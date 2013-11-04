@@ -1,0 +1,89 @@
+/* bootstrap-tags styles */
+
+.tag-list.span12 {
+	height: 30px;
+	left:2px;
+	top:2px;
+	position:relative;
+	margin-left: 0;
+	padding-right: 10px;
+	margin-bottom: 10px;
+}
+.tag-data {
+	display:none;
+}
+.tags-input {
+	width:100%;
+	height:30px !important; 
+	margin:0;
+	padding-bottom:0 !important;
+	font-size:12px !important;
+}
+.tags {
+	width:inherit;
+	height:0;
+	position:absolute;
+	padding: 0;
+	margin:0;
+}
+.tags .tag {
+	padding: 3px;
+	margin: 8px 13px -4px 5px;
+	float:left;
+	background: #FF4444!important;
+	font-size: 11px!important;
+}
+
+.tags .tag:after {
+	content: ' ';
+	height: 0;
+	position: absolute;
+	width: 0;
+	border: 8px solid transparent;
+	border-left-color: #FF4444;
+	left: 100%;
+	top: 0;
+}
+
+.tags .tag a {
+	color: white;
+	cursor: pointer;
+	opacity: .5;
+}
+
+.tags .tag a:hover {
+	text-decoration: none;
+}
+
+ul.tags-suggestion-list {
+	width: 99.5%;
+	height:auto;
+	list-style:none;
+	margin:0;
+	position:absolute;
+	z-index:2;
+	max-height:160px;
+	overflow: hidden;
+	overflow-y: auto;
+	border-radius: 0 0 4px 4px;
+}
+li.tags-suggestion {
+	padding:3px 20px;
+	height:auto;
+}
+li.tags-suggestion-highlighted {
+	color: white;
+	text-decoration: none;
+	background-color: #0081C2;
+	background-image: -moz-linear-gradient(top, #08C, #0077B3);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#08C), to(#0077B3));
+	background-image: -webkit-linear-gradient(top, #08C, #0077B3);
+	background-image: -o-linear-gradient(top, #08C, #0077B3);
+	background-image: linear-gradient(to bottom, #08C, #0077B3);
+	background-repeat: repeat-x;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0077b3', GradientType=0);
+}
+.fixed-width {
+	width:800px;
+	margin:0 auto;
+}

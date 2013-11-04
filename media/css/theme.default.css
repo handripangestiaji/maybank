@@ -1,0 +1,433 @@
+/*************
+Default Theme
+*************/
+/* overall */
+.tablesorter-default {
+	width: 100%;
+	font: 12px/18px;
+	color: #616161;
+	background-color: #fff;
+	border-spacing: 0;
+	margin: 0;
+	text-align: left;
+}
+
+.tablesorter-default span.label.inactive a{
+    color: white;
+}
+
+.tablesorter-default td a.editable-click {
+    border: 0;
+    font-weight: 600;
+    color: #33B5E5;
+    text-transform: uppercase;
+    font-size: 11px;
+}
+
+.tablesorter-default td a.editable-click:hover {
+    color: #0099CC;
+    border-bottom: 1px dashed #0099CC;
+}
+
+.tablesorter-default td a.editable-click.editable-unsaved {
+    color: #0099CC;
+    border-bottom: 1px dashed #0099CC;
+}
+
+.tablesorter-default span.label a {
+    color: white;
+    border: 0;
+    padding: 2px 5px;
+}
+
+.tablesorter-default span.label a:hover {
+    color: white;
+    background-color: rgba(0,0,0,.1);
+    border-bottom: 0;
+}
+
+.tablesorter-default span.label .editable-container ul li a {
+    color: #333;
+}
+
+.tablesorter-default span.label .editable-container ul li.active a {
+    color: white;
+}
+
+.tablesorter-default span.label .editable-container ul li a:hover {
+    color: white;
+    background-color: #33B5E5;
+}
+
+.tablesorter-default span.label a.editable-unsaved {
+    color: white;
+    background-color: rgba(0,0,0,.1);
+    border-bottom: 0;
+}
+
+.tablesorter-default h3.popover-title {
+    color: #616161;
+    text-shadow: none;
+}
+
+/* header */
+.tablesorter thead {
+    border-top: 1px solid #e2e2e2;;
+}
+
+.tablesorter-default th,
+.tablesorter-default thead td {
+	font: bold 12px/18px Arial, Sans-serif;
+	color: #616161;
+	border-collapse: collapse;
+    border: 1px solid #e2e2e2;
+	border-bottom: #e2e2e2 2px solid;
+	padding: 0;
+}
+
+.tablesorter-default tfoot th {
+	border: 0;
+}
+.tablesorter-default .header,
+.tablesorter-default .tablesorter-header {
+	cursor: pointer;
+	white-space: normal;
+	padding: 4px 20px 4px 4px;
+    background: url(../img/sort.gif) center right no-repeat, rgb(254,254,254); /* Old browsers */
+    background: url(../img/sort.gif) center right no-repeat, -moz-linear-gradient(top,  rgba(254,254,254,1) 0%, rgba(243,243,243,1) 100%); /* FF3.6+ */
+    background: url(../img/sort.gif) center right no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(254,254,254,1)), color-stop(100%,rgba(243,243,243,1))); /* Chrome,Safari4+ */
+    background: url(../img/sort.gif) center right no-repeat, -webkit-linear-gradient(top,  rgba(254,254,254,1) 0%,rgba(243,243,243,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: url(../img/sort.gif) center right no-repeat, -o-linear-gradient(top,  rgba(254,254,254,1) 0%,rgba(243,243,243,1) 100%); /* Opera 11.10+ */
+    background: url(../img/sort.gif) center right no-repeat, -ms-linear-gradient(top,  rgba(254,254,254,1) 0%,rgba(243,243,243,1) 100%); /* IE10+ */
+    background: url(../img/sort.gif) center right no-repeat, linear-gradient(to bottom,  rgba(254,254,254,1) 0%,rgba(243,243,243,1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fefefe', endColorstr='#f3f3f3',GradientType=0 ); /* IE6-9 */
+}
+.tablesorter-default .tablesorter-header.selectable {
+    padding: 5px 5px 7px 5px;
+    width: 25px;
+}
+.tablesorter-default thead .headerSortUp,
+.tablesorter-default thead .tablesorter-headerSortUp,
+.tablesorter-default thead .tablesorter-headerAsc {
+	border-bottom: #33B5E5 2px solid;
+    color: #000;
+    background: url(../img/sort-asc.gif) center right no-repeat, rgb(243,243,243); /* Old browsers */
+    background: url(../img/sort-asc.gif) center right no-repeat, -moz-linear-gradient(top,  rgba(243,243,243,1) 0%, rgba(254,254,254,1) 100%); /* FF3.6+ */
+    background: url(../img/sort-asc.gif) center right no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(243,243,243,1)), color-stop(100%,rgba(254,254,254,1))); /* Chrome,Safari4+ */
+    background: url(../img/sort-asc.gif) center right no-repeat, -webkit-linear-gradient(top,  rgba(243,243,243,1) 0%,rgba(254,254,254,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: url(../img/sort-asc.gif) center right no-repeat, -o-linear-gradient(top,  rgba(243,243,243,1) 0%,rgba(254,254,254,1) 100%); /* Opera 11.10+ */
+    background: url(../img/sort-asc.gif) center right no-repeat, -ms-linear-gradient(top,  rgba(243,243,243,1) 0%,rgba(254,254,254,1) 100%); /* IE10+ */
+    background: url(../img/sort-asc.gif) center right no-repeat, linear-gradient(to bottom,  rgba(243,243,243,1) 0%,rgba(254,254,254,1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f3f3f3', endColorstr='#fefefe',GradientType=0 ); /* IE6-9 */
+
+}
+.tablesorter-default thead .headerSortDown,
+.tablesorter-default thead .tablesorter-headerSortDown,
+.tablesorter-default thead .tablesorter-headerDesc {
+	background-image: url(../img/sort-desc.gif);
+	border-bottom: #33B5E5 2px solid;
+    color: #000;
+    background: url(../img/sort-desc.gif) center right no-repeat, rgb(243,243,243); /* Old browsers */
+    background: url(../img/sort-desc.gif) center right no-repeat, -moz-linear-gradient(top,  rgba(243,243,243,1) 0%, rgba(254,254,254,1) 100%); /* FF3.6+ */
+    background: url(../img/sort-desc.gif) center right no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(243,243,243,1)), color-stop(100%,rgba(254,254,254,1))); /* Chrome,Safari4+ */
+    background: url(../img/sort-desc.gif) center right no-repeat, -webkit-linear-gradient(top,  rgba(243,243,243,1) 0%,rgba(254,254,254,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: url(../img/sort-desc.gif) center right no-repeat, -o-linear-gradient(top,  rgba(243,243,243,1) 0%,rgba(254,254,254,1) 100%); /* Opera 11.10+ */
+    background: url(../img/sort-desc.gif) center right no-repeat, -ms-linear-gradient(top,  rgba(243,243,243,1) 0%,rgba(254,254,254,1) 100%); /* IE10+ */
+    background: url(../img/sort-desc.gif) center right no-repeat, linear-gradient(to bottom,  rgba(243,243,243,1) 0%,rgba(254,254,254,1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f3f3f3', endColorstr='#fefefe',GradientType=0 ); /* IE6-9 */
+
+}
+
+.tablesorter-default thead .headerSortUp i,
+.tablesorter-default thead .tablesorter-headerSortUp i,
+.tablesorter-default thead .tablesorter-headerAsc i,
+.tablesorter-default thead .headerSortDown i,
+.tablesorter-default thead .tablesorter-headerSortDown i,
+.tablesorter-default thead .tablesorter-headerDesc i {
+    color: #969696;
+}
+
+.tablesorter-default thead .sorter-false {
+	background-image: none;
+	padding: 4px;
+    background: rgb(254,254,254); /* Old browsers */
+    background: -moz-linear-gradient(top,  rgba(254,254,254,1) 0%, rgba(243,243,243,1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(254,254,254,1)), color-stop(100%,rgba(243,243,243,1))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  rgba(254,254,254,1) 0%,rgba(243,243,243,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  rgba(254,254,254,1) 0%,rgba(243,243,243,1) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  rgba(254,254,254,1) 0%,rgba(243,243,243,1) 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  rgba(254,254,254,1) 0%,rgba(243,243,243,1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fefefe', endColorstr='#f3f3f3',GradientType=0 ); /* IE6-9 */
+}
+/* tfoot */
+.tablesorter-default tfoot .tablesorter-headerSortUp,
+.tablesorter-default tfoot .tablesorter-headerSortDown,
+.tablesorter-default tfoot .tablesorter-headerAsc,
+.tablesorter-default tfoot .tablesorter-headerDesc {
+	border-top: #000 2px solid;
+}
+
+/* tbody */
+.tablesorter-default td {
+	background-color: #fff;
+	border: #e2e2e2 1px solid;
+	padding: 4px;
+	vertical-align: top;
+}
+
+.tablesorter-default td:first-child,
+.tablesorter-default th:first-child,
+.tablesorter-default .tablesorter-filter-row td:first-child {
+    border-left: 0;
+}
+
+.tablesorter-default td:last-child,
+.tablesorter-default th:last-child,
+.tablesorter-default .tablesorter-filter-row td:last-child {
+    border-right: 0;
+}
+
+/* hovered row colors */
+.tablesorter-default tbody > tr:hover > td,
+.tablesorter-default tbody > tr.even:hover > td,
+.tablesorter-default tbody > tr.odd:hover > td {
+	background: #f3f3f3;
+}
+
+/* table processing indicator */
+.tablesorter-default .tablesorter-processing {
+	background-position: center center !important;
+	background-repeat: no-repeat !important;
+	/* background-image: url(../addons/pager/icons/loading.gif) !important; */
+	background-image: url('data:image/gif;base64,R0lGODlhFAAUAKEAAO7u7lpaWgAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh+QQBCgACACwAAAAAFAAUAAACQZRvoIDtu1wLQUAlqKTVxqwhXIiBnDg6Y4eyx4lKW5XK7wrLeK3vbq8J2W4T4e1nMhpWrZCTt3xKZ8kgsggdJmUFACH5BAEKAAIALAcAAAALAAcAAAIUVB6ii7jajgCAuUmtovxtXnmdUAAAIfkEAQoAAgAsDQACAAcACwAAAhRUIpmHy/3gUVQAQO9NetuugCFWAAAh+QQBCgACACwNAAcABwALAAACE5QVcZjKbVo6ck2AF95m5/6BSwEAIfkEAQoAAgAsBwANAAsABwAAAhOUH3kr6QaAcSrGWe1VQl+mMUIBACH5BAEKAAIALAIADQALAAcAAAIUlICmh7ncTAgqijkruDiv7n2YUAAAIfkEAQoAAgAsAAAHAAcACwAAAhQUIGmHyedehIoqFXLKfPOAaZdWAAAh+QQFCgACACwAAAIABwALAAACFJQFcJiXb15zLYRl7cla8OtlGGgUADs=') !important;
+}
+
+/* Zebra Widget - row alternating colors */
+.tablesorter-default tr.odd td {
+	background-color: #fff;
+}
+.tablesorter-default tr.even td {
+	background-color: #f9f9f9;
+}
+
+table.tablesorter tbody tr.odd.checked td {
+    background: #8ee0f6;
+    color: #2e2e2e;
+}
+table.tablesorter tbody tr.even.checked td {
+    background: #70d4f4;
+    color: #fff;
+}
+
+/* Column Widget - column sort colors */
+.tablesorter-default tr.odd td.primary {
+	background-color: #bfbfbf;
+}
+.tablesorter-default td.primary,
+.tablesorter-default tr.even td.primary {
+	background-color: #d9d9d9;
+}
+.tablesorter-default tr.odd td.secondary {
+	background-color: #d9d9d9;
+}
+.tablesorter-default td.secondary,
+.tablesorter-default tr.even td.secondary {
+	background-color: #e6e6e6;
+}
+.tablesorter-default tr.odd td.tertiary {
+	background-color: #e6e6e6;
+}
+.tablesorter-default td.tertiary,
+.tablesorter-default tr.even td.tertiary {
+	background-color: #f2f2f2;
+}
+
+/* center icons in last column */
+.tablesorter.centerFirstLast tbody tr td:last-child,  .tablesorter.centerFirstLast tbody tr td:first-child {
+    text-align: center;
+}
+
+.tablesorter tbody tr td:last-child span.label, .tablesorter tbody tr td:first-child span.label {
+    cursor: pointer;
+    margin-right: 5px;
+    border-radius: 3px;
+}
+
+/* filter widget */
+.tablesorter-default .tablesorter-filter-row td {
+	background: #f9f9f9;
+    border: #e2e2e2 1px solid;
+	border-bottom: #e2e2e2 1px solid;
+	line-height: normal;
+	text-align: center; /* center the input */
+	-webkit-transition: line-height 0.1s ease;
+	-moz-transition: line-height 0.1s ease;
+	-o-transition: line-height 0.1s ease;
+	transition: line-height 0.1s ease;
+    text-align: left;
+}
+
+/* optional disabled input styling */
+.tablesorter-default .tablesorter-filter-row .disabled {
+	opacity: 0.5;
+	filter: alpha(opacity=50);
+	cursor: not-allowed;
+}
+/* hidden filter row */
+.tablesorter-default .tablesorter-filter-row.hideme {
+    border-right: 0;
+}
+
+.tablesorter-default .tablesorter-filter-row.hideme td {
+	/*** *********************************************** ***/
+	/*** change this padding to modify the thickness     ***/
+	/*** of the closed filter row (height = padding x 2) ***/
+	padding: 2px;
+	/*** *********************************************** ***/
+    background-color: #e2e2e2;
+    border: 0;
+	margin: 0;
+	line-height: 0;
+	cursor: pointer;
+}
+
+.tablesorter-default .tablesorter-filter-row.hideme .tablesorter-filter {
+	display: none;
+	min-height: 0;
+	border: 0;
+	padding: 0;
+	margin: 0;
+	/* don't use visibility: hidden because it disables tabbing */
+	opacity: 0;
+	filter: alpha(opacity=0);
+}
+
+.tablesorter-default .tablesorter-filter-row.hideme td > i {
+    display: none;
+}
+
+.tablesorter-default .tablesorter-filter-row td > i {
+    margin: 8px 6px 0 0;
+}
+
+/* filters */
+.tablesorter-default .tablesorter-filter {
+    width: 80%;
+    height: 20px;
+    font-size: 11px;
+    line-height: 12px;
+    margin: 4px;
+    padding: 0 3px;
+    background-color: #fff;
+    border: 1px solid #bbb;
+    color: #333;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-transition: height 0.1s ease;
+    -moz-transition: height 0.1s ease;
+    -o-transition: height 0.1s ease;
+    transition: height 0.1s ease;
+}
+
+/* tablefilterRoller */
+
+.tablesorter-default .tablesorter-filter-row > .tableFilterRoller {
+    display: none;
+}
+
+.tablesorter-default .tablesorter-filter-row.hideme td > .tableFilterRoller {
+    width: 100px;
+    height: 3px;
+    background: url(../img/2dot-divider-dark.gif);
+    position: absolute;
+    left: 47%;
+    display: block;
+    margin-top: -2px;
+}
+
+/* pager wrapper, div */
+.tablesorter-pager {
+    padding: 5px;
+}
+/* pager wrapper, in thead/tfoot */
+td.tablesorter-pager {
+    background-color: #e6eeee;
+    margin: 0; /* needed for bootstrap .pager gets a 18px bottom margin */
+}
+/* pager navigation arrows */
+.tablesorter-pager img {
+    vertical-align: middle;
+    margin-right: 2px;
+    cursor: pointer;
+}
+
+/* pager output text */
+.tablesorter-pager .pagedisplay {
+    padding: 0 5px 0 5px;
+    width: 50px;
+    text-align: center;
+}
+
+/* pager element reset (needed for bootstrap) */
+.tablesorter-pager select {
+    margin: 0;
+    padding: 0;
+}
+
+/*** css used when "updateArrows" option is true ***/
+/* the pager itself gets a disabled class when the number of rows is less than the size */
+.tablesorter-pager.disabled {
+    display: none;
+}
+/* hide or fade out pager arrows when the first or last row is visible */
+.tablesorter-pager .disabled {
+    /* visibility: hidden */
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+    cursor: default;
+}
+
+
+.pager span.label {
+    color: #616161;
+    cursor:pointer;
+    margin:3px;
+    padding: 0 10px;
+    line-height: 19px;
+    border: 1px solid rgba(0,0,0, .1);
+    border-radius: 2px;
+    font-size: 11px;
+    font-weight: bold;
+    height: 20px;
+    text-shadow: none;
+}
+
+.pager span.label:hover {
+    color: #33B5E5
+}
+
+.pager span.label.disabled:hover {
+    color: #616161
+}
+
+.pager .perPageSelect {
+    position: relative;
+    top: 10px;
+}
+
+.pager.tablesorter-pager li>a {
+    display: block;
+    border: 0;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+    text-align: left;
+}
+
+.pager.tablesorter-pager .dropdown-menu {
+    min-width: 51px;
+    -webkit-border-radius: 0 0 6px 6px;
+    -moz-border-radius: 0 0 6px 6px;
+    border-radius: 0 0 6px 6px;
+}

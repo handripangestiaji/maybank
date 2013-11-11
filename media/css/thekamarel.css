@@ -2216,7 +2216,7 @@ div.inlineSelect.primary label.control-label {
 .form-signin {
     max-width: 300px;
     padding: 19px 29px 10px;
-    margin: 180px auto 7px;
+    margin: 150px auto 7px;
     background-color: white;
     border: 1px solid rgba(0, 0, 0, 0.2);
     -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
@@ -2232,10 +2232,12 @@ div.inlineSelect.primary label.control-label {
 
 .form-signin h2 {
     font-weight: normal;
-    font-size: 20px;
-    color: #7f8c8d;
-    margin-top: -15px;
-    text-align: left; 
+    font-size: 17px;
+    color: #black;
+    margin-top: 10px;
+    text-align: center; 
+	font-family: "Trebuchet MS";
+	line-height: 15px;
 }
 
 .form-signin i {
@@ -2314,7 +2316,8 @@ div.inlineSelect.primary label.control-label {
 }
 
 .signInRow div:first-child {
-    float: left; 
+    float: left;
+	text-decoration: underline;
 }
 
 .signInRow div:last-child {
@@ -4549,13 +4552,13 @@ span.label.inactive {
 /* topmenu & dark buttton hovered  */
 
 .navbar-inverse .navbar-inner {
-    background: #34393f;
-    background: -moz-linear-gradient(top,  rgba(52,57,63,1) 0%, rgba(53,58,61,1) 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(52,57,63,1)), color-stop(100%,rgba(53,58,61,1))); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top,  rgba(52,57,63,1) 0%,rgba(53,58,61,1) 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top,  rgba(52,57,63,1) 0%,rgba(53,58,61,1) 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top,  rgba(52,57,63,1) 0%,rgba(53,58,61,1) 100%); /* IE10+ */
-    background: linear-gradient(to bottom,  rgba(52,57,63,1) 0%,rgba(53,58,61,1) 100%); /* W3C */
+	background: #FFC80C;
+	/* background: -moz-linear-gradient(top,  rgba(52,57,63,1) 0%, rgba(53,58,61,1) 100%); /* FF3.6+ */
+    /* background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(52,57,63,1)), color-stop(100%,rgba(53,58,61,1))); /* Chrome,Safari4+ */
+    /* background: -webkit-linear-gradient(top,  rgba(52,57,63,1) 0%,rgba(53,58,61,1) 100%); /* Chrome10+,Safari5.1+ */
+    /* background: -o-linear-gradient(top,  rgba(52,57,63,1) 0%,rgba(53,58,61,1) 100%); /* Opera 11.10+ */
+    /* background: -ms-linear-gradient(top,  rgba(52,57,63,1) 0%,rgba(53,58,61,1) 100%); /* IE10+ */
+    /* background: linear-gradient(to bottom,  rgba(52,57,63,1) 0%,rgba(53,58,61,1) 100%); /* W3C */
 }
 
 /* mainmenu & mainmenu dropdown active & pressed label  */
@@ -4604,13 +4607,13 @@ div.mf_container,
 .fc-button.fc-state-default,
 table.gradientHeader thead th,
 .gradient  {
-    background: rgb(254,254,254); /* Old browsers */
-    background: -moz-linear-gradient(top,  rgba(254,254,254,1) 0%, rgba(243,243,243,1) 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(254,254,254,1)), color-stop(100%,rgba(243,243,243,1))); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top,  rgba(254,254,254,1) 0%,rgba(243,243,243,1) 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top,  rgba(254,254,254,1) 0%,rgba(243,243,243,1) 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top,  rgba(254,254,254,1) 0%,rgba(243,243,243,1) 100%); /* IE10+ */
-    background: linear-gradient(to bottom,  rgba(254,254,254,1) 0%,rgba(243,243,243,1) 100%); /* W3C */
+    /* background: rgb(254,254,254); /* Old browsers */
+    /* background: -moz-linear-gradient(top,  rgba(254,254,254,1) 0%, rgba(243,243,243,1) 100%); /* FF3.6+ */
+    /* background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(254,254,254,1)), color-stop(100%,rgba(243,243,243,1))); /* Chrome,Safari4+ */
+    /* background: -webkit-linear-gradient(top,  rgba(254,254,254,1) 0%,rgba(243,243,243,1) 100%); /* Chrome10+,Safari5.1+ */
+    /* background: -o-linear-gradient(top,  rgba(254,254,254,1) 0%,rgba(243,243,243,1) 100%); /* Opera 11.10+ */
+    /* background: -ms-linear-gradient(top,  rgba(254,254,254,1) 0%,rgba(243,243,243,1) 100%); /* IE10+ */
+    /* background: linear-gradient(to bottom,  rgba(254,254,254,1) 0%,rgba(243,243,243,1) 100%); /* W3C */
 }
 
 /* hover menu field color */

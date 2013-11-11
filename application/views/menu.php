@@ -14,7 +14,7 @@
         </li>
         <li class="divider-vertical"></li>
         <li class="dropdown">
-            <a href="#" id="interface"><i class="icon-pencil"></i> URL SHORTENER</a>
+            <a href="#" id="interface"><i class="icon-file-alt"></i> CONTENT MANAGEMENT</a>
         </li>
         <?php if($this->_access_level == 1) { ?>
         <li class="divider-vertical"></li>
@@ -24,7 +24,19 @@
         <?php } ?>
         <li class="divider-vertical"></li>
         <li class="dropdown">
-            <a href="#" id="interface"><i class="icon-building"></i> MANAGE CHANNELS</a>
+            <a href="#" id="interface"><i class="icon-user"></i> USER MANAGEMENT</a>
+        </li>
+		<li class="divider-vertical"></li>
+        <li class="dropdown">
+            <a href="#" id="interface"><i class="icon-bar-chart"></i> REPORTS</a>
+        </li>
+		<li class="divider-vertical"></li>
+        <li class="dropdown">
+            <a href="#" id="interface"><i class="icon-calendar"></i> PUBLISHER</a>
+        </li>
+		<li class="divider-vertical"></li>
+        <li class="dropdown">
+            <a href="#" id="interface"><i class="icon-building"></i> CHANNEL MANAGEMENT</a>
         </li>
     </ul>
 </div>

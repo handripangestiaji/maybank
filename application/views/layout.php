@@ -30,7 +30,11 @@
         
         <!-- ==================== MAIN MENU ==================== -->
         <div class="mainmenu">
-            <?php $this->load->view('menu') ?>
+            <?php 
+				if(session_id() == NULL){
+					$this->load->view('menu');
+				}
+			?>
         </div>
         <!-- ==================== END OF MAIN MENU ==================== -->
         
@@ -55,26 +59,31 @@
         <div class="content">
 
             <!-- ==================== BREADCRUMBS / DATETIME ==================== -->
-            <ul class="breadcrumb">
-                <li><i class="icon-home"></i><a href="index.html"> Home</a> <span class="divider"><i class="icon-angle-right"></i></span></li>
-                <li class="active">Dashboard</li>
-                <li class="moveDown pull-right">
-                    <span class="time"></span>
-                    <span class="date"></span>
-                </li>    
-            </ul>
+            <?php 
+            if(session_id() == NULL){
+				echo 
+				'<ul class="breadcrumb">
+						<li><i class="icon-home"></i><a href="index.html"> Home</a> <span class="divider"><i class="icon-angle-right"></i></span></li>
+						<li class="active">Dashboard</li>
+						<li class="moveDown pull-right">
+							<span class="time"></span>
+							<span class="date"></span>
+						</li>    
+					</ul>';
+			}
+			?>
             <!-- ==================== END OF BREADCRUMBS / DATETIME ==================== -->
                 
-                <!-- ==================== CONTAINER ==================== -->
-                <div class="container-fluid">
+                <!-- ==================== CONTAINER ==================== 
+                <div class="container-fluid"> -->
                 
-	                <!-- ==================== ROW ==================== -->
-	                <div class="row-fluid">
+	                <!-- ==================== ROW ==================== 
+	                <div class="row-fluid"> -->
 	                	<?php echo $content ?>  
-	                </div>
-	                <!-- ==================== END OF ROW ==================== -->
+	                <!-- </div>
+	                 ==================== END OF ROW ==================== -->
 	                
-                </div>
+                <!-- </div>
                 <!-- ==================== END OF CONTAINER ==================== -->
                 
         </div>

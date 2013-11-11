@@ -1,13 +1,42 @@
+<!-- COMPOSE --> 
+<div class="container-fluid">
+    <div style="width: 100%; height: 40px;">
+        <div style="float:left;">
+            <button type="button" style="float: left;"><i class="icon-rotate-right"></i></button>
+            <input type="textarea" placeholder="Compose Message" style="width:400px; float: left; margin-left: 20px;">
+            <button type="button" style="float: left;"><i class="icon-calendar"></i></button>
+        </div>
+        <div style="float:right;">
+            <select style="width: 100px; float: left;">
+                <option style="display:none">Type</option>
+                <option value="user">User</option>
+                <option value="keyword">Keyword</option>
+            </select>
+            <input type="text" placeholder="Search" style="width:200px; float: left; margin-left: 2px;">
+            <a href="" style="float: left; height: 14px;">
+                <span class="add-on" style="background-color: black;color: white;margin-left: -1px; display: inline-block; white-space: nowrap; padding: 5px 6px; font-size: 14px;"><i class="icon-search"></i></span></a>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+<div class="row-fluid">
 <!-- ==================== LEFT COL ==================== -->
 <div class="span4">
     <!-- ==================== ACTIVITIES CONTAINER ==================== -->
     <div class="row-fluid">
         <div class="span12">
             <!-- ==================== ACTIVITIES HEADLINE ==================== -->
-            <div class="containerHeadline">
+            <div class="containerHeadline" style="background-color:#3B5998; color: white; height: 30px;">
                 <i class="icon-facebook-sign"></i><h2>Facebook</h2>
-                <div class="controlButton pull-right"><i class="icon-caret-down minimizeElement"></i></div>
-                <div class="pull-right btn-toolbar"></div>
+                <div class="pull-right">
+                    <select style="width: 130px; font-size: 10px; height: 25px; display: inline;">
+                        <option style="display:none">All</option>
+                        <option value="user">Read</option>
+                        <option value="keyword">Unread</option>
+                        <option value="keyword">Assigned Cases</option>
+                    </select>
+                </div>
             </div>
             <!-- ==================== END OF ACTIVITIES HEADLINE ==================== -->
 
@@ -1287,10 +1316,15 @@
     <div class="row-fluid">
         <div class="span12">
             <!-- ==================== ACTIVITIES HEADLINE ==================== -->
-            <div class="containerHeadline">
+            <div class="containerHeadline" style="background-color:#4099FF;color: white; height: 30px;">
                 <i class="icon-twitter"></i><h2>Twitter</h2>
-                <div class="controlButton pull-right"><i class="icon-caret-down minimizeElement"></i></div>
-                <div class="pull-right btn-toolbar">
+                <div class="pull-right">
+                    <select style="width: 130px; font-size: 10px; height: 25px; display: inline;">
+                        <option style="display:none">All</option>
+                        <option value="user">Read</option>
+                        <option value="keyword">Unread</option>
+                        <option value="keyword">Assigned Cases</option>
+                    </select>
                 </div>
             </div>
             <!-- ==================== END OF ACTIVITIES HEADLINE ==================== -->
@@ -2095,10 +2129,15 @@
     <div class="row-fluid">
         <div class="span12">
             <!-- ==================== ACTIVITIES HEADLINE ==================== -->
-            <div class="containerHeadline">
+            <div class="containerHeadline" style="background-color: #FF3333; color: white; height: 30px;">
                 <i class="icon-youtube"></i><h2>Youtube</h2>
-                <div class="controlButton pull-right"><i class="icon-caret-down minimizeElement"></i></div>
-                <div class="pull-right btn-toolbar">
+                <div class="pull-right">
+                    <select style="width: 130px; font-size: 10px; height: 25px; display: inline;">
+                        <option style="display:none">All</option>
+                        <option value="user">Read</option>
+                        <option value="keyword">Unread</option>
+                        <option value="keyword">Assigned Cases</option>
+                    </select>
                 </div>
             </div>
             <!-- ==================== END OF ACTIVITIES HEADLINE ==================== -->
@@ -2943,4 +2982,6 @@
     </div>
     <!-- ==================== END OF ACTIVITIES CONTAINER ==================== -->
 </div>
-<!-- ==================== END OF RIGHT COL ==================== -->  
+<!-- ==================== END OF RIGHT COL ==================== -->
+</div>
+</div>

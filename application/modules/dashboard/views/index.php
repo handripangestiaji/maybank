@@ -1,13 +1,14 @@
+<!-- asolole -->
 <!-- COMPOSE --> 
-<div class="container-fluid">
+<div class="row-fluid">
     <div style="width: 100%; height: 40px;">
         <div style="float:left;">
             <button type="button" style="float: left;"><i class="icon-rotate-right"></i></button>
-            <input type="textarea" placeholder="Compose Message" style="width:400px; float: left; margin-left: 20px;">
+            <input type="text" placeholder="Compose Message" style="width:400px; float: left; margin-left: 20px;">
             <button type="button" style="float: left;"><i class="icon-calendar"></i></button>
         </div>
         <div style="float:right;">
-            <select style="width: 100px; float: left; padding: 0px; margin: 0px; font-size: 10px;">
+            <select style="width: 100px; float: left;">
                 <option style="display:none">Type</option>
                 <option value="user">User</option>
                 <option value="keyword">Keyword</option>
@@ -19,9 +20,12 @@
     </div>
 </div>
 
+<<<<<<< HEAD
 <!--I'm testing this file commit    bla bla bla-->
 
 <div class="container-fluid">
+=======
+>>>>>>> e9dd4c1fcb4d87784e9064785aba2b9de944a6c7
 <div class="row-fluid">
 <!-- ==================== LEFT COL ==================== -->
 <div class="span4">
@@ -34,8 +38,8 @@
                     <i class="icon-facebook-sign"></i><h2>Facebook</h2>
                 </div>
                 <div class="pull-right">
-                    <select style="width: 130px; font-size: 10px; height: 25px; display: inline; padding: 0px; margin:0px;">
-                        <option style="display:none">All</option>
+                    <select style="width: 130px;">
+                        <option value="all">All</option>
                         <option value="user">Read</option>
                         <option value="keyword">Unread</option>
                         <option value="keyword">Assigned Cases</option>
@@ -70,7 +74,7 @@
                                     <i class="icon-play-circle moreOptions pull-right"></i>
                                 </p>
                                 <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
-                                <p><span class="label orange">OPEN</span> <span class="label cyan">LIKE</span> </p>
+                                <p><button type="button" class="btn btn-warning btn-mini">OPEN</button><button class="btn btn-primary btn-mini" style="margin-left: 5px;">LIKE</button> </p>
                                 <p><a data-toggle="modal" role="button" href="#modalDialog"><i class="icon-eye-open"></i> View Entire Thread</a> | <a  data-toggle="modal" role="button" href="#modalDialog"><i class="icon-thumbs-up-alt"></i></i> 24 like this</a></p>
 
                                 <!-- MODAL DIALOG PER CONVERSATION -->    
@@ -177,9 +181,11 @@
                                 <!-- END MODAL DIALOG FOR CONVERSATION -->
 
                                 <h4 class="filled">
-                                    <a class="pull-left" ><i class="icon-trash greyText"></i></a>
-                                    <button type="button" class="btn btn-primary pull-right red" style="margin-left: 10px;"><i class="icon-plus"></i> CASE</button>
-                                    <button type="button" class="btn btn-primary pull-right" style="margin-left: 10px;"><i class="icon-mail-reply"></i></button>
+                                    <a><i class="icon-trash greyText"></i></a>
+                                    <div class="pull-right">
+                                        <button type="button" class="btn btn-danger" style="margin-left: 10px;"><i class="icon-plus"></i> CASE</button>
+                                        <button type="button" class="btn btn-primary" style="margin-left: 10px;"><i class="icon-mail-reply"></i></button>
+                                    </div>
                                 </h4>
                                 <div class="reply filled hide">
                                     <form class="contentForm">
@@ -1326,8 +1332,8 @@
                     <i class="icon-twitter"></i><h2>Twitter</h2>
                 </div>
                 <div class="pull-right">
-                    <select style="width: 130px; font-size: 10px; height: 25px; display: inline; padding: 0px; margin: 0px;">
-                        <option style="display:none">All</option>
+                    <select style="width: 130px;">
+                        <option value="all">All</option>
                         <option value="user">Read</option>
                         <option value="keyword">Unread</option>
                         <option value="keyword">Assigned Cases</option>
@@ -2141,8 +2147,8 @@
                     <i class="icon-youtube"></i><h2>Youtube</h2>
                 </div>
                 <div class="pull-right">
-                    <select style="width: 130px; font-size: 10px; height: 25px; display: inline; padding: 0px;margin: 0px;">
-                        <option style="display:none">All</option>
+                    <select style="width: 130px;">
+                        <option value="all">All</option>
                         <option value="user">Read</option>
                         <option value="keyword">Unread</option>
                         <option value="keyword">Assigned Cases</option>
@@ -2992,5 +2998,4 @@
     <!-- ==================== END OF ACTIVITIES CONTAINER ==================== -->
 </div>
 <!-- ==================== END OF RIGHT COL ==================== -->
-</div>
 </div>

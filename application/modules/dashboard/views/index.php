@@ -1,4 +1,3 @@
-<!-- asolole -->
 <!-- COMPOSE --> 
 <div class="row-fluid">
     <div style="width: 100%; height: 40px;">
@@ -175,7 +174,7 @@
                                 <!-- END MODAL DIALOG FOR CONVERSATION -->
 
                                 <h4 class="filled">
-                                    <a><i class="icon-trash greyText"></i></a>
+                                    <a style="font-size: 20px;"><i class="icon-trash greyText"></i></a>
                                     <div class="pull-right">
                                         <button type="button" class="btn btn-danger" style="margin-left: 10px;"><i class="icon-plus"></i> CASE</button>
                                         <button type="button" class="btn btn-primary" style="margin-left: 10px;"><i class="icon-mail-reply"></i></button>

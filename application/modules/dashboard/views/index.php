@@ -20,6 +20,11 @@
     </div>
 </div>
 
+
+<!--I'm testing this file commit    bla bla bla-->
+
+<div class="container-fluid">
+
 <div class="row-fluid">
 <!-- ==================== LEFT COL ==================== -->
 <div class="span4">

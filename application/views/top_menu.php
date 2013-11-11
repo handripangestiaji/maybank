@@ -1,6 +1,6 @@
 <div class="navbar-inner">
     <div class="container-fluid">
-        <a class="brand" href="#" style="float:left;"><img src="<?php echo base_url('media/img/maybank_logo.jpg')?>" style="max-height:95%;"/></a>
+        <a class="brand" href="#" style="float:left;"><img src="<?php echo base_url('media/img/maybank_logo.jpg')?>" style="height:40px;"/></a>
 		<div style="width:1px; height:30px; margin: 7.5px 0px 0px -18px; background-color:white; float:left;"></div>
 		<p style="font-size:15px;font-family:'Trebuchet MS';font-weight:bold;vertical-align:bottom;padding-top:14px;margin-left:-10px;float:left">DCMS</p>
 		<?php

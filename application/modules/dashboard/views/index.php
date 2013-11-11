@@ -7,7 +7,7 @@
             <button type="button" style="float: left;"><i class="icon-calendar"></i></button>
         </div>
         <div style="float:right;">
-            <select style="width: 100px; float: left;">
+            <select style="width: 100px; float: left; padding: 0px; margin: 0px; font-size: 10px;">
                 <option style="display:none">Type</option>
                 <option value="user">User</option>
                 <option value="keyword">Keyword</option>
@@ -28,9 +28,11 @@
         <div class="span12">
             <!-- ==================== ACTIVITIES HEADLINE ==================== -->
             <div class="containerHeadline" style="background-color:#3B5998; color: white; height: 30px;">
-                <i class="icon-facebook-sign"></i><h2>Facebook</h2>
+                <div class="pull-left" style="padding: 4px 0px; height: auto">
+                    <i class="icon-facebook-sign"></i><h2>Facebook</h2>
+                </div>
                 <div class="pull-right">
-                    <select style="width: 130px; font-size: 10px; height: 25px; display: inline;">
+                    <select style="width: 130px; font-size: 10px; height: 25px; display: inline; padding: 0px; margin:0px;">
                         <option style="display:none">All</option>
                         <option value="user">Read</option>
                         <option value="keyword">Unread</option>
@@ -66,8 +68,8 @@
                                     <i class="icon-play-circle moreOptions pull-right"></i>
                                 </p>
                                 <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
-                                <p><span class="label label-important">CASE</span> <span class="label label-warning">OPEN</span> </p>
-                                <p><a data-toggle="modal" role="button" href="#modalDialog"><i class="icon-eye-open"></i> View Entire Thread</a></p>
+                                <p><span class="label orange">OPEN</span> <span class="label cyan">LIKE</span> </p>
+                                <p><a data-toggle="modal" role="button" href="#modalDialog"><i class="icon-eye-open"></i> View Entire Thread</a> | <a  data-toggle="modal" role="button" href="#modalDialog"><i class="icon-thumbs-up-alt"></i></i> 24 like this</a></p>
 
                                 <!-- MODAL DIALOG PER CONVERSATION -->    
                                 <div id="modalDialog" class="modal modalDialog hide fade" tabindex="-1" role="dialog" aria-hidden="true">
@@ -173,8 +175,9 @@
                                 <!-- END MODAL DIALOG FOR CONVERSATION -->
 
                                 <h4 class="filled">
-                                    <button type="button" class="reply-btn btn btn-primary"><i class="icon-mail-reply"></i> Reply</button>
-                                    <button type="button" class="assign-btn btn btn-primary"><i class="icon-male"></i> Assign</button>
+                                    <a class="pull-left" ><i class="icon-trash greyText"></i></a>
+                                    <button type="button" class="btn btn-primary pull-right red" style="margin-left: 10px;"><i class="icon-plus"></i> CASE</button>
+                                    <button type="button" class="btn btn-primary pull-right" style="margin-left: 10px;"><i class="icon-mail-reply"></i></button>
                                 </h4>
                                 <div class="reply filled hide">
                                     <form class="contentForm">
@@ -1317,9 +1320,11 @@
         <div class="span12">
             <!-- ==================== ACTIVITIES HEADLINE ==================== -->
             <div class="containerHeadline" style="background-color:#4099FF;color: white; height: 30px;">
-                <i class="icon-twitter"></i><h2>Twitter</h2>
+                <div class="pull-left" style="padding: 4px 0px; height: auto">
+                    <i class="icon-twitter"></i><h2>Twitter</h2>
+                </div>
                 <div class="pull-right">
-                    <select style="width: 130px; font-size: 10px; height: 25px; display: inline;">
+                    <select style="width: 130px; font-size: 10px; height: 25px; display: inline; padding: 0px; margin: 0px;">
                         <option style="display:none">All</option>
                         <option value="user">Read</option>
                         <option value="keyword">Unread</option>
@@ -2130,9 +2135,11 @@
         <div class="span12">
             <!-- ==================== ACTIVITIES HEADLINE ==================== -->
             <div class="containerHeadline" style="background-color: #FF3333; color: white; height: 30px;">
-                <i class="icon-youtube"></i><h2>Youtube</h2>
+                <div class="pull-left" style="padding: 4px 0px; height: auto">
+                    <i class="icon-youtube"></i><h2>Youtube</h2>
+                </div>
                 <div class="pull-right">
-                    <select style="width: 130px; font-size: 10px; height: 25px; display: inline;">
+                    <select style="width: 130px; font-size: 10px; height: 25px; display: inline; padding: 0px;margin: 0px;">
                         <option style="display:none">All</option>
                         <option value="user">Read</option>
                         <option value="keyword">Unread</option>

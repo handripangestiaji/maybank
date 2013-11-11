@@ -1,3 +1,4 @@
+<!-- 18:33  -->
 <!-- COMPOSE --> 
 <div class="row-fluid">
     <div style="width: 100%; height: 40px;">
@@ -21,9 +22,6 @@
 
 
 <!--I'm testing this file commit    bla bla bla-->
-
-<div class="container-fluid">
-
 <div class="row-fluid">
 <!-- ==================== LEFT COL ==================== -->
 <div class="span4">

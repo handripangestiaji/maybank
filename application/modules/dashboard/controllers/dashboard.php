@@ -8,12 +8,12 @@ class Dashboard extends MY_Controller {
 	{
 		parent::__construct();
 		// Loading TwitterOauth library. 
-	    $this->config->load('twitter');
-        $this->load->library('ion_auth');
-        $this->load->library('Twitteroauth');
+		$this->config->load('twitter');
+		$this->load->library('ion_auth');
+		$this->load->library('Twitteroauth');
 		$this->load->library('session');
 		$this->load->helper('url');
-        $this->load->helper('array');
+		$this->load->helper('array');
         
                 if($this->session->userdata('access_token') && $this->session->userdata('access_token_secret'))
                 {
@@ -32,6 +32,16 @@ class Dashboard extends MY_Controller {
                 }
     }
     
+    
+	public function index()
+	{
+		$data['mention_twitter']=$this->connection->get('statuses/mentions_timeline');   
+		$data['user_twitter']=$this->connection->get('statuses/user_timeline');   
+		$data['home_twitter']=$this->connection->get('statuses/home_timeline');   
+		$data['retweets_twitter']=$this->connection->get('statuses/retweets_of_me');   
+		$this->load->view('dashboard/index',$data);
+	}
+    
       public function auth()
         {
                 if($this->session->userdata('access_token') && $this->session->userdata('access_token_secret'))
@@ -41,9 +51,7 @@ class Dashboard extends MY_Controller {
                          $data['user_twitter']=$this->connection->get('statuses/user_timeline');   
                          $data['home_twitter']=$this->connection->get('statuses/home_timeline');   
                          $data['retweets_twitter']=$this->connection->get('statuses/retweets_of_me');   
-
-                         $this->load->view('dashboard/mention',$data);
-                }
+		}
                 else
                 {
                         // Making a request for request_token
@@ -96,14 +104,8 @@ class Dashboard extends MY_Controller {
                         }
                 }
         }
-
-	public function index()
-	{
-		$this->load->view('dashboard/index');
-	}
     
-    
-    public function mentions()
+	public function mentions()
 	{
 	    $data['mention_twitter']=$this->connection->get('statuses/mentions_timeline');   
         $data['user_twitter']=$this->connection->get('statuses/user_timeline');   

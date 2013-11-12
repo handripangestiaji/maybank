@@ -10,14 +10,22 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
 
-        <link rel="stylesheet" href="css/styles.css">
+        <link rel="stylesheet" href="<?php echo base_url() ?>media/css/styles.css">
 
     </head>
     <body>
         <!--[if lt IE 7]>
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
         <![endif]-->
-
+        <div class="navbar navbar-inverse navbar-fixed-top">
+        	<div class="navbar-inner">
+    <div class="container-fluid">
+        <a class="brand" href="#" style="float:left;"><img src="<?php echo base_url('media/img/maybank_logo.jpg')?>" style="height:40px;"/></a>
+        <div style="width:1px; height:30px; margin: 7.5px 0px 0px -18px; background-color:white; float:left;"></div>
+        <p style="font-size:15px;font-family:'Trebuchet MS';font-weight:bold;vertical-align:bottom;padding-top:14px;margin-left:-10px;float:left">DCMS</p>
+    </div>
+</div>
+        </div>
         <div class="container-fluid">
 
             <form class="form-signin">

@@ -1,4 +1,4 @@
-    <?php
+<?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 $config['twitter_consumer_token']		= 'tgfockKuGZSCafh9zD0g3Q';

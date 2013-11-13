@@ -9,103 +9,99 @@ class Dashboard extends MY_Controller {
 		parent::__construct();
 		// Loading TwitterOauth library. 
 		$this->config->load('twitter');
+		$this->config->load('facebook');
 		$this->load->library('ion_auth');
 		$this->load->library('Twitteroauth');
-		$this->load->library('session');
-		$this->load->helper('url');
-		$this->load->helper('array');
-        
-                if($this->session->userdata('access_token') && $this->session->userdata('access_token_secret'))
-                {
-                        // If user already logged in
-                        $this->connection = $this->twitteroauth->create($this->config->item('twitter_consumer_token'), $this->config->item('twitter_consumer_secret'), $this->session->userdata('access_token'),  $this->session->userdata('access_token_secret'));
-                }
-                elseif($this->session->userdata('request_token') && $this->session->userdata('request_token_secret'))
-                {
-                        // If user in process of authentication
-                        $this->connection = $this->twitteroauth->create($this->config->item('twitter_consumer_token'), $this->config->item('twitter_consumer_secret'), $this->session->userdata('request_token'), $this->session->userdata('request_token_secret'));
-                }
-                else
-                {
-                        // Unknown user
-                        $this->connection = $this->twitteroauth->create($this->config->item('twitter_consumer_token'), $this->config->item('twitter_consumer_secret'));
-                }
+        $this->load->model('facebook_model');
+		if($this->session->userdata('access_token') && $this->session->userdata('access_token_secret'))
+		{
+			// If user already logged in
+			$this->connection = $this->twitteroauth->create($this->config->item('twitter_consumer_token'), $this->config->item('twitter_consumer_secret'), $this->session->userdata('access_token'),  $this->session->userdata('access_token_secret'));
+		}
+		elseif($this->session->userdata('request_token') && $this->session->userdata('request_token_secret'))
+		{
+			// If user in process of authentication
+			$this->connection = $this->twitteroauth->create($this->config->item('twitter_consumer_token'), $this->config->item('twitter_consumer_secret'), $this->session->userdata('request_token'), $this->session->userdata('request_token_secret'));
+		}
+		else
+		{
+			// Unknown user
+			$this->connection = $this->twitteroauth->create($this->config->item('twitter_consumer_token'), $this->config->item('twitter_consumer_secret'));
+		}
     }
     
     
 	public function index()
 	{
+		$access_token_fb = 'CAACEdEose0cBAB7JevPcCuYBZBgz64UYmje0ZAOgRPC3DkAr6i2L4EthyroiMjV9CEvRpBIDVmVYC2hdZA1MrwPFLrvGtACgPpemoPPAKbgLeGHnZAeZBE6a2ZB0R3fX7IfQw8ODHzCDvidyllnNWdYyu62rZAc9NaeuUTUMdMRw8zjiKFOYXlpZA4EzhkjvQjYZD';
+		$this->load->model('facebook_model');
 		$data['mention_twitter']=$this->connection->get('statuses/mentions_timeline');   
 		$data['user_twitter']=$this->connection->get('statuses/user_timeline');   
 		$data['home_twitter']=$this->connection->get('statuses/home_timeline');   
-		$data['retweets_twitter']=$this->connection->get('statuses/retweets_of_me');   
+		$data['retweets_twitter']=$this->connection->get('statuses/retweets_of_me');
+		$data['fb_feed'] = $this->facebook_model->RetrieveFeedFacebook("168151513217686", fb_dummy_accesstoken(), 'feed');
+		$data['own_post'] = $this->facebook_model->RetrieveFeedFacebook("168151513217686", fb_dummy_accesstoken(), 'feed', true);
 		$this->load->view('dashboard/index',$data);
-		$this->load->model('facebook_model');
 	}
     
-      public function auth()
-        {
-                if($this->session->userdata('access_token') && $this->session->userdata('access_token_secret'))
-                {
-                        // User is already authenticated.
-                         $data['mention_twitter']=$this->connection->get('statuses/mentions_timeline');   
-                         $data['user_twitter']=$this->connection->get('statuses/user_timeline');   
-                         $data['home_twitter']=$this->connection->get('statuses/home_timeline');   
-                         $data['retweets_twitter']=$this->connection->get('statuses/retweets_of_me');   
+	public function auth()
+	{
+		if($this->session->userdata('access_token') && $this->session->userdata('access_token_secret'))
+		{
+			// User is already authenticated.
+			 $data['mention_twitter']=$this->connection->get('statuses/mentions_timeline');   
+			 $data['user_twitter']=$this->connection->get('statuses/user_timeline');   
+			 $data['home_twitter']=$this->connection->get('statuses/home_timeline');   
+			 $data['retweets_twitter']=$this->connection->get('statuses/retweets_of_me');   
 		}
-                else
-                {
-                        // Making a request for request_token
-                        $request_token = $this->connection->getRequestToken(base_url('/index.php/dashboard/callback'));
-
-                        $this->session->set_userdata('request_token', $request_token['oauth_token']);
-                        $this->session->set_userdata('request_token_secret', $request_token['oauth_token_secret']);
-                        
-                        if($this->connection->http_code == 200)
-                        {
-                                $url = $this->connection->getAuthorizeURL($request_token);
-                                redirect($url);
-                        }
-                        else
-                        {
-                                // An error occured. Make sure to put your error notification code here.
-                                redirect(base_url('/error_page_faild_auth'));
-                        }
-                }
-        }
+		else
+		{
+			// Making a request for request_token
+			$request_token = $this->connection->getRequestToken(base_url('/index.php/dashboard/callback'));
+			$this->session->set_userdata('request_token', $request_token['oauth_token']);
+			$this->session->set_userdata('request_token_secret', $request_token['oauth_token_secret']);
+			if($this->connection->http_code == 200)
+			{
+				$url = $this->connection->getAuthorizeURL($request_token);
+				redirect($url);
+			}
+			else
+			{
+				// An error occured. Make sure to put your error notification code here.
+				redirect(base_url('/error_page_faild_auth'));
+			}
+		}
+	}
         
-        public function callback()
-        {
-                if($this->input->get('oauth_token') && $this->session->userdata('request_token') !== $this->input->get('oauth_token'))
-                {
-                        $this->reset_session();
-                        redirect(base_url('/index.php/dashboard/auth'));
-                }
-                else
-                {
-                        $access_token = $this->connection->getAccessToken($this->input->get('oauth_verifier'));
-                
-                        if ($this->connection->http_code == 200)
-                        {
-                                $this->session->set_userdata('access_token', $access_token['oauth_token']);
-                                $this->session->set_userdata('access_token_secret', $access_token['oauth_token_secret']);
-                                $this->session->set_userdata('twitter_user_id', $access_token['user_id']);
-                                $this->session->set_userdata('twitter_screen_name', $access_token['screen_name']);
+	public function callback()
+	{
+		if($this->input->get('oauth_token') && $this->session->userdata('request_token') !== $this->input->get('oauth_token'))
+		{
+				$this->reset_session();
+				redirect('/dashboard/auth');
+		}
+		else
+		{
+			$access_token = $this->connection->getAccessToken($this->input->get('oauth_verifier'));
+	
+			if ($this->connection->http_code == 200)
+			{
+				$this->session->set_userdata('access_token', $access_token['oauth_token']);
+				$this->session->set_userdata('access_token_secret', $access_token['oauth_token_secret']);
+				$this->session->set_userdata('twitter_user_id', $access_token['user_id']);
+				$this->session->set_userdata('twitter_screen_name', $access_token['screen_name']);
+				$this->session->unset_userdata('request_token');
+				$this->session->unset_userdata('request_token_secret');
+				redirect(base_url('/index.php/dashboard/mentions'));
+			}
+			else
+			{
+				// An error occured. Add your notification code here.
+				redirect(base_url('/page_error_callback'));
+			}
+		}
+	}
 
-                                $this->session->unset_userdata('request_token');
-                                $this->session->unset_userdata('request_token_secret');
-                                
-                                
-                                redirect(base_url('/index.php/dashboard/mentions'));
-                        }
-                        else
-                        {
-                                // An error occured. Add your notification code here.
-                                redirect(base_url('/page_error_callback'));
-                        }
-                }
-        }
-    
 	public function mentions()
 	{
 	    $data['mention_twitter']=$this->connection->get('statuses/mentions_timeline');   

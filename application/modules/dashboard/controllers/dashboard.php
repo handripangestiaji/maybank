@@ -16,12 +16,11 @@ class Dashboard extends MY_Controller {
 		$this->load->helper('url');
 		$this->load->helper('array');
         
-		/*
                 if($this->session->userdata('access_token') && $this->session->userdata('access_token_secret'))
                 {
                         // If user already logged in */
                         $this->connection = $this->twitteroauth->create($this->config->item('twitter_consumer_token'), $this->config->item('twitter_consumer_secret'), $this->config->item('twitter_access_token'),  $this->config->item('twitter_access_secret'));
-                /*}
+                }
                 elseif($this->session->userdata('request_token') && $this->session->userdata('request_token_secret'))
                 {
                         // If user in process of authentication
@@ -32,7 +31,6 @@ class Dashboard extends MY_Controller {
                         // Unknown user
                         $this->connection = $this->twitteroauth->create($this->config->item('twitter_consumer_token'), $this->config->item('twitter_consumer_secret'));
                 }
-                */
     }
     
     
@@ -97,7 +95,7 @@ class Dashboard extends MY_Controller {
 				$this->session->set_userdata('twitter_screen_name', $access_token['screen_name']);
 				$this->session->unset_userdata('request_token');
 				$this->session->unset_userdata('request_token_secret');
-				redirect(base_url('/index.php/dashboard/mentions'));
+				redirect(base_url('/index.php/dashboard'));
 			}
 			else
 			{

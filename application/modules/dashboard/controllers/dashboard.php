@@ -12,22 +12,27 @@ class Dashboard extends MY_Controller {
 		$this->config->load('facebook');
 		$this->load->library('ion_auth');
 		$this->load->library('Twitteroauth');
-        $this->load->model('facebook_model');
-		if($this->session->userdata('access_token') && $this->session->userdata('access_token_secret'))
-		{
-			// If user already logged in
-			$this->connection = $this->twitteroauth->create($this->config->item('twitter_consumer_token'), $this->config->item('twitter_consumer_secret'), $this->session->userdata('access_token'),  $this->session->userdata('access_token_secret'));
-		}
-		elseif($this->session->userdata('request_token') && $this->session->userdata('request_token_secret'))
-		{
-			// If user in process of authentication
-			$this->connection = $this->twitteroauth->create($this->config->item('twitter_consumer_token'), $this->config->item('twitter_consumer_secret'), $this->session->userdata('request_token'), $this->session->userdata('request_token_secret'));
-		}
-		else
-		{
-			// Unknown user
-			$this->connection = $this->twitteroauth->create($this->config->item('twitter_consumer_token'), $this->config->item('twitter_consumer_secret'));
-		}
+		$this->load->library('session');
+		$this->load->helper('url');
+		$this->load->helper('array');
+        
+		/*
+                if($this->session->userdata('access_token') && $this->session->userdata('access_token_secret'))
+                {
+                        // If user already logged in */
+                        $this->connection = $this->twitteroauth->create($this->config->item('twitter_consumer_token'), $this->config->item('twitter_consumer_secret'), $this->config->item('twitter_access_token'),  $this->config->item('twitter_access_secret'));
+                /*}
+                elseif($this->session->userdata('request_token') && $this->session->userdata('request_token_secret'))
+                {
+                        // If user in process of authentication
+                        $this->connection = $this->twitteroauth->create($this->config->item('twitter_consumer_token'), $this->config->item('twitter_consumer_secret'), $this->session->userdata('request_token'), $this->session->userdata('request_token_secret'));
+                }
+                else
+                {
+                        // Unknown user
+                        $this->connection = $this->twitteroauth->create($this->config->item('twitter_consumer_token'), $this->config->item('twitter_consumer_secret'));
+                }
+                */
     }
     
     

@@ -10,7 +10,6 @@
                 </div>
                 <div class="pull-right">
                     <select style="width: 130px;">
-                        <option value="all">All</option>
                         <option value="user">Read</option>
                         <option value="keyword">Unread</option>
                         <option value="keyword">Assigned Cases</option>
@@ -28,8 +27,7 @@
                             <li class="active"><a href="#mentions">Mentions</a></li>
                             <li><a href="#homefeed">Homefeed</a></li>
                             <li><a href="#sentTweets">Sent Tweets</a></li>
-                            <li><a href="#dmInbox">DM Inbox</a></li>
-                            <li><a href="#dmOutbox">DM Outbox</a></li>
+                            <li><a href="#dmInbox">Direct Message</a></li>
                         </ul>
                     </div>
                     <!-- ==================== END OF ACTIVITIES MENU ==================== -->
@@ -47,12 +45,12 @@
                                         <i class="icon-circle"></i>
                                         <span>mentions</span>
                                         <i class="icon-circle"></i>
-                                        <span>'.$mention_twitter[$i]->created_at.'</span>
+                                        <span>'.str_replace('+0000','',$mention_twitter[$i]->created_at).'</span>
                                         <i class="icon-play-circle moreOptions pull-right"></i>
                                     </p>
                                     <p>'.$mention_twitter[$i]->text.'</p>
                                     <p><button type="button" class="btn btn-warning btn-mini">OPEN</button></p>
-                                    <p><a data-toggle="modal" role="button" href="#modalDialog"><i class="icon-eye-open"></i> View Entire Thread</a> | <a data-toggle="modal" role="button" href="#modalDialog"><i class="icon-retweet greyText"></i>'.$mention_twitter[$i]->retweeted.' re-tweets</a></p>
+                                    <p><a data-toggle="modal" role="button" href="#modalDialog"><i class="icon-eye-open"></i> Engagement</a> | <a data-toggle="modal" role="button" href="#modalDialog"><i class="icon-retweet greyText"></i>'.$mention_twitter[$i]->retweeted.' re-tweets</a></p>
                                     <h4 class="filled">
                                         <a role="button" href="#"><i class="icon-trash greyText"></i></a>
                                         <div class="pull-right">

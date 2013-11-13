@@ -49,10 +49,10 @@ $active_group = 'default';
 $active_record = TRUE;
 
 $db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'ekopurnomo';
-$db['default']['password'] = 'EkoPurnomo';
-$db['default']['database'] = 'maybank';
-$db['default']['dbdriver'] = 'mysqli';
+$db['default']['username'] = 'root';
+$db['default']['password'] = 'y0lk3r@123@mysql';
+$db['default']['database'] = 'ionauth';
+$db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
 $db['default']['db_debug'] = TRUE;

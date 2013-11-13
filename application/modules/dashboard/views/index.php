@@ -22,8 +22,10 @@
 
 <div class="row-fluid">
 <?php
+
+
     $data['mention_twitter'] = $mention_twitter;
-    echo $this->load->view('dashboard/facebook/facebook_stream');
+    echo $this->load->view('dashboard/facebook/facebook_stream', $data);
     echo $this->load->view('dashboard/twitter/twitter_stream',$data);
     echo $this->load->view('dashboard/youtube/youtube_stream');
 ?>

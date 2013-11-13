@@ -1,7 +1,5 @@
 <?php for($i=0; $i<count($fb_feed);$i++):?>
-  
 <li>
-
     <div class="circleAvatar"><img src="https://graph.facebook.com/<?=number_format($fb_feed[$i]->actor_id, 0,'.','')?>/picture?small" alt=""></div>
     <p class="headLine">
         <span class="author"><?php echo $fb_feed[$i]->users->name//."(".$fb_feed[$i]->users->usename.")"?></span>
@@ -15,7 +13,7 @@
     </p>
     <p><?=$fb_feed[$i]->message?></p>
     <p><button type="button" class="btn btn-warning btn-mini">OPEN</button><button class="btn btn-primary btn-mini" style="margin-left: 5px;">LIKE</button> </p>
-    <p><a data-toggle="modal" role="button" href="#modalDialog"><i class="icon-eye-open"></i> View Entire Thread</a> | <a  data-toggle="modal" role="button" href="#modalDialog"><i class="icon-thumbs-up-alt"></i></i> 24 like this</a></p>
+    <p><a data-toggle="modal" role="button" href="#modalDialog"><i class="icon-eye-open"></i> View Entire Thread</a> | <a  data-toggle="modal" role="button" href="#modalDialog"><i class="icon-thumbs-up-alt"></i></i> <?=$fb_feed[$i]->like_info->like_count?> likes this</a></p>
 
     <!-- MODAL DIALOG PER CONVERSATION -->    
     <div id="modalDialog" class="modal modalDialog hide fade" tabindex="-1" role="dialog" aria-hidden="true">

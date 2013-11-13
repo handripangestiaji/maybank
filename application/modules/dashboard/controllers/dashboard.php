@@ -36,19 +36,21 @@ class Dashboard extends MY_Controller {
     
 	public function index()
 	{
-		$access_token_fb = 'CAACEdEose0cBAB7JevPcCuYBZBgz64UYmje0ZAOgRPC3DkAr6i2L4EthyroiMjV9CEvRpBIDVmVYC2hdZA1MrwPFLrvGtACgPpemoPPAKbgLeGHnZAeZBE6a2ZB0R3fX7IfQw8ODHzCDvidyllnNWdYyu62rZAc9NaeuUTUMdMRw8zjiKFOYXlpZA4EzhkjvQjYZD';
+		$access_token_fb = fb_dummy_accesstoken();
 		$this->load->model('facebook_model');
 		$data['mention_twitter']=$this->connection->get('statuses/mentions_timeline');   
 		$data['user_twitter']=$this->connection->get('statuses/user_timeline');   
 		$data['home_twitter']=$this->connection->get('statuses/home_timeline');   
 		$data['retweets_twitter']=$this->connection->get('statuses/retweets_of_me');
-		$data['fb_feed'] = $this->facebook_model->RetrieveFeedFacebook("168151513217686", fb_dummy_accesstoken(), 'feed');
-		$data['own_post'] = $this->facebook_model->RetrieveFeedFacebook("168151513217686", fb_dummy_accesstoken(), 'feed', true);
+		$data['fb_feed'] = $this->facebook_model->RetrieveFeed("168151513217686", $access_token_fb, 'feed');
+		$data['own_post'] = $this->facebook_model->RetrieveOwnPost("168151513217686", $access_token_fb);
 		$this->load->view('dashboard/index',$data);
 	}
     
+	
 	public function auth()
 	{
+		
 		if($this->session->userdata('access_token') && $this->session->userdata('access_token_secret'))
 		{
 			// User is already authenticated.

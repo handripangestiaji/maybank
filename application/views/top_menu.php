@@ -1,6 +1,8 @@
 <div class="navbar-inner">
     <div class="container-fluid">
-         <a class="brand" href="#"><img src="media/img/logo-may-2.png" /></a>
+         <a class="brand" href="#" style="margin: 10px 0px; padding: 0px;">
+	    <img src="<?php echo base_url('media/img/logo-may-2.png'); ?>" />
+	 </a>
 	<div class="nav pull-right">
 		<form class="navbar-form">
 			<div class="input-append">

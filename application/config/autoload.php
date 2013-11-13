@@ -80,7 +80,7 @@ $autoload['helper'] = array('url');
 |
 */
 
-$autoload['config'] = array('ion_oauth');
+$autoload['config'] = array('');
 
 
 /*

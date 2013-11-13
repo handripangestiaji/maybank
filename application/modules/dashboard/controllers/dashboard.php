@@ -38,10 +38,12 @@ class Dashboard extends MY_Controller {
 	{
 		$access_token_fb = fb_dummy_accesstoken();
 		$this->load->model('facebook_model');
-		$data['mention_twitter']=$this->connection->get('statuses/mentions_timeline');   
-		$data['user_twitter']=$this->connection->get('statuses/user_timeline');   
-		$data['home_twitter']=$this->connection->get('statuses/home_timeline');   
-		$data['retweets_twitter']=$this->connection->get('statuses/retweets_of_me');
+	
+    	$data['twiteerAction']=$this->connection->get('statuses/home_timeline');
+        if(!isset($data['action'])){
+            $data['action']='homefeed';  
+        } 
+        
 		$data['fb_feed'] = $this->facebook_model->RetrieveFeed("168151513217686", $access_token_fb, 'feed');
 		$data['own_post'] = $this->facebook_model->RetrieveOwnPost("168151513217686", $access_token_fb);
 		$this->load->view('dashboard/index',$data);
@@ -54,10 +56,8 @@ class Dashboard extends MY_Controller {
 		if($this->session->userdata('access_token') && $this->session->userdata('access_token_secret'))
 		{
 			// User is already authenticated.
-			 $data['mention_twitter']=$this->connection->get('statuses/mentions_timeline');   
-			 $data['user_twitter']=$this->connection->get('statuses/user_timeline');   
-			 $data['home_twitter']=$this->connection->get('statuses/home_timeline');   
-			 $data['retweets_twitter']=$this->connection->get('statuses/retweets_of_me');   
+			  $data['twiteerAction']=$this->connection->get('statuses/home_timeline');   
+			 $this->load->view('dashboard/index',$data);
 		}
 		else
 		{
@@ -109,17 +109,28 @@ class Dashboard extends MY_Controller {
 
 	public function mentions()
 	{
-	    $data['mention_twitter']=$this->connection->get('statuses/mentions_timeline');   
-        $data['user_twitter']=$this->connection->get('statuses/user_timeline');   
-        $data['home_twitter']=$this->connection->get('statuses/home_timeline');   
-        $data['retweets_twitter']=$this->connection->get('statuses/retweets_of_me');   
-
-        $data['mention']=$this->connection->get('statuses/public_timeline');   
-        $this->load->view('dashboard/mention',$data);
-		$access_token = "CAACEdEose0cBADGyv9cLrxG0ycGrwyZBVrr4jPSG4NKHAZAZBwQS5MF1xrYdgwAiyCLZAnYvx1wBvr5I7MGxVsubO0xPMOIaYhVKsTTeVPvC05YLYfUttS0W3SzfC3wFltkY3Lo11zfH7LTVwF6zwADlv9HlAY7ZBinMshTHMM5dYxeY3ZA6bSY5zSNsDOFOsmE6bb5cbjiQZDZD";
+	    $access_token = "CAACEdEose0cBADGyv9cLrxG0ycGrwyZBVrr4jPSG4NKHAZAZBwQS5MF1xrYdgwAiyCLZAnYvx1wBvr5I7MGxVsubO0xPMOIaYhVKsTTeVPvC05YLYfUttS0W3SzfC3wFltkY3Lo11zfH7LTVwF6zwADlv9HlAY7ZBinMshTHMM5dYxeY3ZA6bSY5zSNsDOFOsmE6bb5cbjiQZDZD";
 		$data['fb_feed'] =  $this->facebook_model->RetrieveFeedFacebook('168151513217686', $access_token, "feed");
 		$this->load->view('dashboard/index', $data);
 	}
+    public function twitterAction(){
+        
+        $action=$_GET['action'];
+        if($action=='stream'){
+              $data['twiteerAction']=$this->connection->get('statuses/mentions_timeline');   
+              $data['action']='stream';
+              $this->load->view('dashboard/index',$data); 
+        } elseif($action=='homefeed'){   
+              $data['twiteerAction']=$this->connection->get('statuses/home_timeline');  
+              $data['action']='homefeed';  
+              $this->load->view('dashboard/index',$data); 
+        }else{
+              $data['twiteerAction']=$this->connection->get('statuses/home_timeline');  
+              $data['action']='homefeed';  
+              $this->load->view('dashboard/index',$data); 
+        }
+           
+    }
 	
 	public function fb_access_token(){
 		$app_id = $this->config->item('fb_appid');

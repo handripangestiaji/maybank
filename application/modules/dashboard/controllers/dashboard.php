@@ -121,6 +121,35 @@ class Dashboard extends MY_Controller {
 		$this->load->view('dashboard/index', $data);
 	}
 	
+	public function fb_access_token(){
+		$app_id = $this->config->item('fb_appid');
+		$app_secret = $this->config->item('fb_appsecret');
+		$my_url = site_url('dashboard/fb_access_token');  // redirect url
+		$code = $this->input->get("code");
+	 
+		if(empty($code)) {
+		  // Redirect to Login Dialog
+		  $this->session->set_userdata('state', md5(uniqid(rand(), TRUE))); // CSRF protection
+		  $dialog_url = "https://www.facebook.com/dialog/oauth?client_id=" 
+			. $app_id . "&redirect_uri=" . urlencode($my_url) . "&state="
+			. $this->session->userdata('state') . "&scope=publish_stream,read_friendlists,email,manage_pages,export_stream,publish_actions,publish_checkins,read_stream";
+	 
+	 
+		  redirect($dialog_url);
+		}
+		if($this->session->userdata('state') && ($this->session->userdata('state')=== $this->input->get('state'))) {
+			 $token_url = "https://graph.facebook.com/oauth/access_token?"
+			   . "client_id=" . $app_id . "&redirect_uri=" . urlencode($my_url)
+			   . "&client_secret=" . $app_secret . "&code=" . $code;
+			 $response = curl_get_file_contents($token_url);
+			 $params = null;
+			 parse_str($response, $params);
+			 $longtoken=$params['access_token'];
+			 print_r($params);
+		}
+
+	}
+	
 	public function load_facebook($type){
 		$access_token = "CAACEdEose0cBAFGdZB2IH8VzRiPuoLAZC0vQ3u7Tc0PuZAyycV0cs5CCng8Xw3qnni9V6YxgeaQ0p9VCdGzfGGHTeUUsLL6exlGXBTAbWl6T7573l4DnKm3kTPh7dQrqqJNpcvMMWZA9K92p7NtS5eLwjmZCKxZCCEQ4jWk5DtccZBMZAEKS2Meqe1yzhetcUKMZD";
 		

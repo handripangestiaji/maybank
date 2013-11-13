@@ -15,6 +15,9 @@ class Dashboard extends MY_Controller {
 		$this->load->library('session');
 		$this->load->helper('url');
 		$this->load->helper('array');
+		
+		$this->session->set_userdata('access_token', $this->config->item('twitter_access_token'));
+		$this->session->set_userdata('access_token_secret', $this->config->item('twitter_access_secret'));
         
                 if($this->session->userdata('access_token') && $this->session->userdata('access_token_secret'))
                 {
@@ -46,7 +49,7 @@ class Dashboard extends MY_Controller {
         
 		$data['fb_feed'] = $this->facebook_model->RetrieveFeed("168151513217686", $access_token_fb, 'feed');
 		$data['own_post'] = $this->facebook_model->RetrieveOwnPost("168151513217686", $access_token_fb);
-		$this->load->view('dashboard/index',$data);
+		$this->load->view('dashboard/index', $data);
 	}
     
 	
@@ -91,6 +94,10 @@ class Dashboard extends MY_Controller {
 	
 			if ($this->connection->http_code == 200)
 			{
+				/*
+				echo "<pre>";
+				die(print_r($access_token));
+				*/
 				$this->session->set_userdata('access_token', $access_token['oauth_token']);
 				$this->session->set_userdata('access_token_secret', $access_token['oauth_token_secret']);
 				$this->session->set_userdata('twitter_user_id', $access_token['user_id']);

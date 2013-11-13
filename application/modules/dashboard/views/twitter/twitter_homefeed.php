@@ -24,8 +24,8 @@
                     <!-- ==================== ACTIVITIES MENU ==================== -->
                     <div class="floatingBoxMenu">
                         <ul class="nav nav-tabs">
-                            <li class="active"><a href=<?php echo site_url("index.php/dashboard/twitterAction?action=stream");?>>Mentions</a></li>
-                            <li><a href=<?php echo site_url("index.php/dashboard/twitterAction?action=homefeed");?>>Homefeed</a></li>
+                            <li><a href=<?php echo site_url("index.php/dashboard/twitterAction?action=stream");?>>Mentions</a></li>
+                            <li class="active"><a href=<?php echo site_url("index.php/dashboard/twitterAction?action=homefeed");?>>Homefeed</a></li>
                             <li><a href="#sentTweets">Sent Tweets</a></li>
                             <li><a href="#dmInbox">Direct Message</a></li>
                         </ul>

@@ -36,6 +36,10 @@
                         <!-- ==================== ALL ACTIVITIES CONTENT ==================== -->
                         <ul class="floatingBoxContainers" id="mentions">
                             <?php
+                                if(isset($mention_twitter) )
+                                    echo "<li>Error Retrieving Twitter</li>";
+                                else{
+                                if(count($mention_twitter) > 0){
                                 for($i=0;$i<count($mention_twitter);$i++){
                                 echo
                                 '<li>
@@ -93,6 +97,8 @@
                                         </form>
                                     </div>
                                 </li>';
+                                }
+                                }
                                 }
                             ?>
                         </ul>

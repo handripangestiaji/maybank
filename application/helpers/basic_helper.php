@@ -209,3 +209,10 @@ function open_api_template($url){
     curl_close($ch);
     return $content;
 }
+
+
+function fb_dummy_accesstoken(){
+    $access_token = 'CAACEdEose0cBAHHTUUzDPgkurZBZCiw14cwNuImlKnYm8lOWqtyDZAyrNYVWqZAkiuwH3zHygcpCAbKm76LK6vEtYS2dpbxMtUON0AUgx3HxlpFbXGWLPNvI8H8MLVoJvAZCiIQEWXV2uyM3JDAntaMNWrpDhvucBUMMPJaRwO9QiEXZAZCPZA7NY9Ps7lRphHa7JfhHHmZCkgAZDZD';
+    $account = json_decode(open_api_template('https://graph.facebook.com/me/accounts?access_token='.$access_token));
+    return $account->data[0]->access_token;
+}

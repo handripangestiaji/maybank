@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Login extends CI_Controller {
+class Login extends Login_Controller {
 
 	public function __construct()
 	{
@@ -9,6 +9,34 @@ class Login extends CI_Controller {
 
 	public function index()
 	{
+		if($this->input->server('REQUEST_METHOD') === 'POST')
+		{
+			$params['username'] = $this->input->post('username');
+			$params['password'] = $this->input->post('password');
+			
+			$result = $this->auth($params);
+			if($result == TRUE) {
+				redirect('dashboard');
+			}
+			else
+			{
+				redirect('login');
+			}
+		} 
+		
 		$this->load->view('login/index');
+	}
+	
+	private function auth($params = array())
+	{
+		if($params['username'] == 'admin' && $params['password'] == 'admin')
+		{
+			$return = TRUE;
+		}
+		else {
+			$return = FALSE;
+		}
+		
+		return $return;
 	}
 }

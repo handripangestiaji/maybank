@@ -1,10 +1,12 @@
-<?php
+    <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-$config['twitter_consumer_token']		= 'nmoxetTOaN257c3PHWjI7g';
-$config['twitter_consumer_secret']		= 'OD9ekfpeJKqUXfGK6X0Xl7b70zh8JPjG65iXeVzo';
-$config['twitter_access_token']			= '52367165-YWRNVHulepmwzYFcb1aVpG7UahwGeQZNk0TJoF8ib'; // Optional
-$config['twitter_access_secret']		= '4nsMzT4SfJjCn7fIWfFiEPLr229eGA4wqKUrk2qgsNjn0'; // Optional
-$config['twitter_callback']             = 'http://localhost/maybank/index.php/Dashboard';
+$config['twitter_consumer_token']		= 'tgfockKuGZSCafh9zD0g3Q';
+$config['twitter_consumer_secret']		= 'pGgSfvD2jdz4R5hXptlra4znmvtffFHIIkGrVp7XYYc';
+$config['twitter_access_token']			= '225188500-LtingTWYRzxJdwpAgtA1ysZF99SD7wDu6gHZegIE'; // Optional
+$config['twitter_access_secret']		= '6OFaaco9WejejJ9SupmcjP5XNQHifpDcFDw2y96UBQ'; // Optional
+$config['twitter_callback']             = 'http://www.maybank.local.com/index.php/dashboard/auths';
 /* End of file twitter.php */
-/* Location: ./application/config/twitter.php */
+/* Location: ./application/config/twitter.php 
+
+*/

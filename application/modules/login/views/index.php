@@ -17,19 +17,19 @@
         <!--[if lt IE 7]>
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
         <![endif]-->
+        <!-- ==================== TOP MENU ==================== -->
         <div class="navbar navbar-inverse navbar-fixed-top">
-        	<div class="navbar-inner">
-    <div class="container-fluid">
-        <a class="brand" href="#" style="float:left;"><img src="<?php echo base_url('media/img/maybank_logo.jpg')?>" style="height:40px;"/></a>
-        <div style="width:1px; height:30px; margin: 7.5px 0px 0px -18px; background-color:white; float:left;"></div>
-        <p style="font-size:15px;font-family:'Trebuchet MS';font-weight:bold;vertical-align:bottom;padding-top:14px;margin-left:-10px;float:left">DCMS</p>
-    </div>
-</div>
-        </div>
+                <div class="navbar-inner-yellow">
+                    <div class="container-fluid">
+                        <a class="brand" href="#"><img src="media/img/logo-may.png" /></a>
+                    </div>
+                </div>
+            </div>
+        <!-- ==================== END OF TOP MENU ==================== -->
         <div class="container-fluid">
 
             <form class="form-signin">
-                <h2 class="form-signin-heading"><strong>Digital Channel Management System</strong></h2>
+                <h2 class="form-signin-heading">Digital Channel Management System</h2>
                 <div class="input-prepend">
                   <span class="add-on"><i class="icon-user"></i></span>
                   <input type="text" placeholder="Username">
@@ -42,7 +42,7 @@
             </form>
 
             <div class="signInRow">
-                <div>Terms of Use</div>
+                <div><a href="#" style="color: grey;font-size: 11px;font-weight: bold; text-decoration: none;">Terms or Use</a></div>
                 <div><a href="#">Lost your password?</a></div>
             </div>
 

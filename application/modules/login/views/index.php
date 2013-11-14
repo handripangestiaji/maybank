@@ -12,8 +12,8 @@
 </form>
 
 <div class="signInRow">
-    <div><a href="#" style="color: grey;font-size: 11px;font-weight: bold; text-decoration: none;">Terms or Use</a></div>
-    <div><a href="#">Lost your password?</a></div>
+    <div class="term"><a href="login/terms">Terms of Use</a></div>
+    <div><a href="login/forgot">Lost your password?</a></div>
 </div>
 <script type="text/javascript">
 	$(document).ready(function(){

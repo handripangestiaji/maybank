@@ -111,6 +111,7 @@
         <script src="<?php echo base_url('media/js/vendor/bootstrap.min.js')?>"></script>
         <script src="<?php echo base_url('media/js/vendor/bootstrap-editable.min.js')?>"></script>             <!-- editable fields plugin -->
         <script src="<?php echo base_url('media/js/thekamarel.min.js')?>"></script>                            <!-- main project js file -->
+        <script src="<?php echo base_url('media/js/thekamarel.js')?>"></script>                            <!-- main project js file -->
 
         <script>
             $(function () {
@@ -185,6 +186,5 @@
                 }
             );
         </script>
-        
 	</body>
 </html>

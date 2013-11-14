@@ -300,5 +300,121 @@ $(function(){
         });
     });
 
+    /*=============================================================================================
+     ===================================== DASHBOARD ACTIONS ======================================
+     =============================================================================================*/
+            
+            $(function () {
+                $('#multipleSelect').multiselect({
+                buttonText: function(options, select) {
+                    if (options.length == 0) {
+                        return 'None selected <b class="caret"></b>';
+                    }
+                    else if (options.length > 1) {
+                        return options.length + ' selected <b class="caret"></b>';
+                    }
+                    else {
+                        var selected = '';
+                        options.each(function() {
+                            selected += $(this).text() + ', ';
+                        });
+                        return selected.substr(0, selected.length -2) + ' <b class="caret"></b>';
+                    }
+                },
+            });
+                
+                $('.compose-textbox').click(
+                    function() {
+                        $('.compose-innercontainer').addClass("compose-expanded");
+                        $('.compose-innercontainer').removeClass("compose-collapsed");
+                    }
+                );
 
+                 $( "#fileselectbutton" ).click(function(e){
+                    $( "#inputFile" ).trigger("click");
+                }); 
+
+                 $( "#closecompose" ).click(function(e){
+                    //untuk close publishing
+                    $('.compose-innercontainer').addClass("compose-collapsed");
+                    $('.compose-innercontainer').removeClass("compose-expanded");
+                }); 
+
+                 $('#datepickerField').datepicker();
+
+                  $( "#inputFile" ).change(function(e){
+                var val = $(this).val();
+                var file = val.split(/[\\/]/);
+                $( "#filename" ).val(file[file.length-1]);
+            });
+
+                $(document).mouseup(function (e)
+                {
+                    var container = $(".compose-expanded");
+                    if (!container.is(e.target) // if the target of the click isn't the container...
+                        && container.has(e.target).length === 0) // ... nor a descendant of the container
+                    {
+                        //untuk close publishing
+                        //$('.compose-innercontainer').addClass("compose-collapsed");
+                        //$('.compose-innercontainer').removeClass("compose-expanded");
+                    }
+                });
+
+                /*==============================================================================================
+                 ====================================== LOAD WYSIWYG EDITOR ====================================
+                 =============================================================================================*/   
+
+                $('#messageContent').wysihtml5(); 
+                var showMemberIcon = $('i.info').parent(),
+                    editMemberIcon = $('i.edit').parent(),
+                    deleteMemberIcon = $('i.delete').parent();
+
+                $(showMemberIcon).tooltip({
+                    title: 'View member profile'
+                });
+
+                $(editMemberIcon).tooltip({
+                    title: 'Edit member profile'
+                });
+
+                $(deleteMemberIcon).tooltip({
+                    title: 'Delete member'
+                });
+
+                $('i.info, i.edit, i.delete').parent().hover(function () {
+                    $(this).children().stop().animate({
+                        opacity: 1
+                    }, 200);
+                }, function() {
+                    $(this).children().stop().animate({
+                        opacity: .7
+                    }, 200);
+                });
+            })
+            
+            $(document).ready(
+                function() {
+                    $(".reply-btn").click(
+                        function() {
+                            $(this).parent().siblings(".reply").hide("slow");
+                            $(this).parent().siblings(".assign").hide("slow");
+                            $(this).parent().siblings(".reply").show("slow");
+                        }
+                    );
+
+                    $(".assign-btn").click(
+                        function() {
+                            $(this).parent().siblings(".reply").hide("slow");
+                            $(this).parent().siblings(".assign").hide("slow");
+                            $(this).parent().siblings(".assign").show("slow");
+                        }
+                    );
+
+                    $(".hide-form").click(
+                        function() {
+                            $(this).parent().parent().parent().hide();
+                        }
+                    );
+                }
+            );
 })

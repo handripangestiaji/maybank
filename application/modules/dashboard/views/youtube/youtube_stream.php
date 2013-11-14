@@ -6,12 +6,24 @@
             <!-- ==================== ACTIVITIES HEADLINE ==================== -->
             <div class="containerHeadline" style="background-color: #FF3333; color: white; height: 30px;">
                 <div class="pull-left" style="padding: 4px 0px; height: auto">
-                    <i class="icon-youtube"></i><h2>Youtube</h2>
+                    <div class="btn-group">
+                        <button class="btn trans dropdown-toggle" data-toggle="dropdown">
+                            <i class="icon-youtube"></i> <h2>Youtube </h2> 
+                            &nbsp;&nbsp;<span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Facebook Maybank</a></li>
+                            <li><a href="#">Facebook Maybankard</a></li>
+                            <li><a href="#">Twitter Maybank</a></li>
+                           
+                            <li><a href="#">YouTube Maybank</a></li>
+                        </ul>
+                    </div><!-- /btn-group -->
                 </div>
                 <div class="pull-right">
                     <select style="width: 130px;">
-                        <option value="user">Read</option>
                         <option value="keyword">Unread</option>
+                        <option value="user">Read</option>
                         <option value="keyword">Assigned Cases</option>
                     </select>
                 </div>

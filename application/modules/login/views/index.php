@@ -20,5 +20,12 @@
 		$('#submit').click(function(){
 			$('#login_form').submit();
 		});
+		
+		$('#login_form').bind('keypress', function(e){
+			if(e.which == 13)
+			{
+				$('#login_form').submit();
+			}
+		})
 	});
 </script>

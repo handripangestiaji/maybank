@@ -6,7 +6,7 @@
              <!-- button-refresh -->
             <div class="left">
                 <div class="ref">
-                    <a href="#"><img src="img/ref.png" /></a>
+                    <a href="#"><img src="media/img/ref.png" /></a>
                 </div>
             </div>
             <!-- button-refresh end -->

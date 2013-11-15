@@ -175,14 +175,14 @@ border-radius: 0px;
 	padding:5px 8px;
 	margin-right: 8px;
 
-		background-color: #c5c5c5; 
-   background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#dddddd), to(#c5c5c5));
-   background-image: -webkit-linear-gradient(top, #dddddd, #c5c5c5); 
-   background-image:    -moz-linear-gradient(top, #dddddd, #c5c5c5);
-   background-image:     -ms-linear-gradient(top, #dddddd, #c5c5c5);
-   background-image:      -o-linear-gradient(top, #dddddd, #c5c5c5);
+	background-color: #c5c5c5; 
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#dddddd), to(#c5c5c5));
+	 background-image: -webkit-linear-gradient(top, #dddddd, #c5c5c5); 
+	background-image:    -moz-linear-gradient(top, #dddddd, #c5c5c5);
+	background-image:     -ms-linear-gradient(top, #dddddd, #c5c5c5);
+	background-image:      -o-linear-gradient(top, #dddddd, #c5c5c5);
 
-   -moz-box-shadow:  0px 1px 2px #dddddd;
+	-moz-box-shadow:  0px 1px 2px #dddddd;
 	-webkit-box-shadow: 0px 1px 2px #dddddd;
 	box-shadow: 0px 1px 2px #dddddd;
 	border: 1px solid #CCCCCC;
@@ -453,3 +453,77 @@ border-radius: 3px;
 	border-top: 4px solid #FFF;
 }
 
+/*==============================================================================================
+======================================== C M S ===============================
+==============================================================================================*/
+
+.cms-content{
+	border: solid 1px #C9C9C9;
+	background-color: #F7F7F7;
+}
+
+.cms-table{
+	width: 75%;
+	background-color: #FFFFFF;
+	padding: 10px 10px 40px 10px;
+}
+
+.cms-filter{
+	width: 20%;
+	padding: 10px;
+}
+
+.cms-table .page a{
+	border: solid 1px #C9C9C9;
+	padding: 5px 10px;
+	color: #0C70B3;
+	font-weight: bold;
+	
+}
+
+.cms-table .page .active{
+	border: solid 1px #C9C9C9;
+	padding: 5px 10px;
+	background-color: #0C70B3;
+	font-weight: bold;
+	color: #FFFFFF;
+}
+
+.cms-table thead{
+	background-color: #c5c5c5; 
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#F5F5F5), to(#c5c5c5));
+	background-image: -webkit-linear-gradient(top, #F5F5F5, #c5c5c5); 
+	background-image:    -moz-linear-gradient(top, #F5F5F5, #c5c5c5);
+	background-image:     -ms-linear-gradient(top, #F5F5F5, #c5c5c5);
+	background-image:      -o-linear-gradient(top, #F5F5F5, #c5c5c5);
+
+	-moz-box-shadow:  0px 1px 2px #dddddd;
+	-webkit-box-shadow: 0px 1px 2px #dddddd;
+	box-shadow: 0px 1px 2px #dddddd;
+}
+
+.cms-table .table-sub thead{
+	background-color: #BFBADE;
+	background-image: none;
+}
+
+.floatingBox > div.campaignForm{
+	border: solid 1px #C9C9C9;
+	background-color: #F7F7F7;
+	padding: 0px;
+	margin: 0px;
+}
+
+.floatingBox > div.campaignForm .contentForm{
+	margin: 0px;
+}
+
+.floatingBox > div.campaignForm .contentForm .control-group{
+	border-bottom: solid 1px #C9C9C9;
+	padding: 20px 20px;
+	margin: 0px;
+}
+
+.floatingBox > div.campaignForm .contentForm .control-group .control-label{
+	text-align: left;
+}

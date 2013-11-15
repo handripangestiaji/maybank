@@ -1,4 +1,3 @@
-<link rel="stylesheet" href="<?php echo base_url('media/css/maybankdcms.css')?>">
 <!-- ==================== COMPOSE MESSAGE ==================== -->
 <div class="container-fluid">
     <form class="form-horizontal contentForm compose-form">

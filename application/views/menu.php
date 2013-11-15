@@ -14,7 +14,7 @@
         </li>
         <li class="divider-vertical"></li>
         <li class="dropdown">
-            <a href="#" id="interface"><i class="icon-file-alt"></i> CONTENT MANAGEMENT</a>
+            <a href="cms" id="interface"><i class="icon-file-alt"></i> CONTENT MANAGEMENT</a>
         </li>
         <?php if($this->_access_level == 1) { ?>
         <li class="divider-vertical"></li>

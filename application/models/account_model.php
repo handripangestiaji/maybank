@@ -22,8 +22,6 @@ class account_model extends CI_Model
             $this->db->where($filter);
         return $this->db->get()->result();
     }
-    
-   
-    
+
     
 }

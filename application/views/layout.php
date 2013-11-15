@@ -8,7 +8,7 @@
 <html class="no-js"> <!--<![endif]-->
     
     <head>
-    	<?php $this->load->view('metadata') ?>
+    	<?php echo $this->load->view('metadata') ?>
     </head>
 	
 	<body class="dashboard">
@@ -18,13 +18,13 @@
         
         <!-- ==================== TOP MENU ==================== -->
         <div class="navbar navbar-inverse navbar-fixed-top">
-        	<?php $this->load->view('top_menu') ?>
+        	<?php echo $this->load->view('top_menu') ?>
         </div>
         <!-- ==================== END OF TOP MENU ==================== -->
         
 		<!-- ==================== SIDEBAR ==================== -->
         <div class="hiddenContent">
-            <?php $this->load->view('sidebar')?>
+            <?php echo $this->load->view('sidebar')?>
         </div>
         <!-- ==================== END OF SIDEBAR ==================== -->
         
@@ -32,7 +32,7 @@
         <div class="mainmenu">
             <?php 
 				if(session_id() == NULL){
-					$this->load->view('menu');
+					echo $this->load->view('menu');
 				}
 			?>
         </div>
@@ -111,6 +111,7 @@
         <script src="<?php echo base_url('media/js/vendor/bootstrap.min.js')?>"></script>
         <script src="<?php echo base_url('media/js/vendor/bootstrap-editable.min.js')?>"></script>             <!-- editable fields plugin -->
         <script src="<?php echo base_url('media/js/thekamarel.min.js')?>"></script>                            <!-- main project js file -->
+        <script src="<?php echo base_url('media/js/thekamarel.js')?>"></script>                            <!-- main project js file -->
 
         <script>
             $(function () {
@@ -185,6 +186,5 @@
                 }
             );
         </script>
-        
 	</body>
 </html>

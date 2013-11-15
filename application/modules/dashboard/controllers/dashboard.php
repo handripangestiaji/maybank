@@ -21,7 +21,7 @@ class Dashboard extends MY_Controller {
         
                 if($this->session->userdata('access_token') && $this->session->userdata('access_token_secret'))
                 {
-                        // If user already logged in */
+                        // If user already logged in
                         $this->connection = $this->twitteroauth->create($this->config->item('twitter_consumer_token'), $this->config->item('twitter_consumer_secret'), $this->config->item('twitter_access_token'),  $this->config->item('twitter_access_secret'));
                 }
                 elseif($this->session->userdata('request_token') && $this->session->userdata('request_token_secret'))
@@ -42,14 +42,15 @@ class Dashboard extends MY_Controller {
 		$access_token_fb = fb_dummy_accesstoken();
 		$this->load->model('facebook_model');
 	
-    	$data['twiteerAction']=$this->connection->get('statuses/home_timeline');
-        if(!isset($data['action'])){
-            $data['action']='homefeed';  
-        } 
-        
-		$data['fb_feed'] = $this->facebook_model->RetrieveFeed("168151513217686", $access_token_fb, 'feed');
-		$data['own_post'] = $this->facebook_model->RetrieveOwnPost("168151513217686", $access_token_fb);
-		$this->load->view('dashboard/index', $data);
+	    
+	   $data['fb_feed'] = $this->facebook_model->RetrieveFeed("168151513217686", $access_token_fb, 'feed');
+	   $data['own_post'] = $this->facebook_model->RetrieveOwnPost("168151513217686", $access_token_fb);
+	   $data['mentions']=$this->connection->get('statuses/mentions_timeline');   
+       $data['homefeed']=$this->connection->get('statuses/home_timeline');  
+       $data['directmessage']=$this->connection->get('direct_messages');  
+       //$data['h']=$this->connection->get('statuses/home_timeline');  
+     
+    	$this->load->view('dashboard/index',$data);
 	}
     
 	
@@ -94,10 +95,6 @@ class Dashboard extends MY_Controller {
 	
 			if ($this->connection->http_code == 200)
 			{
-				/*
-				echo "<pre>";
-				die(print_r($access_token));
-				*/
 				$this->session->set_userdata('access_token', $access_token['oauth_token']);
 				$this->session->set_userdata('access_token_secret', $access_token['oauth_token_secret']);
 				$this->session->set_userdata('twitter_user_id', $access_token['user_id']);
@@ -122,21 +119,14 @@ class Dashboard extends MY_Controller {
 	}
     public function twitterAction(){
         
-        $action=$_GET['action'];
-        if($action=='stream'){
+        
               $data['twiteerAction']=$this->connection->get('statuses/mentions_timeline');   
-              $data['action']='stream';
-              $this->load->view('dashboard/index',$data); 
-        } elseif($action=='homefeed'){   
               $data['twiteerAction']=$this->connection->get('statuses/home_timeline');  
-              $data['action']='homefeed';  
-              $this->load->view('dashboard/index',$data); 
-        }else{
+              $data['twiteerAction']=$this->connection->get('direct_messages');  
               $data['twiteerAction']=$this->connection->get('statuses/home_timeline');  
-              $data['action']='homefeed';  
               $this->load->view('dashboard/index',$data); 
-        }
-           
+ 
+            
     }
 	
 	public function fb_access_token(){

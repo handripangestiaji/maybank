@@ -962,6 +962,16 @@ ol.mp_list li.mp_highlighted {
     margin-bottom: 30px;
 }
 
+.mid-box {
+    background: #FFFFFF;
+    -webkit-box-shadow:  1px 1px 2px 0 rgba(0, 0, 0, .3);
+    box-shadow:  1px 1px 2px 0 rgba(0, 0, 0, .3);
+    min-height: 20px;
+    text-align: left;
+    width: 80%;
+    margin: 100px auto 0px auto;
+}
+
 .floatingBox.table {
     position: relative;
 }
@@ -2334,6 +2344,10 @@ div.inlineSelect.primary label.control-label {
     color: #217dbb; 
 }
 
+.signInRow .term a{
+    color: #8f8f8f;
+    font-size: 11px;
+}
 /*==============================================================================================
 ============================================ PAGE 404 ==========================================
 ==============================================================================================*/

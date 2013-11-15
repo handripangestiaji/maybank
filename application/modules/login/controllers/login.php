@@ -39,4 +39,12 @@ class Login extends Login_Controller {
 		
 		return $return;
 	}
+	
+	public function terms(){
+		$this->load->view('terms');
+	}
+	
+	public function forgot(){
+		$this->load->view('forgot');	
+	}
 }

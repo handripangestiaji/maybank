@@ -1,4 +1,6 @@
 <?php
+if(is_array($mentions))
+{
                                 for($i=0;$i<count($mentions);$i++){
                                 echo
                                 '<li>
@@ -57,4 +59,8 @@
                                     </div>
                                 </li>';
                                 }
+}
+else {
+	echo "<li>".$mentions->errors[0]->message."</li>";
+}
                             ?>

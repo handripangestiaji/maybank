@@ -15,6 +15,9 @@ class Dashboard extends MY_Controller {
 		$this->load->library('session');
 		$this->load->helper('url');
 		$this->load->helper('array');
+		
+		$this->session->set_userdata('access_token', $this->config->item('twitter_access_token'));
+		$this->session->set_userdata('access_token_secret', $this->config->item('twitter_access_secret'));
         
                 if($this->session->userdata('access_token') && $this->session->userdata('access_token_secret'))
                 {

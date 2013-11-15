@@ -8,7 +8,7 @@
 <html class="no-js"> <!--<![endif]-->
     
     <head>
-    	<?php $this->load->view('metadata') ?>
+    	<?php echo $this->load->view('metadata') ?>
     </head>
 	
 	<body class="dashboard">
@@ -18,13 +18,13 @@
         
         <!-- ==================== TOP MENU ==================== -->
         <div class="navbar navbar-inverse navbar-fixed-top">
-        	<?php $this->load->view('top_menu') ?>
+        	<?php echo $this->load->view('top_menu') ?>
         </div>
         <!-- ==================== END OF TOP MENU ==================== -->
         
 		<!-- ==================== SIDEBAR ==================== -->
         <div class="hiddenContent">
-            <?php $this->load->view('sidebar')?>
+            <?php echo $this->load->view('sidebar')?>
         </div>
         <!-- ==================== END OF SIDEBAR ==================== -->
         
@@ -32,7 +32,7 @@
         <div class="mainmenu">
             <?php 
 				if(session_id() == NULL){
-					$this->load->view('menu');
+					echo $this->load->view('menu');
 				}
 			?>
         </div>

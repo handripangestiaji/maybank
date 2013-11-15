@@ -1,5 +1,5 @@
-<div class="row-fluid" style="border-bottom: solid 1px #000000;">
-    <h3>Create Campaign</h3>    
+<div class="row-fluid" style="border-bottom: solid 1px #C9C9C9; margin-bottom: 10px;">
+    <h4>Create Campaign</h4>    
 </div>
  <div class="floatingBox">
     <div class="container-fluid campaignForm">

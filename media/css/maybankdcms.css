@@ -527,3 +527,19 @@ border-radius: 3px;
 .floatingBox > div.campaignForm .contentForm .control-group .control-label{
 	text-align: left;
 }
+
+.floatingBox > div.campaignForm .contentForm .control-group input{
+	background-color: #D1D1D1;
+}
+
+.floatingBox > div.campaignForm .contentForm .control-group textarea{
+	background-color: #D1D1D1;
+}
+
+.floatingBox > div.campaignForm .contentForm .control-group select{
+	background-color: #D1D1D1;
+}
+
+.floatingBox > div.campaignForm .contentForm .control-group .btn-group button{
+	background-color: #D1D1D1;
+}

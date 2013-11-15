@@ -8,7 +8,7 @@
 <html class="no-js"> <!--<![endif]-->
     
     <head>
-    	<?php $this->load->view('metadata') ?>
+    	<?php echo $this->load->view('metadata') ?>
     </head>
 	
 	<body class="dashboard">
@@ -18,23 +18,23 @@
         
         <!-- ==================== TOP MENU ==================== -->
         <div class="navbar navbar-inverse navbar-fixed-top">
-        	<?php $this->load->view('top_menu') ?>
+        	<?php echo $this->load->view('top_menu') ?>
         </div>
         <!-- ==================== END OF TOP MENU ==================== -->
         
 		<!-- ==================== SIDEBAR ==================== -->
         <div class="hiddenContent">
-            <?php $this->load->view('sidebar')?>
+            <?php echo $this->load->view('sidebar')?>
         </div>
         <!-- ==================== END OF SIDEBAR ==================== -->
         
         <!-- ==================== MAIN MENU ==================== -->
         <div class="mainmenu">
             <?php 
-		if(session_id() == NULL){
-		    $this->load->view('menu');
-		}
-	    ?>
+				if(session_id() == NULL){
+					echo $this->load->view('menu');
+				}
+			?>
         </div>
         <!-- ==================== END OF MAIN MENU ==================== -->
         
@@ -59,20 +59,20 @@
         <div class="content">
 
             <!-- ==================== BREADCRUMBS / DATETIME ==================== -->
-		<ul class="breadcrumb">
-		    <li><i class="icon-home"></i><a href="<?php echo base_url('dashboard'); ?>"> Home</a> <span class="divider"><i class="icon-angle-right"></i></span></li>
-		    <li class="active">
-			<?php
-			    $value = array('dashboard' => 'Dashboard','cms' => 'Content ');
-			    echo $value[$this->uri->segment(1)];
+            <?php 
+            if(session_id() == NULL){
+				echo 
+				'<ul class="breadcrumb">
+						<li><i class="icon-home"></i><a href="index.html"> Home</a> <span class="divider"><i class="icon-angle-right"></i></span></li>
+						<li class="active">Dashboard</li>
+						<li class="moveDown pull-right">
+							<span class="date"></span>
+							<span class="time"></span>
+						</li>    
+					</ul>';
+			}
 			?>
-		    </li>
-		    <li class="moveDown pull-right">
-			    <span class="time"></span>
-			    <span class="date"></span>
-		    </li>    
-    	    </ul>
-	    <!-- ==================== END OF BREADCRUMBS / DATETIME ==================== -->
+            <!-- ==================== END OF BREADCRUMBS / DATETIME ==================== -->
                 
                 <!-- ==================== CONTAINER ==================== -->
                 <div class="container-fluid"> 

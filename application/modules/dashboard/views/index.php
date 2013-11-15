@@ -210,8 +210,7 @@
 <div class="row-fluid">
 <?php
     echo $this->load->view('dashboard/facebook/facebook_stream');
-    $data1['twitter'] = $twiteerAction;
-    echo $this->load->view('dashboard/twitter/twitter_'.$action,$data1);
-    echo $this->load->view('dashboard/youtube/youtube_stream');
+    echo $this->load->view('dashboard/twitter/twitter_stream');
+    //echo $this->load->view('dashboard/youtube/youtube_stream');
 ?>
 </div>

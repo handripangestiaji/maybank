@@ -32,7 +32,7 @@ $(function(){
      =============================================================================================*/
 
     // Create two variable with the names of the months and days in an array
-    var monthNames = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ],
+    var monthNames = [ "Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec" ],
         dayNames= ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 
     // Create a newDate() object
@@ -40,7 +40,7 @@ $(function(){
     // Extract the current date from Date object
     newDate.setDate(newDate.getDate());
     // Output the day, date, month and year
-    $('.date').html(dayNames[newDate.getDay()] + " " + newDate.getDate() + ' ' + monthNames[newDate.getMonth()] + ' ' + newDate.getFullYear());
+    $('.date').html(dayNames[newDate.getDay()] + ", " + monthNames[newDate.getMonth()] + ' ' + newDate.getDate()  + ', ' + newDate.getFullYear() + ', ');
 
     setInterval( function() {
         // Create a newDate() object and extract the seconds of the current time on the visitor's

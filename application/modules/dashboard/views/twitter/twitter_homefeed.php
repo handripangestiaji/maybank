@@ -24,8 +24,8 @@
                     <!-- ==================== ACTIVITIES MENU ==================== -->
                     <div class="floatingBoxMenu">
                         <ul class="nav nav-tabs">
-                            <li><a href=<?php echo site_url("index.php/dashboard/twitterAction?action=stream");?>>Mentions</a></li>
-                            <li class="active"><a href=<?php echo site_url("index.php/dashboard/twitterAction?action=homefeed");?>>Homefeed</a></li>
+                            <li><a href="#mentions">Mentions</a></li>
+                            <li class="active"><a href="homefeed">Homefeed</a></li>
                             <li><a href="#sentTweets">Sent Tweets</a></li>
                             <li><a href="#dmInbox">Direct Message</a></li>
                         </ul>
@@ -36,6 +36,7 @@
                         <!-- ==================== ALL ACTIVITIES CONTENT ==================== -->
                         <ul class="floatingBoxContainers" id="mentions">
                             <?php
+                                if(is_array($twitter)){
                                 for($i=0;$i<count($twitter);$i++){
                                 echo
                                 '<li>
@@ -94,9 +95,14 @@
                                     </div>
                                 </li>';
                                 }
+                                }
                             ?>
                         </ul>
                         <!-- ==================== END OF RECENT TASKS CONTENT ==================== -->
+                        
+                         <ul class="floatingBoxContainers" id="homefeed">
+                            
+                         </ul>
                          <div class="filled" style="text-align: center;"><button class="btn btn-info"><i class="icon-chevron-down"></i> LOAD MORE</button></div>
                     </div>
                 </div>

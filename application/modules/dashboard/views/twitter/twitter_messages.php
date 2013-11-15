@@ -62,6 +62,6 @@
 ?>
 <?php 
 	else: 
-		echo $directmessage->errors[0]->message;
+		echo "<li>".$directmessage->errors[0]->message."</li>";
 ?>
 <?php endif; ?>

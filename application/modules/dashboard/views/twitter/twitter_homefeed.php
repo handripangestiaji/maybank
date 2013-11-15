@@ -63,6 +63,6 @@ echo
 ?>
 <?php 
 	else: 
-		echo $twitter->errors[0]->message;
+		echo "<li>".$twitter->errors[0]->message."</li>";
 ?>
 <?php endif;?>

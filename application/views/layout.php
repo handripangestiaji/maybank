@@ -66,8 +66,8 @@
 						<li><i class="icon-home"></i><a href="index.html"> Home</a> <span class="divider"><i class="icon-angle-right"></i></span></li>
 						<li class="active">Dashboard</li>
 						<li class="moveDown pull-right">
-							<span class="time"></span>
 							<span class="date"></span>
+							<span class="time"></span>
 						</li>    
 					</ul>';
 			}

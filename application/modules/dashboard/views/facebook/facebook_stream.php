@@ -37,7 +37,7 @@
                         <ul class="nav nav-tabs">
                             
                             <li class="active"><a href="#allActivities">Wall Posts</a></li>
-                            <li><a href="#maybankpost">Maybank Posts</a></li>
+                            <!-- <li><a href="#maybankpost">Maybank Posts</a></li> -->
                             <li><a href="#recentComments">Private Messages</a></li>
                         </ul>
                     </div>

@@ -1,20 +1,67 @@
+<!-- ==================== MIDDLE COL ==================== -->
+<div class="span4">
+    <!-- ==================== ACTIVITIES CONTAINER ==================== -->
+    <div class="row-fluid">
+        <div class="span12">
+            <!-- ==================== ACTIVITIES HEADLINE ==================== -->
+            <div class="containerHeadline" style="background-color:#4099FF;color: white; height: 30px;">
+                <div class="pull-left" style="padding: 4px 0px; height: auto">
+                    <div class="btn-group">
+                        <button class="btn trans  dropdown-toggle" data-toggle="dropdown">
+                            <i class="icon-twitter"></i> <h2>Twitter </h2> 
+                            &nbsp;&nbsp;<span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Facebook Maybank</a></li>
+                            <li><a href="#">Facebook Maybankard</a></li>
+                            <li><a href="#">Twitter Maybank</a></li>
+                            <li><a href="#">YouTube Maybank</a></li>
+                        </ul>
+                    </div><!-- /btn-group -->
+                </div>
+                <div class="pull-right">
+                    <select style="width: 130px;">
+                        <option value="user">Read</option>
+                        <option value="keyword">Unread</option>
+                        <option value="keyword">Assigned Cases</option>
+                    </select>
+                </div>
+            </div>
+            <!-- ==================== END OF ACTIVITIES HEADLINE ==================== -->
+
+            <!-- ==================== ACTIVITIES FLOATING BOX ==================== -->
+            <div class="floatingBox">
+                <div class="container-fluid">
+                    <!-- ==================== ACTIVITIES MENU ==================== -->
+                    <div class="floatingBoxMenu">
+                        <ul class="nav nav-tabs">
+                            <li><a href=<?php echo site_url("index.php/dashboard/twitterAction?action=stream");?>>Mentions</a></li>
+                            <li class="active"><a href=<?php echo site_url("index.php/dashboard/twitterAction?action=homefeed");?>>Homefeed</a></li>
+                            <li><a href="#sentTweets">Sent Tweets</a></li>
+                            <li><a href="#dmInbox">Direct Message</a></li>
+                        </ul>
+                    </div>
+                    <!-- ==================== END OF ACTIVITIES MENU ==================== -->
+
+                    <div class="container-fluid">
+                        <!-- ==================== ALL ACTIVITIES CONTENT ==================== -->
+                        <ul class="floatingBoxContainers" id="mentions">
                             <?php
-                                 //print_r($twitter);   
-                                for($i=0;$i<count($homefeed);$i++){
+                                for($i=0;$i<count($twitter);$i++){
                                 echo
                                 '<li>
-                                    <div class="circleAvatar"><img src="'.$homefeed[$i]->user->profile_image_url.'" alt=""></div>
+                                    <div class="circleAvatar"><img src="'.$twitter[$i]->user->profile_image_url.'" alt=""></div>
                                     <p class="headLine">
-                                        <span class="author">'.$homefeed[$i]->user->name.'</span>
+                                        <span class="author">'.$twitter[$i]->user->name.'</span>
                                         <i class="icon-circle"></i>
                                         <span>mentions</span>
                                         <i class="icon-circle"></i>
-                                        <span>'.str_replace('+0000','',$homefeed[$i]->created_at).'</span>
+                                        <span>'.str_replace('+0000','',$twitter[$i]->created_at).'</span>
                                         <i class="icon-play-circle moreOptions pull-right"></i>
                                     </p>
-                                    <p>'.$homefeed[$i]->text.'</p>
+                                    <p>'.$twitter[$i]->text.'</p>
                                     <p><button type="button" class="btn btn-warning btn-mini">OPEN</button></p>
-                                    <p><a data-toggle="modal" role="button" href="#modalDialog"><i class="icon-eye-open"></i> Engagement</a> | <a data-toggle="modal" role="button" href="#modalDialog"><i class="icon-retweet greyText"></i>'.$homefeed[$i]->retweeted.' re-tweets</a></p>
+                                    <p><a data-toggle="modal" role="button" href="#modalDialog"><i class="icon-eye-open"></i> Engagement</a> | <a data-toggle="modal" role="button" href="#modalDialog"><i class="icon-retweet greyText"></i>'.$twitter[$i]->retweeted.' re-tweets</a></p>
                                     <h4 class="filled">
                                         <a role="button" href="#"><i class="icon-trash greyText"></i></a>
                                         <div class="pull-right">
@@ -59,3 +106,15 @@
                                 </li>';
                                 }
                             ?>
+                        </ul>
+                        <!-- ==================== END OF RECENT TASKS CONTENT ==================== -->
+                         <div class="filled" style="text-align: center;"><button class="btn btn-info"><i class="icon-chevron-down"></i> LOAD MORE</button></div>
+                    </div>
+                </div>
+            </div>
+            <!-- ==================== END OF ACTIVITIES FLOATING BOX ==================== -->
+        </div>
+    </div>
+    <!-- ==================== END OF ACTIVITIES CONTAINER ==================== -->
+</div>
+<!-- ==================== END OF MIDDLE COL ==================== -->

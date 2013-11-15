@@ -51,7 +51,7 @@
                         </ul>
                         
                         <ul class="floatingBoxContainers" id="feed" style="display:none">
-                             <?php $this->load->view('dashboard/twitter/twitter_homefeed', array('twitter' => $homefeed))?> 
+                             <?php //$this->load->view('dashboard/twitter/twitter_homefeed', array('twitter' => $homefeed))?> 
                         </ul>
                         
                         <!--
@@ -60,7 +60,7 @@
                         </ul>
                         -->
                         <ul class="floatingBoxContainers" id="direct" style="display:none">
-                             <?php $this->load->view('dashboard/twitter/twitter_messages', array('directmessage' => $directmessage))?> 
+                             <?php //$this->load->view('dashboard/twitter/twitter_messages', array('directmessage' => $directmessage))?> 
                         </ul>
 
                         <!-- ==================== END OF RECENT TASKS CONTENT ==================== -->

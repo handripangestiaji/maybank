@@ -44,7 +44,7 @@ class Dashboard extends MY_Controller {
 	
 	    
 	   $data['fb_feed'] = $this->facebook_model->RetrieveFeed("168151513217686", $access_token_fb, 'feed');
-	   $data['own_post'] = $this->facebook_model->RetrieveOwnPost("168151513217686", $access_token_fb);
+	   $data['own_post'] = $this->facebook_model->RetrievePost("168151513217686", $access_token_fb);
 	   $data['mentions']=$this->connection->get('statuses/mentions_timeline');   
        $data['homefeed']=$this->connection->get('statuses/home_timeline');  
        $data['directmessage']=$this->connection->get('direct_messages');  

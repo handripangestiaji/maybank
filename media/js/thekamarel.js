@@ -360,6 +360,27 @@ $(function(){
                     }
                 });
 
+                $(document).ready(function() {
+                    $('.facebook_stream').click(function() {
+                        $(this).closest('div').children('button').html('<i class="icon-facebook"></i><h2>Facebook&nbsp;</h2>&nbsp;<i class="icon-caret-down"></i>');
+                        $(this).closest('.containerHeadline').css( "background-color", "#3B5998" );
+                        $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');        
+                        $(this).closest('.containerHeadline').next().load('http://localhost:88/maybank/dashboard/media_stream/facebook_stream');
+                    });
+                    
+                    $('.twitter_stream').click(function() {
+                        $(this).closest('div').children('button').html('<i class="icon-twitter"></i><h2>Twitter&nbsp;</h2><i class="icon-caret-down"></i>');
+                        $(this).closest('.containerHeadline').css( "background-color", "#4099FF" );
+                        $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');        
+                        $(this).closest('.containerHeadline').next().load('http://localhost:88/maybank/dashboard/media_stream/twitter_stream');
+                    });
+                    
+                    $('.youtube_stream').click(function() {
+                        $(this).closest('div').children('button').html('<i class="icon-youtube"></i><h2>Youtube&nbsp;</h2><i class="icon-caret-down"></i>');
+                        $(this).closest('.containerHeadline').css( "background-color", "#FF3333" );
+                        $(this).closest('.containerHeadline').next().html('youtube timeline here');
+                    });
+                });
                 /*==============================================================================================
                  ====================================== LOAD WYSIWYG EDITOR ====================================
                  =============================================================================================*/   

@@ -363,7 +363,7 @@ $(function(){
                 $(document).ready(function() {
                     $('.facebook_stream').click(function() {
                         $(this).closest('div').children('button').html('<i class="icon-facebook"></i>&nbsp;&nbsp;<h2>Facebook</h2>&nbsp;&nbsp;<span class="caret"></span>');
-                        $(this).closest('.containerHeadline').css('background-color:#FFFFFF;');
+                        $(this).closest('.containerHeadline').css( "background-color", "#3B5998" );
                     });
                 });
                 /*==============================================================================================

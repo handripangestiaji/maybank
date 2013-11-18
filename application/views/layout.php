@@ -59,20 +59,20 @@
         <div class="content">
 
             <!-- ==================== BREADCRUMBS / DATETIME ==================== -->
-            <?php 
-            if(session_id() == NULL){
-				echo 
-				'<ul class="breadcrumb">
-						<li><i class="icon-home"></i><a href="index.html"> Home</a> <span class="divider"><i class="icon-angle-right"></i></span></li>
-						<li class="active">Dashboard</li>
-						<li class="moveDown pull-right">
-							<span class="time"></span>
-							<span class="date"></span>
-						</li>    
-					</ul>';
-			}
-			?>
-            <!-- ==================== END OF BREADCRUMBS / DATETIME ==================== -->
+            <ul class="breadcrumb">
+		<li><i class="icon-home"></i><a href="<?php echo base_url('dashboard'); ?>"> Home</a> <span class="divider"><i class="icon-angle-right"></i></span></li>
+		<li class="active">
+		    <?php
+			$value = array('dashboard' => 'Dashboard','cms' => 'Content Management');
+			echo $value[$this->uri->segment(1)];
+		    ?>
+		</li>
+		<li class="moveDown pull-right">
+			<span class="date"></span>
+			<span class="time"></span>
+		</li>    
+	    </ul>
+	    <!-- ==================== END OF BREADCRUMBS / DATETIME ==================== -->
                 
                 <!-- ==================== CONTAINER ==================== -->
                 <div class="container-fluid"> 

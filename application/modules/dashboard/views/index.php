@@ -1,4 +1,3 @@
-<link rel="stylesheet" href="<?php echo base_url('media/css/maybankdcms.css')?>">
 <!-- ==================== COMPOSE MESSAGE ==================== -->
 <div class="container-fluid">
     <form class="form-horizontal contentForm compose-form">
@@ -211,7 +210,7 @@
 <div class="row-fluid">
 <?php
     echo $this->load->view('dashboard/facebook/facebook_stream');
-    //echo $this->load->view('dashboard/twitter/twitter_stream');
+    echo $this->load->view('dashboard/twitter/twitter_stream');
     //echo $this->load->view('dashboard/youtube/youtube_stream');
 ?>
 </div>

@@ -1,93 +1,33 @@
-<!-- ==================== MIDDLE COL ==================== -->
-<div id='ctwitter' class="span4">
-    <!-- ==================== ACTIVITIES CONTAINER ==================== -->
-    <div class="row-fluid">
-        <div class="span12">
-            <!-- ==================== ACTIVITIES HEADLINE ==================== -->
-            <div class="containerHeadline" style="background-color:#4099FF;color: white; height: 30px;">
-                <div class="pull-left" style="padding: 4px 0px; height: auto">
-                    <div class="btn-group">
-                        <button class="btn trans  dropdown-toggle" data-toggle="dropdown">
-                            <i class="icon-twitter"></i> <h2>Twitter </h2> 
-                            &nbsp;&nbsp;<span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Facebook Maybank</a></li>
-                            <li><a href="#">Facebook Maybankard</a></li>
-                            <li><a href="#">Twitter Maybank</a></li>
-                            <li><a href="#">YouTube Maybank</a></li>
-                        </ul>
-                    </div><!-- /btn-group -->
-                </div>
-                <div class="pull-right">
-                    <select style="width: 130px;">
-                        <option value="keyword">Unread</option>
-                        <option value="user">Read</option>
-                        <option value="keyword">Assigned Cases</option>
-                    </select>
-                </div>
-            </div>
-            <!-- ==================== END OF ACTIVITIES HEADLINE ==================== -->
-
-            <!-- ==================== ACTIVITIES FLOATING BOX ==================== -->
-            <div class="floatingBox">
-                <div class="container-fluid">
-                    <!-- ==================== ACTIVITIES MENU ==================== -->
-                    <div class="floatingBoxMenu">
-                        <ul class="nav nav-tabs">
-                            <li class="active"><a href='#mentions'>Mentions</a></li>
-                            <li><a href='#feed'>Homefeed</a></li>
-                            <li><a href='#sendmessage'>Send Twitter</a></li>
-                            <li><a href='#direct'>Direct Message</a></li>
-                        </ul>
-                    </div>
-                    <!-- ==================== END OF ACTIVITIES MENU ==================== -->
-
-                    <div id="ctwitter" class="container-fluid">
-                        <!-- ==================== ALL ACTIVITIES CONTENT ==================== -->
-                        <ul class="floatingBoxContainers" id="mentions">
-                             <?php 
-                                if(is_array($mentions)){
-                                    $this->load->view('dashboard/twitter/twitter_mentions', array('mentions' => $mentions));
-                                }else{
-                                    echo $mentions->errors[0]->message;
-                                }
-                             ?>
-                        </ul>
-                        
-                        <ul class="floatingBoxContainers" id="feed" style="display:none">
-                             <?php 
-                                //if(is_array($homefeed)){
-//                                    $this->load->view('dashboard/twitter/twitter_homefeed', array('homefeed' => $homefeed));
-//                                }else{
-//                                    echo $homefeed->errors[0]->message;
-//                                }
-                             ?> 
-                        </ul>
-                        
-                        <ul class="floatingBoxContainers" id="direct" style="display:none">
-                             <?php 
-                               if(is_array($directmessage)){
-                                    $this->load->view('dashboard/twitter/twitter_messages', array('directmessage' => $directmessage));
-                                 }else{
-                                    echo $directmessage->errors[0]->message;
-                                }
-                                ?> 
-                        </ul>
- 
-
-                         <ul class="floatingBoxContainers" id="sendmessage" style="display:none">
-                             <?php //$this->load->view('dashboard/twitter/twitter_senttweets', array('senttweets' => $senttweets)); ?> 
-                        </ul>
-
-                        <!-- ==================== END OF RECENT TASKS CONTENT ==================== -->
-                         <div class="filled" style="text-align: center;"><button class="btn btn-info"><i class="icon-chevron-down"></i> LOAD MORE</button></div>
-                    </div>
-                </div>
-            </div>
-            <!-- ==================== END OF ACTIVITIES FLOATING BOX ==================== -->
-        </div>
-    </div>
-    <!-- ==================== END OF ACTIVITIES CONTAINER ==================== -->
+<!-- ==================== ACTIVITIES MENU ==================== -->
+<div class="floatingBoxMenu">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href='#mentions'>Mentions</a></li>
+        <li><a href='#feed'>Homefeed</a></li>
+        <!-- <li><a href='#sendmessage'>menu1</a></li> -->
+        <li><a href='#direct'>Direct Message</a></li>
+    </ul>
 </div>
-<!-- ==================== END OF MIDDLE COL ==================== -->
+<!-- ==================== END OF ACTIVITIES MENU ==================== -->
+
+<div id="ctwitter" class="container-fluid">
+    <!-- ==================== ALL ACTIVITIES CONTENT ==================== -->
+    <ul class="floatingBoxContainers" id="mentions">
+         <?php echo $this->load->view('dashboard/twitter/twitter_mentions', array('mentions' => $mentions))?> 
+    </ul>
+    
+    <ul class="floatingBoxContainers" id="feed" style="display:none">
+         <?php //$this->load->view('dashboard/twitter/twitter_homefeed', array('twitter' => $homefeed))?> 
+    </ul>
+    
+    <!--
+    <ul class="floatingBoxContainers" id="sendmessage" style="display:none">
+         <?php /*$this->load->view('dashboard/twitter/twitter_sendmessage', array('twitter' => $twitter))*/ ?> 
+    </ul>
+    -->
+    <ul class="floatingBoxContainers" id="direct" style="display:none">
+         <?php //$this->load->view('dashboard/twitter/twitter_messages', array('directmessage' => $directmessage))?> 
+    </ul>
+
+    <!-- ==================== END OF RECENT TASKS CONTENT ==================== -->
+     <div class="filled" style="text-align: center;"><button class="btn btn-info"><i class="icon-chevron-down"></i> LOAD MORE</button></div>
+</div>

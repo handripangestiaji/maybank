@@ -11,7 +11,6 @@ class account_model extends CI_Model
     /*
         * Retrieve Channel(s) which are restored from databases
 	* $filter : filtering channel by parameter default empty array
-	*
 	* @return array feed collection
         * @author Eko Purnomo
     */

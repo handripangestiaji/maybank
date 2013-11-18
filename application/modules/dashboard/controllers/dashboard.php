@@ -101,7 +101,7 @@ class Dashboard extends MY_Controller {
 				$this->session->set_userdata('twitter_screen_name', $access_token['screen_name']);
 				$this->session->unset_userdata('request_token');
 				$this->session->unset_userdata('request_token_secret');
-				redirect(base_url('/index.php/dashboard'));
+				redirect('dashboard');
 			}
 			else
 			{
@@ -114,7 +114,7 @@ class Dashboard extends MY_Controller {
 	public function mentions()
 	{
 	    $access_token = "CAACEdEose0cBADGyv9cLrxG0ycGrwyZBVrr4jPSG4NKHAZAZBwQS5MF1xrYdgwAiyCLZAnYvx1wBvr5I7MGxVsubO0xPMOIaYhVKsTTeVPvC05YLYfUttS0W3SzfC3wFltkY3Lo11zfH7LTVwF6zwADlv9HlAY7ZBinMshTHMM5dYxeY3ZA6bSY5zSNsDOFOsmE6bb5cbjiQZDZD";
-		$data['fb_feed'] =  $this->facebook_model->RetrieveFeedFacebook('168151513217686', $access_token, "feed");
+		$data['fb_feed'] =  $this->facebook_model->RetrievePost('168151513217686', $access_token, false);
 		$this->load->view('dashboard/index', $data);
 	}
     public function twitterAction(){

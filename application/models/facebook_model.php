@@ -34,7 +34,7 @@ class facebook_model extends CI_Model
     public function RetrieveFeed($page_id, $access_token, $type = 'feed', $isOwnPost = false){
 	
         $fql = '{"query1":"SELECT post_id, actor_id, share_count, attachment, share_count, updated_time, message,like_info, comment_info, message_tags FROM stream WHERE source_id = '.$page_id.
-	' AND actor_id  <> '.$page_id.' order by updated_time DESC LIMIT 30",
+	' AND actor_id  <> '.$page_id.' order by updated_time ASC LIMIT 50",
         "query2" : "SELECT id,post_id, comment_count, text, time, fromid FROM comment WHERE post_id in (Select post_id from #query1 where comment_info.comment_count > 0) ",
         "query3" : "Select uid, name, username from user where uid in (select actor_id from #query1) or uid in (select fromid from #query2)",
         "query4" : "Select page_id, name, username from page where page_id in (select actor_id from #query1) or page_id in (select fromid from #query2)"
@@ -74,9 +74,9 @@ class facebook_model extends CI_Model
 	* @return array feed collection
         * @author Eko Purnomo
     */
-    public function RetrieveOwnPost($page_id, $access_token){
+    public function RetrievePost($page_id, $access_token, $isOwnPost = true){
 	 $fql = '{"query1":"SELECT share_count, attachment, post_id, actor_id, share_count, updated_time, message,like_info, comment_info, message_tags FROM stream WHERE source_id = '.$page_id.
-	' AND actor_id  = '.$page_id.' order by updated_time DESC LIMIT 15",
+	' AND actor_id '.($isOwnPost ? " = " : " <> " ).$page_id.' order by updated_time DESC LIMIT ASC",
         "query2" : "SELECT id,post_id, comment_count, parent_id, text, time, likes, fromid FROM comment WHERE post_id in (Select post_id from #query1 where comment_info.comment_count > 0) ",
         "query3" : "Select uid, name, username,sex from user where uid in (select actor_id from #query1) or uid in (select fromid from #query2)",
         "query4" : "Select page_id, name, username from page where page_id in (select actor_id from #query1) or page_id in (select fromid from #query2)"
@@ -130,10 +130,10 @@ class facebook_model extends CI_Model
      * Transfer all feed from facebook based on post input
      * $post : post retrieved from facebook
     */
-    public function TransferFeedToDb($post, $channel_id){
+    public function TransferFeedToDb($post, $channel){
 	for($i=0; $i < count($post); $i++){
 	    //echo "<pre>";print_r($post[$i]);echo"</pre>";
-	    $this->SavePost($post[$i], $channel_id);
+	    $this->SavePost($post[$i], $channel);
 	}
     }
     
@@ -142,39 +142,45 @@ class facebook_model extends CI_Model
     * $each_post : each post from facebook
     * $channel_id : retrieved from which channel stored on db
     */
-    public function SavePost($each_post, $channel_id){
+    public function SavePost($each_post, $channel){
 	$this->db->trans_start();
 	$timezone = new DateTimeZone("Europe/London");
 	$stream = $this->IsStreamIdExists($each_post->post_id);
-
+	$this->SaveFacebookUser($each_post->users);
 	$social_stream = array(
 	    "post_stream_id" => $each_post->post_id,
-	    "channel_id" => $channel_id,
+	    "channel_id" => $channel->channel_id,
 	    "type" => "facebook",
 	    "retrieved_at" => date("Y-m-d H:i:s"),
 	    "created_at" => date("Y-m-d H:i:s", $each_post->updated_time)
 	);
+	$updated_time = new DateTime(date("Y-m-d H:i:s e", $each_post->updated_time), $timezone);
 	$social_stream_fb_post = array(
 	    "post_content" => $each_post->message,
 	    "author_id" => number_format($each_post->actor_id,0,'.',''),
-	    "attachment" => isset($each_post->media) ? json_encode($each_post->media) : "",
+	    "attachment" => isset($each_post->attachment->media) ? json_encode($each_post->attachment->media) : "",
 	    "enggagement_count" => 0,
 	    "total_likes" => $each_post->like_info->like_count,
 	    "total_shares" =>  $each_post->share_count,
 	    "total_comments" => isset($each_post->comments) ? count($each_post->comments) : 0,
-	    "updated_at" => $each_post->updated_time
+	    "updated_at" => $updated_time->format("Y-m-d H:i:s"),
+	    "is_customer_post" => $channel->social_id == $each_post->actor_id ? 0 : 1
 	);
-	if($stream == null){
-	    $this->db->insert("social_stream", $social_stream);
-	    $insert_id = $this->db->insert_id();
-	    $social_stream_fb_post['post_id'] = $insert_id;
-	    $this->db->insert("social_stream_fb_post", $social_stream_fb_post);
+	if($each_post->message != '' && $each_post->message != null){
+	    if($stream == null){
+		$this->db->insert("social_stream", $social_stream);
+		$insert_id = $this->db->insert_id();
+		$social_stream_fb_post['post_id'] = $insert_id;
+		$this->db->insert("social_stream_fb_post", $social_stream_fb_post);
+	    }
+	    else{
+		$insert_id = $stream->post_id;
+		$this->db->where("post_id", $stream->post_id);
+		$this->db->update("social_stream_fb_post", $social_stream_fb_post);
+	    }
 	}
-	else{
-	    $insert_id = $stream->post_id;
-	    $this->db->where("post_id", $stream->post_id);
-	    $this->db->update("social_stream_fb_post", $social_stream_fb_post);
-	}
+	else
+	    return;
 	
 	if(isset($each_post->comments)){
 	    for($x=0; $x < count($each_post->comments); $x++){

@@ -1,3 +1,4 @@
+<div class="container-fluid">
 <!-- ==================== ACTIVITIES MENU ==================== -->
 <div class="floatingBoxMenu">
     <ul class="nav nav-tabs">
@@ -25,4 +26,5 @@
         <?php $this->load->view('dashboard/facebook/own_post', array('own_post' => $own_post))?> 
     </ul>
     <!-- ==================== END OF RECENT COMMENTS CONTENT ==================== -->
+</div>
 </div>

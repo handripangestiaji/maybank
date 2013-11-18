@@ -1,8 +1,8 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Dashboard extends MY_Controller {
+class Media_stream extends CI_Controller {
 
-     private $connection;
+    private $connection;
 	   
     function __construct()
 	{
@@ -37,21 +37,21 @@ class Dashboard extends MY_Controller {
     }
     
     
-	public function index()
-	{
+	public function facebook_stream(){
 		$access_token_fb = fb_dummy_accesstoken();
 		$this->load->model('facebook_model');
-	
-	    
-	   $data['fb_feed'] = $this->facebook_model->RetrieveFeed("168151513217686", $access_token_fb, 'feed');
-	   $data['own_post'] = $this->facebook_model->RetrievePost("168151513217686", $access_token_fb);
-	   $data['mentions']=$this->connection->get('statuses/mentions_timeline');   
-       $data['homefeed']=$this->connection->get('statuses/home_timeline');  
-       $data['directmessage']=$this->connection->get('direct_messages');  
-       //$data['h']=$this->connection->get('statuses/home_timeline');  
-     
-    	$this->load->view('dashboard/index',$data);
+		$data['fb_feed'] = $this->facebook_model->RetrieveFeed("168151513217686", $access_token_fb, 'feed');
+		$data['own_post'] = $this->facebook_model->RetrievePost("168151513217686", $access_token_fb);
+		$this->load->view('dashboard/facebook/facebook_stream',$data);
 	}
+	
+    	public function twitter_stream(){
+		$data['mentions']=$this->connection->get('statuses/mentions_timeline');   
+                $data['homefeed']=$this->connection->get('statuses/home_timeline');  
+                $data['directmessage']=$this->connection->get('direct_messages');  
+		$this->load->view('dashboard/twitter/twitter_stream',$data);
+	}
+	
 	
 	public function auth()
 	{

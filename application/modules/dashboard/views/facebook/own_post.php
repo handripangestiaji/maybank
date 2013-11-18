@@ -124,6 +124,7 @@
             <button type="button" class="btn btn-danger" style="margin-left: 10px;"><i class="icon-plus"></i> CASE</button>
             <button type="button" class="btn btn-primary" style="margin-left: 10px;"><i class="icon-mail-reply"></i></button>
         </div>
+        <br clear="all" />
     </h4>
     <div class="reply filled hide">
         <form class="contentForm">

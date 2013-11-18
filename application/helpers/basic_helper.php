@@ -178,7 +178,6 @@ function curl_get_file_contents($URL) {
     $contents = curl_exec($c);
     $err  = curl_getinfo($c,CURLINFO_HTTP_CODE);
     curl_close($c);
-    print_r($URL);
     if ($contents) return $contents;
     else return FALSE;
   }

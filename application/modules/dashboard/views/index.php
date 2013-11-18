@@ -209,8 +209,10 @@
 
 <div class="row-fluid">
 <?php
+    $data['type'] = 'facebook';
     $data['stream'] = 'dashboard/facebook/facebook_stream';
     $this->load->view('dashboard/box_stream',$data);
+    $data['type'] = 'twitter';
     $data['stream'] = 'dashboard/twitter/twitter_stream';
     $this->load->view('dashboard/box_stream',$data);
     //$this->load->view('dashboard/twitter/twitter_stream');

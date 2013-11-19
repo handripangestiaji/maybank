@@ -83,7 +83,6 @@ for($i=0;$i<count($mentions);$i++){
                 <input type="hidden" name="id" value="<?php echo $mentions[$i]->id; ?>" />
                 <input type="hidden" name="userid" value="<?php echo $mentions[$i]->user->id_str; ?>" />
                 <input type="hidden" name="followid" value="<?php echo $mentions[$i]->in_reply_to_user_id_str; ?>" />
-            
                </form>    
         </div>
         <br clear="all" />

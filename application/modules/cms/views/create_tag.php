@@ -3,7 +3,7 @@
 </div>
  <div class="floatingBox">
     <div class="container-fluid campaignForm">
-        <form method="post" action="<?php echo base_url('cms/create_tag')?>" class="form-horizontal contentForm">
+        <form method="post" action="<?php echo site_url('cms/create_tag')?>" class="form-horizontal contentForm">
             <div class="control-group">
                 <label class="control-label">Tag Name</label>
                 <div class="controls">
@@ -43,7 +43,10 @@
 		                <td><?php echo $v->tag_name ?></td>
 		                <td><?php echo $v->increment ?></td>
 		                <td><?php echo $v->display_name ?></td>
-		                <td><button class="btn btn-mini btn-danger pull-right" type="button">delete</button></td>
+		                <td>
+		                <a href="<?php echo site_url('cms/create_tag?action=delete&id='.$v->id)?>" class="btn btn-mini btn-danger pull-right">delete</a>
+		                <!-- <button id="delete_btn" class="btn btn-mini btn-danger pull-right" type="button">delete</button> -->
+		                </td>
 					</tr>
             	<?php endforeach; ?>
             <?php endif;?>

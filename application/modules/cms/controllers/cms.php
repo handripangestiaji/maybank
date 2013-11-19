@@ -6,7 +6,7 @@ class Cms extends MY_Controller {
 	{
 		parent::__construct();
 		$this->load->library('Shorturl');
-		$this->load->model(array('tag_model'));
+		$this->load->model(array('tag_model', 'product_model'));
 		$this->load->helper('form');
 		$this->load->library('form_validation');
 	}
@@ -17,7 +17,8 @@ class Cms extends MY_Controller {
         $this->load->view('cms/index',$data);
     }
      
-    public function create_campaign(){
+    public function create_campaign()
+    {
         $data['cms_view'] = 'create_campaign';
         $this->load->view('cms/index',$data);
     }
@@ -25,6 +26,7 @@ class Cms extends MY_Controller {
     public function create_tag(){
     	
     	$data['tags'] = $this->tag_model->get();
+    	$action = $this->input->get('action');
         $data['cms_view'] = 'create_tag';
         
         if ($this->input->server('REQUEST_METHOD') === "POST")
@@ -47,6 +49,18 @@ class Cms extends MY_Controller {
 	        redirect('cms/create_tag');
         }
         
+        if ($action == 'delete')
+        {
+	        $id = $this->input->get('id');
+	        
+	        if ($id)
+	        {
+		       $this->tag_model->delete($id);
+	        }
+	        
+	        redirect('cms/create_tag');
+        }
+        
         $this->load->view('cms/index',$data);
     }
      
@@ -65,8 +79,44 @@ class Cms extends MY_Controller {
         $this->load->view('cms/index',$data);
     }
      
-    public function create_product(){
+    public function create_product()
+    {
+    	$data['products'] = $this->product_model->get();
+    	$action = $this->input->get('action');
         $data['cms_view'] = 'create_product';
+        
+        if ($this->input->server('REQUEST_METHOD') === "POST")
+        {
+        	$params = array();
+	        $params = $this->input->post('product');
+	        $params['user_id'] = "1";
+	        	        
+	        $this->form_validation->set_rules('product[product_name]', 'Product Name', 'required|xss_clean');
+	        
+	        if ($this->form_validation->run() == TRUE)
+	        {
+		        $this->product_model->insert($params);
+	        }
+	        else 
+	        {
+		        $this->session->set_flashdata('message_type', 'error');
+		        $this->session->set_flashdata('message_body', 'Please insert Tag name');
+	        }
+	        redirect('cms/create_product');
+        }
+        
+        if ($action == 'delete')
+        {
+	        $id = $this->input->get('id');
+	        
+	        if ($id)
+	        {
+		       $this->product_model->delete($id);
+	        }
+	        
+	        redirect('cms/create_product');
+        }
+        
         $this->load->view('cms/index',$data);
     }
 }

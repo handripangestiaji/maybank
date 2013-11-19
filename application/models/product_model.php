@@ -1,9 +1,9 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Tag_model extends CI_Model
+class Product_model extends CI_Model
 {
-	protected $_table = "content_tag";
-
+	protected $_table = "content_products";
+	
 	public function __construct()
 	{
 		parent::__construct();
@@ -22,7 +22,7 @@ class Tag_model extends CI_Model
 	
 	public function get()
 	{
-		$this->db->select('content_tag.*, user.display_name');
+		$this->db->select($this->_table.'.*, user.display_name');
 		
 		$this->db->join('user', $this->_table.'.user_id = user.user_id', 'left');
 		
@@ -33,7 +33,7 @@ class Tag_model extends CI_Model
 	
 	public function getOneBy($params = array())
 	{
-		if (isset($params['id']))
+		if(isset($params['id']))
 		{
 			$this->db->where('id', $params['id']);
 		}
@@ -56,4 +56,5 @@ class Tag_model extends CI_Model
 		
 		return true;
 	}
+	
 }

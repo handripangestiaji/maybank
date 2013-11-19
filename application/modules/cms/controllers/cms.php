@@ -6,7 +6,7 @@ class Cms extends MY_Controller {
 	{
 		parent::__construct();
 		$this->load->library('Shorturl');
-		$this->load->model(array('tag_model', 'product_model'));
+		$this->load->model(array('tag_model', 'product_model', 'campaign_model'));
 		$this->load->helper('form');
 		$this->load->library('form_validation');
 	}
@@ -19,7 +19,58 @@ class Cms extends MY_Controller {
      
     public function create_campaign()
     {
+    	$data['campaigns'] = $this->campaign_model->getAllArray();
+    	
+    	$data['products'] = $this->product_model->get();
+    	
+    	$data['tags'] = $this->tag_model->get();
+    	
         $data['cms_view'] = 'create_campaign';
+        
+        $action = $this->input->get('action');
+        
+        if ($this->input->server('REQUEST_METHOD') === "POST")
+        {
+	        $campaigns = array();
+	        
+	        $campaigns = $this->input->post('campaign');
+	        $campaigns['user_id'] = "1";
+	        
+	        $products_id = $this->input->post('products_id');
+	        $tags = $this->input->post('tag_id');
+	        
+/*
+	        echo "<pre>";
+	        die(print_r($tags));
+*/
+	        
+	        $this->form_validation->set_rules('campaign[campaign_name]', 'Campaign Name', 'required|xss_clean');
+	        
+	        if ($this->form_validation->run() == TRUE)
+	        {
+		        $this->campaign_model->insert($campaigns, $products_id, $tags);
+	        }
+	        else 
+	        {
+		        $this->session->set_flashdata('message_type', 'error');
+		        $this->session->set_flashdata('message_body', 'Please Insert Campaign Parameters');
+	        }
+	        
+	        redirect('cms/create_campaign');
+        }
+        
+        if($action == 'delete')
+        {
+	        $id = $this->input->get('id');
+	        
+	        if ($id)
+	        {
+		       $this->campaign_model->delete($id);
+	        }
+	        
+	        redirect('cms/create_campaign');
+        }
+        
         $this->load->view('cms/index',$data);
     }
      

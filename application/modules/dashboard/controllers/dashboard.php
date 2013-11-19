@@ -40,7 +40,7 @@ class Dashboard extends MY_Controller {
     
 	public function index()
 	{
-     	redirect(base_url('/index.php/dashboard/socialmedia'));   
+     	redirect('dashboard/socialmedia');   
 	}
 	
 	public function auth()

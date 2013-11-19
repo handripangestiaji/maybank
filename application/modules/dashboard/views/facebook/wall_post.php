@@ -30,16 +30,6 @@ for($i=0; $i<count($fb_feed);$i++):?>
                         <i class="icon-play-circle moreOptions pull-right"></i>
                     </p>
                     <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
-                    <p class="headLine">
-                        <span class="author">Maybank</span>
-                        <i class="icon-circle"></i>
-                        <span>posted a <span class="cyanText">comment</span></span>
-                        <i class="icon-circle"></i>
-                        <span>2 hours ago</span>
-                        <i class="icon-play-circle moreOptions pull-right"></i>
-                    </p>
-                    <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
-
                     <!--====== MODAL REPLY AND ASSIGN BUTTONS ========-->
                     <h4 class="filled">
                         <button type="button" class="reply-btn btn btn-primary"><i class="icon-mail-reply"></i> Reply</button>

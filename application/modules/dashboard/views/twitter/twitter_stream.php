@@ -34,7 +34,14 @@
     </ul>
     -->
     <ul class="floatingBoxContainers" id="direct" style="display:none">
-         <?php $this->load->view('dashboard/twitter/twitter_messages', array('directmessage' => $directmessage)); ?> 
+         <?php 
+            //print_r($directmessage);
+             if($directmessage){
+                $this->load->view('dashboard/twitter/twitter_messages', array('directmessage' => $directmessage));
+             }else{
+                echo $directmessage->errors[0]->message;
+             }   
+         ?> 
     </ul>
 
     <!-- ==================== END OF RECENT TASKS CONTENT ==================== -->

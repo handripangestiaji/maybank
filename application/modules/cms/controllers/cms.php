@@ -6,6 +6,9 @@ class Cms extends MY_Controller {
 	{
 		parent::__construct();
 		$this->load->library('Shorturl');
+		$this->load->model(array('tag_model'));
+		$this->load->helper('form');
+		$this->load->library('form_validation');
 	}
 
     public function index()
@@ -20,7 +23,30 @@ class Cms extends MY_Controller {
     }
      
     public function create_tag(){
+    	
+    	$data['tags'] = $this->tag_model->get();
         $data['cms_view'] = 'create_tag';
+        
+        if ($this->input->server('REQUEST_METHOD') === "POST")
+        {
+	        $arr = array();
+	        $arr['tag_name'] = $this->input->post('tag_name');
+	        $arr['user_id'] = "1";
+	        
+	        $this->form_validation->set_rules('tag_name', 'Tag Name', 'required|xss_clean');
+	        
+	        if ($this->form_validation->run() == TRUE)
+	        {
+		        $this->tag_model->insert($arr);
+	        }
+	        else 
+	        {
+		        $this->session->set_flashdata('message_type', 'error');
+		        $this->session->set_flashdata('message_body', 'Please insert Tag name');
+	        }
+	        redirect('cms/create_tag');
+        }
+        
         $this->load->view('cms/index',$data);
     }
      

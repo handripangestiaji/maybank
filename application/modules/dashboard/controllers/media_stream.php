@@ -45,10 +45,11 @@ class Media_stream extends CI_Controller {
 	$this->load->view('dashboard/facebook/facebook_stream',$data);
     }
     
-    public function twitter_stream(){
-	$data['mentions']=$this->connection->get('statuses/mentions_timeline');   
-	$data['homefeed']=$this->connection->get('statuses/home_timeline');  
-	$data['directmessage']=$this->connection->get('direct_messages');  
+    public function twitter_stream($channel_id = 2){
+	$this->load->model('twitter_model');
+	$data['mentions'] = $this->twitter_model->ReadTweetFromDb($channel_id, "mentions");
+	$data['homefeed']= $this->twitter_model->ReadTweetFromDb($channel_id, "home_feed");
+	$data['directmessage'] = $this->twitter_model->ReadDMFromDb($channel_id);
 	$this->load->view('dashboard/twitter/twitter_stream',$data);
     }
 	
@@ -116,17 +117,13 @@ class Media_stream extends CI_Controller {
 	    $data['fb_feed'] =  $this->facebook_model->RetrievePost('168151513217686', $access_token, false);
 	    $this->load->view('dashboard/index', $data);
     }
-public function twitterAction(){
-    
-    
+    public function twitterAction(){
 	  $data['twiteerAction']=$this->connection->get('statuses/mentions_timeline');   
 	  $data['twiteerAction']=$this->connection->get('statuses/home_timeline');  
 	  $data['twiteerAction']=$this->connection->get('direct_messages');  
 	  $data['twiteerAction']=$this->connection->get('statuses/home_timeline');  
 	  $this->load->view('dashboard/index',$data); 
-
-	
-}
+    }
     
     public function fb_access_token(){
 	    $app_id = $this->config->item('fb_appid');

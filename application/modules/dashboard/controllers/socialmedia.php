@@ -42,11 +42,8 @@ class Socialmedia extends MY_Controller {
      {
      
 	  $access_token_fb = fb_dummy_accesstoken();
-	      $this->load->model('facebook_model');
-	    
-	      //$data['fb_feed'] = $this->facebook_model->RetrieveFeed("168151513217686", $access_token_fb, 'feed');
-	      //$data['own_post'] = $this->facebook_model->RetrievePost("168151513217686", $access_token_fb);
-	   $filter = array(
+	  $this->load->model('facebook_model');
+	  $filter = array(
 	       '' => ''
 	   );
 	  $data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter);

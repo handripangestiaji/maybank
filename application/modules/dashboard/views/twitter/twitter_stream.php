@@ -14,7 +14,7 @@
     <!-- ==================== ALL ACTIVITIES CONTENT ==================== -->
     <ul class="floatingBoxContainers" id="mentions">
          <?php 
-         if($mentions){
+         if(is_array($mentions)){
             echo $this->load->view('dashboard/twitter/twitter_mentions', array('mentions' => $mentions));
          }else{
             echo $mentions->errors[0]->message;
@@ -36,7 +36,7 @@
     <ul class="floatingBoxContainers" id="direct" style="display:none">
          <?php 
             //print_r($directmessage);
-             if($directmessage){
+             if(is_array($directmessage)){
                 $this->load->view('dashboard/twitter/twitter_messages', array('directmessage' => $directmessage));
              }else{
                 echo $directmessage->errors[0]->message;

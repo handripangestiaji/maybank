@@ -10,11 +10,22 @@ class twitter_model extends CI_Model
         $this->load->library('Twitteroauth');
         
     }
-    
+    /*
+    * Initialize connection properties
+    * $access_secret : Twitter Access Secret
+    * $access_token : Twitter Access Token
+    *
+    * return NULL
+    */
     public function InitConnection($access_token, $access_secret){
         $this->connection = $this->twitteroauth->create("EXWkuGJlJ8zMUGccF04uMA","eUw0K1YuzMof6RqI0oYw22mV6JYH0UbePMscMSiDZk",$access_token,$access_secret);
     }
     
+    
+    /*
+    * Get Mentions from twitter directly based on channel defined (statused/mentions_timeline)
+    * $channel = Current Channel
+    **/
     public function Mentions($channel){
         $result = $this->connection->get('statuses/mentions_timeline',
                                          array("count" => 200));
@@ -27,9 +38,6 @@ class twitter_model extends CI_Model
         }
     }
     
-    public function DirectMessages(){
-        
-    }
     
     public function OwnPost($channel){
         $result = $this->connection->get('statuses/user_timeline',
@@ -63,6 +71,42 @@ class twitter_model extends CI_Model
         }
     }
     
+    public function DirectMessage($channel){
+        $result = $this->connection->get('direct_messages',
+                array(
+                        "count" => 200
+                ));
+        $result2 = $this->connection->get('direct_messages/sent',
+                array(
+                        "count" => 200
+                ));
+        echo "<pre>";
+        print_r($result2);
+        echo "</pre>";
+        if(is_array($result)){
+            foreach($result as $dm){
+                $this->SaveTwitterUsers($dm->sender);
+                $this->SaveTwitterUsers($dm->recipient);
+                $this->SaveDirectMessages($dm, $channel);
+            }
+        }
+        if(is_array($result2)){
+            foreach($result2 as $dm){
+                $this->SaveTwitterUsers($dm->sender);
+                $this->SaveTwitterUsers($dm->recipient);
+                $this->SaveDirectMessages($dm, $channel);
+            }
+        }
+        
+    }
+    
+    
+    /*
+    * Saving each tweet retrieved from twitter
+    * $tweet = Tweet Object
+    * $channel = Current Channel
+    * $come_from = mentions/home_feed/user_timeline
+    */
     public function SaveTweets($tweet, $channel, $come_from = "mentions"){
         $this->db->trans_start();
         $timezone = new DateTimeZone("Europe/London");
@@ -105,8 +149,41 @@ class twitter_model extends CI_Model
         $this->db->trans_complete();
     }
     
-    public function SaveDirectMessages(){
+    public function SaveDirectMessages($direct_message, $channel){
+        $timezone = new DateTimeZone("Europe/London");
+        $created_at = new DateTime($direct_message->created_at, $timezone);
+        $retrieved_at = new DateTime(date("Y-m-d H:i:s e"), $timezone);
+        $this->db->trans_start();
+        $post = $this->GetTweetId($direct_message->id_str, "twitter_dm");
+        $social_stream = array(
+	    "post_stream_id" => $direct_message->id_str,
+	    "channel_id" => $channel->channel_id,
+	    "type" => "twitter_dm",
+	    "retrieved_at" => $retrieved_at->format("Y-m-d H:i:s e"),
+	    "created_at" => $created_at->format("Y-m-d H:i:s")
+	);
+        $dm_saved = array(
+            "entities" => json_encode($direct_message->entities),
+            "text" => $direct_message->text,
+            "sender" => $direct_message->sender_id,
+            "recipient" => $direct_message->recipient_id,
+            "type" => $direct_message->sender_id == $channel->social_id ? "outbox" : "inbox"
+        );
         
+        if($post == null){
+            $this->db->insert("social_stream", $social_stream);
+            $post = new stdClass();
+            $dm_saved['post_id'] = $this->db->insert_id();
+            $this->db->insert("twitter_direct_messages", $dm_saved);
+        }
+        else{
+            $this->db->where('post_id', $post->post_id);
+            $this->db->insert("social_stream", $social_stream);
+            $this->db->where('post_id', $post->post_id);
+            $this->db->update("twitter_direct_messages", $dm_saved);
+            
+        }
+        $this->db->trans_complete();
     }
     
     public function SaveTwitterUsers($user){
@@ -148,12 +225,12 @@ class twitter_model extends CI_Model
         return $this->db->get()->row();
     }
     
-    public function GetTweetId($post_stream_id){
+    public function GetTweetId($post_stream_id, $type = "twitter"){
         $this->db->select("post_id");
         $this->db->from("social_stream");
         $this->db->where(array(
                                "post_stream_id" => $post_stream_id,
-                               "type" => "twitter"
+                               "type" => $type
                         ));
         return $this->db->get()->row();
     }

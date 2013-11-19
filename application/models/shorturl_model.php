@@ -12,8 +12,6 @@ class Shorturl_model extends CI_Model
 	
 	public function find($params = array())
 	{
-		$this->db->select('short_code')
-		
 		if (isset($params['long_url']))
 		{
 			$this->db->where('long_url', $params['long_url']);
@@ -25,7 +23,7 @@ class Shorturl_model extends CI_Model
 		
 		$result = $query->row();
 		
-		return (empty($result)) ? false : $result->short_code;
+		return (empty($result)) ? false : $result;
 	}
 	
 	public function insert($params = array())

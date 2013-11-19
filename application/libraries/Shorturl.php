@@ -17,29 +17,57 @@ class Shorturl {
 	{
 		if (empty($url)) 
 		{
-			throw new Exception("No URL was supplied");
+			throw new \Exception("No URL was supplied");
 		}
 		
 		if ($this->validateUrlFormat($url) == false)
 		{
-			throw new Exception("URL does not have a valid format");
+			throw new \Exception("URL does not have a valid format");
 		}
 		
 		if (self::$checkUrlExists)
 		{
 			if (!$this->verifyUrlExists($url)) 
 			{
-				throw new Exception("URL does not appear to exist");
+				throw new \Exception("URL does not appear to exist");
 			}
 		}
 		
 		$shortCode = $this->urlExistsInDb($url);
+		
 		if($shortCode == false)
 		{
 			$shortCode = $this->createShortCode($url);
 		}
 		
 		return $shortCode;
+	}
+	
+	public function shortCodeToUrl($code, $increment = true)
+	{
+		if (empty($code))
+		{
+			throw new \Exception("No short code was supplied");
+		}
+		
+		if ($this->validateShortCode($code) == false)
+		{
+			throw new \Exception("Short code does not have a valid format");
+		}
+		
+		$urlRow = $this->getUrlFromDb($code);
+		
+		if (empty($urlRow))
+		{
+			throw new \Exception("Short code does not appear to exist");
+		}
+		
+		if ($increment == true)
+		{
+			$this->incrementCounter($urlRow["id"]);
+		}
+		
+		return $urlRow["long_url"];
 	}
 	
 	protected function validateUrlFormat($url)
@@ -68,7 +96,7 @@ class Shorturl {
 		
 		$result = $this->_ci->shorturl_model->find($params);
 		
-		return $result;
+		return $result->short_code;
 	}
 	
 	protected function createShortCode($url)
@@ -88,14 +116,14 @@ class Shorturl {
 		
 		if ($id < 1)
 		{
-			throw new Exception("The ID is not a valid integer");
+			throw new \Exception("The ID is not a valid integer");
 		}
 		
 		$length = strlen(self::$chars);
 		
 		if ($length < 10)
 		{
-			throw new Exception("Length of chars is too small");
+			throw new \Exception("Length of chars is too small");
 		}
 		
 		$code = "";
@@ -115,17 +143,31 @@ class Shorturl {
 	{
 		if ($id == null || $code == null)
 		{
-			throw new Exception("Input parameter(s) invalid");
+			throw new \Exception("Input parameter(s) invalid");
 		}
 		
 		$row = $this->_ci->shorturl_model->udpate($id, array("short_code" => $code));
 		
 		if ($row == FALSE)
 		{
-			throw new Exception("Row was not updated with short code");
+			throw new \Exception("Row was not updated with short code");
 		}
 		
 		return true;
+	}
+	
+	protected function validateShortCode($code)
+	{
+		return preg_match("|[". self::$chars ."]+|", $code);
+	}
+	
+	protected function getUrlFromDb($code)
+	{
+		$params = array("short_code" => $code);
+		
+		$result = $this->_ci->shorturl_model->find($params);
+		
+		return $result;
 	}
 	
 }

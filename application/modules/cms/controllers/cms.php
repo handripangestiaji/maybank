@@ -4,7 +4,8 @@ class Cms extends MY_Controller {
 
 	public function __construct()
 	{
-		$this->load->library('shorturl');
+		parent::__construct();
+		$this->load->library('Shorturl');
 	}
 
     public function index()

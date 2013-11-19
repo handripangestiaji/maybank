@@ -8,7 +8,6 @@ class Shorturl {
 	
 	public function __construct()
 	{
-		parent::__construct();
 		$this->_ci =& get_instance();
 		$this->_ci->load->model('shorturl_model');
 	}
@@ -72,7 +71,7 @@ class Shorturl {
 	
 	protected function validateUrlFormat($url)
 	{
-		return filter_val($url, FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED);
+		return filter_var($url, FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED);
 	}
 	
 	protected function verifyUrlExists($url)
@@ -80,7 +79,7 @@ class Shorturl {
 		$ch = curl_init();
 		
 		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_BODY, true);
+		curl_setopt($ch, CURLOPT_NOBODY, true);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_exec($ch);
 		
@@ -94,7 +93,7 @@ class Shorturl {
 	{
 		$params = array('long_url' => $url);
 		
-		$result = $this->_ci->shorturl_model->find($params);
+		$result = $this->_ci->shorturl_model->getOneBy($params);
 		
 		return $result->short_code;
 	}
@@ -165,7 +164,7 @@ class Shorturl {
 	{
 		$params = array("short_code" => $code);
 		
-		$result = $this->_ci->shorturl_model->find($params);
+		$result = $this->_ci->shorturl_model->getOneBy($params);
 		
 		return $result;
 	}

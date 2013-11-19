@@ -1,8 +1,8 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Dashboard extends MY_Controller {
+class Media_stream extends CI_Controller {
 
-     private $connection;
+    private $connection;
 	   
     function __construct()
 	{
@@ -15,7 +15,6 @@ class Dashboard extends MY_Controller {
 		$this->load->library('session');
 		$this->load->helper('url');
 		$this->load->helper('array');
-        $this->load->helper('form');
 		
 		$this->session->set_userdata('access_token', $this->config->item('twitter_access_token'));
 		$this->session->set_userdata('access_token_secret', $this->config->item('twitter_access_secret'));
@@ -38,10 +37,21 @@ class Dashboard extends MY_Controller {
     }
     
     
-	public function index()
-	{
-     	redirect(base_url('/index.php/dashboard/socialmedia'));   
+	public function facebook_stream(){
+		$access_token_fb = fb_dummy_accesstoken();
+		$this->load->model('facebook_model');
+		$data['fb_feed'] = $this->facebook_model->RetrieveFeed("168151513217686", $access_token_fb, 'feed');
+		$data['own_post'] = $this->facebook_model->RetrievePost("168151513217686", $access_token_fb);
+		$this->load->view('dashboard/facebook/facebook_stream',$data);
 	}
+	
+    	public function twitter_stream(){
+		$data['mentions']=$this->connection->get('statuses/mentions_timeline');   
+                $data['homefeed']=$this->connection->get('statuses/home_timeline');  
+                $data['directmessage']=$this->connection->get('direct_messages');  
+		$this->load->view('dashboard/twitter/twitter_stream',$data);
+	}
+	
 	
 	public function auth()
 	{
@@ -108,101 +118,16 @@ class Dashboard extends MY_Controller {
 	}
     public function twitterAction(){
         
-        if(isset($_POST['action'])){
-            $action=$_POST['action'];   
-        }
         
-        if(isset($_POST['content'])){
-            $content=$_POST['content'];
-        }
-        
-        if(isset($_POST['str_id'])){
-            $str_id=$_POST['str_id'];
-        }
-        
-        if(isset($_GET['friendid'])){
-            $friendid=$_GET['friendid'];
-        }
-        
-        if(isset($_POST['followid'])){
-            $followid=$_POST['followid'];
-        }
-        
-        if(isset($_POST['id'])){//id user
-            $id=$_POST['id'];
-        }
-        /*
-        echo "<br><br><br><br><br>";
-        echo $action;
-        echo $str_id;
-*/
-        //echo "<br><br><br><br><br>strid:".$str_id."<br>cont:<br>act:".$action;
-        //print_r($_POST);
-        
-        if($action=='sendTweet'){ //ok
-
-            /* statuses/update */
-            $parameters = array('status' => $content);
-            $this->connection->post('statuses/update', $parameters);
-    
-        }elseif($action=='deleteTwiter'){
-    
-            /* statuses/destroy */
-            $str_id='402012691415306240';//$_POST[str_id];
-            $method = "statuses/destroy/$str_id";
-            $this->connection->delete($method);    
-    
-        }elseif($action=='replay'){//replay tweet,Direct message
-    
-            /* statuses/update */
-            $parameters = array('status' => $content);
-            $this->connection->post('statuses/update', $parameters);
-               
-        }elseif($action=='retweet'){ //ok
-
-            /* statuses/retweet */
-            $method = 'statuses/retweet/'.$str_id;
-            $this->connection->post($method);
-    
-        }elseif($action=='sent_dm'){//ok
+              $data['twiteerAction']=$this->connection->get('statuses/mentions_timeline');   
+              $data['twiteerAction']=$this->connection->get('statuses/home_timeline');  
+              $data['twiteerAction']=$this->connection->get('direct_messages');  
+              $data['twiteerAction']=$this->connection->get('statuses/home_timeline');  
+              $this->load->view('dashboard/index',$data); 
+ 
             
-            /* direct_messages/new */
-            $parameters = array('user_id' => $friendid, 'text' => $content);
-            $method = 'direct_messages/new';
-            $this->connection->post($method, $parameters);
-            
-        }elseif($action=='favorit'){
-            
-            /* direct_messages/new */
-            $parameters = array('id' => $str_id);
-            $method = 'favorites/create';
-            $this->connection->post($method, $parameters);
-            
-        }elseif($action=='follow'){
-            
-            /* friendships/create */
-            $method = 'friendships/create/'.$followid;
-            echo $method."<br>";   
-                        echo "folooowww:".$followid;
-
-            $this->connection->post($method);
-       
-        }elseif($action=='unfriend'){
-            
-            /* friendships/destroy */
-            $method = 'friendships/destroy/'.$followid;
-            $this->connection->post($method);
-       
-        }
-        redirect(base_url('/index.php/dashboard'));    	
     }
-
-    public function tes(){
-       // $data['mentions']=$this->connection->get('statuses/home_timeline');
-       //  $this->load->view('dashboard/index',$data);
-   $str_id='401256148495400000';//$_POST[str_id];
-           $this->connection->get("statuses/destroy/".$str_id);
-    }
+	
 	public function fb_access_token(){
 		$app_id = $this->config->item('fb_appid');
 		$app_secret = $this->config->item('fb_appsecret');

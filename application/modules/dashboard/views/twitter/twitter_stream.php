@@ -1,3 +1,4 @@
+<div class="container-fluid">
 <!-- ==================== ACTIVITIES MENU ==================== -->
 <div class="floatingBoxMenu">
     <ul class="nav nav-tabs">
@@ -38,4 +39,5 @@
 
     <!-- ==================== END OF RECENT TASKS CONTENT ==================== -->
      <div class="filled" style="text-align: center;"><button class="btn btn-info"><i class="icon-chevron-down"></i> LOAD MORE</button></div>
+</div>
 </div>

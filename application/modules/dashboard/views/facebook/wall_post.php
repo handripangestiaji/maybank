@@ -120,9 +120,10 @@ for($i=0; $i<count($fb_feed);$i++):?>
     <h4 class="filled">
         <a style="font-size: 20px;"><i class="icon-trash greyText"></i></a>
         <div class="pull-right">
-            <button type="button" class="btn btn-danger" style="margin-left: 10px;"><i class="icon-plus"></i> CASE</button>
-            <button type="button" class="btn btn-primary" style="margin-left: 10px;"><i class="icon-mail-reply"></i></button>
+            <button type="button" class="btn btn-primary"><i class="icon-mail-reply"></i></button>
+            <button type="button" class="btn btn-danger"><i class="icon-plus"></i> CASE</button>
         </div>
+        <br clear="all" />
     </h4>
     <div class="reply filled hide">
         <form class="contentForm">

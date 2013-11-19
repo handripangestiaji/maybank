@@ -23,7 +23,7 @@
         <?php $this->load->view('dashboard/facebook/private_message', array('fb_feed' => $fb_feed))?> 
     </ul>
     <ul class="floatingBoxContainers" id="maybankpost" style="display:none">
-        <?php $this->load->view('dashboard/facebook/own_post', array('own_post' => $own_post))?> 
+        <?php //$this->load->view('dashboard/facebook/own_post', array('own_post' => $own_post))?> 
     </ul>
     <!-- ==================== END OF RECENT COMMENTS CONTENT ==================== -->
 </div>

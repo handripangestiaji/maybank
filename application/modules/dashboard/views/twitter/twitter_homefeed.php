@@ -1,22 +1,22 @@
 <?php 
-	if(is_array($twitter)):
+	if(is_array($homefeed)):
 ?>
 <?php
-for($i=0;$i<count($twitter);$i++){
+for($i=0;$i<count($homefeed);$i++){
 echo
 '<li>
-    <div class="circleAvatar"><img src="'.$twitter[$i]->user->profile_image_url.'" alt=""></div>
+    <div class="circleAvatar"><img src="'.$homefeed[$i]->user->profile_image_url.'" alt=""></div>
     <p class="headLine">
-        <span class="author">'.$twitter[$i]->user->name.'</span>
+        <span class="author">'.$homefeed[$i]->user->name.'</span>
         <i class="icon-circle"></i>
         <span>mentions</span>
         <i class="icon-circle"></i>
-        <span>'.str_replace('+0000','',$twitter[$i]->created_at).'</span>
+        <span>'.str_replace('+0000','',$homefeed[$i]->created_at).'</span>
         <i class="icon-play-circle moreOptions pull-right"></i>
     </p>
-    <p>'.$twitter[$i]->text.'</p>
+    <p>'.$homefeed[$i]->text.'</p>
     <p><button type="button" class="btn btn-warning btn-mini">OPEN</button></p>
-    <p><a data-toggle="modal" role="button" href="#modalDialog"><i class="icon-eye-open"></i> Engagement</a> | <a data-toggle="modal" role="button" href="#modalDialog"><i class="icon-retweet greyText"></i>'.$twitter[$i]->retweeted.' re-tweets</a></p>
+    <p><a data-toggle="modal" role="button" href="#modalDialog"><i class="icon-eye-open"></i> Engagement</a> | <a data-toggle="modal" role="button" href="#modalDialog"><i class="icon-retweet greyText"></i>'.$homefeed[$i]->retweeted.' re-tweets</a></p>
     <h4 class="filled">
         <a role="button" href="#"><i class="icon-trash greyText"></i></a>
         <div class="pull-right">
@@ -63,6 +63,6 @@ echo
 ?>
 <?php 
 	else: 
-		echo "<li>".$twitter->errors[0]->message."</li>";
+		echo "<li>".$homefeed->errors[0]->message."</li>";
 ?>
 <?php endif;?>

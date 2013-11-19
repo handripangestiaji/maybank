@@ -1,30 +1,25 @@
 <!-- ==================== MIDDLE COL ==================== -->
-<div class="span4">
+<div id='ctwitter' class="span4">
     <!-- ==================== ACTIVITIES CONTAINER ==================== -->
     <div class="row-fluid">
         <div class="span12">
             <!-- ==================== ACTIVITIES HEADLINE ==================== -->
-            <div class="containerHeadline" style="background-color:<?php if($type == 'facebook'){echo "#3B5998";} elseif($type == 'twitter'){echo "#4099FF";} elseif($type == 'youtube'){echo "#FF3333";}?>;color: white; height: 30px;">
+            <div class="containerHeadline" style="background-color:#4099FF;color: white; height: 30px;">
                 <div class="pull-left" style="padding: 4px 0px; height: auto">
                     <div class="btn-group">
                         <button class="btn trans  dropdown-toggle" data-toggle="dropdown">
-                            <?php
-                                if($type == 'facebook'){
-                                    echo '<i class="icon-facebook"></i><h2>Facebook&nbsp;</h2><i class="icon-caret-down"></i>';
-                                }
-                                elseif($type == 'twitter'){
-                                    echo '<i class="icon-twitter"></i><h2>Twitter&nbsp;</h2><i class="icon-caret-down"></i>';
-                                }
-                                elseif($type == 'youtube'){
-                                    echo '<i class="icon-youtube"></i><h2>Youtube&nbsp;</h2><i class="icon-caret-down"></i>';
-                                }
-                            ?>
+                            <?php if($stream=='dashboard/facebook/facebook_stream'){ ?>
+                                <i class="icon-facebook"></i> <h2>Facebook </h2> 
+                            <?php }elseif($stream=='dashboard/twitter/twitter_stream'){ ?>
+                                <i class="icon-twitter"></i> <h2>Twitter</h2>
+                            <?php } ?>
+                            &nbsp;&nbsp;<span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu">
                             <li><a class="facebook_stream">Facebook Maybank</a></li>
-                            <li><a class="facebook_stream">Facebook Maybankard</a></li>
-                            <li><a class="twitter_stream">Twitter Maybank</a></li>
-                            <li><a class="youtube_stream">YouTube Maybank</a></li>
+                            <li><a href="#">Facebook Maybankard</a></li>
+                            <li><a href="#">Twitter Maybank</a></li>
+                            <li><a href="#">YouTube Maybank</a></li>
                         </ul>
                     </div><!-- /btn-group -->
                 </div>
@@ -40,7 +35,11 @@
 
             <!-- ==================== ACTIVITIES FLOATING BOX ==================== -->
             <div class="floatingBox">
-                <?php $this->load->view($stream); ?>
+                <div class="container-fluid">
+                    <div class="box_stream">
+                        <?php $this->load->view($stream); ?>
+                    </div>
+                </div>
             </div>
             <!-- ==================== END OF ACTIVITIES FLOATING BOX ==================== -->
         

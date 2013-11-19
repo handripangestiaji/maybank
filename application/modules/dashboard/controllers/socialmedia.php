@@ -50,9 +50,8 @@ class Socialmedia extends MY_Controller {
 	  $data['own_post'] = $this->facebook_model->RetrievePostFB($filter);
 	  
 	  $data['mentions']=$this->connection->get('statuses/mentions_timeline');   
-   
-	  //$data['homefeed']=$this->connection->get('statuses/home_timeline');
-	  //$data['senttweets']=$this->connection->get('statuses/user_timeline');  
+   	  $data['homefeed']=$this->connection->get('statuses/home_timeline');
+	  $data['senttweets']=$this->connection->get('statuses/user_timeline');  
 	  $data['directmessage']=$this->connection->get('direct_messages');
 	
 	   $this->load->view('dashboard/index',$data);

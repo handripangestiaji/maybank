@@ -21,7 +21,6 @@ class twitter_model extends CI_Model
         $this->connection = $this->twitteroauth->create("EXWkuGJlJ8zMUGccF04uMA","eUw0K1YuzMof6RqI0oYw22mV6JYH0UbePMscMSiDZk",$access_token,$access_secret);
     }
     
-    
     /*
     * Get Mentions from twitter directly based on channel defined (statused/mentions_timeline)
     * $channel = Current Channel
@@ -42,7 +41,8 @@ class twitter_model extends CI_Model
     public function OwnPost($channel){
         $result = $this->connection->get('statuses/user_timeline',
                     array(
-                        "user_id" => $channel->social_id
+                        "user_id" => $channel->social_id,
+                        "count" => 200
                     ));
         echo "<pre>";
         print_r($result);
@@ -232,6 +232,33 @@ class twitter_model extends CI_Model
                                "post_stream_id" => $post_stream_id,
                                "type" => $type
                         ));
+        return $this->db->get()->row();
+    }
+
+    
+    public function ReadTweetFromDb($channel_id, $type = "mentions"){
+        $query = $this->db->query("call sp_ReadTweetFromDb(?,?)", array($channel_id, $type));
+        return $query->result();
+    }
+    
+    public function ReadDMFromDb($channel_id){
+        $sql = "Select a.channel_id, a.post_stream_id, a.retrieved_at, a.created_at, 
+                b.*
+                from 
+                social_stream a inner join twitter_direct_messages b on a.post_id = b.post_id 
+                where a.type = 'twitter_dm'";
+        $query = $this->db->query($sql);
+        $result = $query->result();
+        
+        for($i=0;$i<count($result);$i++){
+            $result[$i]->sender = $this->ReadTwitterUserFromDb($result[$i]->twitter_user_id);
+        }
+    }
+    
+    public function ReadTwitterUserFromDb($user_id){
+        $this->db->select("*");
+        $this->db->from("twitter_user_engaged");
+        $this->db->where("user_id", $user_id);
         return $this->db->get()->row();
     }
 }

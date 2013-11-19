@@ -66,9 +66,50 @@ class Cronjob extends CI_Controller {
         
         foreach($channel_loaded as $channel){
             $this->twitter_model->InitConnection($channel->oauth_token, $channel->oauth_secret);
-            
+            $this->twitter_model->Mentions($channel);
         }
     }
+    function TwitterHomeFeed(){
+        $this->load->model("twitter_model");
+        $filter = array(
+            'connection_type' => "twitter"
+        );
+        $channel_loaded = $this->account_model->GetChannel($filter);
+        
+        foreach($channel_loaded as $channel){
+            $this->twitter_model->InitConnection($channel->oauth_token, $channel->oauth_secret);
+            $this->twitter_model->HomeFeed($channel);
+        }
+    }
+    
+    function TwitterUserTimeline(){
+        $this->load->model("twitter_model");
+        $filter = array(
+            'connection_type' => "twitter"
+        );
+        $channel_loaded = $this->account_model->GetChannel($filter);
+        
+        foreach($channel_loaded as $channel){
+            $this->twitter_model->InitConnection($channel->oauth_token, $channel->oauth_secret);
+            $this->twitter_model->OwnPost($channel);
+        }
+    }
+    
+    
+    
+    function TwitterDirectMessage(){
+        $this->load->model("twitter_model");
+        $filter = array(
+            'connection_type' => "twitter"
+        );
+        $channel_loaded = $this->account_model->GetChannel($filter);
+        
+        foreach($channel_loaded as $channel){
+            $this->twitter_model->InitConnection($channel->oauth_token, $channel->oauth_secret);
+            $this->twitter_model->DirectMessage($channel);
+        }
+    }
+    
     
     
     

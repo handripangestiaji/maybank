@@ -8,14 +8,18 @@
                 <div class="pull-left" style="padding: 4px 0px; height: auto">
                     <div class="btn-group">
                         <button class="btn trans  dropdown-toggle" data-toggle="dropdown">
-                            <i class="icon-twitter"></i> <h2>Twitter </h2> 
+                            <?php if($stream=='dashboard/facebook/facebook_stream'){ ?>
+                                <i class="icon-facebook"></i> <h2>Facebook </h2> 
+                            <?php }elseif($stream=='dashboard/twitter/twitter_stream'){ ?>
+                                <i class="icon-twitter"></i> <h2>Twitter</h2>
+                            <?php } ?>
                             &nbsp;&nbsp;<span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class="facebook_stream">Facebook Maybank</a></li>
-                            <li><a href="#">Facebook Maybankard</a></li>
-                            <li><a href="#">Twitter Maybank</a></li>
-                            <li><a href="#">YouTube Maybank</a></li>
+                            <li><a class="facebook_stream" title="1">Facebook Maybank</a></li>
+                            <li><a href="#" title="1">Facebook Maybankard</a></li>
+                            <li><a href="#" title="2">Twitter Maybank</a></li>
+                            <li><a href="#" title="3">YouTube Maybank</a></li>
                         </ul>
                     </div><!-- /btn-group -->
                 </div>

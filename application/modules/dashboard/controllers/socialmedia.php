@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Dashboard extends MY_Controller {
+class Socialmedia extends MY_Controller {
 
      private $connection;
 	   
@@ -40,7 +40,25 @@ class Dashboard extends MY_Controller {
     
 	public function index()
 	{
-     	redirect(base_url('/index.php/dashboard/socialmedia'));   
+	
+       $access_token_fb = fb_dummy_accesstoken();
+	   $this->load->model('facebook_model');
+	 
+	   //$data['fb_feed'] = $this->facebook_model->RetrieveFeed("168151513217686", $access_token_fb, 'feed');
+	   //$data['own_post'] = $this->facebook_model->RetrievePost("168151513217686", $access_token_fb);
+        $filter = array(
+            '' => ''
+        );
+       $data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter);
+       $data['own_post'] = $this->facebook_model->RetrievePostFB($filter);
+       
+      $data['mentions']=$this->connection->get('statuses/mentions_timeline');   
+
+       //$data['homefeed']=$this->connection->get('statuses/home_timeline');
+       //$data['senttweets']=$this->connection->get('statuses/user_timeline');  
+       $data['directmessage']=$this->connection->get('direct_messages');
+     
+    	$this->load->view('dashboard/index',$data);
 	}
     
 	
@@ -56,7 +74,7 @@ class Dashboard extends MY_Controller {
 		else
 		{
 			// Making a request for request_token
-			$request_token = $this->connection->getRequestToken(base_url('/index.php/dashboard/callback'));
+			$request_token = $this->connection->getRequestToken(base_url('/index.php/dashboard/socialmedia/callback'));
 			$this->session->set_userdata('request_token', $request_token['oauth_token']);
 			$this->session->set_userdata('request_token_secret', $request_token['oauth_token_secret']);
 			if($this->connection->http_code == 200)
@@ -77,7 +95,7 @@ class Dashboard extends MY_Controller {
 		if($this->input->get('oauth_token') && $this->session->userdata('request_token') !== $this->input->get('oauth_token'))
 		{
 				$this->reset_session();
-				redirect('/dashboard/auth');
+				redirect('/dashboard/socialmedia/auth');
 		}
 		else
 		{
@@ -91,7 +109,7 @@ class Dashboard extends MY_Controller {
 				$this->session->set_userdata('twitter_screen_name', $access_token['screen_name']);
 				$this->session->unset_userdata('request_token');
 				$this->session->unset_userdata('request_token_secret');
-				redirect('dashboard');
+				redirect(base_url('/index.php/dashboard'));
 			}
 			else
 			{
@@ -104,7 +122,7 @@ class Dashboard extends MY_Controller {
 	public function mentions()
 	{
 	    $access_token = "CAACEdEose0cBADGyv9cLrxG0ycGrwyZBVrr4jPSG4NKHAZAZBwQS5MF1xrYdgwAiyCLZAnYvx1wBvr5I7MGxVsubO0xPMOIaYhVKsTTeVPvC05YLYfUttS0W3SzfC3wFltkY3Lo11zfH7LTVwF6zwADlv9HlAY7ZBinMshTHMM5dYxeY3ZA6bSY5zSNsDOFOsmE6bb5cbjiQZDZD";
-		$data['fb_feed'] =  $this->facebook_model->RetrievePost('168151513217686', $access_token, false);
+		$data['fb_feed'] =  $this->facebook_model->RetrieveFeedFacebook('168151513217686', $access_token, "feed");
 		$this->load->view('dashboard/index', $data);
 	}
     public function twitterAction(){
@@ -132,11 +150,11 @@ class Dashboard extends MY_Controller {
         if(isset($_POST['id'])){//id user
             $id=$_POST['id'];
         }
-        /*
+        
         echo "<br><br><br><br><br>";
         echo $action;
         echo $str_id;
-*/
+
         //echo "<br><br><br><br><br>strid:".$str_id."<br>cont:<br>act:".$action;
         //print_r($_POST);
         
@@ -183,9 +201,6 @@ class Dashboard extends MY_Controller {
             
             /* friendships/create */
             $method = 'friendships/create/'.$followid;
-            echo $method."<br>";   
-                        echo "folooowww:".$followid;
-
             $this->connection->post($method);
        
         }elseif($action=='unfriend'){
@@ -197,6 +212,9 @@ class Dashboard extends MY_Controller {
         }
         redirect(base_url('/index.php/dashboard'));    	
     }
+    
+    
+    
 
     public function tes(){
        // $data['mentions']=$this->connection->get('statuses/home_timeline');

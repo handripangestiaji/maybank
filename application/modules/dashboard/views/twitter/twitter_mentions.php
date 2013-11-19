@@ -77,7 +77,7 @@ for($i=0;$i<count($mentions);$i++){
                 <button type="submit" class="btn btn-primary" name="action" value="retweet"><i class="icon-retweet"></i></button>
                 <a role="button" href="#modalsentdm<?php echo $i; ?>" class="btn btn-primary" data-toggle="modal"><i class="icon-envelope"></i></a>
                 <button type="submit" class="btn btn-primary" name="action" value="favorit"><i class="icon-star"></i></button>
-                <button type="submit" class="btn btn-primary" name="action" value="follow"><i class="icon-user"><?php echo $mentions[$i]->in_reply_to_user_id_str;?></i></button>
+                <button type="submit" class="btn btn-primary" name="action" value="follow"><i class="icon-user"></i></button>
                 <button type="submit" class="btn btn-danger" name="action" value="case"><i class="icon-plus"></i>CASE</button>
                 <input type="hidden" name="str_id" value="<?php echo $mentions[$i]->id_str; ?>" />
                 <input type="hidden" name="id" value="<?php echo $mentions[$i]->id; ?>" />
@@ -328,5 +328,5 @@ for($i=0;$i<count($mentions);$i++){
             <button style="clear: both;" type="submit" class="btn btn-primary">Send</button>
         </form>
     </div>
-    </li>';
+    </li>
 <?php } ?>

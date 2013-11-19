@@ -272,6 +272,23 @@ class facebook_model extends CI_Model
 	return $this->db->get()->row();
     }
     
+    public function RetrieveFeedFB($filter){
+        
+        $this->db->select('*');
+        $this->db->from("fb_user_engaged a INNER JOIN social_stream_fb_post b ON b.author_id=a.facebook_id ");
+        //if(count($filter) > 0)
+        //    $this->db->where($filter);
+        return $this->db->get()->result();
+    }
+    
+    public function RetrievePostFB($filter){
+        
+        $this->db->select('*');
+        $this->db->from("fb_user_engaged a INNER JOIN social_stream_fb_post b ON b.author_id=a.facebook_id ");
+        //if(count($filter) > 0)
+        //    $this->db->where($filter);
+        return $this->db->get()->result();
+    }
     
  
 }

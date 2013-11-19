@@ -1,19 +1,18 @@
-<?php for($i=0; $i<count($fb_feed);$i++):?>
+<?php 
+for($i=0; $i<count($fb_feed);$i++):?>
 <li>
-    <div class="circleAvatar"><img src="https://graph.facebook.com/<?=number_format($fb_feed[$i]->actor_id, 0,'.','')?>/picture?small" alt=""></div>
+    <div class="circleAvatar"><img src="https://graph.facebook.com/<?=number_format($fb_feed[$i]->facebook_id, 0,'.','')?>/picture?small" alt=""></div>
     <p class="headLine">
-        <span class="author"><?php echo $fb_feed[$i]->users->name//."(".$fb_feed[$i]->users->usename.")"?></span>
+        <span class="author"><?php echo $fb_feed[$i]->name//."(".$fb_feed[$i][$i]->users->usename.")"?></span>
         <i class="icon-circle"></i>
         <span>posted a <span class="cyanText">comment</span></span>
         <i class="icon-circle"></i>
-        <span><?php $date = date("d M y H:i",$fb_feed[$i]->updated_time);
-        echo " at ".$date
-        ?></span>
+        <span><?php echo $fb_feed[$i]->created_at; ?></span>
         <i class="icon-play-circle moreOptions pull-right"></i>
     </p>
-    <p><?=$fb_feed[$i]->message?></p>
+    <p><?=$fb_feed[$i]->post_content?></p>
     <p><button type="button" class="btn btn-warning btn-mini">OPEN</button><button class="btn btn-primary btn-mini" style="margin-left: 5px;">LIKE</button> </p>
-    <p><a data-toggle="modal" role="button" href="#modalDialog"><i class="icon-eye-open"></i> View Entire Thread</a> | <a  data-toggle="modal" role="button" href="#modalDialog"><i class="icon-thumbs-up-alt"></i></i> <?=$fb_feed[$i]->like_info->like_count?> likes this</a></p>
+    <p><a data-toggle="modal" role="button" href="#modalDialog"><i class="icon-eye-open"></i> View Entire Thread</a> | <a  data-toggle="modal" role="button" href="#modalDialog"><i class="icon-thumbs-up-alt"></i></i> <?php echo $fb_feed[$i]->total_likes; ?> likes this</a></p>
 
     <!-- MODAL DIALOG PER CONVERSATION -->    
     <div id="modalDialog" class="modal modalDialog hide fade" tabindex="-1" role="dialog" aria-hidden="true">

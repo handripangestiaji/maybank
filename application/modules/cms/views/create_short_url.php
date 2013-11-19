@@ -51,7 +51,7 @@
             <div class="control-group">
                 <label class="control-label">Short URL</label>
                 <div class="controls">
-                  http://maybk.co/<input type="text" class="span10" style="width: 100px;">
+                  http://maybk.co/<input type="text" class="span10" style="width: 100px;" value="<?php echo $code?>"/>
                 </div>
             </div>
             <div class="control-group">

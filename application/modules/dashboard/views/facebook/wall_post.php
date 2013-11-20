@@ -12,16 +12,16 @@ for($i=0; $i<count($fb_feed);$i++):?>
     </p>
     <p><?=$fb_feed[$i]->post_content?></p>
     <p><button type="button" class="btn btn-warning btn-mini">OPEN</button><button class="btn btn-primary btn-mini" style="margin-left: 5px;">LIKE</button> </p>
-    <p><a role="button" href="#showEngagement" class="btn-engagement"><i class="icon-eye-open"></i> Engagement</a> | <a  data-toggle="modal" role="button" href="#modalDialog"><i class="icon-thumbs-up-alt"></i></i> <?php echo $fb_feed[$i]->total_likes; ?> likes this</a></p>
+    <p><span class="btn-engagement"><i class="icon-eye-open"></i> Engagement</span> | <span class="cyanText"><i class="icon-thumbs-up-alt"></i></i> <?php echo $fb_feed[$i]->total_likes; ?> likes this</span></p>
 
-    <!-- MODAL DIALOG PER CONVERSATION -->    
+    <!-- ENGAGEMENT -->    
     <div class="engagement hide">
         <div class="engagement-header">
-            <a role="button" class="engagement-btn-close pull-right" href="#closeEngagement">Close <i class="icon-remove-sign"></i></a>
+            <span class="engagement-btn-close btn-close pull-right">Close <i class="icon-remove-sign"></i></span>
         </div>
         <br>
         <div class="engagement-body">
-            <a class="engagement-btn-hide-show pull-right" href="#hideEngagement"><i class="icon-chevron-sign-down"></i></a>    
+            <span class="engagement-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>    
             <p class="headLine">
                 <span class="author">John Doe</span>
                 <i class="icon-circle"></i>
@@ -35,7 +35,7 @@ for($i=0; $i<count($fb_feed);$i++):?>
             </div>
         </div>
         <div class="engagement-body">
-            <a class="engagement-btn-hide-show pull-right" href="#hideEngagement"><i class="icon-chevron-sign-down"></i></a>    
+            <span class="engagement-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>    
             <p class="headLine">
                 <span class="author">John Doe</span>
                 <i class="icon-circle"></i>
@@ -48,8 +48,45 @@ for($i=0; $i<count($fb_feed);$i++):?>
                 <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
             </div>
         </div>
+        <!-- ==================== CONDENSED TABLE HEADLINE ==================== -->
+        <div class="containerHeadline">
+            <i class="icon-table"></i><h2>Action Log</h2>
+            <div class="controlButton pull-right"><i class="icon-caret-down toggleTable"></i></div>
+        </div>
+        <!-- ==================== END OF CONDENSED TABLE HEADLINE ==================== -->
+
+        <!-- ==================== CONDENSED TABLE FLOATING BOX ==================== -->
+        <div class="floatingBox table hide">
+            <div class="container-fluid">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Time Stamp</th>
+                      <th>Username</th>
+                      <th>Action Taken</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>2013-09-30 19:52:46</td>
+                      <td>Teo Eu Gene</td>
+                      <td>Resolved</td>
+                      <td><button class="btn btn-primary icon-book"></button></td>
+                    </tr>
+                    <tr>
+                      <td>2013-09-30 19:52:46</td>
+                      <td>Teo Eu Gene</td>
+                      <td>Resolved</td>
+                      <td><button class="btn btn-primary icon-book"></button></td>
+                    </tr>
+                  </tbody>
+                </table>  
+            </div>
+        </div>
+        <!-- ==================== END OF CONDENSED TABLE FLOATING BOX ==================== --> 
     </div>
-    <!-- END MODAL DIALOG FOR CONVERSATION -->
+    <!-- END ENGAGEMENT -->
 
     <h4 class="filled">
         <a style="font-size: 20px;"><i class="icon-trash greyText"></i></a>
@@ -59,9 +96,11 @@ for($i=0; $i<count($fb_feed);$i++):?>
         </div>
         <br clear="all" />
     </h4>
+    
+    <!-- REPLY -->  
     <div class="reply-field hide">
         <div class="row-fluid">
-            <a role="button" class="reply-field-btn-close pull-right" href="#closeReply"><i class="icon-remove"></i></a>
+            <span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
             <div class="pull-left">
                 <select style="width: 130px;">
                     <option value="keyword">Feedback</option>
@@ -98,9 +137,13 @@ for($i=0; $i<count($fb_feed);$i++):?>
             <div class="reply-status hide">MESSAGE SENT</div>
         </div>
     </div>
+    <!-- END REPLY -->
+    
+    <!-- CASE -->  
     <div class="case-field hide">
         <div class="row-fluid">
-            <a role="button" class="reply-field-btn-close pull-right" href="#closeReply"><i class="icon-remove"></i></a>
+            <span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
+            CASE ID      : #012345
             <div class="pull-left">
                 <select style="width: 130px;">
                     <option value="keyword">Feedback</option>
@@ -117,25 +160,36 @@ for($i=0; $i<count($fb_feed);$i++):?>
                     <option value="keyword">Others</option>
                 </select>
             </div>
+            <br clear="all" />
+            <button class="btn btn-small btn-purple btn-add-related">Add Related Conversation</button>
+            <br clear="all" />
+            <div class="pull-left">
+                Assign To:
+            </div>
+            <div class="pull-right">
+                <select>
+                    <option value="keyword">Nicole Lee</option>
+                    <option value="user">Azahan Azad</option>
+                    <option value="keyword">Azahamad Arif</option>
+                </select>
+            </div>
+            <br clear="all" />
+            <div class="pull-left">
+                Email:
+            </div>
+            <div class="pull-right">
+                <input type="text">
+            </div>
+            <br clear="all" />
+            Message :
+            <br>
             <textarea placeholder="Compose Message"></textarea>
             <br clear="all" />
-            <div class="pull-left">
-                <i class="icon-link"></i>
-                <input type="text" class="span8"><button class="btn btn-primary btn-mini" style="margin-left: 5px;">SHORTEN</button>
-            </div>
             <div class="pull-right">
-                <i class="icon-camera"></i>
+                <button class="btn-purple btn btn-small"><i class="icon-ok-circle icon-large"></i> Assign</button>    
             </div>
-            <br clear="all" />
-            <div class="pull-left">
-                <i class="icon-facebook"></i> 2000     
-            </div>
-            <div class="pull-right">
-                <button class="btn btn-primary btn-small btn-send-reply">SEND</button>    
-            </div>
-            <br clear="all" />
-            <div class="reply-status hide">MESSAGE SENT</div>
         </div>
     </div>
+    <!-- END CASE -->  
 </li>
 <?php endfor;?>

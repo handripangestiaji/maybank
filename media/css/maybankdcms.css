@@ -453,6 +453,18 @@ border-radius: 3px;
 	border-top: 4px solid #FFF;
 }
 
+.btn-purple{
+	background-color: #F054F0;
+	color: #FFF;
+}
+
+.btn-purple:hover,
+.btn-purple:focus
+{
+	background-color: #D448D4;
+	color: #FFF;
+}
+
 /*==============================================================================================
 ======================================== DASHBOARD =============================================
 ==============================================================================================*/
@@ -463,6 +475,19 @@ border-radius: 3px;
 
 .engagement-btn-hide-show{
 	margin-right: 5px;
+}
+
+.engagement > div.floatingBox{
+	margin-bottom: 0px;
+}
+
+.btn-engagement{
+	color: #33B5E5;
+	cursor: pointer;
+}
+
+.btn-close{
+	cursor: pointer;
 }
 
 .reply-field{
@@ -485,6 +510,25 @@ border-radius: 3px;
 	background-color: #00FF04;
 	color: white;
 	text-align: center;
+}
+
+.case-field{
+	background-color: #BABABA;
+	margin-top: -10px;
+	padding: 10px;
+}
+
+.case-field textarea{
+	height: 100px;
+	width: 95%;
+}
+
+.case-field .row-fluid{
+	margin: 0px;
+}
+
+.case-field .btn-add-related{
+	margin-bottom: 10px;
 }
 /*==============================================================================================
 ======================================== C M S =================================================

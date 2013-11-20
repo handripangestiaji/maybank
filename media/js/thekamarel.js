@@ -386,11 +386,13 @@ $(function(){
                         $('.btn-reply').click(
                             function() {
                                 $(this).closest('h4').next().show();
+                                $(this).closest('h4').next().next().hide();
                             }
                         );
     
                         $('.btn-case').click(
                             function() {
+                                $(this).closest('h4').next().hide();
                                 $(this).closest('h4').next().next().show();
                             }
                         );
@@ -437,6 +439,12 @@ $(function(){
                             function() {
                                 $(this).parent().siblings('.reply-status').show();
                                 $(this).parent().siblings('.reply-status').fadeOut(3000);
+                            }
+                        );
+                        
+                        $(".toggleTable").click(
+                            function(){
+                                $(this).parent().parent().next().toggle();
                             }
                         );
                     }

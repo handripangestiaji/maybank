@@ -5,7 +5,7 @@
              <!-- button-refresh -->
             <div class="left">
                 <div class="ref">
-                    <a href="#"><img src="media/img/ref.png" /></a>
+                    <a href="#"><img src="<?php echo base_url() ?>media/img/ref.png" /></a>
                 </div>
             </div>
             <!-- button-refresh end -->
@@ -209,10 +209,10 @@
 
 <div class="row-fluid">
 <?php
-    $data['type'] = 'facebook';
+    $data['color'] = '#3B5998';
     $data['stream'] = 'dashboard/facebook/facebook_stream';
     $this->load->view('dashboard/box_stream',$data);
-    $data['type'] = 'twitter';
+    $data['color'] = '#4099FF';
     $data['stream'] = 'dashboard/twitter/twitter_stream';
     $this->load->view('dashboard/box_stream',$data);
     //$this->load->view('dashboard/twitter/twitter_stream');

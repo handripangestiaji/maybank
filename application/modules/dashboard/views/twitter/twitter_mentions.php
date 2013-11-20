@@ -21,33 +21,33 @@ for($i=0;$i<count($mentions);$i++){
         <button type="button" class="btn btn-inverse btn-mini"><i class="icon-star">&nbsp;</i></button>
     <?php } ?></p>
     
-    <p><a data-toggle="modal" role="button" href="#modalDialogEngagement<?php echo $i; ?>"><i class="icon-eye-open"></i> Engagement</a> | <a data-toggle="modal" role="button" href="#modaltweet<?php echo $i; ?>" ><i class="icon-retweet greyText"></i><?php echo $mentions[$i]->retweeted; ?> re-tweets</a></p>
+    <p><a role="button" class="btn-engagement"><i class="icon-eye-open"></i> Engagement</a> | <a data-toggle="modal" role="button" href="#modaltweet<?php echo $i; ?>" ><i class="icon-retweet greyText"></i><?php echo $mentions[$i]->retweeted; ?> re-tweets</a></p>
     
-    <!-- MODAL DIALOG Engenagemnet-->    
-    <div id="modalDialogEngagement<?php echo $i; ?>" class="modal modalDialog hide fade" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-            <h3><?php echo $mentions[$i]->user->name; ?></h3>
+    <!-- MODAL DIALOG Engagemnet-->    
+    <div class="engagement">
+        <div class="engagement-header">
+            <button type="button" class="engagement-btn-close"><i class="icon-close"></i></button>
+            <h4><?php echo $mentions[$i]->user->name; ?></h4>
         </div>
-        <div class="modal-body">
-                    <p class="headLine">
-                        <span class="author"><?php echo $mentions[$i]->user->name; ?></span>
-                        <i class="icon-circle"></i>
-                        <span>posted a <span class="cyanText">comment</span></span>
-                        <i class="icon-circle"></i>
-                        <span><?php echo str_replace('+0000','',$mentions[$i]->created_at);?></span>
-                        <i class="icon-play-circle moreOptions pull-right"></i>
-                    </p>
-                    <p>"<?php echo $mentions[$i]->text;?>"</p>
-                    <p class="headLine">
-                        <span class="author">Maybank</span>
-                        <i class="icon-circle"></i>
-                        <span>posted a <span class="cyanText">comment</span></span>
-                        <i class="icon-circle"></i>
-                        <span><?php echo str_replace('+0000','',$mentions[$i]->created_at);?></span>
-                        <i class="icon-play-circle moreOptions pull-right"></i>
-                    </p>
-                    <!-- ==================== END OF CONDENSED TABLE FLOATING BOX ==================== --> 
+        <div class="engagement-body">
+            <p class="headLine">
+                <span class="author"><?php echo $mentions[$i]->user->name; ?></span>
+                <i class="icon-circle"></i>
+                <span>posted a <span class="cyanText">comment</span></span>
+                <i class="icon-circle"></i>
+                <span><?php echo str_replace('+0000','',$mentions[$i]->created_at);?></span>
+                <i class="icon-play-circle moreOptions pull-right"></i>
+            </p>
+            <p>"<?php echo $mentions[$i]->text;?>"</p>
+            <p class="headLine">
+                <span class="author">Maybank</span>
+                <i class="icon-circle"></i>
+                <span>posted a <span class="cyanText">comment</span></span>
+                <i class="icon-circle"></i>
+                <span><?php echo str_replace('+0000','',$mentions[$i]->created_at);?></span>
+                <i class="icon-play-circle moreOptions pull-right"></i>
+            </p>
+            <!-- ==================== END OF CONDENSED TABLE FLOATING BOX ==================== --> 
         </div>
     </div>
     <!-- END MODAL DIALOG FOR ENGAGEMENT -->
@@ -73,7 +73,7 @@ for($i=0;$i<count($mentions);$i++){
         <a role="button" href="#"><i class="icon-trash greyText"></i></a>
         <div class="pull-right">
             <form class="contentForm" action="<?php echo base_url('/index.php/dashboard/twitteraction');?>" method="post">
-                <a role="submit" href="#modalreplaytweet<?php echo $i; ?>" class="btn btn-primary" data-toggle="modal"><i class="icon-mail-reply"></i></a>
+                <button class="btn btn-reply btn-primary" data-toggle="modal"><i class="icon-mail-reply"></i></button>
                 <button type="submit" class="btn btn-primary" name="action" value="retweet"><i class="icon-retweet"></i></button>
                 <a role="button" href="#modalsentdm<?php echo $i; ?>" class="btn btn-primary" data-toggle="modal"><i class="icon-envelope"></i></a>
                 <button type="submit" class="btn btn-primary" name="action" value="favorit"><i class="icon-star"></i></button>

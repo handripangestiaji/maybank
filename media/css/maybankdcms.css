@@ -626,6 +626,9 @@ border-radius: 3px;
 ==============================================================================================*/
 .hiddenContent .tasksList li{
 	padding: 0px;
+	margin: 0px;
+	width: 100%;
+	margin-bottom: 10px;
 }
 
 .hiddenContent .tasksList .notifHead{

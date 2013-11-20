@@ -51,75 +51,24 @@
                         <th>Date Created</th>
                         <th>Creator</th>
                         <th>&nbsp;</th>
+                        <th>&nbsp;</th>
                     </tr>
                 </thead>
+                <?php foreach($show->result() as $row){?>
                 <tbody>
                     <tr>
-                        <td>01</td>
-                        <td>User1</td>
-                        <td>asd@gmail.com</td>
-                        <td>Admin</td>
-                        <td>all My</td>
-                        <td>Active</td>
+                        <td><?php echo $row->user_id;?></td>
+                        <td><?php echo $row->full_name;?></td>
+                        <td><?php echo $row->display_name;?></td>
+                        <td><?php echo $row->salt;?></td>
+                        <td><?php echo $row->role_id;?></td>
+                        <td><?php echo $row->group_id;?></td>
                         <td>18-11-2013</td>
                         <td>Azahan</td>
-                        <td><a href="<?php echo site_url();?>users/edit"><span><i class="icon-pencil"></i></span></a></td>
+                        <td><a href="<?php echo site_url();?>/users/edit/<?php echo $row->user_id;?>"><span><i class="icon-pencil"></i></span></a></td>
+                        <td><a href="<?php echo site_url();?>/users/delete/<?php echo $row->user_id;?>"><span><i class="icon-remove"></i></span></a></td>
                     </tr>
-                    <tr>
-                        <td>01</td>
-                        <td>User1</td>
-                        <td>asd@gmail.com</td>
-                        <td>Admin</td>
-                        <td>all My</td>
-                        <td>Active</td>
-                        <td>18-11-2013</td>
-                        <td>Azahan</td>
-                        <td><a href=""><span><i class="icon-pencil"></i></span></a></td>
-                    </tr>
-                    <tr>
-                        <td>01</td>
-                        <td>User1</td>
-                        <td>asd@gmail.com</td>
-                        <td>Admin</td>
-                        <td>all My</td>
-                        <td>Active</td>
-                        <td>18-11-2013</td>
-                        <td>Azahan</td>
-                        <td><a href=""><span><i class="icon-pencil"></i></span></a></td>
-                    </tr>
-                    <tr>
-                        <td>01</td>
-                        <td>User1</td>
-                        <td>asd@gmail.com</td>
-                        <td>Admin</td>
-                        <td>all My</td>
-                        <td>Active</td>
-                        <td>18-11-2013</td>
-                        <td>Azahan</td>
-                        <td><a href=""><span><i class="icon-pencil"></i></span></a></td>
-                    </tr>
-                    <tr>
-                        <td>01</td>
-                        <td>User1</td>
-                        <td>asd@gmail.com</td>
-                        <td>Admin</td>
-                        <td>all My</td>
-                        <td>Active</td>
-                        <td>18-11-2013</td>
-                        <td>Azahan</td>
-                        <td><a href=""><span><i class="icon-pencil"></i></span></a></td>
-                    </tr>
-                    <tr>
-                        <td>01</td>
-                        <td>User1</td>
-                        <td>asd@gmail.com</td>
-                        <td>Admin</td>
-                        <td>all My</td>
-                        <td>Active</td>
-                        <td>18-11-2013</td>
-                        <td>Azahan</td>
-                        <td><a href=""><span><i class="icon-pencil"></i></span></a></td>
-                    </tr>
+                <?php }?>
                 </tbody>
             </table>
             <div class="page pull-right" style="margin-top: 30px;">
@@ -137,11 +86,11 @@
 <script type="text/javascript">
     function btn_add()
     {
-        window.location.href = "<?php echo site_url();?>users/create";
+        window.location.href = "<?php echo site_url();?>/users/create";
     }
     
     function menu_role()
     {
-        window.location.href = "<?php echo site_url();?>users/menu_role";
+        window.location.href = "<?php echo site_url();?>/users/menu_role";
     }
 </script>

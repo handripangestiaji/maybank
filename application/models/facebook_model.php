@@ -290,5 +290,16 @@ class facebook_model extends CI_Model
         return $this->db->get()->result();
     }
     
+    public function RetriveCommentPostFb($post_id){
+        $sql = "SELECT a.post_id,a.post_content,a.total_comments,b.comment_stream_id,b.from,c.name,b.comment_content,b.created_at  
+                FROM social_stream_fb_post a INNER JOIN
+                social_stream_fb_comments b ON b.post_id=a.post_id LEFT OUTER JOIN
+                fb_user_engaged  c ON c.facebook_id=b.from
+                where a.post_id='".$post_id."'
+                ORDER BY post_id";
+        $query = $this->db->query($sql);
+        $result = $query->result();       
+        return $result;  
+    }
  
 }

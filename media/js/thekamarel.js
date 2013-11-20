@@ -321,7 +321,7 @@ $(function(){
                         return selected.substr(0, selected.length -2) + ' <b class="caret"></b>';
                     }
                 },
-            });
+                });
                 
                 $('.compose-textbox').click(
                     function() {
@@ -381,6 +381,74 @@ $(function(){
                         $(this).closest('.containerHeadline').next().html('youtube timeline here');
                     });
                 });
+            
+                $(document).ready(function() {
+                        $('.btn-reply').click(
+                            function() {
+                                $(this).closest('h4').next().show();
+                                $(this).closest('h4').next().next().hide();
+                            }
+                        );
+    
+                        $('.btn-case').click(
+                            function() {
+                                $(this).closest('h4').next().hide();
+                                $(this).closest('h4').next().next().show();
+                            }
+                        );
+                            
+                        $(".assign-btn").click(
+                            function() {
+                                $(this).parent().siblings(".reply").hide("slow");
+                                $(this).parent().siblings(".assign").hide("slow");
+                                $(this).parent().siblings(".assign").show("slow");
+                            }
+                        );
+    
+                        $(".hide-form").click(
+                            function() {
+                                $(this).parent().parent().parent().hide();
+                            }
+                        );
+                        
+                        $(".btn-engagement").click(
+                            function() {
+                                $(this).parent().siblings('.engagement').show();
+                            }
+                        );
+                        
+                        $(".engagement-btn-close").click(
+                            function() {
+                                 $(this).parent().parent().hide();
+                            }
+                        );
+                        
+                        $(".engagement-btn-hide-show").click(
+                            function(){
+                                $(this).siblings('div').toggle();
+                            }
+                        );
+                        
+                        $(".reply-field-btn-close").click(
+                            function() {
+                                 $(this).parent().parent().hide();
+                            }
+                        );
+                        
+                        $(".btn-send-reply").click(
+                            function() {
+                                $(this).parent().siblings('.reply-status').show();
+                                $(this).parent().siblings('.reply-status').fadeOut(3000);
+                            }
+                        );
+                        
+                        $(".toggleTable").click(
+                            function(){
+                                $(this).parent().parent().next().toggle();
+                            }
+                        );
+                    }
+                );
                 /*==============================================================================================
                  ====================================== LOAD WYSIWYG EDITOR ====================================
                  =============================================================================================*/   
@@ -411,33 +479,7 @@ $(function(){
                         opacity: .7
                     }, 200);
                 });
-            })
-            
-            $(document).ready(
-                function() {
-                    $(".reply-btn").click(
-                        function() {
-                            $(this).parent().siblings(".reply").hide("slow");
-                            $(this).parent().siblings(".assign").hide("slow");
-                            $(this).parent().siblings(".reply").show("slow");
-                        }
-                    );
-
-                    $(".assign-btn").click(
-                        function() {
-                            $(this).parent().siblings(".reply").hide("slow");
-                            $(this).parent().siblings(".assign").hide("slow");
-                            $(this).parent().siblings(".assign").show("slow");
-                        }
-                    );
-
-                    $(".hide-form").click(
-                        function() {
-                            $(this).parent().parent().parent().hide();
-                        }
-                    );
-                }
-            );
+            });
             
     /*=============================================================================================
      ===================================== CMS ACTIONS ============================================

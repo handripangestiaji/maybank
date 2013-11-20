@@ -25,14 +25,26 @@
     </ul>
     
     <ul class="floatingBoxContainers" id="feed" style="display:none">
-         <?php //$this->load->view('dashboard/twitter/twitter_homefeed', array('twitter' => $homefeed))?> 
-    </ul>
+         <?php 
+            if(is_array($homefeed)){
+                $this->load->view('dashboard/twitter/twitter_homefeed', array('homefeed' => $homefeed));
+            }else{
+                echo $homefeed->errors[0]->message; 
+            } 
+                ?> 
     
-    <!--
-    <ul class="floatingBoxContainers" id="sendmessage" style="display:none">
-         <?php /*$this->load->view('dashboard/twitter/twitter_sendmessage', array('twitter' => $twitter))*/ ?> 
+    
     </ul>
-    -->
+    <ul class="floatingBoxContainers" id="sendmessage" style="display:none">
+         <?php 
+            //print_r($senttweets);
+            if(is_array($senttweets)){
+                $this->load->view('dashboard/twitter/twitter_senttweets', array('senttweets' => $senttweets));
+            }else{
+                echo $senttweets->errors[0]->message;
+            }
+             ?> 
+    </ul>
     <ul class="floatingBoxContainers" id="direct" style="display:none">
          <?php 
             //print_r($directmessage);

@@ -63,7 +63,7 @@
 		<li><i class="icon-home"></i><a href="<?php echo base_url('dashboard'); ?>"> Home</a> <span class="divider"><i class="icon-angle-right"></i></span></li>
 		<li class="active">
 		    <?php
-			$value = array('dashboard' => 'Dashboard','cms' => 'Content Management');
+			$value = array('dashboard' => 'Dashboard','cms' => 'Content Management','users' => 'User Management');
 			echo $value[$this->uri->segment(1)];
 		    ?>
 		</li>

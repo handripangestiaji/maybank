@@ -331,7 +331,7 @@ $(function(){
                 );
 
                  $( "#fileselectbutton" ).click(function(e){
-                    $( "#inputFile" ).trigger("click");
+                    $( "#composeInputImageFile" ).trigger("click");
                 }); 
 
                  $( "#closecompose" ).click(function(e){
@@ -342,12 +342,31 @@ $(function(){
 
                  $('#datepickerField').datepicker();
 
-                  $( "#inputFile" ).change(function(e){
-                var val = $(this).val();
-                var file = val.split(/[\\/]/);
-                $( "#filename" ).val(file[file.length-1]);
-            });
+                  $( "#composeInputImageFile" ).change(function(e){
+                    var val = $(this).val();
+                    var file = val.split(/[\\/]/);
+                    $( "#filename" ).val(file[file.length-1]);
+                    
+                    if (this.files && this.files[0]) {
+                        var reader = new FileReader();
+                        reader.onload = function (e) {
+                            $('#compose-preview-img').show();        
+                            $('#compose-preview-img').attr('src', e.target.result);        
+                            $("#remove-img").show();       
+                            $('#remove-img').css('left',$('#compose-preview-img').width());
+                        }
+                        reader.readAsDataURL(this.files[0]);
+                    }
+                });
 
+                var upload_file = $("#composeInputImageFile");
+                $( "#remove-img" ).click(function(){
+                    $("#compose-preview-img").hide();
+                    $("#remove-img").hide();
+                    $("#filename").val('');
+                    upload_file.replaceWith(upload_file = upload_file.clone(true));
+                });
+                
                 $(document).mouseup(function (e)
                 {
                     var container = $(".compose-expanded");
@@ -449,6 +468,38 @@ $(function(){
                         );
                     }
                 );
+                
+                $( document ).ready(function() {
+                    $( "#open-img" ).click(function() {
+                       $("#img-show").css({"display": "block"});
+                    });
+
+                    $( "#close-img" ).click(function() {
+                       $("#img-show").css({"display": "none"});
+                    });
+
+                     $( "#open-cal" ).click(function() {
+                       $("#cal-show").css({"display": "block"});
+                    });
+
+                     $( "#close-cal" ).click(function() {
+                       $("#cal-show").css({"display": "none"});
+                    });
+
+                    $( ".compose-insert-link" ).click(function() {
+                       $("#url-show").css({"display": "block"});
+                    });
+
+                     $( "#close-url" ).click(function() {
+                       $("#url-show").css({"display": "none"});
+                    });
+                     
+                     $(".btn-compose-post").click(function() {
+                        $('.compose-post-status').show();
+                        $('.compose-post-status').fadeOut(5000);
+                     })
+                });
+                                
                 /*==============================================================================================
                  ====================================== LOAD WYSIWYG EDITOR ====================================
                  =============================================================================================*/   

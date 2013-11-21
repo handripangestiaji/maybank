@@ -102,9 +102,9 @@ class Shorturl {
 	{
 		$params = array('long_url' => $url);
 		$id = $this->_ci->shorturl_model->insert($params);
-		die($id);
-		$shortCode = $this->convertIntToShortCode($id);
 		
+		$shortCode = $this->convertIntToShortCode($id);
+		//die($shortCode);
 		$this->insertShortCodeInDb($id, $shortCode);
 		
 		return $shortCode;
@@ -127,14 +127,18 @@ class Shorturl {
 		}
 		
 		$code = "";
+		
+/*
 		while ($id > $length - 1)
 		{
 			$code = self::$chars[fmod($id, $length)].$code;
-			
+			die("while ".$code);
 			$id = floor($id / $length);
 		}
 		
 		$code = self::$chars[$id].$code;
+*/
+		$code = substr( md5( time().uniqid().rand() ), 0, 6 );
 		
 		return $code;
 	}

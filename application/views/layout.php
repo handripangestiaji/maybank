@@ -63,7 +63,7 @@
 		<li><i class="icon-home"></i><a href="<?php echo base_url('dashboard'); ?>"> Home</a> <span class="divider"><i class="icon-angle-right"></i></span></li>
 		<li class="active">
 		    <?php
-			$value = array('dashboard' => 'Dashboard','cms' => 'Content Management');
+			$value = array('dashboard' => 'Dashboard','cms' => 'Content Management','users' => 'User Management');
 			echo $value[$this->uri->segment(1)];
 		    ?>
 		</li>
@@ -112,79 +112,5 @@
         <script src="<?php echo base_url('media/js/vendor/bootstrap-editable.min.js')?>"></script>             <!-- editable fields plugin -->
         <script src="<?php echo base_url('media/js/thekamarel.min.js')?>"></script>                            <!-- main project js file -->
         <script src="<?php echo base_url('media/js/thekamarel.js')?>"></script>                            <!-- main project js file -->
-
-        <script>
-            $(function () {
-               
-
-                
-
-                /*==============================================================================================
-                 ====================================== LOAD WYSIWYG EDITOR ====================================
-                 =============================================================================================*/   
-
-                $('#messageContent').wysihtml5(); 
-               
-
-
-                var showMemberIcon = $('i.info').parent(),
-                    editMemberIcon = $('i.edit').parent(),
-                    deleteMemberIcon = $('i.delete').parent();
-
-                $(showMemberIcon).tooltip({
-                    title: 'View member profile'
-                });
-
-                $(editMemberIcon).tooltip({
-                    title: 'Edit member profile'
-                });
-
-                $(deleteMemberIcon).tooltip({
-                    title: 'Delete member'
-                });
-
-                $('i.info, i.edit, i.delete').parent().hover(function () {
-                    $(this).children().stop().animate({
-                        opacity: 1
-                    }, 200);
-                }, function() {
-                    $(this).children().stop().animate({
-                        opacity: .7
-                    }, 200);
-                });
-
-               
-
-            })
-        </script>
-
-
-        <script>
-            $(document).ready(
-                function() {
-                    $(".reply-btn").click(
-                        function() {
-                            $(this).parent().siblings(".reply").hide("slow");
-                            $(this).parent().siblings(".assign").hide("slow");
-                            $(this).parent().siblings(".reply").show("slow");
-                        }
-                    );
-
-                    $(".assign-btn").click(
-                        function() {
-                            $(this).parent().siblings(".reply").hide("slow");
-                            $(this).parent().siblings(".assign").hide("slow");
-                            $(this).parent().siblings(".assign").show("slow");
-                        }
-                    );
-
-                    $(".hide-form").click(
-                        function() {
-                            $(this).parent().parent().parent().hide();
-                        }
-                    );
-                }
-            );
-        </script>
-	</body>
+    </body>
 </html>

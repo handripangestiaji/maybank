@@ -17,45 +17,67 @@
 <div id="tasksContent">
     <div class="sidebarDivider"></div>
     <div class="sidebarContent">
-        <a href="#collapsedSidebarContent" class="showCollapsedSidebarMenu"><i class="icon-chevron-sign-left"></i><h1> Tasks</h1></a>
-        <h1>Tasks</h1>
-        <div class="sidebarInfo">
-            <div class="progressTasks"><span class="label">11</span> tasks in progress</div>
-            <div class="newTasks"><span class="label cyan">3</span> new tasks</div>
+        <a href="#collapsedSidebarContent" class="showCollapsedSidebarMenu"><i class="icon-chevron-sign-left"></i><h1> Notification</h1></a>
+        <div class="sidebarHead">
+            <p class="title pull-left">NOTIFICATION&nbsp;<span class="notifTotal">Total 8</span></p>
         </div>
+        <br clear="all" />
+        <div class="sidebarLine"></div>
+        <div class="sidebarInfo">
+            <div class="replies"><span class="cyan">5</span> Replies</div>
+            <div class="newCases"><span class="purple">3</span> New Cases</div>
+        </div>
+        <div class="sidebarLine"></div>
         <ul class="tasksList">
-            <li class="new">
-                <h3>Facebook User 1 - Can I have my bank account details please?</h3>
-                <div class="progress progress-striped active">
-                  <div class="bar"></div>
+            <li>
+                <div class="notifHead purple">
+                    CASE ID: #A123
                 </div>
-                <div class="appendedTags">
-                    <div class="tag priority red">High priority</div>
-                    <div class="tag status cyan">New task</div>
-                </div>    
+                <div class="notifBody">
+                    Oct 11, 2013, 12:09 AM
+                </div>
             </li>
-            <li class="new">
-                <h3>Twitter User 1 - Where to print my latest bank statement?</h3>
-                <div class="progress progress-striped active">
-                  <div class="bar"></div>
+            <li>
+                <div class="notifHead cyan">
+                    CASE ID: #A123
                 </div>
-                <div class="appendedTags">
-                    <div class="tag priority orange">Normal priority</div>
-                    <div class="tag status cyan">New task</div>
-                </div>  
-            </li> 
-            <li class="new">
-                <h3>Google + User - Do you have a branch in Kuching?</h3>
-                <div class="progress progress-striped active">
-                  <div class="bar"></div>
+                <div class="notifBody">
+                    Oct 11, 2013, 12:09 AM
                 </div>
-                <div class="appendedTags">
-                    <div class="tag priority green">Low priority</div>
-                    <div class="tag status cyan">New task</div>
-                </div> 
-            </li> 
+            </li>
+            <li>
+                <div class="notifHead cyan">
+                    CASE ID: #A123
+                </div>
+                <div class="notifBody">
+                    Oct 11, 2013, 12:09 AM
+                </div>
+            </li>
+            <li>
+                <div class="notifHead purple">
+                    CASE ID: #A123
+                </div>
+                <div class="notifBody">
+                    Oct 11, 2013, 12:09 AM
+                </div>
+            </li>
+            <li>
+                <div class="notifHead purple">
+                    CASE ID: #A123
+                </div>
+                <div class="notifBody">
+                    Oct 11, 2013, 12:09 AM
+                </div>
+            </li>
+            <li>
+                <div class="notifHead cyan">
+                    CASE ID: #A123
+                </div>
+                <div class="notifBody">
+                    Oct 11, 2013, 12:09 AM
+                </div>
+            </li>
         </ul>
-        <button class="btn btn-primary">View all</button>
     </div>   
 </div>
 <!-- ==================== END OF SIDEBAR TASKS ==================== -->

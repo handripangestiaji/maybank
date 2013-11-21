@@ -486,7 +486,7 @@ $(function(){
                        $("#cal-show").css({"display": "none"});
                     });
 
-                    $( ".select-shorten-url" ).change(function() {
+                    $( ".compose-insert-link" ).click(function() {
                        $("#url-show").css({"display": "block"});
                     });
 

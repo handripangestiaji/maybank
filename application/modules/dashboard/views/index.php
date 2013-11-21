@@ -36,7 +36,7 @@
                         <div class="left">
                         <i class="icon-link icon-large"></i>
                         <input type="text" length="100" placeholder="Insert Link" />
-                        <button class="btn btn-primary" type="button">
+                        <button class="compose-insert-link btn btn-primary" type="button">
                             <i class="icon-angle-right"></i> 
                             Insert
                             </button>

@@ -36,7 +36,7 @@
                         <div class="left">
                         <i class="icon-link icon-large"></i>
                         <input type="text" length="100" placeholder="Insert Link" />
-                        <button class="btn btn-primary" type="button" onClick="window.location.href='login.html'">
+                        <button class="btn btn-primary" type="button">
                             <i class="icon-angle-right"></i> 
                             Insert
                             </button>
@@ -52,34 +52,13 @@
                             <option value="#">Type Dua</option>
                             <option value="#">Type Tiga</option>
                         </select>
-                         <select class="standard-sel">
+                         <select class="standard-sel select-shorten-url">
                             <option value="#">-- Select Shorten URL</option>
                             <option value="#">Type Satu</option>
                             <option value="#">Type Dua</option>
                             <option value="#">Type Tiga</option>
                         </select>
                         </div>
-                        <script src="js/jquery-1.10.2.min.js"></script>
-                        <script type="text/javascript">
-                        $( document ).ready(function() {
-                            //console.log( "ready!" );
-                            $( "#open-img" ).click(function() {
-                               $("#img-show").css({"display": "block"});
-                            });
-
-                            $( "#close-img" ).click(function() {
-                               $("#img-show").css({"display": "none"});
-                            });
-
-                             $( "#open-cal" ).click(function() {
-                               $("#cal-show").css({"display": "block"});
-                            });
-
-                             $( "#close-cal" ).click(function() {
-                               $("#cal-show").css({"display": "none"});
-                            });
-                        });
-                        </script>
 
                         <div class="right top10 compose-link">
                             <a href="javascript:void(0);" id="open-img">
@@ -96,7 +75,7 @@
                         <a id="close-img" href="javascript:void(0);">
                          <i class="icon-remove-sign icon-large"></i>
                         </a>
-                        <input type="file" id="inputFile" style="display: none">
+                        <input type="file" id="composeInputImageFile" style="display: none">
                         <div class="dummyfile">
                             <input id="filename" type="text" class="input disabled span5" name="filename" readonly>
                             <a id="fileselectbutton" class="btn btn-small btn-inverse">Upload Image</a>
@@ -106,14 +85,7 @@
                                 <a id="remove-img" href="javascript:void(0);">
                                     <i class="icon-remove icon-2x"></i>
                                 </a>
-                                <img src="img/contoh-upload.jpg" />
-                            </div>
-                            <!-- img-place end -->
-                            <div class="img-place">
-                                <a id="remove-img" href="javascript:void(0);">
-                                    <i class="icon-remove icon-2x"></i>
-                                </a>
-                                <img src="img/contoh-upload.jpg" />
+                                <img id="compose-preview-img"/>
                             </div>
                             <!-- img-place end -->
                         </div>
@@ -129,7 +101,7 @@
                         <a id="close-cal" href="javascript:void(0);">
                          <i class="icon-remove-sign icon-large"></i>
                         </a>
-                        <h5>Shcedule Post</h5>
+                        <h5>Schedule Post</h5>
                         <div class="img-list-upload">
                                 <div class="left">
                                 <label class="left">Date</label>
@@ -185,11 +157,32 @@
                         </div> 
                     </div>
                 </div>
+                <div class="compose-schedule" id="url-show">
+                    <div class="compose-form img-attached">
+                        <!-- close button for image attached -->
+                        <a id="close-url" href="javascript:void(0);">
+                            <i class="icon-remove-sign icon-large"></i>
+                        </a>
+                        <div>
+                            <div class="pull-left img-url">
+                                <img src="http://www.maybank.com/iwov-resources/corporate/img/common/key-business-entities-large.jpg">
+                            </div>
+                            <div class="pull-left content-url">
+                                <input type="text" length="100" placeholder="" value="Maybank2u.com"/>
+                                http://www.maybank2u.com
+                                <textarea class="span4">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <!-- ==================== END URL SHORTERNER AJAX  ==================== -->
               <div class="compose-send">
                 <p class="twitter-character-count"><i class="icon-facebook-sign"></i> 2000</p>
-                <button class="assign-btn btn btn-primary" type="button"><i class="icon-bolt"></i> POST</button>
+                <p class="twitter-character-count">&nbsp;&nbsp;<i class="icon-twitter-sign"></i> 140</p>
+                <button class="btn-compose-post btn btn-primary" type="button"><i class="icon-bolt"></i> POST</button>
               </div>
+              <br clear="all" />
+              <div class="compose-post-status green hide">Message Post</div>
             </div>
         </div>
     </form>

@@ -620,3 +620,52 @@ border-radius: 3px;
 .floatingBox > div.campaignForm .contentForm .control-group .btn-group button{
 	background-color: #D1D1D1;
 }
+
+/*==============================================================================================
+======================================== SIDEBAR =================================================
+==============================================================================================*/
+.hiddenContent .tasksList li{
+	padding: 0px;
+	margin: 0px;
+	width: 100%;
+	margin-bottom: 10px;
+}
+
+.hiddenContent .tasksList .notifHead{
+	padding: 10px;
+	color: #FFF;
+}
+
+.hiddenContent .tasksList .notifBody{
+	padding: 10px;
+}
+
+.sidebarContent .sidebarHead .title{
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.sidebarContent .sidebarHead .notifTotal{
+	background-color: #BABABA;
+	font-weight: normal;
+	color: #FFF;
+	border-radius: 20%;
+	padding: 2px 7px;
+	font-size: 12px;
+}
+
+.sidebarContent .sidebarLine{
+	width: 100%;
+	border-bottom: solid 1px #BABABA;
+	margin-bottom: 8px;
+}
+
+.sidebarInfo span{
+	border-radius: 50%;
+	padding: 3px 8px;;
+	color: #FFF;
+}
+
+.sidebarInfo .newCases{
+	margin-top: 10px;
+}

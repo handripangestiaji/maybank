@@ -107,7 +107,7 @@ for($i=0;$i<count($mentions);$i++){
                 <a role="button" href="#modalsentdm<?php echo $i; ?>" class="btn btn-primary" data-toggle="modal"><i class="icon-envelope"></i></a>
                 <button type="submit" class="btn btn-primary" name="action" value="favorit"><i class="icon-star"></i></button>
                 <button type="submit" class="btn btn-primary" name="action" value="follow"><i class="icon-user"></i></button>
-                <button type="submit" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i>CASE</button>
+                <button class="btn btn-danger btn-case" value="case"><i class="icon-plus"></i>CASE</button>
                 <input type="hidden" name="str_id" value="<?php echo $mentions[$i]->id_str; ?>" />
                 <input type="hidden" name="id" value="<?php echo $mentions[$i]->id; ?>" />
                 <input type="hidden" name="userid" value="<?php echo $mentions[$i]->user->id_str; ?>" />

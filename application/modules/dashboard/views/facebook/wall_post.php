@@ -20,35 +20,26 @@ for($i=0; $i<count($fb_feed);$i++):?>
             <span class="engagement-btn-close btn-close pull-right">Close <i class="icon-remove-sign"></i></span>
         </div>
         <br>
+        <?php 
+            $comment=$this->facebook_model->RetriveCommentPostFb($fb_feed[$i]->post_id);
+            for($j=0;$j<count($comment);$j++){
+        ?>
         <div class="engagement-body">
             <span class="engagement-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>    
             <p class="headLine">
-                <span class="author">John Doe</span>
+                <span class="author"><?php echo $comment[$j]->name; ?></span>
                 <i class="icon-circle"></i>
                 <span>posted a <span class="cyanText">comment</span></span>
                 <i class="icon-circle"></i>
-                <span>2 hours ago</span>
+                <span><?php echo $comment[$j]->created_at; ?></span>
                 <i class="icon-play-circle moreOptions pull-right"></i>
             </p>
             <div>
-                <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
+                <p>"<?php echo $comment[$j]->comment_content; ?>"</p>
             </div>
         </div>
-        <div class="engagement-body">
-            <span class="engagement-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>    
-            <p class="headLine">
-                <span class="author">John Doe</span>
-                <i class="icon-circle"></i>
-                <span>posted a <span class="cyanText">comment</span></span>
-                <i class="icon-circle"></i>
-                <span>2 hours ago</span>
-                <i class="icon-play-circle moreOptions pull-right"></i>
-            </p>
-            <div>
-                <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
-            </div>
-        </div>
-        <!-- ==================== CONDENSED TABLE HEADLINE ==================== -->
+       <?php } ?>
+       <!-- ==================== CONDENSED TABLE HEADLINE ==================== -->
         <div class="containerHeadline">
             <i class="icon-table"></i><h2>Action Log</h2>
             <div class="controlButton pull-right"><i class="icon-caret-down toggleTable"></i></div>

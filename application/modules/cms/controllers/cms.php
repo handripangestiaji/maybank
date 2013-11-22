@@ -13,7 +13,14 @@ class Cms extends MY_Controller {
 
     public function index()
     {
+    	$data['campaigns'] = $this->campaign_model->getAllArray();
+    	
+    	$data['products'] = $this->product_model->get();
+    	
+    	$data['tags'] = $this->tag_model->get();
+    	
         $data['cms_view'] = 'campaign_table';
+        
         $this->load->view('cms/index',$data);
     }
      
@@ -76,8 +83,14 @@ class Cms extends MY_Controller {
      
     public function create_tag(){
     	
+    	$data['campaigns'] = '';
+    	
+    	$data['products'] = '';
+    	
     	$data['tags'] = $this->tag_model->get();
+    	
     	$action = $this->input->get('action');
+    	
         $data['cms_view'] = 'create_tag';
         
         if ($this->input->server('REQUEST_METHOD') === "POST")
@@ -132,8 +145,14 @@ class Cms extends MY_Controller {
      
     public function create_product()
     {
+    	$data['campaigns'] = '';
+    	
+    	$data['tags'] = '';
+    	
     	$data['products'] = $this->product_model->get();
+    	
     	$action = $this->input->get('action');
+        
         $data['cms_view'] = 'create_product';
         
         if ($this->input->server('REQUEST_METHOD') === "POST")

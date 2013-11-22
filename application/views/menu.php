@@ -1,5 +1,5 @@
 <?php
-    $value = array(1 => 'dashboard',2 => 'channels',3 => 'cms',4 => 'manage_users', 5 => 'users', 6 => 'reports', 7 => 'publishers', 8 => 'manage_channel');
+    $value = array(1 => 'dashboard',2 => 'channels',3 => 'cms',4 => 'manage_users', 5 => 'users', 6 => 'reports', 7 => 'publisher', 8 => 'manage_channel');
     for($i=1;$i<9;$i++){
 	if($this->uri->segment(1) == $value[$i]){
 	    $active[$i] = 'active';
@@ -36,19 +36,19 @@
         <?php } ?>
         <li class="divider-vertical"></li>
         <li class="dropdown <?php echo $active[5]; ?>">
-            <a href="#" id="interface"><i class="icon-user"></i> USER MANAGEMENT</a>
+            <a href="<?php echo base_url('users'); ?>" id="interface"><i class="icon-user"></i> USER MANAGEMENT</a>
         </li>
 	<li class="divider-vertical"></li>
         <li class="dropdown <?php echo $active[6]; ?>">
-            <a href="#" id="interface"><i class="icon-bar-chart"></i> REPORTS</a>
+            <a href="<?php echo base_url('reports'); ?>" id="interface"><i class="icon-bar-chart"></i> REPORTS</a>
         </li>
 	<li class="divider-vertical"></li>
         <li class="dropdown <?php echo $active[7]; ?>">
-            <a href="#" id="interface"><i class="icon-calendar"></i> PUBLISHER</a>
+            <a href="<?php echo base_url('publisher'); ?>" id="interface"><i class="icon-calendar"></i> PUBLISHER</a>
         </li>
 	<li class="divider-vertical"></li>
         <li class="dropdown <?php echo $active[8]; ?>">
-            <a href="#" id="interface"><i class="icon-building"></i> CHANNEL MANAGEMENT</a>
+            <a href="<?php echo base_url('manage_channel'); ?>" id="interface"><i class="icon-building"></i> CHANNEL MANAGEMENT</a>
         </li>
     </ul>
 </div>

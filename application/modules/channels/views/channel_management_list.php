@@ -33,18 +33,27 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>User ID</th>
-            <th>User Name</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Group</th>
-            <th>Status</th>
-            <th>Date Created</th>
-            <th>Creator</th>
-            <th>&nbsp;</th>
-            <th>&nbsp;</th>
+            <th>Channel ID</th>
+            <th>Name</th>
+            <th>Token</th>
+            <th>Active</th>
+            <th>Connection Type</th>
+            <th>Social ID</th>
         </tr>
     </thead>
+    <tbody>
+        <?php foreach($channel_list as $channel):?>
+        <tr>
+            <td><?=$channel->channel_id?></td>
+            <td><?=$channel->name?></td>
+            <td><?=substr($channel->oauth_token, 0, 10).'....'?></td>
+            <td><?=$channel->is_active == 1 ? "Active" : "No Active"?></td>
+            <td><?=$channel->connection_type.' '.($channel->is_fb_page == 1? " Page" : "") ?></td>
+            <td><?=$channel->social_id?></td>
+            
+        </tr>
+        <?php endforeach;?>
+    </tbody>
   
 </table>
 <div class="page pull-right" style="margin-top: 30px;">

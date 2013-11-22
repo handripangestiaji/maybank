@@ -7,6 +7,7 @@ class Cronjob extends CI_Controller {
         parent::__construct();
         $this->load->model('facebook_model');
         $this->load->model('account_model');
+        $this->load->model('twitter_model');
     }
     
     function index(){
@@ -94,7 +95,6 @@ class Cronjob extends CI_Controller {
             $this->twitter_model->OwnPost($channel);
         }
     }
-    
     
     
     function TwitterDirectMessage(){

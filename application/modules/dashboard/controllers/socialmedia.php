@@ -153,7 +153,7 @@ class Socialmedia extends MY_Controller {
             $this->connection->post($method);
        
         }
-        redirect(base_url('/index.php/dashboard'));    	
+        //redirect(base_url('/index.php/dashboard'));    	
     }
 
 	

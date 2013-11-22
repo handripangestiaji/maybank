@@ -502,10 +502,11 @@ $(function(){
                      
                      $(".btn-compose-post").click(function() {
                         $.ajax({
-                            url : BASEURL + 'dashboard/media_stream/publish',
+                            url : BASEURL + 'dashboard/socialmedia/twitterAction',
                             type: "POST",
                             data: {
-                                    compose_message:$('.compose-textbox').val()
+                                    action:'sendTweet',
+                                    content:$('.compose-textbox').val()
                                     },
                             success: function()
                             {

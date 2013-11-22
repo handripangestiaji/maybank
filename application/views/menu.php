@@ -36,19 +36,19 @@
         <?php } ?>
         <li class="divider-vertical"></li>
         <li class="dropdown <?php echo $active[5]; ?>">
-            <a href="<?php echo base_url('users'); ?>" id="interface"><i class="icon-user"></i> USER MANAGEMENT</a>
+            <a href="#" id="interface"><i class="icon-user"></i> USER MANAGEMENT</a>
         </li>
 	<li class="divider-vertical"></li>
         <li class="dropdown <?php echo $active[6]; ?>">
-            <a href="<?php echo base_url('reports'); ?>" id="interface"><i class="icon-bar-chart"></i> REPORTS</a>
+            <a href="#" id="interface"><i class="icon-bar-chart"></i> REPORTS</a>
         </li>
 	<li class="divider-vertical"></li>
         <li class="dropdown <?php echo $active[7]; ?>">
-            <a href="<?php echo base_url('publisher'); ?>" id="interface"><i class="icon-calendar"></i> PUBLISHER</a>
+            <a href="#" id="interface"><i class="icon-calendar"></i> PUBLISHER</a>
         </li>
 	<li class="divider-vertical"></li>
         <li class="dropdown <?php echo $active[8]; ?>">
-            <a href="<?php echo base_url('manage_channel'); ?>" id="interface"><i class="icon-building"></i> CHANNEL MANAGEMENT</a>
+            <a href="#" id="interface"><i class="icon-building"></i> CHANNEL MANAGEMENT</a>
         </li>
     </ul>
 </div>

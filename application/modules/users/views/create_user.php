@@ -17,6 +17,11 @@ Add New User
         </tr>
         
         <tr>
+            <td>Email</td>
+            <td><input type="text" name="email"</td>
+        </tr>
+        
+        <tr>
             <td>Role</td>
             <td>
                 <select name="optRole">

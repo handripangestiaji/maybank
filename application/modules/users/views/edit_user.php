@@ -19,7 +19,7 @@ Edit User
         
         <tr>
             <td>Email</td>
-            <td><input name='email' type="text"</td>
+            <td><input name='email' type="text" value='<?php echo $row->email;?>' /></td>
         </tr>
         
         <tr>
@@ -69,8 +69,16 @@ Edit User
         <tr>
             <td>
                 <input type="submit" value="Save" />
+                <input type="button" value="Cancel" onclick="btn_cancel()" />
             </td>
         </tr>
         <?php }?>
     </table>
 </form>
+
+<script type='text/javascript'>
+    function btn_cancel()
+    {
+        window.location = "<?php echo site_url();?>/users";
+    }
+</script>

@@ -5,6 +5,7 @@ class Users_model extends CI_Model
     private $user = 'user';
     private $group = 'user_group';
     private $role = 'role_collection';
+    private $app_role = 'application_role';
     
     function __construct()
     {
@@ -54,5 +55,16 @@ class Users_model extends CI_Model
     function select_group()
     {
         return $this->db->get($this->group);
+    }
+    
+    /////////////////////////////////---------------APP_ROLE---------------
+    function select_appRole()
+    {
+        $this->db->where('role_group','channel');
+        return $this->db->get($this->app_role);
+    }
+    function insert_appRole($data)
+    {
+        return $this->db->insert($this->app_role,$data);
     }
 }

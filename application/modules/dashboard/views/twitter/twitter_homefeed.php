@@ -2,9 +2,9 @@
 for($i=0;$i<count($homefeed);$i++){
 ?>
     <li>
-        <div class="circleAvatar"><img src="<?php echo $homefeed[$i]->user->profile_image_url;?>" alt=""></div>
+        <div class="circleAvatar"><img src="<?php echo $homefeed[$i]->profile_image_url;?>" alt=""></div>
         <p class="headLine">
-            <span class="author"><?php echo $homefeed[$i]->user->name; ?></span>
+            <span class="author"><?php echo $homefeed[$i]->screen_name; ?></span>
             <i class="icon-circle"></i>
             <span>mentions</span>
             <i class="icon-circle"></i>
@@ -14,318 +14,205 @@ for($i=0;$i<count($homefeed);$i++){
     <p><?php echo $homefeed[$i]->text; ?></p>
     
     <p><button type="button" class="btn btn-warning btn-mini">OPEN</button>
-    <?php if ($homefeed[$i]->retweeted>0) { ?>
+    <?php if ($homefeed[$i]->retweet_count>=1) { ?>
         <button type="button" class="btn btn-inverse btn-mini"><i class="icon-retweet">&nbsp;</i></button>
     <?php } ?>    
-    <?php if ($homefeed[$i]->favorited=='true') { ?>
+    <?php if ($homefeed[$i]->favorited=='1') { ?>
         <button type="button" class="btn btn-inverse btn-mini"><i class="icon-star">&nbsp;</i></button>
     <?php } ?></p>
     
-    <p><a data-toggle="modal" role="button" href="#modalDialogEngagement<?php echo $i; ?>"><i class="icon-eye-open"></i> Engagement</a> | <a data-toggle="modal" role="button" href="#modaltweet<?php echo $i; ?>" ><i class="icon-retweet greyText"></i><?php echo $homefeed[$i]->retweeted; ?> re-tweets</a></p>
+    <p><a role="button" class="btn-engagement"><i class="icon-eye-open"></i> Engagement</a> | <a data-toggle="modal" role="button" href="#modaltweet<?php echo $i; ?>" ><i class="icon-retweet greyText"></i><?php //echo $homefeed[$i]->retweeted; ?> re-tweets</a></p>
     
-    <!-- MODAL DIALOG Engenagemnet-->    
-    <div id="modalDialogEngagement<?php echo $i; ?>" class="modal modalDialog hide fade" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-            <h3><?php echo $homefeed[$i]->user->name; ?></h3>
+    
+    <!-- ENGAGEMENT -->    
+    <div class="engagement hide">
+        <div class="engagement-header">
+            <span class="engagement-btn-close btn-close pull-right">Close <i class="icon-remove-sign"></i></span>
         </div>
-        <div class="modal-body">
-                    <p class="headLine">
-                        <span class="author"><?php echo $homefeed[$i]->user->name; ?></span>
-                        <i class="icon-circle"></i>
-                        <span>posted a <span class="cyanText">comment</span></span>
-                        <i class="icon-circle"></i>
-                        <span><?php echo str_replace('+0000','',$homefeed[$i]->created_at);?></span>
-                        <i class="icon-play-circle moreOptions pull-right"></i>
-                    </p>
-                    <p>"<?php echo $homefeed[$i]->text;?>"</p>
-                    <p class="headLine">
-                        <span class="author">Maybank</span>
-                        <i class="icon-circle"></i>
-                        <span>posted a <span class="cyanText">comment</span></span>
-                        <i class="icon-circle"></i>
-                        <span><?php echo str_replace('+0000','',$homefeed[$i]->created_at);?></span>
-                        <i class="icon-play-circle moreOptions pull-right"></i>
-                    </p>
-                    <!-- ==================== END OF CONDENSED TABLE FLOATING BOX ==================== --> 
+        <br>
+        <div class="engagement-body">
+            <span class="engagement-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>    
+            <p class="headLine">
+                <span class="author">John Doe</span>
+                <i class="icon-circle"></i>
+                <span>posted a <span class="cyanText">comment</span></span>
+                <i class="icon-circle"></i>
+                <span>2 hours ago</span>
+                <i class="icon-play-circle moreOptions pull-right"></i>
+            </p>
+            <div>
+                <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
+            </div>
         </div>
+        <div class="engagement-body">
+            <span class="engagement-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>    
+            <p class="headLine">
+                <span class="author">John Doe</span>
+                <i class="icon-circle"></i>
+                <span>posted a <span class="cyanText">comment</span></span>
+                <i class="icon-circle"></i>
+                <span>2 hours ago</span>
+                <i class="icon-play-circle moreOptions pull-right"></i>
+            </p>
+            <div>
+                <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
+            </div>
+        </div>
+        <!-- ==================== CONDENSED TABLE HEADLINE ==================== -->
+        <div class="containerHeadline">
+            <i class="icon-table"></i><h2>Action Log</h2>
+            <div class="controlButton pull-right"><i class="icon-caret-down toggleTable"></i></div>
+        </div>
+        <!-- ==================== END OF CONDENSED TABLE HEADLINE ==================== -->
+
+        <!-- ==================== CONDENSED TABLE FLOATING BOX ==================== -->
+        <div class="floatingBox table hide">
+            <div class="container-fluid">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Time Stamp</th>
+                      <th>Username</th>
+                      <th>Action Taken</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>2013-09-30 19:52:46</td>
+                      <td>Teo Eu Gene</td>
+                      <td>Resolved</td>
+                      <td><button class="btn btn-primary icon-book"></button></td>
+                    </tr>
+                    <tr>
+                      <td>2013-09-30 19:52:46</td>
+                      <td>Teo Eu Gene</td>
+                      <td>Resolved</td>
+                      <td><button class="btn btn-primary icon-book"></button></td>
+                    </tr>
+                  </tbody>
+                </table>  
+            </div>
+        </div>
+        <!-- ==================== END OF CONDENSED TABLE FLOATING BOX ==================== --> 
     </div>
-    <!-- END MODAL DIALOG FOR ENGAGEMENT -->
+    <!-- END ENGAGEMENT -->
     
-    <!-- END MODAL DIALOG FOR TWEET -->
-    <div id="modaltweet<?php echo $i; ?>" class="modal modalDialog hide fade" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-            <h3>Re-tweets</h3>
-        </div>
-        <div class="modal-body">
-                    <p class="headLine">
-                        <span class="author"><?php echo $homefeed[$i]->user->name; ?></span>
-                        <i class="icon-circle"></i>
-                        <span>posted a <span class="cyanText">comment</span></span>
-                        <i class="icon-circle"></i>
-                        <span>2 hours ago</span>
-                        <i class="icon-play-circle moreOptions pull-right"></i>
-                    </p>
-        </div>
-    </div>    
     <h4 class="filled">
         <a role="button" href="#"><i class="icon-trash greyText"></i></a>
         <div class="pull-right">
-            <form class="contentForm" action="<?php echo base_url('/index.php/dashboard/twitteraction');?>" method="post">
-                <a role="submit" href="#modalreplaytweet<?php echo $i; ?>" class="btn btn-primary" data-toggle="modal"><i class="icon-mail-reply"></i></a>
+            <form class="contentForm" action="<?php echo base_url('index.php/dashboard/socialmedia/twitteraction');?>" method="post">
+                <button class="btn btn-reply btn-primary" data-toggle="modal"><i class="icon-mail-reply"></i></button>
                 <button type="submit" class="btn btn-primary" name="action" value="retweet"><i class="icon-retweet"></i></button>
                 <a role="button" href="#modalsentdm<?php echo $i; ?>" class="btn btn-primary" data-toggle="modal"><i class="icon-envelope"></i></a>
                 <button type="submit" class="btn btn-primary" name="action" value="favorit"><i class="icon-star"></i></button>
                 <button type="submit" class="btn btn-primary" name="action" value="follow"><i class="icon-user"></i></button>
-                <button type="submit" class="btn btn-danger" name="action" value="case"><i class="icon-plus"></i>CASE</button>
-                <input type="hidden" name="str_id" value="<?php echo $homefeed[$i]->id_str; ?>" />
-                <input type="hidden" name="id" value="<?php echo $homefeed[$i]->id; ?>" />
-                <input type="hidden" name="userid" value="<?php echo $homefeed[$i]->user->id_str; ?>" />
-                <input type="hidden" name="followid" value="<?php echo $homefeed[$i]->in_reply_to_user_id_str; ?>" />
+                <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i>CASE</button>
+                <input type="hidden" name="str_id" value="<?php echo $homefeed[$i]->post_stream_id; ?>" />
+                <input type="hidden" name="id" value="<?php //echo json_decode($homefeed[$i]->twitter_entities)->user_mentions[0]->id; ?>" />
+                <input type="hidden" name="userid" value="<?php //echo json_decode($homefeed[$i]->twitter_entities)->user_mentions[0]->id_str; ?>" />
+                <input type="hidden" name="followid" value="<?php //echo json_decode($homefeed[$i]->twitter_entities)->user_mentions[0]->id_str; ?>" />
                </form>    
         </div>
         <br clear="all" />
     </h4>
     
-    <!-- MODAL DIALOG REPLAY TWEET-->    
-    <div id="modalreplaytweet<?php echo $i; ?>" class="modal modalDialog hide fade" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-            <h3><?php echo $homefeed[$i]->user->name; ?></h3>
-        </div>
-        <div class="modal-body">
-                    <p class="headLine">
-                        <span class="author"><?php echo $homefeed[$i]->user->name; ?></span>
-                        <i class="icon-circle"></i>
-                        <span>posted a <span class="cyanText">comment</span></span>
-                        <i class="icon-circle"></i>
-                        <span>2 hours ago</span>
-                        <i class="icon-play-circle moreOptions pull-right"></i>
-                    </p>
-                    <p>"<?php echo $homefeed[$i]->text;?>"</p>
-                    <p class="headLine">
-                        <span class="author">Maybank</span>
-                        <i class="icon-circle"></i>
-                        <span>posted a <span class="cyanText">comment</span></span>
-                        <i class="icon-circle"></i>
-                        <span>2 hours ago</span>
-                        <i class="icon-play-circle moreOptions pull-right"></i>
-                    </p>
-                    <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
-
-                    <!--====== MODAL REPLY AND ASSIGN BUTTONS ========-->
-                    <h4 class="filled">
-                        <button type="button" class="reply-btn btn btn-primary"><i class="icon-mail-reply"></i> Reply</button>
-                        <button type="button" class="assign-btn btn btn-primary"><i class="icon-male"></i> Assign</button>
-                        <?php form_close(); ?>
-                    </h4>
-                    <div class="reply filled hide">
-                        <form class="contentForm" action="<?php echo base_url('/index.php/dashboard/twitteraction');?>" method="post">
-                            <div class="controlButton pull-right"><i class="icon-remove-sign hide-form"></i></div>
-                            <textarea style="width: 95%;" rows="9" id="content" name="content"></textarea>
-                            <button style="clear: both;" type="submit" class="btn btn-primary" value="sendTweet" id="action" name="action">Send</button>
-                        </form>
-                    </div>
-                    <div class="assign filled hide">
-                        <form class="contentForm">
-                             <div class="controlButton pull-right"><i class="icon-remove-sign hide-form"></i></div>
-                             <div class="control-group">
-                                <label class="control-label">Assign To</label>
-                                <div class="controls">
-                                    <select id="uniqueSelect">
-                                        <option id="opt1" value="opt1">John Doe</option>
-                                        <option id="opt2" value="opt2">May Bankette</option>
-                                        <option id="opt3" value="opt3">Jane Doyen</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="control-group last">
-                                <label class="control-label">Remarks <span class="label label-important">Not Public</span></label>
-                                <div class="controls">
-                                  <textarea class="span10"></textarea>
-                                </div>
-                            </div>
-                            <button style="clear: both;" type="submit" class="btn btn-primary">Send</button>
-                        </form>
-                    </div>
-                    <!--====== MODAL REPLY AND ASSIGN BUTTONS ========-->
-
-                    <!-- ==================== CONDENSED TABLE HEADLINE ==================== -->
-                    <div class="containerHeadline">
-                        <i class="icon-table"></i><h2>Action Log</h2>
-                        <div class="controlButton pull-right"><i class="icon-caret-down minimizeElement"></i></div>
-                    </div>
-                    <!-- ==================== END OF CONDENSED TABLE HEADLINE ==================== -->
-
-                    <!-- ==================== CONDENSED TABLE FLOATING BOX ==================== -->
-                    <div class="floatingBox table hide">
-                        <div class="container-fluid">
-                            <table class="table table-condensed">
-                              <thead>
-                                <tr>
-                                  <th>Time Stamp</th>
-                                  <th>Username</th>
-                                  <th>Action Taken</th>
-                                  <th></th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr>
-                                  <td>2013-09-30 19:52:46</td>
-                                  <td>Teo Eu Gene</td>
-                                  <td>Resolved</td>
-                                  <td><button class="btn btn-primary icon-book"></button></td>
-                                </tr>
-                                <tr>
-                                  <td>2013-09-30 19:52:46</td>
-                                  <td>Teo Eu Gene</td>
-                                  <td>Resolved</td>
-                                  <td><button class="btn btn-primary icon-book"></button></td>
-                                </tr>
-                              </tbody>
-                            </table>  
-                        </div>
-                    </div>
-                    <!-- ==================== END OF CONDENSED TABLE FLOATING BOX ==================== --> 
-        </div>
-    </div>
-    <!-- END MODAL DIALOG FOR REPLAY TWEET -->
-    
-    <!-- MODAL DIALOG SENT DIRECT MESSAGE-->    
-    <div id="modalsentdm<?php echo $i; ?>" class="modal modalDialog hide fade" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-            <h3><?php echo $homefeed[$i]->user->name; ?></h3>
-        </div>
-        <div class="modal-body">
-                    <p class="headLine">
-                        <span class="author"><?php echo $homefeed[$i]->user->name; ?></span>
-                        <i class="icon-circle"></i>
-                        <span>posted a <span class="cyanText">comment</span></span>
-                        <i class="icon-circle"></i>
-                        <span>2 hours ago</span>
-                        <i class="icon-play-circle moreOptions pull-right"></i>
-                    </p>
-                    <p>"<?php echo $homefeed[$i]->text;?>"</p>
-                    <p class="headLine">
-                        <span class="author">Maybank</span>
-                        <i class="icon-circle"></i>
-                        <span>posted a <span class="cyanText">comment</span></span>
-                        <i class="icon-circle"></i>
-                        <span>2 hours ago</span>
-                        <i class="icon-play-circle moreOptions pull-right"></i>
-                    </p>
-                    <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
-
-                    <!--====== MODAL REPLY DIRECT MESSAGE AND ASSIGN BUTTONS ========-->
-                    <h4 class="filled">
-                        <button type="button" class="reply-btn btn btn-primary"><i class="icon-mail-reply"></i> Reply</button>
-                        <button type="button" class="assign-btn btn btn-primary"><i class="icon-male"></i> Assign</button>
-                        <?php form_close(); ?>
-                    </h4>
-                    <div class="reply filled hide">
-                        <form class="contentForm" action="<?php echo base_url('/index.php/dashboard/twitterAction');?>" method="post">
-                            <div class="controlButton pull-right"><i class="icon-remove-sign hide-form"></i></div>
-                            <textarea style="width: 95%;" rows="9" id="content" name="content"></textarea>
-                            <input type="hidden" name="friendid" value="<?php echo $homefeed[$i]->user->id_str; ?>" />
-                            <button style="clear: both;" type="submit" id="action" name="action" value="sent_dm" class="btn btn-primary">Send</button>
-                        </form>
-                    </div>
-                    <div class="assign filled hide">
-                        <form class="contentForm">
-                             <div class="controlButton pull-right"><i class="icon-remove-sign hide-form"></i></div>
-                             <div class="control-group">
-                                <label class="control-label">Assign To</label>
-                                <div class="controls">
-                                    <select id="uniqueSelect">
-                                        <option id="opt1" value="opt1">John Doe</option>
-                                        <option id="opt2" value="opt2">May Bankette</option>
-                                        <option id="opt3" value="opt3">Jane Doyen</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="control-group last">
-                                <label class="control-label">Remarks <span class="label label-important">Not Public</span></label>
-                                <div class="controls">
-                                  <textarea class="span10"></textarea>
-                                </div>
-                            </div>
-                            <button style="clear: both;" type="submit" class="btn btn-primary">Send</button>
-                        </form>
-                    </div>
-                    <!--====== MODAL REPLY AND ASSIGN BUTTONS ========-->
-
-                    <!-- ==================== CONDENSED TABLE HEADLINE ==================== -->
-                    <div class="containerHeadline">
-                        <i class="icon-table"></i><h2>Action Log</h2>
-                        <div class="controlButton pull-right"><i class="icon-caret-down minimizeElement"></i></div>
-                    </div>
-                    <!-- ==================== END OF CONDENSED TABLE HEADLINE ==================== -->
-
-                    <!-- ==================== CONDENSED TABLE FLOATING BOX ==================== -->
-                    <div class="floatingBox table hide">
-                        <div class="container-fluid">
-                            <table class="table table-condensed">
-                              <thead>
-                                <tr>
-                                  <th>Time Stamp</th>
-                                  <th>Username</th>
-                                  <th>Action Taken</th>
-                                  <th></th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr>
-                                  <td>2013-09-30 19:52:46</td>
-                                  <td>Teo Eu Gene</td>
-                                  <td>Resolved</td>
-                                  <td><button class="btn btn-primary icon-book"></button></td>
-                                </tr>
-                                <tr>
-                                  <td>2013-09-30 19:52:46</td>
-                                  <td>Teo Eu Gene</td>
-                                  <td>Resolved</td>
-                                  <td><button class="btn btn-primary icon-book"></button></td>
-                                </tr>
-                              </tbody>
-                            </table>  
-                        </div>
-                    </div>
-                    <!-- ==================== END OF CONDENSED TABLE FLOATING BOX ==================== --> 
-        </div>
-    </div>
-    <!-- END MODAL DIALOG FOR SENT DIRECT MESSAGE -->
-    
-    <div class="reply filled hide">
-        <form class="contentForm">
-            <div class="controlButton pull-right"><i class="icon-remove-sign hide-form"></i></div>
-            <textarea style="width: 95%;" rows="9" id="mailContent"></textarea>
-            <button style="clear: both;" type="submit" class="btn btn-primary">Send</button>
-        </form>
-    </div>
-    
-    <div class="assign filled hide">
-        <form class="contentForm">
-            <div class="controlButton pull-right"><i class="icon-remove-sign hide-form"></i></div>
-            <div class="control-group">
-                <label class="control-label">Assign To</label>
-                <div class="controls">
-                    <select id="uniqueSelect">
-                        <option id="opt1" value="opt1">John Doe</option>
-                        <option id="opt2" value="opt2">May Bankette</option>
-                        <option id="opt3" value="opt3">Jane Doyen</option>
-                    </select>
-                </div>
+    <!-- REPLY -->  
+    <div class="reply-field hide">
+        <div class="row-fluid">
+             <form class="contentForm" action="<?php echo base_url('index.php/dashboard/socialmedia/twitteraction');?>" method="post">
+            <span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
+            <div class="pull-left">
+                <select style="width: 130px;">
+                    <option value="keyword">Feedback</option>
+                    <option value="user">Enquiry</option>
+                    <option value="keyword">Complaint</option>
+                </select>
+                <select style="width: 130px;">
+                    <option value="keyword">Accounts & Banking</option>
+                    <option value="user">Cards</option>
+                    <option value="keyword">Investment</option>
+                    <option value="keyword">insurance</option>
+                    <option value="user">Loans</option>
+                    <option value="keyword">Maybank2u</option>
+                    <option value="keyword">Others</option>
+                </select>
             </div>
-            <div class="control-group last">
-                <label class="control-label">Remarks <span class="label label-important">Not Public</span></label>
-                <div class="controls">
-                    <textarea class="span10"></textarea>
-                </div>
+            <textarea placeholder="Compose Message" name="content"></textarea>
+            <br clear="all" />
+            <div class="pull-left">
+                <i class="icon-link"></i>
+                <input type="text" class="span8"><button class="btn btn-primary btn-mini" style="margin-left: 5px;">SHORTEN</button>
             </div>
-            <button style="clear: both;" type="submit" class="btn btn-primary">Send</button>
-        </form>
+            <div class="pull-right">
+                <i class="icon-camera"></i>
+            </div>
+            <br clear="all" />
+            <div class="pull-left">
+                <i class="icon-facebook"></i> 2000     
+            </div>
+            <div class="pull-right">
+                <button class="btn btn-primary btn-small btn-send-reply" name="action" type="submit" value="replay" >SEND</button>    
+            </div>
+            <br clear="all" />
+            <div class="reply-status hide">MESSAGE SENT</div>
+            </form>
+        </div>
     </div>
+    <!-- END REPLY -->
+    
+    <!-- CASE -->  
+    <div class="case-field hide">
+        <div class="row-fluid">
+            <span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
+            CASE ID      : #012345
+            <div class="pull-left">
+                <select style="width: 130px;">
+                    <option value="keyword">Feedback</option>
+                    <option value="user">Enquiry</option>
+                    <option value="keyword">Complaint</option>
+                </select>
+                <select style="width: 130px;">
+                    <option value="keyword">Accounts & Banking</option>
+                    <option value="user">Cards</option>
+                    <option value="keyword">Investment</option>
+                    <option value="keyword">insurance</option>
+                    <option value="user">Loans</option>
+                    <option value="keyword">Maybank2u</option>
+                    <option value="keyword">Others</option>
+                </select>
+            </div>
+            <br clear="all" />
+            <button class="btn btn-small btn-purple btn-add-related">Add Related Conversation</button>
+            <br clear="all" />
+            <div class="pull-left">
+                Assign To:
+            </div>
+            <div class="pull-right">
+                <select>
+                    <option value="keyword">Nicole Lee</option>
+                    <option value="user">Azahan Azad</option>
+                    <option value="keyword">Azahamad Arif</option>
+                </select>
+            </div>
+            <br clear="all" />
+            <div class="pull-left">
+                Email:
+            </div>
+            <div class="pull-right">
+                <input type="text">
+            </div>
+            <br clear="all" />
+            Message :
+            <br>
+            <textarea placeholder="Compose Message" id="content" name="content" ></textarea>
+            <br clear="all" />
+            <div class="pull-right">
+                <button class="btn-purple btn btn-small"><i class="icon-ok-circle icon-large"></i> Assign</button>    
+            </div>
+        </div>
+    </div>
+    <!-- END CASE -->  
+    
     </li>
 <?php } ?>

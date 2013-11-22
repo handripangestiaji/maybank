@@ -26,6 +26,7 @@
     
     <ul class="floatingBoxContainers" id="feed" style="display:none">
          <?php 
+        // print_r($homefeed);
             if(is_array($homefeed)){
                 $this->load->view('dashboard/twitter/twitter_homefeed', array('homefeed' => $homefeed));
             }else{
@@ -47,11 +48,11 @@
     </ul>
     <ul class="floatingBoxContainers" id="direct" style="display:none">
          <?php 
-            //print_r($directmessage);
+           // print_r($directmessage);
              if(is_array($directmessage)){
                 $this->load->view('dashboard/twitter/twitter_messages', array('directmessage' => $directmessage));
              }else{
-                echo $directmessage->errors[0]->message;
+                print_r($directmessage);
              }   
          ?> 
     </ul>

@@ -4,11 +4,12 @@ class twitter_model extends CI_Model
 {
     private $connection ;
     
-    public function __construct(){
+   public function __construct(){
         parent::__construct();
         $this->load->helper('basic');
         $this->load->library('Twitteroauth');
-        
+        $this->config->load('twitter');
+                
     }
     /*
     * Initialize connection properties
@@ -18,7 +19,8 @@ class twitter_model extends CI_Model
     * return NULL
     */
     public function InitConnection($access_token, $access_secret){
-        $this->connection = $this->twitteroauth->create("EXWkuGJlJ8zMUGccF04uMA","eUw0K1YuzMof6RqI0oYw22mV6JYH0UbePMscMSiDZk",$access_token,$access_secret);
+        
+        $this->connection = $this->twitteroauth->create($this->config->item('twitter_consumer_token'),$this->config->item('twitter_consumer_secret'),$access_token,$access_secret);
     }
     
     /*
@@ -246,19 +248,32 @@ class twitter_model extends CI_Model
                 b.*
                 from 
                 social_stream a inner join twitter_direct_messages b on a.post_id = b.post_id 
-                where a.type = 'twitter_dm'";
+                where a.type = 'twitter_dm' and a.channel_id=$channel_id order by a.created_at desc";
         $query = $this->db->query($sql);
         $result = $query->result();
         
         for($i=0;$i<count($result);$i++){
-            $result[$i]->sender = $this->ReadTwitterUserFromDb($result[$i]->twitter_user_id);
+            $result[$i]->sender = $this->ReadTwitterUserFromDb($result[$i]->sender);
         }
+        return $result;
     }
     
     public function ReadTwitterUserFromDb($user_id){
         $this->db->select("*");
         $this->db->from("twitter_user_engaged");
-        $this->db->where("user_id", $user_id);
+        $this->db->where("twitter_user_id", $user_id);
         return $this->db->get()->row();
+    }
+    
+    
+    public function ReadTwitterData($filter){
+        $this->db->select("a.channel_id, a.post_stream_id, a.retrieved_at, a.created_at, 
+                            b.*, c.screen_name, c.profile_image_url, c.name, c.description, c.following");
+        $this->db->from("social_stream a INNER JOIN social_stream_twitter b ON a.post_id = b.post_id 
+                        INNER JOIN twitter_user_engaged c ON
+                        c.twitter_user_id = b.twitter_user_id");
+        $where="b.type = '$filter' AND a.type='twitter' ORDER by a.created_at desc";
+        $this->db->where($where);
+        return $this->db->get()->result();
     }
 }

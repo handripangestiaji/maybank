@@ -494,12 +494,28 @@ $(function(){
                        $("#url-show").css({"display": "none"});
                     });
                      
+                     $('.compose-textbox').bind('input propertychange', function() {
+                        var len = this.value.length;
+                        $('.compose-fb-char-count').html(2000-len);
+                        $('.compose-tw-char-count').html(140-len);
+                    });
+                     
                      $(".btn-compose-post").click(function() {
-                        $('.compose-post-status').show();
-                        $('.compose-post-status').fadeOut(5000);
-                     })
+                        $.ajax({
+                            url : BASEURL + 'dashboard/media_stream/publish',
+                            type: "POST",
+                            data: {
+                                    compose_message:$('.compose-textbox').val()
+                                    },
+                            success: function()
+                            {
+                                $('.compose-post-status').show();
+                                $('.compose-post-status').fadeOut(5000);
+                            },
+                        });
+                    });
                 });
-                                
+                  
                 /*==============================================================================================
                  ====================================== LOAD WYSIWYG EDITOR ====================================
                  =============================================================================================*/   

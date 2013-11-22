@@ -115,7 +115,18 @@ for($i=0; $i<count($fb_feed);$i++):?>
                 <input type="text" class="span8"><button class="btn btn-primary btn-mini" style="margin-left: 5px;">SHORTEN</button>
             </div>
             <div class="pull-right">
-                <i class="icon-camera"></i>
+                <a href="javascript:void(0);" id="reply-open-img">
+                    <i class="icon-camera"></i> 
+                </a>
+            </div>
+            <br clear="all" />
+            <div id="reply-img-show">
+                <div class="reply-img-attached">
+                    <!-- close button for image attached -->
+                    <a id="reply-img-close" href="javascript:void(0);">
+                     <i class="icon-remove-sign"></i>
+                    </a>
+                </div>
             </div>
             <br clear="all" />
             <div class="pull-left">

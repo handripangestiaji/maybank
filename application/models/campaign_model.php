@@ -101,6 +101,7 @@ class Campaign_model extends CI_Model
 			$campaigns[$i]['id'] = $v->id;
 			$campaigns[$i]['campaign_name'] = $v->campaign_name;
 			$campaigns[$i]['display_name'] = $v->display_name;
+			$campaigns[$i]['created_at'] = date('M d, Y', strtotime($v->created_at));
 			
 			foreach($result->result() as $value)
 			{

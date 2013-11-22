@@ -4,7 +4,7 @@
     <li>
         <div class="circleAvatar"><img src="<?php echo $directmessage[$i]->sender->profile_image_url; ?>" alt=""></div>
         <p class="headLine">
-            <span class="author">'<?php echo $directmessage[$i]->sender->name; ?>'</span>
+            <span class="author">'<?php echo $directmessage[$i]->sender->screen_name; ?>'</span>
             <i class="icon-circle"></i>
             <span>mentions</span>
             <i class="icon-circle"></i>
@@ -20,8 +20,8 @@
                 <a role="button" href="#modalsentdm<?php echo $i; ?>" class="btn btn-primary" data-toggle="modal"><i class="icon-envelope"></i></a>
                 <button type="button" class="btn btn-primary" name="action" value="follow"><i class="icon-user"></i></button>
                 <button type="button" class="btn btn-danger" name="action" value="case"><i class="icon-plus"></i>CASE</button>
-                <input type="hidden" name="str_id" value="<?php echo $directmessage[$i]->id_str; ?>" />
-                <input type="hidden" name="id" value="<?php echo $directmessage[$i]->id; ?>" />
+                <input type="hidden" name="str_id" value="<?php //echo json$directmessage[$i]->id_str; ?>" />
+                <input type="hidden" name="id" value="<?php //echo $directmessage[$i]->id; ?>" />
              </form>    
         </div>
         <br clear="all" />
@@ -31,11 +31,11 @@
     <div id="modalsentdm<?php echo $i; ?>" class="modal modalDialog hide fade" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-            <h3><?php //echo $directmessage[$i]->user->name; ?></h3>
+            <h3><?php //echo $directmessage[$i]->user->screen_name; ?></h3>
         </div>
         <div class="modal-body">
                     <p class="headLine">
-                        <span class="author"><?php //echo $directmessage[$i]->user->name; ?></span>
+                        <span class="author"><?php //echo $directmessage[$i]->user->screen_name; ?></span>
                         <i class="icon-circle"></i>
                         <span>posted a <span class="cyanText">comment</span></span>
                         <i class="icon-circle"></i>

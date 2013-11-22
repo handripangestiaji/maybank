@@ -6,12 +6,14 @@
 @import url('theme.default.css');                   /* tablesorter css */
 @import url('bootstrap-editable.css');              /* bootstrap editable fields css */
 @import url('jquery.selectBoxIt.css');              /* selectBoxIt plugin css */
-@import url('colorpicker.css');             		/* colorpicker plugin css */
-@import url('datepicker.css');              		/* datepicker plugin css */
-@import url('jquery.jgrowl.min.css');              	/* jgrowl plugin css */
-@import url('bootstrap-tags.css');              	/* bootstrap tags css */
-@import url('colorbox.css');              			/* colorbox css */
+@import url('colorpicker.css');                     /* colorpicker plugin css */
+@import url('datepicker.css');              	    /* datepicker plugin css */
+@import url('jquery.jgrowl.min.css');               /* jgrowl plugin css */
+@import url('bootstrap-tags.css');                  /* bootstrap tags css */
+@import url('colorbox.css');              	    /* colorbox css */
 @import url('jquery-jvectormap-1.2.2.css');         /* vector maps plugin css */
+@import url('fullcalendar/fullcalendar.css');       /* full calendar css */
+@import url('fullcalendar/fullcalendar.print.css'); /* full calendar css */
 @import url('thekamarel.css');                      /* main project css */
 @import url('thekamarel-responsive.css');           /* main responsive project css */
 @import url('maybankdcms.css');                     /* main responsive project css */

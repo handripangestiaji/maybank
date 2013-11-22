@@ -21,6 +21,25 @@ class account_model extends CI_Model
             $this->db->where($filter);
         return $this->db->get()->result();
     }
-
+    
+    
+    function GetApplicationRole($parent_id){
+	$this->db->select("*");
+	$this->db->from("application_role");
+	$this->db->where("parent_id", $parent_id);
+	return $this->db->get()->result();
+    }
+    
+    function GetRole(){
+	$result = $this->GetApplicationRole(5);
+	foreach($result as $row){
+	    $row->children = $this->GetApplicationRole($row->app_role_id);
+	    foreach($row->children as $child){
+		$child->children = $this->GetApplicationRole($child->app_role_id);
+	    }
+	}
+	
+	return $result;
+    }
     
 }

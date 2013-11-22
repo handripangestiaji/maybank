@@ -552,24 +552,64 @@ $(function(){
      ===================================== CMS ACTIONS ============================================
      =============================================================================================*/
     
-    $(document).ready(function() { 
-            $(".table-sub-tr").hide();   
-            $(".table-btn-show-sub").click(function() {
-                if($(this).hasClass('active')) {
-                    $(this).removeClass('active');
-                    $(this).removeClass('btn-danger');
-                    $(this).addClass('btn-primary');
-                    $(this).html('Show <i class="icon-caret-down"></i>');
-                    $(this).closest('tr').next().hide('fast');
-                }
-                else {
-                    $(this).addClass('active');
-                    $(this).removeClass('btn-primary');
-                    $(this).addClass('btn-danger');
-                    $(this).html('Hide <i class="icon-caret-up"></i>');
-                    $(this).closest('tr').next().show('fast');
+    $(document).ready(function() {
+        $("#channelMg a").click(function(){
+            $(this).LoadContentAsync ({
+                url : window.location.origin + "/channels/listofchannel/" + $(this).attr('href').replace("#", ""),
+                contentReplaced : $('#channelMg .cms-table '),
+                urlParameter : {
+                    "testParameter" : 1
                 }
             });
+        });
+        $(".table-sub-tr").hide();   
+        $(".table-btn-show-sub").click(function() {
+            if($(this).hasClass('active')) {
+                $(this).removeClass('active');
+                $(this).removeClass('btn-danger');
+                $(this).addClass('btn-primary');
+                $(this).html('Show <i class="icon-caret-down"></i>');
+                $(this).closest('tr').next().hide('fast');
+            }
+            else {
+                $(this).addClass('active');
+                $(this).removeClass('btn-primary');
+                $(this).addClass('btn-danger');
+                $(this).html('Hide <i class="icon-caret-up"></i>');
+                $(this).closest('tr').next().show('fast');
+            }
+        });
+    });
+});
+/*
+ *  Load Content Asyncronously
+*/
+
+
+serialize = function(obj) {
+  var str = [];
+  for(var p in obj)
+    if (obj.hasOwnProperty(p)) {
+      str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+    }
+  return str.join("&");
+}
+
+jQuery.fn.LoadContentAsync = function(options){
+    $('.btn').removeClass('btn-primary');
+    $(this).addClass('btn-primary');
+    var settings = $.extend({
+        url  : window.location.origin,
+        urlParameter  : {},
+        contentReplaced : $('document'),
+        loaderImage : window.location.origin + "/media/img/loader.gif"
+    }, options);
+    settings.contentReplaced.html("<img style='width:56px;margin:20px 0 0 45%;' src='" + settings.loaderImage + "' alt='' />");
+    $.ajax({
+        "url" : settings.url,
+        "data" : serialize(settings.urlParameter),
+        "success" : function(response){
+            settings.contentReplaced.html(response);
         }
-    );
-})
+    });
+};

@@ -588,6 +588,12 @@ a#reply-img-close{
 	padding: 10px;
 }
 
+.cms-filter .btn{
+	margin: 3px 0;
+	width: 70%;
+	text-align: left
+}
+
 .cms-table .page a{
 	border: solid 1px #C9C9C9;
 	padding: 5px 10px;

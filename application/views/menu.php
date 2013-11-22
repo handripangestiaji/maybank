@@ -1,7 +1,10 @@
 <?php
-    $value = array(1 => 'dashboard',2 => 'channels',3 => 'cms',4 => 'manage_users', 5 => 'users', 6 => 'reports', 7 => 'publishers', 8 => 'manage_channel');
+    $value = array(1 => 'dashboard',2 => 'channels',3 => 'cms',4 => 'users', 5 => 'users', 6 => 'reports', 7 => 'publishers', 8 => 'channels/channelmg');
     for($i=1;$i<9;$i++){
-	if($this->uri->segment(1) == $value[$i]){
+	if($this->uri->segment(1).'/'.$this->uri->segment(2) == $value[$i]){
+	    $active[$i] = 'active';
+	}
+	else if($this->uri->segment(1) == $value[$i]){
 	    $active[$i] = 'active';
 	}
 	else{

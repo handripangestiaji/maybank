@@ -15,7 +15,7 @@
                 <input class="btn btn-primary" onclick="btn_add()" type="button" name="btn_new" value="+ New User" />
             </div>
             
-            <div style="clear: both"></div>
+            <div style="clear: both;"></div>
             <hr style="margin-top: 0px;">
             <div style="float: left; margin-top: -10px;">
                 <table>
@@ -54,22 +54,28 @@
                         <th>&nbsp;</th>
                     </tr>
                 </thead>
-                <?php foreach($show->result() as $row){?>
+                
                 <tbody>
+                    <?php foreach($show->result() as $row){?>
                     <tr>
                         <td><?php echo $row->user_id;?></td>
-                        <td><?php echo $row->full_name;?></td>
                         <td><?php echo $row->display_name;?></td>
-                        <td><?php echo $row->salt;?></td>
+                        <td><?php echo $row->email;?></td>
                         <td><?php echo $row->role_id;?></td>
                         <td><?php echo $row->group_id;?></td>
+                        <?php if($row->is_active==1){?>
+                            <td><?php echo 'Active';?></td>
+                        <?php }else{?>
+                            <td><?php echo 'Not Active';?></td>
+                        <?php }?>
                         <td>18-11-2013</td>
                         <td>Azahan</td>
                         <td><a href="<?php echo site_url();?>/users/edit/<?php echo $row->user_id;?>"><span><i class="icon-pencil"></i></span></a></td>
                         <td><a href="<?php echo site_url();?>/users/delete/<?php echo $row->user_id;?>"><span><i class="icon-remove"></i></span></a></td>
                     </tr>
-                <?php }?>
+                    <?php }?>
                 </tbody>
+                
             </table>
             <div class="page pull-right" style="margin-top: 30px;">
                 <a href="#">First</a>

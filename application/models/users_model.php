@@ -6,6 +6,7 @@ class Users_model extends CI_Model
     private $group = 'user_group';
     private $role = 'role_collection';
     private $app_role = 'application_role';
+    private $activity = 'user_login_activity';
     
     function __construct()
     {
@@ -66,5 +67,33 @@ class Users_model extends CI_Model
     function insert_appRole($data)
     {
         return $this->db->insert($this->app_role,$data);
+    }
+    
+    ////////////////////---------------------LOGIN-------------------------
+    function check($username,$password)
+    {
+        $this->db->where('user_id',$username);
+        $this->db->where('password',$password);
+
+        return $this->db->get($this->user);
+    }
+    
+    function check_login_time($id)
+    {
+        $this->db->where('user_id',$id);
+        $this->db->where('login_time',NULL);
+        return $this->db->get($this->activity);
+    }
+    
+    function insert_activity($data)
+    {
+        return $this->db->insert($this->activity,$data);
+    }
+    
+    function update_activity($id,$data)
+    {
+        $this->db->where('user_id',$id);
+        $this->db->where('logout_time',NULL);
+        return $this->db->update($this->activity,$data);
     }
 }

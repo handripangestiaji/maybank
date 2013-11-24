@@ -501,19 +501,46 @@ $(function(){
                     });
                      
                      $(".btn-compose-post").click(function() {
-                        $.ajax({
-                            url : BASEURL + 'dashboard/socialmedia/twitterAction',
-                            type: "POST",
-                            data: {
-                                    action:'sendTweet',
-                                    content:$('.compose-textbox').val()
+                        if(!$('.compose-channels option:selected').length){
+                            alert('Please select a channel');
+                        }
+                        else if($('.compose-textbox').val() == '')
+                        {
+                            alert('Message is required'); 
+                        }
+                        else
+                        {
+                            if($('#optTw').is(':selected')){
+                                $.ajax({
+                                    url : BASEURL + 'dashboard/socialmedia/twitterAction',
+                                    type: "POST",
+                                    data: {
+                                            action:'sendTweet',
+                                            content:$('.compose-textbox').val()
+                                            },
+                                    success: function()
+                                    {
+                                        $('.compose-post-status').show();
+                                        $('.compose-post-status').fadeOut(5000);
                                     },
-                            success: function()
-                            {
-                                $('.compose-post-status').show();
-                                $('.compose-post-status').fadeOut(5000);
-                            },
-                        });
+                                });
+                            }
+                            
+                            if($('#optFb').is(':selected')){
+                                $.ajax({
+                                    url : BASEURL + 'dashboard/socialmedia/fbstatusupdate',
+                                    type: "POST",
+                                    data: {
+                                            content:$('.compose-textbox').val()
+                                            },
+                                    success: function()
+                                    {
+                                        $('.compose-post-status').show();
+                                        $('.compose-post-status').fadeOut(5000);
+                                    },
+                                });
+                            }
+                        }
                     });
                     
                     $(".destroy_status").click(function() {

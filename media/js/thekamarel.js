@@ -515,6 +515,90 @@ $(function(){
                             },
                         });
                     });
+                    
+                    $(".destroy_status").click(function() {
+                        $.ajax({
+                            url : BASEURL + 'dashboard/socialmedia/twitterAction',
+                            type: "POST",
+                            data: {
+                                    action:'destroy_status',
+                                    str_id: $(".pull-right").siblings(".str_id").val()
+                                   },
+                            success: function()
+                            {
+                                $('.compose-post-status').show();
+                                $('.compose-post-status').fadeOut(5000);
+                            },
+                        });
+                    });
+                    
+                     $(".retweet").click(function() {
+                        $.ajax({
+                            url : BASEURL + 'dashboard/socialmedia/twitterAction',
+                            type: "POST",
+                            data: {
+                                    action:'retweet',
+                                    str_id: $(this).siblings(".str_id").val()
+                                    },
+                            success: function()
+                            {
+                                $('.compose-post-status').show();
+                                $('.compose-post-status').fadeOut(5000);
+                            },
+                        });
+                    });
+                    
+                    $(".favorit").click(function() {
+                        $.ajax({
+                            url : BASEURL + 'dashboard/socialmedia/twitterAction',
+                            type: "POST",
+                            data: {
+                                    action:'favorit',
+                                    str_id: $(this).siblings(".str_id").val()
+                                    },
+                            success: function()
+                            {
+                                $('.compose-post-status').show();
+                                $('.compose-post-status').fadeOut(5000);
+                            },
+                        });
+                    });
+
+                     $(".follow").click(function() {
+                        $.ajax({
+                            url : BASEURL + 'dashboard/socialmedia/twitterAction',
+                            type: "POST",
+                            data: {
+                                    action:'follow',
+                                    followid: $(this).siblings(".followid").val()
+                                    },
+                            success: function()
+                            {
+                                $('.compose-post-status').show();
+                                $('.compose-post-status').fadeOut(5000);
+                            },
+                        });
+                    });
+                    
+                     $(".unfollow").click(function() {
+                        $.ajax({
+                            url : BASEURL + 'dashboard/socialmedia/twitterAction',
+                            type: "POST",
+                            data: {
+                                    action:'unfollow',
+                                    followid: $(this).siblings(".followid").val()
+                                    },
+                            success: function()
+                            {
+                                $('.compose-post-status').show();
+                                $('.compose-post-status').fadeOut(5000);
+                            },
+                        });
+                    });
+
+
+                    
+                                                                                
                 });
                   
                 /*==============================================================================================

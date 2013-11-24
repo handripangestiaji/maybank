@@ -84,13 +84,8 @@ class Socialmedia extends MY_Controller {
         if(isset($_POST['id'])){//id user
             $id=$_POST['id'];
         }
-        /*
-        echo "<br><br><br><br><br>";
-        echo $action;
-        echo $str_id;
-*/
-        //echo "<br><br><br><br><br>strid:".$str_id."<br>cont:<br>act:".$action;
-        //print_r($_POST);
+        
+        
         
         if($action=='sendTweet'){ //ok
 
@@ -98,11 +93,10 @@ class Socialmedia extends MY_Controller {
             $parameters = array('status' => $content);
             $this->connection->post('statuses/update', $parameters);
     
-        }elseif($action=='deleteTwiter'){
+        }elseif($action=='destroy_status'){
     
             /* statuses/destroy */
-            $str_id='402012691415306240';//$_POST[str_id];
-            $method = "statuses/destroy/$str_id";
+            $method = "statuses/destroy".$str_id;
             $this->connection->delete($method);    
     
         }elseif($action=='replay'){//replay tweet,Direct message

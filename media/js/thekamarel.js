@@ -494,12 +494,140 @@ $(function(){
                        $("#url-show").css({"display": "none"});
                     });
                      
+                     $('.compose-textbox').bind('input propertychange', function() {
+                        var len = this.value.length;
+                        $('.compose-fb-char-count').html(2000-len);
+                        $('.compose-tw-char-count').html(140-len);
+                    });
+                     
                      $(".btn-compose-post").click(function() {
-                        $('.compose-post-status').show();
-                        $('.compose-post-status').fadeOut(5000);
-                     })
+                        if(!$('.compose-channels option:selected').length){
+                            alert('Please select a channel');
+                        }
+                        else if($('.compose-textbox').val() == '')
+                        {
+                            alert('Message is required'); 
+                        }
+                        else
+                        {
+                            if($('#optTw').is(':selected')){
+                                $.ajax({
+                                    url : BASEURL + 'dashboard/socialmedia/twitterAction',
+                                    type: "POST",
+                                    data: {
+                                            action:'sendTweet',
+                                            content:$('.compose-textbox').val()
+                                            },
+                                    success: function()
+                                    {
+                                        $('.compose-post-status').show();
+                                        $('.compose-post-status').fadeOut(5000);
+                                    },
+                                });
+                            }
+                            
+                            if($('#optFb').is(':selected')){
+                                $.ajax({
+                                    url : BASEURL + 'dashboard/socialmedia/fbstatusupdate',
+                                    type: "POST",
+                                    data: {
+                                            content:$('.compose-textbox').val()
+                                            },
+                                    success: function()
+                                    {
+                                        $('.compose-post-status').show();
+                                        $('.compose-post-status').fadeOut(5000);
+                                    },
+                                });
+                            }
+                        }
+                    });
+                    
+                    $(".destroy_status").click(function() {
+                        $.ajax({
+                            url : BASEURL + 'dashboard/socialmedia/twitterAction',
+                            type: "POST",
+                            data: {
+                                    action:'destroy_status',
+                                    str_id: $(".pull-right").siblings(".str_id").val()
+                                   },
+                            success: function()
+                            {
+                                $('.compose-post-status').show();
+                                $('.compose-post-status').fadeOut(5000);
+                            },
+                        });
+                    });
+                    
+                     $(".retweet").click(function() {
+                        $.ajax({
+                            url : BASEURL + 'dashboard/socialmedia/twitterAction',
+                            type: "POST",
+                            data: {
+                                    action:'retweet',
+                                    str_id: $(this).siblings(".str_id").val()
+                                    },
+                            success: function()
+                            {
+                                $('.compose-post-status').show();
+                                $('.compose-post-status').fadeOut(5000);
+                            },
+                        });
+                    });
+                    
+                    $(".favorit").click(function() {
+                        $.ajax({
+                            url : BASEURL + 'dashboard/socialmedia/twitterAction',
+                            type: "POST",
+                            data: {
+                                    action:'favorit',
+                                    str_id: $(this).siblings(".str_id").val()
+                                    },
+                            success: function()
+                            {
+                                $('.compose-post-status').show();
+                                $('.compose-post-status').fadeOut(5000);
+                            },
+                        });
+                    });
+
+                     $(".follow").click(function() {
+                        $.ajax({
+                            url : BASEURL + 'dashboard/socialmedia/twitterAction',
+                            type: "POST",
+                            data: {
+                                    action:'follow',
+                                    followid: $(this).siblings(".followid").val()
+                                    },
+                            success: function()
+                            {
+                                $('.compose-post-status').show();
+                                $('.compose-post-status').fadeOut(5000);
+                            },
+                        });
+                    });
+                    
+                     $(".unfollow").click(function() {
+                        $.ajax({
+                            url : BASEURL + 'dashboard/socialmedia/twitterAction',
+                            type: "POST",
+                            data: {
+                                    action:'unfollow',
+                                    followid: $(this).siblings(".followid").val()
+                                    },
+                            success: function()
+                            {
+                                $('.compose-post-status').show();
+                                $('.compose-post-status').fadeOut(5000);
+                            },
+                        });
+                    });
+
+
+                    
+                                                                                
                 });
-                                
+                  
                 /*==============================================================================================
                  ====================================== LOAD WYSIWYG EDITOR ====================================
                  =============================================================================================*/   

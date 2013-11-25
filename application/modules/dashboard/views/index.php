@@ -1,6 +1,5 @@
 <!-- ==================== COMPOSE MESSAGE ==================== -->
 <div class="container-fluid">
-    <form class="form-horizontal contentForm compose-form">
         <div>
              <!-- button-refresh -->
             <div class="left">
@@ -10,19 +9,23 @@
             </div>
             <!-- button-refresh end -->
             <div class="compose-innercontainer compose-collapsed left">
-                <textarea class="span8 compose-textbox" placeholder="Compose Message"></textarea>
+                <textarea class="span8 compose-textbox" placeholder="Compose Message" id="compose-message"></textarea>
                 <!-- ==================== URL SHORTERNER AJAX THIS WILL BE HIDDEN BY DEFAULT ==================== -->
                 <div class="compose-url-shortener">
                     <div class="post-channel">
                         <div class="left">
                                 <label class="left">Add Channel : </label>
-                                <select class="left" id="multipleSelect" multiple="multiple">
+                                <select class="left compose-channels" id="multipleSelect" multiple="multiple">
+                                    <option id="optFb">Facebook</option>
+                                    <option id="optTw">Twitter</option>
+                                    <!--
                                     <option id="opt7" value="opt7">FB Maybank (MY)</option>
                                     <option id="opt8" value="opt8">FB Maybankcard (MY</option>
                                     <option id="opt9" value="opt9">TW Mayabank (MY)</option>
                                     <option id="opt10" value="opt10">TW Maybankcard (MY)</option>
                                     <option id="opt11" value="opt11">Youtube Maybank (MY)</option>
                                     <option id="opt12" value="opt12">Youtube Maybankcard (MY)</option>
+                                    -->
                                 </select>
                         </div>
                         <!-- left end -->
@@ -177,8 +180,8 @@
                 </div>
                 <!-- ==================== END URL SHORTERNER AJAX  ==================== -->
               <div class="compose-send">
-                <p class="twitter-character-count"><i class="icon-facebook-sign"></i> 2000</p>
-                <p class="twitter-character-count">&nbsp;&nbsp;<i class="icon-twitter-sign"></i> 140</p>
+                <p class="facebook-character-count"><i class="icon-facebook-sign"></i>&nbsp;<span class="compose-fb-char-count">2000</span</p>
+                <p class="twitter-character-count">&nbsp;&nbsp;<i class="icon-twitter-sign"></i>&nbsp;<span class="compose-tw-char-count">140</span></p>
                 <button class="btn-compose-post btn btn-primary" type="button"><i class="icon-bolt"></i> POST</button>
               </div>
               <br clear="all" />

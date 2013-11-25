@@ -99,27 +99,33 @@ for($i=0;$i<count($senttweets);$i++){
     <!-- END ENGAGEMENT -->
     
     <h4 class="filled">
-        <a role="button" href="#"><i class="icon-trash greyText"></i></a>
+        <a role="button" class='destroy_status'><i class="icon-trash greyText"></i></a>
         <div class="pull-right">
-            <form class="contentForm" action="<?php echo base_url('/index.php/dashboard/twitteraction');?>" method="post">
+                <!--form class="contentForm" action="<?php //echo base_url('index.php/dashboard/socialmedia/twitteraction');?>" method="post"-->
                 <button class="btn btn-reply btn-primary" data-toggle="modal"><i class="icon-mail-reply"></i></button>
-                <button type="submit" class="btn btn-primary" name="action" value="retweet"><i class="icon-retweet"></i></button>
+                <!--button type="button" class="retweet btn btn-primary"><i class="icon-retweet"></i></button-->
                 <a role="button" href="#modalsentdm<?php echo $i; ?>" class="btn btn-primary" data-toggle="modal"><i class="icon-envelope"></i></a>
-                <button type="submit" class="btn btn-primary" name="action" value="favorit"><i class="icon-star"></i></button>
-                <button type="submit" class="btn btn-primary" name="action" value="follow"><i class="icon-user"></i></button>
-                <button type="submit" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i>CASE</button>
-                <input type="hidden" name="str_id" value="<?php //echo json_decode($senttweets[$i]->twitter_entities)->user_mentions[0]->id_str; ?>" />
-                <input type="hidden" name="id" value="<?php //echo json_decode($senttweets[$i]->twitter_entities)->user_mentions[0]->id; ?>" />
-                <input type="hidden" name="userid" value="<?php //echo json_decode($senttweets[$i]->twitter_entities)->user_mentions[0]->id_str; ?>" />
-                <input type="hidden" name="followid" value="<?php //echo json_decode($senttweets[$i]->twitter_entities)->user_mentions[0]->id_str; ?>" />
-               </form>    
+                <button type="button" class="favorit btn btn-primary"><i class="icon-star"></i></button>
+                
+                <?php if($senttweets[$i]->following=='1'){ ?>
+                        <button type="button" class="unfollow btn"><i class="icon-user"></i></button>
+                <?php }else{ ?>
+                        <button type="button" class="follow btn btn-primary" value="follow"><i class="icon-user"></i></button>
+                <?php } ?>
+                <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i>CASE</button>
+                <input type="hidden" class="str_id" value="<?php echo $senttweets[$i]->post_stream_id; ?>" />
+                <input type="hidden" class="userid" value="<?php echo $senttweets[$i]->twitter_user_id; ?>" />
+                <input type="hidden" class="followid" value="<?php echo $senttweets[$i]->twitter_user_id; ?>" />
+               <!--/form-->    
         </div>
+         <!--div class="actionreport compose-post-status green hide">Message Post</div-->
         <br clear="all" />
     </h4>
     
     <!-- REPLY -->  
     <div class="reply-field hide">
         <div class="row-fluid">
+             <form class="contentForm" action="<?php echo base_url('index.php/dashboard/socialmedia/twitteraction');?>" method="post">
             <span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
             <div class="pull-left">
                 <select style="width: 130px;">
@@ -137,7 +143,7 @@ for($i=0;$i<count($senttweets);$i++){
                     <option value="keyword">Others</option>
                 </select>
             </div>
-            <textarea placeholder="Compose Message"></textarea>
+            <textarea placeholder="Compose Message" name="content"></textarea>
             <br clear="all" />
             <div class="pull-left">
                 <i class="icon-link"></i>
@@ -151,10 +157,11 @@ for($i=0;$i<count($senttweets);$i++){
                 <i class="icon-facebook"></i> 2000     
             </div>
             <div class="pull-right">
-                <button class="btn btn-primary btn-small btn-send-reply">SEND</button>    
+                <button class="btn btn-primary btn-small btn-send-reply" name="action"  type="submit" value="replay" >SEND</button>    
             </div>
             <br clear="all" />
             <div class="reply-status hide">MESSAGE SENT</div>
+            </form>
         </div>
     </div>
     <!-- END REPLY -->
@@ -203,7 +210,7 @@ for($i=0;$i<count($senttweets);$i++){
             <br clear="all" />
             Message :
             <br>
-            <textarea placeholder="Compose Message"></textarea>
+            <textarea placeholder="Compose Message" id="content" name="content" ></textarea>
             <br clear="all" />
             <div class="pull-right">
                 <button class="btn-purple btn btn-small"><i class="icon-ok-circle icon-large"></i> Assign</button>    

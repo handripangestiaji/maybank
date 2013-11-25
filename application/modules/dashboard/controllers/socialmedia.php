@@ -84,13 +84,8 @@ class Socialmedia extends MY_Controller {
         if(isset($_POST['id'])){//id user
             $id=$_POST['id'];
         }
-        /*
-        echo "<br><br><br><br><br>";
-        echo $action;
-        echo $str_id;
-*/
-        //echo "<br><br><br><br><br>strid:".$str_id."<br>cont:<br>act:".$action;
-        //print_r($_POST);
+        
+        
         
         if($action=='sendTweet'){ //ok
 
@@ -98,11 +93,10 @@ class Socialmedia extends MY_Controller {
             $parameters = array('status' => $content);
             $this->connection->post('statuses/update', $parameters);
     
-        }elseif($action=='deleteTwiter'){
+        }elseif($action=='destroy_status'){
     
             /* statuses/destroy */
-            $str_id='402012691415306240';//$_POST[str_id];
-            $method = "statuses/destroy/$str_id";
+            $method = "statuses/destroy".$str_id;
             $this->connection->delete($method);    
     
         }elseif($action=='replay'){//replay tweet,Direct message
@@ -156,6 +150,22 @@ class Socialmedia extends MY_Controller {
         //redirect(base_url('/index.php/dashboard'));    	
     }
 
-	
-	
+    public function FbStatusUpdate(){
+	  $access_token_fb = fb_dummy_accesstoken();
+	  $config = array(
+	       'appId' => $this->config->item('fb_appid'),
+	       'secret' => $this->config->item('fb_secretkey')
+	  );
+	  $this->load->library('facebook',$config);
+	  $this->facebook->setaccesstoken($access_token_fb);
+	  $this->facebook->api('/me/feed','POST',array('message'=>$this->input->post('content')));
+	  /*
+	  $result = curl_get_file_contents('https://graph.facebook.com/me?
+					  method=GET&
+					  format=json&
+					  suppress_http_code=1&
+					  access_token='.$access_token_fb);
+	  echo $result;
+	  */
+    }
 }

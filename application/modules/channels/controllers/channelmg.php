@@ -55,7 +55,7 @@ class ChannelMg extends MY_Controller {
         else
         {
             // An error occured. Make sure to put your error notification code here.
-            redirect(base_url('/error_page_faild_auth'));
+            redirect('/error_page_faild_auth');
         }
     }
     
@@ -86,9 +86,10 @@ class ChannelMg extends MY_Controller {
     }
     
     public function TokenFacebook(){
+        $this->load->config('facebook');
         $app_id = $this->config->item('fb_appid');
         $app_secret = $this->config->item('fb_appsecret');
-        $my_url = site_url('channels/channelmg/TokenFacebook');  // redirect url
+        $my_url = base_url('channels/channelmg/TokenFacebook');  // redirect url
         $code = $this->input->get("code");
         if(empty($code)) {
             // Redirect to Login Dialog
@@ -102,14 +103,17 @@ class ChannelMg extends MY_Controller {
             $token_url = "https://graph.facebook.com/oauth/access_token?"
               . "client_id=" . $app_id . "&redirect_uri=" . urlencode($my_url)
               . "&client_secret=" . $app_secret . "&code=" . $code;
+            
             $response = curl_get_file_contents($token_url);
             $params = null;
             parse_str($response, $params);
             $longtoken=$params['access_token'];
-            
             $this->session->set_userdata('fb_token', $longtoken);
-            redirect('');
+            redirect('channels/channelmg/index?FacebookConfirm=yes');
         }
     }
+    
+    
+    
     
 }

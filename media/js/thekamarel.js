@@ -554,6 +554,13 @@ $(function(){
      =============================================================================================*/
     
     $(document).ready(function() {
+        $('#channelMg a:first').LoadContentAsync({
+            url : window.location.origin + "/channels/listofchannel/facebook" ,
+            contentReplaced : $('#channelMg .cms-table '),
+            urlParameter : {
+                "testParameter" : 1
+            }
+        });
         $("#channelMg a").click(function(){
             $(this).LoadContentAsync ({
                 url : window.location.origin + "/channels/listofchannel/" + $(this).attr('href').replace("#", ""),

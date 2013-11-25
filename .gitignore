@@ -1,4 +1,4 @@
 application/config/database.php
 access_token.json
-!.gitignore
+.gitignore
 .htaccess

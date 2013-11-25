@@ -39,6 +39,7 @@
             <th>Active</th>
             <th>Connection Type</th>
             <th>Social ID</th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
@@ -50,7 +51,9 @@
             <td><?=$channel->is_active == 1 ? "Active" : "No Active"?></td>
             <td><?=$channel->connection_type.' '.($channel->is_fb_page == 1? " Page" : "") ?></td>
             <td><?=$channel->social_id?></td>
-            
+            <td>
+                <button class="btn btn-info edit" type="button" id="channel_<?=$channel->channel_id?>"><i class="icon-pencil"></i> Edit</button>
+            </td>
         </tr>
         <?php endforeach;?>
     </tbody>

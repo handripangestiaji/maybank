@@ -118,7 +118,7 @@ for($i=0;$i<count($mentions);$i++){
                 <input type="hidden" class="followid" value="<?php echo $mentions[$i]->twitter_user_id; ?>" />
                <!--/form-->    
         </div>
-         <div class="actionreport compose-post-status green hide">Message Post</div>
+         <!--div class="actionreport compose-post-status green hide">Message Post</div-->
         <br clear="all" />
     </h4>
     

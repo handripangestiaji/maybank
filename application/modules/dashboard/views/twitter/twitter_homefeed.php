@@ -117,7 +117,7 @@ for($i=0;$i<count($homefeed);$i++){
                 <input type="hidden" class="followid" value="<?php echo $homefeed[$i]->twitter_user_id; ?>" />
                <!--/form-->    
         </div>
-         <div class="actionreport compose-post-status green hide">Message Post</div>
+         <!--div class="actionreport compose-post-status green hide">Message Post</div-->
         <br clear="all" />
     </h4>
     

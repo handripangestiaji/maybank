@@ -81,7 +81,7 @@ $autoload['helper'] = array('url', 'array', 'basic');
 */
 
 //$autoload['config'] = array('ion_oauth');
-$autoload['config'] = array();
+$autoload['config'] = array('twitter');
 
 
 /*

@@ -15,6 +15,7 @@ class Media_stream extends CI_Controller {
 	$this->load->library('session');
 	$this->load->helper('url');
 	$this->load->helper('array');
+	$this->load->helper('form');
 	$this->load->model('twitter_model');
 	$this->session->set_userdata('access_token', $this->config->item('twitter_access_token'));
 	$this->session->set_userdata('access_token_secret', $this->config->item('twitter_access_secret'));
@@ -174,5 +175,9 @@ class Media_stream extends CI_Controller {
 	    $this->session->unset_userdata('request_token_secret');
 	    $this->session->unset_userdata('twitter_user_id');
 	    $this->session->unset_userdata('twitter_screen_name');
+    }
+    
+    public function publish(){
+	    echo $this->input->post('compose_message');
     }
 }

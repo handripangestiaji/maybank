@@ -63,7 +63,9 @@
 		<li><i class="icon-home"></i><a href="<?php echo base_url('dashboard'); ?>"> Home</a> <span class="divider"><i class="icon-angle-right"></i></span></li>
 		<li class="active">
 		    <?php
-			$value = array('dashboard' => 'Dashboard','cms' => 'Content Management','users' => 'User Management');
+			$value = array(1 => 'dashboard',2 => 'channels',3 => 'cms',4 => 'manage_users', 5 => 'users', 6 => 'reports', 7 => 'publisher', 8 => 'manage_channel');
+			$value = array('dashboard' => 'Dashboard','channels' => 'Channels', 'cms' => 'Content Management','manage_users' => 'Manage Users','users' => 'User Management',
+				       'reports' => 'Reports','publisher' => 'Publisher','manage_channel' => 'Manage Channel');
 			echo $value[$this->uri->segment(1)];
 		    ?>
 		</li>
@@ -107,84 +109,11 @@
         <script src="<?php echo base_url('media/js/vendor/bootstrap-colorpicker.js')?>"></script>              <!-- colorpicker plugin -->
         <script src="<?php echo base_url('media/js/vendor/parsley.min.js')?>"></script>                        <!-- parsley validator plugin -->
         <script src="<?php echo base_url('media/js/vendor/formToWizard.js')?>"></script>                       <!-- form wizard plugin -->
-
+	<!-- <script src="<?php //echo base_url('media/js/vendor/fullcalendar.min.js')?>"</script>        		<!-- fullcalendar plugin -->
         <script src="<?php echo base_url('media/js/vendor/bootstrap.min.js')?>"></script>
         <script src="<?php echo base_url('media/js/vendor/bootstrap-editable.min.js')?>"></script>             <!-- editable fields plugin -->
+	<!-- <script src="<?php //echo base_url('media/js/vendor/jquery-ui-1.10.2.custom.min.js')?>"</script>        	<!-- jquery ui dragging -->    
         <script src="<?php echo base_url('media/js/thekamarel.min.js')?>"></script>                            <!-- main project js file -->
         <script src="<?php echo base_url('media/js/thekamarel.js')?>"></script>                            <!-- main project js file -->
-
-        <script>
-            $(function () {
-               
-
-                
-
-                /*==============================================================================================
-                 ====================================== LOAD WYSIWYG EDITOR ====================================
-                 =============================================================================================*/   
-
-                $('#messageContent').wysihtml5(); 
-               
-
-
-                var showMemberIcon = $('i.info').parent(),
-                    editMemberIcon = $('i.edit').parent(),
-                    deleteMemberIcon = $('i.delete').parent();
-
-                $(showMemberIcon).tooltip({
-                    title: 'View member profile'
-                });
-
-                $(editMemberIcon).tooltip({
-                    title: 'Edit member profile'
-                });
-
-                $(deleteMemberIcon).tooltip({
-                    title: 'Delete member'
-                });
-
-                $('i.info, i.edit, i.delete').parent().hover(function () {
-                    $(this).children().stop().animate({
-                        opacity: 1
-                    }, 200);
-                }, function() {
-                    $(this).children().stop().animate({
-                        opacity: .7
-                    }, 200);
-                });
-
-               
-
-            })
-        </script>
-
-
-        <script>
-            $(document).ready(
-                function() {
-                    $(".reply-btn").click(
-                        function() {
-                            $(this).parent().siblings(".reply").hide("slow");
-                            $(this).parent().siblings(".assign").hide("slow");
-                            $(this).parent().siblings(".reply").show("slow");
-                        }
-                    );
-
-                    $(".assign-btn").click(
-                        function() {
-                            $(this).parent().siblings(".reply").hide("slow");
-                            $(this).parent().siblings(".assign").hide("slow");
-                            $(this).parent().siblings(".assign").show("slow");
-                        }
-                    );
-
-                    $(".hide-form").click(
-                        function() {
-                            $(this).parent().parent().parent().hide();
-                        }
-                    );
-                }
-            );
-        </script>
-	</body>
+    </body>
 </html>

@@ -4,7 +4,7 @@
     <div class="row-fluid">
         <div class="span12">
             <!-- ==================== ACTIVITIES HEADLINE ==================== -->
-            <div class="containerHeadline" style="background-color:#4099FF;color: white; height: 30px;">
+            <div class="containerHeadline" style="background-color:<?php echo $color; ?>;color: white; height: 30px;">
                 <div class="pull-left" style="padding: 4px 0px; height: auto">
                     <div class="btn-group">
                         <button class="btn trans  dropdown-toggle" data-toggle="dropdown">
@@ -16,10 +16,10 @@
                             &nbsp;&nbsp;<span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class="facebook_stream" title="1">Facebook Maybank</a></li>
-                            <li><a href="#" title="1">Facebook Maybankard</a></li>
-                            <li><a href="#" title="2">Twitter Maybank</a></li>
-                            <li><a href="#" title="3">YouTube Maybank</a></li>
+                            <li><a class="facebook_stream">Facebook Maybank</a></li>
+                            <li><a class="facebook_stream">Facebook Maybankard</a></li>
+                            <li><a class="twitter_stream">Twitter Maybank</a></li>
+                            <li><a class="youtube_stream">YouTube Maybank</a></li>
                         </ul>
                     </div><!-- /btn-group -->
                 </div>
@@ -35,11 +35,7 @@
 
             <!-- ==================== ACTIVITIES FLOATING BOX ==================== -->
             <div class="floatingBox">
-                <div class="container-fluid">
-                    <div class="box_stream">
-                        <?php $this->load->view($stream); ?>
-                    </div>
-                </div>
+                <?php $this->load->view($stream); ?>
             </div>
             <!-- ==================== END OF ACTIVITIES FLOATING BOX ==================== -->
         

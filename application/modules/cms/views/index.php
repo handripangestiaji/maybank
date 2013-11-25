@@ -27,7 +27,10 @@
         </div>
         <div class="cms-table pull-right">
             <?php
-                $this->load->view($cms_view);
+            	$data['campaigns'] = $campaigns ? $campaigns:'';
+            	$data['products'] = $products ? $products:'';
+            	$data['tags'] = $tags ? $tags:'';
+                $this->load->view($cms_view, $data);
             ?>
         </div>
     </div>

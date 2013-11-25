@@ -3,16 +3,17 @@
 </div>
  <div class="floatingBox">
     <div class="container-fluid campaignForm">
-        <form class="form-horizontal contentForm">
+        <form method="post" action="<?php echo site_url('cms/create_tag')?>" class="form-horizontal contentForm">
             <div class="control-group">
                 <label class="control-label">Tag Name</label>
                 <div class="controls">
-                  <input type="text" class="span10">
+                  <input type="text" class="span10" name="tag_name">
+                  <?php echo form_error('tag_name')?>
                 </div>
             </div>
             <div class="control-group">
                 <div class="pull-left">
-                    <button class="btn btn-primary" type="button">Create</button>
+                    <button class="btn btn-primary" type="submit">Create</button>
                 </div>
                 <div class="pull-right">
                     <button class="btn " type="button">Cancel</button>
@@ -36,42 +37,19 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Credit Cards</td>
-                <td>33</td>
-                <td>Nicole Lee</td>
-                <td><button class="btn btn-mini btn-danger pull-right" type="button">delete</button></td>
-              </tr>
-            <tr>
-                <td>Loans</td>
-                <td>25</td>
-                <td>Nicole Lee</td>
-                <td><button class="btn btn-mini btn-danger pull-right" type="button">delete</button></td>
-            </tr>
-            <tr>
-                <td>Finance</td>
-                <td>20</td>
-                <td>Nicole Lee</td>
-                <td><button class="btn btn-mini btn-danger pull-right" type="button">delete</button></td>
-            </tr>
-             <tr>
-                <td>Credit Cards</td>
-                <td>33</td>
-                <td>Nicole Lee</td>
-                <td><button class="btn btn-mini btn-danger pull-right" type="button">delete</button></td>
-              </tr>
-            <tr>
-                <td>Loans</td>
-                <td>25</td>
-                <td>Nicole Lee</td>
-                <td><button class="btn btn-mini btn-danger pull-right" type="button">delete</button></td>
-            </tr>
-            <tr>
-                <td>Finance</td>
-                <td>20</td>
-                <td>Nicole Lee</td>
-                <td><button class="btn btn-mini btn-danger pull-right" type="button">delete</button></td>
-            </tr>
+            <?php if($tags): ?>
+            	<?php foreach($tags as $v): ?>
+            		<tr>
+		                <td><?php echo $v->tag_name ?></td>
+		                <td><?php echo $v->increment ?></td>
+		                <td><?php echo $v->display_name ?></td>
+		                <td>
+		                <a href="<?php echo site_url('cms/create_tag?action=delete&id='.$v->id)?>" class="btn btn-mini btn-danger pull-right">delete</a>
+		                <!-- <button id="delete_btn" class="btn btn-mini btn-danger pull-right" type="button">delete</button> -->
+		                </td>
+					</tr>
+            	<?php endforeach; ?>
+            <?php endif;?>
             </tbody>
         </table>
     </div>

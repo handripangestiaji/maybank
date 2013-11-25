@@ -1,3 +1,7 @@
+/*==============================================================================================
+======================================== DASHBOARD =============================================
+==============================================================================================*/
+
 .compose-form {
 	margin-bottom: 0px;
 }
@@ -26,7 +30,7 @@
 	height: 22px;    
 	overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
+    white-space: normal;
 }
 
 
@@ -296,12 +300,12 @@ border-radius: 0px;
 	margin: 5px;
 }
 
-#img-show, #cal-show
+#img-show, #cal-show, #url-show
 {
 	display: none;
 }
 
-a#close-img, a#close-cal
+a#close-img, a#close-cal, a#close-url
 {
 	position: absolute;
 	color: #111111;
@@ -329,19 +333,17 @@ a#close-img, a#close-cal
 
 .img-place img
 {
-	border: 5px solid #FFFFFF;
-	-moz-box-shadow:  0px 1px 2px #CCCCCC;
-	-webkit-box-shadow: 0px 1px 2px #CCCCCC;
-	box-shadow: 0px 1px 2px #CCCCCC;
+	height: 100%;
 }
 
 a#remove-img
 {
 	position: absolute;
-	color: #111111;
-	top: -10px;
-	right: -5px;
+	color: #FF0000;
+	top: -12px;
+	left: 0px;
 	text-decoration: none;
+	display: none;
 }
 
 a#closecompose
@@ -453,8 +455,121 @@ border-radius: 3px;
 	border-top: 4px solid #FFF;
 }
 
+.btn-purple{
+	background-color: #F054F0;
+	color: #FFF;
+}
+
+.btn-purple:hover,
+.btn-purple:focus
+{
+	background-color: #D448D4;
+	color: #FFF;
+}
+
+#url-show .img-url{
+	width: 40%;
+}
+
+#url-show .content-url{
+	width: 50%;
+	margin-left: 10px;
+}
+
+#url-show .content-url textarea{
+	margin-top: 0px;
+	resize: none;
+	white-space: normal;
+	overflow-y: scroll;
+}
+
+.compose-post-status{
+	width: 100%;
+	color: #FFF;
+	text-align: center;
+	margin-top: 10px;
+}
+
+.engagement-btn-close{
+	margin-right: 5px;
+}
+
+.engagement-btn-hide-show{
+	margin-right: 5px;
+}
+
+.engagement > div.floatingBox{
+	margin-bottom: 0px;
+}
+
+.btn-engagement{
+	color: #33B5E5;
+	cursor: pointer;
+}
+
+.btn-close{
+	cursor: pointer;
+}
+
+.reply-field{
+	background-color: #BABABA;
+	margin-top: -10px;
+	padding: 10px;
+}
+
+.reply-field textarea{
+	height: 100px;
+	width: 95%;
+	white-space: normal;
+}
+
+.reply-field .row-fluid{
+	margin: 0px;
+}
+
+.reply-field .reply-status{
+	margin-top: 10px;
+	background-color: #00FF04;
+	color: white;
+	text-align: center;
+}
+
+.case-field{
+	background-color: #BABABA;
+	margin-top: -10px;
+	padding: 10px;
+}
+
+.case-field textarea{
+	height: 100px;
+	width: 95%;
+	white-space: normal;
+}
+
+.case-field .row-fluid{
+	margin: 0px;
+}
+
+.case-field .btn-add-related{
+	margin-bottom: 10px;
+}
+
+#reply-img-show{
+	background-color: #f2f2f2;	
+}
+
+#reply-img-show .reply-img-attached{
+	padding: 10px;
+}
+
+a#reply-img-close{
+	color: #111111;
+	top: -10px;
+	right: -5px;
+	padding: 10px;
+}
 /*==============================================================================================
-======================================== C M S ===============================
+======================================== C M S =================================================
 ==============================================================================================*/
 
 .cms-content{
@@ -471,6 +586,12 @@ border-radius: 3px;
 .cms-filter{
 	width: 20%;
 	padding: 10px;
+}
+
+.cms-filter .btn{
+	margin: 3px 0;
+	width: 70%;
+	text-align: left
 }
 
 .cms-table .page a{
@@ -542,4 +663,53 @@ border-radius: 3px;
 
 .floatingBox > div.campaignForm .contentForm .control-group .btn-group button{
 	background-color: #D1D1D1;
+}
+
+/*==============================================================================================
+======================================== SIDEBAR =================================================
+==============================================================================================*/
+.hiddenContent .tasksList li{
+	padding: 0px;
+	margin: 0px;
+	width: 100%;
+	margin-bottom: 10px;
+}
+
+.hiddenContent .tasksList .notifHead{
+	padding: 10px;
+	color: #FFF;
+}
+
+.hiddenContent .tasksList .notifBody{
+	padding: 10px;
+}
+
+.sidebarContent .sidebarHead .title{
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.sidebarContent .sidebarHead .notifTotal{
+	background-color: #BABABA;
+	font-weight: normal;
+	color: #FFF;
+	border-radius: 20%;
+	padding: 2px 7px;
+	font-size: 12px;
+}
+
+.sidebarContent .sidebarLine{
+	width: 100%;
+	border-bottom: solid 1px #BABABA;
+	margin-bottom: 8px;
+}
+
+.sidebarInfo span{
+	border-radius: 50%;
+	padding: 3px 8px;;
+	color: #FFF;
+}
+
+.sidebarInfo .newCases{
+	margin-top: 10px;
 }

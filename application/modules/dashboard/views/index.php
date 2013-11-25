@@ -1,28 +1,31 @@
 <!-- ==================== COMPOSE MESSAGE ==================== -->
 <div class="container-fluid">
-    <form class="form-horizontal contentForm compose-form">
         <div>
              <!-- button-refresh -->
             <div class="left">
                 <div class="ref">
-                    <a href="#"><img src="media/img/ref.png" /></a>
+                    <a href="#"><img src="<?php echo base_url() ?>media/img/ref.png" /></a>
                 </div>
             </div>
             <!-- button-refresh end -->
             <div class="compose-innercontainer compose-collapsed left">
-                <textarea class="span8 compose-textbox" placeholder="Compose Message"></textarea>
+                <textarea class="span8 compose-textbox" placeholder="Compose Message" id="compose-message"></textarea>
                 <!-- ==================== URL SHORTERNER AJAX THIS WILL BE HIDDEN BY DEFAULT ==================== -->
                 <div class="compose-url-shortener">
                     <div class="post-channel">
                         <div class="left">
                                 <label class="left">Add Channel : </label>
-                                <select class="left" id="multipleSelect" multiple="multiple">
+                                <select class="left compose-channels" id="multipleSelect" multiple="multiple">
+                                    <option id="optFb">Facebook</option>
+                                    <option id="optTw">Twitter</option>
+                                    <!--
                                     <option id="opt7" value="opt7">FB Maybank (MY)</option>
                                     <option id="opt8" value="opt8">FB Maybankcard (MY</option>
                                     <option id="opt9" value="opt9">TW Mayabank (MY)</option>
                                     <option id="opt10" value="opt10">TW Maybankcard (MY)</option>
                                     <option id="opt11" value="opt11">Youtube Maybank (MY)</option>
                                     <option id="opt12" value="opt12">Youtube Maybankcard (MY)</option>
+                                    -->
                                 </select>
                         </div>
                         <!-- left end -->
@@ -36,7 +39,7 @@
                         <div class="left">
                         <i class="icon-link icon-large"></i>
                         <input type="text" length="100" placeholder="Insert Link" />
-                        <button class="btn btn-primary" type="button" onClick="window.location.href='login.html'">
+                        <button class="compose-insert-link btn btn-primary" type="button">
                             <i class="icon-angle-right"></i> 
                             Insert
                             </button>
@@ -52,34 +55,13 @@
                             <option value="#">Type Dua</option>
                             <option value="#">Type Tiga</option>
                         </select>
-                         <select class="standard-sel">
+                         <select class="standard-sel select-shorten-url">
                             <option value="#">-- Select Shorten URL</option>
                             <option value="#">Type Satu</option>
                             <option value="#">Type Dua</option>
                             <option value="#">Type Tiga</option>
                         </select>
                         </div>
-                        <script src="js/jquery-1.10.2.min.js"></script>
-                        <script type="text/javascript">
-                        $( document ).ready(function() {
-                            //console.log( "ready!" );
-                            $( "#open-img" ).click(function() {
-                               $("#img-show").css({"display": "block"});
-                            });
-
-                            $( "#close-img" ).click(function() {
-                               $("#img-show").css({"display": "none"});
-                            });
-
-                             $( "#open-cal" ).click(function() {
-                               $("#cal-show").css({"display": "block"});
-                            });
-
-                             $( "#close-cal" ).click(function() {
-                               $("#cal-show").css({"display": "none"});
-                            });
-                        });
-                        </script>
 
                         <div class="right top10 compose-link">
                             <a href="javascript:void(0);" id="open-img">
@@ -96,7 +78,7 @@
                         <a id="close-img" href="javascript:void(0);">
                          <i class="icon-remove-sign icon-large"></i>
                         </a>
-                        <input type="file" id="inputFile" style="display: none">
+                        <input type="file" id="composeInputImageFile" style="display: none">
                         <div class="dummyfile">
                             <input id="filename" type="text" class="input disabled span5" name="filename" readonly>
                             <a id="fileselectbutton" class="btn btn-small btn-inverse">Upload Image</a>
@@ -106,14 +88,7 @@
                                 <a id="remove-img" href="javascript:void(0);">
                                     <i class="icon-remove icon-2x"></i>
                                 </a>
-                                <img src="img/contoh-upload.jpg" />
-                            </div>
-                            <!-- img-place end -->
-                            <div class="img-place">
-                                <a id="remove-img" href="javascript:void(0);">
-                                    <i class="icon-remove icon-2x"></i>
-                                </a>
-                                <img src="img/contoh-upload.jpg" />
+                                <img id="compose-preview-img"/>
                             </div>
                             <!-- img-place end -->
                         </div>
@@ -129,7 +104,7 @@
                         <a id="close-cal" href="javascript:void(0);">
                          <i class="icon-remove-sign icon-large"></i>
                         </a>
-                        <h5>Shcedule Post</h5>
+                        <h5>Schedule Post</h5>
                         <div class="img-list-upload">
                                 <div class="left">
                                 <label class="left">Date</label>
@@ -185,11 +160,32 @@
                         </div> 
                     </div>
                 </div>
+                <div class="compose-schedule" id="url-show">
+                    <div class="compose-form img-attached">
+                        <!-- close button for image attached -->
+                        <a id="close-url" href="javascript:void(0);">
+                            <i class="icon-remove-sign icon-large"></i>
+                        </a>
+                        <div>
+                            <div class="pull-left img-url">
+                                <img src="http://www.maybank.com/iwov-resources/corporate/img/common/key-business-entities-large.jpg">
+                            </div>
+                            <div class="pull-left content-url">
+                                <input type="text" length="100" placeholder="" value="Maybank2u.com"/>
+                                http://www.maybank2u.com
+                                <textarea class="span4">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <!-- ==================== END URL SHORTERNER AJAX  ==================== -->
               <div class="compose-send">
-                <p class="twitter-character-count"><i class="icon-facebook-sign"></i> 2000</p>
-                <button class="assign-btn btn btn-primary" type="button"><i class="icon-bolt"></i> POST</button>
+                <p class="facebook-character-count"><i class="icon-facebook-sign"></i>&nbsp;<span class="compose-fb-char-count">2000</span</p>
+                <p class="twitter-character-count">&nbsp;&nbsp;<i class="icon-twitter-sign"></i>&nbsp;<span class="compose-tw-char-count">140</span></p>
+                <button class="btn-compose-post btn btn-primary" type="button"><i class="icon-bolt"></i> POST</button>
               </div>
+              <br clear="all" />
+              <div class="compose-post-status green hide">Message Post</div>
             </div>
         </div>
     </form>
@@ -209,10 +205,10 @@
 
 <div class="row-fluid">
 <?php
-    $data['type'] = 'facebook';
+    $data['color'] = '#3B5998';
     $data['stream'] = 'dashboard/facebook/facebook_stream';
     $this->load->view('dashboard/box_stream',$data);
-    $data['type'] = 'twitter';
+    $data['color'] = '#4099FF';
     $data['stream'] = 'dashboard/twitter/twitter_stream';
     $this->load->view('dashboard/box_stream',$data);
     //$this->load->view('dashboard/twitter/twitter_stream');

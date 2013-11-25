@@ -21,6 +21,41 @@ class account_model extends CI_Model
             $this->db->where($filter);
         return $this->db->get()->result();
     }
-
+    
+    
+    function GetApplicationRole($parent_id){
+	$this->db->select("*");
+	$this->db->from("application_role");
+	$this->db->where("parent_id", $parent_id);
+	return $this->db->get()->result();
+    }
+    
+    function GetRole(){
+	$result = $this->GetApplicationRole(5);
+	foreach($result as $row){
+	    $row->children = $this->GetApplicationRole($row->app_role_id);
+	    foreach($row->children as $child){
+		$child->children = $this->GetApplicationRole($child->app_role_id);
+	    }
+	}
+	return $result;
+    }
+    
+    function SaveChannel($channel){
+	$currentChannel = $this->GetChannel(array(
+	    "social_id" => $channel['social_id']
+	));
+	if(count($currentChannel) == 0){
+	    $this->db->insert("channel", $channel);
+	    return $this->db->insert_id();
+	}
+	else{
+	    print_r($currentChannel);
+	    $channel['is_active'] = 1;
+	    $this->db->where("channel_id", $currentChannel[0]->channel_id);
+	    $this->db->update("channel", $channel);
+	    return $currentChannel[0]->channel_id;
+	}
+    }
     
 }

@@ -32,7 +32,10 @@ class Shorturl_model extends CI_Model
 		
 		$this->db->insert($this->_table);
 		
-		return $this->db->insert_id();
+		$query = $this->db->query('SELECT LAST_INSERT_ID()');
+		$row = $query->row_array();
+		
+		return $row['LAST_INSERT_ID()'];
 	}
 	
 	public function update($id, $params = array())

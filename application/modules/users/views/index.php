@@ -13,9 +13,10 @@
             </div>
             <div style="float: right;">
                 <input class="btn btn-primary" onclick="btn_add()" type="button" name="btn_new" value="+ New User" />
+                <input type='button' onclick='logout()' value='Logout' />
             </div>
             
-            <div style="clear: both"></div>
+            <div style="clear: both;"></div>
             <hr style="margin-top: 0px;">
             <div style="float: left; margin-top: -10px;">
                 <table>
@@ -51,76 +52,31 @@
                         <th>Date Created</th>
                         <th>Creator</th>
                         <th>&nbsp;</th>
+                        <th>&nbsp;</th>
                     </tr>
                 </thead>
+                
                 <tbody>
+                    <?php foreach($show->result() as $row){?>
                     <tr>
-                        <td>01</td>
-                        <td>User1</td>
-                        <td>asd@gmail.com</td>
-                        <td>Admin</td>
-                        <td>all My</td>
-                        <td>Active</td>
+                        <td><?php echo $row->user_id;?></td>
+                        <td><?php echo $row->display_name;?></td>
+                        <td><?php echo $row->email;?></td>
+                        <td><?php echo $row->role_id;?></td>
+                        <td><?php echo $row->group_id;?></td>
+                        <?php if($row->is_active==1){?>
+                            <td><?php echo 'Active';?></td>
+                        <?php }else{?>
+                            <td><?php echo 'Not Active';?></td>
+                        <?php }?>
                         <td>18-11-2013</td>
                         <td>Azahan</td>
-                        <td><a href="<?php echo site_url();?>users/edit"><span><i class="icon-pencil"></i></span></a></td>
+                        <td><a href="<?php echo site_url();?>/users/edit/<?php echo $row->user_id;?>"><span><i class="icon-pencil"></i></span></a></td>
+                        <td><a href="<?php echo site_url();?>/users/delete/<?php echo $row->user_id;?>"><span><i class="icon-remove"></i></span></a></td>
                     </tr>
-                    <tr>
-                        <td>01</td>
-                        <td>User1</td>
-                        <td>asd@gmail.com</td>
-                        <td>Admin</td>
-                        <td>all My</td>
-                        <td>Active</td>
-                        <td>18-11-2013</td>
-                        <td>Azahan</td>
-                        <td><a href=""><span><i class="icon-pencil"></i></span></a></td>
-                    </tr>
-                    <tr>
-                        <td>01</td>
-                        <td>User1</td>
-                        <td>asd@gmail.com</td>
-                        <td>Admin</td>
-                        <td>all My</td>
-                        <td>Active</td>
-                        <td>18-11-2013</td>
-                        <td>Azahan</td>
-                        <td><a href=""><span><i class="icon-pencil"></i></span></a></td>
-                    </tr>
-                    <tr>
-                        <td>01</td>
-                        <td>User1</td>
-                        <td>asd@gmail.com</td>
-                        <td>Admin</td>
-                        <td>all My</td>
-                        <td>Active</td>
-                        <td>18-11-2013</td>
-                        <td>Azahan</td>
-                        <td><a href=""><span><i class="icon-pencil"></i></span></a></td>
-                    </tr>
-                    <tr>
-                        <td>01</td>
-                        <td>User1</td>
-                        <td>asd@gmail.com</td>
-                        <td>Admin</td>
-                        <td>all My</td>
-                        <td>Active</td>
-                        <td>18-11-2013</td>
-                        <td>Azahan</td>
-                        <td><a href=""><span><i class="icon-pencil"></i></span></a></td>
-                    </tr>
-                    <tr>
-                        <td>01</td>
-                        <td>User1</td>
-                        <td>asd@gmail.com</td>
-                        <td>Admin</td>
-                        <td>all My</td>
-                        <td>Active</td>
-                        <td>18-11-2013</td>
-                        <td>Azahan</td>
-                        <td><a href=""><span><i class="icon-pencil"></i></span></a></td>
-                    </tr>
+                    <?php }?>
                 </tbody>
+                
             </table>
             <div class="page pull-right" style="margin-top: 30px;">
                 <a href="#">First</a>
@@ -133,15 +89,20 @@
         </div>
     </div>
 </div>
+YhaJZhMUq6
 
 <script type="text/javascript">
+    function logout()
+    {
+        window.location.href = "<?php echo site_url();?>/users/logout";
+    }
     function btn_add()
     {
-        window.location.href = "<?php echo site_url();?>users/create";
+        window.location.href = "<?php echo site_url();?>/users/create";
     }
     
     function menu_role()
     {
-        window.location.href = "<?php echo site_url();?>users/menu_role";
+        window.location.href = "<?php echo site_url();?>/users/menu_role";
     }
 </script>

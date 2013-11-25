@@ -25,7 +25,7 @@ class Cms extends MY_Controller {
     }
      
     public function create_short_url(){
-    	$code = "";
+    
 		try {
 			$code = $this->shorturl->urlToShortCode("https://bitbucket.org/yolkatgrey/maybank/commits/2643205aec5b0079278a20a2b0bfdfdd04584b96?at=master");
 		}

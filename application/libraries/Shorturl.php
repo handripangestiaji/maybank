@@ -95,15 +95,16 @@ class Shorturl {
 		
 		$result = $this->_ci->shorturl_model->getOneBy($params);
 		
-		return $result->short_code;
+		return (empty($result)) ? false : $result->short_code;
 	}
 	
 	protected function createShortCode($url)
 	{
 		$params = array('long_url' => $url);
-		$id = $this->_ci->shorturl_model->insert();
+		$id = $this->_ci->shorturl_model->insert($params);
 		
 		$shortCode = $this->convertIntToShortCode($id);
+		
 		$this->insertShortCodeInDb($id, $shortCode);
 		
 		return $shortCode;
@@ -145,7 +146,7 @@ class Shorturl {
 			throw new \Exception("Input parameter(s) invalid");
 		}
 		
-		$row = $this->_ci->shorturl_model->udpate($id, array("short_code" => $code));
+		$row = $this->_ci->shorturl_model->update($id, array("short_code" => $code));
 		
 		if ($row == FALSE)
 		{

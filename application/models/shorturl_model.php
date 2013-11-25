@@ -10,7 +10,7 @@ class Shorturl_model extends CI_Model
 		parent::__construct();
 	}
 	
-	public function find($params = array())
+	public function getOneBy($params = array())
 	{
 		if (isset($params['long_url']))
 		{
@@ -23,7 +23,7 @@ class Shorturl_model extends CI_Model
 		
 		$result = $query->row();
 		
-		return (empty($result)) ? false : $result;
+		return $result;
 	}
 	
 	public function insert($params = array())

@@ -2,15 +2,15 @@
 <!-- ==================== ACTIVITIES MENU ==================== -->
 <div class="floatingBoxMenu">
     <ul class="nav nav-tabs">
-        <li class="active"><a href='#mentions'>Mentions</a></li>
+        <li class="active"><a href='#mentions'>Mentions<span class="notifyCircle red">3</span></a></li>
         <li><a href='#feed'>Homefeed</a></li>
         <li><a href='#sendmessage'>Send Twitter</a></li>
-        <li><a href='#direct'>Direct Message</a></li>
+        <li><a href='#direct'>Direct Message<span class="notifyCircle red">2</span></span></a></li>
     </ul>
 </div>
 <!-- ==================== END OF ACTIVITIES MENU ==================== -->
 
-<div id="ctwitter" class="container-fluid">
+<div id='ctwitter' class="container-fluid">
     <!-- ==================== ALL ACTIVITIES CONTENT ==================== -->
     <ul class="floatingBoxContainers" id="mentions">
          <?php 
@@ -21,7 +21,7 @@
          }
 
 //print_r($mentions);        
-//         ?> 
+//       ?> 
     </ul>
     
     <ul class="floatingBoxContainers" id="feed" style="display:none">

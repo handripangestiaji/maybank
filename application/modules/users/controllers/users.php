@@ -7,11 +7,6 @@ class Users extends MY_Controller {
     function __construct()
     {
         parent::__construct();
-	session_start();
-	if(!$this->session->userdata('is_login'))
-	  {
-	       redirect('login');
-	  }
 	$this->load->model('users_model');
 	$this->load->helper('security');
 	

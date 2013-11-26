@@ -15,7 +15,6 @@ class account_model extends CI_Model
         * @author Eko Purnomo
     */
     function GetChannel($filter = array(), $page = 1){
-	
         $this->db->select('*');
         $this->db->from("channel");
         if(count($filter) > 0)
@@ -52,7 +51,7 @@ class account_model extends CI_Model
 	    return $this->db->insert_id();
 	}
 	else{
-	    print_r($currentChannel);
+	    //print_r($currentChannel);
 	    $channel['is_active'] = 1;
 	    $this->db->where("channel_id", $currentChannel[0]->channel_id);
 	    $this->db->update("channel", $channel);

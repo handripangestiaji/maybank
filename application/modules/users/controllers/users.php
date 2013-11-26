@@ -10,7 +10,7 @@ class Users extends MY_Controller {
 	session_start();
 	if(!$this->session->userdata('is_login'))
 	  {
-	       redirect('authentication');
+	       redirect('login');
 	  }
 	$this->load->model('users_model');
 	$this->load->helper('security');
@@ -106,6 +106,7 @@ class Users extends MY_Controller {
 	  $data = array(
 		      'full_name' => $this->input->post('fullName'),
 		      'display_name' => $this->input->post('displayName'),
+		      'email' => $this->input->post('email'),
 		      'role_id' => $this->input->post('optRole'),
 		      'group_id' => $this->input->post('optGroup')
 			);
@@ -169,7 +170,6 @@ class Users extends MY_Controller {
 	    
 	    $this->users_model->update_activity($id,$data);
             $this->session->sess_destroy();
-            redirect('authentication');
-	    echo 'Ut0ef8kUEa';
+            redirect('login');
         }
 }

@@ -96,4 +96,10 @@ class Users_model extends CI_Model
         $this->db->where('logout_time',NULL);
         return $this->db->update($this->activity,$data);
     }
+    
+    function check_email($email)
+    {
+        $this->db->where('email',$email);
+        return $this->db->get($this->user);
+    }
 }

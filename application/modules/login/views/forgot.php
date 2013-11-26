@@ -1,4 +1,4 @@
- <form class="form-signin">
+ <form class="form-signin" method='post' action='<?php echo site_url();?>/login/reset_pass'>
     <h2 class="form-signin-heading">Forgot Password</h2>
     <div class="input-prepend">
       <span class="add-on"><i class="icon-user"></i></span>

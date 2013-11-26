@@ -13,7 +13,6 @@
             </div>
             <div style="float: right;">
                 <input class="btn btn-primary" onclick="btn_add()" type="button" name="btn_new" value="+ New User" />
-                <input type='button' onclick='logout()' value='Logout' />
             </div>
             
             <div style="clear: both;"></div>
@@ -92,10 +91,6 @@
 YhaJZhMUq6
 
 <script type="text/javascript">
-    function logout()
-    {
-        window.location.href = "<?php echo site_url();?>/users/logout";
-    }
     function btn_add()
     {
         window.location.href = "<?php echo site_url();?>/users/create";

@@ -103,9 +103,15 @@
             <footer>
                 <div class="profileSettingBlock editProfile"><i class="icon-user"></i>edit profile</div>
                 <div class="profileSettingBlock changePassword"><i class="icon-lock"></i>change password</div>
-                <div class="profileSettingBlock logout"><i class="icon-off"></i>logout</div>
+                <div class="profileSettingBlock logout"><i class="icon-off" onclick="logout()"></i>logout</div>
             </footer>
         </div>
     </div>
 </div>
 <!-- ==================== END OF SIDEBAR PROFILE ==================== -->
+<script type="text/javascript">
+    function logout()
+    {
+        window.location = "<?php echo site_url();?>/users/logout";
+    }
+</script>

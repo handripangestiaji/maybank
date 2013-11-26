@@ -102,14 +102,73 @@
             </div>
             <footer>
                 <div class="profileSettingBlock editProfile"><i class="icon-user"></i>edit profile</div>
-                <div class="profileSettingBlock changePassword"><i class="icon-lock"></i>change password</div>
+                <div class="profileSettingBlock changePassword"><i id="password-show" onclick="showHide('password');return false;" class="icon-lock"></i>change password</div>
                 <div class="profileSettingBlock logout"><i class="icon-off" onclick="logout()"></i>logout</div>
             </footer>
         </div>
     </div>
 </div>
+
+<div id="password" class="more">
+    <div class="sidebarDivider"></div>
+    <div class="sidebarContent">
+        <a href="#collapsedSidebarContent" class="showCollapsedSidebarMenu"><i class="icon-chevron-sign-left"></i><h1> My account</h1></a>
+        <h1>Update Password</h1>
+        <div class="profileBlock">
+            <div class="profileInfo">
+                <form method='post' action='<?php echo site_url();?>/users/update_password'>
+                <table>
+                    <tr>
+                        <td>Existing Password</td>
+                    </tr>
+                    <tr>
+                        <td><input type='password' style='width: 175px;' name='existing_password' /></td>
+                    </tr>
+                    <tr>
+                        <td>New Password</td>
+                    </tr>
+                    <tr>
+                        <td><input type='password' style='width: 175px;' name='new_password' /></td>
+                    </tr>
+                    <tr>
+                        <td>Confirm Password</td>
+                    </tr>
+                    <tr>
+                        <td><input type='password' style='width: 175px;' name='confirm_password' /></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type='submit' value='Save' />
+                            <input type='button' value='Cancel' />
+                        </td>
+                    </tr>
+                </table>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- ==================== END OF SIDEBAR PROFILE ==================== -->
+<style type="text/css">
+   .more {
+      display: none; }
+</style>
 <script type="text/javascript">
+    function showHide(sh) {
+   if (document.getElementById(sh)) {
+      if (      document.getElementById(sh+'-show').style.display != 'none')
+            {
+                document.getElementById('profileContent').style.display = 'none';
+                document.getElementById('password').style.display = 'block';
+            }
+        else
+            {
+                document.getElementById(sh+'-show').style.display = 'inline';
+                document.getElementById(sh).style.display = 'none';
+            }
+        }
+    }
+    
     function logout()
     {
         window.location = "<?php echo site_url();?>/users/logout";

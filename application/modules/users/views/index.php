@@ -68,8 +68,8 @@
                         <?php }else{?>
                             <td><?php echo 'Not Active';?></td>
                         <?php }?>
-                        <td>18-11-2013</td>
-                        <td>Azahan</td>
+                        <td><?php echo $row->created_at;?></td>
+                        <td><?php echo $row->created_by;?></td>
                         <td><a href="<?php echo site_url();?>/users/edit/<?php echo $row->user_id;?>"><span><i class="icon-pencil"></i></span></a></td>
                         <td><a href="<?php echo site_url();?>/users/delete/<?php echo $row->user_id;?>"><span><i class="icon-remove"></i></span></a></td>
                     </tr>
@@ -88,7 +88,6 @@
         </div>
     </div>
 </div>
-YhaJZhMUq6
 
 <script type="text/javascript">
     function btn_add()

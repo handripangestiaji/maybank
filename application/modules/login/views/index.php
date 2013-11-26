@@ -12,8 +12,8 @@
 </form>
 
 <div class="signInRow">
-    <div class="term"><a href="login/terms">Terms of Use</a></div>
-    <div><a href="login/forgot">Lost your password?</a></div>
+    <div class="term"><a href="<?php echo site_url();?>/login/terms">Terms of Use</a></div>
+    <div><a href="<?php echo site_url();?>/login/forgot">Lost your password?</a></div>
 </div>
 <script type="text/javascript">
 	$(document).ready(function(){

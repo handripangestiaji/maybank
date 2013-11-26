@@ -39,11 +39,23 @@ class Users_model extends CI_Model
         return $this->db->update($this->user,$data);
     }
     
+    function update_pass($id,$data)
+    {
+        $this->db->where('user_id',$id);
+        return $this->db->update($this->user,$data);
+    }
+    
     //delete
     function delete_user($id)
     {
         $this->db->where('user_id',$id);
         return $this->db->delete($this->user);
+    }
+    
+    function check_email($email)
+    {
+        $this->db->where('email',$email);
+        return $this->db->get($this->user);
     }
     
     ///////////////////////////////////---------------ROLE----------------
@@ -95,11 +107,5 @@ class Users_model extends CI_Model
         $this->db->where('user_id',$id);
         $this->db->where('logout_time',NULL);
         return $this->db->update($this->activity,$data);
-    }
-    
-    function check_email($email)
-    {
-        $this->db->where('email',$email);
-        return $this->db->get($this->user);
     }
 }

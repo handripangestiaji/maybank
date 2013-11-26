@@ -159,13 +159,10 @@ class Socialmedia extends MY_Controller {
 	  $this->load->library('facebook',$config);
 	  $this->facebook->setaccesstoken($access_token_fb);
 	  $this->facebook->api('/me/feed','POST',array('message'=>$this->input->post('content')));
-	  /*
-	  $result = curl_get_file_contents('https://graph.facebook.com/me?
-					  method=GET&
-					  format=json&
-					  suppress_http_code=1&
-					  access_token='.$access_token_fb);
-	  echo $result;
-	  */
     }
+    
+    public function ReadUnread(){
+	  $this->load->model('facebook_model');
+	  $this->facebook_model->ReadUnread($this->input->post('post_id'));
+     }
 }

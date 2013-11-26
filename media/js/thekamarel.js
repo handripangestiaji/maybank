@@ -436,6 +436,38 @@ $(function(){
                             }
                         );
                         
+                        $(".btn-mark-as-read").click(function(){
+                            var me = $(this);
+                            $.ajax({
+                                    url : BASEURL + 'dashboard/socialmedia/ReadUnread',
+                                    type: "POST",
+                                    data: {
+                                            post_id:$(this).parent().siblings('.postId').val(),
+                                            },
+                                    success: function()
+                                    {
+                                        me.hide();
+                                        me.siblings('.btn-mark-as-unread').show();
+                                    },
+                                });
+                        });
+                        
+                        $(".btn-mark-as-unread").click(function(){
+                            var me = $(this);
+                            $.ajax({
+                                    url : BASEURL + 'dashboard/socialmedia/ReadUnread',
+                                    type: "POST",
+                                    data: {
+                                            post_id:$(this).parent().siblings('.postId').val(),
+                                            },
+                                    success: function()
+                                    {
+                                        me.hide();
+                                        me.siblings('.btn-mark-as-read').show();
+                                    },
+                                });
+                        });
+                        
                         $(".engagement-btn-close").click(
                             function() {
                                  $(this).parent().parent().hide();

@@ -21,7 +21,7 @@ for($i=0;$i<count($mentions);$i++){
         <button type="button" class="btn btn-inverse btn-mini"><i class="icon-star">&nbsp;</i></button>
     <?php } ?></p>
     
-    <p><a role="button" class="btn-engagement"><i class="icon-eye-open"></i> Engagement</a> | <a data-toggle="modal" role="button" href="#modaltweet<?php echo $i; ?>" ><i class="icon-retweet greyText"></i><?php //echo $mentions[$i]->retweeted; ?> re-tweets</a></p>
+    <p><a role="button" class="btn-engagement"><i class="icon-eye-open"></i> Engagement</a> | <a data-toggle="modal" role="button" href="#modaltweet<?php echo $i; ?>" ><i class="icon-retweet greyText"></i><?php //echo $mentions[$i]->retweeted; ?> re-tweets</a><span class="btn-mark-as-read"><i class="icon-bookmark"></i> Mark As Read</span></p>
     
     
     <!-- ENGAGEMENT -->    

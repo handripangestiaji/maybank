@@ -275,7 +275,9 @@ class facebook_model extends CI_Model
     public function RetrieveFeedFB($filter){
         
         $this->db->select('*');
-        $this->db->from("fb_user_engaged a INNER JOIN social_stream_fb_post b ON b.author_id=a.facebook_id ");
+        $this->db->from("fb_user_engaged a INNER JOIN social_stream_fb_post b ON
+			b.author_id=a.facebook_id INNER JOIN
+			social_stream c ON b.post_id=c.post_id");
         //if(count($filter) > 0)
         //    $this->db->where($filter);
         return $this->db->get()->result();
@@ -284,7 +286,7 @@ class facebook_model extends CI_Model
     public function RetrievePostFB($filter){
         
         $this->db->select('*');
-        $this->db->from("fb_user_engaged a INNER JOIN social_stream_fb_post b ON b.author_id=a.facebook_id ");
+        $this->db->from("fb_user_engaged a INNER JOIN social_stream_fb_post b ON b.author_id=a.facebook_id");
         //if(count($filter) > 0)
         //    $this->db->where($filter);
         return $this->db->get()->result();
@@ -302,4 +304,23 @@ class facebook_model extends CI_Model
         return $result;  
     }
  
+    public function ReadUnread($post_id){
+	$this->db->select('*');
+	$this->db->from('social_stream');
+	$this->db->where('post_id',$post_id);
+	$val = $this->db->get()->row();
+	if($val->is_read == 0){
+	    $new_val = 1;
+	}
+	else{
+	    $new_val = 0;
+	}
+	
+	$data = array(
+               'is_read' => $new_val,
+            );
+
+	$this->db->where('post_id', $post_id);
+	$this->db->update('social_stream', $data);
+    }
 }

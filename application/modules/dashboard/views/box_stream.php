@@ -15,7 +15,7 @@
                             <?php } ?>
                             &nbsp;&nbsp;<span class="caret"></span>
                         </button>
-                        <ul class="dropdown-menu">
+                        <ul class="dropdown-menu dropdown-stream-channels">
                             <li><a class="facebook_stream">Facebook Maybank</a></li>
                             <li><a class="facebook_stream">Facebook Maybankard</a></li>
                             <li><a class="twitter_stream">Twitter Maybank</a></li>

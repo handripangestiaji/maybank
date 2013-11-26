@@ -787,3 +787,13 @@ jQuery.fn.AsyncPost = function(options){
         "success" : settings.callback
     });
 };
+
+$(function() {
+    startRefresh();
+//    alert(location.href);
+});
+
+function startRefresh() {
+    setTimeout(startRefresh,14000);
+     $('#ctwitter').load(location.href + ' #ctwitter');
+}

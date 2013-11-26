@@ -1,4 +1,5 @@
 <?php 
+//print_r($fb_feed);
 for($i=0; $i<count($fb_feed);$i++):?>
 <li>
     <div class="circleAvatar"><img src="https://graph.facebook.com/<?=number_format($fb_feed[$i]->facebook_id, 0,'.','')?>/picture?small" alt=""></div>
@@ -11,7 +12,7 @@ for($i=0; $i<count($fb_feed);$i++):?>
         <i class="icon-play-circle moreOptions pull-right"></i>
     </p>
     <p><?=$fb_feed[$i]->post_content?></p>
-    <p><button type="button" class="btn btn-warning btn-mini">OPEN</button><button class="btn btn-primary btn-mini" style="margin-left: 5px;">LIKE</button> </p>
+    <p><button type="button" class="btn btn-warning btn-mini">OPEN</button><button class="btn btn-primary btn-mini" style="margin-left: 5px;" value="<?php echo $fb_feed[$i]->post_stream_id;?>">LIKE</button> </p>
     <p><span class="btn-engagement"><i class="icon-eye-open"></i> Engagement</span> | <span class="cyanText"><i class="icon-thumbs-up-alt"></i></i> <?php echo $fb_feed[$i]->total_likes; ?> likes this</span></p>
 
     <!-- ENGAGEMENT -->    

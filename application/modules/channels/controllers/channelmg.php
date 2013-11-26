@@ -76,7 +76,7 @@ class ChannelMg extends MY_Controller {
                 $channel['oauth_secret'] = $access_token['oauth_token_secret'];
                 $channel['social_id']=$access_token['user_id'];
                 $channel['connection_type'] = "twitter";
-                $channel['is_active'] = "true";
+                $channel['is_active'] = 1;
                 $channel['name'] = $access_token['screen_name'];
                 $channel['token_created_at'] = date("Y-m-d H:i:s");
                 $this->account_model->SaveChannel($channel);

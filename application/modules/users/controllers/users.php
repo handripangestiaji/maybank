@@ -7,14 +7,12 @@ class Users extends MY_Controller {
     function __construct()
     {
         parent::__construct();
-	session_start();
-	if(!$this->session->userdata('is_login'))
-	  {
-	       redirect('authentication');
-	  }
 	$this->load->model('users_model');
 	$this->load->helper('security');
-	
+	if(!$this->session->userdata('is_login'))
+	{
+	    //   redirect('authentication');
+	}
     }
     
     function index()
@@ -158,18 +156,18 @@ class Users extends MY_Controller {
     }
     
     function logout()
-        {
-	    $timezone = new DateTimeZone("Europe/London");
-	    $time = new DateTime(date("Y-m-d H:i:s e"), $timezone);
-	    $data = array(
-			'logout_time' => $time->format("Y-m-d H:i:s")
-			);
-	    
-	    $id = $this->session->userdata('user_id');
-	    
-	    $this->users_model->update_activity($id,$data);
-            $this->session->sess_destroy();
-            redirect('authentication');
-	    echo 'Ut0ef8kUEa';
-        }
+    {
+	$timezone = new DateTimeZone("Europe/London");
+	$time = new DateTime(date("Y-m-d H:i:s e"), $timezone);
+	$data = array(
+		    'logout_time' => $time->format("Y-m-d H:i:s")
+		    );
+	
+	$id = $this->session->userdata('user_id');
+	
+	$this->users_model->update_activity($id,$data);
+	$this->session->sess_destroy();
+	redirect('authentication');
+	echo 'Ut0ef8kUEa';
+    }
 }

@@ -45,7 +45,7 @@ class Cronjob extends CI_Controller {
         $conversation_list = array();
         $access_tokens = array();
         foreach($channel_loaded as $channel){
-            $newStd->page_id = '168151513217686';
+            $newStd->page_id = $channel->social_id;
             $newStd->token = $this->facebook_model->GetPageAccessToken($channel->oauth_token, $channel->social_id);
             $newStd->channel = $channel;
             $access_tokens[] = $newStd;

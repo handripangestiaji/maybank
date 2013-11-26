@@ -128,7 +128,13 @@ class Cms extends MY_Controller {
         $this->load->view('cms/index',$data);
     }
      
-    public function create_short_url(){
+    public function create_short_url()
+    {
+    	$data['campaigns'] = '';
+    	
+    	$data['products'] = '';
+    	
+    	$data['tags'] = '';
     
 		try {
 			$code = $this->shorturl->urlToShortCode("https://bitbucket.org/yolkatgrey/maybank/commits/2643205aec5b0079278a20a2b0bfdfdd04584b96?at=master");

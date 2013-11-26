@@ -99,25 +99,26 @@ for($i=0;$i<count($mentions);$i++){
     <!-- END ENGAGEMENT -->
     
     <h4 class="filled">
-        <a role="button" href="#"><i class="icon-trash greyText"></i></a>
+        <a role="button" class='destroy_status'><i class="icon-trash greyText"></i></a>
         <div class="pull-right">
-            <form class="contentForm" action="<?php echo base_url('index.php/dashboard/socialmedia/twitteraction');?>" method="post">
+            <!--form class="contentForm" action="<?php //echo base_url('index.php/dashboard/socialmedia/twitteraction');?>" method="post"-->
                 <button class="btn btn-reply btn-primary" data-toggle="modal"><i class="icon-mail-reply"></i></button>
-                <button type="submit" class="btn btn-primary" name="action" value="retweet"><i class="icon-retweet"></i></button>
+                <button type="button" class="retweet btn btn-primary"><i class="icon-retweet"></i></button>
                 <a role="button" href="#modalsentdm<?php echo $i; ?>" class="btn btn-primary" data-toggle="modal"><i class="icon-envelope"></i></a>
-                <button type="submit" class="btn btn-primary" name="action" value="favorit"><i class="icon-star"></i></button>
+                <button type="button" class="favorit btn btn-primary"><i class="icon-star"></i></button>
                 <?php if($mentions[$i]->following=='1'){ ?>
-                <button type="submit" class="btn" name="action" value="unfollow"><i class="icon-user"></i></button>
+                <button type="button" class="unfollow btn"><i class="icon-user"></i></button>
                 <?php }else{ ?>
-                <button type="submit" class="btn btn-primary" name="action" value="follow"><i class="icon-user"></i></button>
+                <button type="button" class="follow btn btn-primary" value="follow"><i class="icon-user"></i></button>
                 <?php } ?>
                 <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i>CASE</button>
-                <input type="hidden" name="str_id" value="<?php echo $mentions[$i]->post_stream_id; ?>" />
-                <input type="hidden" name="id" value="<?php echo json_decode($mentions[$i]->twitter_entities)->user_mentions[0]->id; ?>" />
-                <input type="hidden" name="userid" value="<?php echo $mentions[$i]->twitter_user_id; ?>" />
-                <input type="hidden" name="followid" value="<?php echo $mentions[$i]->twitter_user_id; ?>" />
-               </form>    
+                <input type="hidden" class="str_id" value="<?php echo $mentions[$i]->post_stream_id; ?>" />
+                <input type="hidden" class="id" value="<?php echo json_decode($mentions[$i]->twitter_entities)->user_mentions[0]->id; ?>" />
+                <input type="hidden" class="userid" value="<?php echo $mentions[$i]->twitter_user_id; ?>" />
+                <input type="hidden" class="followid" value="<?php echo $mentions[$i]->twitter_user_id; ?>" />
+               <!--/form-->    
         </div>
+         <!--div class="actionreport compose-post-status green hide">Message Post</div-->
         <br clear="all" />
     </h4>
     

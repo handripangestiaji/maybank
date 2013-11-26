@@ -218,8 +218,12 @@ function open_api_template($url){
 }
 
 
-function fb_dummy_accesstoken(){
-    $access_token = 'CAAFm2lqzuUgBAKlWFMZAilzeziJZBqx0petmopxlHTJ95aB9sALzBIHOsZCSEXpBZC97sBeorXlPeLf8KROZAaUa6In16Yj5PjY4oKyfLhi8qgcj0X1umawTa1qZAIyuvZAVjjE6ZBZBDPiCOnh3X1hTDokHBZB7jAPQ9fh05V92Fe408zkj3k0nMErrZBHsmXUsKMZD';
+function fb_dummy_accesstoken($access_token = 'CAAFm2lqzuUgBAKlWFMZAilzeziJZBqx0petmopxlHTJ95aB9sALzBIHOsZCSEXpBZC97sBeorXlPeLf8KROZAaUa6In16Yj5PjY4oKyfLhi8qgcj0X1umawTa1qZAIyuvZAVjjE6ZBZBDPiCOnh3X1hTDokHBZB7jAPQ9fh05V92Fe408zkj3k0nMErrZBHsmXUsKMZD'){
     $account = json_decode(open_api_template('https://graph.facebook.com/me/accounts?access_token='.$access_token));
     return $account->data[0]->access_token;
+}
+
+function facebook_page_manage($access_token = 'CAAFm2lqzuUgBAKlWFMZAilzeziJZBqx0petmopxlHTJ95aB9sALzBIHOsZCSEXpBZC97sBeorXlPeLf8KROZAaUa6In16Yj5PjY4oKyfLhi8qgcj0X1umawTa1qZAIyuvZAVjjE6ZBZBDPiCOnh3X1hTDokHBZB7jAPQ9fh05V92Fe408zkj3k0nMErrZBHsmXUsKMZD'){
+    $account = json_decode(open_api_template('https://graph.facebook.com/me/accounts?access_token='.$access_token));
+    return $account->data;
 }

@@ -14,11 +14,13 @@ class account_model extends CI_Model
 	* @return array feed collection
         * @author Eko Purnomo
     */
-    function GetChannel($filter = array()){
+    function GetChannel($filter = array(), $page = 1){
+	
         $this->db->select('*');
         $this->db->from("channel");
         if(count($filter) > 0)
             $this->db->where($filter);
+	$this->db->limit(15, ($page * 15) - 15);
         return $this->db->get()->result();
     }
     

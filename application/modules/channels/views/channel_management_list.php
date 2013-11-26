@@ -52,7 +52,7 @@
             <td><?=$channel->connection_type.' '.($channel->is_fb_page == 1? " Page" : "") ?></td>
             <td><?=$channel->social_id?></td>
             <td>
-                <button class="btn btn-info edit" type="button" id="channel_<?=$channel->channel_id?>"><i class="icon-pencil"></i> Edit</button>
+                <button value="<?=base_url('channels/channelmg/delete?id='.$channel->channel_id)?>" class="btn btn-danger delete" type="button" id="channel_<?=$channel->channel_id?>"><i class="icon-trash"></i> Delete</button>
             </td>
         </tr>
         <?php endforeach;?>

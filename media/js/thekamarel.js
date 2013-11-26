@@ -666,15 +666,16 @@ $(function(){
     
     $(document).ready(function() {
         $('#channelMg a:first').LoadContentAsync({
-            url : window.location.origin + "/channels/listofchannel/facebook" ,
+            url : BASEURL + "/channels/listofchannel/facebook" ,
             contentReplaced : $('#channelMg .cms-table '),
             urlParameter : {
                 "testParameter" : 1
             }
         });
         $("#channelMg a").click(function(){
+            
             $(this).LoadContentAsync ({
-                url : window.location.origin + "/channels/listofchannel/" + $(this).attr('href').replace("#", ""),
+                url : BASEURL +"/channels/listofchannel/" + $(this).attr('href').replace("#", ""),
                 contentReplaced : $('#channelMg .cms-table '),
                 urlParameter : {
                     "testParameter" : 1
@@ -697,6 +698,35 @@ $(function(){
                 $(this).html('Hide <i class="icon-caret-up"></i>');
                 $(this).closest('tr').next().show('fast');
             }
+        });
+        $(this).on('click','button.delete',function(){
+            var confirmBtn = confirm("Are you sure want to delete this item");
+            if(confirmBtn == true){
+                window.location = $(this).val();
+                return true;
+            }
+            else{
+                return false;
+            }
+        });
+        $('#addFbStream .save-changes').click(function(){
+            var value = "";
+            var pageName = "";
+            $('#addFbStream').find('input').each(function(){
+                if($(this).is(":checked")){
+                    value += $(this).attr('id').toString().replace("chk_", "") + ",";
+                    pageName += $(this).val() + ",";
+                }
+            });
+            $(this).AsyncPost({
+                url : BASEURL + "channels/listofchannel/FacebookPagePick",
+                urlParameter : {
+                    "id" :  value,
+                    "pageName" : pageName
+                },
+                reload : true
+                
+            });
         });
     });
 });
@@ -730,5 +760,30 @@ jQuery.fn.LoadContentAsync = function(options){
         "success" : function(response){
             settings.contentReplaced.html(response);
         }
+    });
+};
+
+jQuery.fn.AsyncPost = function(options){
+    var settings = $.extend({
+        url : window.location.origin,
+        urlParameter : {},
+        reload : true,
+        callback : function(response){
+            try{
+                response = JSON.parse(response);
+                alert(response.message);
+                if(settings.reload)
+                    window.location.reload();
+            }catch(e){
+                console.log(e);
+            }
+        }
+    }, options);
+    
+    $.ajax({
+        "url" : settings.url,
+        "type" : "POST",
+        "data" : serialize(settings.urlParameter),
+        "success" : settings.callback
     });
 };

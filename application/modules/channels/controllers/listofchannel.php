@@ -9,7 +9,6 @@ class listofchannel extends CI_Controller {
         $this->load->model('account_model');
     }
     
-    
     function Facebook(){
         $data['title'] = "Facebook";
         $data['channel_list'] = $this->account_model->GetChannel(
@@ -55,6 +54,5 @@ class listofchannel extends CI_Controller {
             )
         );
     }
-    
 }
 ?>

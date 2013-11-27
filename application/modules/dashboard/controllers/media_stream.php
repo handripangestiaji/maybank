@@ -40,13 +40,22 @@ class Media_stream extends CI_Controller {
     }
     
     
-    public function facebook_stream(){
+    public function facebook_stream($channel_id,$is_read = NULL){
 	$access_token_fb = fb_dummy_accesstoken();
+	
 	$filter = array(
-	   '' => ''
+	   'channel_id' => $channel_id,
 	);
-      $data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter);
-      $data['own_post'] = $this->facebook_model->RetrievePostFB($filter);
+	
+	if($is_read != NULL){
+	    if($is_read != 2){
+		$filter['is_read'] = $is_read;
+	    }
+	}
+	
+	$data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter);
+	$data['own_post'] = $this->facebook_model->RetrievePostFB($filter);
+	$data['channel_id'] = $channel_id;
 	$this->load->view('dashboard/facebook/facebook_stream',$data);
     }
     

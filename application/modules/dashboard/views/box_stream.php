@@ -1,5 +1,5 @@
 <!-- ==================== MIDDLE COL ==================== -->
-<div id='ctwitter' class="span4">
+<div class="span4">
     <!-- ==================== ACTIVITIES CONTAINER ==================== -->
     <div class="row-fluid">
         <div class="span12">
@@ -16,18 +16,22 @@
                             &nbsp;&nbsp;<span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu dropdown-stream-channels">
-                            <li><a class="facebook_stream">Facebook Maybank</a></li>
-                            <li><a class="facebook_stream">Facebook Maybankard</a></li>
-                            <li><a class="twitter_stream">Twitter Maybank</a></li>
-                            <li><a class="youtube_stream">YouTube Maybank</a></li>
+                            <?php
+                                for($i=0;$i<count($channels);$i++){
+                                    echo '<li>
+                                            <a class="'.$channels[$i]->connection_type.'_stream change_stream">'.$channels[$i]->name.' ('.$channels[$i]->connection_type.')</a>
+                                            <input type="hidden" class="channel-stream-id" value="'.$channels[$i]->channel_id.'">
+                                            </li>';
+                                }
+                            ?>
                         </ul>
                     </div><!-- /btn-group -->
                 </div>
                 <div class="pull-right">
-                    <select style="width: 130px;">
-                        <option value="keyword">Unread</option>
-                        <option value="user">Read</option>
-                        <option value="keyword">Assigned Cases</option>
+                    <select class="change-read-unread-stream" style="width: 130px;">
+                        <option value="0">Unread</option>
+                        <option value="1">Read</option>
+                        <option value="2">Assigned Cases</option>
                     </select>
                 </div>
             </div>

@@ -205,6 +205,7 @@
 
 <div class="row-fluid">
 <?php
+    //$data['channels'] = $channels;
     $data['color'] = '#3B5998';
     $data['stream'] = 'dashboard/facebook/facebook_stream';
     $this->load->view('dashboard/box_stream',$data);

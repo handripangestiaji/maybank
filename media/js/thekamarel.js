@@ -380,18 +380,31 @@ $(function(){
                 });
 
                 $(document).ready(function() {
+                    $('.change-read-unread-stream').change(function(){
+                        var social_id = $(this).closest('.containerHeadline').next().children('.channel-id').val();
+                        var is_read = $(this).val();
+                        if($(this).closest('div').prev().find('i').attr('class') == 'icon-facebook'){
+                            $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');        
+                            $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/facebook_stream/' + social_id + '/' + is_read);
+                        }
+                        else if($(this).closest('div').prev().find('i').attr('class') == 'icon-twitter'){
+                            $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');        
+                            $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/twitter_stream/' + social_id);
+                        }
+                    });
+                    
                     $('.facebook_stream').click(function() {
                         $(this).closest('div').children('button').html('<i class="icon-facebook"></i><h2>Facebook&nbsp;</h2>&nbsp;<i class="icon-caret-down"></i>');
                         $(this).closest('.containerHeadline').css( "background-color", "#3B5998" );
                         $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');        
-                        $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/facebook_stream');
+                        $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/facebook_stream/' + $(this).siblings('.channel-stream-id').val());
                     });
                     
                     $('.twitter_stream').click(function() {
                         $(this).closest('div').children('button').html('<i class="icon-twitter"></i><h2>Twitter&nbsp;</h2><i class="icon-caret-down"></i>');
                         $(this).closest('.containerHeadline').css( "background-color", "#4099FF" );
                         $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');        
-                        $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/twitter_stream');
+                        $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/twitter_stream/' + $(this).siblings('.channel-stream-id').val());
                     });
                     
                     $('.youtube_stream').click(function() {
@@ -400,7 +413,7 @@ $(function(){
                         $(this).closest('.containerHeadline').next().html('youtube timeline here');
                     });
                 });
-            
+                            
                 $(document).ready(function() {
                         $('.btn-reply').click(
                             function() {

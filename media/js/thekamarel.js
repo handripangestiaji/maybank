@@ -763,6 +763,9 @@ jQuery.fn.LoadContentAsync = function(options){
     });
 };
 
+
+
+//ASyncronoush POST (AJAX)
 jQuery.fn.AsyncPost = function(options){
     var settings = $.extend({
         url : window.location.origin,
@@ -787,13 +790,3 @@ jQuery.fn.AsyncPost = function(options){
         "success" : settings.callback
     });
 };
-
-$(function() {
-    startRefresh();
-//    alert(location.href);
-});
-
-function startRefresh() {
-    setTimeout(startRefresh,14000);
-     $('#ctwitter').load(location.href + ' #ctwitter');
-}

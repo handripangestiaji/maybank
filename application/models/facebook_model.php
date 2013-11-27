@@ -14,9 +14,11 @@ class facebook_model extends CI_Model
      */
     function GetPageAccessToken($access_token, $page_id){
 	$accounts = json_decode(open_api_template('https://graph.facebook.com/me/accounts?access_token='.$access_token));
-	foreach($accounts->data as $account){
-	    if($account->id == $page_id)
-		return $account->access_token;
+	if(isset($accounts->data)){
+	    foreach($accounts->data as $account){
+		if($account->id == $page_id)
+		    return $account->access_token;
+	    }
 	}
     }
     
@@ -375,7 +377,7 @@ class facebook_model extends CI_Model
     public function RetrieveFeedFB($filter){
         
         $this->db->select('*');
-        $this->db->from("fb_user_engaged a INNER JOIN social_stream_fb_post b ON b.author_id=a.facebook_id LEFT OUTER JOIN social_stream c ON c.post_id=b.post_id");
+        $this->db->from("fb_user_engaged a INNER JOIN social_stream_fb_post b ON b.author_id=a.facebook_id ");
         //if(count($filter) > 0)
         //    $this->db->where($filter);
         return $this->db->get()->result();
@@ -384,7 +386,7 @@ class facebook_model extends CI_Model
     public function RetrievePostFB($filter){
         
         $this->db->select('*');
-        $this->db->from("fb_user_engaged a INNER JOIN social_stream_fb_post b ON b.author_id=a.facebook_id LEFT OUTER JOIN social_stream c ON c.post_id=b.post_id");
+        $this->db->from("fb_user_engaged a INNER JOIN social_stream_fb_post b ON b.author_id=a.facebook_id ");
         //if(count($filter) > 0)
         //    $this->db->where($filter);
         return $this->db->get()->result();
@@ -402,11 +404,4 @@ class facebook_model extends CI_Model
         return $result;  
     }
  
-    public function likePost($post_id, $access_token, $type = 'feed'){
-	
-        $requestResult = curl_get_file_contents('https://graph.facebook.com/32423425 453423/likes');
-        $result  = json_decode($requestResult);
-
-    }
-} 
-
+}

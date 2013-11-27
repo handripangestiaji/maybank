@@ -840,5 +840,6 @@ $(function() {
 
 function startRefresh() {
     setTimeout(startRefresh,14000);
-     $('#ctwitter').load(location.href + ' #ctwitter');
+    //alert(location.href + ' #ctwitter');
+    $('#ctwitter').parent().load(BASEURL + 'dashboard/media_stream/twitter_stream/' + $(this).siblings('.channel-stream-id').val());
 }

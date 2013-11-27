@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div id='ctwitter' class="container-fluid">
 <!-- ==================== ACTIVITIES MENU ==================== -->
 <div class="floatingBoxMenu">
     <ul class="nav nav-tabs">
@@ -10,7 +10,7 @@
 </div>
 <!-- ==================== END OF ACTIVITIES MENU ==================== -->
 
-<div id='ctwitter' class="container-fluid">
+<div class="container-fluid">
     <!-- ==================== ALL ACTIVITIES CONTENT ==================== -->
     <ul class="floatingBoxContainers" id="mentions">
          <?php 

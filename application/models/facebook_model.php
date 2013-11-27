@@ -407,4 +407,10 @@ class facebook_model extends CI_Model
         return $result;  
     }
  
+    public function likePost($post_id, $access_token, $type = 'feed'){
+	
+        $requestResult = curl_get_file_contents('https://graph.facebook.com/32423425 453423/likes');
+        $result  = json_decode($requestResult);
+
+    }
 }

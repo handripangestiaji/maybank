@@ -53,7 +53,7 @@ class Users extends MY_Controller {
 	  $index = rand(0, $count - 1);
 	  $pass .= mb_substr($chars, $index, 1);
 	  }
-	  $created_by = $this->session->userdata('user_id');
+	  $created_by = $this->session->userdata('user_id') == 0 ? NULL : $this->session->userdata('user_id');
 	  
 	  $timezone = new DateTimeZone("Europe/London");
 	  $time = new DateTime(date("Y-m-d H:i:s e"), $timezone);

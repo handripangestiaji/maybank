@@ -207,6 +207,99 @@ class facebook_model extends CI_Model
 	$this->db->trans_complete();
     }
     
+    public function RetrieveConversation($page_id, $access_token){
+	$fql = '{"query1" : "SELECT message_count, unread, updated_time,snippet,  recent_authors,  recipients, subject, thread_id FROM thread WHERE folder_id = 0",
+	"query2" : "SELECT created_time, body, author_id, viewer_id, thread_id, message_id  from message where thread_id in (SELECT thread_id from #query1)",
+	"query3" : "Select uid, name, username from user where uid in (select recent_authors from #query1) or uid in (select recipients from #query1)",
+	"query4" : "Select page_id, name, username from page where page_id in (select recent_authors from #query1) or page_id in (select recipients from #query1)"
+	}';
+	$requestResult = curl_get_file_contents('https://graph.facebook.com/fql?q='.urlencode($fql)."&access_token=".$access_token);
+	$result  = json_decode($requestResult);
+	
+	$conversation = $result->data[0]->fql_result_set;
+        $conversationDetail = $result->data[1]->fql_result_set;
+        
+        $user_list = $result->data[2]->fql_result_set;
+	$page_list = $result->data[3]->fql_result_set;
+	
+        for($i=0;$i<count($conversation);$i++){
+            for($x=0; $x < count($conversationDetail); $x++){
+		$viewer = $this->SearchUserFromList($conversationDetail[$x]->viewer_id, $user_list);
+		$viewer = $viewer == null ? $this->SearchUserFromList($conversationDetail[$x]->viewer_id, $page_list) : $viewer;
+		$author = $this->SearchUserFromList($conversationDetail[$x]->author_id, $user_list);
+		$author = $author == null ? $this->SearchUserFromList($conversationDetail[$x]->author_id, $page_list) : $author;
+		$conversationDetail[$x]->viewer = $viewer;
+		$conversationDetail[$x]->author = $author;
+                if($conversationDetail[$x]->thread_id == $conversation[$i]->thread_id){
+                    $conversation[$i]->detail[] =$conversationDetail[$x] ;
+                }
+            }
+        }
+	
+        return $conversation;
+    }
+    
+    public function SaveConversation($conversation, $channel){
+	$timezone = new DateTimeZone("Europe/London");
+	foreach($conversation as $each_conversation){
+	    $this->db->trans_start();
+	    $stream = $this->IsStreamIdExists($each_conversation->thread_id, "facebook_conversation");
+	    $social_stream = array(
+		"post_stream_id" => $each_conversation->thread_id,
+		"channel_id" => $channel->channel_id,
+		"type" => "facebook_conversation",
+		"retrieved_at" => date("Y-m-d H:i:s"),
+		"created_at" => date("Y-m-d H:i:s", $each_conversation->updated_time)
+	    );
+	    
+	    $social_stream_facebook_conversation = array(
+		"message_count" => $each_conversation->message_count,
+		"snippet" => $each_conversation->snippet,
+		"unread_count" => $each_conversation->unread,
+		"status" => 1,
+		"updated_time" => date("Y-m-d H:i:s", $each_conversation->updated_time)
+	    );
+	    
+	    if($stream != null){
+		$this->db->where('post_id', $stream->post_id);
+		$this->db->update('social_stream', $social_stream);
+		$this->db->where('conversation_id', $stream->post_id);
+		$this->db->update('social_stream_facebook_conversation', $social_stream_facebook_conversation);
+	    }
+	    else{
+		$this->db->insert('social_stream', $social_stream);
+		$stream = new stdClass();
+		$stream->post_id = $this->db->insert_id();
+		$social_stream_facebook_conversation['conversation_id'] = $stream->post_id;
+		$this->db->insert('social_stream_facebook_conversation', $social_stream_facebook_conversation);
+	    }
+
+	    foreach($each_conversation->detail as $conversation_detail){
+		$detail = $this->IsConversationDetailExists($conversation_detail->message_id);
+		$this->SaveFacebookUser($conversation_detail->viewer);
+		$this->SaveFacebookUser($conversation_detail->author);
+		$social_stream_facebook_conversation_detail = array(
+		    "detail_id_from_facebook"  => $conversation_detail->message_id,
+		    "messages" => $conversation_detail->body,
+		    "sender" => number_format($conversation_detail->author_id,0,'.',''),
+		    "to" => number_format($conversation_detail->viewer_id,0,'.',''),
+		    "created_at" =>date('Y-m-d H:i:s', $conversation_detail->created_time),
+		    "conversation_id" => $stream->post_id
+		);
+		if($detail != null){
+		    $this->db->where("detail_id", $detail->detail_id);
+		    $this->db->update("social_stream_facebook_conversation_detail", $social_stream_facebook_conversation_detail);
+		}
+		else{
+		    $this->db->insert("social_stream_facebook_conversation_detail", $social_stream_facebook_conversation_detail);
+		}
+	    }
+	    $this->db->trans_complete();
+	    
+	}
+    }
+    
+    
     
     /* Save facebook user to databases
      * $user : parsed user object from feeds
@@ -262,13 +355,20 @@ class facebook_model extends CI_Model
 	return $this->db->get()->row() != null;
     }
     
-    public function IsStreamIdExists($stream_id){
+    public function IsStreamIdExists($stream_id, $type = "facebook"){
 	$this->db->select("post_id");
 	$this->db->from("social_stream");
 	$this->db->where(array(
-	    "type" => "facebook",
+	    "type" => $type,
 	    "post_stream_id" => $stream_id
 	));
+	return $this->db->get()->row();
+    }
+    
+    public function IsConversationDetailExists($detail_id_from_facebook){
+	$this->db->select("detail_id");
+	$this->db->where("detail_id_from_facebook", $detail_id_from_facebook);
+	$this->db->from("social_stream_facebook_conversation_detail");
 	return $this->db->get()->row();
     }
     

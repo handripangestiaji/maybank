@@ -38,9 +38,13 @@ class Cronjob extends CI_Controller {
     }
     
     function FacebookStreamFeed(){
-         $filter = array(
-            'channel_id' => 1
-        );
+        $filter = array();
+        if($this->input->get('channel_id')){
+            $filter = array(
+                'channel_id' => 1
+            );    
+        }
+        
         $channel_loaded = $this->account_model->GetChannel($filter);
         $conversation_list = array();
         $access_tokens = array();
@@ -56,6 +60,36 @@ class Cronjob extends CI_Controller {
             $this->facebook_model->TransferFeedToDb($post, $access_token->channel);
         }
     }
+    
+    
+    function  FacebookConversation(){
+        $filter = array();
+        if($this->input->get('channel_id')){
+            $filter = array(
+                'channel_id' => $this->input->get('channel_id')
+            );    
+        }
+        $channel_loaded = $this->account_model->GetChannel($filter);
+        $conversation_list = array();
+        $access_tokens = array();
+        foreach($channel_loaded as $channel){
+            $newStd->page_id = $channel->social_id;
+            $newStd->token = $this->facebook_model->GetPageAccessToken($channel->oauth_token, $channel->social_id);
+            $newStd->channel = $channel;
+            $access_tokens[] = $newStd;
+        }
+        
+        foreach($access_tokens as $access_token){
+            $conversation = $this->facebook_model->RetrieveConversation($access_token->page_id, $access_token->token);
+            $this->facebook_model->SaveConversation($conversation, $access_token->channel);
+        }
+        echo "<pre>";
+        print_r($conversation);
+        echo "</pre>";
+    }
+    
+    
+    
     
     
     function TwitterMentions(){

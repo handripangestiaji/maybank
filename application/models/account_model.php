@@ -23,6 +23,15 @@ class account_model extends CI_Model
         return $this->db->get()->result();
     }
     
+    function GetTableTotalRow($table_name, $filter = array()){
+	$this->db->select("count(*) as counted");
+	$this->db->from($table_name);
+	
+	if(count($filter) > 0)
+	    $this->db->where($filter);
+	
+	return $this->db->get()->row()->counted;
+    }
     
     function GetApplicationRole($parent_id){
 	$this->db->select("*");

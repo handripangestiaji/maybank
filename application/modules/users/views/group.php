@@ -86,6 +86,7 @@
                 </tbody>
                 
             </table>
+            <?php if($count>=10){?>
             <div class="page pull-right" style="margin-top: 30px;">
                 <a href="#">First</a>
                 <a href="#" class="active">1</a>
@@ -94,6 +95,8 @@
                 <a href="#">4</a>
                 <a href="#">Last</a>
             </div>
+            <?php }?>
+            
         </div>
     </div>
 </div>

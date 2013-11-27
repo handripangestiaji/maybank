@@ -181,7 +181,8 @@ class Users extends MY_Controller {
 	  $data = array(
 			 'group' => $this->users_model->select_group(),
 			 'channel' => $this->users_model->select_channel(),
-			 'group_detail' => $this->users_model->select_user_group_d()
+			 'group_detail' => $this->users_model->select_user_group_d(),
+			 'count' => $this->db->affected_rows($this->users_model->select_group())
 			);
 	  $this->load->view('users/group',$data);
     }
@@ -217,8 +218,41 @@ class Users extends MY_Controller {
     
     function delete_group($id)
     {
-	  $this->users_model->delete_group($id);
-	  redirect('users/group');
+	  $data = $this->users_model->delete_group($id);
+	  redirect('users/menu_group?return='.$data);
+    }
+    
+    function edit_group($id)
+    {
+	  $data = array(
+			 'group' => $this->users_model->edit_group($id),
+			 'group_detail' => $this->users_model->edit_group_detail($id),
+			 'channel' => $this->users_model->select_channel()
+			);
+	  $this->load->view('users/group_edit',$data);
+    }
+    
+    function update_group()
+    {
+	  $channel = $this->input->post('channel');
+	  
+	  $group_id = $this->input->post('group_id');
+	  $data = array(
+			'group_name' => $this->input->post('group_name'),
+		       );
+	  $this->users_model->update_group($group_id,$data);
+	  
+	  $this->users_model->delete_group_detail($group_id);
+	  
+	  for($i=0;$i<count($channel);$i++)
+	  {
+	       $data_channel = array(
+					'user_group_id' => $group_id,
+					'allowed_channel' => $channel[$i]
+				     );
+	       $this->users_model->insert_group_detail($data_channel);
+	  }
+	  redirect('users/menu_group');
     }
     
     //============================= LOGOUT ================================

@@ -78,17 +78,34 @@ class Users_model extends CI_Model
         return $this->db->insert($this->group,$data);
     }
     
+    function update_group($group_id,$data)
+    {
+        $this->db->where('group_id',$group_id);
+        return $this->db->update($this->group,$data);
+    }
+    
     function delete_group($id)
     {
+        try{
+        $this->db->trans_start();
         $this->db->where('user_group_id', $id);
         $this->db->delete('user_group_detail');
         $this->db->where('group_id',$id);
-        return $this->db->delete($this->group);
+        $this->db->delete($this->group);
+        $this->db->trans_complete();
+        return 1;
+        }
+        catch(Exception $ex)
+        {
+            $this->db->trans_rollback();
+            return 0;
+        }
     }
     
     function edit_group($id)
     {
         $this->db->where('group_id',$id);
+        return $this->db->get($this->group);
     }
     
     //============================ CHANNEL ==============================
@@ -106,6 +123,19 @@ class Users_model extends CI_Model
     function insert_group_detail($data_channel)
     {
         return $this->db->insert($this->user_group_detail,$data_channel);
+    }
+    
+    function edit_group_detail($user_group_id)
+    {
+        $this->db->where('user_group_id',$user_group_id);
+        //$this->db->join('channel','channel.id_channel=user_group_detail.allowed_channel','left');
+        return $this->db->get($this->user_group_detail);
+    }
+    
+    function delete_group_detail($id)
+    {
+        $this->db->where('user_group_id',$id);
+        return $this->db->delete($this->user_group_detail);
     }
     
     //============================= APP_ROLE ============================

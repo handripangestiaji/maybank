@@ -768,7 +768,7 @@ jQuery.fn.LoadContentAsync = function(options){
 
 
 
-//ASyncronoush POST (AJAX)
+//ASyncronoush  tes (AJAX)
 jQuery.fn.AsyncPost = function(options){
     var settings = $.extend({
         url : window.location.origin,

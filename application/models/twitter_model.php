@@ -33,9 +33,11 @@ class twitter_model extends CI_Model
         echo "<pre>";
         print_r($result);
         echo "</pre>";
-        foreach($result as $tweet){
-            $this->SaveTwitterUsers($tweet->user);
-            $this->SaveTweets($tweet, $channel, "mentions");
+        if(is_array($result)){
+            foreach($result as $tweet){
+                $this->SaveTwitterUsers($tweet->user);
+                $this->SaveTweets($tweet, $channel, "mentions");
+            }
         }
     }
     

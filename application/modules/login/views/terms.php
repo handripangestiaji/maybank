@@ -32,7 +32,7 @@
                             </ul>
                             <p>
 
-                                <button class="btn btn-inverse" type="button" onClick="window.location.href='<?php echo base_url('login'); ?>'">
+                                <button class="btn btn-inverse" type="button" onClick="window.location.href='<?php echo site_url();?>/login'">
                                 <i class="icon-long-arrow-left"></i> 
                                 Back
                                 </button>

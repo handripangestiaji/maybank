@@ -11,7 +11,7 @@
 </div>
 <!-- ==================== END OF ACTIVITIES MENU ==================== -->
 
-<div class="container-fluid">
+<div id='cfacebook'  class="container-fluid">
     <!-- ==================== ALL ACTIVITIES CONTENT ==================== -->
     <ul class="floatingBoxContainers" id="allActivities">
         <?php $this->load->view('dashboard/facebook/wall_post', array('fb_feed' => $fb_feed))?> 

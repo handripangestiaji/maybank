@@ -46,7 +46,14 @@ Add New User
         </tr>
         
         <tr>
-            <td><input type="submit" value="Create" /></td>
+            <td><input type="submit" value="Create" />
+            <input type="button" value="Cancel" onclick="btn_cancel()" /></td>
         </tr>
     </table>
 </form>
+<script type='text/javascript'>
+    function btn_cancel()
+    {
+        window.location = "<?php echo site_url();?>/users";
+    }
+</script>

@@ -67,7 +67,6 @@ class Media_stream extends CI_Controller {
 	$this->load->view('dashboard/twitter/twitter_stream',$data);
     }
 	
-	
     public function auth()
     {
 	    

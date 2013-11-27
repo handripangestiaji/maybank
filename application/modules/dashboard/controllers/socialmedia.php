@@ -44,6 +44,7 @@ class Socialmedia extends MY_Controller {
 	  $access_token_fb = fb_dummy_accesstoken();
 	  $this->load->model('facebook_model');
 	  $this->load->model('twitter_model');
+	  $this->load->model('account_model');
 	  $filter = array();
 	  $data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter);
 	  $data['own_post'] = $this->facebook_model->RetrievePostFB($filter);
@@ -51,7 +52,8 @@ class Socialmedia extends MY_Controller {
 	  $data['mentions']=$this->twitter_model->ReadTwitterData('mentions');     
 	  $data['homefeed']=$this->twitter_model->ReadTwitterData('home_feed');     
 	  $data['senttweets']=$this->twitter_model->ReadTwitterData('user_timeline');  
-	  $data['directmessage']=$this->twitter_model->ReadDMFromDb('2'); 
+	  $data['directmessage']=$this->twitter_model->ReadDMFromDb('2');
+	  $data['channels'] = $this->account_model->GetChannel();
 	  $this->load->view('dashboard/index',$data);
      }
     

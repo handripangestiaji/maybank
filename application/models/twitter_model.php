@@ -242,6 +242,7 @@ class twitter_model extends CI_Model
     
     public function ReadTweetFromDb($channel_id, $type = "mentions"){
         $query = $this->db->query("call sp_ReadTweetFromDb(?,?)", array($channel_id, $type));
+        
         return $query->result();
     }
     
@@ -270,12 +271,13 @@ class twitter_model extends CI_Model
     
     public function ReadTwitterData($filter){
         $this->db->select("a.channel_id, a.post_stream_id, a.retrieved_at, a.created_at, 
-                            b.*, c.screen_name, c.profile_image_url, c.name, c.description, c.following");
+                            b.*, c.screen_name, c.profile_image_url, c.name, c.description, c.following, a.is_read");
         $this->db->from("social_stream a INNER JOIN social_stream_twitter b ON a.post_id = b.post_id 
                         INNER JOIN twitter_user_engaged c ON
                         c.twitter_user_id = b.twitter_user_id");
-        $where="b.type = '$filter' AND a.type='twitter' ORDER by a.created_at desc";
+        $where="b.type = '$filter' AND a.type='twitter' ORDER by a.post_stream_id desc";
         $this->db->where($where);
+        $this->db->limit('20');           
         return $this->db->get()->result();
     }
 }

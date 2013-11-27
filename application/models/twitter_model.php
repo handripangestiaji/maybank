@@ -275,7 +275,7 @@ class twitter_model extends CI_Model
         $this->db->from("social_stream a INNER JOIN social_stream_twitter b ON a.post_id = b.post_id 
                         INNER JOIN twitter_user_engaged c ON
                         c.twitter_user_id = b.twitter_user_id");
-        $where="b.type = '$filter' AND a.type='twitter' ORDER by a.post_id desc";
+        $where="b.type = '$filter' AND a.type='twitter' ORDER by a.post_stream_id desc";
         $this->db->where($where);
         $this->db->limit('20');           
         return $this->db->get()->result();

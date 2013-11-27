@@ -16,10 +16,12 @@ class Media_stream extends CI_Controller {
 	$this->load->helper('url');
 	$this->load->helper('array');
 	$this->load->helper('form');
+	$this->load->model('facebook_model');
 	$this->load->model('twitter_model');
+	  
 	$this->session->set_userdata('access_token', $this->config->item('twitter_access_token'));
 	$this->session->set_userdata('access_token_secret', $this->config->item('twitter_access_secret'));
-
+	  
 	if($this->session->userdata('access_token') && $this->session->userdata('access_token_secret'))
 	{
 		// If user already logged in
@@ -38,19 +40,30 @@ class Media_stream extends CI_Controller {
     }
     
     
-    public function facebook_stream(){
+    public function facebook_stream($channel_id,$is_read = NULL){
 	$access_token_fb = fb_dummy_accesstoken();
-	$this->load->model('facebook_model');
-	$data['fb_feed'] = $this->facebook_model->RetrieveFeed("168151513217686", $access_token_fb, 'feed');
-	$data['own_post'] = $this->facebook_model->RetrievePost("168151513217686", $access_token_fb);
+	
+	$filter = array(
+	   'channel_id' => $channel_id,
+	);
+	
+	if($is_read != NULL){
+	    if($is_read != 2){
+		$filter['is_read'] = $is_read;
+	    }
+	}
+	
+	$data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter);
+	$data['own_post'] = $this->facebook_model->RetrievePostFB($filter);
+	$data['channel_id'] = $channel_id;
 	$this->load->view('dashboard/facebook/facebook_stream',$data);
     }
     
     public function twitter_stream($channel_id = 2){
-	$this->load->model('twitter_model');
-	$data['mentions'] = $this->twitter_model->ReadTweetFromDb($channel_id, "mentions");
-	$data['homefeed']= $this->twitter_model->ReadTweetFromDb($channel_id, "home_feed");
-	$data['directmessage'] = $this->twitter_model->ReadDMFromDb($channel_id);
+	$data['mentions']=$this->twitter_model->ReadTwitterData('mentions');     
+	$data['homefeed']=$this->twitter_model->ReadTwitterData('home_feed');     
+	$data['senttweets']=$this->twitter_model->ReadTwitterData('user_timeline');  
+	$data['directmessage']=$this->twitter_model->ReadDMFromDb('2');
 	$this->load->view('dashboard/twitter/twitter_stream',$data);
     }
 	

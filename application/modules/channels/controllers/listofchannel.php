@@ -9,7 +9,6 @@ class listofchannel extends CI_Controller {
         $this->load->model('account_model');
     }
     
-    
     function Facebook(){
         $filter = array(
             'connection_type' => 'facebook'
@@ -59,6 +58,5 @@ class listofchannel extends CI_Controller {
             )
         );
     }
-    
 }
 ?>

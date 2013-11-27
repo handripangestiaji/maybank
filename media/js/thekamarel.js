@@ -380,18 +380,31 @@ $(function(){
                 });
 
                 $(document).ready(function() {
+                    $('.change-read-unread-stream').change(function(){
+                        var social_id = $(this).closest('.containerHeadline').next().children('.channel-id').val();
+                        var is_read = $(this).val();
+                        if($(this).closest('div').prev().find('i').attr('class') == 'icon-facebook'){
+                            $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');        
+                            $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/facebook_stream/' + social_id + '/' + is_read);
+                        }
+                        else if($(this).closest('div').prev().find('i').attr('class') == 'icon-twitter'){
+                            $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');        
+                            $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/twitter_stream/' + social_id);
+                        }
+                    });
+                    
                     $('.facebook_stream').click(function() {
                         $(this).closest('div').children('button').html('<i class="icon-facebook"></i><h2>Facebook&nbsp;</h2>&nbsp;<i class="icon-caret-down"></i>');
                         $(this).closest('.containerHeadline').css( "background-color", "#3B5998" );
                         $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');        
-                        $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/facebook_stream');
+                        $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/facebook_stream/' + $(this).siblings('.channel-stream-id').val());
                     });
                     
                     $('.twitter_stream').click(function() {
                         $(this).closest('div').children('button').html('<i class="icon-twitter"></i><h2>Twitter&nbsp;</h2><i class="icon-caret-down"></i>');
                         $(this).closest('.containerHeadline').css( "background-color", "#4099FF" );
                         $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');        
-                        $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/twitter_stream');
+                        $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/twitter_stream/' + $(this).siblings('.channel-stream-id').val());
                     });
                     
                     $('.youtube_stream').click(function() {
@@ -400,7 +413,7 @@ $(function(){
                         $(this).closest('.containerHeadline').next().html('youtube timeline here');
                     });
                 });
-            
+                            
                 $(document).ready(function() {
                         $('.btn-reply').click(
                             function() {
@@ -435,6 +448,38 @@ $(function(){
                                 $(this).parent().siblings('.engagement').show();
                             }
                         );
+                        
+                        $(".btn-mark-as-read").click(function(){
+                            var me = $(this);
+                            $.ajax({
+                                    url : BASEURL + 'dashboard/socialmedia/ReadUnread',
+                                    type: "POST",
+                                    data: {
+                                            post_id:$(this).parent().siblings('.postId').val(),
+                                            },
+                                    success: function()
+                                    {
+                                        me.hide();
+                                        me.siblings('.btn-mark-as-unread').show();
+                                    },
+                                });
+                        });
+                        
+                        $(".btn-mark-as-unread").click(function(){
+                            var me = $(this);
+                            $.ajax({
+                                    url : BASEURL + 'dashboard/socialmedia/ReadUnread',
+                                    type: "POST",
+                                    data: {
+                                            post_id:$(this).parent().siblings('.postId').val(),
+                                            },
+                                    success: function()
+                                    {
+                                        me.hide();
+                                        me.siblings('.btn-mark-as-read').show();
+                                    },
+                                });
+                        });
                         
                         $(".engagement-btn-close").click(
                             function() {
@@ -666,7 +711,7 @@ $(function(){
     
     $(document).ready(function() {
         $('#channelMg a:first').LoadContentAsync({
-            url : BASEURL + "channels/listofchannel/facebook" ,
+            url : BASEURL + "/channels/listofchannel/facebook" ,
             contentReplaced : $('#channelMg .cms-table '),
             urlParameter : {
                 "testParameter" : 1
@@ -675,7 +720,7 @@ $(function(){
         $("#channelMg a").click(function(){
             
             $(this).LoadContentAsync ({
-                url : BASEURL +"channels/listofchannel/" + $(this).attr('href').replace("#", ""),
+                url : BASEURL +"/channels/listofchannel/" + $(this).attr('href').replace("#", ""),
                 contentReplaced : $('#channelMg .cms-table '),
                 urlParameter : {
                     "testParameter" : 1
@@ -763,11 +808,7 @@ jQuery.fn.LoadContentAsync = function(options){
     });
 };
 
-
-
-//ASyncronoush POST (AJAX)
 jQuery.fn.AsyncPost = function(options){
-    var testSettings = true;
     var settings = $.extend({
         url : window.location.origin,
         urlParameter : {},
@@ -791,3 +832,13 @@ jQuery.fn.AsyncPost = function(options){
         "success" : settings.callback
     });
 };
+
+$(function() {
+    startRefresh();
+//    alert(location.href);
+});
+
+function startRefresh() {
+    setTimeout(startRefresh,14000);
+     $('#ctwitter').load(location.href + ' #ctwitter');
+}

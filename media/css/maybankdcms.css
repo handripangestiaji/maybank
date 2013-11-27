@@ -507,6 +507,14 @@ border-radius: 3px;
 	cursor: pointer;
 }
 
+.btn-mark-as-read{
+	cursor: pointer;
+}
+
+.btn-mark-as-unread{
+	cursor: pointer;
+}
+
 .btn-close{
 	cursor: pointer;
 }
@@ -567,6 +575,10 @@ a#reply-img-close{
 	top: -10px;
 	right: -5px;
 	padding: 10px;
+}
+
+.dropdown-stream-channels>li>a {
+	cursor: pointer;
 }
 /*==============================================================================================
 ======================================== C M S =================================================

@@ -378,7 +378,8 @@ class facebook_model extends CI_Model
         $this->db->select('*');
         $this->db->from("fb_user_engaged a INNER JOIN social_stream_fb_post b  
 			 ON b.author_id = a.facebook_id inner join social_stream c on c.post_id = b.post_id ");
-	
+        $this->db->limit(20);
+        $this->db->order_by('b.post_id','desc');
         if(count($filter) >= 1)
             $this->db->where($filter);
         return $this->db->get()->result();
@@ -389,6 +390,8 @@ class facebook_model extends CI_Model
         $this->db->from("fb_user_engaged a INNER JOIN social_stream_fb_post b ON b.author_id=a.facebook_id ");
         if(count($filter) > 0)
 	    $this->db->where($filter);
+        $this->db->limit(20);
+        $this->db->order_by('post_id','desc');
         return $this->db->get()->result();
     }
     

@@ -666,7 +666,7 @@ $(function(){
     
     $(document).ready(function() {
         $('#channelMg a:first').LoadContentAsync({
-            url : BASEURL + "/channels/listofchannel/facebook" ,
+            url : BASEURL + "channels/listofchannel/facebook" ,
             contentReplaced : $('#channelMg .cms-table '),
             urlParameter : {
                 "testParameter" : 1
@@ -675,7 +675,7 @@ $(function(){
         $("#channelMg a").click(function(){
             
             $(this).LoadContentAsync ({
-                url : BASEURL +"/channels/listofchannel/" + $(this).attr('href').replace("#", ""),
+                url : BASEURL +"channels/listofchannel/" + $(this).attr('href').replace("#", ""),
                 contentReplaced : $('#channelMg .cms-table '),
                 urlParameter : {
                     "testParameter" : 1

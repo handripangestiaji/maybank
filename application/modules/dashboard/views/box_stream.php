@@ -1,5 +1,5 @@
 <!-- ==================== MIDDLE COL ==================== -->
-<div id='ctwitter' class="span4">
+<div class="span4">
     <!-- ==================== ACTIVITIES CONTAINER ==================== -->
     <div class="row-fluid">
         <div class="span12">

@@ -21,17 +21,6 @@ New Role <input type='text' /><br />
                 <td><input type='checkbox' value='<?php echo $app->role_name;?>' /><?php echo $app->role_name;?></td>
                 <?php }?>
             </tr>
-            
-            <tr>
-                <th>All Channel</th>
-            </tr>
-            
-            <tr>
-                <td><input type='checkbox' />View</td>
-                <td><input type='checkbox' />Take Action</td>
-                <td><input type='checkbox' />Social Function Like, Retweet</td>
-                <td><input type='checkbox' />Delete</td>
-            </tr>
 
             <tr>
                 <td><input type='button' value='Create Role' onclick='btn_createRole()' /></td>

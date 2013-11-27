@@ -13,7 +13,6 @@
             </div>
             <div style="float: right;">
                 <input class="btn btn-primary" onclick="btn_add()" type="button" name="btn_new" value="+ New User" />
-                <input type='button' onclick='logout()' value='Logout' />
             </div>
             
             <div style="clear: both;"></div>
@@ -69,8 +68,8 @@
                         <?php }else{?>
                             <td><?php echo 'Not Active';?></td>
                         <?php }?>
-                        <td>18-11-2013</td>
-                        <td>Azahan</td>
+                        <td><?php echo $row->created_at;?></td>
+                        <td><?php echo $row->created_by;?></td>
                         <td><a href="<?php echo site_url();?>/users/edit/<?php echo $row->user_id;?>"><span><i class="icon-pencil"></i></span></a></td>
                         <td><a href="<?php echo site_url();?>/users/delete/<?php echo $row->user_id;?>"><span><i class="icon-remove"></i></span></a></td>
                     </tr>
@@ -89,13 +88,8 @@
         </div>
     </div>
 </div>
-YhaJZhMUq6
 
 <script type="text/javascript">
-    function logout()
-    {
-        window.location.href = "<?php echo site_url();?>/users/logout";
-    }
     function btn_add()
     {
         window.location.href = "<?php echo site_url();?>/users/create";

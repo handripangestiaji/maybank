@@ -1,4 +1,4 @@
- <form class="form-signin">
+ <form id="reset_form" class="form-signin" method='post' action='<?php echo site_url();?>/login/reset_pass'>
     <h2 class="form-signin-heading">Forgot Password</h2>
     <div class="input-prepend">
       <span class="add-on"><i class="icon-user"></i></span>
@@ -6,11 +6,11 @@
     </div>
     <div class="input-prepend">
         <p>
-        <button class="btn btn-mini btn-danger" type="button" onClick="window.location.href='reset-sukses.html'">
+        <a id="submit" href="javascript:void(0);"><button class="btn btn-mini btn-danger" type="button">
         <i class="icon-ok"></i> 
         Reset
-        </button>
-        <button class="btn btn-mini" type="button" onClick="window.location.href='login.html'">
+        </button></a>
+        <button class="btn btn-mini" type="button" onClick="window.location.href='<?php echo site_url();?>/login'">
         <i class="icon-remove"></i> 
         Cancel
         </button>
@@ -19,5 +19,20 @@
 </form>
 
 <div class="signInRow">
-    <div><a href="<?php echo base_url('login'); ?>">Login</a></div>
+    <div><a href="<?php echo site_url();?>/login">Login</a></div>
 </div>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#submit').click(function(){
+			$('#reset_form').submit();
+		});
+		
+		$('#reset_form').bind('keypress', function(e){
+			if(e.which == 13)
+			{
+				$('#reset_form').submit();
+			}
+		})
+	});
+</script>

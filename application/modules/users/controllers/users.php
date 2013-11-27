@@ -9,17 +9,27 @@ class Users extends MY_Controller {
         parent::__construct();
 	$this->load->model('users_model');
 	$this->load->helper('security');
-	if(!$this->session->userdata('is_login'))
-	{
-	    //   redirect('authentication');
-	}
+	
+	$config=array(
+					'protocol'=>'smtp',
+					'smtp_host'=>'ssl://smtp.googlemail.com',
+					'smtp_port'=>465,
+					'smtp_user'=>'bogcampbogcamp@gmail.com',
+					'smtp_pass'=>'AB123456CD',
+					'charset'=>'utf-8',
+					'mailtype'=>'html',
+					'wordwrap'=>TRUE
+			);
+				
+			$this->load->library('email',$config);
+			
+	
     }
     
     function index()
     {
         $data = array(
 		      'show' => $this->users_model->select_user()
-		      //'id' => $this->session->userdata('user_id')
 		     );
         $this->load->view('users/index',$data);
     }
@@ -43,6 +53,7 @@ class Users extends MY_Controller {
 	  $index = rand(0, $count - 1);
 	  $pass .= mb_substr($chars, $index, 1);
 	  }
+	  $created_by = $this->session->userdata('user_id');
 	  
 	  $timezone = new DateTimeZone("Europe/London");
 	  $time = new DateTime(date("Y-m-d H:i:s e"), $timezone);
@@ -56,26 +67,13 @@ class Users extends MY_Controller {
 		      'role_id' => $this->input->post('optRole'),
 		      'group_id' => $this->input->post('optGroup'),
 		      'is_active' => 1,
-		      'created_at' => $time->format("Y-m-d H:i:s")
+		      'created_at' => $time->format("Y-m-d H:i:s"),
+		      'created_by' => $created_by
 	       );
 	  
 	  $this->users_model->insert_user($data);
-	  
-	  
-	  $config=array(
-					'protocol'=>'smtp',
-					'smtp_host'=>'ssl://smtp.googlemail.com',
-					'smtp_port'=>465,
-					'smtp_user'=>'bogcampbogcamp@gmail.com',
-					'smtp_pass'=>'AB123456CD',
-					'charset'=>'utf-8',
-					'mailtype'=>'html',
-					'wordwrap'=>TRUE
-			);
-				
-			$this->load->library('email',$config);
-			$this->email->set_newline("\r\n");
 	
+			$this->email->set_newline("\r\n");
 			$this->email->from('robay.robby@gmail.com','robay');
 			$this->email->to($this->input->post('email'));
 			
@@ -104,6 +102,7 @@ class Users extends MY_Controller {
 	  $data = array(
 		      'full_name' => $this->input->post('fullName'),
 		      'display_name' => $this->input->post('displayName'),
+		      'email' => $this->input->post('email'),
 		      'role_id' => $this->input->post('optRole'),
 		      'group_id' => $this->input->post('optGroup')
 			);
@@ -111,6 +110,27 @@ class Users extends MY_Controller {
 	  $this->users_model->update_user($id,$data);
 	  
 	  redirect('users');
+    }
+    
+    function update_password()
+    {
+	  $id = $this->session->userdata('user_id');
+	  $check = $this->users_model->get_byid($id);
+	  
+	  $pass_old = $this->input->post('existing_password');
+	  
+	  if($check->row()->password == do_hash($pass_old.$check->row()->salt,'md5'))
+	  {
+	       $pass_new = array(
+				 'password' => do_hash($this->input->post('new_password').$check->row()->salt,'md5')
+				);
+	       $this->users_model->update_user($id,$pass_new);
+	       redirect('users');
+	  }
+	  else
+	  {
+	       echo 'GAGAL';
+	  }
     }
     
     function delete($id)
@@ -156,18 +176,17 @@ class Users extends MY_Controller {
     }
     
     function logout()
-    {
-	$timezone = new DateTimeZone("Europe/London");
-	$time = new DateTime(date("Y-m-d H:i:s e"), $timezone);
-	$data = array(
-		    'logout_time' => $time->format("Y-m-d H:i:s")
-		    );
-	
-	$id = $this->session->userdata('user_id');
-	
-	$this->users_model->update_activity($id,$data);
-	$this->session->sess_destroy();
-	redirect('authentication');
-	echo 'Ut0ef8kUEa';
-    }
+        {
+	    $timezone = new DateTimeZone("Europe/London");
+	    $time = new DateTime(date("Y-m-d H:i:s e"), $timezone);
+	    $data = array(
+			'logout_time' => $time->format("Y-m-d H:i:s")
+			);
+	    
+	    $id = $this->session->userdata('user_id');
+	    
+	    $this->users_model->update_activity($id,$data);
+            $this->session->sess_destroy();
+            redirect('login');
+        }
 }

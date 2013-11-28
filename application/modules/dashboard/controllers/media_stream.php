@@ -214,15 +214,4 @@ class Media_stream extends CI_Controller {
 	  $new_val = $this->facebook_model->ReadUnread($this->input->post('post_id'));
 	  echo $new_val;
      }
-     
-    public function FbLikeStatus(){
-	  $access_token_fb = fb_dummy_accesstoken();
-	  $config = array(
-	       'appId' => $this->config->item('fb_appid'),
-	       'secret' => $this->config->item('fb_secretkey')
-	  );
-	  $this->load->library('facebook',$config);
-	  $this->facebook->setaccesstoken($access_token_fb);
-	  $this->facebook->api('/me/feed','POST',array('message'=>$this->input->post('content')));
-    }
 }

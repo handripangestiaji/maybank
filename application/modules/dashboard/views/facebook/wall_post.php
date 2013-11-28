@@ -42,6 +42,7 @@ for($i=0; $i<count($fb_feed);$i++):?>
             </p>
             <div>
                 <p>"<?php echo $comment[$j]->comment_content; ?>"</p>
+                <p><button type="button" class="btn btn-warning btn-mini">OPEN</button><button class="btn btn-primary btn-mini" style="margin-left: 5px;">LIKE</button></p>
             </div>
         </div>
        <?php } ?>

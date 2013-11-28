@@ -44,6 +44,7 @@ for($i=0;$i<count($homefeed);$i++){
             </p>
             <div>
                 <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
+                <p><button type="button" class="btn btn-warning btn-mini">OPEN</button><button class="btn btn-primary btn-mini" style="margin-left: 5px;">RE-TWEET</button></p>
             </div>
         </div>
         <div class="engagement-body">
@@ -58,6 +59,7 @@ for($i=0;$i<count($homefeed);$i++){
             </p>
             <div>
                 <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
+                <p><button type="button" class="btn btn-warning btn-mini">OPEN</button><button class="btn btn-primary btn-mini" style="margin-left: 5px;">RE-TWEET</button></p>
             </div>
         </div>
         <!-- ==================== CONDENSED TABLE HEADLINE ==================== -->

@@ -192,4 +192,10 @@ class Media_stream extends CI_Controller {
     public function publish(){
 	    echo $this->input->post('compose_message');
     }
+      
+     public function ReadUnread(){
+	  $this->load->model('facebook_model');
+	  $new_val = $this->facebook_model->ReadUnread($this->input->post('post_id'));
+	  echo $new_val;
+     }
 }

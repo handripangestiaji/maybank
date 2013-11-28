@@ -449,10 +449,30 @@ $(function(){
                             }
                         );
                         
+                        $(".read-mark").click(function(){
+                            var me = $(this);
+                            $.ajax({
+                                    url : BASEURL + 'dashboard/media_stream/ReadUnread',
+                                    type: "POST",
+                                    data: {
+                                            post_id:me.siblings('.postId').val(),
+                                            },
+                                    success: function(result)
+                                    {
+                                        if(result == 1){
+                                            me.removeClass('redText').addClass('greyText');        
+                                        }
+                                        else{
+                                            me.removeClass('greyText').addClass('redText');
+                                        }
+                                    },
+                                });
+                        });
+                        
                         $(".btn-mark-as-read").click(function(){
                             var me = $(this);
                             $.ajax({
-                                    url : BASEURL + 'dashboard/socialmedia/ReadUnread',
+                                    url : BASEURL + 'dashboard/media_stream/ReadUnread',
                                     type: "POST",
                                     data: {
                                             post_id:$(this).parent().siblings('.postId').val(),
@@ -468,7 +488,7 @@ $(function(){
                         $(".btn-mark-as-unread").click(function(){
                             var me = $(this);
                             $.ajax({
-                                    url : BASEURL + 'dashboard/socialmedia/ReadUnread',
+                                    url : BASEURL + 'dashboard/media_stream/ReadUnread',
                                     type: "POST",
                                     data: {
                                             post_id:$(this).parent().siblings('.postId').val(),

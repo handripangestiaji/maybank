@@ -30,7 +30,7 @@ $config['base_url']    = "$root";
 | variable so that it is blank.
 |
 */
-$config['index_page'] = 'index.php';
+$config['index_page'] = '';
 
 /*
 |--------------------------------------------------------------------------
@@ -84,7 +84,7 @@ $config['language']	= 'english';
 | that require a character set to be provided.
 |
 */
-$config['charset'] = 'UTF-8';
+$config['charset'] = 'UTF-8Mb4';
 
 /*
 |--------------------------------------------------------------------------

@@ -19,7 +19,6 @@ class twitter_model extends CI_Model
     * return NULL
     */
     public function InitConnection($access_token, $access_secret){
-        
         $this->connection = $this->twitteroauth->create($this->config->item('twitter_consumer_token'),$this->config->item('twitter_consumer_secret'),$access_token,$access_secret);
     }
     
@@ -30,6 +29,7 @@ class twitter_model extends CI_Model
     public function Mentions($channel){
         $result = $this->connection->get('statuses/mentions_timeline',
                                          array("count" => 200));
+        print_r($this->connection);
         echo "<pre>";
         print_r($result);
         echo "</pre>";
@@ -121,7 +121,7 @@ class twitter_model extends CI_Model
 	    "post_stream_id" => $tweet->id_str,
 	    "channel_id" => $channel->channel_id,
 	    "type" => "twitter",
-	    "retrieved_at" => $retrieved_at->format("Y-m-d H:i:s e"),
+	    "retrieved_at" => $retrieved_at->format("Y-m-d H:i:s"),
 	    "created_at" => $created_at->format("Y-m-d H:i:s")
 	);
         
@@ -130,7 +130,7 @@ class twitter_model extends CI_Model
             "favorited" =>  $tweet->favorited,
             "in_reply_to" => $post_id == null ? NULL : $post_id->post_id,
             "twitter_entities" => $tweet->entities == "" ? "" : json_encode($tweet->entities),
-            "text" => $tweet->text,
+            "text" =>htmlentities( $tweet->text, ENT_NOQUOTES, 'UTF-8'),
             "retweet_count" => $tweet->retweet_count,
             "geolocation" => json_encode($tweet->place),
             "source" => $tweet->source,

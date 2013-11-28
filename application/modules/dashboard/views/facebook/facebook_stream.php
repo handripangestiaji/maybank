@@ -21,7 +21,7 @@
 
     <!-- ==================== RECENT COMMENTS CONTENT ==================== -->
     <ul class="floatingBoxContainers" id="recentComments" style="display:none">
-        <?php $this->load->view('dashboard/facebook/private_message', array('fb_feed' => $fb_feed))?> 
+        <?php $this->load->view('dashboard/facebook/private_message', array('fb_pm' => $fb_pm))?> 
     </ul>
     <ul class="floatingBoxContainers" id="maybankpost" style="display:none">
         <?php //$this->load->view('dashboard/facebook/own_post', array('own_post' => $own_post))?> 

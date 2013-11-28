@@ -55,12 +55,13 @@ class Media_stream extends CI_Controller {
 	
 	$data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter);
 	$data['own_post'] = $this->facebook_model->RetrievePostFB($filter);
+    $data['fb_pm'] = $this->facebook_model->RetrievePmFB($filter);
 	$data['channel_id'] = $channel_id;
 	$this->load->view('dashboard/facebook/facebook_stream',$data);
     }
     
     public function twitter_stream($channel_id = 2){
-	$data['mentions']=$this->twitter_model->ReadTwitterData('mentions');     
+	$data['mentions']=$this->twitter_model->ReadTwitterData($filter;$limit);     
 	$data['homefeed']=$this->twitter_model->ReadTwitterData('home_feed');     
 	$data['senttweets']=$this->twitter_model->ReadTwitterData('user_timeline');  
 	$data['directmessage']=$this->twitter_model->ReadDMFromDb('2');

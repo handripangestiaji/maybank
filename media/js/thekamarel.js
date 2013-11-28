@@ -667,9 +667,23 @@ $(function(){
                             },
                         });
                     });
-
-
                     
+                    
+                    $(".like_Post").click(function() {
+                        $.ajax({
+                            url : BASEURL + 'dashboard/socialmedia/likePost',
+                            type: "POST",
+                            data: {
+                                    post_id:$(this).val(),
+                                    str_id: $(this).siblings(".str_id").val()
+                                    },
+                            success: function()
+                            {
+                                $('.compose-post-status').show();
+                                $('.compose-post-status').fadeOut(5000);
+                            },
+                        });
+                    });                   
                                                                                 
                 });
                   
@@ -834,7 +848,7 @@ jQuery.fn.AsyncPost = function(options){
 };
 
 $(function() {
-    startRefresh();
+//    startRefresh();
 //    alert(location.href);
 });
 

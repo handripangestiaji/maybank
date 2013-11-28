@@ -1,619 +1,202 @@
-
+<?php 
+for($i=0; $i<count($fb_pm);$i++):?>
 <li>
-    <div class="circleAvatar"><img src="img/homer-avatar.jpg" alt=""></div>
+    <input type="hidden" class="postId" value="<?php echo $fb_pm[$i]->detail_id_from_facebook; ?>" />
+    <div class="circleAvatar"><img src="https://graph.facebook.com/<?=number_format($fb_pm[$i]->to, 0,'.','')?>/picture?small" alt=""></div>
     <p class="headLine">
-        <span class="author">John Doe</span>
+        <span class="author"><?php echo $fb_pm[$i]->name; ?></span>
         <i class="icon-circle"></i>
         <span>posted a <span class="cyanText">comment</span></span>
         <i class="icon-circle"></i>
-        <span>2 hours ago</span>
+        <span><?php echo $fb_pm[$i]->created_at; ?></span>
         <i class="icon-play-circle moreOptions pull-right"></i>
     </p>
-    <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
-    <p><span class="label label-important">CASE</span> <span class="label label-warning">OPEN</span> </p>
-    <p><a data-toggle="modal" role="button" href="#modalDialog"><i class="icon-eye-open"></i> View Entire Thread</a></p>
-
-    <!-- MODAL DIALOG PER CONVERSATION -->    
-    <div id="modalDialog" class="modal modalDialog hide fade" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-            <h3>John Doe</h3>
-        </div>
-        <div class="modal-body">
-                    <p class="headLine">
-                        <span class="author">John Doe</span>
-                        <i class="icon-circle"></i>
-                        <span>posted a <span class="cyanText">comment</span></span>
-                        <i class="icon-circle"></i>
-                        <span>2 hours ago</span>
-                        <i class="icon-play-circle moreOptions pull-right"></i>
-                    </p>
-                    <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
-                    <p class="headLine">
-                        <span class="author">Maybank</span>
-                        <i class="icon-circle"></i>
-                        <span>posted a <span class="cyanText">comment</span></span>
-                        <i class="icon-circle"></i>
-                        <span>2 hours ago</span>
-                        <i class="icon-play-circle moreOptions pull-right"></i>
-                    </p>
-                    <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
-
-                    <!--====== MODAL REPLY AND ASSIGN BUTTONS ========-->
-                    <h4 class="filled">
-                        <button type="button" class="reply-btn btn btn-primary"><i class="icon-mail-reply"></i> Reply</button>
-                        <button type="button" class="assign-btn btn btn-primary"><i class="icon-male"></i> Assign</button>
-                    </h4>
-                    <div class="reply filled hide">
-                        <form class="contentForm">
-                            <div class="controlButton pull-right"><i class="icon-remove-sign hide-form"></i></div>
-                            <textarea style="width: 95%;" rows="9" id="mailContent"></textarea>
-                            <button style="clear: both;" type="submit" class="btn btn-primary">Send</button>
-                        </form>
-                    </div>
-                    <div class="assign filled hide">
-                        <form class="contentForm">
-                             <div class="controlButton pull-right"><i class="icon-remove-sign hide-form"></i></div>
-                             <div class="control-group">
-                                <label class="control-label">Assign To</label>
-                                <div class="controls">
-                                    <select id="uniqueSelect">
-                                        <option id="opt1" value="opt1">John Doe</option>
-                                        <option id="opt2" value="opt2">May Bankette</option>
-                                        <option id="opt3" value="opt3">Jane Doyen</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="control-group last">
-                                <label class="control-label">Remarks <span class="label label-important">Not Public</span></label>
-                                <div class="controls">
-                                  <textarea class="span10"></textarea>
-                                </div>
-                            </div>
-                            <button style="clear: both;" type="submit" class="btn btn-primary">Send</button>
-                        </form>
-                    </div>
-                    <!--====== MODAL REPLY AND ASSIGN BUTTONS ========-->
-
-                    <!-- ==================== CONDENSED TABLE HEADLINE ==================== -->
-                    <div class="containerHeadline">
-                        <i class="icon-table"></i><h2>Action Log</h2>
-                        <div class="controlButton pull-right"><i class="icon-caret-down minimizeElement"></i></div>
-                    </div>
-                    <!-- ==================== END OF CONDENSED TABLE HEADLINE ==================== -->
-
-                    <!-- ==================== CONDENSED TABLE FLOATING BOX ==================== -->
-                    <div class="floatingBox table hide">
-                        <div class="container-fluid">
-                            <table class="table table-condensed">
-                              <thead>
-                                <tr>
-                                  <th>Time Stamp</th>
-                                  <th>Username</th>
-                                  <th>Action Taken</th>
-                                  <th></th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr>
-                                  <td>2013-09-30 19:52:46</td>
-                                  <td>Teo Eu Gene</td>
-                                  <td>Resolved</td>
-                                  <td><button class="btn btn-primary icon-book"></button></td>
-                                </tr>
-                                <tr>
-                                  <td>2013-09-30 19:52:46</td>
-                                  <td>Teo Eu Gene</td>
-                                  <td>Resolved</td>
-                                  <td><button class="btn btn-primary icon-book"></button></td>
-                                </tr>
-                              </tbody>
-                            </table>  
-                        </div>
-                    </div>
-                    <!-- ==================== END OF CONDENSED TABLE FLOATING BOX ==================== --> 
-        </div>
-    </div>
-    <!-- END MODAL DIALOG FOR CONVERSATION -->
-
-    <h4 class="filled">
-        <button type="button" class="reply-btn btn btn-primary"><i class="icon-mail-reply"></i> Reply</button>
-        <button type="button" class="assign-btn btn btn-primary"><i class="icon-male"></i> Assign</button>
-    </h4>
-    <div class="reply filled hide">
-        <form class="contentForm">
-            <div class="controlButton pull-right"><i class="icon-remove-sign hide-form"></i></div>
-            <textarea style="width: 95%;" rows="9" id="mailContent"></textarea>
-            <button style="clear: both;" type="submit" class="btn btn-primary">Send</button>
-        </form>
-    </div>
-    <div class="assign filled hide">
-        <form class="contentForm">
-             <div class="controlButton pull-right"><i class="icon-remove-sign hide-form"></i></div>
-             <div class="control-group">
-                <label class="control-label">Assign To</label>
-                <div class="controls">
-                    <select id="uniqueSelect">
-                        <option id="opt1" value="opt1">John Doe</option>
-                        <option id="opt2" value="opt2">May Bankette</option>
-                        <option id="opt3" value="opt3">Jane Doyen</option>
-                    </select>
-                </div>
-            </div>
-            <div class="control-group last">
-                <label class="control-label">Remarks <span class="label label-important">Not Public</span></label>
-                <div class="controls">
-                  <textarea class="span10"></textarea>
-                </div>
-            </div>
-            <button style="clear: both;" type="submit" class="btn btn-primary">Send</button>
-        </form>
-    </div>
-</li>
-<li>
-    <div class="circleAvatar"><img src="img/peter-avatar.jpg" alt=""></div>
-    <p class="headLine">
-        <span class="author">Peter Kay</span>
-        <i class="icon-circle"></i>
-        <span>posted a <span class="cyanText">comment</span></span>
-        <i class="icon-circle"></i>
-        <span class="icon-comments-alt"></span>
-        <span>12 Messages in Thread</span>
-        <i class="icon-circle"></i>
-        <span>5 hours ago</span>
-        <i class="icon-play-circle moreOptions pull-right"></i>
-        <span class="notifyCircle red">12</span></span>
+    <p><?=$fb_pm[$i]->messages?></p>
+    <p><button type="button" class="btn btn-warning btn-mini">OPEN</button><!--button class="btn btn-primary btn-mini" style="margin-left: 5px;">LIKE</button--> </p>
+    <p>
+        <span class="btn-engagement"><i class="icon-eye-open"></i> Engagement</span> |
+        <span class="btn-mark-as-read cyanText" style="display: <?php //if($fb_pm[$i]->is_read==1){echo 'none';} ?>"><i class="icon-bookmark"></i> Mark as Read</span>
+        <span class="btn-mark-as-unread cyanText" style="display: <?php //if($fb_pm[$i]->is_read==0){echo 'none';} ?>"><i class="icon-bookmark-empty"></i> Mark as Unread</span>
     </p>
-    <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
-    <p><span class="label label-important">CASE</span> <span class="label label-success">RESOLVED</span> </p>
-    <p><a data-toggle="modal" role="button" href="#modalDialog"><i class="icon-eye-open"></i> View Entire Thread</a></p>
 
-    <!-- MODAL DIALOG PER CONVERSATION -->    
-    <div id="modalDialog" class="modal modalDialog hide fade" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-            <h3>John Doe</h3>
+    <!-- ENGAGEMENT -->    
+    <div class="engagement hide">
+        <div class="engagement-header">
+            <span class="engagement-btn-close btn-close pull-right">Close <i class="icon-remove-sign"></i></span>
         </div>
-        <div class="modal-body">
-                    <p class="headLine">
-                        <span class="author">John Doe</span>
-                        <i class="icon-circle"></i>
-                        <span>posted a <span class="cyanText">comment</span></span>
-                        <i class="icon-circle"></i>
-                        <span>2 hours ago</span>
-                        <i class="icon-play-circle moreOptions pull-right"></i>
-                    </p>
-                    <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
-                    <p class="headLine">
-                        <span class="author">Maybank</span>
-                        <i class="icon-circle"></i>
-                        <span>posted a <span class="cyanText">comment</span></span>
-                        <i class="icon-circle"></i>
-                        <span>2 hours ago</span>
-                        <i class="icon-play-circle moreOptions pull-right"></i>
-                    </p>
-                    <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
-                    
-                    <!--====== MODAL REPLY AND ASSIGN BUTTONS ========-->
-                    <h4 class="filled">
-                        <button type="button" class="reply-btn btn btn-primary"><i class="icon-mail-reply"></i> Reply</button>
-                        <button type="button" class="assign-btn btn btn-primary"><i class="icon-male"></i> Assign</button>
-                    </h4>
-                    <div class="reply filled hide">
-                        <form class="contentForm">
-                            <div class="controlButton pull-right"><i class="icon-remove-sign hide-form"></i></div>
-                            <textarea style="width: 95%;" rows="9" id="mailContent"></textarea>
-                            <button style="clear: both;" type="submit" class="btn btn-primary">Send</button>
-                        </form>
-                    </div>
-                    <div class="assign filled hide">
-                        <form class="contentForm">
-                             <div class="controlButton pull-right"><i class="icon-remove-sign hide-form"></i></div>
-                             <div class="control-group">
-                                <label class="control-label">Assign To</label>
-                                <div class="controls">
-                                    <select id="uniqueSelect">
-                                        <option id="opt1" value="opt1">John Doe</option>
-                                        <option id="opt2" value="opt2">May Bankette</option>
-                                        <option id="opt3" value="opt3">Jane Doyen</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="control-group last">
-                                <label class="control-label">Remarks <span class="label label-important">Not Public</span></label>
-                                <div class="controls">
-                                  <textarea class="span10"></textarea>
-                                </div>
-                            </div>
-                            <button style="clear: both;" type="submit" class="btn btn-primary">Send</button>
-                        </form>
-                    </div>
-                    <!--====== MODAL REPLY AND ASSIGN BUTTONS ========-->
+        <br>
+        <?php 
+            $comment=$this->facebook_model->RetrievePmDetailFB($fb_pm[$i]->conversation_id);
+            for($j=0;$j<count($comment);$j++){
+        ?>
+        <div class="engagement-body">
+            <span class="engagement-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>    
+            <p class="headLine">
+                <span class="author"><?php echo $comment[$j]->name; ?></span>
+                <i class="icon-circle"></i>
+                <span>posted a <span class="cyanText">comment</span></span>
+                <i class="icon-circle"></i>
+                <span><?php echo $comment[$j]->created_at; ?></span>
+                <i class="icon-play-circle moreOptions pull-right"></i>
+            </p>
+            <div>
+                <p>"<?php echo $comment[$j]->messages; ?>"</p>
+            </div>
         </div>
+       <?php } ?>
+       <!-- ==================== CONDENSED TABLE HEADLINE ==================== -->
+        <div class="containerHeadline">
+            <i class="icon-table"></i><h2>Action Log</h2>
+            <div class="controlButton pull-right"><i class="icon-caret-down toggleTable"></i></div>
+        </div>
+        <!-- ==================== END OF CONDENSED TABLE HEADLINE ==================== -->
+
+        <!-- ==================== CONDENSED TABLE FLOATING BOX ==================== -->
+        <div class="floatingBox table hide">
+            <div class="container-fluid">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Time Stamp</th>
+                      <th>Username</th>
+                      <th>Action Taken</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>2013-09-30 19:52:46</td>
+                      <td>Teo Eu Gene</td>
+                      <td>Resolved</td>
+                      <td><button class="btn btn-primary icon-book"></button></td>
+                    </tr>
+                    <tr>
+                      <td>2013-09-30 19:52:46</td>
+                      <td>Teo Eu Gene</td>
+                      <td>Resolved</td>
+                      <td><button class="btn btn-primary icon-book"></button></td>
+                    </tr>
+                  </tbody>
+                </table>  
+            </div>
+        </div>
+        <!-- ==================== END OF CONDENSED TABLE FLOATING BOX ==================== --> 
     </div>
-    <!-- END MODAL DIALOG FOR CONVERSATION -->
+    <!-- END ENGAGEMENT -->
 
     <h4 class="filled">
-        <button type="button" class="reply-btn btn btn-primary"><i class="icon-mail-reply"></i> Reply</button>
-        <button type="button" class="assign-btn btn btn-primary"><i class="icon-male"></i> Assign</button>
+        <a style="font-size: 20px;"><i class="icon-trash greyText"></i></a>
+        <div class="pull-right">
+            <button type="button" class="btn btn-primary btn-reply"><i class="icon-mail-reply"></i></button>
+            <button type="button" class="btn btn-danger btn-case"><i class="icon-plus"></i> CASE</button>
+        </div>
+        <br clear="all" />
     </h4>
-    <div class="reply filled hide">
-        <form class="contentForm">
-            <div class="controlButton pull-right"><i class="icon-remove-sign hide-form"></i></div>
-            <textarea style="width: 95%;" rows="9" id="mailContent"></textarea>
-            <button style="clear: both;" type="submit" class="btn btn-primary">Send</button>
-        </form>
-    </div>
-    <div class="assign filled hide">
-        <form class="contentForm">
-             <div class="controlButton pull-right"><i class="icon-remove-sign hide-form"></i></div>
-             <div class="control-group">
-                <label class="control-label">Assign To</label>
-                <div class="controls">
-                    <select id="uniqueSelect">
-                        <option id="opt1" value="opt1">John Doe</option>
-                        <option id="opt2" value="opt2">May Bankette</option>
-                        <option id="opt3" value="opt3">Jane Doyen</option>
-                    </select>
+    
+    <!-- REPLY -->  
+    <div class="reply-field hide">
+        <div class="row-fluid">
+            <span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
+            <div class="pull-left">
+                <select style="width: 130px;">
+                    <option value="keyword">Feedback</option>
+                    <option value="user">Enquiry</option>
+                    <option value="keyword">Complaint</option>
+                </select>
+                <select style="width: 130px;">
+                    <option value="keyword">Accounts & Banking</option>
+                    <option value="user">Cards</option>
+                    <option value="keyword">Investment</option>
+                    <option value="keyword">insurance</option>
+                    <option value="user">Loans</option>
+                    <option value="keyword">Maybank2u</option>
+                    <option value="keyword">Others</option>
+                </select>
+            </div>
+            <textarea placeholder="Compose Message"></textarea>
+            <br clear="all" />
+            <div class="pull-left">
+                <i class="icon-link"></i>
+                <input type="text" class="span8"><button class="btn btn-primary btn-mini" style="margin-left: 5px;">SHORTEN</button>
+            </div>
+            <div class="pull-right">
+                <a href="javascript:void(0);" id="reply-open-img">
+                    <i class="icon-camera"></i> 
+                </a>
+            </div>
+            <br clear="all" />
+            <div id="reply-img-show">
+                <div class="reply-img-attached">
+                    <!-- close button for image attached -->
+                    <a id="reply-img-close" href="javascript:void(0);">
+                     <i class="icon-remove-sign"></i>
+                    </a>
                 </div>
             </div>
-            <div class="control-group last">
-                <label class="control-label">Remarks <span class="label label-important">Not Public</span></label>
-                <div class="controls">
-                  <textarea class="span10"></textarea>
-                </div>
+            <br clear="all" />
+            <div class="pull-left">
+                <i class="icon-facebook"></i> 2000     
             </div>
-            <button style="clear: both;" type="submit" class="btn btn-primary">Send</button>
-        </form>
+            <div class="pull-right">
+                <button class="btn btn-primary btn-small btn-send-reply">SEND</button>    
+            </div>
+            <br clear="all" />
+            <div class="reply-status hide">MESSAGE SENT</div>
+        </div>
     </div>
+    <!-- END REPLY -->
+    
+    <!-- CASE -->  
+    <div class="case-field hide">
+        <div class="row-fluid">
+            <span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
+            CASE ID      : #012345
+            <div class="pull-left">
+                <select style="width: 130px;">
+                    <option value="keyword">Feedback</option>
+                    <option value="user">Enquiry</option>
+                    <option value="keyword">Complaint</option>
+                </select>
+                <select style="width: 130px;">
+                    <option value="keyword">Accounts & Banking</option>
+                    <option value="user">Cards</option>
+                    <option value="keyword">Investment</option>
+                    <option value="keyword">insurance</option>
+                    <option value="user">Loans</option>
+                    <option value="keyword">Maybank2u</option>
+                    <option value="keyword">Others</option>
+                </select>
+            </div>
+            <br clear="all" />
+            <button class="btn btn-small btn-purple btn-add-related">Add Related Conversation</button>
+            <br clear="all" />
+            <div class="pull-left">
+                Assign To:
+            </div>
+            <div class="pull-right">
+                <select>
+                    <option value="keyword">Nicole Lee</option>
+                    <option value="user">Azahan Azad</option>
+                    <option value="keyword">Azahamad Arif</option>
+                </select>
+            </div>
+            <br clear="all" />
+            <div class="pull-left">
+                Email:
+            </div>
+            <div class="pull-right">
+                <input type="text">
+            </div>
+            <br clear="all" />
+            Message :
+            <br>
+            <textarea placeholder="Compose Message"></textarea>
+            <br clear="all" />
+            <div class="pull-right">
+                <button class="btn-purple btn btn-small"><i class="icon-ok-circle icon-large"></i> Assign</button>    
+            </div>
+        </div>
+    </div>
+    <!-- END CASE -->  
 </li>
-<li>
-    <div class="circleAvatar"><img src="img/zoidberg-avatar.jpg" alt=""></div>
-    <p class="headLine">
-        <span class="author">George McCain</span>
-        <i class="icon-circle"></i>
-        <span>posted a <span class="cyanText">comment</span></span>
-        <i class="icon-circle"></i>
-        <span class="icon-comments-alt"></span>
-        <span>2 Messages in Thread</span>
-        <i class="icon-circle"></i>
-        <span>5 hours ago</span>
-        <i class="icon-play-circle moreOptions pull-right"></i>
-        <span class="notifyCircle red">2</span></span>
-    </p>
-    <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
-    <p></p>
-    <p><a data-toggle="modal" role="button" href="#modalDialog"><i class="icon-eye-open"></i> View Entire Thread</a></p>
-
-    <!-- MODAL DIALOG PER CONVERSATION -->    
-    <div id="modalDialog" class="modal modalDialog hide fade" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-            <h3>John Doe</h3>
-        </div>
-        <div class="modal-body">
-                    <p class="headLine">
-                        <span class="author">John Doe</span>
-                        <i class="icon-circle"></i>
-                        <span>posted a <span class="cyanText">comment</span></span>
-                        <i class="icon-circle"></i>
-                        <span>2 hours ago</span>
-                        <i class="icon-play-circle moreOptions pull-right"></i>
-                    </p>
-                    <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
-                    <p class="headLine">
-                        <span class="author">Maybank</span>
-                        <i class="icon-circle"></i>
-                        <span>posted a <span class="cyanText">comment</span></span>
-                        <i class="icon-circle"></i>
-                        <span>2 hours ago</span>
-                        <i class="icon-play-circle moreOptions pull-right"></i>
-                    </p>
-                    <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
-                    
-                    <!--====== MODAL REPLY AND ASSIGN BUTTONS ========-->
-                    <h4 class="filled">
-                        <button type="button" class="reply-btn btn btn-primary"><i class="icon-mail-reply"></i> Reply</button>
-                        <button type="button" class="assign-btn btn btn-primary"><i class="icon-male"></i> Assign</button>
-                    </h4>
-                    <div class="reply filled hide">
-                        <form class="contentForm">
-                            <div class="controlButton pull-right"><i class="icon-remove-sign hide-form"></i></div>
-                            <textarea style="width: 95%;" rows="9" id="mailContent"></textarea>
-                            <button style="clear: both;" type="submit" class="btn btn-primary">Send</button>
-                        </form>
-                    </div>
-                    <div class="assign filled hide">
-                        <form class="contentForm">
-                             <div class="controlButton pull-right"><i class="icon-remove-sign hide-form"></i></div>
-                             <div class="control-group">
-                                <label class="control-label">Assign To</label>
-                                <div class="controls">
-                                    <select id="uniqueSelect">
-                                        <option id="opt1" value="opt1">John Doe</option>
-                                        <option id="opt2" value="opt2">May Bankette</option>
-                                        <option id="opt3" value="opt3">Jane Doyen</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="control-group last">
-                                <label class="control-label">Remarks <span class="label label-important">Not Public</span></label>
-                                <div class="controls">
-                                  <textarea class="span10"></textarea>
-                                </div>
-                            </div>
-                            <button style="clear: both;" type="submit" class="btn btn-primary">Send</button>
-                        </form>
-                    </div>
-                    <!--====== MODAL REPLY AND ASSIGN BUTTONS ========-->
-        </div>
-    </div>
-    <!-- END MODAL DIALOG FOR CONVERSATION -->
-
-    <h4 class="filled">
-        <button type="button" class="reply-btn btn btn-primary"><i class="icon-mail-reply"></i> Reply</button>
-        <button type="button" class="assign-btn btn btn-primary"><i class="icon-male"></i> Assign</button>
-    </h4>
-    <div class="reply filled hide">
-        <form class="contentForm">
-            <div class="controlButton pull-right"><i class="icon-remove-sign hide-form"></i></div>
-            <textarea style="width: 95%;" rows="9" id="mailContent"></textarea>
-            <button style="clear: both;" type="submit" class="btn btn-primary">Send</button>
-        </form>
-    </div>
-    <div class="assign filled hide">
-        <form class="contentForm">
-             <div class="controlButton pull-right"><i class="icon-remove-sign hide-form"></i></div>
-             <div class="control-group">
-                <label class="control-label">Assign To</label>
-                <div class="controls">
-                    <select id="uniqueSelect">
-                        <option id="opt1" value="opt1">John Doe</option>
-                        <option id="opt2" value="opt2">May Bankette</option>
-                        <option id="opt3" value="opt3">Jane Doyen</option>
-                    </select>
-                </div>
-            </div>
-            <div class="control-group last">
-                <label class="control-label">Remarks <span class="label label-important">Not Public</span></label>
-                <div class="controls">
-                  <textarea class="span10"></textarea>
-                </div>
-            </div>
-            <button style="clear: both;" type="submit" class="btn btn-primary">Send</button>
-        </form>
-    </div>
-</li>
-<li>
-    <div class="circleAvatar"><img src="img/zoidberg-avatar.jpg" alt=""></div>
-    <p class="headLine">
-        <span class="author">George McCain</span>
-        <i class="icon-circle"></i>
-        <span>posted a <span class="cyanText">comment</span></span>
-        <i class="icon-circle"></i>
-        <span class="icon-comments-alt"></span>
-        <span>2 Messages in Thread</span>
-        <i class="icon-circle"></i>
-        <span>5 hours ago</span>
-        <i class="icon-play-circle moreOptions pull-right"></i>
-        <span class="notifyCircle red">2</span></span>
-    </p>
-    <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
-    <p><a data-toggle="modal" role="button" href="#modalDialog"><i class="icon-eye-open"></i> View Entire Thread</a></p>
-
-    <!-- MODAL DIALOG PER CONVERSATION -->    
-    <div id="modalDialog" class="modal modalDialog hide fade" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-            <h3>John Doe</h3>
-        </div>
-        <div class="modal-body">
-                    <p class="headLine">
-                        <span class="author">John Doe</span>
-                        <i class="icon-circle"></i>
-                        <span>posted a <span class="cyanText">comment</span></span>
-                        <i class="icon-circle"></i>
-                        <span>2 hours ago</span>
-                        <i class="icon-play-circle moreOptions pull-right"></i>
-                    </p>
-                    <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
-                    <p class="headLine">
-                        <span class="author">Maybank</span>
-                        <i class="icon-circle"></i>
-                        <span>posted a <span class="cyanText">comment</span></span>
-                        <i class="icon-circle"></i>
-                        <span>2 hours ago</span>
-                        <i class="icon-play-circle moreOptions pull-right"></i>
-                    </p>
-                    <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
-                    
-                    <!--====== MODAL REPLY AND ASSIGN BUTTONS ========-->
-                    <h4 class="filled">
-                        <button type="button" class="reply-btn btn btn-primary"><i class="icon-mail-reply"></i> Reply</button>
-                        <button type="button" class="assign-btn btn btn-primary"><i class="icon-male"></i> Assign</button>
-                    </h4>
-                    <div class="reply filled hide">
-                        <form class="contentForm">
-                            <div class="controlButton pull-right"><i class="icon-remove-sign hide-form"></i></div>
-                            <textarea style="width: 95%;" rows="9" id="mailContent"></textarea>
-                            <button style="clear: both;" type="submit" class="btn btn-primary">Send</button>
-                        </form>
-                    </div>
-                    <div class="assign filled hide">
-                        <form class="contentForm">
-                             <div class="controlButton pull-right"><i class="icon-remove-sign hide-form"></i></div>
-                             <div class="control-group">
-                                <label class="control-label">Assign To</label>
-                                <div class="controls">
-                                    <select id="uniqueSelect">
-                                        <option id="opt1" value="opt1">John Doe</option>
-                                        <option id="opt2" value="opt2">May Bankette</option>
-                                        <option id="opt3" value="opt3">Jane Doyen</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="control-group last">
-                                <label class="control-label">Remarks <span class="label label-important">Not Public</span></label>
-                                <div class="controls">
-                                  <textarea class="span10"></textarea>
-                                </div>
-                            </div>
-                            <button style="clear: both;" type="submit" class="btn btn-primary">Send</button>
-                        </form>
-                    </div>
-                    <!--====== MODAL REPLY AND ASSIGN BUTTONS ========-->
-        </div>
-    </div>
-    <!-- END MODAL DIALOG FOR CONVERSATION -->
-
-    <h4 class="filled">
-        <button type="button" class="reply-btn btn btn-primary"><i class="icon-mail-reply"></i> Reply</button>
-        <button type="button" class="assign-btn btn btn-primary"><i class="icon-male"></i> Assign</button>
-    </h4>
-    <div class="reply filled hide">
-        <form class="contentForm">
-            <div class="controlButton pull-right"><i class="icon-remove-sign hide-form"></i></div>
-            <textarea style="width: 95%;" rows="9" id="mailContent"></textarea>
-            <button style="clear: both;" type="submit" class="btn btn-primary">Send</button>
-        </form>
-    </div>
-    <div class="assign filled hide">
-        <form class="contentForm">
-             <div class="controlButton pull-right"><i class="icon-remove-sign hide-form"></i></div>
-             <div class="control-group">
-                <label class="control-label">Assign To</label>
-                <div class="controls">
-                    <select id="uniqueSelect">
-                        <option id="opt1" value="opt1">John Doe</option>
-                        <option id="opt2" value="opt2">May Bankette</option>
-                        <option id="opt3" value="opt3">Jane Doyen</option>
-                    </select>
-                </div>
-            </div>
-            <div class="control-group last">
-                <label class="control-label">Remarks <span class="label label-important">Not Public</span></label>
-                <div class="controls">
-                  <textarea class="span10"></textarea>
-                </div>
-            </div>
-            <button style="clear: both;" type="submit" class="btn btn-primary">Send</button>
-        </form>
-    </div>
-</li>
-<li>
-    <div class="circleAvatar"><img src="img/zoidberg-avatar.jpg" alt=""></div>
-    <p class="headLine">
-        <span class="author">George McCain</span>
-        <i class="icon-circle"></i>
-        <span>posted a <span class="cyanText">comment</span></span>
-        <i class="icon-circle"></i>
-        <span class="icon-comments-alt"></span>
-        <span>2 Messages in Thread</span>
-        <i class="icon-circle"></i>
-        <span>5 hours ago</span>
-        <i class="icon-play-circle moreOptions pull-right"></i>
-        <span class="notifyCircle red">2</span></span>
-    </p>
-    <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
-    <p><span class="label label-important">CASE</span> <span class="label label-success">RESOLVED</span> </p>
-    <p><a data-toggle="modal" role="button" href="#modalDialog"><i class="icon-eye-open"></i> View Entire Thread</a></p>
-
-    <!-- MODAL DIALOG PER CONVERSATION -->    
-    <div id="modalDialog" class="modal modalDialog hide fade" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-            <h3>John Doe</h3>
-        </div>
-        <div class="modal-body">
-                    <p class="headLine">
-                        <span class="author">John Doe</span>
-                        <i class="icon-circle"></i>
-                        <span>posted a <span class="cyanText">comment</span></span>
-                        <i class="icon-circle"></i>
-                        <span>2 hours ago</span>
-                        <i class="icon-play-circle moreOptions pull-right"></i>
-                    </p>
-                    <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
-                    <p class="headLine">
-                        <span class="author">Maybank</span>
-                        <i class="icon-circle"></i>
-                        <span>posted a <span class="cyanText">comment</span></span>
-                        <i class="icon-circle"></i>
-                        <span>2 hours ago</span>
-                        <i class="icon-play-circle moreOptions pull-right"></i>
-                    </p>
-                    <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
-                    
-                    <!--====== MODAL REPLY AND ASSIGN BUTTONS ========-->
-                    <h4 class="filled">
-                        <button type="button" class="reply-btn btn btn-primary"><i class="icon-mail-reply"></i> Reply</button>
-                        <button type="button" class="assign-btn btn btn-primary"><i class="icon-male"></i> Assign</button>
-                    </h4>
-                    <div class="reply filled hide">
-                        <form class="contentForm">
-                            <div class="controlButton pull-right"><i class="icon-remove-sign hide-form"></i></div>
-                            <textarea style="width: 95%;" rows="9" id="mailContent"></textarea>
-                            <button style="clear: both;" type="submit" class="btn btn-primary">Send</button>
-                        </form>
-                    </div>
-                    <div class="assign filled hide">
-                        <form class="contentForm">
-                             <div class="controlButton pull-right"><i class="icon-remove-sign hide-form"></i></div>
-                             <div class="control-group">
-                                <label class="control-label">Assign To</label>
-                                <div class="controls">
-                                    <select id="uniqueSelect">
-                                        <option id="opt1" value="opt1">John Doe</option>
-                                        <option id="opt2" value="opt2">May Bankette</option>
-                                        <option id="opt3" value="opt3">Jane Doyen</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="control-group last">
-                                <label class="control-label">Remarks <span class="label label-important">Not Public</span></label>
-                                <div class="controls">
-                                  <textarea class="span10"></textarea>
-                                </div>
-                            </div>
-                            <button style="clear: both;" type="submit" class="btn btn-primary">Send</button>
-                        </form>
-                    </div>
-                    <!--====== MODAL REPLY AND ASSIGN BUTTONS ========-->
-        </div>
-    </div>
-    <!-- END MODAL DIALOG FOR CONVERSATION -->
-
-    <h4 class="filled">
-        <button type="button" class="reply-btn btn btn-primary"><i class="icon-mail-reply"></i> Reply</button>
-        <button type="button" class="assign-btn btn btn-primary"><i class="icon-male"></i> Assign</button>
-    </h4>
-    <div class="reply filled hide">
-        <form class="contentForm">
-            <div class="controlButton pull-right"><i class="icon-remove-sign hide-form"></i></div>
-            <textarea style="width: 95%;" rows="9" id="mailContent"></textarea>
-            <button style="clear: both;" type="submit" class="btn btn-primary">Send</button>
-        </form>
-    </div>
-    <div class="assign filled hide">
-        <form class="contentForm">
-             <div class="controlButton pull-right"><i class="icon-remove-sign hide-form"></i></div>
-             <div class="control-group">
-                <label class="control-label">Assign To</label>
-                <div class="controls">
-                    <select id="uniqueSelect">
-                        <option id="opt1" value="opt1">John Doe</option>
-                        <option id="opt2" value="opt2">May Bankette</option>
-                        <option id="opt3" value="opt3">Jane Doyen</option>
-                    </select>
-                </div>
-            </div>
-            <div class="control-group last">
-                <label class="control-label">Remarks <span class="label label-important">Not Public</span></label>
-                <div class="controls">
-                  <textarea class="span10"></textarea>
-                </div>
-            </div>
-            <button style="clear: both;" type="submit" class="btn btn-primary">Send</button>
-        </form>
-    </div>
-</li>
+<?php endfor;?>

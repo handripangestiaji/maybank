@@ -46,13 +46,16 @@ class Socialmedia extends MY_Controller {
 	  $this->load->model('twitter_model');
 	  $this->load->model('account_model');
 	  $filter = array();
-	  $data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter);
-	  $data['own_post'] = $this->facebook_model->RetrievePostFB($filter);
+      $limit=20;
+	  $data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter,$limit);
+	  //$data['own_post'] = $this->facebook_model->RetrievePostFB($filter);
+      $data['fb_pm'] = $this->facebook_model->RetrievePmFB($filter,$limit);
 	  
-	  $data['mentions']=$this->twitter_model->ReadTwitterData('mentions');     
-	  $data['homefeed']=$this->twitter_model->ReadTwitterData('home_feed');     
-	  $data['senttweets']=$this->twitter_model->ReadTwitterData('user_timeline');  
-	  $data['directmessage']=$this->twitter_model->ReadDMFromDb('2');
+   
+	  $data['mentions']=$this->twitter_model->ReadTwitterData(array('b.type'=>'mentions','a.channel_id'=>'2'),'20');     
+	  $data['homefeed']=$this->twitter_model->ReadTwitterData(array('b.type'=>'home_feed','a.channel_id'=>'2'),'20');     
+	  $data['senttweets']=$this->twitter_model->ReadTwitterData(array('b.type'=>'user_timeline','a.channel_id'=>'2'),'20');  
+	  $data['directmessage']=$this->twitter_model->ReadDMFromDb(array('b.type'=>'user_timeline','a.channel_id'=>'2'),'20');
 	  $data['channels'] = $this->account_model->GetChannel();
 	  $this->load->view('dashboard/index',$data);
      }
@@ -167,4 +170,34 @@ class Socialmedia extends MY_Controller {
 	  echo $result;
 	  */
     }
+    
+    public function likePost(){
+	  $post_id=$_POST['post_id'];
+      $access_token_fb = fb_dummy_accesstoken();
+	  $config = array(
+	       'appId' => $this->config->item('fb_appid'),
+	       'secret' => $this->config->item('fb_secretkey')
+	  );
+	  $this->load->library('facebook',$config);
+	  $this->facebook->setaccesstoken($access_token_fb);
+	  $this->facebook->api('/'.$post_id.'/likes','POST');
+    }
+    
+    
+    public function replyPost(){
+	  $post_id="272288926209649_394270234011517";//$_POST['post_id'];
+      //$comment=$_POST['comment'];
+      $access_token_fb = fb_dummy_accesstoken();
+	  $config = array(
+	       'appId' => $this->config->item('fb_appid'),
+	       'secret' => $this->config->item('fb_secretkey')
+	  );
+	  $this->load->library('facebook',$config);
+	  $this->facebook->setaccesstoken($access_token_fb);
+      //$this->facebook->api('/'.$post_id.'/', array('message' => 'comment' ));
+      echo "<br><br><br><br><br>";
+      print_r($this->facebook->api('/'.$post_id.'/comments',array('message' =>'comment')));
+    }
+    
+    
 }

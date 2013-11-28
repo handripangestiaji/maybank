@@ -52,13 +52,16 @@
             <td><?=$channel->connection_type.' '.($channel->is_fb_page == 1? " Page" : "") ?></td>
             <td><?=$channel->social_id?></td>
             <td>
-                <button value="<?=base_url('channels/channelmg/delete?id='.$channel->channel_id)?>" class="btn btn-danger delete" type="button" id="channel_<?=$channel->channel_id?>"><i class="icon-trash"></i> Delete</button>
+                <button value="<?=base_url('channels/channelmg/DeleteChannel?channel_id='.$channel->channel_id."&token=".$this->session->userdata('channel_token_delete'))?>" class="btn btn-danger delete" type="button" id="channel_<?=$channel->channel_id?>"><i class="icon-trash"></i> Delete</button>
             </td>
         </tr>
         <?php endforeach;?>
     </tbody>
   
 </table>
+<?php
+    if($total_row > 15):
+?>
 <div class="page pull-right" style="margin-top: 30px;">
     <a href="#">First</a>
     <a href="#" class="active">1</a>
@@ -67,3 +70,4 @@
     <a href="#">4</a>
     <a href="#">Last</a>
 </div>
+<?php endif;?>

@@ -53,7 +53,7 @@ class Users extends MY_Controller {
 	  $index = rand(0, $count - 1);
 	  $pass .= mb_substr($chars, $index, 1);
 	  }
-	  $created_by = $this->session->userdata('user_id');
+	  $created_by = $this->session->userdata('user_id') == 0 ? NULL : $this->session->userdata('user_id');
 	  
 	  $timezone = new DateTimeZone("Europe/London");
 	  $time = new DateTime(date("Y-m-d H:i:s e"), $timezone);
@@ -142,7 +142,7 @@ class Users extends MY_Controller {
     
     
     
-    //----------------------ROLE----------------------------
+    //============================ ROLE ===================================
     function menu_role()
     {
 	  $data = array(
@@ -153,7 +153,7 @@ class Users extends MY_Controller {
     }
     
     
-    //-------------------APP_ROLE---------------------------
+    //============================ APP_ROLE ===============================
     function create_appRole()
     {
 	  $this->load->view('users/create_appRole');
@@ -175,6 +175,87 @@ class Users extends MY_Controller {
 	  redirect('users/menu_role');
     }
     
+    //============================= GROUP =================================
+    function menu_group()
+    {
+	  $data = array(
+			 'group' => $this->users_model->select_group(),
+			 'channel' => $this->users_model->select_channel(),
+			 'group_detail' => $this->users_model->select_user_group_d(),
+			 'count' => $this->db->affected_rows($this->users_model->select_group())
+			);
+	  $this->load->view('users/group',$data);
+    }
+    
+    function insert_group()
+    {	
+	  $timezone = new DateTimeZone("Europe/London");
+	  $time = new DateTime(date("Y-m-d H:i:s e"), $timezone);
+	  $channel = $this->input->post('channel');
+	  $created_by = $this->session->userdata('user_id');
+	  $created_at = $time->format("Y-m-d H:i:s"); 
+	  
+	  $data = array(
+			 'group_name' => $this->input->post('group_name'),
+			 'created_at' => $created_at,
+			 'is_active' => 1,
+			 'created_by' => $created_by
+			);
+	  $this->users_model->insert_group($data);
+	  $last_id=$this->db->insert_id();
+	  
+	  for($i=0;$i<count($channel);$i++)
+	  {
+	       $data_channel = array(
+					'user_group_id' => $last_id,
+					'allowed_channel' => $channel[$i],
+					'created_at' => $created_at
+				     );
+	       $this->users_model->insert_group_detail($data_channel);
+	  }
+	  redirect('users/menu_group');
+    }
+    
+    function delete_group($id)
+    {
+	  $data = $this->users_model->delete_group($id);
+	  redirect('users/menu_group?return='.$data);
+    }
+    
+    function edit_group($id)
+    {
+	  $data = array(
+			 'group' => $this->users_model->edit_group($id),
+			 'group_detail' => $this->users_model->edit_group_detail($id),
+			 'channel' => $this->users_model->select_channel()
+			);
+	  $this->load->view('users/group_edit',$data);
+    }
+    
+    function update_group()
+    {
+	  $channel = $this->input->post('channel');
+	  
+	  $group_id = $this->input->post('group_id');
+	  $data = array(
+			'group_name' => $this->input->post('group_name'),
+		       );
+	  $this->users_model->update_group($group_id,$data);
+	  
+	  $this->users_model->delete_group_detail($group_id);
+	  
+	  for($i=0;$i<count($channel);$i++)
+	  {
+	       $data_channel = array(
+					'user_group_id' => $group_id,
+					'allowed_channel' => $channel[$i]
+				     );
+	       $this->users_model->insert_group_detail($data_channel);
+	  }
+	  redirect('users/menu_group');
+    }
+    
+    //============================= LOGOUT ================================
     function logout()
         {
 	    $timezone = new DateTimeZone("Europe/London");

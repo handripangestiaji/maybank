@@ -113,6 +113,14 @@ class ChannelMg extends MY_Controller {
         }
     }
     
+    public function DeleteChannel(){
+        $channel_id = $this->input->get('channel_id');
+        if($this->session->userdata('channel_token_delete') == $this->input->get('token')){
+            //DELETE channel    
+        }
+        //redirect('channels/channelmg');
+    }
+    
     
     
     

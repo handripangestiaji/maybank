@@ -10,23 +10,27 @@ class listofchannel extends CI_Controller {
     }
     
     function Facebook(){
-        $data['title'] = "Facebook";
-        $data['channel_list'] = $this->account_model->GetChannel(
-            array(
-                'connection_type' => 'facebook'
-            )
+        $filter = array(
+            'connection_type' => 'facebook'
         );
+        $data['title'] = "Facebook";
+        $data['channel_list'] = $this->account_model->GetChannel($filter);
+        $data['total_row'] = $this->account_model->GetTableTotalRow('channel', $filter);
+        $this->session->set_userdata('channel_token_delete', md5(time()));
         $this->load->view("channels/channel_management_list", $data);
+        
     }
     
     function Twitter(){
-        $data['title'] = "Twitter";
-        $data['channel_list'] = $this->account_model->GetChannel(
-            array(
-                'connection_type' => 'twitter'
-            )
+        $filter = array(
+            'connection_type' => 'twitter'
         );
+        $data['title'] = "Twitter";
+        $data['channel_list'] = $this->account_model->GetChannel($filter);
+        $data['total_row'] = $this->account_model->GetTableTotalRow('channel', $filter);
+        $this->session->set_userdata('channel_token_delete', md5(time()));
         $this->load->view("channels/channel_management_list", $data);
+        
     }
     
     public function FacebookPagePick(){

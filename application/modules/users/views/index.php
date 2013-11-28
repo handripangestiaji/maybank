@@ -4,7 +4,7 @@
         <div class="cms-filter pull-left">
             <input class="btn btn-primary" type="button" name="btn_user" value="User" /> <br />
             <input class="btn" type="button" onclick="menu_role()" name="btn_role" value="Role"  />   <br />
-            <input class="btn" type="button" name="btn_group" value="Group" />
+            <input class="btn" type="button" onclick="menu_group()" name="btn_group" value="Group" />
         </div>
         
         <div class="cms-table pull-right">
@@ -62,7 +62,7 @@
                         <td><?php echo $row->display_name;?></td>
                         <td><?php echo $row->email;?></td>
                         <td><?php echo $row->role_id;?></td>
-                        <td><?php echo $row->group_id;?></td>
+                        <td><?php echo $row->group_name;?></td>
                         <?php if($row->is_active==1){?>
                             <td><?php echo 'Active';?></td>
                         <?php }else{?>
@@ -98,5 +98,10 @@
     function menu_role()
     {
         window.location.href = "<?php echo site_url();?>/users/menu_role";
+    }
+    
+    function menu_group()
+    {
+        window.location.href = "<?php echo site_url();?>/users/menu_group";
     }
 </script>

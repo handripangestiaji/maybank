@@ -53,7 +53,6 @@ class Socialmedia extends MY_Controller {
 	  $data['homefeed']=$this->twitter_model->ReadTwitterData('home_feed');     
 	  $data['senttweets']=$this->twitter_model->ReadTwitterData('user_timeline');  
 	  $data['directmessage']=$this->twitter_model->ReadDMFromDb('2');
-	  
 	  $data['channels'] = $this->account_model->GetChannel();
 	  $this->load->view('dashboard/index',$data);
      }

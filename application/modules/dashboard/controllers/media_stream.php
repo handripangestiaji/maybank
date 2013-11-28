@@ -59,11 +59,27 @@ class Media_stream extends CI_Controller {
 	$this->load->view('dashboard/facebook/facebook_stream',$data);
     }
     
-    public function twitter_stream($channel_id = 2){
-	$data['mentions']=$this->twitter_model->ReadTwitterData('mentions');     
-	$data['homefeed']=$this->twitter_model->ReadTwitterData('home_feed');     
-	$data['senttweets']=$this->twitter_model->ReadTwitterData('user_timeline');  
-	$data['directmessage']=$this->twitter_model->ReadDMFromDb('2');
+    public function twitter_stream($channel_id,$is_read = null){
+	$limit = 20;
+	$filter = array(
+	   'a.channel_id' => $channel_id,
+	);
+	
+	if($is_read != NULL){
+	    if($is_read != 2){
+		$filter['is_read'] = $is_read;
+	    }
+	}
+	
+	$filter['b.type'] = 'mentions';
+	$data['mentions']=$this->twitter_model->ReadTwitterData($filter,$limit);
+	$filter['b.type'] = 'homefeed';
+	$data['homefeed']=$this->twitter_model->ReadTwitterData($filter,$limit);     
+	$filter['b.type'] = 'user_timeline';
+	$data['senttweets']=$this->twitter_model->ReadTwitterData($filter,$limit);  
+	$filter['b.type'] = 'user_timeline';
+	$data['directmessage']=$this->twitter_model->ReadDMFromDb($filter,$limit);
+	$data['channel_id'] = $channel_id;
 	$this->load->view('dashboard/twitter/twitter_stream',$data);
     }
 	
@@ -192,4 +208,10 @@ class Media_stream extends CI_Controller {
     public function publish(){
 	    echo $this->input->post('compose_message');
     }
+      
+     public function ReadUnread(){
+	  $this->load->model('facebook_model');
+	  $new_val = $this->facebook_model->ReadUnread($this->input->post('post_id'));
+	  echo $new_val;
+     }
 }

@@ -380,7 +380,7 @@ $(function(){
                 });
 
                 $(document).ready(function() {
-                    $('.change-read-unread-stream').change(function(){
+                    $('.change-read-unread-stream').on('change', function(){
                         var social_id = $(this).closest('.containerHeadline').next().children('.channel-id').val();
                         var is_read = $(this).val();
                         if($(this).closest('div').prev().find('i').attr('class') == 'icon-facebook'){
@@ -389,25 +389,25 @@ $(function(){
                         }
                         else if($(this).closest('div').prev().find('i').attr('class') == 'icon-twitter'){
                             $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');        
-                            $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/twitter_stream/' + social_id);
+                            $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/twitter_stream/' + social_id + '/' + is_read);
                         }
                     });
                     
-                    $('.facebook_stream').click(function() {
+                    $('.facebook_stream').on('click',function() {
                         $(this).closest('div').children('button').html('<i class="icon-facebook"></i><h2>Facebook&nbsp;</h2>&nbsp;<i class="icon-caret-down"></i>');
                         $(this).closest('.containerHeadline').css( "background-color", "#3B5998" );
                         $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');        
                         $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/facebook_stream/' + $(this).siblings('.channel-stream-id').val());
                     });
                     
-                    $('.twitter_stream').click(function() {
+                    $('.twitter_stream').on('click',function() {
                         $(this).closest('div').children('button').html('<i class="icon-twitter"></i><h2>Twitter&nbsp;</h2><i class="icon-caret-down"></i>');
                         $(this).closest('.containerHeadline').css( "background-color", "#4099FF" );
                         $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');        
                         $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/twitter_stream/' + $(this).siblings('.channel-stream-id').val());
                     });
                     
-                    $('.youtube_stream').click(function() {
+                    $('.youtube_stream').on('click',function() {
                         $(this).closest('div').children('button').html('<i class="icon-youtube"></i><h2>Youtube&nbsp;</h2><i class="icon-caret-down"></i>');
                         $(this).closest('.containerHeadline').css( "background-color", "#FF3333" );
                         $(this).closest('.containerHeadline').next().html('youtube timeline here');
@@ -415,21 +415,21 @@ $(function(){
                 });
                             
                 $(document).ready(function() {
-                        $('.btn-reply').click(
+                        $(this).on('click','.btn-reply',
                             function() {
                                 $(this).closest('h4').next().show();
                                 $(this).closest('h4').next().next().hide();
                             }
                         );
     
-                        $('.btn-case').click(
+                        $(this).on('click','.btn-case',
                             function() {
                                 $(this).closest('h4').next().hide();
                                 $(this).closest('h4').next().next().show();
                             }
                         );
                             
-                        $(".assign-btn").click(
+                        $(this).on('click','.assign-btn',
                             function() {
                                 $(this).parent().siblings(".reply").hide("slow");
                                 $(this).parent().siblings(".assign").hide("slow");
@@ -437,22 +437,43 @@ $(function(){
                             }
                         );
     
-                        $(".hide-form").click(
+                        $(this).on('click','.hide-form',
                             function() {
                                 $(this).parent().parent().parent().hide();
                             }
                         );
                         
-                        $(".btn-engagement").click(
+                        $(this).on('click','.btn-engagement',
                             function() {
                                 $(this).parent().siblings('.engagement').show();
                             }
                         );
                         
-                        $(".btn-mark-as-read").click(function(){
+                        $(this).on('click','.read-mark',
+                            function(){
                             var me = $(this);
                             $.ajax({
-                                    url : BASEURL + 'dashboard/socialmedia/ReadUnread',
+                                    url : BASEURL + 'dashboard/media_stream/ReadUnread',
+                                    type: "POST",
+                                    data: {
+                                            post_id:me.siblings('.postId').val(),
+                                            },
+                                    success: function(result)
+                                    {
+                                        if(result == 1){
+                                            me.removeClass('redText').addClass('greyText');        
+                                        }
+                                        else{
+                                            me.removeClass('greyText').addClass('redText');
+                                        }
+                                    },
+                                });
+                        });
+                        
+                        $(this).on('click','.btn-mark-as-read',function(){
+                            var me = $(this);
+                            $.ajax({
+                                    url : BASEURL + 'dashboard/media_stream/ReadUnread',
                                     type: "POST",
                                     data: {
                                             post_id:$(this).parent().siblings('.postId').val(),
@@ -465,10 +486,10 @@ $(function(){
                                 });
                         });
                         
-                        $(".btn-mark-as-unread").click(function(){
+                        $(this).on('click','.btn-mark-as-unread',function(){
                             var me = $(this);
                             $.ajax({
-                                    url : BASEURL + 'dashboard/socialmedia/ReadUnread',
+                                    url : BASEURL + 'dashboard/media_stream/ReadUnread',
                                     type: "POST",
                                     data: {
                                             post_id:$(this).parent().siblings('.postId').val(),
@@ -481,32 +502,32 @@ $(function(){
                                 });
                         });
                         
-                        $(".engagement-btn-close").click(
+                        $(this).on('click','.engagement-btn-close',
                             function() {
                                  $(this).parent().parent().hide();
                             }
                         );
                         
-                        $(".engagement-btn-hide-show").click(
+                        $(this).on('click','.engagement-btn-hide-show',
                             function(){
                                 $(this).siblings('div').toggle();
                             }
                         );
                         
-                        $(".reply-field-btn-close").click(
+                        $(this).on('click','.reply-field-btn-close',
                             function() {
                                  $(this).parent().parent().hide();
                             }
                         );
                         
-                        $(".btn-send-reply").click(
-                            function() {
+                        $(this).on('click','.btn-send-reply',
+                           function() {
                                 $(this).parent().siblings('.reply-status').show();
                                 $(this).parent().siblings('.reply-status').fadeOut(3000);
                             }
                         );
                         
-                        $(".toggleTable").click(
+                        $(this).on('click','.toggleTable',
                             function(){
                                 $(this).parent().parent().next().toggle();
                             }
@@ -604,7 +625,8 @@ $(function(){
                         });
                     });
                     
-                     $(".retweet").click(function() {
+                     $(this).on('click','.retweet',
+                        function() {
                         $.ajax({
                             url : BASEURL + 'dashboard/socialmedia/twitterAction',
                             type: "POST",
@@ -620,7 +642,8 @@ $(function(){
                         });
                     });
                     
-                    $(".favorit").click(function() {
+                    $(this).on('click','.favorit',
+                        function() {
                         $.ajax({
                             url : BASEURL + 'dashboard/socialmedia/twitterAction',
                             type: "POST",
@@ -636,7 +659,8 @@ $(function(){
                         });
                     });
 
-                     $(".follow").click(function() {
+                    $(this).on('click','.follow',
+                        function() {
                         $.ajax({
                             url : BASEURL + 'dashboard/socialmedia/twitterAction',
                             type: "POST",
@@ -652,7 +676,8 @@ $(function(){
                         });
                     });
                     
-                     $(".unfollow").click(function() {
+                    $(this).on('click','.unfollow',
+                        function() {
                         $.ajax({
                             url : BASEURL + 'dashboard/socialmedia/twitterAction',
                             type: "POST",
@@ -667,10 +692,22 @@ $(function(){
                             },
                         });
                     });
-
-
                     
-                                                                                
+                    $(this).on('click','.fblike',
+                        function() {
+                        $.ajax({
+                            url : BASEURL + 'dashboard/media_stream/FbLikeStatus',
+                            type: "POST",
+                            data: {
+                                    str_id: $(this).siblings(".str_id").val()
+                                    },
+                            success: function()
+                            {
+                                $('.compose-post-status').show();
+                                $('.compose-post-status').fadeOut(5000);
+                            },
+                        });
+                    });                                                         
                 });
                   
                 /*==============================================================================================
@@ -718,7 +755,7 @@ $(function(){
             }
         });
         $("#channelMg a").click(function(){
-            
+            $('.btn').removeClass('btn-primary');
             $(this).LoadContentAsync ({
                 url : BASEURL +"channels/listofchannel/" + $(this).attr('href').replace("#", ""),
                 contentReplaced : $('#channelMg .cms-table '),
@@ -790,7 +827,6 @@ serialize = function(obj) {
 }
 
 jQuery.fn.LoadContentAsync = function(options){
-    $('.btn').removeClass('btn-primary');
     $(this).addClass('btn-primary');
     var settings = $.extend({
         url  : window.location.origin,
@@ -841,5 +877,5 @@ $(function() {
 function startRefresh() {
     setTimeout(startRefresh,14000);
     //alert(location.href + ' #ctwitter');
-    $('#ctwitter').parent().load(BASEURL + 'dashboard/media_stream/twitter_stream/' + $(this).siblings('.channel-stream-id').val());
+    //$('#ctwitter').parent().load(BASEURL + 'dashboard/media_stream/twitter_stream/' + $(this).siblings('.channel-stream-id').val());
 }

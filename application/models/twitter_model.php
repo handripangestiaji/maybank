@@ -246,14 +246,14 @@ class twitter_model extends CI_Model
         return $query->result();
     }
     
-    public function ReadDMFromDb($channel_id){
-        $sql = "Select a.channel_id, a.post_stream_id, a.retrieved_at, a.created_at, 
-                b.*
-                from 
-                social_stream a inner join twitter_direct_messages b on a.post_id = b.post_id 
-                where a.type = 'twitter_dm' and a.channel_id=$channel_id order by a.created_at desc";
-        $query = $this->db->query($sql);
-        $result = $query->result();
+    public function ReadDMFromDb($filter,$limit){
+         $this->db->select("a.channel_id, a.post_stream_id, a.retrieved_at, a.created_at,b.*");
+         $this->db->from("social_stream a inner join twitter_direct_messages b on a.post_id = b.post_id"); 
+         if(count($filter) > 0)
+	     $this->db->where($filter);
+         $this->db->limit($limit);           
+         $this->db->order_by('a.created_at','desc');
+         $result = $this->db->get()->result();
         
         for($i=0;$i<count($result);$i++){
             $result[$i]->sender = $this->ReadTwitterUserFromDb($result[$i]->sender);
@@ -269,15 +269,15 @@ class twitter_model extends CI_Model
     }
     
     
-    public function ReadTwitterData($filter){
+    public function ReadTwitterData($filter,$limit){
         $this->db->select("a.channel_id, a.post_stream_id, a.retrieved_at, a.created_at, 
                             b.*, c.screen_name, c.profile_image_url, c.name, c.description, c.following, a.is_read");
         $this->db->from("social_stream a INNER JOIN social_stream_twitter b ON a.post_id = b.post_id 
                         INNER JOIN twitter_user_engaged c ON
                         c.twitter_user_id = b.twitter_user_id");
-        $where="b.type = '$filter' AND a.type='twitter' ORDER by a.post_stream_id desc";
-        $this->db->where($where);
-        $this->db->limit('20');           
+        if(count($filter) > 0)
+	    $this->db->where($filter);
+        $this->db->limit($limit);           
         return $this->db->get()->result();
     }
 }

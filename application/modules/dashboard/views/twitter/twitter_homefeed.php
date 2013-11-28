@@ -1,8 +1,10 @@
 <?php
 for($i=0;$i<count($homefeed);$i++){
 ?>
-    <li>
+    <li <?php if($homefeed[$i]->is_read==0){echo 'class="unread-post"';} ?>>
         <div class="circleAvatar"><img src="<?php echo $homefeed[$i]->profile_image_url;?>" alt=""></div>
+        <div class="read-mark <?php if($homefeed[$i]->is_read==0){echo 'redText';} else { echo 'greyText'; } ?>"><i class="icon-bookmark icon-large"></i></div>
+        <br />
         <p class="headLine">
             <span class="author"><?php echo $homefeed[$i]->screen_name; ?></span>
             <i class="icon-circle"></i>
@@ -42,6 +44,7 @@ for($i=0;$i<count($homefeed);$i++){
             </p>
             <div>
                 <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
+                <p><button type="button" class="btn btn-warning btn-mini">OPEN</button><button class="btn btn-primary btn-mini" style="margin-left: 5px;">RE-TWEET</button></p>
             </div>
         </div>
         <div class="engagement-body">
@@ -56,6 +59,7 @@ for($i=0;$i<count($homefeed);$i++){
             </p>
             <div>
                 <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
+                <p><button type="button" class="btn btn-warning btn-mini">OPEN</button><button class="btn btn-primary btn-mini" style="margin-left: 5px;">RE-TWEET</button></p>
             </div>
         </div>
         <!-- ==================== CONDENSED TABLE HEADLINE ==================== -->

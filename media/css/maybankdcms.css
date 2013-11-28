@@ -580,6 +580,18 @@ a#reply-img-close{
 .dropdown-stream-channels>li>a {
 	cursor: pointer;
 }
+
+div.read-mark {
+    float: left;
+    position: relative;
+    top: -4px;
+    left: 4px;
+    cursor: pointer;
+}
+
+ul.floatingBoxContainers li.unread-post{
+	background-color: #fff2f2;
+}
 /*==============================================================================================
 ======================================== C M S =================================================
 ==============================================================================================*/

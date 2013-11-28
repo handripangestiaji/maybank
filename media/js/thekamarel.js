@@ -100,21 +100,12 @@ $(function(){
      =========================== FLOATING BOX MENU / TAB MENU ACTIONS =============================
      =============================================================================================*/
 
-    $('ul.nav-tabs li a').click(function() {
-        var href = $(this).attr('href'),
-            $previous = $(this).closest('ul.nav-tabs').find('li.active');
-
-        //show one particular menu
-        $(href).parent().children().hide();
-        $(href).fadeIn();
-
-        $previous.removeClass('active');
-        $(this).parent().stop().addClass('active');
-
-        return false;
+    $(this).on('click', 'ul.nav-tabs li a', function() {
+        $(this).parent().addClass('active');
+        previous = $(this).closest('ul.nav-tabs').find('li.active');
+        previous.removeClass('active');
+        alert($(this).text());
     });
-
-    
 
 
     /*=============================================================================================
@@ -379,7 +370,26 @@ $(function(){
                     }
                 });
 
-                $(document).ready(function() {
+                $(document).ready(function() {                    
+                    $(this).on('click', '.stream_head > li > a',
+                        function() {
+                            previous = $(this).closest('ul.stream_head').find('li.active');
+                            previous.removeClass('active');
+                            $(this).parent().addClass('active');
+                            var id_tab_name = '#' + $(this).attr('class');
+                            $(this).closest('.floatingBoxMenu').next().find('.floatingBoxContainers').hide(); 
+                            $(this).closest('.floatingBoxMenu').next().find(id_tab_name).show();
+                            
+                        /*
+                        var href = $(this).attr('href'),
+                        $previous = $(this).closest('ul.nav-tabs').find('li.active');
+                
+                        //show one particular menu
+                        $(href).parent().children().hide();
+                        $(href).fadeIn();
+                        */
+                    });
+    
                     $('.change-read-unread-stream').on('change', function(){
                         var social_id = $(this).closest('.containerHeadline').next().children('.channel-id').val();
                         var is_read = $(this).val();

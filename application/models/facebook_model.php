@@ -377,8 +377,7 @@ class facebook_model extends CI_Model
     public function RetrieveFeedFB($filter){
         
         $this->db->select('*');
-        $this->db->from("fb_user_engaged a INNER JOIN social_stream_fb_post b  
-        if(count($filter) > 0)
+        $this->db->from("fb_user_engaged a INNER JOIN social_stream_fb_post b ON b.author_id=a.facebook_id LEFT OUTER JOIN social_stream c ON c.post_id=b.post_id");if(count($filter) > 0)
             $this->db->where($filter);
         $this->db->order_by('c.created_at','desc');
         return $this->db->get()->result();
@@ -387,8 +386,7 @@ class facebook_model extends CI_Model
     public function RetrievePostFB($filter){
         
         $this->db->select('*');
-        $this->db->from("fb_user_engaged a INNER JOIN social_stream_fb_post b ON b.author_id=a.facebook_id
-        if(count($filter) > 0)
+        $this->db->from("fb_user_engaged a INNER JOIN social_stream_fb_post b ON b.author_id=a.facebook_id LEFT OUTER JOIN social_stream c ON c.post_id=b.post_id");if(count($filter) > 0)
             $this->db->where($filter);
 	$this->db->limit(20);
         $this->db->order_by('c.created_at','desc');

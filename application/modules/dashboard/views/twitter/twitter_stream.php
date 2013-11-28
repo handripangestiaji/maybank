@@ -1,3 +1,4 @@
+<input type="hidden" class="channel-id" value="<?php if(isset($channel_id)){echo $channel_id;}else{echo '1';}  ?>">
 <div id='ctwitter' class="container-fluid">
 <!-- ==================== ACTIVITIES MENU ==================== -->
 <div class="floatingBoxMenu">

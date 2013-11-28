@@ -1,6 +1,6 @@
-<?php 
+<?php
 for($i=0; $i<count($fb_feed);$i++):?>
-<li>
+<li <?php if($fb_feed[$i]->is_read==0){echo 'class="unread-post"';} ?>>
     <input type="hidden" class="postId" value="<?php echo $fb_feed[$i]->post_id; ?>" />
     <div class="circleAvatar"><img src="https://graph.facebook.com/<?=number_format($fb_feed[$i]->facebook_id, 0,'.','')?>/picture?small" alt=""></div>
     <div class="read-mark <?php if($fb_feed[$i]->is_read==0){echo 'redText';} else { echo 'greyText'; } ?>"><i class="icon-bookmark icon-large"></i></div>

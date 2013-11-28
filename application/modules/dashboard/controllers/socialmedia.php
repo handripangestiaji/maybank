@@ -40,7 +40,6 @@ class Socialmedia extends MY_Controller {
     
      public function index()
      {
-	  
 	  $access_token_fb = fb_dummy_accesstoken();
 	  $this->load->model('facebook_model');
 	  $this->load->model('twitter_model');
@@ -49,10 +48,10 @@ class Socialmedia extends MY_Controller {
 	  $data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter);
 	  $data['own_post'] = $this->facebook_model->RetrievePostFB($filter);
 	  
-	  $data['mentions']=$this->twitter_model->ReadTwitterData('mentions');     
-	  $data['homefeed']=$this->twitter_model->ReadTwitterData('home_feed');     
-	  $data['senttweets']=$this->twitter_model->ReadTwitterData('user_timeline');  
-	  $data['directmessage']=$this->twitter_model->ReadDMFromDb('2');
+	  $data['mentions']=$this->twitter_model->ReadTwitterData(array('b.type'=>'mentions'),'20');     
+	  $data['homefeed']=$this->twitter_model->ReadTwitterData(array('b.type'=>'home_feed'),'20');     
+	  $data['senttweets']=$this->twitter_model->ReadTwitterData(array('b.type'=>'user_timeline'),'20');  
+	  $data['directmessage']=$this->twitter_model->ReadDMFromDb(array('b.type'=>'user_timeline'),'20');
 	  $data['channels'] = $this->account_model->GetChannel();
 	  $this->load->view('dashboard/index',$data);
      }
@@ -158,13 +157,5 @@ class Socialmedia extends MY_Controller {
 	  $this->load->library('facebook',$config);
 	  $this->facebook->setaccesstoken($access_token_fb);
 	  $this->facebook->api('/me/feed','POST',array('message'=>$this->input->post('content')));
-	  /*
-	  $result = curl_get_file_contents('https://graph.facebook.com/me?
-					  method=GET&
-					  format=json&
-					  suppress_http_code=1&
-					  access_token='.$access_token_fb);
-	  echo $result;
-	  */
     }
 }

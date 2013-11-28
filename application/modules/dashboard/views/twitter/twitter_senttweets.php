@@ -1,8 +1,10 @@
 <?php
 for($i=0;$i<count($senttweets);$i++){
 ?>
-    <li>
+    <li <?php if($senttweets[$i]->is_read==0){echo 'class="unread-post"';} ?>>
         <div class="circleAvatar"><img src="<?php echo $senttweets[$i]->profile_image_url;?>" alt=""></div>
+        <div class="read-mark <?php if($senttweets[$i]->is_read==0){echo 'redText';} else { echo 'greyText'; } ?>"><i class="icon-bookmark icon-large"></i></div>
+        <br />
         <p class="headLine">
             <span class="author"><?php echo $senttweets[$i]->screen_name; ?></span>
             <i class="icon-circle"></i>

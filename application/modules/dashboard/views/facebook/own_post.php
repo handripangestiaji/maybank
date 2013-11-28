@@ -1,6 +1,8 @@
 <?php for($i=0; $i<count($own_post);$i++):?>  
 <li>
     <div class="circleAvatar"><img src="https://graph.facebook.com/<?=number_format($own_post[$i]->actor_id, 0,'.','')?>/picture?small" alt=""></div>
+    <div class="read-mark <?php if($own_post[$i]->is_read==0){echo 'redText';} else { echo 'greyText'; } ?>"><i class="icon-bookmark icon-large"></i></div>
+    <br />
     <p class="headLine">
         <span class="author"><?php echo $own_post[$i]->users->name//."(".$fb_feed[$i]->users->usename.")"?></span>
         <i class="icon-circle"></i>

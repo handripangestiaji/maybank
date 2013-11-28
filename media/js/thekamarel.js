@@ -389,7 +389,7 @@ $(function(){
                         }
                         else if($(this).closest('div').prev().find('i').attr('class') == 'icon-twitter'){
                             $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');        
-                            $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/twitter_stream/' + social_id);
+                            $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/twitter_stream/' + social_id + '/' + is_read);
                         }
                     });
                     
@@ -688,9 +688,20 @@ $(function(){
                         });
                     });
 
-
-                    
-                                                                                
+                    $(".fblike").click(function() {
+                        $.ajax({
+                            url : BASEURL + 'dashboard/media_stream/FbLikeStatus',
+                            type: "POST",
+                            data: {
+                                    str_id: $(this).siblings(".str_id").val()
+                                    },
+                            success: function()
+                            {
+                                $('.compose-post-status').show();
+                                $('.compose-post-status').fadeOut(5000);
+                            },
+                        });
+                    });                                                         
                 });
                   
                 /*==============================================================================================
@@ -861,5 +872,5 @@ $(function() {
 function startRefresh() {
     setTimeout(startRefresh,14000);
     //alert(location.href + ' #ctwitter');
-    $('#ctwitter').parent().load(BASEURL + 'dashboard/media_stream/twitter_stream/' + $(this).siblings('.channel-stream-id').val());
+    //$('#ctwitter').parent().load(BASEURL + 'dashboard/media_stream/twitter_stream/' + $(this).siblings('.channel-stream-id').val());
 }

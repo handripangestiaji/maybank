@@ -9,12 +9,17 @@
       <input type="password" name="password" placeholder="Password">
       <a id="submit" href="javascript:void(0);"><span class="add-on" id="login"><i class="icon-arrow-right"></i></span></a>
     </div>
+    <div class="alert alert-error">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>Login Failed!</strong> Username and password are incorrect.
+     </div>
 </form>
 
 <div class="signInRow">
     <div class="term"><a href="<?php echo site_url();?>/login/terms">Terms of Use</a></div>
     <div><a href="<?php echo site_url();?>/login/forgot">Lost your password?</a></div>
 </div>
+     
 <script type="text/javascript">
 	$(document).ready(function(){
 		$('#submit').click(function(){
@@ -27,5 +32,9 @@
 				$('#login_form').submit();
 			}
 		})
+                                
+                $(this).on('click', '.alert > .close', function() {
+                    $(this).parent().hide();
+                });
 	});
 </script>

@@ -1,4 +1,4 @@
-<input type="hidden" class="channel-id" value="<?php if(count($mentions) >0 ){echo $mentions[0]->channel_id;} ?>">
+<input type="hidden" class="channel-id" value="<?php if(count($mentions) > 0) echo $mentions[0]->channel_id; ?>">
 <div id='ctwitter' class="container-fluid">
 <!-- ==================== ACTIVITIES MENU ==================== -->
 <div class="floatingBoxMenu">

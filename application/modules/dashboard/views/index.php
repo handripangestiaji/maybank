@@ -207,10 +207,10 @@
 <?php
     //$data['channels'] = $channels;
     $data['color'] = '#3B5998';
-    $data['stream'] = 'dashboard/facebook/facebook_stream';
+    
     $this->load->view('dashboard/box_stream',$data);
     $data['color'] = '#4099FF';
-    $data['stream'] = 'dashboard/twitter/twitter_stream';
+    
     $this->load->view('dashboard/box_stream',$data);
     //$this->load->view('dashboard/twitter/twitter_stream');
     //echo $this->load->view('dashboard/youtube/youtube_stream');

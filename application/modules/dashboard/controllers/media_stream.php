@@ -41,21 +41,19 @@ class Media_stream extends CI_Controller {
     
     
     public function facebook_stream($channel_id,$is_read = NULL){
-	$access_token_fb = fb_dummy_accesstoken();
-	
 	$filter = array(
 	   'channel_id' => $channel_id,
 	);
-	
 	if($is_read != NULL){
 	    if($is_read != 2){
 		$filter['is_read'] = $is_read;
 	    }
 	}
-	
 	$data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter);
 	$data['own_post'] = $this->facebook_model->RetrievePostFB($filter);
 	$data['channel_id'] = $channel_id;
+	$this->load->model('case_model');
+	$data['user_list'] = $this->case_model->ReadAllUser();
 	$this->load->view('dashboard/facebook/facebook_stream',$data);
     }
     
@@ -70,14 +68,15 @@ class Media_stream extends CI_Controller {
 		$filter['is_read'] = $is_read;
 	    }
 	}
-	
+	$this->load->model('case_model');
+	$data['user_list'] = $this->case_model->ReadAllUser();
 	$filter['b.type'] = 'mentions';
 	$data['mentions']=$this->twitter_model->ReadTwitterData($filter,$limit);
-	$filter['b.type'] = 'homefeed';
+	$filter['b.type'] = 'home_feed';
 	$data['homefeed']=$this->twitter_model->ReadTwitterData($filter,$limit);     
 	$filter['b.type'] = 'user_timeline';
 	$data['senttweets']=$this->twitter_model->ReadTwitterData($filter,$limit);  
-	$filter['b.type'] = 'user_timeline';
+	unset($filter['b.type']);
 	$data['directmessage']=$this->twitter_model->ReadDMFromDb($filter,$limit);
 	$data['channel_id'] = $channel_id;
 	$this->load->view('dashboard/twitter/twitter_stream',$data);

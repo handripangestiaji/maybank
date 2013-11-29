@@ -26,7 +26,7 @@ $.extend($.expr[":"],
     });
 
 $(function(){
-
+    
     /*=============================================================================================
      ==================================== GET ACTUAL DATETIME =====================================
      =============================================================================================*/
@@ -370,7 +370,8 @@ $(function(){
                     }
                 });
 
-                $(document).ready(function() {                    
+                $(document).ready(function() {
+                    
                     $(this).on('click', '.stream_head > li > a',
                         function() {
                             previous = $(this).closest('ul.stream_head').find('li.active');
@@ -402,9 +403,29 @@ $(function(){
                             $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/twitter_stream/' + social_id + '/' + is_read);
                         }
                     });
-                    
+                    var i = 0;
+                    $('.containerHeadline .dropdown-stream-channels').each(function(){
+                        i++;
+                        var streamId, streamType, urlToLoad ;
+                        urlToLoad = BASEURL + 'dashboard/media_stream/';
+                        streamId = $(this).find('li:nth-child(' + i + ') input').val();
+                        
+                        if($(this).find('li:nth-child(' + i + ') a').hasClass('facebook_stream')){
+                            urlToLoad += "facebook_stream/" + streamId
+                            $(this).closest('div').children('button').html('<i class="icon-facebook"></i><h2>Facebook&nbsp;</h2><i class="icon-caret-down"></i>');
+                            $(this).closest('.containerHeadline').css( "background-color", "#3B5998" );
+                            $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...'); 
+                        }
+                        else if($(this).find('li:nth-child(' + i + ') a').hasClass('twitter_stream')){
+                            urlToLoad += "twitter_stream/" + streamId
+                            $(this).closest('div').children('button').html('<i class="icon-twitter"></i><h2>Twitter&nbsp;</h2><i class="icon-caret-down"></i>');
+                            $(this).closest('.containerHeadline').css( "background-color", "#4099FF" );
+                            $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');                                   
+                        }
+                        $(this).closest('.containerHeadline').next().load(urlToLoad);                      
+                    });
                     $('.facebook_stream').on('click',function() {
-                        $(this).closest('div').children('button').html('<i class="icon-facebook"></i><h2>Facebook&nbsp;</h2>&nbsp;<i class="icon-caret-down"></i>');
+                        $(this).closest('div').children('button').html('<i class="icon-facebook"></i><h2>Facebook&nbsp;</h2><i class="icon-caret-down"></i>');
                         $(this).closest('.containerHeadline').css( "background-color", "#3B5998" );
                         $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');        
                         $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/facebook_stream/' + $(this).siblings('.channel-stream-id').val());
@@ -773,6 +794,7 @@ $(function(){
      =============================================================================================*/
     
     $(document).ready(function() {
+        
         $('#channelMg a:first').LoadContentAsync({
             url : BASEURL + "channels/listofchannel/facebook" ,
             contentReplaced : $('#channelMg .cms-table '),
@@ -896,7 +918,9 @@ jQuery.fn.AsyncPost = function(options){
 };
 
 $(function() {
+    
     startRefresh();
+    
 //    alert(location.href);
 });
 

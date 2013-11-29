@@ -40,18 +40,11 @@ class Socialmedia extends MY_Controller {
     
      public function index()
      {
-	  $access_token_fb = fb_dummy_accesstoken();
+	  
 	  $this->load->model('facebook_model');
 	  $this->load->model('twitter_model');
 	  $this->load->model('account_model');
 	  $filter = array();
-	  $data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter);
-	  $data['own_post'] = $this->facebook_model->RetrievePostFB($filter);
-	  
-	  $data['mentions']=$this->twitter_model->ReadTwitterData(array('b.type'=>'mentions'),'20');     
-	  $data['homefeed']=$this->twitter_model->ReadTwitterData(array('b.type'=>'home_feed'),'20');     
-	  $data['senttweets']=$this->twitter_model->ReadTwitterData(array('b.type'=>'user_timeline'),'20');  
-	  $data['directmessage']=$this->twitter_model->ReadDMFromDb(array('b.type'=>'user_timeline'),'20');
 	  $data['channels'] = $this->account_model->GetChannel();
 	  $this->load->view('dashboard/index',$data);
      }

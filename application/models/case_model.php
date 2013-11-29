@@ -30,4 +30,14 @@ class case_model extends CI_Model{
     }
     
     
+    function ReadAllUser($filter = array()){
+        $filter['is_active'] = 1;
+        if(count($filter) > 0){
+            $this->db->where($filter);
+        }
+        $this->db->select("user_id, email, full_name");
+        $this->db->from("user");
+        return $this->db->get()->result();
+    }
+    
 }

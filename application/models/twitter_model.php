@@ -60,10 +60,9 @@ class twitter_model extends CI_Model
     }
     
     public function HomeFeed($channel){
-        $result = $this->connection->get('statuses/home_timeline',
-                    array(
-                        "user_id" => $channel->social_id
-                    ));
+        $result = $this->connection->get('statuses/home_timeline');
+        
+        print_r($channel);
         echo "<pre>";
         print_r($result);
         echo "</pre>";
@@ -163,7 +162,7 @@ class twitter_model extends CI_Model
 	    "post_stream_id" => $direct_message->id_str,
 	    "channel_id" => $channel->channel_id,
 	    "type" => "twitter_dm",
-	    "retrieved_at" => $retrieved_at->format("Y-m-d H:i:s e"),
+	    "retrieved_at" => $retrieved_at->format("Y-m-d H:i:s"),
 	    "created_at" => $created_at->format("Y-m-d H:i:s")
 	);
         $dm_saved = array(
@@ -247,7 +246,7 @@ class twitter_model extends CI_Model
     }
     
     public function ReadDMFromDb($filter,$limit){
-         $this->db->select("a.channel_id, a.post_stream_id, a.retrieved_at, a.created_at,b.*");
+         $this->db->select("a.channel_id, a.post_stream_id, a.retrieved_at, a.created_at,b.*, a.is_read");
          $this->db->from("social_stream a inner join twitter_direct_messages b on a.post_id = b.post_id"); 
          if(count($filter) > 0)
 	     $this->db->where($filter);

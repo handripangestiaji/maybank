@@ -8,12 +8,7 @@
                 <div class="pull-left" style="padding: 4px 0px; height: auto">
                     <div class="btn-group">
                         <button class="btn trans  dropdown-toggle" data-toggle="dropdown">
-                            <?php if($stream=='dashboard/facebook/facebook_stream'){ ?>
-                                <i class="icon-facebook"></i> <h2>Facebook </h2> 
-                            <?php }elseif($stream=='dashboard/twitter/twitter_stream'){ ?>
-                                <i class="icon-twitter"></i> <h2>Twitter</h2>
-                            <?php } ?>
-                            &nbsp;&nbsp;<span class="caret"></span>
+                            
                         </button>
                         <ul class="dropdown-menu dropdown-stream-channels">
                             <?php
@@ -39,7 +34,7 @@
 
             <!-- ==================== ACTIVITIES FLOATING BOX ==================== -->
             <div class="floatingBox">
-                <?php $this->load->view($stream); ?>
+                Loading...
             </div>
             <!-- ==================== END OF ACTIVITIES FLOATING BOX ==================== -->
         

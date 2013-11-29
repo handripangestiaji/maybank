@@ -47,14 +47,11 @@ class Login extends Login_Controller {
             {
                 redirect('users');
             }
-            
             $this->load->model('users_model');
             $this->load->helper('security');
-	    
-
-				
-			$this->load->library('email',$config);
-            
+	    $this->load->config('mail_config');
+	    $config = $this->config->item('mail_provider');
+	    $this->load->library('email',$config);
         }
         
         function index()

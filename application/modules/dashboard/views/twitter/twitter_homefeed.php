@@ -171,54 +171,7 @@ for($i=0;$i<count($homefeed);$i++){
     
     <!-- CASE -->  
     <div class="case-field hide">
-        <div class="row-fluid">
-            <span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
-            CASE ID      : #012345
-            <div class="pull-left">
-                <select style="width: 130px;">
-                    <option value="keyword">Feedback</option>
-                    <option value="user">Enquiry</option>
-                    <option value="keyword">Complaint</option>
-                </select>
-                <select style="width: 130px;">
-                    <option value="keyword">Accounts & Banking</option>
-                    <option value="user">Cards</option>
-                    <option value="keyword">Investment</option>
-                    <option value="keyword">insurance</option>
-                    <option value="user">Loans</option>
-                    <option value="keyword">Maybank2u</option>
-                    <option value="keyword">Others</option>
-                </select>
-            </div>
-            <br clear="all" />
-            <button class="btn btn-small btn-purple btn-add-related">Add Related Conversation</button>
-            <br clear="all" />
-            <div class="pull-left">
-                Assign To:
-            </div>
-            <div class="pull-right">
-                <select>
-                    <option value="keyword">Nicole Lee</option>
-                    <option value="user">Azahan Azad</option>
-                    <option value="keyword">Azahamad Arif</option>
-                </select>
-            </div>
-            <br clear="all" />
-            <div class="pull-left">
-                Email:
-            </div>
-            <div class="pull-right">
-                <input type="text">
-            </div>
-            <br clear="all" />
-            Message :
-            <br>
-            <textarea placeholder="Compose Message" id="content" name="content" ></textarea>
-            <br clear="all" />
-            <div class="pull-right">
-                <button class="btn-purple btn btn-small"><i class="icon-ok-circle icon-large"></i> Assign</button>    
-            </div>
-        </div>
+       <?php $this->load->view('dashboard/case_field');?>
     </div>
     <!-- END CASE -->  
     

@@ -12,7 +12,7 @@ class mycase extends CI_Controller{
     /*Create case by post parameter */
     function CreateCase(){
         $user_id = $this->session->userdata('user_id');
-        
+        $allPost = $this->input->post();
         
         
     }

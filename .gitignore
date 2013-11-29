@@ -4,3 +4,9 @@ access_token.json
 .htaccess
 Maybank.komodoproject
 dumpmaybank.sql
+application/models/facebook_model.php.orig
+application/models/twitter_model.php.orig
+application/modules/dashboard/controllers/media_stream.php.orig
+application/modules/dashboard/controllers/socialmedia.php.orig
+application/modules/dashboard/views/facebook/facebook_stream.php.orig
+media/js/thekamarel.js.orig

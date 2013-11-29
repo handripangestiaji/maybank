@@ -4,7 +4,7 @@
         <div class="cms-filter pull-left">
             <input class="btn btn-primary" onclick='menu_user()' type="button" name="btn_user" value="User" /> <br />
             <input class="btn" type="button" onclick="menu_role()" name="btn_role" value="Role"  />   <br />
-            <input class="btn" type="button" name="btn_group" value="Group" />
+            <input class="btn" type="button" onclick='menu_group()' name="btn_group" value="Group" />
         </div>
         
         <div class="cms-table pull-right">
@@ -64,5 +64,10 @@
     function menu_user()
     {
         window.location.href = "<?php echo site_url();?>/users";
+    }
+    
+    function menu_group()
+    {
+        window.location.href = "<?php echo site_url();?>/users/menu_group";
     }
 </script>

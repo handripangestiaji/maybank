@@ -111,17 +111,17 @@ for($i=0;$i<count($senttweets);$i++){
         <a role="button" class='destroy_status'><i class="icon-trash greyText"></i></a>
         <div class="pull-right">
                 <!--form class="contentForm" action="<?php //echo base_url('index.php/dashboard/socialmedia/twitteraction');?>" method="post"-->
-                <button class="btn btn-reply btn-primary" data-toggle="modal"><i class="icon-mail-reply"></i></button>
-                <!--button type="button" class="retweet btn btn-primary"><i class="icon-retweet"></i></button-->
+                <!--button class="btn btn-reply btn-primary" data-toggle="modal"><i class="icon-mail-reply"></i></button--!>
+                <button type="button" class="retweet btn btn-primary"><i class="icon-retweet"></i></button  >
                 <a role="button" href="#modalsentdm<?php echo $i; ?>" class="btn btn-primary" data-toggle="modal"><i class="icon-envelope"></i></a>
                 <button type="button" class="favorit btn btn-primary"><i class="icon-star"></i></button>
                 
-                <?php if($senttweets[$i]->following=='1'){ ?>
+                <?php /*if($senttweets[$i]->following=='1'){ ?>
                         <button type="button" class="unfollow btn"><i class="icon-user"></i></button>
                 <?php }else{ ?>
                         <button type="button" class="follow btn btn-primary" value="follow"><i class="icon-user"></i></button>
-                <?php } ?>
-                <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i>CASE</button>
+                <?php } */?>
+                <!--button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i>CASE</button-->
                 <input type="hidden" class="str_id" value="<?php echo $senttweets[$i]->post_stream_id; ?>" />
                 <input type="hidden" class="userid" value="<?php echo $senttweets[$i]->twitter_user_id; ?>" />
                 <input type="hidden" class="followid" value="<?php echo $senttweets[$i]->twitter_user_id; ?>" />

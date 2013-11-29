@@ -26,7 +26,7 @@ $.extend($.expr[":"],
     });
 
 $(function(){
-    
+
     /*=============================================================================================
      ==================================== GET ACTUAL DATETIME =====================================
      =============================================================================================*/
@@ -754,7 +754,25 @@ $(function(){
                                 $('.compose-post-status').fadeOut(5000);
                             },
                         });
-                    });                                                         
+                    });
+                    
+                    $(".send_reply").click(function() {
+                        $.ajax({
+                            url : BASEURL + 'dashboard/socialmedia/replyPost',
+                            type: "POST",
+                            data: {
+                                    post_id:$(this).val(),
+                                    comment: $(this).parent().siblings(".reply_comment").val()
+                                    },
+                            success: function()
+                            {
+                                $('.compose-post-status').show();
+                                $('.compose-post-status').fadeOut(5000);
+                            },
+                        });
+                    });                   
+                     
+                                                                                
                 });
                   
                 /*==============================================================================================
@@ -918,14 +936,12 @@ jQuery.fn.AsyncPost = function(options){
 };
 
 $(function() {
-    
-    startRefresh();
-    
+//    startRefresh();
 //    alert(location.href);
 });
 
 function startRefresh() {
     setTimeout(startRefresh,14000);
     //alert(location.href + ' #ctwitter');
-    //$('#ctwitter').parent().load(BASEURL + 'dashboard/media_stream/twitter_stream/' + $(this).siblings('.channel-stream-id').val());
+    $('#ctwitter').parent().load(BASEURL + 'dashboard/media_stream/twitter_stream/' + $(this).siblings('.channel-stream-id').val());
 }

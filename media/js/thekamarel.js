@@ -431,14 +431,28 @@ $(function(){
                                 $(this).closest('h4').next().next().hide();
                             }
                         );
-    
+                        
+                        $(this).on('click','.btn-engagement-reply',
+                            function() {
+                                $(this).parent().siblings('.reply-engagement-field').show();
+                                $(this).parent().siblings('.case-engagement-field').hide();
+                            }
+                        );
+                        
                         $(this).on('click','.btn-case',
                             function() {
                                 $(this).closest('h4').next().hide();
                                 $(this).closest('h4').next().next().show();
                             }
                         );
-                            
+                        
+                        $(this).on('click','.btn-engagement-case',
+                            function() {
+                                $(this).parent().siblings('.reply-engagement-field').hide();
+                                $(this).parent().siblings('.case-engagement-field').show();
+                            }
+                        );
+                        
                         $(this).on('click','.assign-btn',
                             function() {
                                 $(this).parent().siblings(".reply").hide("slow");

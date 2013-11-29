@@ -23,7 +23,12 @@ for($i=0;$i<count($homefeed);$i++){
         <button type="button" class="btn btn-inverse btn-mini"><i class="icon-star">&nbsp;</i></button>
     <?php } ?></p>
     
-    <p><a role="button" class="btn-engagement"><i class="icon-eye-open"></i> Engagement</a> | <a data-toggle="modal" role="button" href="#modaltweet<?php echo $i; ?>" ><i class="icon-retweet greyText"></i><?php //echo $homefeed[$i]->retweeted; ?> re-tweets</a></p>
+    <p>
+        <a role="button" class="btn-engagement"><i class="icon-eye-open"></i> Engagement</a> |
+        <a data-toggle="modal" role="button" href="#modaltweet<?php echo $i; ?>" ><i class="icon-retweet greyText"></i><?php //echo $homefeed[$i]->retweeted; ?> re-tweets</a> | 
+        <span class="btn-mark-as-read cyanText" style="display: <?php if($homefeed[$i]->is_read==1){echo 'none';} ?>"><i class="icon-bookmark"></i> Mark as Read</span>
+        <span class="btn-mark-as-unread cyanText" style="display: <?php if($homefeed[$i]->is_read==0){echo 'none';} ?>"><i class="icon-bookmark-empty"></i> Mark as Unread</span>
+    </p>
     
     
     <!-- ENGAGEMENT -->    

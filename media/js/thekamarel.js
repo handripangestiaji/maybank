@@ -492,7 +492,7 @@ $(function(){
                                     success: function(result)
                                     {
                                         if(result == 1){
-                                            me.removeClass('redText').addClass('greyText');        
+                                            me.removeClass('redText').addClass('greyText');
                                         }
                                         else{
                                             me.removeClass('greyText').addClass('redText');
@@ -513,6 +513,7 @@ $(function(){
                                     {
                                         me.hide();
                                         me.siblings('.btn-mark-as-unread').show();
+                                        me.parent().siblings('.read-mark').removeClass('redText').addClass('greyText');
                                     },
                                 });
                         });
@@ -529,6 +530,7 @@ $(function(){
                                     {
                                         me.hide();
                                         me.siblings('.btn-mark-as-read').show();
+                                        me.parent().siblings('.read-mark').removeClass('greyText').addClass('redText');
                                     },
                                 });
                         });

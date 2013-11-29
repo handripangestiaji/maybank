@@ -1,9 +1,11 @@
 <?php
 for($i=0;$i<count($mentions);$i++){
 ?>
-    <li>
+    <li <?php if($mentions[$i]->is_read==0){echo 'class="unread-post"';} ?>>
         <input type="hidden" class="postId" value="<?php echo $mentions[$i]->post_id; ?>" />
         <div class="circleAvatar"><img src="<?php echo $mentions[$i]->profile_image_url;?>" alt=""></div>
+        <div class="read-mark <?php if($mentions[$i]->is_read==0){echo 'redText';} else { echo 'greyText'; } ?>"><i class="icon-bookmark icon-large"></i></div>
+        <br />
         <p class="headLine">
             <span class="author"><?php echo $mentions[$i]->screen_name; ?></span>
             <i class="icon-circle"></i>
@@ -24,10 +26,10 @@ for($i=0;$i<count($mentions);$i++){
     
     <p>
         <a role="button" class="btn-engagement"><i class="icon-eye-open"></i> Engagement</a> |
-        <a data-toggle="modal" role="button" href="#modaltweet<?php echo $i; ?>" ><i class="icon-retweet greyText"></i><?php //echo $mentions[$i]->retweeted; ?> re-tweets</a> |
+        <a data-toggle="modal" role="button" href="#modaltweet<?php echo $i; ?>" ><i class="icon-retweet greyText"></i><?php //echo $mentions[$i]->retweeted; ?> re-tweets</a> | 
         <span class="btn-mark-as-read cyanText" style="display: <?php if($mentions[$i]->is_read==1){echo 'none';} ?>"><i class="icon-bookmark"></i> Mark as Read</span>
         <span class="btn-mark-as-unread cyanText" style="display: <?php if($mentions[$i]->is_read==0){echo 'none';} ?>"><i class="icon-bookmark-empty"></i> Mark as Unread</span>
-    
+    </p>
     <!-- ENGAGEMENT -->    
     <div class="engagement hide">
         <div class="engagement-header">
@@ -46,6 +48,7 @@ for($i=0;$i<count($mentions);$i++){
             </p>
             <div>
                 <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
+                <p><button type="button" class="btn btn-warning btn-mini">OPEN</button><button class="btn btn-primary btn-mini" style="margin-left: 5px;">RE-TWEET</button></p>
             </div>
         </div>
         <div class="engagement-body">
@@ -60,6 +63,7 @@ for($i=0;$i<count($mentions);$i++){
             </p>
             <div>
                 <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
+                <p><button type="button" class="btn btn-warning btn-mini">OPEN</button><button class="btn btn-primary btn-mini" style="margin-left: 5px;">RE-TWEET</button></p>
             </div>
         </div>
         <!-- ==================== CONDENSED TABLE HEADLINE ==================== -->
@@ -115,7 +119,7 @@ for($i=0;$i<count($mentions);$i++){
                 <?php }else{ ?>
                 <button type="button" class="follow btn btn-primary" value="follow"><i class="icon-user"></i></button>
                 <?php } ?>
-                <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i>CASE</button>
+                <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>
                 <input type="hidden" class="str_id" value="<?php echo $mentions[$i]->post_stream_id; ?>" />
                 <input type="hidden" class="id" value="<?php echo json_decode($mentions[$i]->twitter_entities)->user_mentions[0]->id; ?>" />
                 <input type="hidden" class="userid" value="<?php echo $mentions[$i]->twitter_user_id; ?>" />
@@ -170,56 +174,9 @@ for($i=0;$i<count($mentions);$i++){
     </div>
     <!-- END REPLY -->
     
-    <!-- CASE -->  
+    <!-- CASE -->
     <div class="case-field hide">
-        <div class="row-fluid">
-            <span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
-            CASE ID      : #012345
-            <div class="pull-left">
-                <select style="width: 130px;">
-                    <option value="keyword">Feedback</option>
-                    <option value="user">Enquiry</option>
-                    <option value="keyword">Complaint</option>
-                </select>
-                <select style="width: 130px;">
-                    <option value="keyword">Accounts & Banking</option>
-                    <option value="user">Cards</option>
-                    <option value="keyword">Investment</option>
-                    <option value="keyword">insurance</option>
-                    <option value="user">Loans</option>
-                    <option value="keyword">Maybank2u</option>
-                    <option value="keyword">Others</option>
-                </select>
-            </div>
-            <br clear="all" />
-            <button class="btn btn-small btn-purple btn-add-related">Add Related Conversation</button>
-            <br clear="all" />
-            <div class="pull-left">
-                Assign To:
-            </div>
-            <div class="pull-right">
-                <select>
-                    <option value="keyword">Nicole Lee</option>
-                    <option value="user">Azahan Azad</option>
-                    <option value="keyword">Azahamad Arif</option>
-                </select>
-            </div>
-            <br clear="all" />
-            <div class="pull-left">
-                Email:
-            </div>
-            <div class="pull-right">
-                <input type="text">
-            </div>
-            <br clear="all" />
-            Message :
-            <br>
-            <textarea placeholder="Compose Message" id="content" name="content" ></textarea>
-            <br clear="all" />
-            <div class="pull-right">
-                <button class="btn-purple btn btn-small"><i class="icon-ok-circle icon-large"></i> Assign</button>    
-            </div>
-        </div>
+       <?php $this->load->view('dashboard/case_field');?>
     </div>
     <!-- END CASE -->  
     

@@ -186,7 +186,6 @@ class Users_model extends CI_Model
     {
         $this->db->where('user_id',$username);
         $this->db->where('password',$password);
-
         return $this->db->get($this->user);
     }
     

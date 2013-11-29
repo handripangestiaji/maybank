@@ -52,6 +52,7 @@ class Cronjob extends CI_Controller {
         $access_tokens = array();
         print_r($access_tokens);
         foreach($channel_loaded as $channel){
+            $newStd = new stdClass();
             $newStd->page_id = $channel->social_id;
             $newStd->token = $this->facebook_model->GetPageAccessToken($channel->oauth_token, $channel->social_id);
             $newStd->channel = $channel;
@@ -145,8 +146,10 @@ class Cronjob extends CI_Controller {
         $channel_loaded = $this->account_model->GetChannel($filter);
         
         foreach($channel_loaded as $channel){
+            
             $this->twitter_model->InitConnection($channel->oauth_token, $channel->oauth_secret);
             $this->twitter_model->DirectMessage($channel);
+            
         }
     }
     

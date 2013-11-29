@@ -115,5 +115,6 @@
 	<!-- <script src="<?php //echo base_url('media/js/vendor/jquery-ui-1.10.2.custom.min.js')?>"</script>        	<!-- jquery ui dragging -->    
         <script src="<?php echo base_url('media/js/thekamarel.min.js')?>"></script>                            <!-- main project js file -->
         <script src="<?php echo base_url('media/js/thekamarel.js')?>"></script>                            <!-- main project js file -->
+	<script src="<?php echo base_url('media/js/kamarelimprove.js')?>"></script>                            <!-- main project js file -->
     </body>
 </html>

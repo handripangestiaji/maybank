@@ -1,11 +1,12 @@
+<input type="hidden" class="channel-id" value="<?php if(count($mentions) > 0) echo $mentions[0]->channel_id; ?>">
 <div id='ctwitter' class="container-fluid">
 <!-- ==================== ACTIVITIES MENU ==================== -->
 <div class="floatingBoxMenu">
-    <ul class="nav nav-tabs">
-        <li class="active"><a href='#mentions'>Mentions<span class="notifyCircle red">3</span></a></li>
-        <li><a href='#feed'>Homefeed</a></li>
-        <li><a href='#sendmessage'>Send Twitter</a></li>
-        <li><a href='#direct'>Direct Message<span class="notifyCircle red">2</span></span></a></li>
+    <ul class="nav stream_head">
+        <li class="active"><a class='mentions'>Mentions<span class="notifyCircle red">3</span></a></li>
+        <li><a class='feed'>Homefeed</a></li>
+        <li><a class='sendmessage'>Send Twitter</a></li>
+        <li><a class='direct'>Direct Message<span class="notifyCircle red">2</span></span></a></li>
     </ul>
 </div>
 <!-- ==================== END OF ACTIVITIES MENU ==================== -->

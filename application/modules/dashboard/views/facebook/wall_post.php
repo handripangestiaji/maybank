@@ -1,8 +1,10 @@
-<?php 
+<?php
 for($i=0; $i<count($fb_feed);$i++):?>
-<li>
+<li <?php if($fb_feed[$i]->is_read==0){echo 'class="unread-post"';} ?>>
     <input type="hidden" class="postId" value="<?php echo $fb_feed[$i]->post_id; ?>" />
     <div class="circleAvatar"><img src="https://graph.facebook.com/<?=number_format($fb_feed[$i]->facebook_id, 0,'.','')?>/picture?small" alt=""></div>
+    <div class="read-mark <?php if($fb_feed[$i]->is_read==0){echo 'redText';} else { echo 'greyText'; } ?>"><i class="icon-bookmark icon-large"></i></div>
+    <br />
     <p class="headLine">
         <span class="author"><?php echo $fb_feed[$i]->name//."(".$fb_feed[$i][$i]->users->usename.")"?></span>
         <i class="icon-circle"></i>
@@ -15,7 +17,7 @@ for($i=0; $i<count($fb_feed);$i++):?>
     <p><button type="button" class="btn btn-warning btn-mini">OPEN</button><button class="btn btn-primary btn-mini" style="margin-left: 5px;">LIKE</button> </p>
     <p>
         <span class="btn-engagement"><i class="icon-eye-open"></i> Engagement</span> |
-        <span class="cyanText"><i class="icon-thumbs-up-alt"></i></i> <?php echo $fb_feed[$i]->total_likes; ?> likes</span> |
+        <span class="cyanText"><i class="icon-thumbs-up-alt"></i></i> <?php echo $fb_feed[$i]->total_likes; ?> likes</span> | 
         <span class="btn-mark-as-read cyanText" style="display: <?php if($fb_feed[$i]->is_read==1){echo 'none';} ?>"><i class="icon-bookmark"></i> Mark as Read</span>
         <span class="btn-mark-as-unread cyanText" style="display: <?php if($fb_feed[$i]->is_read==0){echo 'none';} ?>"><i class="icon-bookmark-empty"></i> Mark as Unread</span>
     </p>
@@ -42,6 +44,7 @@ for($i=0; $i<count($fb_feed);$i++):?>
             </p>
             <div>
                 <p>"<?php echo $comment[$j]->comment_content; ?>"</p>
+                <p><button type="button" class="btn btn-warning btn-mini">OPEN</button><button class="btn btn-primary btn-mini" style="margin-left: 5px;">LIKE</button></p>
             </div>
         </div>
        <?php } ?>
@@ -147,56 +150,9 @@ for($i=0; $i<count($fb_feed);$i++):?>
     </div>
     <!-- END REPLY -->
     
-    <!-- CASE -->  
+    <!-- CASE -->
     <div class="case-field hide">
-        <div class="row-fluid">
-            <span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
-            CASE ID      : #012345
-            <div class="pull-left">
-                <select style="width: 130px;">
-                    <option value="keyword">Feedback</option>
-                    <option value="user">Enquiry</option>
-                    <option value="keyword">Complaint</option>
-                </select>
-                <select style="width: 130px;">
-                    <option value="keyword">Accounts & Banking</option>
-                    <option value="user">Cards</option>
-                    <option value="keyword">Investment</option>
-                    <option value="keyword">insurance</option>
-                    <option value="user">Loans</option>
-                    <option value="keyword">Maybank2u</option>
-                    <option value="keyword">Others</option>
-                </select>
-            </div>
-            <br clear="all" />
-            <button class="btn btn-small btn-purple btn-add-related">Add Related Conversation</button>
-            <br clear="all" />
-            <div class="pull-left">
-                Assign To:
-            </div>
-            <div class="pull-right">
-                <select>
-                    <option value="keyword">Nicole Lee</option>
-                    <option value="user">Azahan Azad</option>
-                    <option value="keyword">Azahamad Arif</option>
-                </select>
-            </div>
-            <br clear="all" />
-            <div class="pull-left">
-                Email:
-            </div>
-            <div class="pull-right">
-                <input type="text">
-            </div>
-            <br clear="all" />
-            Message :
-            <br>
-            <textarea placeholder="Compose Message"></textarea>
-            <br clear="all" />
-            <div class="pull-right">
-                <button class="btn-purple btn btn-small"><i class="icon-ok-circle icon-large"></i> Assign</button>    
-            </div>
-        </div>
+    <?php $this->load->view('dashboard/case_field')?>
     </div>
     <!-- END CASE -->  
 </li>

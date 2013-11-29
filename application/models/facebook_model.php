@@ -375,23 +375,20 @@ class facebook_model extends CI_Model
     }
     
     public function RetrieveFeedFB($filter){
+        
         $this->db->select('*');
-        $this->db->from("fb_user_engaged a INNER JOIN social_stream_fb_post b  
-			 ON b.author_id = a.facebook_id inner join social_stream c on c.post_id = b.post_id ");
-        $this->db->limit(20);
-        $this->db->order_by('c.created_at','desc');
-        if(count($filter) >= 1)
+        $this->db->from("fb_user_engaged a INNER JOIN social_stream_fb_post b ON b.author_id=a.facebook_id LEFT OUTER JOIN social_stream c ON c.post_id=b.post_id");if(count($filter) > 0)
             $this->db->where($filter);
+        $this->db->order_by('c.created_at','desc');
         return $this->db->get()->result();
     }
     
     public function RetrievePostFB($filter){
+        
         $this->db->select('*');
-        $this->db->from("fb_user_engaged a INNER JOIN social_stream_fb_post b ON b.author_id=a.facebook_id
-			inner join social_stream c on c.post_id = b.post_id");
-        if(count($filter) > 0)
-	    $this->db->where($filter);
-        $this->db->limit(20);
+        $this->db->from("fb_user_engaged a INNER JOIN social_stream_fb_post b ON b.author_id=a.facebook_id LEFT OUTER JOIN social_stream c ON c.post_id=b.post_id");if(count($filter) > 0)
+            $this->db->where($filter);
+	$this->db->limit(20);
         $this->db->order_by('c.created_at','desc');
         return $this->db->get()->result();
     }
@@ -413,5 +410,26 @@ class facebook_model extends CI_Model
         $requestResult = curl_get_file_contents('https://graph.facebook.com/32423425 453423/likes');
         $result  = json_decode($requestResult);
 
+    }
+    
+    public function ReadUnread($post_id){
+	$this->db->select('*');
+	$this->db->from('social_stream');
+	$this->db->where('post_id',$post_id);
+	$val = $this->db->get()->row();
+	if($val->is_read == 0){
+	    $new_val = 1;
+	}
+	else{
+	    $new_val = 0;
+	}
+	
+	$data = array(
+               'is_read' => $new_val,
+            );
+
+	$this->db->where('post_id', $post_id);
+	$this->db->update('social_stream', $data);
+	return $new_val;
     }
 }

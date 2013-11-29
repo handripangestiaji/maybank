@@ -1,8 +1,11 @@
 <?php
+
     for($i=0;$i<count($directmessage);$i++){
     ?>
-    <li>
+    <li <?php if($directmessage[$i]->is_read==0){echo 'class="unread-post"';} ?>>
         <div class="circleAvatar"><img src="<?php echo $directmessage[$i]->sender->profile_image_url; ?>" alt=""></div>
+        <div class="read-mark <?php if($directmessage[$i]->is_read==0){echo 'redText';} else { echo 'greyText'; } ?>"><i class="icon-bookmark icon-large"></i></div>
+        <br />
         <p class="headLine">
             <span class="author">'<?php echo $directmessage[$i]->sender->screen_name; ?>'</span>
             <i class="icon-circle"></i>
@@ -145,9 +148,9 @@
                     <label class="control-label">Assign To</label>
                     <div class="controls">
                         <select id="uniqueSelect">
-                            <option id="opt1" value="opt1">John Doe</option>
-                            <option id="opt2" value="opt2">May Bankette</option>
-                            <option id="opt3" value="opt3">Jane Doyen</option>
+                            <?php foreach($user_list as $user):?>
+                                <option value="<?=$user->user_id?>"><?=$user->full_name."($user->email)"?></option>
+                            <?php endforeach;?>
                         </select>
                     </div>
                 </div>

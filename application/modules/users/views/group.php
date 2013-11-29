@@ -110,4 +110,9 @@
     {
         window.location.href = "<?php echo site_url();?>/users";
     }
+    
+    function menu_group()
+    {
+        window.location.href = "<?php echo site_url();?>/users/menu_group";
+    }
 </script>

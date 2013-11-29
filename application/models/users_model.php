@@ -9,6 +9,7 @@ class Users_model extends CI_Model
     private $activity = 'user_login_activity';
     private $channel = 'channel';
     private $user_group_detail = 'user_group_detail';
+    private $role_detail = 'role_collection_detail';
     
     function __construct()
     {
@@ -65,6 +66,38 @@ class Users_model extends CI_Model
     function select_role()
     {
         return $this->db->get($this->role);
+    }
+    
+    function insert_role($data)
+    {
+        return $this->db->insert($this->role,$data);
+    }
+    
+    function delete_role($id)
+    {
+        $this->db->where('role_collection_id',$id);
+        $this->db->delete($this->role_detail);
+        
+        $this->db->where('role_collection_id',$id);
+        return $this->db->delete($this->role);
+    }
+    
+    function edit_role($id)
+    {
+        $this->db->where('role_collection_id',$id);
+        return $this->db->get($this->role);
+    }
+    
+    //============================ ROLE DETAIL =========================
+    function insert_role_detail($data)
+    {
+        return $this->db->insert($this->role_detail,$data);
+    }
+    
+    function edit_role_detail($id)
+    {
+        $this->db->where('role_collection_id',$id);
+        return $this->db->get($this->role_detail);
     }
     
     //============================ GROUP ================================
@@ -141,7 +174,6 @@ class Users_model extends CI_Model
     //============================= APP_ROLE ============================
     function select_appRole()
     {
-        $this->db->where('role_group','channel');
         return $this->db->get($this->app_role);
     }
     function insert_appRole($data)

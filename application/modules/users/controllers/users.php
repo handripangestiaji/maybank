@@ -29,7 +29,9 @@ class Users extends MY_Controller {
     function index()
     {
         $data = array(
-		      'show' => $this->users_model->select_user()
+		      'show' => $this->users_model->select_user(),
+		      'role' => $this->users_model->select_role(),
+		      'count' => $this->db->affected_rows($this->users_model->select_user())
 		     );
         $this->load->view('users/index',$data);
     }
@@ -152,11 +154,58 @@ class Users extends MY_Controller {
 	  $this->load->view('users/role',$data);
     }
     
+    function insert_role()
+    {
+	  $timezone = new DateTimeZone("Europe/London");
+	  $time = new DateTime(date("Y-m-d H:i:s e"), $timezone);
+	  $created_at = $time->format("Y-m-d H:i:s");
+	  $created_by = $this->session->userdata('user_id');
+	  
+	  $data = array(
+			 'role_name' => $this->input->post('new_role'),
+			 'created_by' => $created_by,
+			 'created_at' => $created_at
+			);
+	  $this->users_model->insert_role($data);
+	  $last_id=$this->db->insert_id();
+	  
+	  $role = $this->input->post('role');
+	  
+	  for($i=0;$i<count($role);$i++)
+	  {
+	       $data1 = array(
+			      'role_collection_id' => $last_id,
+			      'app_role_id' => $role[$i]
+			      );
+	       $this->users_model->insert_role_detail($data1);
+	  }
+	  redirect('users/menu_role');
+    }
+    
+    function delete_role($id)
+    {
+	  $this->users_model->delete_role($id);
+	  redirect('users/menu_role');
+    }
+    
+    function edit_role($id)
+    {
+	  $data = array(
+			 'role' => $this->users_model->edit_role($id),
+			 'app_show' =>$this->users_model->select_appRole(),
+			 'role_detail' => $this->users_model->edit_role_detail($id)
+			);
+	  $this->load->view('users/role_edit',$data);
+    }
+    
     
     //============================ APP_ROLE ===============================
     function create_appRole()
     {
-	  $this->load->view('users/create_appRole');
+	  $data = array(
+			 'parent' =>$this->users_model->select_appRole()
+		    );
+	  $this->load->view('users/create_appRole',$data);
     }
     function insert_appRole()
     {
@@ -168,7 +217,8 @@ class Users extends MY_Controller {
 			'role_name' => $this->input->post('role_name'),
 			'role_friendly_name' => $this->input->post('role_friend'),
 			'created_at' => $time->format("Y-m-d H:i:s"),
-			'active' => 1
+			'active' => 1,
+			'parent_id' => $this->input->post('parent_id')
 			);
 	  $this->users_model->insert_appRole($data);
 	  
@@ -191,9 +241,11 @@ class Users extends MY_Controller {
     {	
 	  $timezone = new DateTimeZone("Europe/London");
 	  $time = new DateTime(date("Y-m-d H:i:s e"), $timezone);
-	  $channel = $this->input->post('channel');
+	  $created_at = $time->format("Y-m-d H:i:s");
 	  $created_by = $this->session->userdata('user_id');
-	  $created_at = $time->format("Y-m-d H:i:s"); 
+	  
+	  $channel = $this->input->post('channel');
+	   
 	  
 	  $data = array(
 			 'group_name' => $this->input->post('group_name'),

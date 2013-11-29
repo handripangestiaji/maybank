@@ -159,7 +159,7 @@ class Socialmedia extends MY_Controller {
 	  echo $result;
 	  */
     }
-}    
+ 
     public function likePost(){
 	  $post_id=$_POST['post_id'];
       $access_token_fb = fb_dummy_accesstoken();

@@ -374,7 +374,7 @@ class facebook_model extends CI_Model
 	return $this->db->get()->row();
     }
     
-    public function RetrieveFeedFB($filter,$limit){
+    public function RetrieveFeedFB($filter,$limit = 20){
         $this->db->select('*');
         $this->db->from("fb_user_engaged a INNER JOIN social_stream_fb_post b  
 			 ON b.author_id = a.facebook_id inner join social_stream c on c.post_id = b.post_id ");
@@ -408,14 +408,18 @@ class facebook_model extends CI_Model
         return $result;  
     }
     
-      public function RetrievePmFB($filter,$limit){
+      public function RetrievePmFB($filter,$limit = 20){
         //WHERE detail_id_from_facebook LIKE '%_0'
         $this->db->select('a.*,b.*,c.name,c.username');
         $this->db->from("social_stream_facebook_conversation a LEFT OUTER JOIN 
                         social_stream_facebook_conversation_detail b ON b.conversation_id = a.conversation_id LEFT OUTER JOIN
-                        fb_user_engaged c ON c.facebook_id=b.sender");
+                        fb_user_engaged c ON c.facebook_id=b.sender INNER JOIN
+                        social_stream d ON d.post_id=b.conversation_id");
+	
         if(count($filter) > 0){
-	    $this->db->where("detail_id_from_facebook LIKE '%_0' and ".$filter);
+	    $this->db->where("detail_id_from_facebook LIKE '%_0' ");
+	    $this->db->where($filter);
+	    
         }else{
         $this->db->where("detail_id_from_facebook LIKE '%_0'");    
         }
@@ -435,21 +439,16 @@ class facebook_model extends CI_Model
         $this->db->where("detail_id_from_facebook NOT LIKE '%_0' and b.conversation_id='".$filter."'");
         $this->db->order_by('created_at','desc');
         return $this->db->get()->result();
- 
+    }
+    
     public function likePost($post_id, $access_token, $type = 'feed'){
 	
         $requestResult = curl_get_file_contents('https://graph.facebook.com/32423425 453423/likes');
         $result  = json_decode($requestResult);
 
     }
-}
- 
-    public function likePost($post_id, $access_token, $type = 'feed'){
-	
-        $requestResult = curl_get_file_contents('https://graph.facebook.com/32423425 453423/likes');
-        $result  = json_decode($requestResult);
 
-    }
+ 
     
     public function ReadUnread($post_id){
 	$this->db->select('*');

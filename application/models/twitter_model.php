@@ -280,10 +280,5 @@ class twitter_model extends CI_Model
         $this->db->order_by('b.created_at','desc');           
         return $this->db->get()->result();
     }
-}    
-    public function ReadTwitterConversation($in_reply_to_status_id_str){
-        
-        //query disini
-        
-    }    
+   
 }

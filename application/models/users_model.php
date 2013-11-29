@@ -88,6 +88,12 @@ class Users_model extends CI_Model
         return $this->db->get($this->role);
     }
     
+    function update_role($id,$data)
+    {
+        $this->db->where('role_collection_id',$id);
+        return $this->db->update($this->role,$data);
+    }
+    
     //============================ ROLE DETAIL =========================
     function insert_role_detail($data)
     {
@@ -98,6 +104,12 @@ class Users_model extends CI_Model
     {
         $this->db->where('role_collection_id',$id);
         return $this->db->get($this->role_detail);
+    }
+    
+    function delete_role_detail($id)
+    {
+        $this->db->where('role_collection_id',$id);
+        return $this->db->delete($this->role_detail);
     }
     
     //============================ GROUP ================================

@@ -198,6 +198,28 @@ class Users extends MY_Controller {
 	  $this->load->view('users/role_edit',$data);
     }
     
+    function update_role()
+    {
+	  
+	  $data = array(
+			 'role_name' => $this->input->post('role_name')
+			);
+	  $id = $this->input->post('role_id');
+	  $this->users_model->update_role($id,$data);
+	  
+	  $role = $this->input->post('role');
+	  $this->users_model->delete_role_detail($id);
+	  for($i=0;$i<count($role);$i++)
+	  {
+	       $data1 = array(
+			      'role_collection_id' => $id,
+			      'app_role_id' => $role[$i]
+			      );
+	       $this->users_model->insert_role_detail($data1);
+	  }
+	  redirect('users/menu_role');
+    }
+    
     
     //============================ APP_ROLE ===============================
     function create_appRole()

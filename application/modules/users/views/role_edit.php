@@ -13,7 +13,7 @@
 						$( this ).parent().children( 'ul' ).slideToggle( 'fast' );
 				});
 				
-				$( '#all' ).click( function() {
+				$( '#all-toogle' ).click( function() {
 					
 					$( '.tree li' ).each( function() {
 						$( this ).toggleClass( 'active' );
@@ -33,14 +33,16 @@
             <input class="btn" type="button" onclick='menu_group()' name="btn_group" value="Group" />
         </div>
         <div class="cms-table pull-right">
-            <form method='post' action='<?php echo site_url();?>/users/insert_role' >
+        <form method='post' action='<?php echo site_url();?>/users/update_role' >
             <h5>Edit Role</h5>
             <hr style="margin-top: 0px;">
-            Role Name <input type='text' name='new_role' value='<?php echo $role->row()->role_name;?>' /><br />
+            Role Name <input type='text' name='role_name' value='<?php echo $role->row()->role_name;?>' />
+            <input type='hidden' name='role_id' value='<?php echo $role->row()->role_collection_id;?>' />
+            <br />
             <hr>
             <div>
                 <div class="tree" id="tree">
-                    Role Permission
+                    Role Permission<br />
                     <ul>
                         <?php foreach($app_show->result() as $parent)
                         {

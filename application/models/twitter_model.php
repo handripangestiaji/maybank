@@ -29,7 +29,6 @@ class twitter_model extends CI_Model
     public function Mentions($channel){
         $result = $this->connection->get('statuses/mentions_timeline',
                                          array("count" => 200));
-        print_r($this->connection);
         echo "<pre>";
         print_r($result);
         echo "</pre>";
@@ -60,9 +59,10 @@ class twitter_model extends CI_Model
     }
     
     public function HomeFeed($channel){
-        $result = $this->connection->get('statuses/home_timeline');
-        
-        print_r($channel);
+        $result = $this->connection->get('statuses/home_timeline',
+                    array(
+                        "user_id" => $channel->social_id
+                    ));
         echo "<pre>";
         print_r($result);
         echo "</pre>";
@@ -246,7 +246,7 @@ class twitter_model extends CI_Model
     }
     
     public function ReadDMFromDb($filter,$limit){
-         $this->db->select("a.channel_id, a.post_stream_id, a.retrieved_at, a.created_at,b.*, a.is_read");
+         $this->db->select("a.channel_id, a.post_stream_id, a.retrieved_at, a.created_at,b.*");
          $this->db->from("social_stream a inner join twitter_direct_messages b on a.post_id = b.post_id"); 
          if(count($filter) > 0)
 	     $this->db->where($filter);
@@ -276,7 +276,14 @@ class twitter_model extends CI_Model
                         c.twitter_user_id = b.twitter_user_id");
         if(count($filter) > 0)
 	    $this->db->where($filter);
-        $this->db->limit($limit);           
+        $this->db->limit($limit);
+        $this->db->order_by('b.created_at','desc');           
         return $this->db->get()->result();
     }
+}    
+    public function ReadTwitterConversation($in_reply_to_status_id_str){
+        
+        //query disini
+        
+    }    
 }

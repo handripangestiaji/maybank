@@ -51,6 +51,7 @@ class Media_stream extends CI_Controller {
 	}
 	$data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter);
 	$data['own_post'] = $this->facebook_model->RetrievePostFB($filter);
+    $data['fb_pm'] = $this->facebook_model->RetrievePmFB($filter);
 	$data['channel_id'] = $channel_id;
 	$this->load->model('case_model');
 	$data['user_list'] = $this->case_model->ReadAllUser();

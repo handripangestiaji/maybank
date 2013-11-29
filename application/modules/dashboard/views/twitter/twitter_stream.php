@@ -53,7 +53,8 @@
              if(is_array($directmessage)){
                 $this->load->view('dashboard/twitter/twitter_messages', array('directmessage' => $directmessage));
              }else{
-                print_r($directmessage);
+                //print_r($directmessage);
+                echo $directmessage->errors[0]->message;
              }   
          ?> 
     </ul>

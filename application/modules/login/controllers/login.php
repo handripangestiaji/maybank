@@ -96,7 +96,7 @@ class Login extends Login_Controller {
                                                     'login_time' => $time->format("Y-m-d H:i:s")
                                                 );
                         $this->users_model->insert_activity($login_activity);
-                    redirect('users');
+                    redirect('dashboard');
                 }
                 else
                 {

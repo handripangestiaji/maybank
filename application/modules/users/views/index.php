@@ -25,11 +25,9 @@
                         <td>
                             <select>
                                 <option>All User Role</option>
-                                <option>Super Admin</option>
-                                <option>Administrator</option>
-                                <option>Manager</option>
-                                <option>Author</option>
-                                <option>Viewer</option>
+                                <?php foreach($role->result() as $rol){?>
+                                    <option><?php echo $rol->role_name;?></option>
+                                <?php }?>
                             </select>
                         </td>
                     </tr>
@@ -77,6 +75,7 @@
                 </tbody>
                 
             </table>
+            <?php if($count>=10){?>
             <div class="page pull-right" style="margin-top: 30px;">
                 <a href="#">First</a>
                 <a href="#" class="active">1</a>
@@ -85,6 +84,7 @@
                 <a href="#">4</a>
                 <a href="#">Last</a>
             </div>
+            <?php }?>
         </div>
     </div>
 </div>

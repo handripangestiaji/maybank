@@ -32,23 +32,19 @@
             <input class="btn" type="button" onclick="menu_role()" name="btn_role" value="Role"  />   <br />
             <input class="btn" type="button" onclick='menu_group()' name="btn_group" value="Group" />
         </div>
-        
         <div class="cms-table pull-right">
             <form method='post' action='<?php echo site_url();?>/users/insert_role' >
-            <h5>New User Role</h5>
+            <h5>Edit Role</h5>
             <hr style="margin-top: 0px;">
-            New Role <input type='text' name='new_role' /><br />
+            Role Name <input type='text' name='new_role' value='<?php echo $role->row()->role_name;?>' /><br />
             <hr>
-            <div style='float: right;'>
-                <input type='button' class='btn' id="next" value='Next' onclick="showHide();return false;" />
-            </div>
-            <div style='clear: both;'></div>
             <div>
                 <div class="tree" id="tree">
                     Role Permission
                     <ul>
                         <?php foreach($app_show->result() as $parent)
                         {
+                            $checked = '';
                             if($parent->parent_id == NULL)
                             {
                         ?>
@@ -59,26 +55,46 @@
                             {
                                 if($parent->app_role_id == $child->parent_id)
                                 {
+                                    foreach($role_detail->result() as $role_d3)
+                                            {
+                                                if($child->app_role_id == $role_d3->app_role_id)
+                                                {
+                                                    $checked='checked';
+                                                }
+                                            }
                             ?>
-                                <li><a><input type='checkbox' name="role[]" value='<?php echo $child->app_role_id;?>' /><?php echo $child->role_name;?></a>
+                                <li><a><input <?php echo $checked;?> type='checkbox' name="role[]" value='<?php echo $child->app_role_id;?>' /><?php echo $child->role_name;?></a>
                             
                             <?php
                                     foreach($app_show->result() as $child_child)
                                     {
                                         if($child->app_role_id == $child_child->parent_id)
                                         {
+                                            foreach($role_detail->result() as $role_d2)
+                                            {
+                                                if($child_child->app_role_id == $role_d2->app_role_id)
+                                                {
+                                                    $checked='checked';
+                                                }
+                                            }
                             ?><ul>
-                                        <li><a><input type='checkbox' name="role[]" value='<?php echo $child_child->app_role_id;?>' /><?php echo $child_child->role_name;?></a>
+                                        <li><a><input <?php echo $checked;?> type='checkbox' name="role[]" value='<?php echo $child_child->app_role_id;?>' /><?php echo $child_child->role_name;?></a>
                                         <?php
                                             foreach($app_show->result() as $child_child_child)
                                             {
                                                 if($child_child->app_role_id == $child_child_child->parent_id)
                                                 {
+                                                    foreach($role_detail->result() as $role_d){
+                                                        if($role_d->app_role_id == $child_child_child->app_role_id)
+                                                        {
+                                                            $checked='checked';
+                                                        }
+                                                    }
                                         ?>
                                                 <ul>
-                                                    <li><input type='checkbox' name="role[]" value='<?php echo $child_child_child->app_role_id;?>' /><?php echo $child_child_child->role_name;?></li>
+                                                    <li><input <?php echo $checked;?> type='checkbox' name="role[]" value='<?php echo $child_child_child->app_role_id;?>' /><?php echo $child_child_child->role_name;?></li>
                                                 </ul>
-                                        <?php
+                                        <?php           
                                                 }
                                             }
                                         ?>
@@ -97,54 +113,18 @@
                         <?php
                             }
                         }
+                    
                         ?>
                     </ul>
                     <input type='submit' value='Save' />
                     </form>
                 </div>
                 </div>
-                
-            <input type='button' value='Create Role Permission' onclick='btn_createRole()' />
-            <h5>Current User Role</h5>
-            <table class="table table-striped table-role">
-                <thead>
-                    <tr>
-                        <td>User Role</td>
-                        <td>Users</td>
-                        <td>Creator</td>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach($show->result() as $row){?>
-                    <tr>
-                        <td><?php echo $row->role_name;?></td>
-                        <td>0</td>
-                        <td>kosong</td>
-                        <td><a href='<?php echo site_url();?>/users/edit_role/<?php echo $row->role_collection_id;?>'><span><i class="icon-pencil"></i></span></a></td>
-                        <td><button class="btn-role-delete" id="delete_<?PHP echo $row->role_collection_id; ?>"><span><i class="icon-remove"></i></span></button></td>
-                        
-                    </tr>
-                    <?php }?>
-                </tbody>
-            </table>
             </div>
            
     </div>
-    </div>
 </div>
-<style type="text/css">
-   .tree {
-      display: none;
-      margin-bottom: 15px;
-      }
-</style>
 <script type="text/javascript">
-    function btn_createRole()
-    {
-        window.location = '<?php echo site_url();?>/users/create_appRole';
-    }
     function menu_role()
     {
         window.location.href = "<?php echo site_url();?>/users/menu_role";
@@ -159,21 +139,4 @@
     {
         window.location.href = "<?php echo site_url();?>/users/menu_group";
     }
-    function showHide(sh) {
-                document.getElementById('tree').style.display = 'block';
-                document.getElementById('next').type = 'hidden';
-    }
-</script>
-<script type="text/javascript">
-	$(document).ready(function(e){
-			$('.btn-role-delete').click(function(e) {
-		            if(confirm('Are you want delete this data ?'))
-			    {
-				var id = $(this).attr('id').substr(7);
-                                
-				window.location = '<?php echo site_url();?>/users/delete_role/'+id;
-			    }
-		        });
-		});
-	
 </script>

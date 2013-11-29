@@ -742,9 +742,10 @@ $(function(){
                         });
                     });
                     
-                    $(".send_reply").click(function() {
+                     $(this).on('click','.send_reply',
+                        function() {
                         $.ajax({
-                            url : BASEURL + 'dashboard/socialmedia/replyPost',
+                            url : BASEURL + 'dashboard/media_stream/FbReplyPost',
                             type: "POST",
                             data: {
                                     post_id:$(this).val(),

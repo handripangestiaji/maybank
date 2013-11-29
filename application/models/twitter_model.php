@@ -277,7 +277,14 @@ class twitter_model extends CI_Model
                         c.twitter_user_id = b.twitter_user_id");
         if(count($filter) > 0)
 	    $this->db->where($filter);
-        $this->db->limit($limit);           
+        $this->db->limit($limit);
+        $this->db->order_by('b.created_at','desc');           
         return $this->db->get()->result();
     }
+    
+    public function ReadTwitterConversation($in_reply_to_status_id_str){
+        
+        //query disini
+        
+    }    
 }

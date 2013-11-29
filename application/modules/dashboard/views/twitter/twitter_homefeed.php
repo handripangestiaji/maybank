@@ -99,7 +99,7 @@ for($i=0;$i<count($homefeed);$i++){
     <!-- END ENGAGEMENT -->
     
     <h4 class="filled">
-        <a role="button" class='destroy_status'><i class="icon-trash greyText"></i></a>
+        <!--a role="button" class='destroy_status'><i class="icon-trash greyText"></i></a-->
         <div class="pull-right">
             <!--form class="contentForm" action="<?php //echo base_url('index.php/dashboard/socialmedia/twitteraction');?>" method="post"-->
                 <button class="btn btn-reply btn-primary" data-toggle="modal"><i class="icon-mail-reply"></i></button>

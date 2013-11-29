@@ -14,7 +14,6 @@ class Cronjob extends CI_Controller {
         
     }
     
-    
     // Purposed for save facebook stream to database.... 
     function FacebookStreamOwnPost(){
         $filter = array(
@@ -93,10 +92,6 @@ class Cronjob extends CI_Controller {
         }
         
     }
-    
-    
-    
-    
     
     function TwitterMentions(){
         $this->load->model("twitter_model");

@@ -114,7 +114,7 @@ for($i=0; $i<count($fb_feed);$i++):?>
                     <option value="keyword">Others</option>
                 </select>
             </div>
-            <textarea placeholder="Compose Message"></textarea>
+            <textarea class='reply_comment' placeholder="Compose Message"></textarea>
             <br clear="all" />
             <div class="pull-left">
                 <i class="icon-link"></i>
@@ -139,7 +139,7 @@ for($i=0; $i<count($fb_feed);$i++):?>
                 <i class="icon-facebook"></i> 2000     
             </div>
             <div class="pull-right">
-                <button class="btn btn-primary btn-small btn-send-reply">SEND</button>    
+                <button class="send_reply btn btn-primary btn-small btn-send-reply" value="<?php echo $fb_feed[$i]->post_stream_id;?>">SEND</button>    
             </div>
             <br clear="all" />
             <div class="reply-status hide">MESSAGE SENT</div>

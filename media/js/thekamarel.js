@@ -683,7 +683,24 @@ $(function(){
                                 $('.compose-post-status').fadeOut(5000);
                             },
                         });
+                    });
+                    
+                    $(".send_reply").click(function() {
+                        $.ajax({
+                            url : BASEURL + 'dashboard/socialmedia/replyPost',
+                            type: "POST",
+                            data: {
+                                    post_id:$(this).val(),
+                                    comment: $(this).parent().siblings(".reply_comment").val()
+                                    },
+                            success: function()
+                            {
+                                $('.compose-post-status').show();
+                                $('.compose-post-status').fadeOut(5000);
+                            },
+                        });
                     });                   
+                     
                                                                                 
                 });
                   

@@ -26,11 +26,9 @@ for($i=0;$i<count($mentions);$i++){
     
     <p>
         <a role="button" class="btn-engagement"><i class="icon-eye-open"></i> Engagement</a> |
-        <a data-toggle="modal" role="button" href="#modaltweet<?php echo $i; ?>" ><i class="icon-retweet greyText"></i><?php //echo $mentions[$i]->retweeted; ?> re-tweets</a>
-        <!--
+        <a data-toggle="modal" role="button" href="#modaltweet<?php echo $i; ?>" ><i class="icon-retweet greyText"></i><?php //echo $mentions[$i]->retweeted; ?> re-tweets</a> | 
         <span class="btn-mark-as-read cyanText" style="display: <?php if($mentions[$i]->is_read==1){echo 'none';} ?>"><i class="icon-bookmark"></i> Mark as Read</span>
         <span class="btn-mark-as-unread cyanText" style="display: <?php if($mentions[$i]->is_read==0){echo 'none';} ?>"><i class="icon-bookmark-empty"></i> Mark as Unread</span>
-        -->
     </p>
     <!-- ENGAGEMENT -->    
     <div class="engagement hide">
@@ -121,7 +119,7 @@ for($i=0;$i<count($mentions);$i++){
                 <?php }else{ ?>
                 <button type="button" class="follow btn btn-primary" value="follow"><i class="icon-user"></i></button>
                 <?php } ?>
-                <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i>CASE</button>
+                <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>
                 <input type="hidden" class="str_id" value="<?php echo $mentions[$i]->post_stream_id; ?>" />
                 <input type="hidden" class="id" value="<?php echo json_decode($mentions[$i]->twitter_entities)->user_mentions[0]->id; ?>" />
                 <input type="hidden" class="userid" value="<?php echo $mentions[$i]->twitter_user_id; ?>" />

@@ -1,4 +1,4 @@
-<input type="hidden" class="channel-id" value="<?php if(isset($fb_feed)){echo $fb_feed[0]->channel_id;}  ?>">
+<input type="hidden" class="channel-id" value="<?php if(count($fb_feed) > 0){echo $fb_feed[0]->channel_id;}  ?>">
 <div class="container-fluid">
 <!-- ==================== ACTIVITIES MENU ==================== -->
 <div class="floatingBoxMenu">

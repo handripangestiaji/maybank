@@ -561,6 +561,12 @@ $(function(){
                             }
                         );
                         
+                        $(this).on('click','.related-conversation-btn-hide-show',
+                            function(){
+                                $(this).siblings('div').toggle();
+                            }
+                        );
+                        
                         $(this).on('click','.reply-field-btn-close',
                             function() {
                                  $(this).parent().parent().hide();

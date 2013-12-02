@@ -176,7 +176,11 @@ for($i=0;$i<count($mentions);$i++){
     
     <!-- CASE -->
     <div class="case-field hide">
-       <?php $this->load->view('dashboard/case_field');?>
+       <?php
+            $data['posts'] = $mentions;
+            $data['i'] = $i;
+            $this->load->view('dashboard/case_field',$data);
+        ?>
     </div>
     <!-- END CASE -->  
     

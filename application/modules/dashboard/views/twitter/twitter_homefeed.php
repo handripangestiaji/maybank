@@ -176,7 +176,11 @@ for($i=0;$i<count($homefeed);$i++){
     
     <!-- CASE -->  
     <div class="case-field hide">
-       <?php $this->load->view('dashboard/case_field');?>
+       <?php
+            $data['posts'] = $homefeed;
+            $data['i'] = $i;
+            $this->load->view('dashboard/case_field',$data);
+        ?>
     </div>
     <!-- END CASE -->  
     

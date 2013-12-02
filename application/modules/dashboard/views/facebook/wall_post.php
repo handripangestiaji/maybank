@@ -8,7 +8,7 @@ for($i=0; $i<count($fb_feed);$i++):?>
     <p class="headLine">
         <span class="author"><?php echo $fb_feed[$i]->name//."(".$fb_feed[$i][$i]->users->usename.")"?></span>
         <i class="icon-circle"></i>
-        <span>posted a <span class="cyanText">comment</span></span>
+        <span>posted a <span class="cyanText">new post</span></span>
         <i class="icon-circle"></i>
         <span><?php echo $fb_feed[$i]->created_at; ?></span>
         <i class="icon-play-circle moreOptions pull-right"></i>
@@ -257,7 +257,11 @@ for($i=0; $i<count($fb_feed);$i++):?>
     
     <!-- CASE -->
     <div class="case-field hide">
-    <?php $this->load->view('dashboard/case_field')?>
+    <?php
+        $data['posts'] = $fb_feed;
+        $data['i'] = $i;
+        $this->load->view('dashboard/case_field',$data);
+    ?>
     </div>
     <!-- END CASE -->  
 </li>

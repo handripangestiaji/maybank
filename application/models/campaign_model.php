@@ -118,6 +118,13 @@ echo "<pre>";
 		return $campaigns;
 	}
 	
+	
+	public function GetProduct($filter = array()){
+		if(count($array)){
+			
+		}
+	}
+	
 	public function getOneBy($params = array())
 	{
 		if (isset($params['id']))

@@ -9,10 +9,14 @@
       <input type="password" name="password" placeholder="Password">
       <a id="submit" href="javascript:void(0);"><span class="add-on" id="login"><i class="icon-arrow-right"></i></span></a>
     </div>
-    <div class="alert alert-error">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <strong>Login Failed!</strong> Username and password are incorrect.
-     </div>
+    <?php
+	$msg = $this->session->flashdata('message');
+	if($msg!=NULL){ ?>
+	<div class="alert alert-error">
+	    <button type="button" class="close" data-dismiss="alert">&times;</button>
+	    <strong>Login Failed!</strong> Username and password are incorrect.
+	 </div>
+     <?php }?>
 </form>
 
 <div class="signInRow">

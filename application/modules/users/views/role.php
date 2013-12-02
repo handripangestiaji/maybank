@@ -28,8 +28,8 @@
 <!--<span style="font-size: 14pt; color: black; margin: 5px 0;">USER MANAGEMENT</span>-->
     <div class="cms-content row-fluid">
         <div class="cms-filter pull-left">
-            <input class="btn btn-primary" onclick='menu_user()' type="button" name="btn_user" value="User" /> <br />
-            <input class="btn" type="button" onclick="menu_role()" name="btn_role" value="Role"  />   <br />
+            <input class="btn" onclick='menu_user()' type="button" name="btn_user" value="User" /> <br />
+            <input class="btn btn-primary" type="button" onclick="menu_role()" name="btn_role" value="Role"  />   <br />
             <input class="btn" type="button" onclick='menu_group()' name="btn_group" value="Group" />
         </div>
         

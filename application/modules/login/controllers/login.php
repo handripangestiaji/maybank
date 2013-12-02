@@ -45,7 +45,7 @@ class Login extends Login_Controller {
             
             if($this->session->userdata('is_login'))
             {
-                redirect('users');
+                redirect('dashboard');
             }
             $this->load->model('users_model');
             $this->load->helper('security');
@@ -88,11 +88,13 @@ class Login extends Login_Controller {
                 }
                 else
                 {
+		    $this->session->set_flashdata('message', TRUE);
                     redirect('login');
                 }
             }
             else
             {
+		$this->session->set_flashdata('message', TRUE);
                 redirect('login');
             }
             
@@ -129,7 +131,7 @@ class Login extends Login_Controller {
 		    $this->users_model->update_pass($id,$data);
 		    
 		    $this->email->set_newline("\r\n");
-		    $this->email->from('robay.robby@gmail.com','robay');
+		    $this->email->from('coba@gmail.com','coba');
 		    $this->email->to($email);
 		    
 		    $this->email->subject('Your current Password');

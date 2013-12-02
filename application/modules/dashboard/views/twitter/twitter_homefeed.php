@@ -133,7 +133,6 @@ for($i=0;$i<count($homefeed);$i++){
     <!-- REPLY -->  
     <div class="reply-field hide">
         <div class="row-fluid">
-             <form class="contentForm" action="<?php echo base_url('index.php/dashboard/socialmedia/twitteraction');?>" method="post">
             <span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
             <div class="pull-left">
                 <select style="width: 130px;">
@@ -151,7 +150,7 @@ for($i=0;$i<count($homefeed);$i++){
                     <option value="keyword">Others</option>
                 </select>
             </div>
-            <textarea placeholder="Compose Message" name="content"></textarea>
+            <textarea class='replaycontent' placeholder="Compose Message" name="content">@<?=$homefeed[$i]->screen_name?></textarea>
             <br clear="all" />
             <div class="pull-left">
                 <i class="icon-link"></i>
@@ -165,11 +164,52 @@ for($i=0;$i<count($homefeed);$i++){
                 <i class="icon-facebook"></i> 2000     
             </div>
             <div class="pull-right">
-                <button class="btn btn-primary btn-small btn-send-reply" name="action"  type="submit" value="replay" >SEND</button>    
+                <button class="replayTweet btn btn-primary btn-small btn-send-reply"  type="button" value="<?=$homefeed[$i]->post_stream_id;?>" >SEND</button>    
             </div>
             <br clear="all" />
             <div class="reply-status hide">MESSAGE SENT</div>
-            </form>
+        </div>
+    </div>
+    <!-- END REPLY -->
+    
+    <!-- dm -->  
+    <div class="reply-field hide">
+        <div class="row-fluid">
+            <span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
+            <div class="pull-left">
+                <select style="width: 130px;">
+                    <option value="keyword">Feedback</option>
+                    <option value="user">Enquiry</option>
+                    <option value="keyword">Complaint</option>
+                </select>
+                <select style="width: 130px;">
+                    <option value="keyword">Accounts & Banking</option>
+                    <option value="user">Cards</option>
+                    <option value="keyword">Investment</option>
+                    <option value="keyword">insurance</option>
+                    <option value="user">Loans</option>
+                    <option value="keyword">Maybank2u</option>
+                    <option value="keyword">Others</option>
+                </select>
+            </div>
+            <textarea class='replaycontent' placeholder="Compose Message" name="content">@<?=$homefeed[$i]->screen_name?></textarea>
+            <br clear="all" />
+            <div class="pull-left">
+                <i class="icon-link"></i>
+                <input type="text" class="span8"><button class="btn btn-primary btn-mini" style="margin-left: 5px;">SHORTEN</button>
+            </div>
+            <div class="pull-right">
+                <i class="icon-camera"></i>
+            </div>
+            <br clear="all" />
+            <div class="pull-left">
+                <i class="icon-facebook"></i> 2000     
+            </div>
+            <div class="pull-right">
+                <button class="replayTweet btn btn-primary btn-small btn-send-reply"  type="button" value="<?=$homefeed[$i]->post_stream_id;?>" >SEND</button>    
+            </div>
+            <br clear="all" />
+            <div class="reply-status hide">MESSAGE SENT</div>
         </div>
     </div>
     <!-- END REPLY -->

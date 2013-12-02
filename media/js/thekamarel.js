@@ -459,6 +459,13 @@ $(function(){
                                 $(this).closest('h4').next().next().show();
                             }
                         );
+                        
+                         $(this).on('click','.btn-dm',
+                            function() {
+                                $(this).closest('h4').next().hide();
+                                $(this).closest('h4').next().next().show();
+                            }
+                        );
                             
                         $(this).on('click','.assign-btn',
                             function() {
@@ -675,6 +682,24 @@ $(function(){
                         });
                     });
                     
+                    $(this).on('click','.replayTweet',
+                        function() {
+                        $.ajax({
+                            url : BASEURL + 'dashboard/socialmedia/twitterAction',
+                            type: "POST",
+                            data: {
+                                    action:'replayTweet',
+                                    content:$(this).parent().siblings(".replaycontent").val(),
+                                    str_id: $(this).val()
+                                    },
+                            success: function(data)
+                            {
+                                alert(data)
+                            },
+                        });
+                    });
+                    
+                    
                     $(this).on('click','.favorit',
                         function() {
                         $.ajax({
@@ -732,7 +757,7 @@ $(function(){
                             url : BASEURL + 'dashboard/media_stream/FbLikeStatus',
                             type: "POST",
                             data: {
-                                    str_id: $(this).siblings(".str_id").val()
+                                    post_id: $(this).val()
                                     },
                             success: function()
                             {

@@ -112,7 +112,8 @@ for($i=0;$i<count($mentions);$i++){
             <!--form class="contentForm" action="<?php //echo base_url('index.php/dashboard/socialmedia/twitteraction');?>" method="post"-->
                 <button class="btn btn-reply btn-primary" data-toggle="modal"><i class="icon-mail-reply"></i></button>
                 <button type="button" class="retweet btn btn-primary"><i class="icon-retweet"></i></button>
-                <a role="button" href="#modalsentdm<?php echo $i; ?>" class="btn btn-primary" data-toggle="modal"><i class="icon-envelope"></i></a>
+                <!--a role="button" href="#modalsentdm<?php //echo $i; ?>" class="btn btn-primary" data-toggle="modal"><i class="icon-envelope"></i></a-->
+                 <button type="button" class="btn-dm btn btn-primary" data-toggle="modal"><i class="icon-envelope"></i></button>
                 <button type="button" class="favorit btn btn-primary"><i class="icon-star"></i></button>
                 <?php if($mentions[$i]->following=='1'){ ?>
                 <button type="button" class="unfollow btn"><i class="icon-user"></i></button>
@@ -133,7 +134,6 @@ for($i=0;$i<count($mentions);$i++){
     <!-- REPLY -->  
     <div class="reply-field hide">
         <div class="row-fluid">
-             <form class="contentForm" action="<?php echo base_url('index.php/dashboard/socialmedia/twitteraction');?>" method="post">
             <span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
             <div class="pull-left">
                 <select style="width: 130px;">
@@ -151,7 +151,7 @@ for($i=0;$i<count($mentions);$i++){
                     <option value="keyword">Others</option>
                 </select>
             </div>
-            <textarea placeholder="Compose Message" name="content"></textarea>
+            <textarea class='replaycontent' placeholder="Compose Message" name="content"></textarea>
             <br clear="all" />
             <div class="pull-left">
                 <i class="icon-link"></i>
@@ -165,11 +165,52 @@ for($i=0;$i<count($mentions);$i++){
                 <i class="icon-facebook"></i> 2000     
             </div>
             <div class="pull-right">
-                <button class="btn btn-primary btn-small btn-send-reply" name="action"  type="submit" value="replay" >SEND</button>    
+                <button class="replayTweet btn btn-primary btn-small btn-send-reply"  type="button" value="<?=$mentions[$i]->post_stream_id;?>" >SEND</button>    
             </div>
             <br clear="all" />
             <div class="reply-status hide">MESSAGE SENT</div>
-            </form>
+        </div>
+    </div>
+    <!-- END REPLY -->
+    
+    <!-- DM -->  
+    <div class="dm-field hide">
+        <div class="row-fluid">
+            <span class="dm-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
+            <div class="pull-left">
+                <select style="width: 130px;">
+                    <option value="keyword">Feedback</option>
+                    <option value="user">Enquiry</option>
+                    <option value="keyword">Complaint</option>
+                </select>
+                <select style="width: 130px;">
+                    <option value="keyword">Accounts & Banking</option>
+                    <option value="user">Cards</option>
+                    <option value="keyword">Investment</option>
+                    <option value="keyword">insurance</option>
+                    <option value="user">Loans</option>
+                    <option value="keyword">Maybank2u</option>
+                    <option value="keyword">Others</option>
+                </select>
+            </div>
+            <textarea class='replaycontent' placeholder="Compose Message" name="content"></textarea>
+            <br clear="all" />
+            <div class="pull-left">
+                <i class="icon-link"></i>
+                <input type="text" class="span8"><button class="btn btn-primary btn-mini" style="margin-left: 5px;">SHORTEN</button>
+            </div>
+            <div class="pull-right">
+                <i class="icon-camera"></i>
+            </div>
+            <br clear="all" />
+            <div class="pull-left">
+                <i class="icon-facebook"></i> 2000     
+            </div>
+            <div class="pull-right">
+                <button class="replayTweet btn btn-primary btn-small btn-send-reply"  type="button" value="<?=$mentions[$i]->post_stream_id;?>" >SEND</button>    
+            </div>
+            <br clear="all" />
+            <div class="reply-status hide">MESSAGE SENT</div>
         </div>
     </div>
     <!-- END REPLY -->

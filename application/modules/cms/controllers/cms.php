@@ -41,7 +41,7 @@ class Cms extends MY_Controller {
 	        $campaigns = array();
 	        
 	        $campaigns = $this->input->post('campaign');
-	        $campaigns['user_id'] = "1";
+	        $campaigns['user_id'] = $this->session->userdata('user_id');
 	        
 	        $products_id = $this->input->post('products_id');
 	        $tags = $this->input->post('tag_id');
@@ -97,7 +97,7 @@ class Cms extends MY_Controller {
         {
 	        $arr = array();
 	        $arr['tag_name'] = $this->input->post('tag_name');
-	        $arr['user_id'] = "1";
+	        $arr['user_id'] = $this->session->userdata('user_id');
 	        
 	        $this->form_validation->set_rules('tag_name', 'Tag Name', 'required|xss_clean');
 	        
@@ -165,7 +165,7 @@ class Cms extends MY_Controller {
         {
         	$params = array();
 	        $params = $this->input->post('product');
-	        $params['user_id'] = "1";
+	        $params['user_id'] = $this->session->userdata('user_id');
 	        	        
 	        $this->form_validation->set_rules('product[product_name]', 'Product Name', 'required|xss_clean');
 	        

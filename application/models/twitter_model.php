@@ -246,7 +246,7 @@ class twitter_model extends CI_Model
     }
     
     public function ReadDMFromDb($filter,$limit){
-         $this->db->select("a.channel_id, a.post_stream_id, a.retrieved_at, a.created_at,b.*");
+         $this->db->select("a.channel_id, a.is_read, a.post_stream_id, a.retrieved_at, a.created_at,b.*");
          $this->db->from("social_stream a inner join twitter_direct_messages b on a.post_id = b.post_id"); 
          if(count($filter) > 0)
 	     $this->db->where($filter);

@@ -130,7 +130,7 @@ class Cms extends MY_Controller {
      
     public function create_short_url()
     {
-    	$data['campaigns'] = '';
+    	$data['campaigns'] = $this->campaign_model->get();
     	
     	$data['products'] = '';
     	

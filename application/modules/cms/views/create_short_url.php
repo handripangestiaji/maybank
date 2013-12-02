@@ -20,12 +20,12 @@
                 <label class="control-label">Campaign</label>
                 <div class="controls">
                     <select id="uniqueSelect">
-                        <option id="opt1" value="opt1">First Option</option>
-                        <option id="opt2" value="opt2">Second Option</option>
-                        <option id="opt3" value="opt3">Third Option</option>
-                        <option id="opt4" value="opt4">Fourth Option</option>
-                        <option id="opt5" value="opt5">Fifth Option</option>
-                        <option id="opt6" value="opt6">Sixth Option</option>
+                    	<?php if($campaigns): ?>
+                    		<?php $i=1;?>
+                    		<?php foreach($campaigns as $v): ?>
+                    			<option id="opt<?php echo $i?>" value="<?php echo $v->id?>"><?php echo $v->campaign_name ?></option>
+                    		<?php endforeach; ?>
+                    	<?php endif; ?>
                     </select>
                 </div>
             </div>

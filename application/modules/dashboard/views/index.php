@@ -16,16 +16,11 @@
                         <div class="left">
                                 <label class="left">Add Channel : </label>
                                 <select class="left compose-channels" id="multipleSelect" multiple="multiple">
-                                    <option id="optFb">Facebook</option>
-                                    <option id="optTw">Twitter</option>
-                                    <!--
-                                    <option id="opt7" value="opt7">FB Maybank (MY)</option>
-                                    <option id="opt8" value="opt8">FB Maybankcard (MY</option>
-                                    <option id="opt9" value="opt9">TW Mayabank (MY)</option>
-                                    <option id="opt10" value="opt10">TW Maybankcard (MY)</option>
-                                    <option id="opt11" value="opt11">Youtube Maybank (MY)</option>
-                                    <option id="opt12" value="opt12">Youtube Maybankcard (MY)</option>
-                                    -->
+                                    <?php
+                                        for($i=0;$i<count($channels);$i++){
+                                            echo '<option id="opt'.$channels[i]->connection_type.'">'.$channels[$i]->name.'</option>';
+                                        }
+                                    ?>
                                 </select>
                         </div>
                         <!-- left end -->

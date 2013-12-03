@@ -51,10 +51,10 @@
          <?php 
            // print_r($directmessage);
              if(is_array($directmessage)){
-                $this->load->view('dashboard/twitter/twitter_messages', array('directmessage' => $directmessage));
+                $this->load->view('dashboard/twitter/twitter_messages');
              }else{
                 //print_r($directmessage);
-                echo $directmessage->errors[0]->message;
+                //echo $directmessage->errors[0]->message;
              }   
          ?> 
     </ul>

@@ -51,7 +51,9 @@ class Media_stream extends CI_Controller {
 	}
 	$data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter);
 	$data['own_post'] = $this->facebook_model->RetrievePostFB($filter);
-    $data['fb_pm'] = $this->facebook_model->RetrievePmFB($filter);
+	$data['fb_pm'] = $this->facebook_model->RetrievePmFB($filter);
+	$this->load->model('campaign_model');
+	$data['product_list'] = $this->campaign_model->GetProduct();
 	$data['channel_id'] = $channel_id;
 	$this->load->model('case_model');
 	$data['user_list'] = $this->case_model->ReadAllUser();
@@ -80,6 +82,9 @@ class Media_stream extends CI_Controller {
 	unset($filter['b.type']);
 	$data['directmessage']=$this->twitter_model->ReadDMFromDb($filter,$limit);
 	$data['channel_id'] = $channel_id;
+	
+	$this->load->model('campaign_model');
+	$data['product_list'] = $this->campaign_model->GetProduct();
 	$this->load->view('dashboard/twitter/twitter_stream',$data);
     }
 	

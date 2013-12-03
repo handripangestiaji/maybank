@@ -120,9 +120,10 @@ echo "<pre>";
 	
 	
 	public function GetProduct($filter = array()){
-		if(count($array)){
-			
-		}
+		$this->db->select("*");
+		$this->db->from('content_products');
+		$this->db->where($filter);
+		return $this->db->get()->result();
 	}
 	
 	public function getOneBy($params = array())

@@ -795,10 +795,8 @@ $(function(){
             
     /*=============================================================================================
      ===================================== CMS ACTIONS ============================================
-     =============================================================================================*/
-    
+     =============================================================================================*/    
     $(document).ready(function() {
-        
         $('#channelMg a:first').LoadContentAsync({
             url : BASEURL + "channels/listofchannel/facebook" ,
             contentReplaced : $('#channelMg .cms-table '),
@@ -816,6 +814,8 @@ $(function(){
                 }
             });
         });
+        
+        
         $(".table-sub-tr").hide();   
         $(".table-btn-show-sub").click(function() {
             if($(this).hasClass('active')) {
@@ -861,6 +861,20 @@ $(function(){
                 reload : true
                 
             });
+        });
+        
+        
+        $(this).on('submit', 'form.assign_case', function(e){
+            var thisContext = $(this);
+            $(this).AsyncPost({
+                "url" : BASEURL + "/cms/case_provider/SaveCase",
+                "urlParameter" : $(this).serialize(),
+                "callback" : function(response){
+                    
+                }
+            });
+            e.preventDefault();
+           
         });
     });
 });
@@ -916,7 +930,7 @@ jQuery.fn.AsyncPost = function(options){
     $.ajax({
         "url" : settings.url,
         "type" : "POST",
-        "data" : serialize(settings.urlParameter),
+        "data" : typeof settings.urlParameter == 'string' ? settings.urlParameter : serialize(settings.urlParameter),
         "success" : settings.callback
     });
 };

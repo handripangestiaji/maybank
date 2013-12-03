@@ -412,7 +412,7 @@ $(function(){
                         
                         if($(this).find('li:nth-child(' + i + ') a').hasClass('facebook_stream')){
                             urlToLoad += "facebook_stream/" + streamId
-                            $(this).closest('div').children('button').html('<i class="icon-facebook"></i><h2>Facebook&nbsp;</h2>&nbsp;<i class="icon-caret-down"></i>');
+                            $(this).closest('div').children('button').html('<i class="icon-facebook"></i><h2>Facebook&nbsp;</h2><i class="icon-caret-down"></i>');
                             $(this).closest('.containerHeadline').css( "background-color", "#3B5998" );
                             $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...'); 
                         }
@@ -425,7 +425,7 @@ $(function(){
                         $(this).closest('.containerHeadline').next().load(urlToLoad);                      
                     });
                     $('.facebook_stream').on('click',function() {
-                        $(this).closest('div').children('button').html('<i class="icon-facebook"></i><h2>Facebook&nbsp;</h2>&nbsp;<i class="icon-caret-down"></i>');
+                        $(this).closest('div').children('button').html('<i class="icon-facebook"></i><h2>Facebook&nbsp;</h2><i class="icon-caret-down"></i>');
                         $(this).closest('.containerHeadline').css( "background-color", "#3B5998" );
                         $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');        
                         $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/facebook_stream/' + $(this).siblings('.channel-stream-id').val());
@@ -452,7 +452,14 @@ $(function(){
                                 $(this).closest('h4').next().next().hide();
                             }
                         );
-    
+                        
+                        $(this).on('click','.btn-engagement-reply',
+                            function() {
+                                $(this).parent().siblings('.reply-engagement-field').show();
+                                $(this).parent().siblings('.case-engagement-field').hide();
+                            }
+                        );
+                        
                         $(this).on('click','.btn-case',
                             function() {
                                 $(this).closest('h4').next().hide();
@@ -937,6 +944,11 @@ $(function(){
            
         });
     });
+    
+    /*=============================================================================================
+     ===================================== USERS ACTIONS ==========================================
+     =============================================================================================*/
+
 });
 /*
  *  Load Content Asyncronously

@@ -5,10 +5,6 @@
 	top: auto;
 	margin-top: 7px;
 }
-
-.form-signin .alert-error{
-	display: none;
-}
 /*==============================================================================================
 ======================================== DASHBOARD =============================================
 ==============================================================================================*/
@@ -530,46 +526,46 @@ border-radius: 3px;
 	cursor: pointer;
 }
 
-.reply-field{
+.reply-field, .reply-engagement-field{
 	background-color: #BABABA;
 	margin-top: -10px;
 	padding: 10px;
 }
 
-.reply-field textarea{
+.reply-field textarea, .reply-engagement-field textarea{
 	height: 100px;
 	width: 95%;
 	white-space: normal;
 }
 
-.reply-field .row-fluid{
+.reply-field .row-fluid, .reply-engagement-field .row-fluid{
 	margin: 0px;
 }
 
-.reply-field .reply-status{
+.reply-field .reply-status, .reply-engagement-field .reply-status{
 	margin-top: 10px;
 	background-color: #00FF04;
 	color: white;
 	text-align: center;
 }
 
-.case-field{
+.case-field, .case-engagement-field{
 	background-color: #BABABA;
 	margin-top: -10px;
 	padding: 10px;
 }
 
-.case-field textarea{
+.case-field textarea, .case-engagement-field textarea{
 	height: 100px;
 	width: 95%;
 	white-space: normal;
 }
 
-.case-field .row-fluid{
+.case-field .row-fluid, .case-engagement-field .row-fluid{
 	margin: 0px;
 }
 
-.case-field .btn-add-related{
+.case-field .btn-add-related, .case-engagement-field .btn-add-related{
 	margin-bottom: 10px;
 }
 
@@ -606,6 +602,15 @@ ul.floatingBoxContainers li.unread-post{
 
 .stream_head li a{
 	cursor: pointer;
+}
+
+.btn-dropdown-stream-channels{
+	height: 20px;
+}
+
+.stream_head .notifyCircle{
+	left: auto;
+	right: -10px;
 }
 /*==============================================================================================
 ======================================== C M S =================================================
@@ -755,4 +760,20 @@ ul.floatingBoxContainers li.unread-post{
 
 .sidebarInfo .newCases{
 	margin-top: 10px;
+}
+
+/*==============================================================================================
+======================================== USERS =================================================
+==============================================================================================*/
+
+#jqxTree{
+	color: black;
+}
+
+#jqxTree .jqx-tree-item-li{
+	left: auto;
+}
+
+#jqxTree .jqx-checkbox{
+	margin-top: 6.5px;
 }

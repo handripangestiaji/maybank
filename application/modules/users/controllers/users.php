@@ -66,7 +66,7 @@ class Users extends MY_Controller {
 	  $this->users_model->insert_user($data);
 	
 			$this->email->set_newline("\r\n");
-			$this->email->from('robay.robby@gmail.com','robay');
+			$this->email->from('coba@gmail.com','coba');
 			$this->email->to($this->input->post('email'));
 			
 			$this->email->subject('User Name and Password');
@@ -74,7 +74,7 @@ class Users extends MY_Controller {
 			
 			$this->email->send();
 	  
-	  
+	  $this->session->set_flashdata('succes', TRUE);
 	  redirect('users');
     }
     
@@ -101,6 +101,7 @@ class Users extends MY_Controller {
 	  
 	  $this->users_model->update_user($id,$data);
 	  
+	  $this->session->set_flashdata('info', TRUE);
 	  redirect('users');
     }
     
@@ -128,7 +129,7 @@ class Users extends MY_Controller {
     function delete($id)
     {
 	  $this->users_model->delete_user($id);
-	  
+	  $this->session->set_flashdata('info_delete', TRUE);
 	  redirect('users');
     }
     
@@ -151,7 +152,11 @@ class Users extends MY_Controller {
 	  $created_at = $time->format("Y-m-d H:i:s");
 	  $created_by = $this->session->userdata('user_id');
 	  
-	  $data = array(
+	  $role = $this->input->post('role');
+	  print_r($role);
+	  die();
+	  
+	  /*$data = array(
 			 'role_name' => $this->input->post('new_role'),
 			 'created_by' => $created_by,
 			 'created_at' => $created_at
@@ -170,7 +175,7 @@ class Users extends MY_Controller {
 	       $this->users_model->insert_role_detail($data1);
 	  }
 	  redirect('users/menu_role');
-    }
+    */}
     
     function delete_role($id)
     {

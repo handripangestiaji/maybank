@@ -1,35 +1,11 @@
-<link rel="stylesheet" href="<?php echo base_url();?>media/css/style1.css">
 <script src="<?php echo base_url();?>media/js/jquery-1.7.2.min.js" type="text/javascript" > </script>
-        <script type="text/javascript">
-		$( document ).ready( function( ) {
-				$( '.tree li' ).each( function() {
-						if( $( this ).children( 'ul' ).length > 0 ) {
-								$( this ).addClass( 'parent' );     
-						}
-				});
-				
-				$( '.tree li.parent > a' ).click( function( ) {
-						$( this ).parent().toggleClass( 'active' );
-						$( this ).parent().children( 'ul' ).slideToggle( 'fast' );
-				});
-				
-				$( '#all' ).click( function() {
-					
-					$( '.tree li' ).each( function() {
-						$( this ).toggleClass( 'active' );
-						$( this ).children( 'ul' ).slideToggle( 'fast' );
-					});
-				});
-				
-		});
-	</script>
 
 <div class="row-fluid" style="width: 80%; margin: 0px auto;">
 <!--<span style="font-size: 14pt; color: black; margin: 5px 0;">USER MANAGEMENT</span>-->
     <div class="cms-content row-fluid">
         <div class="cms-filter pull-left">
-            <input class="btn btn-primary" onclick='menu_user()' type="button" name="btn_user" value="User" /> <br />
-            <input class="btn" type="button" onclick="menu_role()" name="btn_role" value="Role"  />   <br />
+            <input class="btn" onclick='menu_user()' type="button" name="btn_user" value="User" /> <br />
+            <input class="btn btn-primary" type="button" onclick="menu_role()" name="btn_role" value="Role"  />   <br />
             <input class="btn" type="button" onclick='menu_group()' name="btn_group" value="Group" />
         </div>
         
@@ -39,67 +15,75 @@
             <hr style="margin-top: 0px;">
             New Role <input type='text' name='new_role' /><br />
             <hr>
-            <div style='float: right;'>
+            <!--<div style='float: right;'>
                 <input type='button' class='btn' id="next" value='Next' onclick="showHide();return false;" />
-            </div>
-            <div style='clear: both;'></div>
+            </div>-->
             <div>
-                <div class="tree" id="tree">
+                <div style='clear: both;'></div>
+                <div class="tree_tree" id="tree_tree">
                     Role Permission
-                    <ul>
-                        <?php foreach($app_show->result() as $parent)
-                        {
-                            if($parent->parent_id == NULL)
-                            {
-                        ?>
-                        <li>
-                            <a><?php echo $parent->role_name;?></a>
-                            <ul>
-                            <?php foreach($app_show->result() as $child)
-                            {
-                                if($parent->app_role_id == $child->parent_id)
-                                {
-                            ?>
-                                <li><a><input type='checkbox' name="role[]" value='<?php echo $child->app_role_id;?>' /><?php echo $child->role_name;?></a>
-                            
-                            <?php
-                                    foreach($app_show->result() as $child_child)
-                                    {
-                                        if($child->app_role_id == $child_child->parent_id)
-                                        {
-                            ?><ul>
-                                        <li><a><input type='checkbox' name="role[]" value='<?php echo $child_child->app_role_id;?>' /><?php echo $child_child->role_name;?></a>
-                                        <?php
-                                            foreach($app_show->result() as $child_child_child)
+                    
+		    <div id='jqxWidget'>
+			<div>
+		             <div id='jqxTree'>
+				<ul>
+                                    <?php foreach($app_show->result() as $parent)
                                             {
-                                                if($child_child->app_role_id == $child_child_child->parent_id)
+                                                if($parent->parent_id == NULL){
+                                    ?>
+				    
+                                    <li><?php echo $parent->role_name;?>
+					<ul>
+                                            <?php foreach($app_show->result() as $child)
+                                            {
+                                                if($parent->app_role_id == $child->parent_id)
                                                 {
-                                        ?>
+                                            ?>
+					    <li><?php echo $child->role_name;?><!--<input type='hidden' name="role[]" value='<?php echo $child->app_role_id;?>' />-->
                                                 <ul>
-                                                    <li><input type='checkbox' name="role[]" value='<?php echo $child_child_child->app_role_id;?>' /><?php echo $child_child_child->role_name;?></li>
+                                                    <?php
+                                                            foreach($app_show->result() as $child_child)
+                                                            {
+                                                                if($child->app_role_id == $child_child->parent_id)
+                                                                {
+                                                    ?>
+                                                                <li><?php echo $child_child->role_name;?><!--<input type='hidden' name="role[]" value='<?php echo $child_child->app_role_id;?>' />-->
+                                                                    <ul>
+                                                                        <?php
+                                                                            foreach($app_show->result() as $child_child_child)
+                                                                            {
+                                                                                if($child_child->app_role_id == $child_child_child->parent_id)
+                                                                                {
+                                                                        ?>
+                                                                        <li item-checked='true'><?php echo $child_child_child->role_name;?><!--<input type='hidden' name="role[]" value='<?php echo $child_child_child->app_role_id;?>' />--></li>
+                                                                        <?php
+                                                                            }
+                                                                        }
+                                                                        ?>  
+                                                                    </ul>
+                                                                </li>
+                                                            <?php
+                                                                }
+                                                            }
+                                                            ?>    
                                                 </ul>
-                                        <?php
+                                            </li>
+                                            <?php
                                                 }
                                             }
-                                        ?>
-                                        </li>
-                                </ul>
-                            <?php
+                                            ?>
+					</ul>
+				    </li>
+                                    <?php
+                                            }
                                         }
-                                    }
-                                }
-                            }
-                            ?>
-                            
-                                </li>
-                            </ul>
-                        </li>
-                        <?php
-                            }
-                        }
-                        ?>
-                    </ul>
-                    <input type='submit' value='Save' />
+                                    ?>
+				</ul>
+			    </div>
+			</div>
+		    </div>
+			    
+		    <input type='submit' value='Save' />
                     </form>
                 </div>
                 </div>
@@ -135,8 +119,8 @@
     </div>
 </div>
 <style type="text/css">
-   .tree {
-      display: none;
+   .tree_tree {
+      display: block;
       margin-bottom: 15px;
       }
 </style>
@@ -160,7 +144,7 @@
         window.location.href = "<?php echo site_url();?>/users/menu_group";
     }
     function showHide(sh) {
-                document.getElementById('tree').style.display = 'block';
+                document.getElementById('tree_tree').style.display = 'block';
                 document.getElementById('next').type = 'hidden';
     }
 </script>
@@ -175,5 +159,14 @@
 			    }
 		        });
 		});
+
+	$(document).ready(function () {
+		// Create jqxTree 
+		var theme = "";
+		// create jqxTree
+		$('#jqxTree').jqxTree({ height: 'auto', hasThreeStates: true, checkboxes: true, width: '500px' });
+                var item = $('#jqxTree').jqxTree('getSelectedItem');
+                console.log(item);
+	    });
 	
 </script>

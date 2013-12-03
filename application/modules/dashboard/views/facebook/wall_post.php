@@ -42,9 +42,114 @@ for($i=0; $i<count($fb_feed);$i++):?>
                 <span><?php echo $comment[$j]->created_at; ?></span>
                 <i class="icon-play-circle moreOptions pull-right"></i>
             </p>
-            <div>
+            <div class="engagement-comment">
                 <p>"<?php echo $comment[$j]->comment_content; ?>"</p>
-                <p><button type="button" class="btn btn-warning btn-mini">OPEN</button><button class="btn btn-primary btn-mini" style="margin-left: 5px;">LIKE</button></p>
+                <p>
+                    <button type="button" class="btn btn-warning btn-mini">OPEN</button>
+                    <button class="btn btn-primary btn-mini">LIKE</button>
+                    <button type="button" class="btn btn-primary btn-engagement-reply btn-mini"><i class="icon-mail-reply"></i></button>
+                    <button type="button" class="btn btn-danger btn-engagement-case btn-mini"><i class="icon-plus"></i> CASE</button>
+                </p>
+                <div class="reply-engagement-field hide">
+                    <div class="row-fluid">
+                        <span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
+                        <div class="pull-left">
+                            <select style="width: 130px;">
+                                <option value="keyword">Feedback</option>
+                                <option value="user">Enquiry</option>
+                                <option value="keyword">Complaint</option>
+                            </select>
+                            <select style="width: 130px;">
+                                <option value="keyword">Accounts & Banking</option>
+                                <option value="user">Cards</option>
+                                <option value="keyword">Investment</option>
+                                <option value="keyword">insurance</option>
+                                <option value="user">Loans</option>
+                                <option value="keyword">Maybank2u</option>
+                                <option value="keyword">Others</option>
+                            </select>
+                        </div>
+                        <textarea placeholder="Compose Message"></textarea>
+                        <br clear="all" />
+                        <div class="pull-left">
+                            <i class="icon-link"></i>
+                            <input type="text" class="span8"><button class="btn btn-primary btn-mini" style="margin-left: 5px;">SHORTEN</button>
+                        </div>
+                        <div class="pull-right">
+                            <a href="javascript:void(0);" id="reply-open-img">
+                                <i class="icon-camera"></i> 
+                            </a>
+                        </div>
+                        <br clear="all" />
+                        <div id="reply-img-show">
+                            <div class="reply-img-attached">
+                                <!-- close button for image attached -->
+                                <a id="reply-img-close" href="javascript:void(0);">
+                                 <i class="icon-remove-sign"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <br clear="all" />
+                        <div class="pull-left">
+                            <i class="icon-facebook"></i> 2000     
+                        </div>
+                        <div class="pull-right">
+                            <button class="btn btn-primary btn-small btn-send-reply">SEND</button>    
+                        </div>
+                        <br clear="all" />
+                        <div class="reply-status hide">MESSAGE SENT</div>
+                    </div>
+                </div>
+                <div class="case-engagement-field hide">
+                    <div class="row-fluid">
+                        <span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
+                        CASE ID      : #012345
+                        <div class="pull-left">
+                            <select style="width: 130px;">
+                                <option value="keyword">Feedback</option>
+                                <option value="user">Enquiry</option>
+                                <option value="keyword">Complaint</option>
+                            </select>
+                            <select style="width: 130px;">
+                                <option value="keyword">Accounts & Banking</option>
+                                <option value="user">Cards</option>
+                                <option value="keyword">Investment</option>
+                                <option value="keyword">insurance</option>
+                                <option value="user">Loans</option>
+                                <option value="keyword">Maybank2u</option>
+                                <option value="keyword">Others</option>
+                            </select>
+                        </div>
+                        <br clear="all" />
+                        <button class="btn btn-small btn-purple btn-add-related">Add Related Conversation</button>
+                        <br clear="all" />
+                        <div class="pull-left">
+                            Assign To:
+                        </div>
+                        <div class="pull-right">
+                            <select>
+                                <option value="keyword">Nicole Lee</option>
+                                <option value="user">Azahan Azad</option>
+                                <option value="keyword">Azahamad Arif</option>
+                            </select>
+                        </div>
+                        <br clear="all" />
+                        <div class="pull-left">
+                            Email:
+                        </div>
+                        <div class="pull-right">
+                            <input type="text">
+                        </div>
+                        <br clear="all" />
+                        Message :
+                        <br>
+                        <textarea placeholder="Compose Message"></textarea>
+                        <br clear="all" />
+                        <div class="pull-right">
+                            <button class="btn-purple btn btn-small"><i class="icon-ok-circle icon-large"></i> Assign</button>    
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
        <?php } ?>

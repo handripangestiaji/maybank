@@ -601,6 +601,18 @@ $(function(){
                                 $(this).parent().parent().next().toggle();
                             }
                         );
+                        
+                        $(this).on('input propertychange', '.reply_comment',
+                            function() {
+                                var len = $(this).val().length;
+                                $(this).siblings('.reply-char-count').children('.reply-fb-char-count').html(2000-len);
+                        });
+                        
+                        $(this).on('input propertychange', '.replaycontent',
+                            function() {
+                                var len = $(this).val().length;
+                                $(this).siblings('.reply-char-count').children('.reply-tw-char-count').html(140-len);
+                        });
                     }
                 );
                 

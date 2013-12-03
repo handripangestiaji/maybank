@@ -76,6 +76,10 @@ class Socialmedia extends MY_Controller {
             $id=$_POST['id'];
         }
         
+        if(isset($_POST['screen_name'])){//id user
+            $screen_name=$_POST['screen_name'];
+        }
+        
         if($action=='sendTweet'){ //ok
 
             /* statuses/update */
@@ -101,10 +105,10 @@ class Socialmedia extends MY_Controller {
             $method = 'statuses/retweet/'.$str_id;
             $this->connection->post($method);
     
-        }elseif($action=='sent_dm'){//ok
+        }elseif($action=='dm_send'){//ok
             
             /* direct_messages/new */
-            $parameters = array('user_id' => $friendid, 'text' => $content);
+            $parameters = array('user_id' => $friendid, 'text' => $content,'screen_name'=>$screen_name);
             $method = 'direct_messages/new';
             $this->connection->post($method, $parameters);
             

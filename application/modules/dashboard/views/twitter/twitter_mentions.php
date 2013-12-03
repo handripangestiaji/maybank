@@ -11,7 +11,7 @@ for($i=0;$i<count($mentions);$i++){
             <i class="icon-circle"></i>
             <span>mentions</span>
             <i class="icon-circle"></i>
-            <span><?php echo str_replace('+0000','',$mentions[$i]->created_at);?></span>
+            <span><?php echo date('l, M j, Y H:i:s',strtotime($mentions[$i]->created_at));?></span>
             <i class="icon-play-circle moreOptions pull-right"></i>
         </p>
     <p><?php echo $mentions[$i]->text; ?></p>
@@ -112,8 +112,7 @@ for($i=0;$i<count($mentions);$i++){
             <!--form class="contentForm" action="<?php //echo base_url('index.php/dashboard/socialmedia/twitteraction');?>" method="post"-->
                 <button class="btn btn-reply btn-primary" data-toggle="modal"><i class="icon-mail-reply"></i></button>
                 <button type="button" class="retweet btn btn-primary"><i class="icon-retweet"></i></button>
-                <!--a role="button" href="#modalsentdm<?php //echo $i; ?>" class="btn btn-primary" data-toggle="modal"><i class="icon-envelope"></i></a-->
-                 <button type="button" class="btn-dm btn btn-primary" data-toggle="modal"><i class="icon-envelope"></i></button>
+                <button class="btn btn-dm btn-primary" data-toggle="modal"><i class="icon-envelope"></i></button>
                 <button type="button" class="favorit btn btn-primary"><i class="icon-star"></i></button>
                 <?php if($mentions[$i]->following=='1'){ ?>
                 <button type="button" class="unfollow btn"><i class="icon-user"></i></button>
@@ -151,7 +150,7 @@ for($i=0;$i<count($mentions);$i++){
                     <option value="keyword">Others</option>
                 </select>
             </div>
-            <textarea class='replaycontent' placeholder="Compose Message" name="content"></textarea>
+            <textarea class='replaycontent' placeholder="Compose Message" name="content">@<?=$mentions[$i]->screen_name?></textarea>
             <br clear="all" />
             <div class="pull-left">
                 <i class="icon-link"></i>
@@ -172,9 +171,9 @@ for($i=0;$i<count($mentions);$i++){
         </div>
     </div>
     <!-- END REPLY -->
-    
+
     <!-- DM -->  
-    <div class="dm-field hide">
+    <div class="reply-field hide">
         <div class="row-fluid">
             <span class="dm-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
             <div class="pull-left">
@@ -207,13 +206,15 @@ for($i=0;$i<count($mentions);$i++){
                 <i class="icon-facebook"></i> 2000     
             </div>
             <div class="pull-right">
-                <button class="replayTweet btn btn-primary btn-small btn-send-reply"  type="button" value="<?=$mentions[$i]->post_stream_id;?>" >SEND</button>    
+                <button class="dm_send btn btn-primary btn-small btn-send-dm"  type="button" value="<?=$mentions[$i]->twitter_user_id;?>" >SEND</button>    
+                       <input type="hidden" class="screen_name" value="<?php echo $homefeed[$i]->screen_name; ?>" />
             </div>
             <br clear="all" />
-            <div class="reply-status hide">MESSAGE SENT</div>
+            <div class="dm-status hide">MESSAGE SENT</div>
         </div>
     </div>
-    <!-- END REPLY -->
+    <!-- END DM -->    
+    
     
     <!-- CASE -->
     <div class="case-field hide">

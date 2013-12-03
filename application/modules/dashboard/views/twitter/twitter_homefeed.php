@@ -10,7 +10,7 @@ for($i=0;$i<count($homefeed);$i++){
             <i class="icon-circle"></i>
             <span>mentions</span>
             <i class="icon-circle"></i>
-            <span><?php echo str_replace('+0000','',$homefeed[$i]->created_at);?></span>
+            <span><?php echo date('l, M j, Y H:i:s',strtotime($homefeed[$i]->created_at));?></span>
             <i class="icon-play-circle moreOptions pull-right"></i>
         </p>
     <p><?php echo $homefeed[$i]->text; ?></p>
@@ -113,7 +113,7 @@ for($i=0;$i<count($homefeed);$i++){
             <!--form class="contentForm" action="<?php //echo base_url('index.php/dashboard/socialmedia/twitteraction');?>" method="post"-->
                 <button class="btn btn-reply btn-primary" data-toggle="modal"><i class="icon-mail-reply"></i></button>
                 <button type="button" class="retweet btn btn-primary"><i class="icon-retweet"></i></button>
-                <a role="button" href="#modalsentdm<?php echo $i; ?>" class="btn btn-primary" data-toggle="modal"><i class="icon-envelope"></i></a>
+                 <button class="btn btn-dm btn-primary" data-toggle="modal"><i class="icon-envelope"></i></button>
                 <button type="button" class="favorit btn btn-primary"><i class="icon-star"></i></button>
                 <?php if($homefeed[$i]->following=='1'){ ?>
                 <button type="button" class="unfollow btn"><i class="icon-user"></i></button>
@@ -172,10 +172,10 @@ for($i=0;$i<count($homefeed);$i++){
     </div>
     <!-- END REPLY -->
     
-    <!-- dm -->  
+    <!-- DM -->  
     <div class="reply-field hide">
         <div class="row-fluid">
-            <span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
+            <span class="dm-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
             <div class="pull-left">
                 <select style="width: 130px;">
                     <option value="keyword">Feedback</option>
@@ -192,7 +192,7 @@ for($i=0;$i<count($homefeed);$i++){
                     <option value="keyword">Others</option>
                 </select>
             </div>
-            <textarea class='replaycontent' placeholder="Compose Message" name="content">@<?=$homefeed[$i]->screen_name?></textarea>
+            <textarea class='replaycontent' placeholder="Compose Message" name="content"></textarea>
             <br clear="all" />
             <div class="pull-left">
                 <i class="icon-link"></i>
@@ -206,13 +206,13 @@ for($i=0;$i<count($homefeed);$i++){
                 <i class="icon-facebook"></i> 2000     
             </div>
             <div class="pull-right">
-                <button class="replayTweet btn btn-primary btn-small btn-send-reply"  type="button" value="<?=$homefeed[$i]->post_stream_id;?>" >SEND</button>    
+                <button class="dm_send btn btn-primary btn-small btn-send-dm"  type="button" value="<?=$homefeed[$i]->post_stream_id;?>" >SEND</button>    
             </div>
             <br clear="all" />
-            <div class="reply-status hide">MESSAGE SENT</div>
+            <div class="dm-status hide">MESSAGE SENT</div>
         </div>
     </div>
-    <!-- END REPLY -->
+    <!-- END DM -->
     
     <!-- CASE -->  
     <div class="case-field hide">

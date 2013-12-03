@@ -162,7 +162,11 @@ class Users extends MY_Controller {
 	  $created_at = $time->format("Y-m-d H:i:s");
 	  $created_by = $this->session->userdata('user_id');
 	  
-	  $data = array(
+	  $role = $this->input->post('role');
+	  print_r($role);
+	  die();
+	  
+	  /*$data = array(
 			 'role_name' => $this->input->post('new_role'),
 			 'created_by' => $created_by,
 			 'created_at' => $created_at
@@ -181,7 +185,7 @@ class Users extends MY_Controller {
 	       $this->users_model->insert_role_detail($data1);
 	  }
 	  redirect('users/menu_role');
-    }
+    */}
     
     function delete_role($id)
     {

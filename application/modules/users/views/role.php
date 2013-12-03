@@ -1,28 +1,4 @@
-<link rel="stylesheet" href="<?php echo base_url();?>media/css/style1.css">
 <script src="<?php echo base_url();?>media/js/jquery-1.7.2.min.js" type="text/javascript" > </script>
-        <script type="text/javascript">
-		$( document ).ready( function( ) {
-				$( '.tree li' ).each( function() {
-						if( $( this ).children( 'ul' ).length > 0 ) {
-								$( this ).addClass( 'parent' );     
-						}
-				});
-				
-				$( '.tree li.parent > a' ).click( function( ) {
-						$( this ).parent().toggleClass( 'active' );
-						$( this ).parent().children( 'ul' ).slideToggle( 'fast' );
-				});
-				
-				$( '#all' ).click( function() {
-					
-					$( '.tree li' ).each( function() {
-						$( this ).toggleClass( 'active' );
-						$( this ).children( 'ul' ).slideToggle( 'fast' );
-					});
-				});
-				
-		});
-	</script>
 
 <div class="row-fluid" style="width: 80%; margin: 0px auto;">
 <!--<span style="font-size: 14pt; color: black; margin: 5px 0;">USER MANAGEMENT</span>-->
@@ -39,141 +15,69 @@
             <hr style="margin-top: 0px;">
             New Role <input type='text' name='new_role' /><br />
             <hr>
-            <div style='float: right;'>
+            <!--<div style='float: right;'>
                 <input type='button' class='btn' id="next" value='Next' onclick="showHide();return false;" />
-            </div>
-            <div style='clear: both;'></div>
+            </div>-->
             <div>
-                <div class="tree" id="tree">
+                <div style='clear: both;'></div>
+                <div class="tree_tree" id="tree_tree">
                     Role Permission
-                    <ul>
-                        <?php foreach($app_show->result() as $parent)
-                        {
-                            if($parent->parent_id == NULL)
-                            {
-                        ?>
-                        <li>
-                            <a><?php echo $parent->role_name;?></a>
-                            <ul>
-                            <?php foreach($app_show->result() as $child)
-                            {
-                                if($parent->app_role_id == $child->parent_id)
-                                {
-                            ?>
-                                <li><a><input type='checkbox' name="role[]" value='<?php echo $child->app_role_id;?>' /><?php echo $child->role_name;?></a>
-                            
-                            <?php
-                                    foreach($app_show->result() as $child_child)
-                                    {
-                                        if($child->app_role_id == $child_child->parent_id)
-                                        {
-                            ?><ul>
-                                        <li><a><input type='checkbox' name="role[]" value='<?php echo $child_child->app_role_id;?>' /><?php echo $child_child->role_name;?></a>
-                                        <?php
-                                            foreach($app_show->result() as $child_child_child)
-                                            {
-                                                if($child_child->app_role_id == $child_child_child->parent_id)
-                                                {
-                                        ?>
-                                                <ul>
-                                                    <li><input type='checkbox' name="role[]" value='<?php echo $child_child_child->app_role_id;?>' /><?php echo $child_child_child->role_name;?></li>
-                                                </ul>
-                                        <?php
-                                                }
-                                            }
-                                        ?>
-                                        </li>
-                                </ul>
-                            <?php
-                                        }
-                                    }
-                                }
-                            }
-                            ?>
-                            
-                                </li>
-                            </ul>
-                        </li>
-                        <?php
-                            }
-                        }
-                        ?>
-                    </ul>
+                    
 		    <div id='jqxWidget'>
-			<div style='float: left;'>
+			<div>
 		             <div id='jqxTree'>
 				<ul>
-				    <li id='home'>Home</li>
-				    <li >Solutions
+                                    <?php foreach($app_show->result() as $parent)
+                                            {
+                                                if($parent->parent_id == NULL){
+                                    ?>
+				    
+                                    <li><?php echo $parent->role_name;?>
 					<ul>
-					    <li>Education</li>
-					    <li>Financial services</li>
-					    <li>Government</li>
-					    <li item-checked='false'>Manufacturing</li>
-					    <li>Solutions
-						<ul>
-						    <li>Consumer photo and video</li>
-						    <li>Mobile</li>
-						    <li>Rich Internet applications</li>
-						    <li>Technical communication</li>
-						    <li>Training and eLearning</li>
-						    <li>Web conferencing</li>
-						</ul>
-					    </li>
-					    <li>All industries and solutions</li>
+                                            <?php foreach($app_show->result() as $child)
+                                            {
+                                                if($parent->app_role_id == $child->parent_id)
+                                                {
+                                            ?>
+					    <li><?php echo $child->role_name;?><!--<input type='hidden' name="role[]" value='<?php echo $child->app_role_id;?>' />-->
+                                                <ul>
+                                                    <?php
+                                                            foreach($app_show->result() as $child_child)
+                                                            {
+                                                                if($child->app_role_id == $child_child->parent_id)
+                                                                {
+                                                    ?>
+                                                                <li><?php echo $child_child->role_name;?><!--<input type='hidden' name="role[]" value='<?php echo $child_child->app_role_id;?>' />-->
+                                                                    <ul>
+                                                                        <?php
+                                                                            foreach($app_show->result() as $child_child_child)
+                                                                            {
+                                                                                if($child_child->app_role_id == $child_child_child->parent_id)
+                                                                                {
+                                                                        ?>
+                                                                        <li item-checked='true'><?php echo $child_child_child->role_name;?><!--<input type='hidden' name="role[]" value='<?php echo $child_child_child->app_role_id;?>' />--></li>
+                                                                        <?php
+                                                                            }
+                                                                        }
+                                                                        ?>  
+                                                                    </ul>
+                                                                </li>
+                                                            <?php
+                                                                }
+                                                            }
+                                                            ?>    
+                                                </ul>
+                                            </li>
+                                            <?php
+                                                }
+                                            }
+                                            ?>
 					</ul>
 				    </li>
-				    <li>Products
-					<ul>
-					    <li>PC products</li>
-					    <li>Mobile products</li>
-					    <li>All products</li>
-					</ul>
-				    </li>
-				    <li>Support
-					<ul>
-					    <li>Support home</li>
-					    <li>Customer Service</li>
-					    <li>Knowledge base</li>
-					    <li>Books</li>
-					    <li>Training and certification</li>
-					    <li>Support programs</li>
-					    <li>Forums</li>
-					    <li>Documentation</li>
-					    <li>Updates</li>
-					</ul>
-				    </li>
-				    <li>Communities
-					<ul>
-					    <li>Designers</li>
-					    <li>Developers</li>
-					    <li>Educators and students</li>
-					    <li>Partners</li>
-					    <li>By resource
-						<ul>
-						    <li>Labs</li>
-						    <li>TV</li>
-						    <li>Forums</li>
-						    <li>Exchange</li>
-						    <li>Blogs</li>
-						    <li>Experience Design</li>
-						</ul>
-					    </li>
-					</ul>
-				    </li>
-				    <li>Company
-					<ul>
-					    <li>About Us</li>
-					    <li>Press</li>
-					    <li>Investor Relations</li>
-					    <li>Corporate Affairs</li>
-					    <li>Careers</li>
-					    <li>Showcase</li>
-					    <li>Events</li>
-					    <li>Contact Us</li>
-					    <li>Become an affiliate</li>
-					</ul>
-				    </li>
+                                    <?php
+                                            }
+                                        }
+                                    ?>
 				</ul>
 			    </div>
 			</div>
@@ -215,8 +119,8 @@
     </div>
 </div>
 <style type="text/css">
-   .tree {
-      display: none;
+   .tree_tree {
+      display: block;
       margin-bottom: 15px;
       }
 </style>
@@ -240,7 +144,7 @@
         window.location.href = "<?php echo site_url();?>/users/menu_group";
     }
     function showHide(sh) {
-                document.getElementById('tree').style.display = 'block';
+                document.getElementById('tree_tree').style.display = 'block';
                 document.getElementById('next').type = 'hidden';
     }
 </script>
@@ -260,13 +164,9 @@
 		// Create jqxTree 
 		var theme = "";
 		// create jqxTree
-		$('#jqxTree').jqxTree({ height: 'auto', hasThreeStates: true, checkboxes: true, width: '500px', theme: theme });
-		$('#jqxCheckBox').jqxCheckBox({ width: '500px', height: '25px', checked: true, theme: theme });
-		$('#jqxCheckBox').on('change', function (event) {
-		    var checked = event.args.checked;
-		    $('#jqxTree').jqxTree({ hasThreeStates: checked });
-		});
-		$("#jqxTree").jqxTree('selectItem', $("#home")[0]);
+		$('#jqxTree').jqxTree({ height: 'auto', hasThreeStates: true, checkboxes: true, width: '500px' });
+                var item = $('#jqxTree').jqxTree('getSelectedItem');
+                console.log(item);
 	    });
 	
 </script>

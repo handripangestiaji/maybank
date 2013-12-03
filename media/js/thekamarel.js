@@ -459,6 +459,13 @@ $(function(){
                                 $(this).closest('h4').next().next().show();
                             }
                         );
+                        
+                         $(this).on('click','.btn-dm',
+                            function() {
+                                $(this).closest('h4').next().hide();
+                                $(this).closest('h4').next().next().show();
+                            }
+                        );
                             
                         $(this).on('click','.assign-btn',
                             function() {
@@ -553,12 +560,28 @@ $(function(){
                             }
                         );
                         
+                        
                         $(this).on('click','.btn-send-reply',
                            function() {
                                 $(this).parent().siblings('.reply-status').show();
                                 $(this).parent().siblings('.reply-status').fadeOut(3000);
                             }
                         );
+
+                        $(this).on('click','.dm-field-btn-close',
+                            function() {
+                                 $(this).parent().parent().hide();
+                            }
+                        );
+                        
+                        
+                        $(this).on('click','.btn-send-dm',
+                           function() {
+                                $(this).parent().siblings('.dm-status').show();
+                                $(this).parent().siblings('.dm-status').fadeOut(3000);
+                            }
+                        );
+                
                         
                         $(this).on('click','.toggleTable',
                             function(){
@@ -675,6 +698,42 @@ $(function(){
                         });
                     });
                     
+                    $(this).on('click','.replayTweet',
+                        function() {
+                        $.ajax({
+                            url : BASEURL + 'dashboard/socialmedia/twitterAction',
+                            type: "POST",
+                            data: {
+                                    action:'replayTweet',
+                                    content:$(this).parent().siblings(".replaycontent").val(),
+                                    str_id: $(this).val()
+                                    },
+                            success: function(data)
+                            {
+                                alert(data)
+                            },
+                        });
+                    });
+                    
+                    $(this).on('click','.dm_send',
+                        function() {
+                        $.ajax({
+                            url : BASEURL + 'dashboard/socialmedia/twitterAction',
+                            type: "POST",
+                            data: {
+                                    action:'dm_send',
+                                    content:$(this).parent().siblings(".replaycontent").val(),
+                                    screen_name: $(this).siblings(".screen_name").val(),
+                                    str_id: $(this).val()
+                                    },
+                            success: function(data)
+                            {
+                                //alert(data)
+                            },
+                        });
+                    });
+                    
+                    
                     $(this).on('click','.favorit',
                         function() {
                         $.ajax({
@@ -732,7 +791,7 @@ $(function(){
                             url : BASEURL + 'dashboard/media_stream/FbLikeStatus',
                             type: "POST",
                             data: {
-                                    str_id: $(this).siblings(".str_id").val()
+                                    post_id: $(this).val()
                                     },
                             success: function()
                             {
@@ -742,9 +801,10 @@ $(function(){
                         });
                     });
                     
-                    $(".send_reply").click(function() {
+                     $(this).on('click','.send_reply',
+                        function() {
                         $.ajax({
-                            url : BASEURL + 'dashboard/socialmedia/replyPost',
+                            url : BASEURL + 'dashboard/media_stream/FbReplyPost',
                             type: "POST",
                             data: {
                                     post_id:$(this).val(),

@@ -188,6 +188,48 @@ class Media_stream extends CI_Controller {
 
     }
     
+    
+    public function FbLikeStatus(){
+	  $post_id=$_POST['post_id'];
+      $access_token_fb = fb_dummy_accesstoken();
+	  $config = array(
+	       'appId' => $this->config->item('fb_appid'),
+	       'secret' => $this->config->item('fb_secretkey')
+	  );
+	  $this->load->library('facebook',$config);
+	  $this->facebook->setaccesstoken($access_token_fb);
+	  $this->facebook->api('/'.$post_id.'/likes','POST');
+    }
+    
+    
+    public function FbReplyPost(){
+        $this->load->model('account_model');
+        $this->load->model('facebook_model');
+        $comment=$_POST['comment'];
+        $post_id=$_POST['post_id'];
+     
+       $filter = array(
+            "connection_type" => "facebook"
+        );
+        if($this->input->get('channel_id')){
+            $filter['channel_id'] = $this->input->get('channel_id');
+        }
+        $channel_loaded = $this->account_model->GetChannel($filter);
+        echo "<br><br><br><br><br><br>";
+        //print_r($channel_loaded);
+       
+        $newStd = new stdClass();
+        $newStd->page_id =  $channel_loaded[0]->social_id;
+        $newStd->token = $this->facebook_model->GetPageAccessToken( $channel_loaded[0]->oauth_token, $channel_loaded[0]->social_id);
+        $config = array(
+	       'appId' => $this->config->item('fb_appid'),
+	       'secret' => $this->config->item('fb_secretkey')
+	    );
+	    $this->load->library('facebook',$config);
+	    $this->facebook->setaccesstoken($newStd->token);
+	    $this->facebook->api('/'.$post_id.'/comments','post',array('message' => $comment,));
+    }
+    
     public function load_facebook($type){
 	    $access_token = "CAACEdEose0cBAFGdZB2IH8VzRiPuoLAZC0vQ3u7Tc0PuZAyycV0cs5CCng8Xw3qnni9V6YxgeaQ0p9VCdGzfGGHTeUUsLL6exlGXBTAbWl6T7573l4DnKm3kTPh7dQrqqJNpcvMMWZA9K92p7NtS5eLwjmZCKxZCCEQ4jWk5DtccZBMZAEKS2Meqe1yzhetcUKMZD";
 	    

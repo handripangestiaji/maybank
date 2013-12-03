@@ -9,20 +9,10 @@ class Users extends MY_Controller {
         parent::__construct();
 	$this->load->model('users_model');
 	$this->load->helper('security');
-	
-	$config=array(
-					'protocol'=>'smtp',
-					'smtp_host'=>'ssl://smtp.googlemail.com',
-					'smtp_port'=>465,
-					'smtp_user'=>'bogcampbogcamp@gmail.com',
-					'smtp_pass'=>'AB123456CD',
-					'charset'=>'utf-8',
-					'mailtype'=>'html',
-					'wordwrap'=>TRUE
-			);
-				
-			$this->load->library('email',$config);
-			
+	$this->load->config('mail_config');
+	$config = $this->config->item('mail_provider');
+	$this->load->library('email',$config);
+
 	
     }
     

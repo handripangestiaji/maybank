@@ -118,6 +118,14 @@ echo "<pre>";
 		return $campaigns;
 	}
 	
+	
+	public function GetProduct($filter = array()){
+		$this->db->select("*");
+		$this->db->from('content_products');
+		$this->db->where($filter);
+		return $this->db->get()->result();
+	}
+	
 	public function getOneBy($params = array())
 	{
 		if (isset($params['id']))

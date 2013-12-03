@@ -12,7 +12,7 @@ class case_model extends CI_Model{
         
     }
     
-    function CreateCase(){
+    function CreateCase($case){
         $this->load->config('mail_config');
         $mail_provider = $this->config->item('mail_provider');
         

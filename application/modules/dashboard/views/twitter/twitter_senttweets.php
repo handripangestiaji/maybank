@@ -10,7 +10,7 @@ for($i=0;$i<count($senttweets);$i++){
             <i class="icon-circle"></i>
             <span>mentions</span>
             <i class="icon-circle"></i>
-            <span><?php echo str_replace('+0000','',$senttweets[$i]->created_at);?></span>
+            <span><?php echo date('l, M j, Y H:i:s',strtotime($senttweets[$i]->created_at));?></span>
             <i class="icon-play-circle moreOptions pull-right"></i>
         </p>
     <p><?php echo $senttweets[$i]->text; ?></p>

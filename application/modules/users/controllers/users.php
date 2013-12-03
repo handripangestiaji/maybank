@@ -9,20 +9,10 @@ class Users extends MY_Controller {
         parent::__construct();
 	$this->load->model('users_model');
 	$this->load->helper('security');
-	
-	$config=array(
-					'protocol'=>'smtp',
-					'smtp_host'=>'ssl://smtp.googlemail.com',
-					'smtp_port'=>465,
-					'smtp_user'=>'bogcampbogcamp@gmail.com',
-					'smtp_pass'=>'AB123456CD',
-					'charset'=>'utf-8',
-					'mailtype'=>'html',
-					'wordwrap'=>TRUE
-			);
-				
-			$this->load->library('email',$config);
-			
+	$this->load->config('mail_config');
+	$config = $this->config->item('mail_provider');
+	$this->load->library('email',$config);
+
 	
     }
     
@@ -76,7 +66,7 @@ class Users extends MY_Controller {
 	  $this->users_model->insert_user($data);
 	
 			$this->email->set_newline("\r\n");
-			$this->email->from('robay.robby@gmail.com','robay');
+			$this->email->from('coba@gmail.com','coba');
 			$this->email->to($this->input->post('email'));
 			
 			$this->email->subject('User Name and Password');
@@ -84,7 +74,7 @@ class Users extends MY_Controller {
 			
 			$this->email->send();
 	  
-	  
+	  $this->session->set_flashdata('succes', TRUE);
 	  redirect('users');
     }
     
@@ -111,6 +101,7 @@ class Users extends MY_Controller {
 	  
 	  $this->users_model->update_user($id,$data);
 	  
+	  $this->session->set_flashdata('info', TRUE);
 	  redirect('users');
     }
     
@@ -138,7 +129,7 @@ class Users extends MY_Controller {
     function delete($id)
     {
 	  $this->users_model->delete_user($id);
-	  
+	  $this->session->set_flashdata('info_delete', TRUE);
 	  redirect('users');
     }
     
@@ -161,7 +152,11 @@ class Users extends MY_Controller {
 	  $created_at = $time->format("Y-m-d H:i:s");
 	  $created_by = $this->session->userdata('user_id');
 	  
-	  $data = array(
+	  $role = $this->input->post('role');
+	  print_r($role);
+	  die();
+	  
+	  /*$data = array(
 			 'role_name' => $this->input->post('new_role'),
 			 'created_by' => $created_by,
 			 'created_at' => $created_at
@@ -180,7 +175,7 @@ class Users extends MY_Controller {
 	       $this->users_model->insert_role_detail($data1);
 	  }
 	  redirect('users/menu_role');
-    }
+    */}
     
     function delete_role($id)
     {

@@ -1,5 +1,19 @@
-Edit User
-<form method='post' action='<?php echo site_url();?>/users/update_user'>
+<div class="row-fluid" style="width: 80%; margin: 0px auto;">    
+<!--<span style="font-size: 14pt; color: black; margin: 5px 0;">USER MANAGEMENT</span>-->
+    <div class="cms-content row-fluid">
+        <div class="cms-filter pull-left">
+            <input class="btn btn-primary" type="button" name="btn_user" value="User" /> <br />
+            <input class="btn" type="button" onclick="menu_role()" name="btn_role" value="Role"  />   <br />
+            <input class="btn" type="button" onclick="menu_group()" name="btn_group" value="Group" />
+        </div>
+        
+        <div class="cms-table pull-right">
+            <div>
+                <h5>Edit user</h5>
+            </div>
+            <hr style="margin-top: 0px;">
+            
+            <form method='post' action='<?php echo site_url();?>/users/update_user'>
     <table cellspacing=5px>
         <?php foreach($id->result() as $row){ ?>
         <tr>
@@ -75,10 +89,29 @@ Edit User
         <?php }?>
     </table>
 </form>
+            
+            
+        </div>
+    </div>
+</div>
 
 <script type='text/javascript'>
     function btn_cancel()
     {
         window.location = "<?php echo site_url();?>/users";
+    }
+    function menu_role()
+    {
+        window.location.href = "<?php echo site_url();?>/users/menu_role";
+    }
+    
+    function menu_user()
+    {
+        window.location.href = "<?php echo site_url();?>/users";
+    }
+    
+    function menu_group()
+    {
+        window.location.href = "<?php echo site_url();?>/users/menu_group";
     }
 </script>

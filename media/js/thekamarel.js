@@ -412,7 +412,7 @@ $(function(){
                         
                         if($(this).find('li:nth-child(' + i + ') a').hasClass('facebook_stream')){
                             urlToLoad += "facebook_stream/" + streamId
-                            $(this).closest('div').children('button').html('<i class="icon-facebook"></i><h2>Facebook&nbsp;</h2>&nbsp;<i class="icon-caret-down"></i>');
+                            $(this).closest('div').children('button').html('<i class="icon-facebook"></i><h2>Facebook&nbsp;</h2><i class="icon-caret-down"></i>');
                             $(this).closest('.containerHeadline').css( "background-color", "#3B5998" );
                             $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...'); 
                         }
@@ -425,7 +425,7 @@ $(function(){
                         $(this).closest('.containerHeadline').next().load(urlToLoad);                      
                     });
                     $('.facebook_stream').on('click',function() {
-                        $(this).closest('div').children('button').html('<i class="icon-facebook"></i><h2>Facebook&nbsp;</h2>&nbsp;<i class="icon-caret-down"></i>');
+                        $(this).closest('div').children('button').html('<i class="icon-facebook"></i><h2>Facebook&nbsp;</h2><i class="icon-caret-down"></i>');
                         $(this).closest('.containerHeadline').css( "background-color", "#3B5998" );
                         $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');        
                         $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/facebook_stream/' + $(this).siblings('.channel-stream-id').val());
@@ -452,7 +452,14 @@ $(function(){
                                 $(this).closest('h4').next().next().hide();
                             }
                         );
-    
+                        
+                        $(this).on('click','.btn-engagement-reply',
+                            function() {
+                                $(this).parent().siblings('.reply-engagement-field').show();
+                                $(this).parent().siblings('.case-engagement-field').hide();
+                            }
+                        );
+                        
                         $(this).on('click','.btn-case',
                             function() {
                                 $(this).closest('h4').next().hide();
@@ -554,6 +561,12 @@ $(function(){
                             }
                         );
                         
+                        $(this).on('click','.related-conversation-btn-hide-show',
+                            function(){
+                                $(this).siblings('div').toggle();
+                            }
+                        );
+                        
                         $(this).on('click','.reply-field-btn-close',
                             function() {
                                  $(this).parent().parent().hide();
@@ -588,6 +601,18 @@ $(function(){
                                 $(this).parent().parent().next().toggle();
                             }
                         );
+                        
+                        $(this).on('input propertychange', '.reply_comment',
+                            function() {
+                                var len = $(this).val().length;
+                                $(this).siblings('.reply-char-count').children('.reply-fb-char-count').html(2000-len);
+                        });
+                        
+                        $(this).on('input propertychange', '.replaycontent',
+                            function() {
+                                var len = $(this).val().length;
+                                $(this).siblings('.reply-char-count').children('.reply-tw-char-count').html(140-len);
+                        });
                     }
                 );
                 
@@ -856,10 +881,8 @@ $(function(){
             
     /*=============================================================================================
      ===================================== CMS ACTIONS ============================================
-     =============================================================================================*/
-    
+     =============================================================================================*/    
     $(document).ready(function() {
-        
         $('#channelMg a:first').LoadContentAsync({
             url : BASEURL + "channels/listofchannel/facebook" ,
             contentReplaced : $('#channelMg .cms-table '),
@@ -877,6 +900,8 @@ $(function(){
                 }
             });
         });
+        
+        
         $(".table-sub-tr").hide();   
         $(".table-btn-show-sub").click(function() {
             if($(this).hasClass('active')) {
@@ -923,7 +948,21 @@ $(function(){
                 
             });
         });
+        
+        
+        $(this).on('submit', 'form.assign_case', function(e){
+            var thisContext = $(this);
+            console.log($(this).parent().closest('.postId').val());
+           
+            e.preventDefault();
+           
+        });
     });
+    
+    /*=============================================================================================
+     ===================================== USERS ACTIONS ==========================================
+     =============================================================================================*/
+
 });
 /*
  *  Load Content Asyncronously
@@ -977,7 +1016,7 @@ jQuery.fn.AsyncPost = function(options){
     $.ajax({
         "url" : settings.url,
         "type" : "POST",
-        "data" : serialize(settings.urlParameter),
+        "data" : typeof settings.urlParameter == 'string' ? settings.urlParameter : serialize(settings.urlParameter),
         "success" : settings.callback
     });
 };

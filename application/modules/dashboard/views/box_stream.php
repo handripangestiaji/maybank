@@ -7,8 +7,7 @@
             <div class="containerHeadline" style="background-color:<?php echo $color; ?>;color: white; height: 30px;">
                 <div class="pull-left" style="padding: 4px 0px; height: auto">
                     <div class="btn-group">
-                        <button class="btn trans  dropdown-toggle" data-toggle="dropdown">
-                            
+                        <button class="btn trans dropdown-toggle btn-dropdown-stream-channels" data-toggle="dropdown">
                         </button>
                         <ul class="dropdown-menu dropdown-stream-channels">
                             <?php

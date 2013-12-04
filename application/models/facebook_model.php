@@ -83,34 +83,38 @@ class facebook_model extends CI_Model
         }';
 	$requestResult = curl_get_file_contents('https://graph.facebook.com/fql?q='.urlencode($fql)."&access_token=".$access_token);
 
-	
-	$result  = json_decode($requestResult);
-	$postList = $result->data[0]->fql_result_set;
-        $comment = $result->data[1]->fql_result_set;
-        $page_list = $result->data[3]->fql_result_set;
-        $user_list = $result->data[2]->fql_result_set;
-	
-        for($i=0;$i<count($postList);$i++){
+	if(is_array($result->data)){
+	    $result  = json_decode($requestResult);
+	    $postList = $result->data[0]->fql_result_set;
+	    $comment = $result->data[1]->fql_result_set;
+	    $page_list = $result->data[3]->fql_result_set;
+	    $user_list = $result->data[2]->fql_result_set;
 	    
-            for($x=0; $x < count($comment); $x++){
-		$user = $this->SearchUserFromList($comment[$x]->fromid, $user_list);
-		$user = $user == null ? $this->SearchUserFromList($comment[$x]->fromid, $page_list) : $user;
-                if($comment[$x]->post_id == $postList[$i]->post_id){
-		    $comment[$x]->user = $user;
-                    $postList[$i]->comments[] = $comment[$x];
-                }
-            }
-            for($x=0; $x < count($user_list); $x++){
-                if($user_list[$x]->uid == $postList[$i]->actor_id)
-                    $postList[$i]->users = $user_list[$x];
-            }
-            
-            for($x=0; $x < count($page_list); $x++){
-                if($page_list[$x]->page_id == $postList[$i]->actor_id)
-                    $postList[$i]->users = $page_list[$x];
-            }
-        }
-        return $postList;
+	    for($i=0;$i<count($postList);$i++){
+		
+		for($x=0; $x < count($comment); $x++){
+		    $user = $this->SearchUserFromList($comment[$x]->fromid, $user_list);
+		    $user = $user == null ? $this->SearchUserFromList($comment[$x]->fromid, $page_list) : $user;
+		    if($comment[$x]->post_id == $postList[$i]->post_id){
+			$comment[$x]->user = $user;
+			$postList[$i]->comments[] = $comment[$x];
+		    }
+		}
+		for($x=0; $x < count($user_list); $x++){
+		    if($user_list[$x]->uid == $postList[$i]->actor_id)
+			$postList[$i]->users = $user_list[$x];
+		}
+		
+		for($x=0; $x < count($page_list); $x++){
+		    if($page_list[$x]->page_id == $postList[$i]->actor_id)
+			$postList[$i]->users = $page_list[$x];
+		}
+	    }
+	    return $postList;
+	}
+	else{
+	    return null;
+	}
     }
     
     
@@ -410,7 +414,7 @@ class facebook_model extends CI_Model
     
       public function RetrievePmFB($filter,$limit = 20){
         //WHERE detail_id_from_facebook LIKE '%_0'
-        $this->db->select('a.*,b.*,c.name,c.username,d.is_read');
+        $this->db->select('a.*,b.*,c.name,c.username, d.is_read, d.post_stream_id');
         $this->db->from("social_stream_facebook_conversation a LEFT OUTER JOIN 
                         social_stream_facebook_conversation_detail b ON b.conversation_id = a.conversation_id LEFT OUTER JOIN
                         fb_user_engaged c ON c.facebook_id=b.sender INNER JOIN

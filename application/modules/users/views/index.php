@@ -78,7 +78,7 @@
                 <thead>
                     <tr>
                         <th>User ID</th>
-                        <th>User Name</th>
+                        <th>Name</th>
                         <th>Email</th>
                         <th>Role</th>
                         <th>Group</th>
@@ -96,7 +96,7 @@
                         <td><?php echo $row->user_id;?></td>
                         <td><?php echo $row->display_name;?></td>
                         <td><?php echo $row->email;?></td>
-                        <td><?php echo $row->role_id;?></td>
+                        <td><?php echo $row->role_name;?></td>
                         <td><?php echo $row->group_name;?></td>
                         <?php if($row->is_active==1){?>
                             <td><?php echo 'Active';?></td>

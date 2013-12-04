@@ -1,12 +1,12 @@
 <?php 
 for($i=0; $i<count($fb_pm);$i++):?>
-<li>
+<li <?php if($fb_pm[$i]->is_read==0){echo 'class="unread-post"';}?>>
     <input type="hidden" class="postId" value="<?php echo $fb_pm[$i]->detail_id_from_facebook; ?>" />
     <div class="circleAvatar"><img src="https://graph.facebook.com/<?=number_format($fb_pm[$i]->sender, 0,'.','')?>/picture?small" alt=""></div>
     <p class="headLine">
         <span class="author"><?php echo $fb_pm[$i]->name; ?></span>
         <i class="icon-circle"></i>
-        <span>posted a <span class="cyanText">comment</span></span>
+        <span>posted a <span class="cyanText">message</span></span>
         <i class="icon-circle"></i>
         <span><?php echo date('l, M j, Y H:i:s',strtotime($fb_pm[$i]->created_at));?></span>
         <i class="icon-play-circle moreOptions pull-right"></i>

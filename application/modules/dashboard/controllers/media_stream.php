@@ -210,9 +210,7 @@ class Media_stream extends CI_Controller {
             $filter['channel_id'] = $this->input->get('channel_id');
         }
         $channel_loaded = $this->account_model->GetChannel($filter);
-        echo "<br><br><br><br><br><br>";
-        //print_r($channel_loaded);
-       
+              
         $newStd = new stdClass();
         $newStd->page_id =  $channel_loaded[0]->social_id;
         $newStd->token = $this->facebook_model->GetPageAccessToken( $channel_loaded[0]->oauth_token, $channel_loaded[0]->social_id);

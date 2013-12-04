@@ -526,23 +526,23 @@ border-radius: 3px;
 	cursor: pointer;
 }
 
-.reply-field, .reply-engagement-field{
+.reply-field, .reply-engagement-field, .dm-field{
 	background-color: #BABABA;
 	margin-top: -10px;
 	padding: 10px;
 }
 
-.reply-field textarea, .reply-engagement-field textarea{
+.reply-field textarea, .reply-engagement-field textarea, .dm-field textarea{
 	height: 100px;
 	width: 95%;
 	white-space: normal;
 }
 
-.reply-field .row-fluid, .reply-engagement-field .row-fluid{
+.reply-field .row-fluid, .reply-engagement-field .row-fluid, .dm-field .row-fluid{
 	margin: 0px;
 }
 
-.reply-field .reply-status, .reply-engagement-field .reply-status{
+.reply-field .reply-status, .reply-engagement-field .reply-status, .dm-field .reply-status{
 	margin-top: 10px;
 	background-color: #00FF04;
 	color: white;

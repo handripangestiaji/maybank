@@ -234,15 +234,6 @@ for($i=0; $i<count($fb_feed);$i++):?>
                 </a>
             </div>
             <br clear="all" />
-            <div id="reply-img-show">
-                <div class="reply-img-attached">
-                    <!-- close button for image attached -->
-                    <a id="reply-img-close" href="javascript:void(0);">
-                     <i class="icon-remove-sign"></i>
-                    </a>
-                </div>
-            </div>
-            <br clear="all" />
             <div class="pull-left reply-char-count">
                 <i class="icon-facebook-sign"></i>&nbsp;<span class="reply-fb-char-count">2000</span>
             </div>

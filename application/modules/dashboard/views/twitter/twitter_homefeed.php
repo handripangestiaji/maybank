@@ -173,7 +173,7 @@ for($i=0;$i<count($homefeed);$i++){
     <!-- END REPLY -->
     
     <!-- DM -->  
-    <div class="reply-field hide">
+    <div class="dm-field hide">
         <div class="row-fluid">
             <span class="dm-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
             <div class="pull-left">

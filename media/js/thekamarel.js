@@ -448,8 +448,9 @@ $(function(){
                 $(document).ready(function() {
                         $(this).on('click','.btn-reply',
                             function() {
-                                $(this).closest('h4').next().show();
-                                $(this).closest('h4').next().next().hide();
+                                $(this).closest('h4').siblings('.reply-field').show();
+                                $(this).closest('h4').siblings('.case-field').hide();
+                                $(this).closest('h4').siblings('.dm-field').hide();
                             }
                         );
                         
@@ -462,15 +463,17 @@ $(function(){
                         
                         $(this).on('click','.btn-case',
                             function() {
-                                $(this).closest('h4').next().hide();
-                                $(this).closest('h4').next().next().show();
+                                $(this).closest('h4').siblings('.reply-field').hide();
+                                $(this).closest('h4').siblings('.dm-field').hide();
+                                $(this).closest('h4').siblings('.case-field').show();
                             }
                         );
                         
                          $(this).on('click','.btn-dm',
                             function() {
-                                $(this).closest('h4').next().hide();
-                                $(this).closest('h4').next().next().show();
+                                $(this).closest('h4').siblings('.reply-field').hide();
+                                $(this).closest('h4').siblings('.dm-field').show();
+                                $(this).closest('h4').siblings('.case-field').hide();
                             }
                         );
                             

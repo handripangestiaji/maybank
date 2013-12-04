@@ -111,9 +111,7 @@ for($i=0;$i<count($senttweets);$i++){
         <a role="button" class='destroy_status'><i class="icon-trash greyText"></i></a>
         <div class="pull-right">
                 <!--form class="contentForm" action="<?php //echo base_url('index.php/dashboard/socialmedia/twitteraction');?>" method="post"-->
-                <!--button class="btn btn-reply btn-primary" data-toggle="modal"><i class="icon-mail-reply"></i></button--!>
-                <button type="button" class="retweet btn btn-primary"><i class="icon-retweet"></i></button  >
-                <a role="button" href="#modalsentdm<?php echo $i; ?>" class="btn btn-primary" data-toggle="modal"><i class="icon-envelope"></i></a>
+                <button type="button" class="retweet btn btn-primary"><i class="icon-retweet"></i></button>
                 <button type="button" class="favorit btn btn-primary"><i class="icon-star"></i></button>
                 
                 <?php /*if($senttweets[$i]->following=='1'){ ?>

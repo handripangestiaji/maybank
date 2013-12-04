@@ -933,13 +933,8 @@ $(function(){
         
         $(this).on('submit', 'form.assign_case', function(e){
             var thisContext = $(this);
-            $(this).AsyncPost({
-                "url" : BASEURL + "/cms/case_provider/SaveCase",
-                "urlParameter" : $(this).serialize(),
-                "callback" : function(response){
-                    
-                }
-            });
+            console.log($(this).parent().closest('.postId').val());
+           
             e.preventDefault();
            
         });

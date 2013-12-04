@@ -13,8 +13,7 @@
             <i class="icon-circle"></i>
             <span>mentions</span>
             <i class="icon-circle"></i>
-            <span><?php echo date('l, M j, Y H:i:s',strtotime($directmessage[$i]->created_at));?></span>
-            <i class="icon-play-circle moreOptions pull-right"></i>
+            <span><?php echo date('M j, Y, H:i a',strtotime($directmessage[$i]->created_at));?></span>
         </p>
         <p><?php echo $directmessage[$i]->text;?></p>
         <p><button type="button" class="btn btn-warning btn-mini">OPEN</button></p>

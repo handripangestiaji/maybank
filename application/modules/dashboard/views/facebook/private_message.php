@@ -1,4 +1,4 @@
-<?php 
+<?php
 for($i=0; $i<count($fb_pm);$i++):?>
 <li>
     <input type="hidden" class="postId" value="<?php echo $fb_pm[$i]->detail_id_from_facebook; ?>" />
@@ -8,13 +8,12 @@ for($i=0; $i<count($fb_pm);$i++):?>
         <i class="icon-circle"></i>
         <span>posted a <span class="cyanText">comment</span></span>
         <i class="icon-circle"></i>
-        <span><?php echo date('l, M j, Y H:i:s',strtotime($fb_pm[$i]->created_at));?></span>
-        <i class="icon-play-circle moreOptions pull-right"></i>
+        <span><?php echo date('M j, Y, H:i a',strtotime($fb_pm[$i]->created_at));?></span>
     </p>
     <p><?=$fb_pm[$i]->messages?></p>
     <p><button type="button" class="btn btn-warning btn-mini">OPEN</button><!--button class="btn btn-primary btn-mini" style="margin-left: 5px;">LIKE</button--> </p>
     <p>
-        <span class="btn-engagement"><i class="icon-eye-open"></i> Engagement</span> |
+        <span class="btn-engagement"><i class="icon-eye-open"></i> <?php echo $fb_pm[$i]->total_comments;?> Engagements</span> |
         <span class="btn-mark-as-read cyanText" style="display: <?php if($fb_pm[$i]->is_read==1){echo 'none';} ?>"><i class="icon-bookmark"></i> Mark as Read</span>
         <span class="btn-mark-as-unread cyanText" style="display: <?php if($fb_pm[$i]->is_read==0){echo 'none';} ?>"><i class="icon-bookmark-empty"></i> Mark as Unread</span>
     </p>
@@ -36,8 +35,7 @@ for($i=0; $i<count($fb_pm);$i++):?>
                 <i class="icon-circle"></i>
                 <span>posted a <span class="cyanText">comment</span></span>
                 <i class="icon-circle"></i>
-                <span><?php echo $comment[$j]->created_at; ?></span>
-                <i class="icon-play-circle moreOptions pull-right"></i>
+                <span><?php echo date('M j, Y, H:i a',strtotime($comment[$i]->created_at));?></span>
             </p>
             <div>
                 <p>"<?php echo $comment[$j]->messages; ?>"</p>

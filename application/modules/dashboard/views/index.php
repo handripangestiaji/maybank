@@ -106,52 +106,47 @@
                                 <input id="datepickerField" type="text" class="span3" value="04/26/2013">
                                 </div>
                                 <div class="right">
-                                <label class="left">Time</label>
-                                <select class="time-sel">
-                                    <option value="">Hours</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                    <option value="6">6</option>
-                                    <option value="7">7</option>
-                                    <option value="8">8</option>
-                                    <option value="9">9</option>
-                                    <option value="10">10</option>
-                                    <option value="11">11</option>
-                                    <option value="12">12</option>
-                                    <option value="13">13</option>
-                                    <option value="14">14</option>
-                                    <option value="15">15</option>
-                                    <option value="16">16</option>
-                                    <option value="17">17</option>
-                                    <option value="18">18</option>
-                                    <option value="19">19</option>
-                                    <option value="20">20</option>
-                                    <option value="21">21</option>
-                                    <option value="22">22</option>
-                                     <option value="22">23</option>
-                                </select>
-                                <select class="time-sel">
-                                    <option value="">Minutes</option>
-                                    <option value="5">5</option>
-                                    <option value="10">10</option>
-                                    <option value="15">15</option>
-                                    <option value="20">20</option>
-                                    <option value="25">25</option>
-                                    <option value="30">30</option>
-                                    <option value="35">35</option>
-                                    <option value="40">40</option>
-                                    <option value="45">45</option>
-                                    <option value="50">50</option>
-                                    <option value="55">55</option>
-                                </select>
+                                <p>
+                                    <label class="left">Time</label>
+                                    <select class="time-sel">
+                                        <option value="">Hours</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                    </select>
+                                    <select class="time-sel">
+                                        <option value="">Minutes</option>
+                                        <option value="5">5</option>
+                                        <option value="10">10</option>
+                                        <option value="15">15</option>
+                                        <option value="20">20</option>
+                                        <option value="25">25</option>
+                                        <option value="30">30</option>
+                                        <option value="35">35</option>
+                                        <option value="40">40</option>
+                                        <option value="45">45</option>
+                                        <option value="50">50</option>
+                                        <option value="55">55</option>
+                                    </select>
+                                    <select class="time-sel">
+                                        <option value="AM">AM</option>
+                                        <option value="PM">PM</option>
+                                    </select>
+                                </p>
+                                <br/>
+                                <p>
+                                    <input type="checkbox" checked style="margin-top: 0px;"/> Email me when message is sent
+                                </p> 
                             </div>
-                        </div> 
-                        <div class="img-list-upload top10">
-                            <input id="demo_box_2" class="css-checkbox" type="checkbox" checked/>
-                            <label for="demo_box_2" class="css-label">Email me when message is sent</label>
                         </div> 
                     </div>
                 </div>
@@ -177,6 +172,7 @@
               <div class="compose-send">
                 <p class="facebook-character-count"><i class="icon-facebook-sign"></i>&nbsp;<span class="compose-fb-char-count">2000</span</p>
                 <p class="twitter-character-count">&nbsp;&nbsp;<i class="icon-twitter-sign"></i>&nbsp;<span class="compose-tw-char-count">140</span></p>
+                <p class="youtube-character-count">&nbsp;&nbsp;<i class="icon-youtube-sign"></i>&nbsp;<span class="compose-yt-char-count">500</span></p>
                 <button class="btn-compose-post btn btn-primary" type="button"><i class="icon-bolt"></i> POST</button>
               </div>
               <br clear="all" />

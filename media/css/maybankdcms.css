@@ -134,6 +134,9 @@
 	display: inline;
 }
 
+.compose-expanded input{
+	margin-bottom: 0px;
+}
 
 .compose-collapsed .compose-url-shortener, .compose-collapsed .compose-form, .compose-collapsed .compose-form-control, .compose-collapsed .compose-send, .compose-collapsed .compose-channel-select {
 	display: none;

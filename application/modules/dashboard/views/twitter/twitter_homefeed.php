@@ -10,8 +10,7 @@ for($i=0;$i<count($homefeed);$i++){
             <i class="icon-circle"></i>
             <span>mentions</span>
             <i class="icon-circle"></i>
-            <span><?php echo date('l, M j, Y H:i:s',strtotime($homefeed[$i]->created_at));?></span>
-            <i class="icon-play-circle moreOptions pull-right"></i>
+            <span><?php echo date('M j, Y, H:i a',strtotime($homefeed[$i]->created_at));?></span>
         </p>
     <p><?php echo $homefeed[$i]->text; ?></p>
     
@@ -45,7 +44,6 @@ for($i=0;$i<count($homefeed);$i++){
                 <span>posted a <span class="cyanText">comment</span></span>
                 <i class="icon-circle"></i>
                 <span>2 hours ago</span>
-                <i class="icon-play-circle moreOptions pull-right"></i>
             </p>
             <div>
                 <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
@@ -60,7 +58,6 @@ for($i=0;$i<count($homefeed);$i++){
                 <span>posted a <span class="cyanText">comment</span></span>
                 <i class="icon-circle"></i>
                 <span>2 hours ago</span>
-                <i class="icon-play-circle moreOptions pull-right"></i>
             </p>
             <div>
                 <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>

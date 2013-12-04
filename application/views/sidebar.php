@@ -18,14 +18,14 @@
     <div class="sidebarDivider"></div>
     <div class="sidebarContent">
         <div class="sidebarHead pull-left">
-            <p class="title pull-left">NOTIFICATION&nbsp;<span class="badge">Total <?php echo $count_new_cases + $count_replies; ?></span></p>
+            <p class="title pull-left">NOTIFICATION&nbsp;<span class="badge">Total <?php if(isset($count_new_cases)){echo ($count_new_cases + $count_replies);} else {echo 0;}?></span></p>
         </div>
         <span class="btn-close pull-right">Close <i class="icon-remove-sign"></i></span>
         <br clear="all" />
         <div class="sidebarLine"></div>
         <div class="sidebarInfo">
-            <div class="replies"><span class="badge cyan"><?php echo $count_replies; ?></span> Replies</div>
-            <div class="newCases"><span class="badge purple"><?php echo $count_new_cases; ?></span> New Cases</div>
+            <div class="replies"><span class="badge cyan"><?php if(isset($count_new_cases)){echo $count_replies;} else {echo 0;}?></span> Replies</div>
+            <div class="newCases"><span class="badge purple"><?php if(isset($count_new_cases)){echo $count_new_cases;} else {echo 0;}?></span> New Cases</div>
         </div>
         <div class="sidebarLine"></div>
         <ul class="tasksList">

@@ -491,6 +491,13 @@ $(function(){
                             }
                         );
                         
+                        $(this).on('click','.btn-engagement-case',
+                            function() {
+                                $(this).parent().siblings('.reply-engagement-field').hide();
+                                $(this).parent().siblings('.case-engagement-field').show();
+                            }
+                        );
+                        
                         $(this).on('click','.btn-case',
                             function() {
                                 $(this).closest('h4').siblings('.reply-field').hide();
@@ -678,6 +685,7 @@ $(function(){
                         var len = this.value.length;
                         $('.compose-fb-char-count').html(2000-len);
                         $('.compose-tw-char-count').html(140-len);
+                        $('.compose-yt-char-count').html(500-len);
                     });
                      
                      $(".btn-compose-post").click(function() {

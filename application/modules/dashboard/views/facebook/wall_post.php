@@ -10,13 +10,12 @@ for($i=0; $i<count($fb_feed);$i++):?>
         <i class="icon-circle"></i>
         <span>posted a <span class="cyanText">new post</span></span>
         <i class="icon-circle"></i>
-        <span><?php echo date('l, M j, Y H:i:s',strtotime($fb_feed[$i]->created_at));?></span>
-        <i class="icon-play-circle moreOptions pull-right"></i>
+        <span><?php echo date('M j, Y, H:i a',strtotime($fb_feed[$i]->created_at));?></span>
     </p>
     <p><?=$fb_feed[$i]->post_content?></p>
     <p><button type="button" class="btn btn-warning btn-mini">OPEN</button><button class="fblike btn btn-primary btn-mini" style="margin-left: 5px;" value="<?php echo $fb_feed[$i]->post_stream_id;?>">LIKE</button> </p>
     <p>
-        <span class="btn-engagement"><i class="icon-eye-open"></i> Engagement</span> |
+        <span class="btn-engagement"><i class="icon-eye-open"></i> <?php echo $fb_feed[$i]->total_comments;?> Engagements</span> |
         <span class="cyanText"><i class="icon-thumbs-up-alt"></i></i> <?php echo $fb_feed[$i]->total_likes; ?> likes</span> | 
         <span class="btn-mark-as-read cyanText" style="display: <?php if($fb_feed[$i]->is_read==1){echo 'none';} ?>"><i class="icon-bookmark"></i> Mark as Read</span>
         <span class="btn-mark-as-unread cyanText" style="display: <?php if($fb_feed[$i]->is_read==0){echo 'none';} ?>"><i class="icon-bookmark-empty"></i> Mark as Unread</span>
@@ -39,8 +38,7 @@ for($i=0; $i<count($fb_feed);$i++):?>
                 <i class="icon-circle"></i>
                 <span>posted a <span class="cyanText">comment</span></span>
                 <i class="icon-circle"></i>
-                <span><?php echo $comment[$j]->created_at; ?></span>
-                <i class="icon-play-circle moreOptions pull-right"></i>
+                <span><?php echo date('M j, Y, H:i a',strtotime($comment[$j]->created_at));?></span>
             </p>
             <div class="engagement-comment">
                 <p>"<?php echo $comment[$j]->comment_content; ?>"</p>
@@ -79,15 +77,6 @@ for($i=0; $i<count($fb_feed);$i++):?>
                             <a href="javascript:void(0);" id="reply-open-img">
                                 <i class="icon-camera"></i> 
                             </a>
-                        </div>
-                        <br clear="all" />
-                        <div id="reply-img-show">
-                            <div class="reply-img-attached">
-                                <!-- close button for image attached -->
-                                <a id="reply-img-close" href="javascript:void(0);">
-                                 <i class="icon-remove-sign"></i>
-                                </a>
-                            </div>
                         </div>
                         <br clear="all" />
                         <div class="pull-left reply-char-count">

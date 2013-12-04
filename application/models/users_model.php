@@ -18,12 +18,34 @@ class Users_model extends CI_Model
     
     //======================== USER ==========================
     //view user
+    function select_user1($limit, $start)
+    {
+        $this->db->limit($limit, $start);
+        
+        $this->db->select('user.*,role_collection.role_name,user_group.group_name');
+        $this->db->join('user_group','user.group_id = user_group.group_id','inner');
+        $this->db->join('role_collection','user.role_id = role_collection.role_collection_id','left');
+        $query = $this->db->get($this->user);
+        
+        if ($query->num_rows() > 0) {
+            foreach ($query->result() as $row) {
+                $data[] = $row;
+            }
+            return $data;
+        }
+        return false;
+    }
     function select_user()
     {
         $this->db->select('user.*,role_collection.role_name,user_group.group_name');
         $this->db->join('user_group','user.group_id = user_group.group_id','inner');
         $this->db->join('role_collection','user.role_id = role_collection.role_collection_id','left');
         return $this->db->get($this->user);
+    }
+    
+    function count_record()
+    {
+        return $this->db->count_all($this->user);
     }
     
     //insert user
@@ -65,9 +87,30 @@ class Users_model extends CI_Model
     }
     
     //============================= ROLE ================================
+    function count_record_role()
+    {
+        return $this->db->count_all($this->role);
+    }
+    
     function select_role()
     {
+        $this->db->join('user','user.user_id=role_collection.created_by','inner');
         return $this->db->get($this->role);
+    }
+    function select_role1($limit, $start)
+    {
+        $this->db->limit($limit, $start);
+        
+        $this->db->join('user','user.user_id=role_collection.created_by','inner');
+        $query = $this->db->get($this->role);
+        
+        if ($query->num_rows() > 0) {
+            foreach ($query->result() as $row) {
+                $data[] = $row;
+            }
+            return $data;
+        }
+        return false;
     }
     
     function insert_role($data)
@@ -115,9 +158,29 @@ class Users_model extends CI_Model
     }
     
     //============================ GROUP ================================
+    function count_record_group()
+    {
+        return $this->db->count_all($this->group);
+    }
+    
     function select_group()
     {
         return $this->db->get($this->group);
+    }
+    
+    function select_group1($limit, $start)
+    {
+        $this->db->limit($limit, $start);
+        
+        $query = $this->db->get($this->group);
+        
+        if ($query->num_rows() > 0) {
+            foreach ($query->result() as $row) {
+                $data[] = $row;
+            }
+            return $data;
+        }
+        return false;
     }
     
     function insert_group($data)

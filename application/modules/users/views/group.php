@@ -94,7 +94,7 @@
                 </thead>
                 
                 <tbody>
-                    <?php foreach($group->result() as $gr){?>
+                    <?php foreach($group as $gr){?>
                     <tr>
                         <td><?php echo $gr->group_name;?></td>
                         <td>10</td>
@@ -124,14 +124,9 @@
                 </tbody>
                 
             </table>
-            <?php if($count>=10){?>
+            <?php if($count>10){?>
             <div class="page pull-right" style="margin-top: 30px;">
-                <a href="#">First</a>
-                <a href="#" class="active">1</a>
-                <a href="#">2</a>
-                <a href="#">3</a>
-                <a href="#">4</a>
-                <a href="#">Last</a>
+                <?php echo $links; ?>
             </div>
             <?php }?>
             

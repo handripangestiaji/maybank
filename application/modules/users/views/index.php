@@ -91,7 +91,7 @@
                 </thead>
                 
                 <tbody>
-                    <?php foreach($show->result() as $row){?>
+                    <?php foreach($show as $row){?>
                     <tr>
                         <td><?php echo $row->user_id;?></td>
                         <td><?php echo $row->display_name;?></td>
@@ -106,23 +106,18 @@
                         <td><?php echo $row->created_at;?></td>
                         <td><?php echo $row->created_by;?></td>
                         <td><a href="<?php echo site_url();?>/users/edit/<?php echo $row->user_id;?>"><span><i class="icon-pencil"></i></span></a></td>
-                        <!--<td><a href="<?php echo site_url();?>/users/delete/<?php echo $row->user_id;?>"><span><i class="icon-remove"></i></span></a></td>
-                    --><td>
+                        <td>
                             <a href="" onclick="show_confirm('<?php echo $row->user_id;?>');return false;"><span><i class="icon-remove"></i></span></a>
-                    </td>
+                        </td>
                     </tr>
                     <?php }?>
                 </tbody>
                 
             </table>
-            <?php if($count>=10){?>
-            <div class="page pull-right" style="margin-top: 30px;">
-                <a href="#">First</a>
-                <a href="#" class="active">1</a>
-                <a href="#">2</a>
-                <a href="#">3</a>
-                <a href="#">4</a>
-                <a href="#">Last</a>
+            
+            <?php if($count>10){?>
+            <div class="page pull-right" style="margin-top: 30px; margin-left:10px; margin-right:10px;">
+               <?php echo $links; ?>
             </div>
             <?php }?>
         </div>

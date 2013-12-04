@@ -18,11 +18,28 @@ class Users extends MY_Controller {
     
     function index()
     {
-        $data = array(
-		      'show' => $this->users_model->select_user(),
-		      'role' => $this->users_model->select_role(),
-		      'count' => $this->db->affected_rows($this->users_model->select_user())
-		     );
+     $config['base_url'] = base_url().'users/index';
+     $config['total_rows'] = $this->users_model->count_record();
+     $config['per_page'] = 10;
+     $config["uri_segment"] = 3;
+     
+     $config['next_link'] = 'Next';
+     $config['prev_link'] = 'Prev';
+     
+     $config['first_link'] = 'First';
+     $config['last_link'] = 'Last';
+
+     $config['cur_tag_open'] = '<b style="margin:0px 5px;">';
+     $config['cur_tag_close'] = '</b>';
+     
+     $this->pagination->initialize($config);
+     
+     $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+     $data['show'] = $this->users_model->select_user1($config["per_page"], $page);
+     
+     $data['links'] = $this->pagination->create_links();
+     $data['role'] = $this->users_model->select_role();
+     $data['count'] = $this->users_model->count_record();
         $this->load->view('users/index',$data);
     }
     
@@ -138,10 +155,28 @@ class Users extends MY_Controller {
     //============================ ROLE ===================================
     function menu_role()
     {
-	  $data = array(
-			 'show' => $this->users_model->select_role(),
-			 'app_show' =>$this->users_model->select_appRole()
-		    );
+	  $config['base_url'] = base_url().'users/menu_role';
+	  $config['total_rows'] = $this->users_model->count_record_role();
+	  $config['per_page'] = 10;
+	  $config["uri_segment"] = 3;
+	  
+	  $config['next_link'] = 'Next';
+	  $config['prev_link'] = 'Prev';
+	  
+	  $config['first_link'] = 'First';
+	  $config['last_link'] = 'Last';
+     
+	  $config['cur_tag_open'] = '<b style="margin:0px 5px;">';
+	  $config['cur_tag_close'] = '</b>';
+	  
+	  $this->pagination->initialize($config);
+	  
+	  $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+	  $data['show'] = $this->users_model->select_role1($config["per_page"], $page);
+     
+	  $data['links'] = $this->pagination->create_links();
+	  $data['count'] = $this->users_model->count_record_role();
+	  
 	  $roles = $this->users_model->select_appRole();
 	  $arr = array();
 	  $tree = array();
@@ -207,10 +242,53 @@ class Users extends MY_Controller {
     function edit_role($id)
     {
 	  $data = array(
-			 'role' => $this->users_model->edit_role($id),
-			 'app_show' =>$this->users_model->select_appRole(),
-			 'role_detail' => $this->users_model->edit_role_detail($id)
+			 'role' => $this->users_model->edit_role($id)
 			);
+	  
+	  $roles = $this->users_model->select_appRole();
+	  $role_detail = $this->users_model->edit_role_detail($id);
+	  
+	  $arr = array();
+	  $tree = array();
+	  $i = 0;
+	  
+	  foreach($role_detail->result_array() as $d){
+	       $c[] = $d['app_role_id']; 
+	  }
+	  
+	  foreach($roles->result_array() as $v)
+	  {
+	       if (in_array($v['app_role_id'], $c)) {
+		    $checked = true;
+		}
+		else{
+		    $checked = false;
+		}
+	       
+	      $arr[$v['app_role_id']] = array_merge(array("label" => $v['role_name'], "parent_id" => $v['parent_id'] , "value" => $v['app_role_id'], "checked" => $checked), array('items' => array()));
+	  }
+	  
+	  //echo "<pre>";
+	  //print_r($arr);
+	  //die();
+	  
+	  foreach($arr as $role_app_id => &$value)
+	  {
+	       if(!$value['parent_id'] || !array_key_exists($value['parent_id'], $arr))
+	       {
+		    $tree[] = &$value;
+	       } else {
+		    $arr[$value['parent_id']]['items'][] = &$value;
+	       }
+	  }
+	  
+	  //echo "<pre>";
+	  //print_r($tree);
+	  //die();
+	  
+	  $data['json'] = json_encode($tree);
+	  
+	  
 	  $this->load->view('users/role_edit',$data);
     }
     
@@ -224,12 +302,14 @@ class Users extends MY_Controller {
 	  $this->users_model->update_role($id,$data);
 	  
 	  $role = $this->input->post('role');
+	  
+	  $tampung = explode(',',$role[0]);
 	  $this->users_model->delete_role_detail($id);
-	  for($i=0;$i<count($role);$i++)
+	  for($i=0;$i<count($tampung);$i++)
 	  {
 	       $data1 = array(
 			      'role_collection_id' => $id,
-			      'app_role_id' => $role[$i]
+			      'app_role_id' => $tampung[$i]
 			      );
 	       $this->users_model->insert_role_detail($data1);
 	  }
@@ -267,12 +347,30 @@ class Users extends MY_Controller {
     //============================= GROUP =================================
     function menu_group()
     {
-	  $data = array(
-			 'group' => $this->users_model->select_group(),
-			 'channel' => $this->users_model->select_channel(),
-			 'group_detail' => $this->users_model->select_user_group_d(),
-			 'count' => $this->db->affected_rows($this->users_model->select_group())
-			);
+	  $config['base_url'] = base_url().'users/menu_group';
+	  $config['total_rows'] = $this->users_model->count_record_group();
+	  $config['per_page'] = 10;
+	  $config["uri_segment"] = 3;
+	  
+	  $config['next_link'] = 'Next';
+	  $config['prev_link'] = 'Prev';
+	  
+	  $config['first_link'] = 'First';
+	  $config['last_link'] = 'Last';
+     
+	  $config['cur_tag_open'] = '<b style="margin:0px 5px;">';
+	  $config['cur_tag_close'] = '</b>';
+	  
+	  $this->pagination->initialize($config);
+	  
+	  $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+	  $data['group'] = $this->users_model->select_group1($config["per_page"], $page);
+     
+	  $data['links'] = $this->pagination->create_links();
+	  $data['count'] = $this->users_model->count_record_group();
+			 $data['channel'] = $this->users_model->select_channel();
+			 $data['group_detail'] = $this->users_model->select_user_group_d();
+			
 	  $this->load->view('users/group',$data);
     }
     

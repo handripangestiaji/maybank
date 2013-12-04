@@ -67,6 +67,10 @@ class Socialmedia extends MY_Controller {
         if(isset($_GET['friendid'])){
             $friendid=$_GET['friendid'];
         }
+
+        if(isset($_POST['friendid'])){
+            $friendid=$_POST['friendid'];
+        }
         
         if(isset($_POST['followid'])){
             $followid=$_POST['followid'];
@@ -108,7 +112,7 @@ class Socialmedia extends MY_Controller {
         }elseif($action=='dm_send'){//ok
             
             /* direct_messages/new */
-            $parameters = array('user_id' => $friendid, 'text' => $content,'screen_name'=>$screen_name);
+            $parameters = array('user_id' => $friendid, 'text' => $content);
             $method = 'direct_messages/new';
             $this->connection->post($method, $parameters);
             

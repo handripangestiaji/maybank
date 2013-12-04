@@ -280,5 +280,14 @@ class twitter_model extends CI_Model
         $this->db->order_by('b.created_at','desc');           
         return $this->db->get()->result();
     }
+    
+    public function CountUnread(){
+        $this->db->select("SELECT a.`type`, SUM(a.is_read)");
+        $this->db->from("social_stream a INNER JOIN social_stream_twitter b ON a.post_id = b.post_id 
+                        INNER JOIN twitter_user_engaged c ON
+                        c.twitter_user_id = b.twitter_user_id");
+        $this->db->group_by("a.type");
+        return $this->db->get()->result();
+    }
    
 }

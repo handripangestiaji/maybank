@@ -717,7 +717,8 @@ $(function(){
                                     },
                             success: function(data)
                             {
-                                alert(data)
+                                $('.compose-post-status').show();
+                                $('.compose-post-status').fadeOut(5000);
                             },
                         });
                     });
@@ -731,11 +732,11 @@ $(function(){
                                     action:'dm_send',
                                     content:$(this).parent().siblings(".replaycontent").val(),
                                     screen_name: $(this).siblings(".screen_name").val(),
-                                    str_id: $(this).val()
+                                    friendid: $(this).val()
                                     },
                             success: function(data)
                             {
-                                //alert(data)
+                                alert(data)
                             },
                         });
                     });

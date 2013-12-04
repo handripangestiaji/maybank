@@ -526,23 +526,23 @@ border-radius: 3px;
 	cursor: pointer;
 }
 
-.reply-field, .reply-engagement-field{
+.reply-field, .reply-engagement-field, .dm-field{
 	background-color: #BABABA;
 	margin-top: -10px;
 	padding: 10px;
 }
 
-.reply-field textarea, .reply-engagement-field textarea{
+.reply-field textarea, .reply-engagement-field textarea, .dm-field textarea{
 	height: 100px;
 	width: 95%;
 	white-space: normal;
 }
 
-.reply-field .row-fluid, .reply-engagement-field .row-fluid{
+.reply-field .row-fluid, .reply-engagement-field .row-fluid, .dm-field .row-fluid{
 	margin: 0px;
 }
 
-.reply-field .reply-status, .reply-engagement-field .reply-status{
+.reply-field .reply-status, .reply-engagement-field .reply-status, .dm-field .reply-status{
 	margin-top: 10px;
 	background-color: #00FF04;
 	color: white;
@@ -736,6 +736,10 @@ input.related-conversation-check{
 	padding: 10px;
 }
 
+.sidebarContent{
+	text-align: left;
+}
+
 .sidebarContent .sidebarHead .title{
 	font-size: 14px;
 	font-weight: bold;
@@ -756,16 +760,17 @@ input.related-conversation-check{
 	margin-bottom: 8px;
 }
 
-.sidebarInfo span{
-	border-radius: 50%;
-	padding: 3px 8px;;
-	color: #FFF;
-}
-
 .sidebarInfo .newCases{
 	margin-top: 10px;
 }
 
+.sidebarContent .btn-close{
+	font-size: 10px;
+}
+
+#updateProfile .sidebarContent .profileInfo textarea.about-me{
+	height: 150px;
+}
 /*==============================================================================================
 ======================================== USERS =================================================
 ==============================================================================================*/

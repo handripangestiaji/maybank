@@ -27,7 +27,7 @@ for($i=0; $i<count($fb_feed);$i++):?>
         <div class="engagement-header">
             <span class="engagement-btn-close btn-close pull-right">Close <i class="icon-remove-sign"></i></span>
         </div>
-        <br>
+        <br />
         <?php 
             $comment=$this->facebook_model->RetriveCommentPostFb($fb_feed[$i]->post_id);
             for($j=0;$j<count($comment);$j++){

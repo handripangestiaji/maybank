@@ -46,6 +46,8 @@ class Socialmedia extends MY_Controller {
 	  $this->load->model('account_model');
 	  $filter = array();
 	  $data['channels'] = $this->account_model->GetChannel();
+	  $data['count_new_cases'] = 63;
+	  $data['count_replies'] = 36;
 	  $this->load->view('dashboard/index',$data);
      }
     

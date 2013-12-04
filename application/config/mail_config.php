@@ -2,12 +2,13 @@
 
 
 $config['mail_provider'] = array(
-    'protocol' =>'smtp',
-    'smtp_host' =>'mail.giziku.com',
-    'smtp_port' =>587,
-    'smtp_user' =>'noreply@giziku.com',
-    'smtp_pass' =>'g1z1ku.c0m',
-    'charset' =>'utf-8',
-    'mailtype' =>'html',
-    'wordwrap' =>TRUE
+    'protocol'=>'sendmail',
+    'smtp_host' => 'pro.turbo-smtp.com',
+    'smtp_user'=>'eko.purnomo@icloud.com',
+    'mailpath' => '/usr/sbin/sendmail',
+    'charset' => 'UTF-8',
+    'wordwrap' => TRUE,
+    'smtp_pass' => '1CzRQwiJ',
+    'mailtype' => 'html',
+    'smtp_port' => 587 
 );

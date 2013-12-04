@@ -29,13 +29,14 @@ class twitter_model extends CI_Model
     public function Mentions($channel){
         $result = $this->connection->get('statuses/mentions_timeline',
                                          array("count" => 200));
-        echo "<pre>";
-        print_r($result);
-        echo "</pre>";
+       
         if(is_array($result)){
             foreach($result as $tweet){
                 $this->SaveTwitterUsers($tweet->user);
-                $this->SaveTweets($tweet, $channel, "mentions");
+                $mentions = $this->SaveTweets($tweet, $channel, "mentions");
+                echo "<pre>";
+                print_r($mentions);
+                echo "</pre>";
             }
         }
     }
@@ -116,6 +117,7 @@ class twitter_model extends CI_Model
         $created_at = new DateTime($tweet->created_at, $timezone);
         $retrieved_at = new DateTime(date("Y-m-d H:i:s e"), $timezone);
         $post_id = $this->GetTweetId($tweet->id_str);
+        $in_reply_to = $this->GetTweetId($tweet->in_reply_to_status_id_str);
         $social_stream = array(
 	    "post_stream_id" => $tweet->id_str,
 	    "channel_id" => $channel->channel_id,
@@ -126,8 +128,9 @@ class twitter_model extends CI_Model
         
         $tweet_to_save = array(
             "type" => $come_from,
+            "retweeted" => $tweet->retweeted,
             "favorited" =>  $tweet->favorited,
-            "in_reply_to" => $post_id == null ? NULL : $post_id->post_id,
+            "in_reply_to" => $in_reply_to == null ? NULL : $in_reply_to->post_id,
             "twitter_entities" => $tweet->entities == "" ? "" : json_encode($tweet->entities),
             "text" =>htmlentities( $tweet->text, ENT_NOQUOTES, 'UTF-8'),
             "retweet_count" => $tweet->retweet_count,
@@ -150,6 +153,7 @@ class twitter_model extends CI_Model
             $this->db->update("social_stream_twitter", $tweet_to_save);
         }
         $this->db->trans_complete();
+        return array($tweet_to_save, $social_stream);
     }
     
     public function SaveDirectMessages($direct_message, $channel){
@@ -277,7 +281,16 @@ class twitter_model extends CI_Model
         if(count($filter) > 0)
 	    $this->db->where($filter);
         $this->db->limit($limit);
-        $this->db->order_by('b.created_at','desc');           
+        $this->db->order_by('a.post_stream_id','desc');           
+        return $this->db->get()->result();
+    }
+    
+    public function CountUnread(){
+        $this->db->select("SELECT a.`type`, SUM(a.is_read)");
+        $this->db->from("social_stream a INNER JOIN social_stream_twitter b ON a.post_id = b.post_id 
+                        INNER JOIN twitter_user_engaged c ON
+                        c.twitter_user_id = b.twitter_user_id");
+        $this->db->group_by("a.type");
         return $this->db->get()->result();
     }
    

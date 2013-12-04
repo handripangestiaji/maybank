@@ -22,9 +22,8 @@
         <i class="icon-camera"></i>
     </div>
     <br clear="all" />
-    <div class="pull-left">
-        
-        <i class="icon-twitter"></i> <span class="char-text-count">140</span>
+    <div class="pull-left reply-char-count">
+        <i class="icon-twitter-sign"></i>&nbsp;<span class="reply-tw-char-count">140</span>
     </div>
     <div class="pull-right">
         <button class="dm_send btn btn-primary btn-small btn-send-dm"  type="button" value="<?=$mentions[$i]->twitter_user_id;?>" >SEND</button>    

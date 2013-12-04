@@ -8,7 +8,7 @@ for($i=0; $i<count($fb_feed);$i++):?>
     <p class="headLine">
         <span class="author"><?php echo $fb_feed[$i]->name//."(".$fb_feed[$i][$i]->users->usename.")"?></span>
         <i class="icon-circle"></i>
-        <span>posted a <span class="cyanText">comment</span></span>
+        <span>posted a <span class="cyanText">new post</span></span>
         <i class="icon-circle"></i>
         <span><?php echo date('l, M j, Y H:i:s',strtotime($fb_feed[$i]->created_at));?></span>
         <i class="icon-play-circle moreOptions pull-right"></i>
@@ -69,7 +69,7 @@ for($i=0; $i<count($fb_feed);$i++):?>
                                 <option value="keyword">Others</option>
                             </select>
                         </div>
-                        <textarea placeholder="Compose Message"></textarea>
+                        <textarea class="reply_comment" placeholder="Compose Message"></textarea>
                         <br clear="all" />
                         <div class="pull-left">
                             <i class="icon-link"></i>
@@ -90,8 +90,8 @@ for($i=0; $i<count($fb_feed);$i++):?>
                             </div>
                         </div>
                         <br clear="all" />
-                        <div class="pull-left">
-                            <i class="icon-facebook"></i> 2000     
+                        <div class="pull-left reply-char-count">
+                            <i class="icon-facebook-sign"></i>&nbsp;<span class="reply-fb-char-count">2000</span>
                         </div>
                         <div class="pull-right">
                             <button class="btn btn-primary btn-small btn-send-reply">SEND</button>    
@@ -213,7 +213,11 @@ for($i=0; $i<count($fb_feed);$i++):?>
     
     <!-- CASE -->
     <div class="case-field hide">
-    <?php $this->load->view('dashboard/case_field')?>
+    <?php
+        $data['posts'] = $fb_feed;
+        $data['i'] = $i;
+        $this->load->view('dashboard/case_field',$data);
+    ?>
     </div>
     <!-- END CASE -->  
 </li>

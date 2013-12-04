@@ -111,9 +111,7 @@ for($i=0;$i<count($senttweets);$i++){
         <a role="button" class='destroy_status'><i class="icon-trash greyText"></i></a>
         <div class="pull-right">
                 <!--form class="contentForm" action="<?php //echo base_url('index.php/dashboard/socialmedia/twitteraction');?>" method="post"-->
-                <!--button class="btn btn-reply btn-primary" data-toggle="modal"><i class="icon-mail-reply"></i></button--!>
-                <button type="button" class="retweet btn btn-primary"><i class="icon-retweet"></i></button  >
-                <a role="button" href="#modalsentdm<?php echo $i; ?>" class="btn btn-primary" data-toggle="modal"><i class="icon-envelope"></i></a>
+                <button type="button" class="retweet btn btn-primary"><i class="icon-retweet"></i></button>
                 <button type="button" class="favorit btn btn-primary"><i class="icon-star"></i></button>
                 
                 <?php /*if($senttweets[$i]->following=='1'){ ?>
@@ -162,8 +160,8 @@ for($i=0;$i<count($senttweets);$i++){
                 <i class="icon-camera"></i>
             </div>
             <br clear="all" />
-            <div class="pull-left">
-                <i class="icon-facebook"></i> 2000     
+            <div class="pull-left reply-char-count">
+                <i class="icon-twitter-sign"></i>&nbsp;<span class="reply-tw-char-count">140</span>
             </div>
             <div class="pull-right">
                 <button class="btn btn-primary btn-small btn-send-reply" name="action"  type="submit" value="replay" >SEND</button>    

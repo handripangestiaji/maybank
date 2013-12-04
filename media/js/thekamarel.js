@@ -142,6 +142,36 @@ $(function(){
         }
         return false;
     });
+    
+    $(document).ready(function(){
+        $('.sidebarContent > .btn-close').click(function(){
+            $('.hiddenContent>div').hide();
+            $('.hiddenContent').stop().animate({right: -270}).css({display: 'block'});
+            $('div .input-append a.sidebar').removeClass('active');
+            currentSection = 0;
+        });
+        
+        $('.sidebarContent > footer > .changePassword').click(function(){
+            $(this).closest('#profileContent').hide();
+            $(this).closest('#profileContent').siblings('#updatePassword').show();
+        });
+        
+        $('.sidebarContent > footer > .updateProfile').click(function(){
+            $(this).closest('#profileContent').hide();
+            $(this).closest('#profileContent').siblings('#updateProfile').show();
+        });
+        
+        $('.sidebarContent > footer > .updateProfile').click(function(){
+            $(this).closest('#profileContent').hide();
+            $(this).closest('#profileContent').siblings('#updateProfile').show();
+        });
+        
+        $('.sidebar-btn-cancel').click(function(){
+            $(this).closest('#updateProfile').hide();
+            $(this).closest('#updatePassword').hide();
+            $('#profileContent').show();
+        });
+    });
 
     /*=============================================================================================
      =============================== COLLAPSED SIDEBAR SHOWING ACTIONS ============================
@@ -448,8 +478,9 @@ $(function(){
                 $(document).ready(function() {
                         $(this).on('click','.btn-reply',
                             function() {
-                                $(this).closest('h4').next().show();
-                                $(this).closest('h4').next().next().hide();
+                                $(this).closest('h4').siblings('.reply-field').show();
+                                $(this).closest('h4').siblings('.case-field').hide();
+                                $(this).closest('h4').siblings('.dm-field').hide();
                             }
                         );
                         
@@ -462,15 +493,17 @@ $(function(){
                         
                         $(this).on('click','.btn-case',
                             function() {
-                                $(this).closest('h4').next().hide();
-                                $(this).closest('h4').next().next().show();
+                                $(this).closest('h4').siblings('.reply-field').hide();
+                                $(this).closest('h4').siblings('.dm-field').hide();
+                                $(this).closest('h4').siblings('.case-field').show();
                             }
                         );
                         
                          $(this).on('click','.btn-dm',
                             function() {
-                                $(this).closest('h4').next().hide();
-                                $(this).closest('h4').next().next().show();
+                                $(this).closest('h4').siblings('.reply-field').hide();
+                                $(this).closest('h4').siblings('.dm-field').show();
+                                $(this).closest('h4').siblings('.case-field').hide();
                             }
                         );
                             

@@ -160,6 +160,17 @@ $(function(){
             $(this).closest('#profileContent').hide();
             $(this).closest('#profileContent').siblings('#updateProfile').show();
         });
+        
+        $('.sidebarContent > footer > .updateProfile').click(function(){
+            $(this).closest('#profileContent').hide();
+            $(this).closest('#profileContent').siblings('#updateProfile').show();
+        });
+        
+        $('.sidebar-btn-cancel').click(function(){
+            $(this).closest('#updateProfile').hide();
+            $(this).closest('#updatePassword').hide();
+            $('#profileContent').show();
+        });
     });
 
     /*=============================================================================================

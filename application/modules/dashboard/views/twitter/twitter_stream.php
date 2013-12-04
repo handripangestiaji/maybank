@@ -1,12 +1,34 @@
+<?php
+    $count_unread_mentions = 0;
+    foreach($mentions as $m){
+        if($m->is_read == 0){        
+            $count_unread_mentions++;
+        }
+    }
+    
+    $count_unread_homefeed = 0;
+    foreach($homefeed as $h){
+        if($h->is_read == 0){        
+            $count_unread_homefeed++;
+        }
+    }
+    
+    $count_unread_dm = 0;
+    foreach($directmessage as $dm){
+        if($dm->is_read == 0){        
+            $count_unread_dm++;
+        }
+    }
+?>
 <input type="hidden" class="channel-id" value="<?php if(count($mentions) > 0) echo $mentions[0]->channel_id; ?>">
 <div id='ctwitter' class="container-fluid">
 <!-- ==================== ACTIVITIES MENU ==================== -->
 <div class="floatingBoxMenu">
     <ul class="nav stream_head">
-        <li class="active"><a class='mentions'>Mentions<span class="notifyCircle red">3</span></a></li>
-        <li><a class='feed'>Homefeed</a></li>
+        <li class="active"><a class='mentions'>Mentions<?php if($count_unread_mentions!=0){echo '<span class="notifyCircle red">'.$count_unread_mentions.'</span>';}?></a></li>
+        <li><a class='feed'>Homefeed<?php if($count_unread_homefeed!=0){echo '<span class="notifyCircle red">'.$count_unread_homefeed.'</span>';}?></a></li>
         <li><a class='sendmessage'>Send Twitter</a></li>
-        <li><a class='direct'>Direct Message<span class="notifyCircle red">2</span></span></a></li>
+        <li><a class='direct'>Direct Message<?php if($count_unread_dm!=0){echo '<span class="notifyCircle red">'.$count_unread_dm.'</span>';}?></a></li>
     </ul>
 </div>
 <!-- ==================== END OF ACTIVITIES MENU ==================== -->

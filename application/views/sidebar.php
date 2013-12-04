@@ -136,10 +136,9 @@
             <input type='password' style='width: 175px;' name='confirm_password' />
             </form>
             <div class="sidebarLine"></div>
-            <div>
-                <button class="btn btn-primary" type="submit">Save</button>
-                <button class="btn" type="button">Cancel</button>
-            </div>
+            <button class="btn btn-primary" type="submit">Save</button>
+            <button class="btn sidebar-btn-cancel" type="button">Cancel</button>
+            </div
         </div>
     </div>
 </div>
@@ -168,10 +167,8 @@
             <textarea class="about-me" name="about-me" placeholder="Compose Message"></textarea>
             Count: 500
             <div class="sidebarLine"></div>
-            <div>
-                <button class="btn btn-primary" type="submit">Save</button>
-                <button class="btn" type="button">Cancel</button>
-            </div>
+            <button class="btn btn-primary" type="submit">Save</button>
+            <button class="btn sidebar-btn-cancel" type="button">Cancel</button>
         </div>
     </div>
 </div>

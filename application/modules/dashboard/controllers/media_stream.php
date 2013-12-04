@@ -205,17 +205,16 @@ class Media_stream extends CI_Controller {
     public function FbReplyPost(){
         $this->load->model('account_model');
         $this->load->model('facebook_model');
-        $comment=$_POST['comment'];
-        $post_id=$_POST['post_id'];
+        $comment = $this->input->post('comment');
+        $post_id = $this->input->post('post_id');
      
-       $filter = array(
+	$filter = array(
             "connection_type" => "facebook"
         );
         if($this->input->get('channel_id')){
             $filter['channel_id'] = $this->input->get('channel_id');
         }
         $channel_loaded = $this->account_model->GetChannel($filter);
-              
         $newStd = new stdClass();
         $newStd->page_id =  $channel_loaded[0]->social_id;
         $newStd->token = $this->facebook_model->GetPageAccessToken( $channel_loaded[0]->oauth_token, $channel_loaded[0]->social_id);
@@ -223,9 +222,9 @@ class Media_stream extends CI_Controller {
 	       'appId' => $this->config->item('fb_appid'),
 	       'secret' => $this->config->item('fb_secretkey')
 	    );
-	    $this->load->library('facebook',$config);
-	    $this->facebook->setaccesstoken($newStd->token);
-	    $this->facebook->api('/'.$post_id.'/comments','post',array('message' => $comment,));
+	$this->load->library('facebook',$config);
+	$this->facebook->setaccesstoken($newStd->token);
+	$this->facebook->api('/'.$post_id.'/comments','post',array('message' => $comment));
     }
     
     public function load_facebook($type){

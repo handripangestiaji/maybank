@@ -899,9 +899,7 @@ $(function(){
                     "testParameter" : 1
                 }
             });
-        });
-        
-        
+        });        
         $(".table-sub-tr").hide();   
         $(".table-btn-show-sub").click(function() {
             if($(this).hasClass('active')) {

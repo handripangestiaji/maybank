@@ -7,13 +7,9 @@
             <option value="keyword">Complaint</option>
         </select>
         <select style="width: 130px;">
-            <option value="keyword">Accounts & Banking</option>
-            <option value="user">Cards</option>
-            <option value="keyword">Investment</option>
-            <option value="keyword">insurance</option>
-            <option value="user">Loans</option>
-            <option value="keyword">Maybank2u</option>
-            <option value="keyword">Others</option>
+            <?php foreach($product_list as $product):?>
+                <option value="<?=$product->id?>"><?=$product->product_name?></option>
+            <?php endforeach?>
         </select>
     </div>
     <textarea class='reply_comment' placeholder="Compose Message"></textarea>

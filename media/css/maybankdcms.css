@@ -736,6 +736,10 @@ input.related-conversation-check{
 	padding: 10px;
 }
 
+.sidebarContent{
+	text-align: left;
+}
+
 .sidebarContent .sidebarHead .title{
 	font-size: 14px;
 	font-weight: bold;
@@ -756,16 +760,17 @@ input.related-conversation-check{
 	margin-bottom: 8px;
 }
 
-.sidebarInfo span{
-	border-radius: 50%;
-	padding: 3px 8px;;
-	color: #FFF;
-}
-
 .sidebarInfo .newCases{
 	margin-top: 10px;
 }
 
+.sidebarContent .btn-close{
+	font-size: 10px;
+}
+
+#updateProfile .sidebarContent .profileInfo textarea.about-me{
+	height: 150px;
+}
 /*==============================================================================================
 ======================================== USERS =================================================
 ==============================================================================================*/

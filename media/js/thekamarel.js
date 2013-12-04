@@ -142,6 +142,25 @@ $(function(){
         }
         return false;
     });
+    
+    $(document).ready(function(){
+        $('.sidebarContent > .btn-close').click(function(){
+            $('.hiddenContent>div').hide();
+            $('.hiddenContent').stop().animate({right: -270}).css({display: 'block'});
+            $('div .input-append a.sidebar').removeClass('active');
+            currentSection = 0;
+        });
+        
+        $('.sidebarContent > footer > .changePassword').click(function(){
+            $(this).closest('#profileContent').hide();
+            $(this).closest('#profileContent').siblings('#updatePassword').show();
+        });
+        
+        $('.sidebarContent > footer > .updateProfile').click(function(){
+            $(this).closest('#profileContent').hide();
+            $(this).closest('#profileContent').siblings('#updateProfile').show();
+        });
+    });
 
     /*=============================================================================================
      =============================== COLLAPSED SIDEBAR SHOWING ACTIONS ============================

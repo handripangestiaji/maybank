@@ -30,8 +30,6 @@
         <br clear="all" />
         </h4>
         
-        <div></div>
-        
         <!-- DM -->  
     <div class="dm-field hide">
         <div class="row-fluid">

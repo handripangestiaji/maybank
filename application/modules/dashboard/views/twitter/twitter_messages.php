@@ -19,7 +19,7 @@
             echo $date->format('l, M j, Y H:i:s');
             ?>
             </span>
-            <i class="icon-play-circle moreOptions pull-right"></i>
+            
         </p>
         <p><?php echo $directmessage[$i]->text;?></p>
         <p><button type="button" class="btn btn-warning btn-mini">OPEN</button></p>

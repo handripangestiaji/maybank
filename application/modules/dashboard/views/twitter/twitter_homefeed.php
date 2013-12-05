@@ -19,7 +19,7 @@ for($i=0;$i<count($homefeed);$i++){
             echo $date->format('l, M j, Y H:i:s');
             ?>
             </span>
-            <i class="icon-play-circle moreOptions pull-right"></i>
+          
         </p>
     <p><?php echo $homefeed[$i]->text; ?></p>
     
@@ -53,7 +53,6 @@ for($i=0;$i<count($homefeed);$i++){
                 <span>posted a <span class="cyanText">comment</span></span>
                 <i class="icon-circle"></i>
                 <span>2 hours ago</span>
-                <i class="icon-play-circle moreOptions pull-right"></i>
             </p>
             <div>
                 <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
@@ -68,7 +67,6 @@ for($i=0;$i<count($homefeed);$i++){
                 <span>posted a <span class="cyanText">comment</span></span>
                 <i class="icon-circle"></i>
                 <span>2 hours ago</span>
-                <i class="icon-play-circle moreOptions pull-right"></i>
             </p>
             <div>
                 <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>

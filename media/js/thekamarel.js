@@ -491,6 +491,13 @@ $(function(){
                             }
                         );
                         
+                        $(this).on('click','.btn-engagement-case',
+                            function() {
+                                $(this).parent().siblings('.reply-engagement-field').hide();
+                                $(this).parent().siblings('.case-engagement-field').show();
+                            }
+                        );
+                        
                         $(this).on('click','.btn-case',
                             function() {
                                 $(this).closest('h4').siblings('.reply-field').hide();
@@ -666,8 +673,25 @@ $(function(){
                        $("#cal-show").css({"display": "none"});
                     });
 
-                    $( ".compose-insert-link" ).click(function() {
-                       $("#url-show").css({"display": "block"});
+                    $(".compose-insert-link-btn").click(function(){
+                        $(".compose-insert-link-text").linkpreview({
+                            previewContainer: "#url-show > .compose-form > div",  //optional
+                            //previewContainerClass: ".compose-schedule",
+                            refreshButton: ".compose-insert-link-btn",        //optional
+                            preProcess: function() {                //optional
+                                $('#url-show').css({"display": "block"});
+                                $('#url-show > .compose-form > div').html('Loading...');
+                            },
+                            onSuccess: function(data) {                  //optional
+                                console.log("onSuccess");
+                            },
+                            onError: function() {                    //optional
+                                console.log("onError");
+                            },
+                            onComplete: function() {                 //optional
+                                console.log("onComplete");
+                            }
+                       });
                     });
 
                      $( "#close-url" ).click(function() {
@@ -678,6 +702,7 @@ $(function(){
                         var len = this.value.length;
                         $('.compose-fb-char-count').html(2000-len);
                         $('.compose-tw-char-count').html(140-len);
+                        $('.compose-yt-char-count').html(500-len);
                     });
                      
                      $(".btn-compose-post").click(function() {

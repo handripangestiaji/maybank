@@ -84,17 +84,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach($show->result() as $row){?>
+                    <?php foreach($show as $row){?>
                     <tr>
                         <td><?php echo $row->role_name;?></td>
                         <td>0</td>
-                        <td>kosong</td>
+                        <td><?php echo $row->display_name;?></td>
                         <td><a href='<?php echo site_url();?>/users/edit_role/<?php echo $row->role_collection_id;?>'><span><i class="icon-pencil"></i></span></a></td>
                         <td><a href="" onclick="show_confirm('<?php echo $row->role_collection_id;?>');return false;"><span><i class="icon-remove"></i></span></a></td>
                     </tr>
                     <?php }?>
                 </tbody>
             </table>
+            <?php if($count>10){?>
+            <div class="page pull-right" style="margin-top: 30px; margin-left:10px; margin-right:10px;">
+               <?php echo $links; ?>
+            </div>
+            <?php }?>
             </div>
            
     </div>
@@ -150,18 +155,7 @@
     }
 </script>
 <script type="text/javascript">
-	$(document).ready(function(e){
-			$('.btn-role-delete').click(function(e) {
-		            if(confirm('Are you want delete this data ?'))
-			    {
-				var id = $(this).attr('id').substr(7);
-                                
-				window.location = '<?php echo site_url();?>/users/delete_role/'+id;
-			    }
-		        });
-		});
-
-	$(document).ready(function () {
+    $(document).ready(function () {
 		// Create jqxTree 
 		var theme = "";
 		// create jqxTree
@@ -185,11 +179,6 @@
                     
                     console.log(array);
                 });
-                var items = $('#jqxTree').jqxTree('getCheckedItems');
-                for(i=0;i<items.length;i++){
-                    console.log(items[i]);    
-                }
-                //alert(items);
 	    });
 	
 </script>

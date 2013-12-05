@@ -1,4 +1,9 @@
 <?php
+//print_r($countMentions);
+//print_r($mentions);
+//
+$total_groups = ceil($countMentions[0]->count_post_id/$this->config->item('item_perpage'));
+$timezone=new DateTimeZone($this->config->item('timezone'));
 for($i=0;$i<count($mentions);$i++){
 ?>
     <li <?php if($mentions[$i]->is_read==0){echo 'class="unread-post"';} ?>>
@@ -11,7 +16,11 @@ for($i=0;$i<count($mentions);$i++){
             <i class="icon-circle"></i>
             <span>mentions</span>
             <i class="icon-circle"></i>
-            <span><?php echo date('l, M j, Y H:i:s',strtotime($mentions[$i]->created_at));?></span>
+            <span><?php 
+            $date=new DateTime($mentions[$i]->created_at.' Europe/London');
+            $date->setTimezone($timezone);
+            echo $date->format('l, M j, Y H:i:s');
+            ?></span>
             <i class="icon-play-circle moreOptions pull-right"></i>
         </p>
     <p><?php echo $mentions[$i]->text; ?></p>
@@ -194,4 +203,7 @@ for($i=0;$i<count($mentions);$i++){
     <!-- END CASE -->  
     
     </li>
-<?php } ?>
+<?php } 
+?>
+
+ <div class="filled" style="text-align: center;"><input type="hidden" class="total_groups" value="<?=$total_groups?>" /><input type="hidden"  class="looppage" value=""/><button class="loadmore btn btn-info" value="mentions"><i class="icon-chevron-down"></i> LOAD MORE</button></div>

@@ -1,4 +1,6 @@
 <?php
+$total_groups = ceil($countTweets[0]->count_post_id/$this->config->item('item_perpage'));
+$timezone=new DateTimeZone($this->config->item('timezone'));
 for($i=0;$i<count($senttweets);$i++){
 ?>
     <li <?php if($senttweets[$i]->is_read==0){echo 'class="unread-post"';} ?>>
@@ -10,7 +12,11 @@ for($i=0;$i<count($senttweets);$i++){
             <i class="icon-circle"></i>
             <span>mentions</span>
             <i class="icon-circle"></i>
-            <span><?php echo date('l, M j, Y H:i:s',strtotime($senttweets[$i]->created_at));?></span>
+            <span><?php 
+            $date=new DateTime($senttweets[$i]->created_at.' Europe/London');
+            $date->setTimezone($timezone);
+            echo $date->format('l, M j, Y H:i:s');
+            //echo date('l, M j, Y H:i:s',strtotime($senttweets[$i]->created_at));?></span>
             <i class="icon-play-circle moreOptions pull-right"></i>
         </p>
     <p><?php echo $senttweets[$i]->text; ?></p>
@@ -185,3 +191,4 @@ for($i=0;$i<count($senttweets);$i++){
     
     </li>
 <?php } ?>
+ <div class="filled" style="text-align: center;"><button class="loadmore btn btn-info" value="sendmessage"><i class="icon-chevron-down"></i> LOAD MORE</button></div>

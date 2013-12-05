@@ -60,6 +60,9 @@ $config['uri_protocol']	= 'AUTO';
 |
 | http://codeigniter.com/user_guide/general/urls.html
 */
+$config['item_perpage']=10;
+
+$config['timezone']='asia/jakarta';
 
 $config['url_suffix'] = '';
 

@@ -444,7 +444,7 @@ $(function(){
                         $(this).closest('.containerHeadline').next().html('youtube timeline here');
                     });
                 });
-                            
+                
                 $(document).ready(function() {
                         $(this).on('click','.btn-reply',
                             function() {
@@ -754,7 +754,7 @@ $(function(){
                                     },
                             success: function(data)
                             {
-                                alert(data)
+                                //alert(data)
                             },
                         });
                     });
@@ -842,7 +842,22 @@ $(function(){
                                 $('.compose-post-status').fadeOut(5000);
                             },
                         });
-                    });                   
+                    }); 
+                    
+                      /*load more content*/  
+                    looppage=2;
+                    $(this).on('click','.loadmore',
+                        function() {
+  //                          alert($(this).val());
+                        	 loading = true;
+                              action=$(this).val();    
+                            group_numbers=2;
+                            channel_ids=1;
+                            
+                           $('#'+action).load(BASEURL + 'dashboard/media_stream/loadmore/'+action+'/'+looppage+'/'+channel_ids);
+                            looppage++;
+                            loading = false;
+                    });                  
                      
                                                                                 
                 });

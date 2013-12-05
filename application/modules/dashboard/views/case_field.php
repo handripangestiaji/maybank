@@ -1,4 +1,6 @@
+
 <div class="row-fluid">
+<?php if($posts){?>
            <span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
            
            <form method="post" class="assign_case" action="<?=base_url("case/mycase/CreateCase")?>">
@@ -108,5 +110,7 @@
         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
         <button class="btn btn-primary">Add</button>
     </div>
+<?php } ?>
 </div>
+
 <!-- ==================== END OF MODALS FLOATING BOX ==================== -->

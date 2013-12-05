@@ -1,4 +1,8 @@
 <?php
+//print_r($count_fb_feed);
+$total_groups = ceil($count_fb_feed[0]->count_post_id/$this->config->item('item_perpage'));
+$timezone=new DateTimeZone($this->config->item('timezone'));
+
 for($i=0; $i<count($fb_feed);$i++):?>
 <li <?php if($fb_feed[$i]->is_read==0){echo 'class="unread-post"';} ?>>
     <input type="hidden" class="postId" value="<?php echo $fb_feed[$i]->post_id; ?>" />
@@ -10,7 +14,12 @@ for($i=0; $i<count($fb_feed);$i++):?>
         <i class="icon-circle"></i>
         <span>posted a <span class="cyanText">new post</span></span>
         <i class="icon-circle"></i>
-        <span><?php echo date('l, M j, Y H:i:s',strtotime($fb_feed[$i]->created_at));?></span>
+        <span>
+        <?php 
+            $date=new DateTime($fb_feed[$i]->created_at.' Europe/London');
+            $date->setTimezone($timezone);
+            echo $date->format('l, M j, Y H:i:s');
+        ?>
         <i class="icon-play-circle moreOptions pull-right"></i>
     </p>
     <p><?=$fb_feed[$i]->post_content?></p>
@@ -222,3 +231,4 @@ for($i=0; $i<count($fb_feed);$i++):?>
     <!-- END CASE -->  
 </li>
 <?php endfor;?>
+<div class="filled" style="text-align: center;"><input type="hidden" class="total_groups" value="<?=$total_groups?>" /><input type="hidden"  class="looppage" value=""/><button class="loadmore btn btn-info" value="wallPosts"><i class="icon-chevron-down"></i> LOAD MORE</button></div>

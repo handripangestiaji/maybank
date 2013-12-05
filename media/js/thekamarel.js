@@ -776,7 +776,8 @@ $(function(){
                                     },
                             success: function(data)
                             {
-                                alert(data)
+                                $('.compose-post-status').show();
+                                $('.compose-post-status').fadeOut(5000);
                             },
                         });
                     });
@@ -790,11 +791,11 @@ $(function(){
                                     action:'dm_send',
                                     content:$(this).parent().siblings(".replaycontent").val(),
                                     screen_name: $(this).siblings(".screen_name").val(),
-                                    str_id: $(this).val()
+                                    friendid: $(this).val()
                                     },
                             success: function(data)
                             {
-                                //alert(data)
+                                alert(data)
                             },
                         });
                     });
@@ -939,9 +940,7 @@ $(function(){
                     "testParameter" : 1
                 }
             });
-        });
-        
-        
+        });        
         $(".table-sub-tr").hide();   
         $(".table-btn-show-sub").click(function() {
             if($(this).hasClass('active')) {
@@ -992,13 +991,8 @@ $(function(){
         
         $(this).on('submit', 'form.assign_case', function(e){
             var thisContext = $(this);
-            $(this).AsyncPost({
-                "url" : BASEURL + "/cms/case_provider/SaveCase",
-                "urlParameter" : $(this).serialize(),
-                "callback" : function(response){
-                    
-                }
-            });
+            console.log($(this).parent().closest('.postId').val());
+           
             e.preventDefault();
            
         });

@@ -23,8 +23,8 @@
                Assign To:
            </div>
            <div class="pull-right">
-               <select name="assignTo">
-                <option value="" name="assign_to"></option>
+               <select name="assign_to">
+                <option value=""></option>
                    <?php foreach($user_list as $user):?>
                    <option value="<?=$user->user_id?>"><?=$user->full_name."($user->email)"?></option>
                    <?php endforeach;?>

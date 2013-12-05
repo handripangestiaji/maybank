@@ -92,20 +92,19 @@
         <span class="btn-close pull-right">Close <i class="icon-remove-sign"></i></span>
         <br clear="all" />
         <div class="sidebarLine"></div>
+        <div class="profilePhoto">
+            <div><?php echo $this->session->userdata('display_name'); ?></div>
+        </div>
         <div class="profileInfo">
-            <p>User Id : 0008288</p>
-            <p>Full Name : Ah Hong, Tew</p>
-            <p>Display Name : Tew</p>
-            <p>Role : Manager</p>
-            <p>Email : <span class="cyanText">ahhong.tew@maybank.com.my</span></p>
+            <p>User Id : <?php echo $this->session->userdata('user_id'); ?></p>
+            <p>Full Name : <?php echo $this->session->userdata('full_name'); ?></p>
+            <p>Display Name : <?php echo $this->session->userdata('display_name'); ?></p>
+            <p>Role : <?php echo $this->session->userdata('role_name'); ?></p>
+            <p>Email : <span class="cyanText"><?php echo $this->session->userdata('web_address'); ?></span></p>
             <br/>
             <p><strong>About Me</strong></p>
             <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-            </p>
-            <br />
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                <?php echo $this->session->userdata('description'); ?>
             </p>
         </div>
         <footer>

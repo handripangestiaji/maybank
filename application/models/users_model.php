@@ -18,13 +18,15 @@ class Users_model extends CI_Model
     
     //======================== USER ==========================
     //view user
-    function select_user1($limit, $start)
+    function select_user1($limit, $start, $role_id = null)
     {
         $this->db->limit($limit, $start);
         
         $this->db->select('user.*,role_collection.role_name,user_group.group_name');
         $this->db->join('user_group','user.group_id = user_group.group_id','inner');
         $this->db->join('role_collection','user.role_id = role_collection.role_collection_id','left');
+        if($role_id != null)
+            $this->db->where("user.role_id", $role_id);
         $query = $this->db->get($this->user);
         
         if ($query->num_rows() > 0) {
@@ -40,6 +42,15 @@ class Users_model extends CI_Model
         $this->db->select('user.*,role_collection.role_name,user_group.group_name');
         $this->db->join('user_group','user.group_id = user_group.group_id','inner');
         $this->db->join('role_collection','user.role_id = role_collection.role_collection_id','left');
+        return $this->db->get($this->user);
+    }
+    
+    function select_user_login($id)
+    {
+        $this->db->select('user.*,role_collection.role_name,user_group.group_name');
+        $this->db->join('user_group','user.group_id = user_group.group_id','inner');
+        $this->db->join('role_collection','user.role_id = role_collection.role_collection_id','left');
+        $this->db->where('user_id',$id);
         return $this->db->get($this->user);
     }
     

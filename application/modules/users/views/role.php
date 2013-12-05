@@ -49,9 +49,9 @@
             <hr style="margin-top: 0px;">
             New Role <input type='text' name='new_role' /><br />
             <hr>
-            <!--<div style='float: right;'>
+            <div style='float: right;'>
                 <input type='button' class='btn' id="next" value='Next' onclick="showHide();return false;" />
-            </div>-->
+            </div>
             <div>
                 <div style='clear: both;'></div>
                 <div class="tree_tree" id="tree_tree">
@@ -107,7 +107,7 @@
 </div>
 <style type="text/css">
    .tree_tree {
-      display: block;
+      display: none;
       margin-bottom: 15px;
       }
     .alert-error

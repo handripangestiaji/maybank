@@ -2,7 +2,7 @@
 
 
 $config['mail_provider'] = array(
-    'protocol'=>'sendmail',
+    'protocol'=>'smtp',
     'smtp_host' => 'pro.turbo-smtp.com',
     'smtp_user'=>'eko.purnomo@icloud.com',
     'mailpath' => '/usr/sbin/sendmail',

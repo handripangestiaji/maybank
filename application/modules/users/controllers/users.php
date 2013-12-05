@@ -12,6 +12,7 @@ class Users extends MY_Controller {
 	$this->load->config('mail_config');
 	$config = $this->config->item('mail_provider');
 	$this->load->library('email',$config);
+	$this->load->library('upload');
 
 	
     }
@@ -35,12 +36,16 @@ class Users extends MY_Controller {
      $this->pagination->initialize($config);
      
      $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-     $data['show'] = $this->users_model->select_user1($config["per_page"], $page);
+     if($this->input->get('role_collection_id'))
+	  $data['show'] = $this->users_model->select_user1($config["per_page"], $page, $this->input->get('role_collection_id'));
+     else
+	  $data['show'] = $this->users_model->select_user1($config["per_page"], $page, null);
      
      $data['links'] = $this->pagination->create_links();
      $data['role'] = $this->users_model->select_role();
      $data['count'] = $this->users_model->count_record();
-        $this->load->view('users/index',$data);
+     
+     $this->load->view('users/index',$data);
     }
     
     //view create user
@@ -55,44 +60,74 @@ class Users extends MY_Controller {
     
     function insert_user()
     {
-	  $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-	  $count = mb_strlen($chars);
-    
-	  for ($i = 0, $pass = ''; $i < 10; $i++) {
-	  $index = rand(0, $count - 1);
-	  $pass .= mb_substr($chars, $index, 1);
+	  if(isset($_POST['Create']))
+	  {
+	       $config = array(
+			      'upload_path'   => 'media/dynamic/',
+			      'allowed_types' => 'gif|jpg|png',
+			      'max_size'      => '2048',
+			      'max_width'     => '1024',
+			      'max_height'    => '768'
+			       );
+	       
+	       $this->upload->initialize($config);
+	       if ( ! $this->upload->do_upload())
+		{
+		    //$this->upload->display_errors();
+		    $this->session->set_flashdata('failed', TRUE);
+		    redirect('users/create');
+		}
+		else
+		{
+		    $image = $this->upload->data();
+		    $dir = "media/dynamic/".$image['file_name'];
+		    
+		    $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+		    $count = mb_strlen($chars);
+	      
+		    for ($i = 0, $pass = ''; $i < 10; $i++) {
+		    $index = rand(0, $count - 1);
+		    $pass .= mb_substr($chars, $index, 1);
+		    }
+		    $created_by = $this->session->userdata('user_id') == 0 ? NULL : $this->session->userdata('user_id');
+		    
+		    $timezone = new DateTimeZone("Europe/London");
+		    $time = new DateTime(date("Y-m-d H:i:s e"), $timezone);
+		    $data=array(
+				'user_id' => $this->input->post('userID'),
+				'full_name' => $this->input->post('fullName'),
+				'display_name' => $this->input->post('displayName'),
+				'email' => $this->input->post('email'),
+				'password' => do_hash($pass.time(),'md5'),
+				'salt' => time(),
+				'role_id' => $this->input->post('optRole'),
+				'group_id' => $this->input->post('optGroup'),
+				'is_active' => 1,
+				'image_url' => $dir,
+				'description' => $this->input->post('description'),
+				'location' => $this->input->post('location'),
+				'web_address' => $this->input->post('web_addres'),
+				'created_at' => $time->format("Y-m-d H:i:s"),
+				'created_by' => $created_by
+			 );
+		   
+		    
+		    $this->users_model->insert_user($data);
+		  
+				  $this->email->set_newline("\r\n");
+				  $this->email->from('eko.purnomo@icloud.com','eko_purnomo_(icloud)');
+				  $this->email->to($this->input->post('email'));
+				  
+				  $this->email->subject('New Registration');
+				  $this->email->message('Thank you for registering<br />Your username <b>'.$this->input->post('userID').'</b> and password <b>'.$pass.'</b> for login in application.');
+				  
+				  $this->email->send();
+		    
+		    $this->session->set_flashdata('succes', TRUE);
+		    redirect('users');
+		}
+	       
 	  }
-	  $created_by = $this->session->userdata('user_id') == 0 ? NULL : $this->session->userdata('user_id');
-	  
-	  $timezone = new DateTimeZone("Europe/London");
-	  $time = new DateTime(date("Y-m-d H:i:s e"), $timezone);
-	  $data=array(
-		      'user_id' => $this->input->post('userID'),
-		      'full_name' => $this->input->post('fullName'),
-		      'display_name' => $this->input->post('displayName'),
-		      'email' => $this->input->post('email'),
-		      'password' => do_hash($pass.time(),'md5'),
-		      'salt' => time(),
-		      'role_id' => $this->input->post('optRole'),
-		      'group_id' => $this->input->post('optGroup'),
-		      'is_active' => 1,
-		      'created_at' => $time->format("Y-m-d H:i:s"),
-		      'created_by' => $created_by
-	       );
-	  
-	  $this->users_model->insert_user($data);
-	
-			$this->email->set_newline("\r\n");
-			$this->email->from('coba@gmail.com','coba');
-			$this->email->to($this->input->post('email'));
-			
-			$this->email->subject('User Name and Password');
-			$this->email->message('Username '.$this->input->post('userID').' and password '.$pass);
-			
-			$this->email->send();
-	  
-	  $this->session->set_flashdata('succes', TRUE);
-	  redirect('users');
     }
     
     function edit($id)

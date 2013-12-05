@@ -2,7 +2,7 @@
 <!--<span style="font-size: 14pt; color: black; margin: 5px 0;">USER MANAGEMENT</span>-->
     <div class="cms-content row-fluid">
         <div class="cms-filter pull-left">
-            <input class="btn btn-primary" type="button" name="btn_user" value="User" /> <br />
+            <input class="btn btn-primary" type="button" onclick="menu_user()" name="btn_user" value="User" /> <br />
             <input class="btn" type="button" onclick="menu_role()" name="btn_role" value="Role"  />   <br />
             <input class="btn" type="button" onclick="menu_group()" name="btn_group" value="Group" />
         </div>
@@ -18,7 +18,7 @@
         <?php foreach($id->result() as $row){ ?>
         <tr>
             <td>User ID*</td>
-            <td><input name='userID' type="text" value='<?php echo $row->user_id?>' /></td>
+            <td><input name='userID' type="text" value='<?php echo $row->user_id?>' readonly /></td>
         </tr>
         
         <tr>
@@ -78,6 +78,30 @@
                     ?>
                 </select>
             </td>
+        </tr>
+        
+        <tr>
+            <td>Image</td>
+            <td>
+                <img src="<?php echo base_url();echo $row->image_url;?>" style='width: auto; height: 105px;' />
+                <input type='file' name='userfile' id='userfile' style='position: relative;' />
+            </td>
+            
+        </tr>
+        
+        <tr>
+            <td>Description</td>
+            <td><textarea type='text'><?php echo $row->description;?></textarea></td>
+        </tr>
+        
+        <tr>
+            <td>Location</td>
+            <td><input type='text' value="<?php echo $row->location;?>"</td>
+        </tr>
+        
+        <tr>
+            <td>Web Address</td>
+            <td><input type='text' value="<?php echo $row->web_address;?>" /></td>
         </tr>
         
         <tr>

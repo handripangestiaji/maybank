@@ -33,8 +33,8 @@
                     <!-- post-channel end -->
                         <div class="left">
                         <i class="icon-link icon-large"></i>
-                        <input type="text" length="100" placeholder="Insert Link" />
-                        <button class="compose-insert-link btn btn-primary" type="button">
+                        <input type="text" class="compose-insert-link-text" length="100" placeholder="Insert Link" />
+                        <button class="compose-insert-link-btn btn btn-primary" type="button">
                             <i class="icon-angle-right"></i> 
                             Insert
                             </button>
@@ -157,14 +157,6 @@
                             <i class="icon-remove-sign icon-large"></i>
                         </a>
                         <div>
-                            <div class="pull-left img-url">
-                                <img src="http://www.maybank.com/iwov-resources/corporate/img/common/key-business-entities-large.jpg">
-                            </div>
-                            <div class="pull-left content-url">
-                                <input type="text" length="100" placeholder="" value="Maybank2u.com"/>
-                                http://www.maybank2u.com
-                                <textarea class="span4">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</textarea>
-                            </div>
                         </div>
                     </div>
                 </div>

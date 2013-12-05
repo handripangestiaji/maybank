@@ -86,24 +86,17 @@
             } else {
                 this.$previewContainer = this.$element.parent();
             }
-
-            this.$previewContainer.addClass("link-preview");
-
-            if (this.getOption("previewContainerClass")) {
-                this.$previewContainer.addClass(this.options.previewContainerClass);
-            } else {
-                this.$previewContainer.addClass("well row-fluid");
-            }
         },
 
         initUrlValue: function() {
             if (this.getOption("url")) {
                 this.url = this.options.url;
             } else {
-                this.url =
+                me_url =
                     this.$element.attr("href") ||
                     this.$element.text() ||
                     this.$element.val();
+                this.url = BASEURL + 'dashboard/media_stream/GetUrlPreview?url=' + me_url;
             }
         },
 
@@ -123,7 +116,7 @@
 
             var that = this;
             $.ajax({
-                url: url,
+                url:  url,
                 type: "GET",
                 success: function(data) {
                     onSuccess(this.url, data, that);
@@ -146,7 +139,6 @@
         },
 
         renderPreview: function(url, data, that) {
-            
             // old request
             if (that.url !== url) {
                 return;
@@ -170,25 +162,24 @@
                 image = that.findImageInDom($dom);
 
             // build dom elements
-            var $title = $("<a></a>").attr("href", url).text(title),
-                $description = $("<p></p>").text(description);
-
-            var $spanRight;
+            var $text_input = '<input type="text" length="200" placeholder="" value="' + title + '"/>',
+                $url = '<p>' + url.replace(BASEURL + 'dashboard/media_stream/GetUrlPreview?url=','') + '</p>',
+                $textarea = '<textarea class="span4">' + description + '</textarea>';
+                
+            var $spanLeft = $("<div></div>").addClass("img-url"),
+                $spanRight = $("<div></div>").addClass("content-url");
             if (image) {
-                var $image = $("<img></img>").attr("src", image),
-                    $spanLeft = $("<div></div>").addClass("span4");
-                $spanRight = $("<div></div>").addClass("span8");
+                var $image = $("<img></img>").attr("src", image);
                 $spanLeft
                     .append($image);
                 that.$previewContainer
                     .append($spanLeft);
-            } else {
-                $spanRight = $("<div></div>");
             }
-
+                
             $spanRight
-                .append($title)
-                .append($description);
+                .append($text_input)
+                .append($url)
+                .append($textarea);
             that.$previewContainer
                 .append($spanRight);
         },

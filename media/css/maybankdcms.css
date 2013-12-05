@@ -479,11 +479,14 @@ border-radius: 3px;
 
 #url-show .img-url{
 	width: 40%;
+	float: left;
 }
 
 #url-show .content-url{
-	width: 50%;
+	width: 55%;
 	margin-left: 10px;
+	float: right;
+	text-align: left;
 }
 
 #url-show .content-url textarea{

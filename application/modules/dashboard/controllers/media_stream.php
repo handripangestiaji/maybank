@@ -258,4 +258,11 @@ class Media_stream extends CI_Controller {
 	  $new_val = $this->facebook_model->ReadUnread($this->input->post('post_id'));
 	  echo $new_val;
      }
+     
+     public function GetUrlPreview(){
+	if (!isset($_GET['url'])) die();
+	$url = urldecode($_GET['url']);
+	$url = 'http://' . str_replace('http://', '', $url); // Avoid accessing the file system
+	echo file_get_contents($url);
+     }
 }

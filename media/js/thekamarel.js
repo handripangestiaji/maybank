@@ -673,8 +673,25 @@ $(function(){
                        $("#cal-show").css({"display": "none"});
                     });
 
-                    $( ".compose-insert-link" ).click(function() {
-                       $("#url-show").css({"display": "block"});
+                    $(".compose-insert-link-btn").click(function(){
+                        $(".compose-insert-link-text").linkpreview({
+                            previewContainer: "#url-show > .compose-form > div",  //optional
+                            //previewContainerClass: ".compose-schedule",
+                            refreshButton: ".compose-insert-link-btn",        //optional
+                            preProcess: function() {                //optional
+                                $('#url-show').css({"display": "block"});
+                                $('#url-show > .compose-form > div').html('Loading...');
+                            },
+                            onSuccess: function(data) {                  //optional
+                                console.log("onSuccess");
+                            },
+                            onError: function() {                    //optional
+                                console.log("onError");
+                            },
+                            onComplete: function() {                 //optional
+                                console.log("onComplete");
+                            }
+                       });
                     });
 
                      $( "#close-url" ).click(function() {

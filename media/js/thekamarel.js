@@ -474,7 +474,7 @@ $(function(){
                         $(this).closest('.containerHeadline').next().html('youtube timeline here');
                     });
                 });
-                            
+                
                 $(document).ready(function() {
                         $(this).on('click','.btn-reply',
                             function() {
@@ -488,6 +488,13 @@ $(function(){
                             function() {
                                 $(this).parent().siblings('.reply-engagement-field').show();
                                 $(this).parent().siblings('.case-engagement-field').hide();
+                            }
+                        );
+                        
+                        $(this).on('click','.btn-engagement-case',
+                            function() {
+                                $(this).parent().siblings('.reply-engagement-field').hide();
+                                $(this).parent().siblings('.case-engagement-field').show();
                             }
                         );
                         
@@ -666,8 +673,25 @@ $(function(){
                        $("#cal-show").css({"display": "none"});
                     });
 
-                    $( ".compose-insert-link" ).click(function() {
-                       $("#url-show").css({"display": "block"});
+                    $(".compose-insert-link-btn").click(function(){
+                        $(".compose-insert-link-text").linkpreview({
+                            previewContainer: "#url-show > .compose-form > div",  //optional
+                            //previewContainerClass: ".compose-schedule",
+                            refreshButton: ".compose-insert-link-btn",        //optional
+                            preProcess: function() {                //optional
+                                $('#url-show').css({"display": "block"});
+                                $('#url-show > .compose-form > div').html('Loading...');
+                            },
+                            onSuccess: function(data) {                  //optional
+                                console.log("onSuccess");
+                            },
+                            onError: function() {                    //optional
+                                console.log("onError");
+                            },
+                            onComplete: function() {                 //optional
+                                console.log("onComplete");
+                            }
+                       });
                     });
 
                      $( "#close-url" ).click(function() {
@@ -678,6 +702,7 @@ $(function(){
                         var len = this.value.length;
                         $('.compose-fb-char-count').html(2000-len);
                         $('.compose-tw-char-count').html(140-len);
+                        $('.compose-yt-char-count').html(500-len);
                     });
                      
                      $(".btn-compose-post").click(function() {
@@ -787,7 +812,7 @@ $(function(){
                                     },
                             success: function(data)
                             {
-                                alert(data)
+                                //alert(data)
                             },
                         });
                     });
@@ -875,7 +900,22 @@ $(function(){
                                 $('.compose-post-status').fadeOut(5000);
                             },
                         });
-                    });                   
+                    }); 
+                    
+                      /*load more content*/  
+                    looppage=2;
+                    $(this).on('click','.loadmore',
+                        function() {
+  //                          alert($(this).val());
+                        	 loading = true;
+                              action=$(this).val();    
+                            group_numbers=2;
+                            channel_ids=1;
+                            
+                           $('#'+action).load(BASEURL + 'dashboard/media_stream/loadmore/'+action+'/'+looppage+'/'+channel_ids);
+                            looppage++;
+                            loading = false;
+                    });                  
                      
                                                                                 
                 });
@@ -1015,15 +1055,17 @@ jQuery.fn.LoadContentAsync = function(options){
         url  : window.location.origin,
         urlParameter  : {},
         contentReplaced : $('document'),
-        loaderImage : window.location.origin + "/media/img/loader.gif"
+        loaderImage : window.location.origin + "/media/img/loader.gif",
+        callback : function(response){
+            
+            settings.contentReplaced.html(response);
+        }
     }, options);
     settings.contentReplaced.html("<img style='width:56px;margin:20px 0 0 45%;' src='" + settings.loaderImage + "' alt='' />");
     $.ajax({
         "url" : settings.url,
-        "data" : serialize(settings.urlParameter),
-        "success" : function(response){
-            settings.contentReplaced.html(response);
-        }
+        "data" : typeof settings.urlParameter == 'string' ? settings.urlParameter : serialize(settings.urlParameter),
+        "success" : settings.callback
     });
 };
 

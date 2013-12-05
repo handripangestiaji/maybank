@@ -1,4 +1,9 @@
 <?php
+//print_r($countMentions);
+//print_r($mentions);
+//
+$total_groups = ceil($countMentions[0]->count_post_id/$this->config->item('item_perpage'));
+$timezone=new DateTimeZone($this->config->item('timezone'));
 for($i=0;$i<count($mentions);$i++){
 ?>
     <li <?php if($mentions[$i]->is_read==0){echo 'class="unread-post"';} ?>>
@@ -11,8 +16,12 @@ for($i=0;$i<count($mentions);$i++){
             <i class="icon-circle"></i>
             <span>mentions</span>
             <i class="icon-circle"></i>
-            <span><?php echo date('l, M j, Y H:i:s',strtotime($mentions[$i]->created_at));?></span>
-            <i class="icon-play-circle moreOptions pull-right"></i>
+            <span><?php 
+            $date=new DateTime($mentions[$i]->created_at.' Europe/London');
+            $date->setTimezone($timezone);
+            echo $date->format('l, M j, Y H:i:s');
+            ?></span>
+           
         </p>
     <p><?php echo $mentions[$i]->text; ?></p>
     
@@ -44,7 +53,6 @@ for($i=0;$i<count($mentions);$i++){
                 <span>posted a <span class="cyanText">comment</span></span>
                 <i class="icon-circle"></i>
                 <span>2 hours ago</span>
-                <i class="icon-play-circle moreOptions pull-right"></i>
             </p>
             <div>
                 <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
@@ -59,7 +67,6 @@ for($i=0;$i<count($mentions);$i++){
                 <span>posted a <span class="cyanText">comment</span></span>
                 <i class="icon-circle"></i>
                 <span>2 hours ago</span>
-                <i class="icon-play-circle moreOptions pull-right"></i>
             </p>
             <div>
                 <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
@@ -167,11 +174,12 @@ for($i=0;$i<count($mentions);$i++){
             </div>
             <div class="pull-right">
                 <button class="dm_send btn btn-primary btn-small btn-send-dm"  type="button" value="<?=$mentions[$i]->twitter_user_id;?>" >SEND</button>    
-                       <input type="hidden" class="screen_name" value="<?php echo $homefeed[$i]->screen_name; ?>" />
+                       <input type="hidden" class="screen_name" value="<?php echo $mentions[$i]->screen_name; ?>" />
             </div>
             <br clear="all" />
             <div class="dm-status hide">MESSAGE SENT</div>
         </div>
+    </div>
     <div class="reply-field hide">
         
         <?php
@@ -193,4 +201,7 @@ for($i=0;$i<count($mentions);$i++){
     <!-- END CASE -->  
     
     </li>
-<?php } ?>
+<?php } 
+?>
+
+ <div class="filled" style="text-align: center;"><input type="hidden" class="total_groups" value="<?=$total_groups?>" /><input type="hidden"  class="looppage" value=""/><button class="loadmore btn btn-info" value="mentions"><i class="icon-chevron-down"></i> LOAD MORE</button></div>

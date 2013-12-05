@@ -1,7 +1,10 @@
+
 <div class="row-fluid">
+<?php if($posts){?>
            <span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
            
-           <form method="post" class="assign_case" action="<?=base_url("case/mycase/CreateCase")?>">
+           <form method="post" class="assign-case" action="<?=base_url("case/mycase/CreateCase")?>">
+           <div class="message"></div>
            <div class="pull-left">
                <select style="width: 130px;" name="case_type">
                    <option value="Feedback">Feedback</option>
@@ -15,9 +18,9 @@
                </select>
            </div>
            <br clear="all" />
-           <button href="#modalConfirm-<?php echo $posts[$i]->post_id ?>" data-toggle="modal" class="btn btn-small btn-purple btn-add-related">Add Related Conversation</button>
-                        
-           <input type="hidden" name="relatedConversation" />
+           <button href="#modalConfirm-<?php echo $posts[$i]->post_id ?>" data-toggle="modal" class="btn btn-small btn-purple btn-add-related <?php echo $posts[$i]->social_stream_type?>">Add Related Conversation</button>
+            
+           <input type="hidden" id="relatedCoversation-<?=$posts[$i]->post_id ?>" name="related_conversation" value="<?=$posts[$i]->post_id?>" />
            <br clear="all" />
            <div class="pull-left">
                Assign To:
@@ -50,63 +53,27 @@
 
 <!-- ==================== MODALS FLOATING BOX ==================== -->
 <div id="modalConfirm-<?php echo $posts[$i]->post_id ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <input type="hidden" value="<?=$posts[$i]->post_id?>" name="post_id" />
+    
+    <?php if($posts[$i]->social_stream_type=="twitter"):?>
+        <input type="hidden" value="<?=$posts[$i]->twitter_user_id?>" name="twitter_user_id" />
+        <input type="hidden" value="<?=$posts[$i]->type?>" name="type" />
+    <?php else:?>
+    <?php endif?>
     <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <button type="button" class="close " data-dismiss="modal" aria-hidden="true"></button>
         <h3>Add Related Conversation</h3>
     </div>
     <div class="modal-body">
         <form class="form-horizontal contentForm">
-            <div class="related-conversation-body">
-                      <span class="related-conversation-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>    
-                      <p class="headLine">
-                                 <input type="checkbox" class="related-conversation-check">
-                          <span class="author">John Doe</span>
-                          <i class="icon-circle"></i>
-                          <span>posted a <span class="cyanText">comment</span></span>
-                          <i class="icon-circle"></i>
-                          <span>2 hours ago</span>
-                          <i class="icon-play-circle moreOptions pull-right"></i>
-                      </p>
-                      <div>
-                          <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
-                          <?php if($posts[$i]->type == 'facebook'){ ?>
-                          <p><button type="button" class="btn btn-warning btn-mini">OPEN</button><button class="btn btn-primary btn-mini" style="margin-left: 5px;">LIKE</button></p>
-                          <?php
-                                 }
-                                 else{?>
-                                 <p><button type="button" class="btn btn-warning btn-mini">OPEN</button><button class="btn btn-primary btn-mini" style="margin-left: 5px;">RE-TWEET</button></p>
-                      <?php
-                                 }?>
-                      </div>
-                  </div>
-           <div class="related-conversation-body">
-                      <span class="related-conversation-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>    
-                      <p class="headLine">
-                                 <input type="checkbox" class="related-conversation-check">
-                          <span class="author">John Doe</span>
-                          <i class="icon-circle"></i>
-                          <span>posted a <span class="cyanText">comment</span></span>
-                          <i class="icon-circle"></i>
-                          <span>2 hours ago</span>
-                          <i class="icon-play-circle moreOptions pull-right"></i>
-                      </p>
-                      <div>
-                          <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
-                          <?php if($posts[$i]->type == 'facebook'){ ?>
-                          <p><button type="button" class="btn btn-warning btn-mini">OPEN</button><button class="btn btn-primary btn-mini" style="margin-left: 5px;">LIKE</button></p>
-                          <?php
-                                 }
-                                 else{?>
-                                 <p><button type="button" class="btn btn-warning btn-mini">OPEN</button><button class="btn btn-primary btn-mini" style="margin-left: 5px;">RE-TWEET</button></p>
-                      <?php
-                                 }?>
-                      </div>
-                  </div>
+            <img style="width:56px;margin:20px 0 0 45%;" src="<?=base_url()?>/media/img/loader.gif" alt="" class="loader-image">
         </form>
     </div>
     <div class="modal-footer">
         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-        <button class="btn btn-primary">Add</button>
+        <button class="btn btn-primary add-related-conversation" data-dismiss="modal" value="<?php echo $posts[$i]->post_id ?>">Add</button>
     </div>
+<?php } ?>
 </div>
+
 <!-- ==================== END OF MODALS FLOATING BOX ==================== -->

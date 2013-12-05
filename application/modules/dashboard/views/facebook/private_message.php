@@ -1,4 +1,6 @@
 <?php 
+$total_groups = ceil($CountPmFB[0]->count_post_id/$this->config->item('item_perpage'));
+$timezone=new DateTimeZone($this->config->item('timezone'));
 for($i=0; $i<count($fb_pm);$i++):?>
 <li <?php if($fb_pm[$i]->is_read==0){echo 'class="unread-post"';}?>>
     <input type="hidden" class="postId" value="<?php echo $fb_pm[$i]->detail_id_from_facebook; ?>" />
@@ -8,13 +10,18 @@ for($i=0; $i<count($fb_pm);$i++):?>
         <i class="icon-circle"></i>
         <span>posted a <span class="cyanText">message</span></span>
         <i class="icon-circle"></i>
-        <span><?php echo date('l, M j, Y H:i:s',strtotime($fb_pm[$i]->created_at));?></span>
-        <i class="icon-play-circle moreOptions pull-right"></i>
+        <span>
+        <?php 
+            $date=new DateTime($fb_pm[$i]->created_at.' Europe/London');
+            $date->setTimezone($timezone);
+            echo $date->format('l, M j, Y H:i:s');
+        ?>
+        
     </p>
     <p><?=$fb_pm[$i]->messages?></p>
     <p><button type="button" class="btn btn-warning btn-mini">OPEN</button><!--button class="btn btn-primary btn-mini" style="margin-left: 5px;">LIKE</button--> </p>
     <p>
-        <span class="btn-engagement"><i class="icon-eye-open"></i> Engagement</span> |
+        <span class="btn-engagement"><i class="icon-eye-open"></i> <?php echo $fb_pm[$i]->total_comments;?> Engagements</span> |
         <span class="btn-mark-as-read cyanText" style="display: <?php if($fb_pm[$i]->is_read==1){echo 'none';} ?>"><i class="icon-bookmark"></i> Mark as Read</span>
         <span class="btn-mark-as-unread cyanText" style="display: <?php if($fb_pm[$i]->is_read==0){echo 'none';} ?>"><i class="icon-bookmark-empty"></i> Mark as Unread</span>
     </p>
@@ -37,7 +44,7 @@ for($i=0; $i<count($fb_pm);$i++):?>
                 <span>posted a <span class="cyanText">comment</span></span>
                 <i class="icon-circle"></i>
                 <span><?php echo $comment[$j]->created_at; ?></span>
-                <i class="icon-play-circle moreOptions pull-right"></i>
+               
             </p>
             <div>
                 <p>"<?php echo $comment[$j]->messages; ?>"</p>
@@ -109,3 +116,5 @@ for($i=0; $i<count($fb_pm);$i++):?>
     <!-- END CASE -->  
 </li>
 <?php endfor;?>
+
+<div class="filled" style="text-align: center;"><input type="hidden" class="total_groups" value="<?=$total_groups?>" /><input type="hidden"  class="looppage" value=""/><button class="loadmore btn btn-info" value="privateMessages"><i class="icon-chevron-down"></i> LOAD MORE</button></div>

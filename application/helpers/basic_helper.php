@@ -227,3 +227,18 @@ function facebook_page_manage($access_token = 'CAAFm2lqzuUgBAPRYLUQcU0smQCWJhNM9
     $account = json_decode(open_api_template('https://graph.facebook.com/me/accounts?access_token='.$access_token));
     return $account->data;
 }
+
+function CheckValidation($dataToValidated, $validationObj){
+    $error = array();
+    for($i=0;$i<count($dataToValidated);$i++)
+    {
+        $validation = $validationObj->set($dataToValidated[$i]['type'],$dataToValidated[$i]['name'],$dataToValidated[$i]['value'],
+                                          $dataToValidated[$i]['fine_name']);
+        
+        if($validation['result'] == FALSE){
+            $error[] = $validation;
+        }
+    }
+    
+    return count($error) > 0 ? $error : true ;
+}

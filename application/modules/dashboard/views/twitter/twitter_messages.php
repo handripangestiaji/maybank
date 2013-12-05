@@ -1,5 +1,6 @@
 <?php
-
+    $total_groups = ceil($countDirect[0]->count_post_id/$this->config->item('item_perpage'));
+    $timezone=new DateTimeZone($this->config->item('timezone'));
     for($i=0;$i<count($directmessage);$i++){
     ?>
     <li <?php if($directmessage[$i]->is_read==0){echo 'class="unread-post"';} ?>>
@@ -11,8 +12,14 @@
             <i class="icon-circle"></i>
             <span>mentions</span>
             <i class="icon-circle"></i>
-            <span><?php echo date('l, M j, Y H:i:s',strtotime($directmessage[$i]->created_at));?></span>
-            <i class="icon-play-circle moreOptions pull-right"></i>
+            <span>
+            <?php 
+            $date=new DateTime($directmessage[$i]->created_at.' Europe/London');
+            $date->setTimezone($timezone);
+            echo $date->format('l, M j, Y H:i:s');
+            ?>
+            </span>
+            
         </p>
         <p><?php echo $directmessage[$i]->text;?></p>
         <p><button type="button" class="btn btn-warning btn-mini">OPEN</button></p>
@@ -81,3 +88,4 @@
     <?php 
     }
  ?>
+  <div class="filled" style="text-align: center;"><button class="loadmore btn btn-info" value="direct"><i class="icon-chevron-down"></i> LOAD MORE</button></div>

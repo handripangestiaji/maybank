@@ -29,7 +29,6 @@
     <!-- ==================== ALL ACTIVITIES CONTENT ==================== -->
     <ul class="floatingBoxContainers" id="wallPosts">
         <?php $this->load->view('dashboard/facebook/wall_post', array('fb_feed' => $fb_feed))?> 
-        <div class="filled" style="text-align: center;"><button class="btn btn-info"><i class="icon-chevron-down"></i> LOAD MORE</button></div>
     </ul>
     <!-- ==================== END OF ALL ACTIVITIES CONTENT ==================== -->
 

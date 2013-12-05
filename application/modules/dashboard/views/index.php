@@ -18,7 +18,7 @@
                                 <select class="left compose-channels" id="multipleSelect" multiple="multiple">
                                     <?php
                                         for($i=0;$i<count($channels);$i++){
-                                            echo '<option id="opt'.$channels[i]->connection_type.'">'.$channels[$i]->name.'</option>';
+                                            echo '<option id="opt'.$channels[$i]->connection_type.'">'.$channels[$i]->name.'</option>';
                                         }
                                     ?>
                                 </select>
@@ -46,11 +46,13 @@
                         <div class="left clear top10">
                         <select class="standard-sel">
                             <option value="#">-- Select Campaign</option>
-                            <option value="#">Type Satu</option>
-                            <option value="#">Type Dua</option>
-                            <option value="#">Type Tiga</option>
+                            <?php
+                                for($i=0;$i<count($campaign);$i++){
+                                    echo '<option value="'.$campaign[$i]->id.'">'.$campaign[$i]->campaign_name.'</option>';
+                                }
+                            ?>
                         </select>
-                         <select class="standard-sel select-shorten-url">
+                        <select class="standard-sel select-shorten-url">
                             <option value="#">-- Select Shorten URL</option>
                             <option value="#">Type Satu</option>
                             <option value="#">Type Dua</option>

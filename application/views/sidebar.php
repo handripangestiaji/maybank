@@ -92,6 +92,9 @@
         <span class="btn-close pull-right">Close <i class="icon-remove-sign"></i></span>
         <br clear="all" />
         <div class="sidebarLine"></div>
+         <div class="profilePhoto">
+            <div class="usernameHolder">Ah Hong, Tew</div>
+        </div>
         <div class="profileInfo">
             <p>User Id : 0008288</p>
             <p>Full Name : Ah Hong, Tew</p>

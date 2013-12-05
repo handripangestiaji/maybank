@@ -1015,15 +1015,17 @@ jQuery.fn.LoadContentAsync = function(options){
         url  : window.location.origin,
         urlParameter  : {},
         contentReplaced : $('document'),
-        loaderImage : window.location.origin + "/media/img/loader.gif"
+        loaderImage : window.location.origin + "/media/img/loader.gif",
+        callback : function(response){
+            
+            settings.contentReplaced.html(response);
+        }
     }, options);
     settings.contentReplaced.html("<img style='width:56px;margin:20px 0 0 45%;' src='" + settings.loaderImage + "' alt='' />");
     $.ajax({
         "url" : settings.url,
-        "data" : serialize(settings.urlParameter),
-        "success" : function(response){
-            settings.contentReplaced.html(response);
-        }
+        "data" : typeof settings.urlParameter == 'string' ? settings.urlParameter : serialize(settings.urlParameter),
+        "success" : settings.callback
     });
 };
 

@@ -26,8 +26,23 @@ class case_model extends CI_Model{
     }
     
     function CreateCase($case){
+        $related_conversation = $case['related_conversation'];
+        unset($case['related_conversation']);
+        $this->db->trans_start();
         $this->db->insert('case', $case);
         $insert_id = $this->db->insert_id();
+        if($related_conversation != ''){
+            $conv = explode(',', $related_conversation);
+            foreach($conv as $related){
+                if($related != '')
+                    $this->db->insert('case_related_conversation',
+                                array(
+                                    "social_stream_id" => $related,
+                                    "created_at" => date("Y-m-d H:i:s"),
+                                    "case_id" => $insert_id
+                                ));
+            }
+        }
         $this->load->config('mail_config');
         $mail_provider = $this->config->item('mail_provider');
         $this->load->library('email', $mail_provider);        
@@ -49,7 +64,8 @@ class case_model extends CI_Model{
         $this->email->message($content_email);
         
         $this->email->send();
-        print_r($this->email->print_debugger());
+        $this->db->trans_complete();
+        //print_r($this->email->print_debugger());
     }
     
     

@@ -786,3 +786,10 @@ input.related-conversation-check{
 #jqxTree .jqx-checkbox{
 	margin-top: 6.5px;
 }
+
+.alert ul.error-list li{
+	border: none;
+	margin: 0;
+	list-style:  disc;
+	background: none;
+}

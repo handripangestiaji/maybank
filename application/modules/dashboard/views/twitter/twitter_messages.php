@@ -69,8 +69,8 @@
                 <i class="icon-twitter-sign"></i>&nbsp;<span class="reply-tw-char-count">140</span>
             </div>
             <div class="pull-right">
-                <button class="dm_send btn btn-primary btn-small btn-send-dm"  type="button" value="<?=$mentions[$i]->twitter_user_id;?>" >SEND</button>    
-                       <input type="hidden" class="screen_name" value="<?php echo $homefeed[$i]->screen_name; ?>" />
+                <button class="dm_send btn btn-primary btn-small btn-send-dm"  type="button" value="<?=$directmessage[$i]->twitter_user_id;?>" >SEND</button>    
+                       <input type="hidden" class="screen_name" value="<?php echo $directmessage[$i]->screen_name; ?>" />
             </div>
             <br clear="all" />
             <div class="dm-status hide">MESSAGE SENT</div>
@@ -88,4 +88,4 @@
     <?php 
     }
  ?>
-  <div class="filled" style="text-align: center;"><button class="loadmore btn btn-info" value="direct"><i class="icon-chevron-down"></i> LOAD MORE</button></div>
+  <div class="filled" style="text-align: center;"><button class="loadmore btn btn-info" value="direct"><input type="hidden" class="channel_id" value="<?=$channel_id?>" /><input type="hidden"  class="channel_id" value="<?=$directmessage[0]->channel_id?>"/><i class="icon-chevron-down"></i> LOAD MORE</button></div>

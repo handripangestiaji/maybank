@@ -792,6 +792,7 @@ input.related-conversation-check{
 #jqxTree .jqx-checkbox{
 	margin-top: 6.5px;
 }
+#jqxTree .jqx-widget{margin-top:7px !important}}
 
 .alert ul.error-list li{
 	border: none;

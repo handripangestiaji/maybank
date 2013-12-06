@@ -29,7 +29,11 @@ for($i=0; $i<count($fb_feed);$i++):?>
         $attachment=json_decode($fb_feed[$i]->attachment);
         for($att=0;$att<count($attachment);$att++){
            if($attachment[$att]->type=='photo'){
-                echo    "<img src='".$attachment[$att]->src."' />";
+                echo    "<a href='#modal-".$fb_feed[$i]->post_id."-".$attachment[$att]->type."' data-toggle='modal' ><img src='".$attachment[$att]->src."' /></a>";
+                echo    '<div id="modal-'.$fb_feed[$i]->post_id.'-'.$attachment[$att]->type.'" class="attachment-modal modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+                            <button type="button" class="close " data-dismiss="modal"><i class="icon-remove"></i></button>
+                            <img src="'.$attachment[$att]->src.'" />
+                        </div>';
            }elseif($attachment[$att]->type=='link'){
                 echo    "<a href='".$attachment[$att]->href."'>".$attachment[0]->href."</a>";
            }elseif($attachment[$att]->type=='video'){?>
@@ -39,7 +43,7 @@ for($i=0; $i<count($fb_feed);$i++):?>
             }
       } 
     }
-    ?>   
+    ?>
     </p>
 
     <p><button type="button" class="btn btn-warning btn-mini">OPEN</button><button class="fblike btn btn-primary btn-mini" style="margin-left: 5px;" value="<?php echo $fb_feed[$i]->post_stream_id;?>">LIKE</button> </p>

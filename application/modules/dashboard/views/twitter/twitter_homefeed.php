@@ -3,7 +3,7 @@ $total_groups = ceil($countFeed[0]->count_post_id/$this->config->item('item_perp
 $timezone=new DateTimeZone($this->config->item('timezone'));
 for($i=0;$i<count($homefeed);$i++){
 ?>
-    <li <?php if($homefeed[$i]->is_read==0){echo 'class="unread-post"';} ?>>
+    <li>
         <div class="circleAvatar"><img src="<?php echo $homefeed[$i]->profile_image_url;?>" alt=""></div>
         <div class="read-mark <?php if($homefeed[$i]->is_read==0){echo 'redText';} else { echo 'greyText'; } ?>"><i class="icon-bookmark icon-large"></i></div>
         <br />
@@ -33,9 +33,7 @@ for($i=0;$i<count($homefeed);$i++){
     
     <p>
         <a role="button" class="btn-engagement"><i class="icon-eye-open"></i> Engagement</a> |
-        <a data-toggle="modal" role="button" href="#modaltweet<?php echo $i; ?>" ><i class="icon-retweet greyText"></i><?php //echo $homefeed[$i]->retweeted; ?> re-tweets</a> | 
-        <span class="btn-mark-as-read cyanText" style="display: <?php if($homefeed[$i]->is_read==1){echo 'none';} ?>"><i class="icon-bookmark"></i> Mark as Read</span>
-        <span class="btn-mark-as-unread cyanText" style="display: <?php if($homefeed[$i]->is_read==0){echo 'none';} ?>"><i class="icon-bookmark-empty"></i> Mark as Unread</span>
+        <a data-toggle="modal" role="button" href="#modaltweet<?php echo $i; ?>" ><i class="icon-retweet greyText"></i><?php //echo $homefeed[$i]->retweeted; ?> re-tweets</a>
     </p>
     
     

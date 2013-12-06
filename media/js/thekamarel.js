@@ -559,7 +559,7 @@ $(function(){
                         
                         $(this).on('click','.btn-engagement',
                             function() {
-                                $(this).parent().siblings('.engagement').show();
+                                $(this).parent().siblings('.engagement').toggle();
                             }
                         );
                         
@@ -580,40 +580,6 @@ $(function(){
                                         else{
                                             me.removeClass('greyText').addClass('redText');
                                         }
-                                    },
-                                });
-                        });
-                        
-                        $(this).on('click','.btn-mark-as-read',function(){
-                            var me = $(this);
-                            $.ajax({
-                                    url : BASEURL + 'dashboard/media_stream/ReadUnread',
-                                    type: "POST",
-                                    data: {
-                                            post_id:$(this).parent().siblings('.postId').val(),
-                                            },
-                                    success: function()
-                                    {
-                                        me.hide();
-                                        me.siblings('.btn-mark-as-unread').show();
-                                        me.parent().siblings('.read-mark').removeClass('redText').addClass('greyText');
-                                    },
-                                });
-                        });
-                        
-                        $(this).on('click','.btn-mark-as-unread',function(){
-                            var me = $(this);
-                            $.ajax({
-                                    url : BASEURL + 'dashboard/media_stream/ReadUnread',
-                                    type: "POST",
-                                    data: {
-                                            post_id:$(this).parent().siblings('.postId').val(),
-                                            },
-                                    success: function()
-                                    {
-                                        me.hide();
-                                        me.siblings('.btn-mark-as-read').show();
-                                        me.parent().siblings('.read-mark').removeClass('greyText').addClass('redText');
                                     },
                                 });
                         });
@@ -979,8 +945,11 @@ $(function(){
                             looppage++;
                             loading = false;
                     });                  
-                     
-                                                                                
+                    
+                    $(this).on('click','.specialToggleTable',
+                        function() {
+                        $(this).next().toggle();
+                    });                                                         
                 });
                   
                 /*==============================================================================================

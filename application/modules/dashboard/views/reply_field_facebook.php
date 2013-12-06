@@ -14,7 +14,7 @@
     </div>
     <textarea class='reply_comment' placeholder="Compose Message"></textarea>
     <br clear="all" />
-    <div class="pull-left">
+    <div class="pull-left"  style="margin-bottom: 5px;">
         <i class="icon-link"></i>
         <input type="text" class="reply-insert-link-text">
         <button class="reply-insert-link-btn btn btn-primary btn-mini" style="margin-left: 5px;">SHORTEN</button>
@@ -24,7 +24,7 @@
             <i class="icon-camera"></i> 
         </a>
     </div>
-    <br clear="all" />
+    <br clear="all"/>
     <div id="reply-img-show" class="hide">
         <div class="compose-form img-attached">
             <!-- close button for image attached -->

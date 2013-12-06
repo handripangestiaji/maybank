@@ -4,7 +4,7 @@ $total_groups = ceil($count_fb_feed[0]->count_post_id/$this->config->item('item_
 $timezone=new DateTimeZone($this->config->item('timezone'));
 
 for($i=0; $i<count($fb_feed);$i++):?>
-<li <?php if($fb_feed[$i]->is_read==0){echo 'class="unread-post"';} ?>>
+<li>
     <input type="hidden" class="postId" value="<?php echo $fb_feed[$i]->post_id; ?>" />
     <div class="circleAvatar"><img src="https://graph.facebook.com/<?=number_format($fb_feed[$i]->facebook_id, 0,'.','')?>/picture?small" alt=""></div>
     <div class="read-mark <?php if($fb_feed[$i]->is_read==0){echo 'redText';} else { echo 'greyText'; } ?>"><i class="icon-bookmark icon-large"></i></div>
@@ -49,9 +49,7 @@ for($i=0; $i<count($fb_feed);$i++):?>
     <p><button type="button" class="btn btn-warning btn-mini">OPEN</button><button class="fblike btn btn-primary btn-mini" style="margin-left: 5px;" value="<?php echo $fb_feed[$i]->post_stream_id;?>">LIKE</button> </p>
     <p>
         <span class="btn-engagement"><i class="icon-eye-open"></i> <?php echo $fb_feed[$i]->total_comments;?> Engagements</span> |
-        <span class="cyanText"><i class="icon-thumbs-up-alt"></i></i> <?php echo $fb_feed[$i]->total_likes; ?> likes</span> | 
-        <span class="btn-mark-as-read cyanText" style="display: <?php if($fb_feed[$i]->is_read==1){echo 'none';} ?>"><i class="icon-bookmark"></i> Mark as Read</span>
-        <span class="btn-mark-as-unread cyanText" style="display: <?php if($fb_feed[$i]->is_read==0){echo 'none';} ?>"><i class="icon-bookmark-empty"></i> Mark as Unread</span>
+        <span class="cyanText"><i class="icon-thumbs-up-alt"></i></i> <?php echo $fb_feed[$i]->total_likes; ?> likes</span> 
     </p>
 
     <!-- ENGAGEMENT -->    
@@ -190,9 +188,8 @@ for($i=0; $i<count($fb_feed);$i++):?>
         </div>
        <?php } ?>
        <!-- ==================== CONDENSED TABLE HEADLINE ==================== -->
-        <div class="containerHeadline">
+        <div class="containerHeadline specialToggleTable">
             <i class="icon-table"></i><h2>Action Log</h2>
-            <div class="controlButton pull-right"><i class="icon-caret-down toggleTable"></i></div>
         </div>
         <!-- ==================== END OF CONDENSED TABLE HEADLINE ==================== -->
 

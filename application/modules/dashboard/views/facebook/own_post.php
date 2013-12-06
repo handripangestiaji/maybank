@@ -11,7 +11,6 @@
         <span><?php $date = date("d M y H:i",$own_post[$i]->updated_time);
         echo " at ".$date
         ?></span>
-        <i class="icon-play-circle moreOptions pull-right"></i>
     </p>
     <p><?=$own_post[$i]->message?></p>
     <p><button type="button" class="btn btn-warning btn-mini">OPEN</button><button class="btn btn-primary btn-mini" style="margin-left: 5px;">LIKE</button> </p>

@@ -1,7 +1,7 @@
 <div class="navbar-inner">
     <div class="container-fluid">
          <a class="brand" href="#" style="margin: 10px 0px; padding: 0px;">
-	    <img src="<?php echo base_url('media/img/logo-may-2.png'); ?>" />
+	    <img src="https://clientstaging.yolk.com.sg/maybank/2013DCMS/Assets/DCMS-Logo.png" />
 	 </a>
 	<div class="nav pull-right">
 		<form class="navbar-form">

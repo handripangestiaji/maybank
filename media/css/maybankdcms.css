@@ -5,9 +5,30 @@
 	top: auto;
 	margin-top: 7px;
 }
+
+.brand img{
+	height: 25px;
+}
+
+.signInRow{
+	font-family: Trebuchet MS, Arial, Helvetica, sans-serif;
+}
+
+.signInRow a{
+	font-size: 11px;
+}
 /*==============================================================================================
 ======================================== DASHBOARD =============================================
 ==============================================================================================*/
+
+.floatingBoxContainers li p{
+	padding: 0px 5px 0px 0px;
+	margin-left: 45px;
+}
+
+.floatingBoxContainers li p.headLine{
+	margin: 5px 0px;
+}
 
 .compose-icons {
 	top: 2px;
@@ -586,6 +607,12 @@ border-radius: 3px;
 
 .reply-field .reply-insert-link-text{
 	width: 50%;
+	margin-bottom: 0px;
+}
+
+
+.reply-field .reply-insert-link-btn{
+	margin-left: 5px;
 }
 
 .case-field, .case-engagement-field{
@@ -655,10 +682,6 @@ div.read-mark {
     cursor: pointer;
 }
 
-ul.floatingBoxContainers li.unread-post{
-	background-color: #fff2f2;
-}
-
 .stream_head li a{
 	cursor: pointer;
 }
@@ -687,6 +710,11 @@ input.related-conversation-check{
 	margin-left: -24px;
 	padding: 4px;
 }
+
+.specialToggleTable{
+	cursor: pointer;
+}
+
 /*==============================================================================================
 ======================================== C M S =================================================
 ==============================================================================================*/

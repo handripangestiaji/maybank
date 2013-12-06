@@ -23,6 +23,25 @@ for($i=0; $i<count($fb_feed);$i++):?>
         
     </p>
     <p><?=$fb_feed[$i]->post_content?></p>
+    <p>
+    <?php
+    if($fb_feed[$i]->attachment){ 
+        $attachment=json_decode($fb_feed[$i]->attachment);
+        for($att=0;$att<count($attachment);$att++){
+           if($attachment[$att]->type=='photo'){
+                echo    "<img src='".$attachment[$att]->src."' />";
+           }elseif($attachment[$att]->type=='link'){
+                echo    "<a href='".$attachment[$att]->href."'>".$attachment[0]->href."</a>";
+           }elseif($attachment[$att]->type=='video'){?>
+                <iframe width="320" height="auto" src="<?=$attachment[$att]->video->source_url."?version=3&autohide=1&autoplay=0"?>"></iframe>
+                <a href="<?=$attachment[$att]->video->display_url?>" ><?=$attachment[0]->alt?></a>
+       <?php 
+            }
+      } 
+    }
+    ?>   
+    </p>
+
     <p><button type="button" class="btn btn-warning btn-mini">OPEN</button><button class="fblike btn btn-primary btn-mini" style="margin-left: 5px;" value="<?php echo $fb_feed[$i]->post_stream_id;?>">LIKE</button> </p>
     <p>
         <span class="btn-engagement"><i class="icon-eye-open"></i> <?php echo $fb_feed[$i]->total_comments;?> Engagements</span> |
@@ -39,6 +58,9 @@ for($i=0; $i<count($fb_feed);$i++):?>
         <br />
         <?php 
             $comment=$this->facebook_model->RetriveCommentPostFb($fb_feed[$i]->post_id);
+            //echo "<pre>";
+            //print_r($comment);
+            //echo "</pre>";
             for($j=0;$j<count($comment);$j++){
         ?>
         <div class="engagement-body">

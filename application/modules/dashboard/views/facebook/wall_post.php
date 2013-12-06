@@ -1,4 +1,8 @@
 <?php
+//print_r($fb_feed);
+$total_groups = ceil($count_fb_feed[0]->count_post_id/$this->config->item('item_perpage'));
+$timezone=new DateTimeZone($this->config->item('timezone'));
+
 for($i=0; $i<count($fb_feed);$i++):?>
 <li <?php if($fb_feed[$i]->is_read==0){echo 'class="unread-post"';} ?>>
     <input type="hidden" class="postId" value="<?php echo $fb_feed[$i]->post_id; ?>" />
@@ -8,15 +12,20 @@ for($i=0; $i<count($fb_feed);$i++):?>
     <p class="headLine">
         <span class="author"><?php echo $fb_feed[$i]->name//."(".$fb_feed[$i][$i]->users->usename.")"?></span>
         <i class="icon-circle"></i>
-        <span>posted a <span class="cyanText">comment</span></span>
+        <span>posted a <span class="cyanText">new post</span></span>
         <i class="icon-circle"></i>
-        <span><?php echo date('l, M j, Y H:i:s',strtotime($fb_feed[$i]->created_at));?></span>
-        <i class="icon-play-circle moreOptions pull-right"></i>
+        <span>
+        <?php 
+            $date=new DateTime($fb_feed[$i]->created_at.' Europe/London');
+            $date->setTimezone($timezone);
+            echo $date->format('l, M j, Y H:i:s');
+        ?>
+        
     </p>
     <p><?=$fb_feed[$i]->post_content?></p>
     <p><button type="button" class="btn btn-warning btn-mini">OPEN</button><button class="fblike btn btn-primary btn-mini" style="margin-left: 5px;" value="<?php echo $fb_feed[$i]->post_stream_id;?>">LIKE</button> </p>
     <p>
-        <span class="btn-engagement"><i class="icon-eye-open"></i> Engagement</span> |
+        <span class="btn-engagement"><i class="icon-eye-open"></i> <?php echo $fb_feed[$i]->total_comments;?> Engagements</span> |
         <span class="cyanText"><i class="icon-thumbs-up-alt"></i></i> <?php echo $fb_feed[$i]->total_likes; ?> likes</span> | 
         <span class="btn-mark-as-read cyanText" style="display: <?php if($fb_feed[$i]->is_read==1){echo 'none';} ?>"><i class="icon-bookmark"></i> Mark as Read</span>
         <span class="btn-mark-as-unread cyanText" style="display: <?php if($fb_feed[$i]->is_read==0){echo 'none';} ?>"><i class="icon-bookmark-empty"></i> Mark as Unread</span>
@@ -27,7 +36,7 @@ for($i=0; $i<count($fb_feed);$i++):?>
         <div class="engagement-header">
             <span class="engagement-btn-close btn-close pull-right">Close <i class="icon-remove-sign"></i></span>
         </div>
-        <br>
+        <br />
         <?php 
             $comment=$this->facebook_model->RetriveCommentPostFb($fb_feed[$i]->post_id);
             for($j=0;$j<count($comment);$j++){
@@ -69,7 +78,7 @@ for($i=0; $i<count($fb_feed);$i++):?>
                                 <option value="keyword">Others</option>
                             </select>
                         </div>
-                        <textarea placeholder="Compose Message"></textarea>
+                        <textarea class="reply_comment" placeholder="Compose Message"></textarea>
                         <br clear="all" />
                         <div class="pull-left">
                             <i class="icon-link"></i>
@@ -90,8 +99,8 @@ for($i=0; $i<count($fb_feed);$i++):?>
                             </div>
                         </div>
                         <br clear="all" />
-                        <div class="pull-left">
-                            <i class="icon-facebook"></i> 2000     
+                        <div class="pull-left reply-char-count">
+                            <i class="icon-facebook-sign"></i>&nbsp;<span class="reply-fb-char-count">2000</span>
                         </div>
                         <div class="pull-right">
                             <button class="btn btn-primary btn-small btn-send-reply">SEND</button>    
@@ -204,61 +213,22 @@ for($i=0; $i<count($fb_feed);$i++):?>
     
     <!-- REPLY -->  
     <div class="reply-field hide">
-        <div class="row-fluid">
-            <span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
-            <div class="pull-left">
-                <select style="width: 130px;">
-                    <option value="keyword">Feedback</option>
-                    <option value="user">Enquiry</option>
-                    <option value="keyword">Complaint</option>
-                </select>
-                <select style="width: 130px;">
-                    <option value="keyword">Accounts & Banking</option>
-                    <option value="user">Cards</option>
-                    <option value="keyword">Investment</option>
-                    <option value="keyword">insurance</option>
-                    <option value="user">Loans</option>
-                    <option value="keyword">Maybank2u</option>
-                    <option value="keyword">Others</option>
-                </select>
-            </div>
-            <textarea class='reply_comment' placeholder="Compose Message"></textarea>
-            <br clear="all" />
-            <div class="pull-left">
-                <i class="icon-link"></i>
-                <input type="text" class="span8"><button class="btn btn-primary btn-mini" style="margin-left: 5px;">SHORTEN</button>
-            </div>
-            <div class="pull-right">
-                <a href="javascript:void(0);" id="reply-open-img">
-                    <i class="icon-camera"></i> 
-                </a>
-            </div>
-            <br clear="all" />
-            <div id="reply-img-show">
-                <div class="reply-img-attached">
-                    <!-- close button for image attached -->
-                    <a id="reply-img-close" href="javascript:void(0);">
-                     <i class="icon-remove-sign"></i>
-                    </a>
-                </div>
-            </div>
-            <br clear="all" />
-            <div class="pull-left">
-                <i class="icon-facebook"></i> 2000     
-            </div>
-            <div class="pull-right">
-                <button class="send_reply btn btn-primary btn-small btn-send-reply" value="<?php echo $fb_feed[$i]->post_stream_id;?>">SEND</button>    
-            </div>
-            <br clear="all" />
-            <div class="reply-status hide">MESSAGE SENT</div>
-        </div>
+    <?php
+    $data['fb_feed'] = $fb_feed;
+    $data['i'] = $i;
+    $this->load->view('dashboard/reply_field_facebook', $data)?>  
     </div>
     <!-- END REPLY -->
     
     <!-- CASE -->
     <div class="case-field hide">
-    <?php $this->load->view('dashboard/case_field')?>
+    <?php
+        $data['posts'] = $fb_feed;
+        $data['i'] = $i;
+        $this->load->view('dashboard/case_field',$data);
+    ?>
     </div>
     <!-- END CASE -->  
 </li>
 <?php endfor;?>
+<div class="filled" style="text-align: center;"><input type="hidden" class="total_groups" value="<?=$total_groups?>" /><input type="hidden"  class="looppage" value=""/><input type="hidden"  class="channel_id" value="<?=$fb_feed[0]->channel_id?>"/><button class="loadmore btn btn-info" value="wallPosts"><i class="icon-chevron-down"></i> LOAD MORE</button></div>

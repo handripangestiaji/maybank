@@ -1,8 +1,16 @@
 <div class="row-fluid" style="width: 80%; margin: 0px auto;">    
 <!--<span style="font-size: 14pt; color: black; margin: 5px 0;">USER MANAGEMENT</span>-->
+<?php
+	$msg = $this->session->flashdata('failed');
+	if($msg!=NULL){ ?>
+        <div class="alert alert-error">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Create User</strong> failed.
+        </div>
+<?php }?>
     <div class="cms-content row-fluid">
         <div class="cms-filter pull-left">
-            <input class="btn btn-primary" type="button" name="btn_user" value="User" /> <br />
+            <input class="btn btn-primary" onclick="menu_user()" type="button" name="btn_user" value="User" /> <br />
             <input class="btn" type="button" onclick="menu_role()" name="btn_role" value="Role"  />   <br />
             <input class="btn" type="button" onclick="menu_group()" name="btn_group" value="Group" />
         </div>
@@ -13,7 +21,7 @@
             </div>
             <hr style="margin-top: 0px;">
             
-            <form method="post" action="<?php echo site_url();?>/users/insert_user">
+            <form method="post" action="<?php echo site_url();?>/users/insert_user" enctype="multipart/form-data">
                 <table>
                     <tr>
                         <td>User ID *</td>
@@ -29,7 +37,7 @@
                         <td>Display Name</td>
                         <td><input type="text" name="displayName" /></td>
                     </tr>
-                    
+                        
                     <tr>
                         <td>Email</td>
                         <td><input type="text" name="email"</td>
@@ -60,13 +68,33 @@
                     </tr>
                     
                     <tr>
-                        <td><input type="submit" value="Create" />
+                        <td>Image</td>
+                        <td>
+                            <input type='file' name='userfile' id='userfile' />
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>Description</td>
+                        <td><textarea name='description'></textarea></td>
+                    </tr>
+                    
+                    <tr>
+                        <td>Location</td>
+                        <td><input type='text' name='location' /></td>
+                    </tr>
+                    
+                    <tr>
+                        <td>Web Addres</td>
+                        <td><input type='text' name='web_addres' /></td>
+                    </tr>
+                    
+                    <tr>
+                        <td><input type="submit" value="Create" name='Create' />
                         <input type="button" value="Cancel" onclick="btn_cancel()" /></td>
                     </tr>
                 </table>
-            </form>
-            
-            
+            </form>          
         </div>
     </div>
 </div>

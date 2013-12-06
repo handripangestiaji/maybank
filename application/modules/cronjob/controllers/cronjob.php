@@ -99,6 +99,9 @@ class Cronjob extends CI_Controller {
         $filter = array(
             'connection_type' => "twitter"
         );
+        if($this->input->get('channel_id')){
+            $filter['channel_id'] = $this->input->get('channel_id');
+        }
         $channel_loaded = $this->account_model->GetChannel($filter);
         
         foreach($channel_loaded as $channel){
@@ -124,6 +127,9 @@ class Cronjob extends CI_Controller {
         $filter = array(
             'connection_type' => "twitter"
         );
+        if($this->input->get('channel_id')){
+            $filter['channel_id'] = $this->input->get('channel_id');
+        }
         $channel_loaded = $this->account_model->GetChannel($filter);
         
         foreach($channel_loaded as $channel){

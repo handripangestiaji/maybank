@@ -1,4 +1,6 @@
 <?php
+$total_groups = ceil($countFeed[0]->count_post_id/$this->config->item('item_perpage'));
+$timezone=new DateTimeZone($this->config->item('timezone'));
 for($i=0;$i<count($homefeed);$i++){
 ?>
     <li <?php if($homefeed[$i]->is_read==0){echo 'class="unread-post"';} ?>>
@@ -10,14 +12,20 @@ for($i=0;$i<count($homefeed);$i++){
             <i class="icon-circle"></i>
             <span>mentions</span>
             <i class="icon-circle"></i>
-            <span><?php echo date('l, M j, Y H:i:s',strtotime($homefeed[$i]->created_at));?></span>
-            <i class="icon-play-circle moreOptions pull-right"></i>
+            <span>
+            <?php 
+            $date=new DateTime($homefeed[$i]->created_at.' Europe/London');
+            $date->setTimezone($timezone);
+            echo $date->format('l, M j, Y H:i:s');
+            ?>
+            </span>
+          
         </p>
     <p><?php echo $homefeed[$i]->text; ?></p>
     
     <p><button type="button" class="btn btn-warning btn-mini">OPEN</button>
     <?php if ($homefeed[$i]->retweet_count>=1) { ?>
-        <button type="button" class="btn btn-inverse btn-mini"><i class="icon-retweet">&nbsp;</i></button>
+        <button type="button" class="btn btn-inverse btn-mini"><i class="icon-retweet"><?=$homefeed[$i]->retweet_count?></i></button>
     <?php } ?>    
     <?php if ($homefeed[$i]->favorited=='1') { ?>
         <button type="button" class="btn btn-inverse btn-mini"><i class="icon-star">&nbsp;</i></button>
@@ -45,7 +53,6 @@ for($i=0;$i<count($homefeed);$i++){
                 <span>posted a <span class="cyanText">comment</span></span>
                 <i class="icon-circle"></i>
                 <span>2 hours ago</span>
-                <i class="icon-play-circle moreOptions pull-right"></i>
             </p>
             <div>
                 <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
@@ -60,7 +67,6 @@ for($i=0;$i<count($homefeed);$i++){
                 <span>posted a <span class="cyanText">comment</span></span>
                 <i class="icon-circle"></i>
                 <span>2 hours ago</span>
-                <i class="icon-play-circle moreOptions pull-right"></i>
             </p>
             <div>
                 <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
@@ -132,48 +138,15 @@ for($i=0;$i<count($homefeed);$i++){
     
     <!-- REPLY -->  
     <div class="reply-field hide">
-        <div class="row-fluid">
-            <span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
-            <div class="pull-left">
-                <select style="width: 130px;">
-                    <option value="keyword">Feedback</option>
-                    <option value="user">Enquiry</option>
-                    <option value="keyword">Complaint</option>
-                </select>
-                <select style="width: 130px;">
-                    <option value="keyword">Accounts & Banking</option>
-                    <option value="user">Cards</option>
-                    <option value="keyword">Investment</option>
-                    <option value="keyword">insurance</option>
-                    <option value="user">Loans</option>
-                    <option value="keyword">Maybank2u</option>
-                    <option value="keyword">Others</option>
-                </select>
-            </div>
-            <textarea class='replaycontent' placeholder="Compose Message" name="content">@<?=$homefeed[$i]->screen_name?></textarea>
-            <br clear="all" />
-            <div class="pull-left">
-                <i class="icon-link"></i>
-                <input type="text" class="span8"><button class="btn btn-primary btn-mini" style="margin-left: 5px;">SHORTEN</button>
-            </div>
-            <div class="pull-right">
-                <i class="icon-camera"></i>
-            </div>
-            <br clear="all" />
-            <div class="pull-left">
-                <i class="icon-facebook"></i> 2000     
-            </div>
-            <div class="pull-right">
-                <button class="replayTweet btn btn-primary btn-small btn-send-reply"  type="button" value="<?=$homefeed[$i]->post_stream_id;?>" >SEND</button>    
-            </div>
-            <br clear="all" />
-            <div class="reply-status hide">MESSAGE SENT</div>
-        </div>
+        <?php
+        $data['mentions'] = $homefeed;
+        $data['i'] = $i;
+        $this->load->view('dashboard/reply_field_twitter', $data);?>
     </div>
     <!-- END REPLY -->
     
     <!-- DM -->  
-    <div class="reply-field hide">
+    <div class="dm-field hide">
         <div class="row-fluid">
             <span class="dm-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
             <div class="pull-left">
@@ -202,8 +175,8 @@ for($i=0;$i<count($homefeed);$i++){
                 <i class="icon-camera"></i>
             </div>
             <br clear="all" />
-            <div class="pull-left">
-                <i class="icon-facebook"></i> 2000     
+            <div class="pull-left reply-char-count">
+                <i class="icon-twitter-sign"></i>&nbsp;<span class="reply-tw-char-count">140</span>
             </div>
             <div class="pull-right">
                 <button class="dm_send btn btn-primary btn-small btn-send-dm"  type="button" value="<?=$homefeed[$i]->post_stream_id;?>" >SEND</button>    
@@ -216,9 +189,14 @@ for($i=0;$i<count($homefeed);$i++){
     
     <!-- CASE -->  
     <div class="case-field hide">
-       <?php $this->load->view('dashboard/case_field');?>
+       <?php
+            $data['posts'] = $homefeed;
+            $data['i'] = $i;
+            $this->load->view('dashboard/case_field',$data);
+        ?>
     </div>
     <!-- END CASE -->  
     
     </li>
 <?php } ?>
+<div class="filled" style="text-align: center;"><input type="hidden" class="channel_id" value="<?=$channel_id?>" /><input type="hidden"  class="channel_id" value="<?=$homefeed[0]->channel_id?>"/><input type="hidden" class="total_groups" value="<?=$total_groups?>" /><input type="hidden"  class="looppage" value=""/><button class="loadmore btn btn-info" value="feed"><i class="icon-chevron-down"></i> LOAD MORE</button></div>

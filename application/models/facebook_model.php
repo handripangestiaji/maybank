@@ -82,35 +82,39 @@ class facebook_model extends CI_Model
         "query4" : "Select page_id, name, username from page where page_id in (select actor_id from #query1) or page_id in (select fromid from #query2)"
         }';
 	$requestResult = curl_get_file_contents('https://graph.facebook.com/fql?q='.urlencode($fql)."&access_token=".$access_token);
-
-	
 	$result  = json_decode($requestResult);
-	$postList = $result->data[0]->fql_result_set;
-        $comment = $result->data[1]->fql_result_set;
-        $page_list = $result->data[3]->fql_result_set;
-        $user_list = $result->data[2]->fql_result_set;
-	
-        for($i=0;$i<count($postList);$i++){
+	if(is_array($result->data)){
 	    
-            for($x=0; $x < count($comment); $x++){
-		$user = $this->SearchUserFromList($comment[$x]->fromid, $user_list);
-		$user = $user == null ? $this->SearchUserFromList($comment[$x]->fromid, $page_list) : $user;
-                if($comment[$x]->post_id == $postList[$i]->post_id){
-		    $comment[$x]->user = $user;
-                    $postList[$i]->comments[] = $comment[$x];
-                }
-            }
-            for($x=0; $x < count($user_list); $x++){
-                if($user_list[$x]->uid == $postList[$i]->actor_id)
-                    $postList[$i]->users = $user_list[$x];
-            }
-            
-            for($x=0; $x < count($page_list); $x++){
-                if($page_list[$x]->page_id == $postList[$i]->actor_id)
-                    $postList[$i]->users = $page_list[$x];
-            }
-        }
-        return $postList;
+	    $postList = $result->data[0]->fql_result_set;
+	    $comment = $result->data[1]->fql_result_set;
+	    $page_list = $result->data[3]->fql_result_set;
+	    $user_list = $result->data[2]->fql_result_set;
+	    
+	    for($i=0;$i<count($postList);$i++){
+		
+		for($x=0; $x < count($comment); $x++){
+		    $user = $this->SearchUserFromList($comment[$x]->fromid, $user_list);
+		    $user = $user == null ? $this->SearchUserFromList($comment[$x]->fromid, $page_list) : $user;
+		    if($comment[$x]->post_id == $postList[$i]->post_id){
+			$comment[$x]->user = $user;
+			$postList[$i]->comments[] = $comment[$x];
+		    }
+		}
+		for($x=0; $x < count($user_list); $x++){
+		    if($user_list[$x]->uid == $postList[$i]->actor_id)
+			$postList[$i]->users = $user_list[$x];
+		}
+		
+		for($x=0; $x < count($page_list); $x++){
+		    if($page_list[$x]->page_id == $postList[$i]->actor_id)
+			$postList[$i]->users = $page_list[$x];
+		}
+	    }
+	    return $postList;
+	}
+	else{
+	    return null;
+	}
     }
     
     
@@ -375,7 +379,7 @@ class facebook_model extends CI_Model
     }
     
     public function RetrieveFeedFB($filter,$limit = 20){
-        $this->db->select('*');
+        $this->db->select('*, c.type as social_stream_type');
         $this->db->from("fb_user_engaged a INNER JOIN social_stream_fb_post b  
 			 ON b.author_id = a.facebook_id inner join social_stream c on c.post_id = b.post_id ");
         $this->db->limit($limit);
@@ -385,8 +389,18 @@ class facebook_model extends CI_Model
         return $this->db->get()->result();
     }
     
+     public function CountFeedFB($filter){
+        $this->db->select('count(b.post_id) as count_post_id');
+        $this->db->from("fb_user_engaged a INNER JOIN social_stream_fb_post b  
+			 ON b.author_id = a.facebook_id inner join social_stream c on c.post_id = b.post_id ");
+        $this->db->order_by('c.created_at','desc');
+        if(count($filter) >= 1)
+            $this->db->where($filter);
+        return $this->db->get()->result();
+    }
+    
     public function RetrievePostFB($filter){
-        $this->db->select('*');
+        $this->db->select('*, c.type as social_stream_type');
         $this->db->from("fb_user_engaged a INNER JOIN social_stream_fb_post b ON b.author_id=a.facebook_id
 			inner join social_stream c on c.post_id = b.post_id");
         if(count($filter) > 0)
@@ -408,9 +422,9 @@ class facebook_model extends CI_Model
         return $result;  
     }
     
-      public function RetrievePmFB($filter,$limit = 20){
+      public function RetrievePmFB($filter,$limit){
         //WHERE detail_id_from_facebook LIKE '%_0'
-        $this->db->select('a.*,b.*,c.name,c.username');
+        $this->db->select('a.*,b.*,c.name,c.username, d.is_read, d.post_stream_id, d.type as social_stream_type,d.channel_id');
         $this->db->from("social_stream_facebook_conversation a LEFT OUTER JOIN 
                         social_stream_facebook_conversation_detail b ON b.conversation_id = a.conversation_id LEFT OUTER JOIN
                         fb_user_engaged c ON c.facebook_id=b.sender INNER JOIN
@@ -429,9 +443,20 @@ class facebook_model extends CI_Model
         return $this->db->get()->result();
     }
     
+    public function CountPmFB($filter){
+        $this->db->select('count(a.conversation_id) as count_post_id');
+        $this->db->from("social_stream_facebook_conversation a LEFT OUTER JOIN 
+                        social_stream d ON d.post_id=a.conversation_id");
+	   if(count($filter) > 0){
+	    $this->db->where($filter);
+	   } 
+        $this->db->order_by('created_at','desc');
+        return $this->db->get()->result();
+    }
+    
     public function RetrievePmDetailFB($filter){
         //WHERE detail_id_from_facebook LIKE '%_0'
-        $this->db->select("a.*,b.*,c.name,c.username,d.channel_id,d.type,d.is_read");
+        $this->db->select("a.*,b.*,c.name,c.username,d.channel_id,d.type,d.is_read, d.type as social_stream_type");
         $this->db->from("social_stream_facebook_conversation a LEFT OUTER JOIN 
                         social_stream_facebook_conversation_detail b ON b.conversation_id = a.conversation_id LEFT OUTER JOIN
                         fb_user_engaged c ON c.facebook_id=b.sender LEFT OUTER JOIN

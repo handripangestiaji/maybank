@@ -72,8 +72,15 @@ class Login extends Login_Controller {
                 
                 if($valid->num_rows() == 1)
                 {
-                    $data = array(
+		    $user_login = $this->users_model->select_user_login($username);
+		    
+		    $data = array(
                                 'user_id' => $username,
+				'full_name'=> $user_login->row()->full_name,
+				'display_name' => $user_login->row()->display_name,
+				'role_name' => $user_login->row()->role_name,
+				'web_address' => $user_login->row()->web_address,
+				'image_url' => $user_login->row()->image_url,
                                 'is_login' => TRUE
                             );
                     $timezone = new DateTimeZone("Europe/London");
@@ -131,7 +138,7 @@ class Login extends Login_Controller {
 		    $this->users_model->update_pass($id,$data);
 		    
 		    $this->email->set_newline("\r\n");
-		    $this->email->from('coba@gmail.com','coba');
+		    $this->email->from('eko.purnomo@icloud.com','eko.purnomo@icloud.com');
 		    $this->email->to($email);
 		    
 		    $this->email->subject('Your current Password');

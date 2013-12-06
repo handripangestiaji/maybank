@@ -1,20 +1,28 @@
 <?php 
+//print_r($fb_pm);    
+$total_groups = ceil($CountPmFB[0]->count_post_id/$this->config->item('item_perpage'));
+$timezone=new DateTimeZone($this->config->item('timezone'));
 for($i=0; $i<count($fb_pm);$i++):?>
-<li>
+<li <?php if($fb_pm[$i]->is_read==0){echo 'class="unread-post"';}?>>
     <input type="hidden" class="postId" value="<?php echo $fb_pm[$i]->detail_id_from_facebook; ?>" />
     <div class="circleAvatar"><img src="https://graph.facebook.com/<?=number_format($fb_pm[$i]->sender, 0,'.','')?>/picture?small" alt=""></div>
     <p class="headLine">
         <span class="author"><?php echo $fb_pm[$i]->name; ?></span>
         <i class="icon-circle"></i>
-        <span>posted a <span class="cyanText">comment</span></span>
+        <span>posted a <span class="cyanText">message</span></span>
         <i class="icon-circle"></i>
-        <span><?php echo date('l, M j, Y H:i:s',strtotime($fb_pm[$i]->created_at));?></span>
-        <i class="icon-play-circle moreOptions pull-right"></i>
+        <span>
+        <?php 
+            $date=new DateTime($fb_pm[$i]->created_at.' Europe/London');
+            $date->setTimezone($timezone);
+            echo $date->format('l, M j, Y H:i:s');
+        ?>
+        
     </p>
     <p><?=$fb_pm[$i]->messages?></p>
     <p><button type="button" class="btn btn-warning btn-mini">OPEN</button><!--button class="btn btn-primary btn-mini" style="margin-left: 5px;">LIKE</button--> </p>
     <p>
-        <span class="btn-engagement"><i class="icon-eye-open"></i> Engagement</span> |
+        <span class="btn-engagement"><i class="icon-eye-open"></i> <?php echo $fb_pm[$i]->message_count;?> Engagements</span> |
         <span class="btn-mark-as-read cyanText" style="display: <?php if($fb_pm[$i]->is_read==1){echo 'none';} ?>"><i class="icon-bookmark"></i> Mark as Read</span>
         <span class="btn-mark-as-unread cyanText" style="display: <?php if($fb_pm[$i]->is_read==0){echo 'none';} ?>"><i class="icon-bookmark-empty"></i> Mark as Unread</span>
     </p>
@@ -37,7 +45,7 @@ for($i=0; $i<count($fb_pm);$i++):?>
                 <span>posted a <span class="cyanText">comment</span></span>
                 <i class="icon-circle"></i>
                 <span><?php echo $comment[$j]->created_at; ?></span>
-                <i class="icon-play-circle moreOptions pull-right"></i>
+               
             </p>
             <div>
                 <p>"<?php echo $comment[$j]->messages; ?>"</p>
@@ -95,108 +103,19 @@ for($i=0; $i<count($fb_pm);$i++):?>
     
     <!-- REPLY -->  
     <div class="reply-field hide">
-        <div class="row-fluid">
-            <span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
-            <div class="pull-left">
-                <select style="width: 130px;">
-                    <option value="keyword">Feedback</option>
-                    <option value="user">Enquiry</option>
-                    <option value="keyword">Complaint</option>
-                </select>
-                <select style="width: 130px;">
-                    <option value="keyword">Accounts & Banking</option>
-                    <option value="user">Cards</option>
-                    <option value="keyword">Investment</option>
-                    <option value="keyword">insurance</option>
-                    <option value="user">Loans</option>
-                    <option value="keyword">Maybank2u</option>
-                    <option value="keyword">Others</option>
-                </select>
-            </div>
-            <textarea placeholder="Compose Message"></textarea>
-            <br clear="all" />
-            <div class="pull-left">
-                <i class="icon-link"></i>
-                <input type="text" class="span8"><button class="btn btn-primary btn-mini" style="margin-left: 5px;">SHORTEN</button>
-            </div>
-            <div class="pull-right">
-                <a href="javascript:void(0);" id="reply-open-img">
-                    <i class="icon-camera"></i> 
-                </a>
-            </div>
-            <br clear="all" />
-            <div id="reply-img-show">
-                <div class="reply-img-attached">
-                    <!-- close button for image attached -->
-                    <a id="reply-img-close" href="javascript:void(0);">
-                     <i class="icon-remove-sign"></i>
-                    </a>
-                </div>
-            </div>
-            <br clear="all" />
-            <div class="pull-left">
-                <i class="icon-facebook"></i> 2000     
-            </div>
-            <div class="pull-right">
-                <button class="btn btn-primary btn-small btn-send-reply">SEND</button>    
-            </div>
-            <br clear="all" />
-            <div class="reply-status hide">MESSAGE SENT</div>
-        </div>
-    </div>
+        <?php
+        $to_reply_field['fb_feed'] = $fb_pm;
+        $to_reply_field['i'] = $i;
+        $this->load->view('dashboard/reply_field_facebook', $to_reply_field)?>
+     </div>
     <!-- END REPLY -->
     
     <!-- CASE -->  
     <div class="case-field hide">
-        <div class="row-fluid">
-            <span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
-            CASE ID      : #012345
-            <div class="pull-left">
-                <select style="width: 130px;">
-                    <option value="keyword">Feedback</option>
-                    <option value="user">Enquiry</option>
-                    <option value="keyword">Complaint</option>
-                </select>
-                <select style="width: 130px;">
-                    <option value="keyword">Accounts & Banking</option>
-                    <option value="user">Cards</option>
-                    <option value="keyword">Investment</option>
-                    <option value="keyword">insurance</option>
-                    <option value="user">Loans</option>
-                    <option value="keyword">Maybank2u</option>
-                    <option value="keyword">Others</option>
-                </select>
-            </div>
-            <br clear="all" />
-            <button class="btn btn-small btn-purple btn-add-related">Add Related Conversation</button>
-            <br clear="all" />
-            <div class="pull-left">
-                Assign To:
-            </div>
-            <div class="pull-right">
-                <select>
-                    <option value="keyword">Nicole Lee</option>
-                    <option value="user">Azahan Azad</option>
-                    <option value="keyword">Azahamad Arif</option>
-                </select>
-            </div>
-            <br clear="all" />
-            <div class="pull-left">
-                Email:
-            </div>
-            <div class="pull-right">
-                <input type="text">
-            </div>
-            <br clear="all" />
-            Message :
-            <br>
-            <textarea placeholder="Compose Message"></textarea>
-            <br clear="all" />
-            <div class="pull-right">
-                <button class="btn-purple btn btn-small"><i class="icon-ok-circle icon-large"></i> Assign</button>    
-            </div>
-        </div>
+        <?php $this->load->view('dashboard/case_field')?>
     </div>
     <!-- END CASE -->  
 </li>
 <?php endfor;?>
+
+<div class="filled" style="text-align: center;"><input type="hidden" class="total_groups" value="<?=$total_groups?>" /><input type="hidden"  class="channel_id" value="<?=$fb_pm[0]->channel_id?>"/><input type="hidden"  class="looppage" value=""/><button class="loadmore btn btn-info" value="privateMessages"><i class="icon-chevron-down"></i> LOAD MORE</button></div>

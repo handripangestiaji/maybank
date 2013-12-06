@@ -1,4 +1,6 @@
 <?php
+$total_groups = ceil($countTweets[0]->count_post_id/$this->config->item('item_perpage'));
+$timezone=new DateTimeZone($this->config->item('timezone'));
 for($i=0;$i<count($senttweets);$i++){
 ?>
     <li <?php if($senttweets[$i]->is_read==0){echo 'class="unread-post"';} ?>>
@@ -10,7 +12,11 @@ for($i=0;$i<count($senttweets);$i++){
             <i class="icon-circle"></i>
             <span>mentions</span>
             <i class="icon-circle"></i>
-            <span><?php echo date('l, M j, Y H:i:s',strtotime($senttweets[$i]->created_at));?></span>
+            <span><?php 
+            $date=new DateTime($senttweets[$i]->created_at.' Europe/London');
+            $date->setTimezone($timezone);
+            echo $date->format('l, M j, Y H:i:s');
+            //echo date('l, M j, Y H:i:s',strtotime($senttweets[$i]->created_at));?></span>
             <i class="icon-play-circle moreOptions pull-right"></i>
         </p>
     <p><?php echo $senttweets[$i]->text; ?></p>
@@ -45,7 +51,6 @@ for($i=0;$i<count($senttweets);$i++){
                 <span>posted a <span class="cyanText">comment</span></span>
                 <i class="icon-circle"></i>
                 <span>2 hours ago</span>
-                <i class="icon-play-circle moreOptions pull-right"></i>
             </p>
             <div>
                 <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
@@ -60,7 +65,6 @@ for($i=0;$i<count($senttweets);$i++){
                 <span>posted a <span class="cyanText">comment</span></span>
                 <i class="icon-circle"></i>
                 <span>2 hours ago</span>
-                <i class="icon-play-circle moreOptions pull-right"></i>
             </p>
             <div>
                 <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
@@ -111,9 +115,7 @@ for($i=0;$i<count($senttweets);$i++){
         <a role="button" class='destroy_status'><i class="icon-trash greyText"></i></a>
         <div class="pull-right">
                 <!--form class="contentForm" action="<?php //echo base_url('index.php/dashboard/socialmedia/twitteraction');?>" method="post"-->
-                <!--button class="btn btn-reply btn-primary" data-toggle="modal"><i class="icon-mail-reply"></i></button--!>
-                <button type="button" class="retweet btn btn-primary"><i class="icon-retweet"></i></button  >
-                <a role="button" href="#modalsentdm<?php echo $i; ?>" class="btn btn-primary" data-toggle="modal"><i class="icon-envelope"></i></a>
+                <button type="button" class="retweet btn btn-primary"><i class="icon-retweet"></i></button>
                 <button type="button" class="favorit btn btn-primary"><i class="icon-star"></i></button>
                 
                 <?php /*if($senttweets[$i]->following=='1'){ ?>
@@ -162,8 +164,8 @@ for($i=0;$i<count($senttweets);$i++){
                 <i class="icon-camera"></i>
             </div>
             <br clear="all" />
-            <div class="pull-left">
-                <i class="icon-facebook"></i> 2000     
+            <div class="pull-left reply-char-count">
+                <i class="icon-twitter-sign"></i>&nbsp;<span class="reply-tw-char-count">140</span>
             </div>
             <div class="pull-right">
                 <button class="btn btn-primary btn-small btn-send-reply" name="action"  type="submit" value="replay" >SEND</button>    
@@ -177,9 +179,14 @@ for($i=0;$i<count($senttweets);$i++){
     
     <!-- CASE -->  
     <div class="case-field hide">
-       <?php $this->load->view('dashboard/case_field');?>
+       <?php
+            $data['posts'] = $senttweets;
+            $data['i'] = $i;
+            $this->load->view('dashboard/case_field',$data);
+        ?>
     </div>
     <!-- END CASE -->  
     
     </li>
 <?php } ?>
+ <div class="filled" style="text-align: center;"><button class="loadmore btn btn-info" value="sendmessage"><input type="hidden"  class="channel_id" value="<?=$senttweets[0]->channel_id?>"/><input type="hidden" class="channel_id" value="<?=$channel_id?>" /><i class="icon-chevron-down"></i> LOAD MORE</button></div>

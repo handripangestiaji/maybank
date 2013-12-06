@@ -39,7 +39,7 @@
 <!--<span style="font-size: 14pt; color: black; margin: 5px 0;">USER MANAGEMENT</span>-->
     <div class="cms-content row-fluid">
         <div class="cms-filter pull-left">
-            <input class="btn btn-primary" type="button" name="btn_user" value="User" /> <br />
+            <input class="btn btn-primary" onclick="menu_user()" type="button" name="btn_user" value="User" /> <br />
             <input class="btn" type="button" onclick="menu_role()" name="btn_role" value="Role"  />   <br />
             <input class="btn" type="button" onclick="menu_group()" name="btn_group" value="Group" />
         </div>
@@ -60,10 +60,12 @@
                         <td>Show :</td>
                         <td>&nbsp;</td>
                         <td>
-                            <select>
-                                <option>All User Role</option>
+                            <select id="filterRole" onchange="window.location = window.location.origin + window.location.pathname + '?role_collection_id=' + this.value">
+                                <option value="0">All User Role</option>
                                 <?php foreach($role->result() as $rol){?>
-                                    <option><?php echo $rol->role_name;?></option>
+                                    <option value="<?=$rol->role_collection_id?>"
+                                    <?=$rol->role_collection_id == $this->input->get('role_collection_id') ? "selected='selected'" : ""?>
+                                    ><?php echo $rol->role_name;?></option>
                                 <?php }?>
                             </select>
                         </td>
@@ -78,7 +80,7 @@
                 <thead>
                     <tr>
                         <th>User ID</th>
-                        <th>User Name</th>
+                        <th>Name</th>
                         <th>Email</th>
                         <th>Role</th>
                         <th>Group</th>
@@ -91,12 +93,14 @@
                 </thead>
                 
                 <tbody>
-                    <?php foreach($show->result() as $row){?>
+                    <?php if($show != null)
+                    {
+                        foreach($show as $row){?>
                     <tr>
                         <td><?php echo $row->user_id;?></td>
                         <td><?php echo $row->display_name;?></td>
                         <td><?php echo $row->email;?></td>
-                        <td><?php echo $row->role_id;?></td>
+                        <td><?php echo $row->role_name;?></td>
                         <td><?php echo $row->group_name;?></td>
                         <?php if($row->is_active==1){?>
                             <td><?php echo 'Active';?></td>
@@ -106,23 +110,19 @@
                         <td><?php echo $row->created_at;?></td>
                         <td><?php echo $row->created_by;?></td>
                         <td><a href="<?php echo site_url();?>/users/edit/<?php echo $row->user_id;?>"><span><i class="icon-pencil"></i></span></a></td>
-                        <!--<td><a href="<?php echo site_url();?>/users/delete/<?php echo $row->user_id;?>"><span><i class="icon-remove"></i></span></a></td>
-                    --><td>
+                        <td>
                             <a href="" onclick="show_confirm('<?php echo $row->user_id;?>');return false;"><span><i class="icon-remove"></i></span></a>
-                    </td>
+                        </td>
                     </tr>
-                    <?php }?>
+                    <?php }
+                    }?>
                 </tbody>
                 
             </table>
-            <?php if($count>=10){?>
-            <div class="page pull-right" style="margin-top: 30px;">
-                <a href="#">First</a>
-                <a href="#" class="active">1</a>
-                <a href="#">2</a>
-                <a href="#">3</a>
-                <a href="#">4</a>
-                <a href="#">Last</a>
+            
+            <?php if($count>10){?>
+            <div class="page pull-right" style="margin-top: 30px; margin-left:10px; margin-right:10px;">
+               <?php echo $links; ?>
             </div>
             <?php }?>
         </div>
@@ -162,6 +162,11 @@
     {
         document.getElementById('user_id_delete').value = tes;
         document.getElementById('confirm_user').style.display = 'block';
+    }
+    
+    function menu_user()
+    {
+        window.location.href = "<?php echo site_url();?>/users";
     }
     
     function hide_confirm()

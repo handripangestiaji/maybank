@@ -1,5 +1,6 @@
 <?php
-
+    $total_groups = ceil($countDirect[0]->count_post_id/$this->config->item('item_perpage'));
+    $timezone=new DateTimeZone($this->config->item('timezone'));
     for($i=0;$i<count($directmessage);$i++){
     ?>
     <li <?php if($directmessage[$i]->is_read==0){echo 'class="unread-post"';} ?>>
@@ -11,8 +12,14 @@
             <i class="icon-circle"></i>
             <span>mentions</span>
             <i class="icon-circle"></i>
-            <span><?php echo date('l, M j, Y H:i:s',strtotime($directmessage[$i]->created_at));?></span>
-            <i class="icon-play-circle moreOptions pull-right"></i>
+            <span>
+            <?php 
+            $date=new DateTime($directmessage[$i]->created_at.' Europe/London');
+            $date->setTimezone($timezone);
+            echo $date->format('l, M j, Y H:i:s');
+            ?>
+            </span>
+            
         </p>
         <p><?php echo $directmessage[$i]->text;?></p>
         <p><button type="button" class="btn btn-warning btn-mini">OPEN</button></p>
@@ -21,7 +28,7 @@
         <div class="pull-right">
            <button class="btn btn-dm btn-primary" data-toggle="modal"><i class="icon-envelope"></i></button>
                 <button type="button" class="btn btn-primary" name="action" value="follow"><i class="icon-user"></i></button>
-                <button type="button" class="btn btn-danger" name="action" value="case"><i class="icon-plus"></i>CASE</button>
+                <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>
                 <input type="hidden" name="str_id" value="<?php //echo json$directmessage[$i]->id_str; ?>" />
                 <input type="hidden" name="id" value="<?php //echo $directmessage[$i]->id; ?>" />
         </div>
@@ -29,7 +36,7 @@
         </h4>
         
         <!-- DM -->  
-    <div class="reply-field hide">
+    <div class="dm-field hide">
         <div class="row-fluid">
             <span class="dm-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
             <div class="pull-left">
@@ -58,18 +65,18 @@
                 <i class="icon-camera"></i>
             </div>
             <br clear="all" />
-            <div class="pull-left">
-                <i class="icon-facebook"></i> 2000     
+            <div class="pull-left reply-char-count">
+                <i class="icon-twitter-sign"></i>&nbsp;<span class="reply-tw-char-count">140</span>
             </div>
             <div class="pull-right">
-                <button class="dm_send btn btn-primary btn-small btn-send-dm"  type="button" value="<?=$homefeed[$i]->post_stream_id;?>" >SEND</button>    
-            <input type="hidden" name="screename" value="<?php echo $homefeed[$i]->username; ?>" />
+                <button class="dm_send btn btn-primary btn-small btn-send-dm"  type="button" value="<?=$directmessage[$i]->twitter_user_id;?>" >SEND</button>    
+                       <input type="hidden" class="screen_name" value="<?php echo $directmessage[$i]->screen_name; ?>" />
             </div>
             <br clear="all" />
             <div class="dm-status hide">MESSAGE SENT</div>
         </div>
     </div>
-    <!-- END DM -->
+    <!-- END DM -->  
     
     <!-- CASE -->  
     <div class="case-field hide">
@@ -81,3 +88,4 @@
     <?php 
     }
  ?>
+  <div class="filled" style="text-align: center;"><button class="loadmore btn btn-info" value="direct"><input type="hidden" class="channel_id" value="<?=$channel_id?>" /><input type="hidden"  class="channel_id" value="<?=$directmessage[0]->channel_id?>"/><i class="icon-chevron-down"></i> LOAD MORE</button></div>

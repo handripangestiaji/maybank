@@ -44,8 +44,12 @@ class Socialmedia extends MY_Controller {
 	  $this->load->model('facebook_model');
 	  $this->load->model('twitter_model');
 	  $this->load->model('account_model');
+	  $this->load->model('campaign_model');
 	  $filter = array();
+	  $data['campaign'] = $this->campaign_model->get();
 	  $data['channels'] = $this->account_model->GetChannel();
+	  $data['count_new_cases'] = 63;
+	  $data['count_replies'] = 36;
 	  $this->load->view('dashboard/index',$data);
      }
     
@@ -66,6 +70,10 @@ class Socialmedia extends MY_Controller {
         
         if(isset($_GET['friendid'])){
             $friendid=$_GET['friendid'];
+        }
+
+        if(isset($_POST['friendid'])){
+            $friendid=$_POST['friendid'];
         }
         
         if(isset($_POST['followid'])){
@@ -108,7 +116,7 @@ class Socialmedia extends MY_Controller {
         }elseif($action=='dm_send'){//ok
             
             /* direct_messages/new */
-            $parameters = array('user_id' => $friendid, 'text' => $content,'screen_name'=>$screen_name);
+            $parameters = array('user_id' => $friendid, 'text' => $content);
             $method = 'direct_messages/new';
             $this->connection->post($method, $parameters);
             

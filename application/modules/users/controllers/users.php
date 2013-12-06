@@ -12,18 +12,40 @@ class Users extends MY_Controller {
 	$this->load->config('mail_config');
 	$config = $this->config->item('mail_provider');
 	$this->load->library('email',$config);
+	$this->load->library('upload');
 
 	
     }
     
     function index()
     {
-        $data = array(
-		      'show' => $this->users_model->select_user(),
-		      'role' => $this->users_model->select_role(),
-		      'count' => $this->db->affected_rows($this->users_model->select_user())
-		     );
-        $this->load->view('users/index',$data);
+     $config['base_url'] = base_url().'users/index';
+     $config['total_rows'] = $this->users_model->count_record();
+     $config['per_page'] = 10;
+     $config["uri_segment"] = 3;
+     
+     $config['next_link'] = 'Next';
+     $config['prev_link'] = 'Prev';
+     
+     $config['first_link'] = 'First';
+     $config['last_link'] = 'Last';
+
+     $config['cur_tag_open'] = '<b style="margin:0px 5px;">';
+     $config['cur_tag_close'] = '</b>';
+     
+     $this->pagination->initialize($config);
+     
+     $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+     if($this->input->get('role_collection_id'))
+	  $data['show'] = $this->users_model->select_user1($config["per_page"], $page, $this->input->get('role_collection_id'));
+     else
+	  $data['show'] = $this->users_model->select_user1($config["per_page"], $page, null);
+     
+     $data['links'] = $this->pagination->create_links();
+     $data['role'] = $this->users_model->select_role();
+     $data['count'] = $this->users_model->count_record();
+     
+     $this->load->view('users/index',$data);
     }
     
     //view create user
@@ -38,44 +60,74 @@ class Users extends MY_Controller {
     
     function insert_user()
     {
-	  $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-	  $count = mb_strlen($chars);
-    
-	  for ($i = 0, $pass = ''; $i < 10; $i++) {
-	  $index = rand(0, $count - 1);
-	  $pass .= mb_substr($chars, $index, 1);
+	  if(isset($_POST['Create']))
+	  {
+	       $config = array(
+			      'upload_path'   => 'media/dynamic/',
+			      'allowed_types' => 'gif|jpg|png',
+			      'max_size'      => '2048',
+			      'max_width'     => '1024',
+			      'max_height'    => '768'
+			       );
+	       
+	       $this->upload->initialize($config);
+	       if ( ! $this->upload->do_upload())
+		{
+		    //$this->upload->display_errors();
+		    $this->session->set_flashdata('failed', TRUE);
+		    redirect('users/create');
+		}
+		else
+		{
+		    $image = $this->upload->data();
+		    $dir = "media/dynamic/".$image['file_name'];
+		    
+		    $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+		    $count = mb_strlen($chars);
+	      
+		    for ($i = 0, $pass = ''; $i < 10; $i++) {
+		    $index = rand(0, $count - 1);
+		    $pass .= mb_substr($chars, $index, 1);
+		    }
+		    $created_by = $this->session->userdata('user_id') == 0 ? NULL : $this->session->userdata('user_id');
+		    
+		    $timezone = new DateTimeZone("Europe/London");
+		    $time = new DateTime(date("Y-m-d H:i:s e"), $timezone);
+		    $data=array(
+				'user_id' => $this->input->post('userID'),
+				'full_name' => $this->input->post('fullName'),
+				'display_name' => $this->input->post('displayName'),
+				'email' => $this->input->post('email'),
+				'password' => do_hash($pass.time(),'md5'),
+				'salt' => time(),
+				'role_id' => $this->input->post('optRole'),
+				'group_id' => $this->input->post('optGroup'),
+				'is_active' => 1,
+				'image_url' => $dir,
+				'description' => $this->input->post('description'),
+				'location' => $this->input->post('location'),
+				'web_address' => $this->input->post('web_addres'),
+				'created_at' => $time->format("Y-m-d H:i:s"),
+				'created_by' => $created_by
+			 );
+		   
+		    
+		    $this->users_model->insert_user($data);
+		  
+				  $this->email->set_newline("\r\n");
+				  $this->email->from('eko.purnomo@icloud.com','eko_purnomo_(icloud)');
+				  $this->email->to($this->input->post('email'));
+				  
+				  $this->email->subject('New Registration');
+				  $this->email->message('Thank you for registering<br />Your username <b>'.$this->input->post('userID').'</b> and password <b>'.$pass.'</b> for login in application.');
+				  
+				  $this->email->send();
+		    
+		    $this->session->set_flashdata('succes', TRUE);
+		    redirect('users');
+		}
+	       
 	  }
-	  $created_by = $this->session->userdata('user_id') == 0 ? NULL : $this->session->userdata('user_id');
-	  
-	  $timezone = new DateTimeZone("Europe/London");
-	  $time = new DateTime(date("Y-m-d H:i:s e"), $timezone);
-	  $data=array(
-		      'user_id' => $this->input->post('userID'),
-		      'full_name' => $this->input->post('fullName'),
-		      'display_name' => $this->input->post('displayName'),
-		      'email' => $this->input->post('email'),
-		      'password' => do_hash($pass.time(),'md5'),
-		      'salt' => time(),
-		      'role_id' => $this->input->post('optRole'),
-		      'group_id' => $this->input->post('optGroup'),
-		      'is_active' => 1,
-		      'created_at' => $time->format("Y-m-d H:i:s"),
-		      'created_by' => $created_by
-	       );
-	  
-	  $this->users_model->insert_user($data);
-	
-			$this->email->set_newline("\r\n");
-			$this->email->from('coba@gmail.com','coba');
-			$this->email->to($this->input->post('email'));
-			
-			$this->email->subject('User Name and Password');
-			$this->email->message('Username '.$this->input->post('userID').' and password '.$pass);
-			
-			$this->email->send();
-	  
-	  $this->session->set_flashdata('succes', TRUE);
-	  redirect('users');
     }
     
     function edit($id)
@@ -138,10 +190,50 @@ class Users extends MY_Controller {
     //============================ ROLE ===================================
     function menu_role()
     {
-	  $data = array(
-			 'show' => $this->users_model->select_role(),
-			 'app_show' =>$this->users_model->select_appRole()
-		    );
+	  $config['base_url'] = base_url().'users/menu_role';
+	  $config['total_rows'] = $this->users_model->count_record_role();
+	  $config['per_page'] = 10;
+	  $config["uri_segment"] = 3;
+	  
+	  $config['next_link'] = 'Next';
+	  $config['prev_link'] = 'Prev';
+	  
+	  $config['first_link'] = 'First';
+	  $config['last_link'] = 'Last';
+     
+	  $config['cur_tag_open'] = '<b style="margin:0px 5px;">';
+	  $config['cur_tag_close'] = '</b>';
+	  
+	  $this->pagination->initialize($config);
+	  
+	  $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+	  $data['show'] = $this->users_model->select_role1($config["per_page"], $page);
+     
+	  $data['links'] = $this->pagination->create_links();
+	  $data['count'] = $this->users_model->count_record_role();
+	  
+	  $roles = $this->users_model->select_appRole();
+	  $arr = array();
+	  $tree = array();
+	  $i = 0;
+	  
+	  foreach($roles->result_array() as $v)
+	  {
+	       $arr[$v['app_role_id']] = array_merge(array("label" => $v['role_name'], "parent_id" => $v['parent_id'] , "value" => $v['app_role_id']), array('items' => array()));
+	  }
+	  
+	  foreach($arr as $role_app_id => &$value)
+	  {
+	       if(!$value['parent_id'] || !array_key_exists($value['parent_id'], $arr))
+	       {
+		    $tree[] = &$value;
+	       } else {
+		    $arr[$value['parent_id']]['items'][] = &$value;
+	       }
+	  }
+	  
+	  $data['json'] = json_encode($tree);
+	  
 	  $this->load->view('users/role',$data);
     }
     
@@ -153,10 +245,9 @@ class Users extends MY_Controller {
 	  $created_by = $this->session->userdata('user_id');
 	  
 	  $role = $this->input->post('role');
-	  print_r($role);
-	  die();
+	  $tampung = explode(",", $role[0]);
 	  
-	  /*$data = array(
+	  $data = array(
 			 'role_name' => $this->input->post('new_role'),
 			 'created_by' => $created_by,
 			 'created_at' => $created_at
@@ -164,32 +255,75 @@ class Users extends MY_Controller {
 	  $this->users_model->insert_role($data);
 	  $last_id=$this->db->insert_id();
 	  
-	  $role = $this->input->post('role');
-	  
-	  for($i=0;$i<count($role);$i++)
+	  for($i=0;$i<count($tampung);$i++)
 	  {
 	       $data1 = array(
 			      'role_collection_id' => $last_id,
-			      'app_role_id' => $role[$i]
+			      'app_role_id' => $tampung[$i]
 			      );
 	       $this->users_model->insert_role_detail($data1);
 	  }
+	  $this->session->set_flashdata('succes', TRUE);
 	  redirect('users/menu_role');
-    */}
+    }
     
     function delete_role($id)
     {
 	  $this->users_model->delete_role($id);
+	  $this->session->set_flashdata('info_delete', TRUE);
 	  redirect('users/menu_role');
     }
     
     function edit_role($id)
     {
 	  $data = array(
-			 'role' => $this->users_model->edit_role($id),
-			 'app_show' =>$this->users_model->select_appRole(),
-			 'role_detail' => $this->users_model->edit_role_detail($id)
+			 'role' => $this->users_model->edit_role($id)
 			);
+	  
+	  $roles = $this->users_model->select_appRole();
+	  $role_detail = $this->users_model->edit_role_detail($id);
+	  
+	  $arr = array();
+	  $tree = array();
+	  $i = 0;
+	  
+	  foreach($role_detail->result_array() as $d){
+	       $c[] = $d['app_role_id']; 
+	  }
+	  
+	  foreach($roles->result_array() as $v)
+	  {
+	       if (in_array($v['app_role_id'], $c)) {
+		    $checked = true;
+		}
+		else{
+		    $checked = false;
+		}
+	       
+	      $arr[$v['app_role_id']] = array_merge(array("label" => $v['role_name'], "parent_id" => $v['parent_id'] , "value" => $v['app_role_id'], "checked" => $checked), array('items' => array()));
+	  }
+	  
+	  //echo "<pre>";
+	  //print_r($arr);
+	  //die();
+	  
+	  foreach($arr as $role_app_id => &$value)
+	  {
+	       if(!$value['parent_id'] || !array_key_exists($value['parent_id'], $arr))
+	       {
+		    $tree[] = &$value;
+	       } else {
+		    $arr[$value['parent_id']]['items'][] = &$value;
+	       }
+	  }
+	  
+	  //echo "<pre>";
+	  //print_r($tree);
+	  //die();
+	  
+	  $data['json'] = json_encode($tree);
+	  
+	  
 	  $this->load->view('users/role_edit',$data);
     }
     
@@ -203,15 +337,18 @@ class Users extends MY_Controller {
 	  $this->users_model->update_role($id,$data);
 	  
 	  $role = $this->input->post('role');
+	  
+	  $tampung = explode(',',$role[0]);
 	  $this->users_model->delete_role_detail($id);
-	  for($i=0;$i<count($role);$i++)
+	  for($i=0;$i<count($tampung);$i++)
 	  {
 	       $data1 = array(
 			      'role_collection_id' => $id,
-			      'app_role_id' => $role[$i]
+			      'app_role_id' => $tampung[$i]
 			      );
 	       $this->users_model->insert_role_detail($data1);
 	  }
+	  $this->session->set_flashdata('info', TRUE);
 	  redirect('users/menu_role');
     }
     
@@ -245,12 +382,30 @@ class Users extends MY_Controller {
     //============================= GROUP =================================
     function menu_group()
     {
-	  $data = array(
-			 'group' => $this->users_model->select_group(),
-			 'channel' => $this->users_model->select_channel(),
-			 'group_detail' => $this->users_model->select_user_group_d(),
-			 'count' => $this->db->affected_rows($this->users_model->select_group())
-			);
+	  $config['base_url'] = base_url().'users/menu_group';
+	  $config['total_rows'] = $this->users_model->count_record_group();
+	  $config['per_page'] = 10;
+	  $config["uri_segment"] = 3;
+	  
+	  $config['next_link'] = 'Next';
+	  $config['prev_link'] = 'Prev';
+	  
+	  $config['first_link'] = 'First';
+	  $config['last_link'] = 'Last';
+     
+	  $config['cur_tag_open'] = '<b style="margin:0px 5px;">';
+	  $config['cur_tag_close'] = '</b>';
+	  
+	  $this->pagination->initialize($config);
+	  
+	  $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+	  $data['group'] = $this->users_model->select_group1($config["per_page"], $page);
+     
+	  $data['links'] = $this->pagination->create_links();
+	  $data['count'] = $this->users_model->count_record_group();
+			 $data['channel'] = $this->users_model->select_channel();
+			 $data['group_detail'] = $this->users_model->select_user_group_d();
+			
 	  $this->load->view('users/group',$data);
     }
     
@@ -282,12 +437,14 @@ class Users extends MY_Controller {
 				     );
 	       $this->users_model->insert_group_detail($data_channel);
 	  }
+	  $this->session->set_flashdata('succes', TRUE);
 	  redirect('users/menu_group');
     }
     
     function delete_group($id)
     {
 	  $data = $this->users_model->delete_group($id);
+	  $this->session->set_flashdata('info_delete', TRUE);
 	  redirect('users/menu_group?return='.$data);
     }
     
@@ -321,6 +478,7 @@ class Users extends MY_Controller {
 				     );
 	       $this->users_model->insert_group_detail($data_channel);
 	  }
+	  $this->session->set_flashdata('info', TRUE);
 	  redirect('users/menu_group');
     }
     

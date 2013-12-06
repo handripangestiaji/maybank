@@ -142,6 +142,36 @@ $(function(){
         }
         return false;
     });
+    
+    $(document).ready(function(){
+        $('.sidebarContent > .btn-close').click(function(){
+            $('.hiddenContent>div').hide();
+            $('.hiddenContent').stop().animate({right: -270}).css({display: 'block'});
+            $('div .input-append a.sidebar').removeClass('active');
+            currentSection = 0;
+        });
+        
+        $('.sidebarContent > footer > .changePassword').click(function(){
+            $(this).closest('#profileContent').hide();
+            $(this).closest('#profileContent').siblings('#updatePassword').show();
+        });
+        
+        $('.sidebarContent > footer > .updateProfile').click(function(){
+            $(this).closest('#profileContent').hide();
+            $(this).closest('#profileContent').siblings('#updateProfile').show();
+        });
+        
+        $('.sidebarContent > footer > .updateProfile').click(function(){
+            $(this).closest('#profileContent').hide();
+            $(this).closest('#profileContent').siblings('#updateProfile').show();
+        });
+        
+        $('.sidebar-btn-cancel').click(function(){
+            $(this).closest('#updateProfile').hide();
+            $(this).closest('#updatePassword').hide();
+            $('#profileContent').show();
+        });
+    });
 
     /*=============================================================================================
      =============================== COLLAPSED SIDEBAR SHOWING ACTIONS ============================
@@ -444,12 +474,13 @@ $(function(){
                         $(this).closest('.containerHeadline').next().html('youtube timeline here');
                     });
                 });
-                            
+                
                 $(document).ready(function() {
                         $(this).on('click','.btn-reply',
                             function() {
-                                $(this).closest('h4').next().show();
-                                $(this).closest('h4').next().next().hide();
+                                $(this).closest('h4').siblings('.reply-field').show();
+                                $(this).closest('h4').siblings('.case-field').hide();
+                                $(this).closest('h4').siblings('.dm-field').hide();
                             }
                         );
                         
@@ -460,17 +491,26 @@ $(function(){
                             }
                         );
                         
+                        $(this).on('click','.btn-engagement-case',
+                            function() {
+                                $(this).parent().siblings('.reply-engagement-field').hide();
+                                $(this).parent().siblings('.case-engagement-field').show();
+                            }
+                        );
+                        
                         $(this).on('click','.btn-case',
                             function() {
-                                $(this).closest('h4').next().hide();
-                                $(this).closest('h4').next().next().show();
+                                $(this).closest('h4').siblings('.reply-field').hide();
+                                $(this).closest('h4').siblings('.dm-field').hide();
+                                $(this).closest('h4').siblings('.case-field').show();
                             }
                         );
                         
                          $(this).on('click','.btn-dm',
                             function() {
-                                $(this).closest('h4').next().hide();
-                                $(this).closest('h4').next().next().show();
+                                $(this).closest('h4').siblings('.reply-field').hide();
+                                $(this).closest('h4').siblings('.dm-field').show();
+                                $(this).closest('h4').siblings('.case-field').hide();
                             }
                         );
                             
@@ -561,6 +601,12 @@ $(function(){
                             }
                         );
                         
+                        $(this).on('click','.related-conversation-btn-hide-show',
+                            function(){
+                                $(this).siblings('div').toggle();
+                            }
+                        );
+                        
                         $(this).on('click','.reply-field-btn-close',
                             function() {
                                  $(this).parent().parent().hide();
@@ -595,6 +641,18 @@ $(function(){
                                 $(this).parent().parent().next().toggle();
                             }
                         );
+                        
+                        $(this).on('input propertychange', '.reply_comment',
+                            function() {
+                                var len = $(this).val().length;
+                                $(this).siblings('.reply-char-count').children('.reply-fb-char-count').html(2000-len);
+                        });
+                        
+                        $(this).on('input propertychange', '.replaycontent',
+                            function() {
+                                var len = $(this).val().length;
+                                $(this).siblings('.reply-char-count').children('.reply-tw-char-count').html(140-len);
+                        });
                     }
                 );
                 
@@ -615,8 +673,25 @@ $(function(){
                        $("#cal-show").css({"display": "none"});
                     });
 
-                    $( ".compose-insert-link" ).click(function() {
-                       $("#url-show").css({"display": "block"});
+                    $(".compose-insert-link-btn").click(function(){
+                        $(".compose-insert-link-text").linkpreview({
+                            previewContainer: "#url-show > .compose-form > div",  //optional
+                            //previewContainerClass: ".compose-schedule",
+                            refreshButton: ".compose-insert-link-btn",        //optional
+                            preProcess: function() {                //optional
+                                $('#url-show').css({"display": "block"});
+                                $('#url-show > .compose-form > div').html('Loading...');
+                            },
+                            onSuccess: function(data) {                  //optional
+                                console.log("onSuccess");
+                            },
+                            onError: function() {                    //optional
+                                console.log("onError");
+                            },
+                            onComplete: function() {                 //optional
+                                console.log("onComplete");
+                            }
+                       });
                     });
 
                      $( "#close-url" ).click(function() {
@@ -627,6 +702,7 @@ $(function(){
                         var len = this.value.length;
                         $('.compose-fb-char-count').html(2000-len);
                         $('.compose-tw-char-count').html(140-len);
+                        $('.compose-yt-char-count').html(500-len);
                     });
                      
                      $(".btn-compose-post").click(function() {
@@ -717,7 +793,8 @@ $(function(){
                                     },
                             success: function(data)
                             {
-                                alert(data)
+                                $('.compose-post-status').show();
+                                $('.compose-post-status').fadeOut(5000);
                             },
                         });
                     });
@@ -731,7 +808,7 @@ $(function(){
                                     action:'dm_send',
                                     content:$(this).parent().siblings(".replaycontent").val(),
                                     screen_name: $(this).siblings(".screen_name").val(),
-                                    str_id: $(this).val()
+                                    friendid: $(this).val()
                                     },
                             success: function(data)
                             {
@@ -823,7 +900,22 @@ $(function(){
                                 $('.compose-post-status').fadeOut(5000);
                             },
                         });
-                    });                   
+                    }); 
+                    
+                      /*load more content*/  
+                    looppage=2;
+                    $(this).on('click','.loadmore',
+                        function() {
+  //                          alert($(this).val());
+                        	 loading = true;
+                              action=$(this).val();    
+                            group_numbers=2;
+                            channel_ids=$(this).siblings(".channel_id").val();
+                            
+                           $('#'+action).load(BASEURL + 'dashboard/media_stream/loadmore/'+action+'/'+looppage+'/'+channel_ids);
+                            looppage++;
+                            loading = false;
+                    });                  
                      
                                                                                 
                 });
@@ -880,9 +972,7 @@ $(function(){
                     "testParameter" : 1
                 }
             });
-        });
-        
-        
+        });        
         $(".table-sub-tr").hide();   
         $(".table-btn-show-sub").click(function() {
             if($(this).hasClass('active')) {
@@ -933,13 +1023,8 @@ $(function(){
         
         $(this).on('submit', 'form.assign_case', function(e){
             var thisContext = $(this);
-            $(this).AsyncPost({
-                "url" : BASEURL + "/cms/case_provider/SaveCase",
-                "urlParameter" : $(this).serialize(),
-                "callback" : function(response){
-                    
-                }
-            });
+            console.log($(this).parent().closest('.postId').val());
+           
             e.preventDefault();
            
         });
@@ -970,15 +1055,17 @@ jQuery.fn.LoadContentAsync = function(options){
         url  : window.location.origin,
         urlParameter  : {},
         contentReplaced : $('document'),
-        loaderImage : window.location.origin + "/media/img/loader.gif"
+        loaderImage : window.location.origin + "/media/img/loader.gif",
+        callback : function(response){
+            
+            settings.contentReplaced.html(response);
+        }
     }, options);
     settings.contentReplaced.html("<img style='width:56px;margin:20px 0 0 45%;' src='" + settings.loaderImage + "' alt='' />");
     $.ajax({
         "url" : settings.url,
-        "data" : serialize(settings.urlParameter),
-        "success" : function(response){
-            settings.contentReplaced.html(response);
-        }
+        "data" : typeof settings.urlParameter == 'string' ? settings.urlParameter : serialize(settings.urlParameter),
+        "success" : settings.callback
     });
 };
 

@@ -1,5 +1,5 @@
 <?php
-//print_r($count_fb_feed);
+//print_r($fb_feed);
 $total_groups = ceil($count_fb_feed[0]->count_post_id/$this->config->item('item_perpage'));
 $timezone=new DateTimeZone($this->config->item('timezone'));
 
@@ -49,7 +49,6 @@ for($i=0; $i<count($fb_feed);$i++):?>
                 <span>posted a <span class="cyanText">comment</span></span>
                 <i class="icon-circle"></i>
                 <span><?php echo $comment[$j]->created_at; ?></span>
-                <i class="icon-play-circle moreOptions pull-right"></i>
             </p>
             <div class="engagement-comment">
                 <p>"<?php echo $comment[$j]->comment_content; ?>"</p>
@@ -90,15 +89,17 @@ for($i=0; $i<count($fb_feed);$i++):?>
                             </a>
                         </div>
                         <br clear="all" />
-                        <div id="reply-img-show">
-                            <div class="reply-img-attached">
+                        <br clear="all" />
+                        <div class="compose-schedule" id="reply-url-show">
+                            <div class="compose-form img-attached">
                                 <!-- close button for image attached -->
-                                <a id="reply-img-close" href="javascript:void(0);">
-                                 <i class="icon-remove-sign"></i>
+                                <a id="close-url" href="javascript:void(0);">
+                                    <i class="icon-remove-sign icon-large"></i>
                                 </a>
+                                <div>
+                                </div>
                             </div>
                         </div>
-                        <br clear="all" />
                         <div class="pull-left reply-char-count">
                             <i class="icon-facebook-sign"></i>&nbsp;<span class="reply-fb-char-count">2000</span>
                         </div>

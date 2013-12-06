@@ -50,8 +50,8 @@ for($i=0;$i<count($mentions);$i++){
         <br/>
         <?php 
                // $filtera["b.twitter_user_id"] = $mentions[$i]->twitter_user_id;
-                $filtera["b.in_reply_to = "] = $mentions[$i]->post_id.' ';     
-                $comment=$this->twitter_model->ReadTwitterData($filtera, 3);
+                $filterm["b.in_reply_to = "] = $mentions[$i]->post_id.' ';     
+                $comment=$this->twitter_model->ReadTwitterData($filterm, 3);
                
                 for($j=0;$j<count($comment);$j++){
         ?>

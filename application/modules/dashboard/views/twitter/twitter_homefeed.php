@@ -47,10 +47,10 @@ for($i=0;$i<count($homefeed);$i++){
         </div>
         <br>
         <?php 
-                $filtera["b.twitter_user_id"] = $homefeed[$i]->twitter_user_id;
-                 // $filtera["b.twitter_user_id"] = $mentions[$i]->twitter_user_id;
-                $filtera["b.in_reply_to = "] = $homefeed[$i]->post_id.' ';     
-                $comment=$this->twitter_model->ReadTwitterData($filtera, 3); 
+                //$filterh["b.twitter_user_id"] = $homefeed[$i]->twitter_user_id;
+                //  $filterh["b.type"] = $mentions[$i]->type;
+                $filterh["b.in_reply_to = "] = $homefeed[$i]->post_id.' ';     
+                $comment=$this->twitter_model->ReadTwitterData($filterh, 3); 
 
                 for($j=0;$j<count($comment);$j++){
         ?>

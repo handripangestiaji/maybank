@@ -23,11 +23,14 @@ for($i=0;$i<count($mentions);$i++){
             ?></span>
            
         </p>
-    <p><?php echo $mentions[$i]->text; ?></p>
+    <p><?php 
+        echo $mentions[$i]->text; 
+        
+    ?></p>
     
     <p><button type="button" class="btn btn-warning btn-mini">OPEN</button>
     <?php if ($mentions[$i]->retweet_count>=1) { ?>
-        <button type="button" class="btn btn-inverse btn-mini"><i class="icon-retweet">&nbsp;</i></button>
+        <button type="button" class="btn btn-inverse btn-mini"><i class="icon-retweet"><?=$mentions[$i]->retweet_count?></i></button>
     <?php } ?>    
     <?php if ($mentions[$i]->favorited=='1') { ?>
         <button type="button" class="btn btn-inverse btn-mini"><i class="icon-star">&nbsp;</i></button>
@@ -204,4 +207,4 @@ for($i=0;$i<count($mentions);$i++){
 <?php } 
 ?>
 
- <div class="filled" style="text-align: center;"><input type="hidden" class="total_groups" value="<?=$total_groups?>" /><input type="hidden"  class="looppage" value=""/><button class="loadmore btn btn-info" value="mentions"><i class="icon-chevron-down"></i> LOAD MORE</button></div>
+ <div class="filled" style="text-align: center;"><input type="hidden" class="total_groups" value="<?=$total_groups?>" /><input type="hidden"  class="channel_id" value="<?=$mentions[0]->channel_id?>"/><input type="hidden"  class="looppage" value=""/><button class="loadmore btn btn-info" value="mentions"><i class="icon-chevron-down"></i> LOAD MORE</button></div>

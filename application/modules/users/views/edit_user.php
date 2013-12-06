@@ -13,7 +13,7 @@
             </div>
             <hr style="margin-top: 0px;">
             
-            <form method='post' action='<?php echo site_url();?>/users/update_user'>
+            <form method='post' action='<?php echo site_url();?>/users/update_user' enctype="multipart/form-data">
     <table cellspacing=5px>
         <?php foreach($id->result() as $row){ ?>
         <tr>
@@ -84,29 +84,54 @@
             <td>Image</td>
             <td>
                 <img src="<?php echo base_url();echo $row->image_url;?>" style='width: auto; height: 105px;' />
-                <input type='file' name='userfile' id='userfile' style='position: relative;' />
+                <input type='file' name='userfile' id='userfile' accept='image/*' />
             </td>
             
         </tr>
         
         <tr>
             <td>Description</td>
-            <td><textarea type='text'><?php echo $row->description;?></textarea></td>
+            <td><textarea name='description' type='text'><?php echo $row->description;?></textarea></td>
         </tr>
         
         <tr>
             <td>Location</td>
-            <td><input type='text' value="<?php echo $row->location;?>"</td>
+            <td><input name='location' type='text' value="<?php echo $row->location;?>"</td>
         </tr>
         
         <tr>
             <td>Web Address</td>
-            <td><input type='text' value="<?php echo $row->web_address;?>" /></td>
+            <td><input name='web_address' type='text' value="<?php echo $row->web_address;?>" /></td>
+        </tr>
+        
+        <tr>
+            <td>Status</td>
+            <td>
+                <select name="is_active">
+                    <?php
+                        $status = $row->is_active;
+                        if($status==1)
+                        {
+                    ?>
+                        <option selected='selected' value=1>Active</option>
+                        <option value=0>Deactived</option>
+                    <?php
+                        }
+                        else
+                        {
+                    ?>
+                        <option value=1>Active</option>
+                        <option selected='selected' value=0>Deactived</option>
+                    <?php
+                        }
+                    ?>
+                </select>
+            </td>
         </tr>
         
         <tr>
             <td>
-                <input type="submit" value="Save" />
+                <input type="submit" value="Save" name='Save' />
                 <input type="button" value="Cancel" onclick="btn_cancel()" />
             </td>
         </tr>

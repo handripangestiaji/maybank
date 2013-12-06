@@ -22,7 +22,7 @@ for($i=0;$i<count($senttweets);$i++){
     <p><?php echo $senttweets[$i]->text; ?></p>
     
     <p><button type="button" class="btn btn-warning btn-mini">OPEN</button>
-    <?php if ($senttweets[$i]->retweet_count>=1) { ?>
+    <?php if ($senttweets[$i]->retweeted==1) { ?>
         <button type="button" class="btn btn-inverse btn-mini"><i class="icon-retweet">&nbsp;</i></button>
     <?php } ?>    
     <?php if ($senttweets[$i]->favorited=='1') { ?>
@@ -31,7 +31,7 @@ for($i=0;$i<count($senttweets);$i++){
     
     <p>
         <a role="button" class="btn-engagement"><i class="icon-eye-open"></i> Engagement</a> |
-        <a data-toggle="modal" role="button" href="#modaltweet<?php echo $i; ?>" ><i class="icon-retweet greyText"></i><?php //echo $senttweets[$i]->retweeted; ?> re-tweets</a> | 
+        <a data-toggle="modal" role="button" href="#modaltweet<?php echo $i; ?>" ><i class="icon-retweet greyText"></i><?php if($senttweets[$i]->retweet_count>0)echo $senttweets[$i]->retweet_count; ?> re-tweets</a> |
         <span class="btn-mark-as-read cyanText" style="display: <?php if($senttweets[$i]->is_read==1){echo 'none';} ?>"><i class="icon-bookmark"></i> Mark as Read</span>
         <span class="btn-mark-as-unread cyanText" style="display: <?php if($senttweets[$i]->is_read==0){echo 'none';} ?>"><i class="icon-bookmark-empty"></i> Mark as Unread</span>
     </p>

@@ -973,7 +973,7 @@ $(function(){
                         	 loading = true;
                               action=$(this).val();    
                             group_numbers=2;
-                            channel_ids=1;
+                            channel_ids=$(this).siblings(".channel_id").val();
                             
                            $('#'+action).load(BASEURL + 'dashboard/media_stream/loadmore/'+action+'/'+looppage+'/'+channel_ids);
                             looppage++;

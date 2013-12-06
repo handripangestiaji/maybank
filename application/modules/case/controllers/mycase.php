@@ -17,24 +17,24 @@ class mycase extends CI_Controller{
         $allPost = $this->input->post();
         
         $validation[] = array('type' => 'required','name' => 'tanggal_bayar','value' => $user_id, 'fine_name' => "User ID");
-        $validation[] = array('type' => 'required','name' => 'product_type','value' => $allPost['product_type'], 'fine_name' => "Product Type");
-        $validation[] = array('type' => 'required','name' => 'message','value' => $allPost['message'], 'fine_name' => "Messages");
+        $validation[] = array('type' => 'required','name' => 'product_type','value' => $this->input->post('product_type'), 'fine_name' => "Product Type");
+        $validation[] = array('type' => 'required','name' => 'message','value' => $this->input->post('message'), 'fine_name' => "Messages");
         if($allPost['assign_to'])
             $validation[] = array('type' => 'required','name' => 'assign_to','value' => $allPost['assign_to'], 'fine_name' => "Assign To");
         else
-            $validation[] = array('type' => 'required','name' => 'email','value' => $allPost['email'], 'fine_name' => "Email");
+            $validation[] = array('type' => 'required','name' => 'email','value' => $this->input->post('email'), 'fine_name' => "Email");
             
         $is_valid = CheckValidation($validation, $this->validation);
         if($is_valid === true){
             $case = array(
-            "content_products_id" => $allPost['product_type'],
+            "content_products_id" => $this->input->post('product_type'),
             "created_by" => $user_id,
-            "messages" => $allPost['message'],
+            "messages" => $this->input->post('message'),
             "status" => "pending",
-            "email" => $allPost['email'],
-            "case_type" => $allPost['case_type'],
-            "assign_to" => $allPost['assign_to'] == '' ? NULL : $allPost['assign_to'],
-            "related_conversation" => $allPost['related_conversation']
+            "email" => $this->input->post('email'),
+            "case_type" => $this->input->post('case_type'),
+            "assign_to" => $this->input->post('assign_to') == '' ? NULL : $this->input->post('assign_to'),
+            "related_conversation" => $this->input->post('related_conversation')
             );
             
             $this->case_model->CreateCase($case);

@@ -189,4 +189,4 @@ for($i=0;$i<count($senttweets);$i++){
     
     </li>
 <?php } ?>
- <div class="filled" style="text-align: center;"><button class="loadmore btn btn-info" value="sendmessage"><i class="icon-chevron-down"></i> LOAD MORE</button></div>
+ <div class="filled" style="text-align: center;"><button class="loadmore btn btn-info" value="sendmessage"><input type="hidden"  class="channel_id" value="<?=$senttweets[0]->channel_id?>"/><input type="hidden" class="channel_id" value="<?=$channel_id?>" /><i class="icon-chevron-down"></i> LOAD MORE</button></div>

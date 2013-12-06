@@ -63,13 +63,14 @@
         </div>
     </div>
     <br clear="all" />
-    <div class="pull-left reply-char-count">
-        <i class="icon-twitter-sign"></i>&nbsp;<span class="reply-tw-char-count">140</span>
-    </div>
-    <div class="pull-right">
-        <button class="dm_send btn btn-primary btn-small btn-send-dm"  type="button" value="<?=$mentions[$i]->twitter_user_id;?>" >SEND</button>    
-               <input type="hidden" class="screen_name" value="<?php echo $mentions[$i]->screen_name; ?>" />
-    </div>
+    <br/>
+        <div class="pull-left reply-char-count">
+            <i class="icon-twitter-sign"></i>&nbsp;<span class="reply-tw-char-count">140</span>
+        </div>
+        <div class="pull-right">
+            <button class="dm_send btn btn-primary btn-small btn-send-dm"  type="button" value="<?=$mentions[$i]->twitter_user_id;?>" >SEND</button>    
+                   <input type="hidden" class="screen_name" value="<?php echo $mentions[$i]->screen_name; ?>" />
+        </div>
     <br clear="all" />
     <div class="dm-status hide">MESSAGE SENT</div>
 </div>

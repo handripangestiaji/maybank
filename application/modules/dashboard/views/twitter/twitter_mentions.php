@@ -144,12 +144,12 @@ for($i=0;$i<count($mentions);$i++){
         <div class="row-fluid">
             <span class="dm-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
             <div class="pull-left">
-                <select style="width: 130px;">
+                <select style="width: 40%;">
                     <option value="keyword">Feedback</option>
                     <option value="user">Enquiry</option>
                     <option value="keyword">Complaint</option>
                 </select>
-                <select style="width: 130px;">
+                <select style="width: 40%;">
                     <option value="keyword">Accounts & Banking</option>
                     <option value="user">Cards</option>
                     <option value="keyword">Investment</option>

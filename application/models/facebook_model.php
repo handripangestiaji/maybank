@@ -82,9 +82,9 @@ class facebook_model extends CI_Model
         "query4" : "Select page_id, name, username from page where page_id in (select actor_id from #query1) or page_id in (select fromid from #query2)"
         }';
 	$requestResult = curl_get_file_contents('https://graph.facebook.com/fql?q='.urlencode($fql)."&access_token=".$access_token);
-
+	$result  = json_decode($requestResult);
 	if(is_array($result->data)){
-	    $result  = json_decode($requestResult);
+	    
 	    $postList = $result->data[0]->fql_result_set;
 	    $comment = $result->data[1]->fql_result_set;
 	    $page_list = $result->data[3]->fql_result_set;

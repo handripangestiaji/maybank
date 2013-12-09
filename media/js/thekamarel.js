@@ -821,7 +821,9 @@ $(function(){
                             type: "POST",
                             data: {
                                 action:'retweet',
-                                str_id: $(this).siblings(".str_id").val()
+                                str_id: $(this).siblings(".str_id").val(),
+                                log_action:'retweet_twitter'
+
                                 },
                             success: function()
                             {
@@ -840,7 +842,8 @@ $(function(){
                             data: {
                                     action:'replayTweet',
                                     content:$(this).parent().siblings(".replaycontent").val(),
-                                    str_id: $(this).val()
+                                    str_id: $(this).val(),
+                                    log_action:'reply_twitter'
                                     },
                             success: function(data)
                             {
@@ -859,7 +862,8 @@ $(function(){
                                     action:'dm_send',
                                     content:$(this).parent().siblings(".replaycontent").val(),
                                     screen_name: $(this).siblings(".screen_name").val(),
-                                    friendid: $(this).val()
+                                    friendid: $(this).val(),
+                                    log_action:'reply_dm_twitter'
                                     },
                             success: function(data)
                             {
@@ -876,7 +880,8 @@ $(function(){
                             type: "POST",
                             data: {
                                     action:'favorit',
-                                    str_id: $(this).siblings(".str_id").val()
+                                    str_id: $(this).siblings(".str_id").val(),
+                                    log_action:'favorit_twitter',
                                     },
                             success: function()
                             {
@@ -893,7 +898,8 @@ $(function(){
                             type: "POST",
                             data: {
                                     action:'follow',
-                                    followid: $(this).siblings(".followid").val()
+                                    followid: $(this).siblings(".followid").val(),
+                                    log_action:'follow_twitter',
                                     },
                             success: function()
                             {
@@ -910,7 +916,8 @@ $(function(){
                             type: "POST",
                             data: {
                                     action:'unfollow',
-                                    followid: $(this).siblings(".followid").val()
+                                    followid: $(this).siblings(".followid").val(),
+                                    log_action:'unfollow_twitter',
                                     },
                             success: function()
                             {
@@ -926,7 +933,8 @@ $(function(){
                             url : BASEURL + 'dashboard/media_stream/FbLikeStatus',
                             type: "POST",
                             data: {
-                                    post_id: $(this).val()
+                                    post_id: $(this).val(),
+                                    log_action:'like_facebook',
                                     },
                             success: function()
                             {
@@ -943,7 +951,8 @@ $(function(){
                             type: "POST",
                             data: {
                                     post_id:$(this).val(),
-                                    comment: $(this).parent().siblings(".reply_comment").val()
+                                    comment: $(this).parent().siblings(".reply_comment").val(),
+                                    log_action:'reply_facebook',
                                     },
                             success: function()
                             {

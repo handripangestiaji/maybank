@@ -181,7 +181,7 @@ class Socialmedia extends MY_Controller {
             "post_stream_id" => $post_id
         );
         $post_ids= $this->twitter_model->ReadTwitterData($filter,1);       
-        //print_r($post_ids);
+        print_r($post_ids);
         $db_log=$this->action_model->actionLog($log_action,$post_ids[0]->channel_id,$currentTime->format("Y-m-d H:i:s"),$post_ids[0]->post_stream_id,$result_post_id,$post_ids[0]->post_id,$this->session->userdata['user_id']);
         
     }

@@ -91,7 +91,6 @@ class Users extends MY_Controller {
 		    $pass .= mb_substr($chars, $index, 1);
 		    }
 		    $created_by = $this->session->userdata('user_id') == 0 ? NULL : $this->session->userdata('user_id');
-		    
 		    $timezone = new DateTimeZone("Europe/London");
 		    $time = new DateTime(date("Y-m-d H:i:s e"), $timezone);
 		    $data=array(
@@ -111,17 +110,16 @@ class Users extends MY_Controller {
 				'created_at' => $time->format("Y-m-d H:i:s"),
 				'created_by' => $created_by
 			 );
-		   
 		    
 		    $this->users_model->insert_user($data);
 		  
 				  $this->email->set_newline("\r\n");
-				  $this->email->from('eko.purnomo@icloud.com','eko_purnomo_(icloud)');
+				  $this->email->from('maybank@gmail.com','maybank');
 				  $this->email->to($this->input->post('email'));
 				  
 				  $this->email->subject('New Registration');
-				  $this->email->message('Thank you for registering<br />Your username <b>'.$this->input->post('userID').'</b> and password <b>'.$pass.'</b> for login in application.');
-				  
+				  $template = curl_get_file_contents(base_url('mail_template/NewUser/'.$this->input->post('userID').'/'.$pass));
+				  $this->email->message($template);
 				  $this->email->send();
 		    
 		    $this->session->set_flashdata('succes', TRUE);

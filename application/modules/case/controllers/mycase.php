@@ -34,7 +34,8 @@ class mycase extends CI_Controller{
             "email" => $this->input->post('email'),
             "case_type" => $this->input->post('case_type'),
             "assign_to" => $this->input->post('assign_to') == '' ? NULL : $this->input->post('assign_to'),
-            "related_conversation" => $this->input->post('related_conversation')
+            "related_conversation" => $this->input->post('related_conversation'),
+            "post_id" => $this->input->post('post_id')
             );
             
             $this->case_model->CreateCase($case);

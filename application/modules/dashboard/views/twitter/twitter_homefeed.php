@@ -4,6 +4,7 @@ $timezone=new DateTimeZone($this->config->item('timezone'));
 for($i=0;$i<count($homefeed);$i++){
 ?>
     <li <?php if($homefeed[$i]->is_read==0){echo 'class="unread-post"';} ?>>
+        <input type="hidden" class="postId" value="<?php echo $homefeed[$i]->post_id; ?>" />
         <div class="circleAvatar"><img src="<?php echo $homefeed[$i]->profile_image_url;?>" alt=""></div>
         <div class="read-mark <?php if($homefeed[$i]->is_read==0){echo 'redText';} else { echo 'greyText'; } ?>"><i class="icon-bookmark icon-large"></i></div>
         <br />
@@ -24,7 +25,18 @@ for($i=0;$i<count($homefeed);$i++){
             </span>
           
         </p>
-    <p><?php  echo linkify(html_entity_decode($homefeed[$i]->text), true);  ?></p>
+    <p><?php
+    $pattern = "/_(?=[^>]*<)/";
+    $html = html_entity_decode($homefeed[$i]->text);
+    foreach($entities->urls as $url){
+        $html = substr($html, 0, $url->indices[0]);
+        $html .= "<a href='$url->expanded_url' target='_blank'>$url->display_url</a>";
+        $html .= substr($homefeed[$i]->text, $url->indices[1] );
+        
+    }
+    $html =  linkify(html_entity_decode($html), true, false);
+    echo $html;
+    ?></p>
     <p><?php
     
     if(isset($entities->media[0])):    ?>
@@ -212,4 +224,6 @@ for($i=0;$i<count($homefeed);$i++){
     
     </li>
 <?php } ?>
+<?php if(count($homefeed) > 0):?>
 <div class="filled" style="text-align: center;"><input type="hidden" class="channel_id" value="<?=$homefeed[0]->channel_id?>" /><input type="hidden"  class="channel_id" value="<?=$homefeed[0]->channel_id?>"/><input type="hidden" class="total_groups" value="<?=$total_groups?>" /><input type="hidden"  class="looppage" value=""/><button class="loadmore btn btn-info" value="feed"><i class="icon-chevron-down"></i> LOAD MORE</button></div>
+<?php endif;?>

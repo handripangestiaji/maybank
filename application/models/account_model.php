@@ -68,4 +68,9 @@ class account_model extends CI_Model
 	}
     }
     
+    function DeleteChannel($channel_id){
+	$this->db->where('channel_id', $channel_id);
+	$this->db->delete('channel');
+    }
+    
 }

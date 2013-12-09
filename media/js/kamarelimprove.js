@@ -87,11 +87,19 @@ $(function(){
         var modalBody = $(this).parent().parent().find('.modal-body');
         currentElement = $(this);
         var relatedConversation = '';
+        var selected = 0;
         modalBody.find('input[type="checkbox"]').each(function(){
             if($(this).is(":checked")){
                 relatedConversation += $(this).val() +",";
+                selected ++ ;
             }
         });
+        
+        if(selected > 0){
+            
+            
+            $('#relatedCoversation-'+$(this).val()).parent().find('.btn-add-related').html('Add Related Conversation (' + selected +' added)');
+        }
         
         $('#relatedCoversation-'+$(this).val()).val(relatedConversation);
     });

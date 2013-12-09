@@ -117,5 +117,6 @@ for($i=0; $i<count($fb_pm);$i++):?>
     <!-- END CASE -->  
 </li>
 <?php endfor;?>
-
+<?php if(count($fb_pm) > 0):?>
 <div class="filled" style="text-align: center;"><input type="hidden" class="total_groups" value="<?=$total_groups?>" /><input type="hidden"  class="channel_id" value="<?=$fb_pm[0]->channel_id?>"/><input type="hidden"  class="looppage" value=""/><button class="loadmore btn btn-info" value="privateMessages"><i class="icon-chevron-down"></i> LOAD MORE</button></div>
+<?php endif?>

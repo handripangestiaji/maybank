@@ -7,19 +7,19 @@
             <div class="control-group">
                 <label class="control-label">Full URL Path</label>
                 <div class="controls">
-                  <input type="text" class="span10">
+                  <input type="text" class="span10" name="shorturl[long_url]">
                 </div>
             </div>
             <div class="control-group">
                 <label class="control-label">Description</label>
                 <div class="controls">
-                  <textarea class="span10"></textarea>
+                  <textarea class="span10" name="shorturl[description]"></textarea>
                 </div>
             </div>
             <div class="control-group">
                 <label class="control-label">Campaign</label>
                 <div class="controls">
-                    <select id="uniqueSelect">
+                    <select id="uniqueSelect" name="shorturl[campaign_id]">
                     	<?php if($campaigns): ?>
                     		<?php $i=1;?>
                     		<?php foreach($campaigns as $v): ?>
@@ -29,6 +29,7 @@
                     </select>
                 </div>
             </div>
+            <!--
             <div class="control-group">
                 <label class="control-label">Product</label>
                 <div class="controls">
@@ -48,10 +49,12 @@
                   <input type="text" class="span10">
                 </div>
             </div>
+            -->
             <div class="control-group">
                 <label class="control-label">Short URL</label>
                 <div class="controls">
-                  http://maybk.co/<input type="text" class="span10" style="width: 100px;" value="<?php echo $code?>"/>
+                  http://maybk.co/<input type="text" class="span10" style="width: 100px;" value="<?php echo $code['shortcode']?>"/>
+                  <input type="hidden" name="shorturl[id]" value="<?php echo $code['url_id']?>" />
                 </div>
             </div>
             <div class="control-group">

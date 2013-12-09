@@ -115,7 +115,7 @@
                                 }
                             ?>
                         </td>
-                        <td>Nicole Lee</td>
+                        <td><?php echo $gr->name;?></td>
                         <td><a href="<?php echo site_url();?>/users/edit_group/<?php echo $gr->group_id;?>"><span><i class="icon-pencil"></i></span></a></td>
                         <!--<td><a href="<?php echo site_url();?>/users/delete_group/<?php echo $gr->group_id;?>"><span><i class="icon-remove"></i></span></a></td>-->
                         <td><a href="" onclick="show_confirm('<?php echo $gr->group_id;?>');return false;"><span><i class="icon-remove"></i></span></a></td>

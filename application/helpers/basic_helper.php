@@ -242,3 +242,21 @@ function CheckValidation($dataToValidated, $validationObj){
     
     return count($error) > 0 ? $error : true ;
 }
+
+
+function linkify($string, $twitter=false) {
+
+    // reg exp pattern
+    $pattern = "/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/";
+
+    // convert string URLs to active links
+    $new_string = preg_replace($pattern, "<a href=\"\\0\">\\0</a>", $string);
+
+    if ($twitter) {
+        $pattern = '/@([a-zA-Z0-9_]+)/';
+        $replace = '<a href="http://twitter.com/\1" target="_blank">@\1</a>';
+        $new_string = preg_replace($pattern, $replace, $new_string);
+    }
+
+    return $new_string;
+}

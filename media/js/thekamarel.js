@@ -563,23 +563,42 @@ $(function(){
                             }
                         );
                         
-                        $(this).on('click','.read-mark',
+                        $(this).on('click','.read-mark, .btn-case',
                             function(){
                             var me = $(this);
                             $.ajax({
                                     url : BASEURL + 'dashboard/media_stream/ReadUnread',
                                     type: "POST",
                                     data: {
-                                            post_id:me.siblings('.postId').val(),
-                                            },
+                                        post_id:me.closest('li').find('.postId').val(),
+                                        read : $(this).val() == 'case' ? 1 : null
+                                    },
                                     success: function(result)
                                     {
+                                        
+                                        var currentNumber = 0;
+                                        try{
+                                            currentNumber = parseInt(me.closest('.container-fluid').siblings('.floatingBoxMenu').find('li.active .notifyCircle').html());
+                                        }
+                                        catch(e){
+                                            currentNumber = 0;
+                                        }
                                         if(result == 1){
+                                            currentNumber -=  1;
+                                            currentNumber = currentNumber < 0 ? 0 : currentNumber;
                                             me.removeClass('redText').addClass('greyText');
                                         }
                                         else{
+                                            currentNumber += 1;
                                             me.removeClass('greyText').addClass('redText');
                                         }
+                                        
+                                        me.closest('.container-fluid').siblings('.floatingBoxMenu').find('li.active .notifyCircle').html(currentNumber);
+                                        if(currentNumber == 0){
+                                            me.closest('.container-fluid').siblings('.floatingBoxMenu').find('li.active .notifyCircle').hide();
+                                        }
+                                        else
+                                            me.closest('.container-fluid').siblings('.floatingBoxMenu').find('li.active .notifyCircle').show();
                                     },
                                 });
                         });
@@ -795,15 +814,18 @@ $(function(){
                     
                      $(this).on('click','.retweet',
                         function() {
+                        var retweetBtn = $(this);
+                        retweetBtn.attr('disabled', 'disabled');
                         $.ajax({
                             url : BASEURL + 'dashboard/socialmedia/twitterAction',
                             type: "POST",
                             data: {
-                                    action:'retweet',
-                                    str_id: $(this).siblings(".str_id").val()
-                                    },
+                                action:'retweet',
+                                str_id: $(this).siblings(".str_id").val()
+                                },
                             success: function()
                             {
+                                
                                 $('.compose-post-status').show();
                                 $('.compose-post-status').fadeOut(5000);
                             },
@@ -935,13 +957,30 @@ $(function(){
                     looppage=2;
                     $(this).on('click','.loadmore',
                         function() {
-  //                          alert($(this).val());
-                        	 loading = true;
-                              action=$(this).val();    
+                            loading = true;
+                            action=$(this).val();    
                             group_numbers=2;
-                            channel_ids=$(this).siblings(".channel_id").val();
+                            channel_ids = $(this).siblings(".channel_id").val();
+                            me = $(this);
+                            $(this).closest('.floatingBoxContainers').load(BASEURL + 'dashboard/media_stream/loadmore/'+action+'/'+looppage+'/'+channel_ids, function(){
+                                var currentNumber = $(this).closest('.floatingBoxContainers').find('.unread-post').length;
+                                try{
+                                    currentNumber += parseInt($(this).closest('.container-fluid').siblings('.floatingBoxMenu').find('li.active .notifyCircle').html());
+                                }
+                                catch(exception){
+                                    currentNumber = $(this).closest('.floatingBoxContainers').find('.unread-post').length;
+                                }
+                                
+                                
+                                $(this).closest('.container-fluid').siblings('.floatingBoxMenu').find('li.active .notifyCircle').html(currentNumber);
+                                if(currentNumber == 0){
+                                    me.closest('.container-fluid').siblings('.floatingBoxMenu').find('li.active .notifyCircle').hide();
+                                }
+                                else
+                                    me.closest('.container-fluid').siblings('.floatingBoxMenu').find('li.active .notifyCircle').show();
+                            });
                             
-                           $('#'+action).load(BASEURL + 'dashboard/media_stream/loadmore/'+action+'/'+looppage+'/'+channel_ids);
+                            
                             looppage++;
                             loading = false;
                     });                  

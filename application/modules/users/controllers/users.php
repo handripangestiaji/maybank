@@ -44,6 +44,7 @@ class Users extends MY_Controller {
      $data['links'] = $this->pagination->create_links();
      $data['role'] = $this->users_model->select_role();
      $data['count'] = $this->users_model->count_record();
+     $data['show1'] = $this->users_model->select_user();
      
      $this->load->view('users/index',$data);
     }
@@ -142,19 +143,99 @@ class Users extends MY_Controller {
     
     function update_user()
     {
-	  $id = $this->input->post('userID');
-	  $data = array(
-		      'full_name' => $this->input->post('fullName'),
-		      'display_name' => $this->input->post('displayName'),
-		      'email' => $this->input->post('email'),
-		      'role_id' => $this->input->post('optRole'),
-		      'group_id' => $this->input->post('optGroup')
-			);
+	  $config = array(
+			      'upload_path'   => 'media/dynamic/',
+			      'allowed_types' => 'gif|jpg|png',
+			      'max_size'      => '2048',
+			      'max_width'     => '1024',
+			      'max_height'    => '768'
+			       );
+	       
+	       $this->upload->initialize($config);
+	       
+	  if(!empty($_FILES['userfile']['tmp_name']))
+	  {
+	       if ( ! $this->upload->do_upload())
+		{
+		    //$this->upload->display_errors();
+		    //$this->session->set_flashdata('failed', TRUE);
+		    redirect('users');
+		}
+		else
+		{
+		    $image = $this->upload->data();
+		    $dir = "media/dynamic/".$image['file_name'];
+		    
+		    $id = $this->input->post('userID');
+		    $data = array(
+				'full_name' => $this->input->post('fullName'),
+				'display_name' => $this->input->post('displayName'),
+				'email' => $this->input->post('email'),
+				'role_id' => $this->input->post('optRole'),
+				'group_id' => $this->input->post('optGroup'),
+				'image_url' => $dir,
+				'description' => $this->input->post('description'),
+				'location' => $this->input->post('location'),
+			        'web_address' =>$this->input->post('web_address'),
+				'is_active' => $this->input->post('is_active')
+				  );
+		    
+		    $this->users_model->update_user($id,$data);
+		    
+		    $username = $this->session->userdata('user_id');
+		    $user_login = $this->users_model->select_user_login($username);
+		    
+		    $data1 = array(
+                                'user_id' => $username,
+				'full_name'=> $user_login->row()->full_name,
+				'display_name' => $user_login->row()->display_name,
+				'role_name' => $user_login->row()->role_name,
+				'web_address' => $user_login->row()->web_address,
+				'image_url' => $user_login->row()->image_url,
+				'description' => $user_login->row()->description,
+                                'is_login' => TRUE
+                            );
+                    $this->session->set_userdata($data1);
+		    
+		    $this->session->set_flashdata('info', TRUE);
+		    redirect('users');
+		}
+	  }
 	  
-	  $this->users_model->update_user($id,$data);
-	  
-	  $this->session->set_flashdata('info', TRUE);
-	  redirect('users');
+	  elseif(empty($_FILES['userfile']['tmp_name']))
+	  {
+		    $id = $this->input->post('userID');
+		    $data = array(
+				'full_name' => $this->input->post('fullName'),
+				'display_name' => $this->input->post('displayName'),
+				'email' => $this->input->post('email'),
+				'role_id' => $this->input->post('optRole'),
+				'group_id' => $this->input->post('optGroup'),
+				'description' => $this->input->post('description'),
+				'location' => $this->input->post('location'),
+			        'web_address' =>$this->input->post('web_address'),
+				'is_active' => $this->input->post('is_active')
+				  );
+		    
+		    $this->users_model->update_user($id,$data);
+		    
+		    $username = $this->session->userdata('user_id');
+		    $user_login = $this->users_model->select_user_login($username);
+		    
+		    $data1 = array(
+                                'user_id' => $username,
+				'full_name'=> $user_login->row()->full_name,
+				'display_name' => $user_login->row()->display_name,
+				'role_name' => $user_login->row()->role_name,
+				'web_address' => $user_login->row()->web_address,
+				'description' => $user_login->row()->description,
+                                'is_login' => TRUE
+                            );
+                    $this->session->set_userdata($data1);
+		    
+		    $this->session->set_flashdata('info', TRUE);
+		    redirect('users');
+	  }
     }
     
     function update_password()
@@ -176,6 +257,29 @@ class Users extends MY_Controller {
 	  {
 	       echo 'GAGAL';
 	  }
+    }
+    
+    function update_user_login()
+    {
+	  $id = $this->input->post('user_id');
+	  
+	  $data = array(
+			 'description' => $this->input->post('about-me'),
+			 'display_name' => $this->input->post('display-name')
+			);
+
+	  $this->users_model->update_user($id,$data);
+	  
+	  $user_login = $this->users_model->select_user_login($id);
+		    $data1 = array(
+                                'user_id' => $id,
+				'display_name' => $user_login->row()->display_name,
+				'description' => $user_login->row()->description,
+                                'is_login' => TRUE
+                            );
+                    $this->session->set_userdata($data1);
+	  
+	  redirect('users');
     }
     
     function delete($id)
@@ -403,8 +507,8 @@ class Users extends MY_Controller {
      
 	  $data['links'] = $this->pagination->create_links();
 	  $data['count'] = $this->users_model->count_record_group();
-			 $data['channel'] = $this->users_model->select_channel();
-			 $data['group_detail'] = $this->users_model->select_user_group_d();
+	  $data['channel'] = $this->users_model->select_channel();
+	  $data['group_detail'] = $this->users_model->select_user_group_d();
 			
 	  $this->load->view('users/group',$data);
     }

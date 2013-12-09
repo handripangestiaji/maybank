@@ -105,10 +105,10 @@
                         <?php if($row->is_active==1){?>
                             <td><?php echo 'Active';?></td>
                         <?php }else{?>
-                            <td><?php echo 'Not Active';?></td>
+                            <td><?php echo 'Deactived';?></td>
                         <?php }?>
                         <td><?php echo $row->created_at;?></td>
-                        <td><?php echo $row->created_by;?></td>
+                        <td><?php echo $row->created_by_name;?></td>
                         <td><a href="<?php echo site_url();?>/users/edit/<?php echo $row->user_id;?>"><span><i class="icon-pencil"></i></span></a></td>
                         <td>
                             <a href="" onclick="show_confirm('<?php echo $row->user_id;?>');return false;"><span><i class="icon-remove"></i></span></a>

@@ -166,6 +166,7 @@
             <input type="text" name="display-name" value='<?php echo $this->session->userdata('display_name'); ?>'/>
             <p><strong>About Me</strong></p>
             <textarea class="about-me" name="about-me" placeholder="Compose Message"><?php echo $this->session->userdata('description'); ?></textarea>
+
             <div class="sidebarLine"></div>
             <button class="btn btn-primary" type="submit">Save</button>
             <button class="btn sidebar-btn-cancel" type="button">Cancel</button>

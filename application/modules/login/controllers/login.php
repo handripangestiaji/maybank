@@ -139,7 +139,7 @@ class Login extends Login_Controller {
 		    $this->users_model->update_pass($id,$data);
 		    
 		    $this->email->set_newline("\r\n");
-		    $this->email->from('maybank@gmail.com','maybank');
+		    $this->email->from('tes@gmail.com','maybank');
 		    $this->email->to($email);
 		    
 		    $this->email->subject('Forgot Password');

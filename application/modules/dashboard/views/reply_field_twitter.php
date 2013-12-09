@@ -45,11 +45,7 @@
                 </div>
                 <!-- img-place end -->
             </div>
-            <!-- img-list-upload end -->  
-            <div class="reply-img-list-upload">
-                <input id="demo_box_1" class="css-checkbox" type="checkbox" checked/>
-                <label for="demo_box_1" class="css-label">Hide URL</label>
-            </div>
+            <!-- img-list-upload end -->
         </div>
     </div>
     <div id="reply-url-show" class="hide">

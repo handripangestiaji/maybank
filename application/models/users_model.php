@@ -90,6 +90,8 @@ class Users_model extends CI_Model
     function delete_user($id)
     {
         $this->db->where('user_id',$id);
+        $this->db->delete($this->activity);
+        $this->db->where('user_id',$id);
         return $this->db->delete($this->user);
     }
     

@@ -54,6 +54,8 @@ class case_model extends CI_Model{
             )
         );
         
+        
+        
         $user = is_array($user) && count($user) > 0 ? $user[0] : $user;
         if($user == null)
             $this->email->to($case['email']);

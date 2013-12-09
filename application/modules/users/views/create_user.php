@@ -25,7 +25,9 @@
                 <table>
                     <tr>
                         <td>User ID *</td>
-                        <td><input type="text" name="userID" /></td>
+                        <td><input type="text" name="userID" />
+                            <?php echo form_error('userID'); ?>
+                        </td>
                     </tr>
                     
                     <tr>

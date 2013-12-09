@@ -17,15 +17,23 @@ for($i=0;$i<count($homefeed);$i++){
             $date=new DateTime($homefeed[$i]->created_at.' Europe/London');
             $date->setTimezone($timezone);
             echo $date->format('l, M j, Y H:i:s');
+            
+            $entities = json_decode($homefeed[$i]->twitter_entities);
+            
             ?>
             </span>
           
         </p>
-    <p><?php echo $homefeed[$i]->text; ?></p>
+    <p><?php  echo linkify(html_entity_decode($homefeed[$i]->text), true);  ?></p>
+    <p><?php
     
+    if(isset($entities->media[0])):    ?>
+        <img src="<?=$entities->media[0]->media_url_https?>" alt="" />
+    <?php endif;?>
+    </p>
     <p><button type="button" class="btn btn-warning btn-mini">OPEN</button>
     <?php if ($homefeed[$i]->retweet_count>=1) { ?>
-        <button type="button" class="btn btn-inverse btn-mini"><i class="icon-retweet"><?=$homefeed[$i]->retweet_count?></i></button>
+        <button type="button" class="btn btn-inverse btn-mini"><i class="icon-retweet"> <?=$homefeed[$i]->retweet_count?></i></button>
     <?php } ?>    
     <?php if ($homefeed[$i]->favorited=='1') { ?>
         <button type="button" class="btn btn-inverse btn-mini"><i class="icon-star">&nbsp;</i></button>

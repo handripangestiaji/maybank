@@ -19,16 +19,24 @@ for($i=0;$i<count($mentions);$i++){
             <span><?php 
             $date=new DateTime($mentions[$i]->created_at.' Europe/London');
             $date->setTimezone($timezone);
-            echo $date->format('l, M j, Y H:i:s');
+            echo $date->format('l, M j, Y H:i');
             ?></span>
-           
         </p>
     <p><?php 
-        echo $mentions[$i]->text; 
+        echo linkify(html_entity_decode($mentions[$i]->text),true); 
         
     ?></p>
+    <p><?php if(isset($entities->media[0])):    ?>
+        <img src="<?=$entities->media[0]->media_url_https?>" alt="" />
+    <?php endif;?>
+    </p>
+    <p>
+    <?php if($mentions[$i]->case_id):?>
+        <button type="button" class="btn btn-purple" value="<?=$mentions[$i]->case_id?>">CASE ID #<?=$mentions[$i]->case_id?></button>
+    <?php else:?>
+        <button type="button" class="btn btn-warning btn-mini">OPEN</button>
+    <?php endif?>
     
-    <p><button type="button" class="btn btn-warning btn-mini">OPEN</button>
     <?php if ($mentions[$i]->retweet_count>=1) { ?>
         <button type="button" class="btn btn-inverse btn-mini"><i class="icon-retweet"><?=$mentions[$i]->retweet_count?></i></button>
     <?php } ?>    

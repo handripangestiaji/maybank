@@ -64,4 +64,10 @@ class mycase extends CI_Controller{
         echo json_encode($this->twitter_model->ReadTwitterData($filter, 3));
     }
     
+    
+    function CaseRelatedConversation(){
+        
+        
+    }
+    
 }

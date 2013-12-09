@@ -19,8 +19,12 @@ for($i=0;$i<count($senttweets);$i++){
             //echo date('l, M j, Y H:i:s',strtotime($senttweets[$i]->created_at));?></span>
             <i class="icon-play-circle moreOptions pull-right"></i>
         </p>
-    <p><?php echo $senttweets[$i]->text; ?></p>
-    
+    <p><?php  echo linkify(html_entity_decode($senttweets[$i]->text),true);  ?></p>
+     <p><?php
+    if(isset($entities->media[0])):    ?>
+        <img src="<?=$entities->media[0]->media_url_https?>" alt="" />
+    <?php endif;?>
+    </p>
     <p><button type="button" class="btn btn-warning btn-mini">OPEN</button>
     <?php if ($senttweets[$i]->retweet_count>=1) { ?>
         <button type="button" class="btn btn-inverse btn-mini"><i class="icon-retweet">&nbsp;</i></button>

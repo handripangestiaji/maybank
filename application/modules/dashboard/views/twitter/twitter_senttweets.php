@@ -26,7 +26,7 @@ for($i=0;$i<count($senttweets);$i++){
     <?php endif;?>
     </p>
     <p><button type="button" class="btn btn-warning btn-mini">OPEN</button>
-    <?php if ($senttweets[$i]->retweet_count>=1) { ?>
+    <?php if ($senttweets[$i]->retweeted==1) { ?>
         <button type="button" class="btn btn-inverse btn-mini"><i class="icon-retweet">&nbsp;</i></button>
     <?php } ?>    
     <?php if ($senttweets[$i]->favorited=='1') { ?>
@@ -35,7 +35,7 @@ for($i=0;$i<count($senttweets);$i++){
     
     <p>
         <a role="button" class="btn-engagement"><i class="icon-eye-open"></i> Engagement</a> |
-        <a data-toggle="modal" role="button" href="#modaltweet<?php echo $i; ?>" ><i class="icon-retweet greyText"></i><?php //echo $senttweets[$i]->retweeted; ?> re-tweets</a> | 
+        <a data-toggle="modal" role="button" href="#modaltweet<?php echo $i; ?>" ><i class="icon-retweet greyText"></i><?php if($senttweets[$i]->retweet_count>0)echo $senttweets[$i]->retweet_count; ?> re-tweets</a> |
         <span class="btn-mark-as-read cyanText" style="display: <?php if($senttweets[$i]->is_read==1){echo 'none';} ?>"><i class="icon-bookmark"></i> Mark as Read</span>
         <span class="btn-mark-as-unread cyanText" style="display: <?php if($senttweets[$i]->is_read==0){echo 'none';} ?>"><i class="icon-bookmark-empty"></i> Mark as Unread</span>
     </p>
@@ -47,34 +47,33 @@ for($i=0;$i<count($senttweets);$i++){
             <span class="engagement-btn-close btn-close pull-right">Close <i class="icon-remove-sign"></i></span>
         </div>
         <br>
-        <div class="engagement-body">
-            <span class="engagement-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>    
-            <p class="headLine">
-                <span class="author">John Doe</span>
-                <i class="icon-circle"></i>
-                <span>posted a <span class="cyanText">comment</span></span>
-                <i class="icon-circle"></i>
-                <span>2 hours ago</span>
-            </p>
-            <div>
-                <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
-                <p><button type="button" class="btn btn-warning btn-mini">OPEN</button><button class="btn btn-primary btn-mini" style="margin-left: 5px;">RE-TWEET</button></p>
-            </div>
-        </div>
-        <div class="engagement-body">
-            <span class="engagement-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>    
-            <p class="headLine">
-                <span class="author">John Doe</span>
-                <i class="icon-circle"></i>
-                <span>posted a <span class="cyanText">comment</span></span>
-                <i class="icon-circle"></i>
-                <span>2 hours ago</span>
-            </p>
-            <div>
-                <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
-                <p><button type="button" class="btn btn-warning btn-mini">OPEN</button><button class="btn btn-primary btn-mini" style="margin-left: 5px;">RE-TWEET</button></p>
-            </div>
-        </div>
+        <?php 
+               // $filtera["b.twitter_user_id"] = $mentions[$i]->twitter_user_id;
+                $filters["b.post_id = "] = $senttweets[$i]->in_reply_to.' ';     
+                $comment=$this->twitter_model->ReadTwitterData($filters, 3);
+               
+                for($j=0;$j<count($comment);$j++){
+        ?>
+                <div class="engagement-body">
+                    <span class="engagement-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>    
+                    <p class="headLine">
+                        <span class="author">
+                            <?php
+                            $users=json_decode($comment[$j]->twitter_entities);
+                            echo $users->user_mentions[0]->name;
+                            ?>
+                        </span>
+                        <i class="icon-circle"></i>
+                        <span>posted a <span class="cyanText">comment</span></span>
+                        <i class="icon-circle"></i>
+                        <span>2 hours ago</span>
+                    </p>
+                    <div>
+                        <p>"<?=$comment[$j]->text?>"</p>
+                        <p><input type="hidden" class="str_id" value="<?php echo $comment[$j]->post_stream_id; ?>" /><button type="button" class="btn btn-warning btn-mini">OPEN</button><button class="retweet btn btn-primary btn-mini" style="margin-left: 5px;">RE-TWEET</button></p>
+                    </div>
+                </div>
+        <?php } ?>
         <!-- ==================== CONDENSED TABLE HEADLINE ==================== -->
         <div class="containerHeadline">
             <i class="icon-table"></i><h2>Action Log</h2>

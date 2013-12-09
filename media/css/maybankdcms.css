@@ -5,12 +5,29 @@
 	top: auto;
 	margin-top: 7px;
 }
+
+.brand img{
+	height: 25px;
+}
+
+.signInRow{
+	font-family: Trebuchet MS, Arial, Helvetica, sans-serif;
+}
+
+.signInRow a{
+	font-size: 11px;
+}
 /*==============================================================================================
 ======================================== DASHBOARD =============================================
 ==============================================================================================*/
 
-.compose-form {
-	margin-bottom: 0px;
+.floatingBoxContainers li p{
+	padding: 0px 5px 0px 0px;
+	margin-left: 45px;
+}
+
+.floatingBoxContainers li p.headLine{
+	margin: 5px 0px;
 }
 
 .compose-icons {
@@ -68,15 +85,22 @@
 	border: 0px solid #F00;
 }
 
-.compose-expanded .compose-form {
+.compose-expanded .compose-form{
 	width: 585px;
 	margin-top: 15px;
 	border: #CCC 1px solid;
-	
 	padding: 15px;
 	float: left;
+	margin-bottom: 0px;
 }
 
+#reply-url-show, .compose-form{
+	width: 100%;
+	border: #CCC 1px solid;
+	float: left;
+	margin-bottom: 0px;
+}
+  
 .img-attached
 {
 	background: #e2e2e3;
@@ -315,7 +339,7 @@ border-radius: 0px;
 	display: none;
 }
 
-a#close-img, a#close-cal, a#close-url
+a#close-img, a#close-cal, a#close-url, a#close-reply-url-show, a#close-reply-img-show
 {
 	position: absolute;
 	color: #111111;
@@ -346,7 +370,7 @@ a#close-img, a#close-cal, a#close-url
 	height: 100%;
 }
 
-a#remove-img
+a#remove-img, a#reply-remove-img
 {
 	position: absolute;
 	color: #FF0000;
@@ -482,11 +506,33 @@ border-radius: 3px;
 	float: left;
 }
 
+#reply-url-show .img-url{
+	width: 100%;
+}
+
 #url-show .content-url{
 	width: 55%;
-	margin-left: 10px;
+	margin-left: 5%;
 	float: right;
 	text-align: left;
+}
+
+#reply-url-show .content-url{
+	margin-top: 10px;
+	width: 100%;
+	text-align: left;
+}
+
+#reply-url-show .content-url p{
+	margin-left: 0px;
+}
+
+#reply-url-show .content-url input{
+	width: 55%;
+}
+
+#reply-url-show .content-url textarea{
+	width: 95%;
 }
 
 #url-show .content-url textarea{
@@ -532,6 +578,10 @@ border-radius: 3px;
 	cursor: pointer;
 }
 
+#reply-url-show{
+	background-color: #e2e2e3; margin: 10px 0px;;
+}
+
 .reply-field, .reply-engagement-field, .dm-field{
 	background-color: #BABABA;
 	margin-top: -10px;
@@ -555,6 +605,16 @@ border-radius: 3px;
 	text-align: center;
 }
 
+.reply-field .reply-insert-link-text{
+	width: 50%;
+	margin-bottom: 0px;
+}
+
+
+.reply-field .reply-insert-link-btn{
+	margin-left: 5px;
+}
+
 .case-field, .case-engagement-field{
 	background-color: #BABABA;
 	margin-top: -10px;
@@ -576,7 +636,27 @@ border-radius: 3px;
 }
 
 #reply-img-show{
-	background-color: #f2f2f2;	
+	background-color: #f2f2f2;
+	margin: 10px 0px;
+}
+
+#reply-img-show .dummyfile{
+	margin-top: 10px;
+	padding: 0px 5px;
+}
+
+#reply-img-show .dummyfile #replyfilename{
+	margin-bottom: 0px;
+}
+
+#reply-img-show .reply-img-list-upload{
+	float: left;
+	width: 100%;
+	padding: 0px 5px;
+}
+
+#reply-img-show .reply-img-list-upload .img-place{
+	margin-bottom: 10px;
 }
 
 #reply-img-show .reply-img-attached{
@@ -602,10 +682,6 @@ div.read-mark {
     cursor: pointer;
 }
 
-ul.floatingBoxContainers li.unread-post{
-	background-color: #fff2f2;
-}
-
 .stream_head li a{
 	cursor: pointer;
 }
@@ -622,6 +698,23 @@ ul.floatingBoxContainers li.unread-post{
 input.related-conversation-check{
 	margin: 0px;
 }
+
+.attachment-modal{
+	width: auto;
+	margin-top: 30px;
+	margin-left: -220px
+}
+
+.attachment-modal button.close{
+	background-color: #fff;
+	margin-left: -24px;
+	padding: 4px;
+}
+
+.specialToggleTable{
+	cursor: pointer;
+}
+
 /*==============================================================================================
 ======================================== C M S =================================================
 ==============================================================================================*/

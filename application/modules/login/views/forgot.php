@@ -4,22 +4,15 @@
       <span class="add-on"><i class="icon-user"></i></span>
       <input type="text" name="username" placeholder="Enter your Email">
     </div>
-    <div class="input-prepend">
-        <p>
-        <a id="submit" href="javascript:void(0);"><button class="btn btn-mini btn-danger" type="button">
-        <i class="icon-ok"></i> 
-        Reset
-        </button></a>
-        <button class="btn btn-mini" type="button" onClick="window.location.href='<?php echo site_url();?>/login'">
-        <i class="icon-remove"></i> 
-        Cancel
-        </button>
-        </p>
-    </div>
+    <div style="margin-bottom: 10px;">
+   <a id="submit" href="javascript:void(0);"><button class="btn btn-mini btn-danger" type="button"><i class="icon-ok"></i> Reset</button></a>
+   <button class="btn btn-mini" type="button" onClick="window.location.href='<?php echo site_url();?>/login'"><i class="icon-remove"></i> Cancel</button>
+   </div>
 </form>
 
 <div class="signInRow">
-    <div><a href="<?php echo site_url();?>/login">Login</a></div>
+    <div class="term"><a href="<?php echo site_url();?>/login"><i class="icon-arrow-left"></i> Back</a></div>
+    <div></div>
 </div>
 
 <script type="text/javascript">

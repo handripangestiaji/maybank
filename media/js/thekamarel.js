@@ -353,6 +353,10 @@ $(function(){
 
                  $( "#fileselectbutton" ).click(function(e){
                     $( "#composeInputImageFile" ).trigger("click");
+                });
+                 
+                 $(this).on('click', '#replyfileselectbutton', function(){
+                    $(this).siblings("#replyInputImageFile" ).trigger("click");
                 }); 
 
                  $( "#closecompose" ).click(function(e){
@@ -380,11 +384,36 @@ $(function(){
                     }
                 });
 
+                $(this).on('change','#replyInputImageFile',function(e){
+                    var val = $(this).val();
+                    var file = val.split(/[\\/]/);
+                    $(this).siblings( "#replyfilename" ).val(file[file.length-1]);
+                    var me = $(this);
+                    if (this.files && this.files[0]) {
+                        var reader = new FileReader();
+                        reader.onload = function (e) {
+                            me.parent().siblings('.reply-img-list-upload').find('#reply-preview-img').show();        
+                            me.parent().siblings('.reply-img-list-upload').find('#reply-preview-img').attr('src', e.target.result);        
+                            me.parent().siblings('.reply-img-list-upload').find('#reply-remove-img').show();
+                            me.parent().siblings('.reply-img-list-upload').find('#reply-remove-img').css('left',me.parent().siblings('.reply-img-list-upload').find('#reply-preview-img').width());
+                        }
+                        reader.readAsDataURL(this.files[0]);
+                    }
+                });
+                
                 var upload_file = $("#composeInputImageFile");
                 $( "#remove-img" ).click(function(){
                     $("#compose-preview-img").hide();
                     $("#remove-img").hide();
                     $("#filename").val('');
+                    upload_file.replaceWith(upload_file = upload_file.clone(true));
+                });
+                
+                $(this).on('click', "#reply-remove-img", function(){
+                    $(this).siblings("#reply-preview-img").hide();
+                    $(this).hide();
+                    $(this).closest('.reply-img-list-upload').siblings('.dummyfile').find("#replyfilename").val('');
+                    var upload_file = $(this).closest('.reply-img-list-upload').siblings('.dummyfile').find("#replyInputImageFile");
                     upload_file.replaceWith(upload_file = upload_file.clone(true));
                 });
                 
@@ -530,7 +559,7 @@ $(function(){
                         
                         $(this).on('click','.btn-engagement',
                             function() {
-                                $(this).parent().siblings('.engagement').show();
+                                $(this).parent().siblings('.engagement').toggle();
                             }
                         );
                         
@@ -551,40 +580,6 @@ $(function(){
                                         else{
                                             me.removeClass('greyText').addClass('redText');
                                         }
-                                    },
-                                });
-                        });
-                        
-                        $(this).on('click','.btn-mark-as-read',function(){
-                            var me = $(this);
-                            $.ajax({
-                                    url : BASEURL + 'dashboard/media_stream/ReadUnread',
-                                    type: "POST",
-                                    data: {
-                                            post_id:$(this).parent().siblings('.postId').val(),
-                                            },
-                                    success: function()
-                                    {
-                                        me.hide();
-                                        me.siblings('.btn-mark-as-unread').show();
-                                        me.parent().siblings('.read-mark').removeClass('redText').addClass('greyText');
-                                    },
-                                });
-                        });
-                        
-                        $(this).on('click','.btn-mark-as-unread',function(){
-                            var me = $(this);
-                            $.ajax({
-                                    url : BASEURL + 'dashboard/media_stream/ReadUnread',
-                                    type: "POST",
-                                    data: {
-                                            post_id:$(this).parent().siblings('.postId').val(),
-                                            },
-                                    success: function()
-                                    {
-                                        me.hide();
-                                        me.siblings('.btn-mark-as-read').show();
-                                        me.parent().siblings('.read-mark').removeClass('greyText').addClass('redText');
                                     },
                                 });
                         });
@@ -693,9 +688,43 @@ $(function(){
                             }
                        });
                     });
+                    
+                    $(this).on('click','.reply-insert-link-btn', function(){
+                        var me = $(this);
+                        me.siblings(".reply-insert-link-text").linkpreview({
+                            previewContainer: me.closest('.pull-left').siblings('#reply-url-show').find('div.reply-url-show-content'),  //optional
+                            //previewContainerClass: ".compose-schedule",
+                            refreshButton: ".reply-insert-link-btn",        //optional
+                            preProcess: function() {                //optional
+                                me.closest('.pull-left').siblings("#reply-url-show").show();
+                                me.closest('.pull-left').siblings("#reply-url-show").find('div.reply-url-show-content').html('Loading...');
+                            },
+                            onSuccess: function(data) {                  //optional
+                                console.log("onSuccess");
+                            },
+                            onError: function() {                    //optional
+                                console.log("onError");
+                            },
+                            onComplete: function() {                 //optional
+                                console.log("onComplete");
+                            }
+                       });
+                    });
 
                      $( "#close-url" ).click(function() {
                        $("#url-show").css({"display": "none"});
+                    });
+                     
+                     $(this).on('click',"#close-reply-url-show", function() {
+                       $(this).closest("#reply-url-show").hide();
+                    });
+                     
+                    $(this).on('click','#reply-open-img', function(){
+                        $(this).parent().siblings('#reply-img-show').show();
+                    });
+                     
+                     $(this).on('click',"#close-reply-img-show", function() {
+                       $(this).closest("#reply-img-show").hide();
                     });
                      
                      $('.compose-textbox').bind('input propertychange', function() {
@@ -916,8 +945,11 @@ $(function(){
                             looppage++;
                             loading = false;
                     });                  
-                     
-                                                                                
+                    
+                    $(this).on('click','.specialToggleTable',
+                        function() {
+                        $(this).next().toggle();
+                    });                                                         
                 });
                   
                 /*==============================================================================================

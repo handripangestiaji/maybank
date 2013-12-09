@@ -4,7 +4,7 @@ $total_groups = ceil($count_fb_feed[0]->count_post_id/$this->config->item('item_
 $timezone=new DateTimeZone($this->config->item('timezone'));
 
 for($i=0; $i<count($fb_feed);$i++):?>
-<li <?php if($fb_feed[$i]->is_read==0){echo 'class="unread-post"';} ?>>
+<li>
     <input type="hidden" class="postId" value="<?php echo $fb_feed[$i]->post_id; ?>" />
     <div class="circleAvatar"><img src="https://graph.facebook.com/<?=number_format($fb_feed[$i]->facebook_id, 0,'.','')?>/picture?small" alt=""></div>
     <div class="read-mark <?php if($fb_feed[$i]->is_read==0){echo 'redText';} else { echo 'greyText'; } ?>"><i class="icon-bookmark icon-large"></i></div>
@@ -23,12 +23,33 @@ for($i=0; $i<count($fb_feed);$i++):?>
         
     </p>
     <p><?=$fb_feed[$i]->post_content?></p>
+    <p>
+    <?php
+    if($fb_feed[$i]->attachment){ 
+        $attachment=json_decode($fb_feed[$i]->attachment);
+        for($att=0;$att<count($attachment);$att++){
+           if($attachment[$att]->type=='photo'){
+                echo    "<a href='#modal-".$fb_feed[$i]->post_id."-".$attachment[$att]->type."' data-toggle='modal' ><img src='".$attachment[$att]->src."' /></a>";
+                echo    '<div id="modal-'.$fb_feed[$i]->post_id.'-'.$attachment[$att]->type.'" class="attachment-modal modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+                            <button type="button" class="close " data-dismiss="modal"><i class="icon-remove"></i></button>
+                            <img src="'.$attachment[$att]->src.'" />
+                        </div>';
+           }elseif($attachment[$att]->type=='link'){
+                echo    "<a href='".$attachment[$att]->href."'>".$attachment[0]->href."</a>";
+           }elseif($attachment[$att]->type=='video'){?>
+                <iframe width="320" height="auto" src="<?=$attachment[$att]->video->source_url."?version=3&autohide=1&autoplay=0"?>"></iframe>
+                <a href="<?=$attachment[$att]->video->display_url?>" ><?=$attachment[0]->alt?></a>
+       <?php 
+            }
+      } 
+    }
+    ?>
+    </p>
+
     <p><button type="button" class="btn btn-warning btn-mini">OPEN</button><button class="fblike btn btn-primary btn-mini" style="margin-left: 5px;" value="<?php echo $fb_feed[$i]->post_stream_id;?>">LIKE</button> </p>
     <p>
         <span class="btn-engagement"><i class="icon-eye-open"></i> <?php echo $fb_feed[$i]->total_comments;?> Engagements</span> |
-        <span class="cyanText"><i class="icon-thumbs-up-alt"></i></i> <?php echo $fb_feed[$i]->total_likes; ?> likes</span> | 
-        <span class="btn-mark-as-read cyanText" style="display: <?php if($fb_feed[$i]->is_read==1){echo 'none';} ?>"><i class="icon-bookmark"></i> Mark as Read</span>
-        <span class="btn-mark-as-unread cyanText" style="display: <?php if($fb_feed[$i]->is_read==0){echo 'none';} ?>"><i class="icon-bookmark-empty"></i> Mark as Unread</span>
+        <span class="cyanText"><i class="icon-thumbs-up-alt"></i></i> <?php echo $fb_feed[$i]->total_likes; ?> likes</span> 
     </p>
 
     <!-- ENGAGEMENT -->    
@@ -39,6 +60,9 @@ for($i=0; $i<count($fb_feed);$i++):?>
         <br />
         <?php 
             $comment=$this->facebook_model->RetriveCommentPostFb($fb_feed[$i]->post_id);
+            //echo "<pre>";
+            //print_r($comment);
+            //echo "</pre>";
             for($j=0;$j<count($comment);$j++){
         ?>
         <div class="engagement-body">
@@ -49,7 +73,6 @@ for($i=0; $i<count($fb_feed);$i++):?>
                 <span>posted a <span class="cyanText">comment</span></span>
                 <i class="icon-circle"></i>
                 <span><?php echo $comment[$j]->created_at; ?></span>
-                <i class="icon-play-circle moreOptions pull-right"></i>
             </p>
             <div class="engagement-comment">
                 <p>"<?php echo $comment[$j]->comment_content; ?>"</p>
@@ -90,15 +113,17 @@ for($i=0; $i<count($fb_feed);$i++):?>
                             </a>
                         </div>
                         <br clear="all" />
-                        <div id="reply-img-show">
-                            <div class="reply-img-attached">
+                        <br clear="all" />
+                        <div class="compose-schedule" id="reply-url-show">
+                            <div class="compose-form img-attached">
                                 <!-- close button for image attached -->
-                                <a id="reply-img-close" href="javascript:void(0);">
-                                 <i class="icon-remove-sign"></i>
+                                <a id="close-url" href="javascript:void(0);">
+                                    <i class="icon-remove-sign icon-large"></i>
                                 </a>
+                                <div>
+                                </div>
                             </div>
                         </div>
-                        <br clear="all" />
                         <div class="pull-left reply-char-count">
                             <i class="icon-facebook-sign"></i>&nbsp;<span class="reply-fb-char-count">2000</span>
                         </div>
@@ -163,9 +188,8 @@ for($i=0; $i<count($fb_feed);$i++):?>
         </div>
        <?php } ?>
        <!-- ==================== CONDENSED TABLE HEADLINE ==================== -->
-        <div class="containerHeadline">
+        <div class="containerHeadline specialToggleTable">
             <i class="icon-table"></i><h2>Action Log</h2>
-            <div class="controlButton pull-right"><i class="icon-caret-down toggleTable"></i></div>
         </div>
         <!-- ==================== END OF CONDENSED TABLE HEADLINE ==================== -->
 
@@ -231,4 +255,6 @@ for($i=0; $i<count($fb_feed);$i++):?>
     <!-- END CASE -->  
 </li>
 <?php endfor;?>
+<?php if(count($fb_feed) > 0):?>
 <div class="filled" style="text-align: center;"><input type="hidden" class="total_groups" value="<?=$total_groups?>" /><input type="hidden"  class="looppage" value=""/><input type="hidden"  class="channel_id" value="<?=$fb_feed[0]->channel_id?>"/><button class="loadmore btn btn-info" value="wallPosts"><i class="icon-chevron-down"></i> LOAD MORE</button></div>
+<?php endif;?>

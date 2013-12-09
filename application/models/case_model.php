@@ -27,12 +27,13 @@ class case_model extends CI_Model{
     
     function CreateCase($case){
         $related_conversation = $case['related_conversation'];
+        $conv = explode(',', $related_conversation);
         unset($case['related_conversation']);
+        $case['related_conversation_count'] = count($conv);
         $this->db->trans_start();
         $this->db->insert('case', $case);
         $insert_id = $this->db->insert_id();
         if($related_conversation != ''){
-            $conv = explode(',', $related_conversation);
             foreach($conv as $related){
                 if($related != '')
                     $this->db->insert('case_related_conversation',

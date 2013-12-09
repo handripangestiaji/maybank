@@ -13,6 +13,7 @@ class Users extends MY_Controller {
 	$config = $this->config->item('mail_provider');
 	$this->load->library('email',$config);
 	$this->load->library('upload');
+	$this->load->library('form_validation');
 
 	
     }
@@ -63,6 +64,17 @@ class Users extends MY_Controller {
     {
 	  if(isset($_POST['Create']))
 	  {
+	       $this->form_validation->set_rules('userID', 'User ID', 'required');
+	       if($this->form_validation->run() == FALSE)
+	       {
+		    $this->load->view('users/create_user');
+	       }
+	       else{
+		    echo 'sukses';
+	       }
+	       die();
+	       
+	       
 	       $config = array(
 			      'upload_path'   => 'media/dynamic/',
 			      'allowed_types' => 'gif|jpg|png',
@@ -114,7 +126,7 @@ class Users extends MY_Controller {
 		    $this->users_model->insert_user($data);
 		  
 				  $this->email->set_newline("\r\n");
-				  $this->email->from('maybank@gmail.com','maybank');
+				  $this->email->from('tes@gmail.com','maybank');
 				  $this->email->to($this->input->post('email'));
 				  
 				  $this->email->subject('New Registration');

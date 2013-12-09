@@ -1,4 +1,4 @@
-<form id="login_form" class="form-signin" action='<?php echo site_url();?>/login/auth' method="post">
+<form id="login_form" class="form-signin" action='<?php echo site_url('login/auth');?>' method="post">
     <h2 class="form-signin-heading">Digital Channel Management System</h2>
     <div class="input-prepend">
       <span class="add-on"><i class="icon-user"></i></span>

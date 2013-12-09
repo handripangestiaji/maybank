@@ -1,4 +1,4 @@
-<div class="row-fluid" style="width: 80%; margin: 0px auto;">
+<div class="row-fluid" style="width: 100%; margin: 0px auto;">
     
     <?php
 	$msg = $this->session->flashdata('succes');

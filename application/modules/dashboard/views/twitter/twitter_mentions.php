@@ -6,7 +6,7 @@ $total_groups = ceil($countMentions[0]->count_post_id/$this->config->item('item_
 $timezone=new DateTimeZone($this->config->item('timezone'));
 for($i=0;$i<count($mentions);$i++){
 ?>
-    <li <?php if($mentions[$i]->is_read==0){echo 'class="unread-post"';} ?>>
+    <li>
         <input type="hidden" class="postId" value="<?php echo $mentions[$i]->post_id; ?>" />
         <div class="circleAvatar"><img src="<?php echo $mentions[$i]->profile_image_url;?>" alt=""></div>
         <div class="read-mark <?php if($mentions[$i]->is_read==0){echo 'redText';} else { echo 'greyText'; } ?>"><i class="icon-bookmark icon-large"></i></div>

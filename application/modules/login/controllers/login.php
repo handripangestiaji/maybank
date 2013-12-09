@@ -81,6 +81,7 @@ class Login extends Login_Controller {
 				'role_name' => $user_login->row()->role_name,
 				'web_address' => $user_login->row()->web_address,
 				'image_url' => $user_login->row()->image_url,
+				'description' => $user_login->row()->description,
                                 'is_login' => TRUE
                             );
                     $timezone = new DateTimeZone("Europe/London");
@@ -138,11 +139,12 @@ class Login extends Login_Controller {
 		    $this->users_model->update_pass($id,$data);
 		    
 		    $this->email->set_newline("\r\n");
-		    $this->email->from('eko.purnomo@icloud.com','eko.purnomo@icloud.com');
+		    $this->email->from('maybank@gmail.com','maybank');
 		    $this->email->to($email);
 		    
-		    $this->email->subject('Your current Password');
-		    $this->email->message('Username '.$check_mail->row()->user_id.' and password '.$pass);
+		    $this->email->subject('Forgot Password');
+		    $template = curl_get_file_contents(base_url('mail_template/ForgotPass/'.$check_mail->row()->user_id.'/'.$pass));
+		    $this->email->message($template);
 		    
 		    $this->email->send();
 		    

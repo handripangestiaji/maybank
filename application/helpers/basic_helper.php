@@ -242,3 +242,41 @@ function CheckValidation($dataToValidated, $validationObj){
     
     return count($error) > 0 ? $error : true ;
 }
+
+
+function linkify($string, $twitter=false, $url=false) {
+
+    // reg exp pattern
+    $pattern = "/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/";
+    $new_string = $string;
+    // convert string URLs to active links
+    if($url)
+        $new_string = preg_replace($pattern, "<a href=\"\\0\">\\0</a>", $string);
+
+    if ($twitter) {
+        $pattern = '/@([a-zA-Z0-9_]+)/';
+        $replace = '<a href="http://twitter.com/\1" target="_blank">@\1</a>';
+        $new_string = preg_replace($pattern, $replace, $new_string);
+    }
+
+    return $new_string;
+}
+
+
+function find_anchors($html)
+{
+    $links = array();
+    $doc = new DOMDocument();
+    $doc->loadHTML($html);
+    $navbars = $doc->getElementsByTagName('div');
+    foreach ($navbars as $navbar) {
+        $id = $navbar->getAttribute('id');
+        if ($id === "anchors") {
+            $anchors = $navbar->getElementsByTagName('a');
+            foreach ($anchors as $a) {
+                $links[] = $doc->saveHTML($a);
+            }
+        }
+    }
+    return $links;
+}

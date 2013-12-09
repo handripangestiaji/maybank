@@ -20,15 +20,17 @@ class Users_model extends CI_Model
     //view user
     function select_user1($limit, $start, $role_id = null)
     {
+        $this->db->distinct();
         $this->db->limit($limit, $start);
-        
-        $this->db->select('user.*,role_collection.role_name,user_group.group_name');
-        $this->db->join('user_group','user.group_id = user_group.group_id','inner');
-        $this->db->join('role_collection','user.role_id = role_collection.role_collection_id','left');
-        if($role_id != null)
-            $this->db->where("user.role_id", $role_id);
+        $this->db->select('a.*, b.full_name as created_by_name,c.group_name,d.role_name');
+        $this->db->from('user a left outer join user b on b.user_id = a.created_by inner join user_group c on a.group_id = c.group_id inner join role_collection d on a.role_id=d.role_collection_id');
+        $this->db->order_by('a.user_id','asc');
+        //$this->db->join('user_group','user.group_id = user_group.group_id','left');
+        //$this->db->join('role_collection','user.role_id = role_collection.role_collection_id','left');
+        //$this->db->order_by("a.user_id", "asc"); 
+        //if($role_id != null)
+           //$this->db->where("user.role_id", $role_id);
         $query = $this->db->get($this->user);
-        
         if ($query->num_rows() > 0) {
             foreach ($query->result() as $row) {
                 $data[] = $row;
@@ -47,7 +49,7 @@ class Users_model extends CI_Model
     
     function select_user_login($id)
     {
-        $this->db->select('user.*,role_collection.role_name,user_group.group_name');
+        $this->db->select('user.*,role_collection.role_name,user_group.group_name,user.full_name');
         $this->db->join('user_group','user.group_id = user_group.group_id','inner');
         $this->db->join('role_collection','user.role_id = role_collection.role_collection_id','left');
         $this->db->where('user_id',$id);
@@ -87,6 +89,8 @@ class Users_model extends CI_Model
     //delete
     function delete_user($id)
     {
+        $this->db->where('user_id',$id);
+        $this->db->delete($this->activity);
         $this->db->where('user_id',$id);
         return $this->db->delete($this->user);
     }
@@ -182,7 +186,8 @@ class Users_model extends CI_Model
     function select_group1($limit, $start)
     {
         $this->db->limit($limit, $start);
-        
+        $this->db->select('user_group.*,user.full_name as name');
+        $this->db->join('user','user_group.created_by=user.user_id','inner');
         $query = $this->db->get($this->group);
         
         if ($query->num_rows() > 0) {

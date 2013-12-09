@@ -136,8 +136,15 @@ class Cms extends MY_Controller {
     	
     	$data['tags'] = '';
     
+		if ($this->input->server('REQUEST_METHOD') === 'POST')
+		{
+			$params = array();
+			$params = $this->input->post('shorturl');
+			$code = $this->shorturl->urlToShortCode();
+		}
+		
 		try {
-			$code = $this->shorturl->urlToShortCode("https://bitbucket.org/yolkatgrey/maybank/commits/2643205aec5b0079278a20a2b0bfdfdd04584b96?at=master");
+			$code = $this->shorturl->urlToShortCode(array("long_url" => "http://www.maybank2u.com.my/"));
 		}
 		catch (Exception $e)
 		{

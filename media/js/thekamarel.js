@@ -353,6 +353,10 @@ $(function(){
 
                  $( "#fileselectbutton" ).click(function(e){
                     $( "#composeInputImageFile" ).trigger("click");
+                });
+                 
+                 $(this).on('click', '#replyfileselectbutton', function(){
+                    $(this).siblings("#replyInputImageFile" ).trigger("click");
                 }); 
 
                  $( "#closecompose" ).click(function(e){
@@ -380,11 +384,36 @@ $(function(){
                     }
                 });
 
+                $(this).on('change','#replyInputImageFile',function(e){
+                    var val = $(this).val();
+                    var file = val.split(/[\\/]/);
+                    $(this).siblings( "#replyfilename" ).val(file[file.length-1]);
+                    var me = $(this);
+                    if (this.files && this.files[0]) {
+                        var reader = new FileReader();
+                        reader.onload = function (e) {
+                            me.parent().siblings('.reply-img-list-upload').find('#reply-preview-img').show();        
+                            me.parent().siblings('.reply-img-list-upload').find('#reply-preview-img').attr('src', e.target.result);        
+                            me.parent().siblings('.reply-img-list-upload').find('#reply-remove-img').show();
+                            me.parent().siblings('.reply-img-list-upload').find('#reply-remove-img').css('left',me.parent().siblings('.reply-img-list-upload').find('#reply-preview-img').width());
+                        }
+                        reader.readAsDataURL(this.files[0]);
+                    }
+                });
+                
                 var upload_file = $("#composeInputImageFile");
                 $( "#remove-img" ).click(function(){
                     $("#compose-preview-img").hide();
                     $("#remove-img").hide();
                     $("#filename").val('');
+                    upload_file.replaceWith(upload_file = upload_file.clone(true));
+                });
+                
+                $(this).on('click', "#reply-remove-img", function(){
+                    $(this).siblings("#reply-preview-img").hide();
+                    $(this).hide();
+                    $(this).closest('.reply-img-list-upload').siblings('.dummyfile').find("#replyfilename").val('');
+                    var upload_file = $(this).closest('.reply-img-list-upload').siblings('.dummyfile').find("#replyInputImageFile");
                     upload_file.replaceWith(upload_file = upload_file.clone(true));
                 });
                 
@@ -530,61 +559,46 @@ $(function(){
                         
                         $(this).on('click','.btn-engagement',
                             function() {
-                                $(this).parent().siblings('.engagement').show();
+                                $(this).parent().siblings('.engagement').toggle();
                             }
                         );
                         
-                        $(this).on('click','.read-mark',
+                        $(this).on('click','.read-mark, .btn-case',
                             function(){
                             var me = $(this);
                             $.ajax({
                                     url : BASEURL + 'dashboard/media_stream/ReadUnread',
                                     type: "POST",
                                     data: {
-                                            post_id:me.siblings('.postId').val(),
-                                            },
+                                        post_id:me.closest('li').find('.postId').val(),
+                                        read : $(this).val() == 'case' ? 1 : null
+                                    },
                                     success: function(result)
                                     {
+                                        
+                                        var currentNumber = 0;
+                                        try{
+                                            currentNumber = parseInt(me.closest('.container-fluid').siblings('.floatingBoxMenu').find('li.active .notifyCircle').html());
+                                        }
+                                        catch(e){
+                                            currentNumber = 0;
+                                        }
                                         if(result == 1){
+                                            currentNumber -=  1;
+                                            currentNumber = currentNumber < 0 ? 0 : currentNumber;
                                             me.removeClass('redText').addClass('greyText');
                                         }
                                         else{
+                                            currentNumber += 1;
                                             me.removeClass('greyText').addClass('redText');
                                         }
-                                    },
-                                });
-                        });
-                        
-                        $(this).on('click','.btn-mark-as-read',function(){
-                            var me = $(this);
-                            $.ajax({
-                                    url : BASEURL + 'dashboard/media_stream/ReadUnread',
-                                    type: "POST",
-                                    data: {
-                                            post_id:$(this).parent().siblings('.postId').val(),
-                                            },
-                                    success: function()
-                                    {
-                                        me.hide();
-                                        me.siblings('.btn-mark-as-unread').show();
-                                        me.parent().siblings('.read-mark').removeClass('redText').addClass('greyText');
-                                    },
-                                });
-                        });
-                        
-                        $(this).on('click','.btn-mark-as-unread',function(){
-                            var me = $(this);
-                            $.ajax({
-                                    url : BASEURL + 'dashboard/media_stream/ReadUnread',
-                                    type: "POST",
-                                    data: {
-                                            post_id:$(this).parent().siblings('.postId').val(),
-                                            },
-                                    success: function()
-                                    {
-                                        me.hide();
-                                        me.siblings('.btn-mark-as-read').show();
-                                        me.parent().siblings('.read-mark').removeClass('greyText').addClass('redText');
+                                        
+                                        me.closest('.container-fluid').siblings('.floatingBoxMenu').find('li.active .notifyCircle').html(currentNumber);
+                                        if(currentNumber == 0){
+                                            me.closest('.container-fluid').siblings('.floatingBoxMenu').find('li.active .notifyCircle').hide();
+                                        }
+                                        else
+                                            me.closest('.container-fluid').siblings('.floatingBoxMenu').find('li.active .notifyCircle').show();
                                     },
                                 });
                         });
@@ -693,9 +707,43 @@ $(function(){
                             }
                        });
                     });
+                    
+                    $(this).on('click','.reply-insert-link-btn', function(){
+                        var me = $(this);
+                        me.siblings(".reply-insert-link-text").linkpreview({
+                            previewContainer: me.closest('.pull-left').siblings('#reply-url-show').find('div.reply-url-show-content'),  //optional
+                            //previewContainerClass: ".compose-schedule",
+                            refreshButton: ".reply-insert-link-btn",        //optional
+                            preProcess: function() {                //optional
+                                me.closest('.pull-left').siblings("#reply-url-show").show();
+                                me.closest('.pull-left').siblings("#reply-url-show").find('div.reply-url-show-content').html('Loading...');
+                            },
+                            onSuccess: function(data) {                  //optional
+                                console.log("onSuccess");
+                            },
+                            onError: function() {                    //optional
+                                console.log("onError");
+                            },
+                            onComplete: function() {                 //optional
+                                console.log("onComplete");
+                            }
+                       });
+                    });
 
                      $( "#close-url" ).click(function() {
                        $("#url-show").css({"display": "none"});
+                    });
+                     
+                     $(this).on('click',"#close-reply-url-show", function() {
+                       $(this).closest("#reply-url-show").hide();
+                    });
+                     
+                    $(this).on('click','#reply-open-img', function(){
+                        $(this).parent().siblings('#reply-img-show').show();
+                    });
+                     
+                     $(this).on('click',"#close-reply-img-show", function() {
+                       $(this).closest("#reply-img-show").hide();
                     });
                      
                      $('.compose-textbox').bind('input propertychange', function() {
@@ -766,16 +814,18 @@ $(function(){
                     
                      $(this).on('click','.retweet',
                         function() {
+                        var retweetBtn = $(this);
+                        retweetBtn.attr('disabled', 'disabled');
                         $.ajax({
                             url : BASEURL + 'dashboard/socialmedia/twitterAction',
                             type: "POST",
                             data: {
-                                    action:'retweet',
-                                    str_id: $(this).siblings(".str_id").val(),
-                                    log_action:'retweet_twitter'
-                                    },
+                                action:'retweet',
+                                str_id: $(this).siblings(".str_id").val()
+                                },
                             success: function()
                             {
+                                
                                 $('.compose-post-status').show();
                                 $('.compose-post-status').fadeOut(5000);
                             },
@@ -790,8 +840,7 @@ $(function(){
                             data: {
                                     action:'replayTweet',
                                     content:$(this).parent().siblings(".replaycontent").val(),
-                                    str_id: $(this).val(),
-                                    log_action:'reply_twitter'
+                                    str_id: $(this).val()
                                     },
                             success: function(data)
                             {
@@ -810,8 +859,7 @@ $(function(){
                                     action:'dm_send',
                                     content:$(this).parent().siblings(".replaycontent").val(),
                                     screen_name: $(this).siblings(".screen_name").val(),
-                                    friendid: $(this).val(),
-                                    log_action:'reply_dm_twitter'
+                                    friendid: $(this).val()
                                     },
                             success: function(data)
                             {
@@ -828,8 +876,7 @@ $(function(){
                             type: "POST",
                             data: {
                                     action:'favorit',
-                                    str_id: $(this).siblings(".str_id").val(),
-                                    log_action:'favorit_twitter'
+                                    str_id: $(this).siblings(".str_id").val()
                                     },
                             success: function()
                             {
@@ -846,8 +893,7 @@ $(function(){
                             type: "POST",
                             data: {
                                     action:'follow',
-                                    followid: $(this).siblings(".followid").val(),
-                                    log_action:'follow_twitter'
+                                    followid: $(this).siblings(".followid").val()
                                     },
                             success: function()
                             {
@@ -864,8 +910,7 @@ $(function(){
                             type: "POST",
                             data: {
                                     action:'unfollow',
-                                    followid: $(this).siblings(".followid").val(),
-                                    log_action:'unfollow_twitter'
+                                    followid: $(this).siblings(".followid").val()
                                     },
                             success: function()
                             {
@@ -881,10 +926,9 @@ $(function(){
                             url : BASEURL + 'dashboard/media_stream/FbLikeStatus',
                             type: "POST",
                             data: {
-                                    post_id: $(this).val(),
-                                    log_action:'like_facebook'
+                                    post_id: $(this).val()
                                     },
-                            success: function(data)
+                            success: function()
                             {
                                 $('.compose-post-status').show();
                                 $('.compose-post-status').fadeOut(5000);
@@ -899,8 +943,7 @@ $(function(){
                             type: "POST",
                             data: {
                                     post_id:$(this).val(),
-                                    comment: $(this).parent().siblings(".reply_comment").val(),
-                                    log_action:'reply_facebook'
+                                    comment: $(this).parent().siblings(".reply_comment").val()
                                     },
                             success: function()
                             {
@@ -914,18 +957,38 @@ $(function(){
                     looppage=2;
                     $(this).on('click','.loadmore',
                         function() {
-  //                          alert($(this).val());
-                        	 loading = true;
-                              action=$(this).val();    
+                            loading = true;
+                            action=$(this).val();    
                             group_numbers=2;
-                            channel_ids=$(this).siblings(".channel_id").val();
+                            channel_ids = $(this).siblings(".channel_id").val();
+                            me = $(this);
+                            $(this).closest('.floatingBoxContainers').load(BASEURL + 'dashboard/media_stream/loadmore/'+action+'/'+looppage+'/'+channel_ids, function(){
+                                var currentNumber = $(this).closest('.floatingBoxContainers').find('.unread-post').length;
+                                try{
+                                    currentNumber += parseInt($(this).closest('.container-fluid').siblings('.floatingBoxMenu').find('li.active .notifyCircle').html());
+                                }
+                                catch(exception){
+                                    currentNumber = $(this).closest('.floatingBoxContainers').find('.unread-post').length;
+                                }
+                                
+                                
+                                $(this).closest('.container-fluid').siblings('.floatingBoxMenu').find('li.active .notifyCircle').html(currentNumber);
+                                if(currentNumber == 0){
+                                    me.closest('.container-fluid').siblings('.floatingBoxMenu').find('li.active .notifyCircle').hide();
+                                }
+                                else
+                                    me.closest('.container-fluid').siblings('.floatingBoxMenu').find('li.active .notifyCircle').show();
+                            });
                             
-                           $('#'+action).load(BASEURL + 'dashboard/media_stream/loadmore/'+action+'/'+looppage+'/'+channel_ids);
+                            
                             looppage++;
                             loading = false;
                     });                  
-                     
-                                                                                
+                    
+                    $(this).on('click','.specialToggleTable',
+                        function() {
+                        $(this).next().toggle();
+                    });                                                         
                 });
                   
                 /*==============================================================================================

@@ -1,4 +1,4 @@
-<div class="row-fluid" style="width: 80%; margin: 0px auto;">
+<div class="row-fluid" style="width: 100%; margin: 0px auto;">
     <div class="row-fluid" >
         <div class="pull-left">
             <input type="text" placeholder="Search" style="width:175px; float: left; margin-left: 2px;">

@@ -3,7 +3,8 @@ $total_groups = ceil($countTweets[0]->count_post_id/$this->config->item('item_pe
 $timezone=new DateTimeZone($this->config->item('timezone'));
 for($i=0;$i<count($senttweets);$i++){
 ?>
-    <li <?php if($senttweets[$i]->is_read==0){echo 'class="unread-post"';} ?>>
+    <li>
+        <input type="hidden" class="postId" value="<?php echo $directmessage[$i]->post_id; ?>" />
         <div class="circleAvatar"><img src="<?php echo $senttweets[$i]->profile_image_url;?>" alt=""></div>
         <div class="read-mark <?php if($senttweets[$i]->is_read==0){echo 'redText';} else { echo 'greyText'; } ?>"><i class="icon-bookmark icon-large"></i></div>
         <br />
@@ -16,11 +17,27 @@ for($i=0;$i<count($senttweets);$i++){
             $date=new DateTime($senttweets[$i]->created_at.' Europe/London');
             $date->setTimezone($timezone);
             echo $date->format('l, M j, Y H:i:s');
+            $entities = json_decode($senttweets[$i]->twitter_entities);
             //echo date('l, M j, Y H:i:s',strtotime($senttweets[$i]->created_at));?></span>
             <i class="icon-play-circle moreOptions pull-right"></i>
         </p>
-    <p><?php echo $senttweets[$i]->text; ?></p>
+    <p><?php
     
+     $html = html_entity_decode($senttweets[$i]->text);
+    foreach($entities->urls as $url){
+        $html = substr($html, 0, $url->indices[0]);
+        $html .= "<a href='$url->expanded_url' target='_blank'>$url->display_url</a>";
+        $html .= substr($senttweets[$i]->text, $url->indices[1] );
+        
+    }
+    $html =  linkify(html_entity_decode($html), true, false);
+    echo $html;
+    ?></p>
+     <p><?php
+    if(isset($entities->media[0])):    ?>
+        <img src="<?=$entities->media[0]->media_url_https?>" alt="" />
+    <?php endif;?>
+    </p>
     <p><button type="button" class="btn btn-warning btn-mini">OPEN</button>
     <?php if ($senttweets[$i]->retweeted==1) { ?>
         <button type="button" class="btn btn-inverse btn-mini"><i class="icon-retweet">&nbsp;</i></button>
@@ -31,9 +48,7 @@ for($i=0;$i<count($senttweets);$i++){
     
     <p>
         <a role="button" class="btn-engagement"><i class="icon-eye-open"></i> Engagement</a> |
-        <a data-toggle="modal" role="button" href="#modaltweet<?php echo $i; ?>" ><i class="icon-retweet greyText"></i><?php if($senttweets[$i]->retweet_count>0)echo $senttweets[$i]->retweet_count; ?> re-tweets</a> |
-        <span class="btn-mark-as-read cyanText" style="display: <?php if($senttweets[$i]->is_read==1){echo 'none';} ?>"><i class="icon-bookmark"></i> Mark as Read</span>
-        <span class="btn-mark-as-unread cyanText" style="display: <?php if($senttweets[$i]->is_read==0){echo 'none';} ?>"><i class="icon-bookmark-empty"></i> Mark as Unread</span>
+        <a data-toggle="modal" role="button" href="#modaltweet<?php echo $i; ?>" ><i class="icon-retweet greyText"></i><?php if($senttweets[$i]->retweet_count>0)echo $senttweets[$i]->retweet_count; ?> re-tweets</a> 
     </p>
     
     
@@ -188,4 +203,6 @@ for($i=0;$i<count($senttweets);$i++){
     
     </li>
 <?php } ?>
+<?php if(count($senttweets) > 0):?>
  <div class="filled" style="text-align: center;"><button class="loadmore btn btn-info" value="sendmessage"><input type="hidden"  class="channel_id" value="<?=$senttweets[0]->channel_id?>"/><input type="hidden" class="channel_id" value="<?=$channel_id?>" /><i class="icon-chevron-down"></i> LOAD MORE</button></div>
+<?php endif?>

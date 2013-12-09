@@ -3,9 +3,11 @@
 $total_groups = ceil($CountPmFB[0]->count_post_id/$this->config->item('item_perpage'));
 $timezone=new DateTimeZone($this->config->item('timezone'));
 for($i=0; $i<count($fb_pm);$i++):?>
-<li <?php if($fb_pm[$i]->is_read==0){echo 'class="unread-post"';}?>>
-    <input type="hidden" class="postId" value="<?php echo $fb_pm[$i]->detail_id_from_facebook; ?>" />
+<li>
+    <input type="hidden" class="postId" value="<?php echo $fb_pm[$i]->post_id; ?>" />
     <div class="circleAvatar"><img src="https://graph.facebook.com/<?=number_format($fb_pm[$i]->sender, 0,'.','')?>/picture?small" alt=""></div>
+    <div class="read-mark <?php if($fb_pm[$i]->is_read==0){echo 'redText';} else { echo 'greyText'; } ?>"><i class="icon-bookmark icon-large"></i></div>
+    <br />
     <p class="headLine">
         <span class="author"><?php echo $fb_pm[$i]->name; ?></span>
         <i class="icon-circle"></i>
@@ -20,11 +22,10 @@ for($i=0; $i<count($fb_pm);$i++):?>
         
     </p>
     <p><?=$fb_pm[$i]->messages?></p>
-    <p><button type="button" class="btn btn-warning btn-mini">OPEN</button><!--button class="btn btn-primary btn-mini" style="margin-left: 5px;">LIKE</button--> </p>
+    <p><button type="button" class="btn btn-warning btn-mini">OPEN</button>
+        <!--button class="btn btn-primary btn-mini" style="margin-left: 5px;">LIKE</button--> </p>
     <p>
-        <span class="btn-engagement"><i class="icon-eye-open"></i> <?php echo $fb_pm[$i]->message_count;?> Engagements</span> |
-        <span class="btn-mark-as-read cyanText" style="display: <?php if($fb_pm[$i]->is_read==1){echo 'none';} ?>"><i class="icon-bookmark"></i> Mark as Read</span>
-        <span class="btn-mark-as-unread cyanText" style="display: <?php if($fb_pm[$i]->is_read==0){echo 'none';} ?>"><i class="icon-bookmark-empty"></i> Mark as Unread</span>
+        <span class="btn-engagement"><i class="icon-eye-open"></i> <?php echo $fb_pm[$i]->message_count;?> Engagements</span>
     </p>
 
     <!-- ENGAGEMENT -->    
@@ -117,5 +118,6 @@ for($i=0; $i<count($fb_pm);$i++):?>
     <!-- END CASE -->  
 </li>
 <?php endfor;?>
-
+<?php if(count($fb_pm) > 0):?>
 <div class="filled" style="text-align: center;"><input type="hidden" class="total_groups" value="<?=$total_groups?>" /><input type="hidden"  class="channel_id" value="<?=$fb_pm[0]->channel_id?>"/><input type="hidden"  class="looppage" value=""/><button class="loadmore btn btn-info" value="privateMessages"><i class="icon-chevron-down"></i> LOAD MORE</button></div>
+<?php endif?>

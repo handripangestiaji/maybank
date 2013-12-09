@@ -70,13 +70,13 @@
                     <tr>
                         <td>Image</td>
                         <td>
-                            <input type='file' name='userfile' id='userfile' />
+                            <input type='file' name='userfile' id='userfile' accept='image/*' />
                         </td>
                     </tr>
                     
                     <tr>
                         <td>Description</td>
-                        <td><textarea name='description'></textarea></td>
+                        <td><textarea class="about-me" name='description'></textarea></td>
                     </tr>
                     
                     <tr>

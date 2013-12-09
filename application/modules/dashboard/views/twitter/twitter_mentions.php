@@ -19,16 +19,25 @@ for($i=0;$i<count($mentions);$i++){
             <span><?php 
             $date=new DateTime($mentions[$i]->created_at.' Europe/London');
             $date->setTimezone($timezone);
-            echo $date->format('l, M j, Y H:i:s');
+            echo $date->format('l, M j, Y H:i');
+            $entities = json_decode($mentions[$i]->twitter_entities);
             ?></span>
-           
         </p>
     <p><?php 
-        echo $mentions[$i]->text; 
+        echo linkify(html_entity_decode($mentions[$i]->text),true); 
         
     ?></p>
+    <p><?php if(isset($entities->media[0])):    ?>
+        <img src="<?=$entities->media[0]->media_url_https?>" alt="" />
+    <?php endif;?>
+    </p>
+    <p>
+    <?php if($mentions[$i]->case_id):?>
+        <button type="button" class="btn btn-purple" value="<?=$mentions[$i]->case_id?>">CASE ID #<?=$mentions[$i]->case_id?></button>
+    <?php else:?>
+        <button type="button" class="btn btn-warning btn-mini">OPEN</button>
+    <?php endif?>
     
-    <p><button type="button" class="btn btn-warning btn-mini">OPEN</button>
     <?php if ($mentions[$i]->retweeted==1) { ?>
         <button type="button" class="btn btn-success btn-mini"><i class="icon-retweet"></i></button>
     <?php } ?>    
@@ -38,9 +47,7 @@ for($i=0;$i<count($mentions);$i++){
     
     <p>
         <a role="button" class="btn-engagement"><i class="icon-eye-open"></i> Engagement</a> |
-        <a data-toggle="modal" role="button" href="#modaltweet<?php echo $i; ?>" ><i class="icon-retweet greyText"></i><?php if($mentions[$i]->retweet_count>0)echo $mentions[$i]->retweet_count; ?> re-tweets</a> | 
-        <span class="btn-mark-as-read cyanText" style="display: <?php if($mentions[$i]->is_read==1){echo 'none';} ?>"><i class="icon-bookmark"></i> Mark as Read</span>
-        <span class="btn-mark-as-unread cyanText" style="display: <?php if($mentions[$i]->is_read==0){echo 'none';} ?>"><i class="icon-bookmark-empty"></i> Mark as Unread</span>
+        <a data-toggle="modal" role="button" href="#modaltweet<?php echo $i; ?>" ><i class="icon-retweet greyText"></i><?php if($mentions[$i]->retweet_count>0)echo $mentions[$i]->retweet_count; ?> re-tweets</a>  
     </p>
     <!-- ENGAGEMENT -->    
     <div class="engagement hide">
@@ -128,7 +135,11 @@ for($i=0;$i<count($mentions);$i++){
                 <?php }else{ ?>
                 <button type="button" class="follow btn btn-primary" value="follow"><i class="icon-user"></i></button>
                 <?php } ?>
-                <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>
+                <?php if(!$mentions[$i]->case_id):?>
+                    <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>
+                <?php else:?>
+                    <button type="button" class="btn btn-purple btn-case" name="action" value="Resolved"><i class="icon-check"></i> RESOLVE</button>
+                <?php endif?>
                 <input type="hidden" class="str_id" value="<?php echo $mentions[$i]->post_stream_id; ?>" />
                 <input type="hidden" class="id" value="<?php echo json_decode($mentions[$i]->twitter_entities)->user_mentions[0]->id; ?>" />
                 <input type="hidden" class="userid" value="<?php echo $mentions[$i]->twitter_user_id; ?>" />
@@ -205,5 +216,6 @@ for($i=0;$i<count($mentions);$i++){
     </li>
 <?php } 
 ?>
-
+<?php if(count($mentions) > 0):?>
  <div class="filled" style="text-align: center;"><input type="hidden" class="total_groups" value="<?=$total_groups?>" /><input type="hidden"  class="channel_id" value="<?=$mentions[0]->channel_id?>"/><input type="hidden"  class="looppage" value=""/><button class="loadmore btn btn-info" value="mentions"><i class="icon-chevron-down"></i> LOAD MORE</button></div>
+<?php endif;?>

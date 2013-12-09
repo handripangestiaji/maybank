@@ -285,8 +285,14 @@ class Media_stream extends CI_Controller {
     
     public function ReadUnread(){
 	  $this->load->model('facebook_model');
-	  $new_val = $this->facebook_model->ReadUnread($this->input->post('post_id'));
-	  echo $new_val;
+	  if($this->input->post('post_id')){
+	    $read = $this->input->post('read');
+	    $new_val = $this->facebook_model->ReadUnread($this->input->post('post_id'), $read);
+	    echo $new_val;  
+	  }
+	  else
+	    echo 0;
+	  
     }
     //=========================================END facebook function=============================================    
 
@@ -306,10 +312,7 @@ class Media_stream extends CI_Controller {
         $group_number=$group_numbers;
         $action=$actions;
         $channel_id=$channel_ids;
-
         $is_read=0;
-                
-        if(isset($_POST['channel_id']))        
         $filter = array(
     	   'channel_id' => $channel_id,
     	);

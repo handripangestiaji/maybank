@@ -3,7 +3,8 @@
     $timezone=new DateTimeZone($this->config->item('timezone'));
     for($i=0;$i<count($directmessage);$i++){
     ?>
-    <li <?php if($directmessage[$i]->is_read==0){echo 'class="unread-post"';} ?>>
+    <li>
+        <input type="hidden" class="postId" value="<?php echo $directmessage[$i]->post_id; ?>" />
         <div class="circleAvatar"><img src="<?php echo $directmessage[$i]->sender->profile_image_url; ?>" alt=""></div>
         <div class="read-mark <?php if($directmessage[$i]->is_read==0){echo 'redText';} else { echo 'greyText'; } ?>"><i class="icon-bookmark icon-large"></i></div>
         <br />
@@ -17,6 +18,7 @@
             $date=new DateTime($directmessage[$i]->created_at.' Europe/London');
             $date->setTimezone($timezone);
             echo $date->format('l, M j, Y H:i:s');
+            
             ?>
             </span>
             
@@ -88,4 +90,6 @@
     <?php 
     }
  ?>
+<?php if(count($directmessage) > 0):?>
   <div class="filled" style="text-align: center;"><button class="loadmore btn btn-info" value="direct"><input type="hidden" class="channel_id" value="<?=$channel_id?>" /><input type="hidden"  class="channel_id" value="<?=$directmessage[0]->channel_id?>"/><i class="icon-chevron-down"></i> LOAD MORE</button></div>
+<?php endif;?>

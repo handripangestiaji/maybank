@@ -92,8 +92,8 @@
         <span class="btn-close pull-right">Close <i class="icon-remove-sign"></i></span>
         <br clear="all" />
         <div class="sidebarLine"></div>
-        <div class="profilePhoto">
-            <div><?php echo $this->session->userdata('display_name'); ?></div>
+        <div>
+            <div><img src="<?php echo base_url().$this->session->userdata('image_url'); ?>" /></div>
         </div>
         <div class="profileInfo">
             <p>User Id : <?php echo $this->session->userdata('user_id'); ?></p>
@@ -133,11 +133,11 @@
             <input type='password' style='width: 175px;' name='new_password' />
             <p>Confirm Password</p>
             <input type='password' style='width: 175px;' name='confirm_password' />
-            </form>
+            
             <div class="sidebarLine"></div>
             <button class="btn btn-primary" type="submit">Save</button>
             <button class="btn sidebar-btn-cancel" type="button">Cancel</button>
-            </div
+            </form>
         </div>
     </div>
 </div>
@@ -154,20 +154,22 @@
         <br clear="all" />
         <div class="sidebarLine"></div>
         <div class="profileInfo">
-            <p>User Id : 0008288</p>
-            <p>Full Name : Ah Hong, Tew</p>
-            <p>Display Name : Tew</p>
-            <p>Role : Manager</p>
-            <p>Email : <span class="cyanText">ahhong.tew@maybank.com.my</span></p>
+            <p>User Id : <?php echo $this->session->userdata('user_id'); ?></p>
+            <p>Full Name : <?php echo $this->session->userdata('full_name'); ?></p>
+            <!--<p>Display Name : <?php //echo $this->session->userdata('display_name'); ?></p>-->
+            <p>Role : <?php echo $this->session->userdata('role_name'); ?></p>
+            <p>Email : <span class="cyanText"><?php echo $this->session->userdata('web_address'); ?></span></p>
             <br/>
+            <form method='post' action='<?php echo site_url();?>/users/update_user_login'>
+            <input type='hidden' value='<?php echo $this->session->userdata('user_id'); ?>' name='user_id' />
             <p><strong>Display Name</strong></p>
-            <input type="text" name="display-name"/>
+            <input type="text" name="display-name" value='<?php echo $this->session->userdata('display_name'); ?>'/>
             <p><strong>About Me</strong></p>
-            <textarea class="about-me" name="about-me" placeholder="Compose Message"></textarea>
-            Count: 500
+            <textarea class="about-me" name="about-me" placeholder="Compose Message"><?php echo $this->session->userdata('description'); ?></textarea>
             <div class="sidebarLine"></div>
             <button class="btn btn-primary" type="submit">Save</button>
             <button class="btn sidebar-btn-cancel" type="button">Cancel</button>
+            </form>
         </div>
     </div>
 </div>

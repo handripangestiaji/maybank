@@ -8,6 +8,7 @@ class mail_template extends CI_Controller{
     public function __construct(){
         parent::__construct();
         $this->load->model('case_model');
+        $this->load->model('users_model');
     }
     
     
@@ -15,6 +16,25 @@ class mail_template extends CI_Controller{
         $data['case_object'] = $this->case_model->LoadCase(array(
                                 'case_id' => $id));
         $this->load->view('AssignCase/'.$view, $data);
+    }
+    
+    
+    public function NewUser($id,$pass)
+    {
+        $data = array(
+                      'user' => $this->users_model->get_byid($id),
+                      'pass' => $pass
+                      );
+        $this->load->view('mail_template/User/new_user', $data);
+    }
+    
+    public function ForgotPass($id,$pass)
+    {
+        $data = array(
+                      'user' => $this->users_model->get_byid($id),
+                      'pass' => $pass
+                      );
+        $this->load->view('mail_template/User/forgot_user',$data);
     }
 }
 

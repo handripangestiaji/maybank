@@ -4,6 +4,7 @@
            <span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
            
            <form method="post" class="assign-case" action="<?=base_url("case/mycase/CreateCase")?>">
+           <input type="hidden" value="<?=$posts[$i]->post_id?>" name="post_id" />
            <div class="message"></div>
            <div class="pull-left">
                <select style="width: 130px;" name="case_type">
@@ -18,7 +19,8 @@
                </select>
            </div>
            <br clear="all" />
-           <button href="#modalConfirm-<?php echo $posts[$i]->post_id ?>" data-toggle="modal" class="btn btn-small btn-purple btn-add-related <?php echo $posts[$i]->social_stream_type?>">Add Related Conversation</button>
+           <button href="#modalConfirm-<?php echo $posts[$i]->post_id ?>" data-toggle="modal"
+            class="btn btn-small btn-purple btn-add-related <?php echo $posts[$i]->social_stream_type?>">Add Related Conversation</button>
             
            <input type="hidden" id="relatedCoversation-<?=$posts[$i]->post_id ?>" name="related_conversation" value="<?=$posts[$i]->post_id?>" />
            <br clear="all" />

@@ -12,21 +12,21 @@ class Shorturl {
 		$this->_ci->load->model('shorturl_model');
 	}
 	
-	public function urlToShortCode($url)
+	public function urlToShortCode($url = array())
 	{
 		if (empty($url)) 
 		{
 			throw new \Exception("No URL was supplied");
 		}
 		
-		if ($this->validateUrlFormat($url) == false)
+		if ($this->validateUrlFormat($url['long_url']) == false)
 		{
 			throw new \Exception("URL does not have a valid format");
 		}
 		
 		if (self::$checkUrlExists)
 		{
-			if (!$this->verifyUrlExists($url)) 
+			if (!$this->verifyUrlExists($url['long_url'])) 
 			{
 				throw new \Exception("URL does not appear to exist");
 			}
@@ -95,7 +95,9 @@ class Shorturl {
 		
 		$result = $this->_ci->shorturl_model->find($params);
 		
-		return (empty($result)) ? false : $result->short_code;
+		$arr = array("url_id" => $result->id, "shortcode" => $result->short_code);
+		
+		return (empty($result)) ? false : $arr;
 	}
 	
 	protected function createShortCode($url)
@@ -107,7 +109,9 @@ class Shorturl {
 		//die($shortCode);
 		$this->insertShortCodeInDb($id, $shortCode);
 		
-		return $shortCode;
+		$arr = array("url_id" => $id, "shortcode" => $shortCode);
+		
+		return $arr;
 	}
 	
 	protected function convertIntToShortCode($id)

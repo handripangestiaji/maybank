@@ -18,6 +18,7 @@ class Media_stream extends CI_Controller {
 	$this->load->helper('form');
 	$this->load->model('facebook_model');
 	$this->load->model('twitter_model');
+    $this->load->model('action_model');
 	  
 	$this->session->set_userdata('access_token', $this->config->item('twitter_access_token'));
 	$this->session->set_userdata('access_token_secret', $this->config->item('twitter_access_secret'));
@@ -41,27 +42,26 @@ class Media_stream extends CI_Controller {
     
     
     public function facebook_stream($channel_id,$is_read = NULL){
-	$filter = array(
-	   'channel_id' => $channel_id,
-	);
-	if($is_read != NULL){
-	    if($is_read != 2){
-		$filter['is_read'] = $is_read;
-	    }
-	}
-    $limit=10;
-	$data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter,$limit);
-	$data['count_fb_feed']=$this->facebook_model->CountFeedFB($filter);
-    //$data['own_post'] = $this->facebook_model->RetrievePostFB($filter);
-	$data['fb_pm'] = $this->facebook_model->RetrievePmFB($filter,$limit);
-    $data['CountPmFB']=$this->facebook_model->CountPmFB($filter);
-    
-	$this->load->model('campaign_model');
-	$data['product_list'] = $this->campaign_model->GetProduct();
-	$data['channel_id'] = $channel_id;
-	$this->load->model('case_model');
-	$data['user_list'] = $this->case_model->ReadAllUser();
-	$this->load->view('dashboard/facebook/facebook_stream',$data);
+    	$filter = array(
+    	   'channel_id' => $channel_id,
+    	);
+    	if($is_read != NULL){
+    	    if($is_read != 2){
+    		$filter['is_read'] = $is_read;
+    	    }
+    	}
+        $limit=10;
+    	$data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter,$limit);
+    	$data['count_fb_feed']=$this->facebook_model->CountFeedFB($filter);
+    	$data['fb_pm'] = $this->facebook_model->RetrievePmFB($filter,$limit);
+        $data['CountPmFB']=$this->facebook_model->CountPmFB($filter);
+        
+    	$this->load->model('campaign_model');
+    	$data['product_list'] = $this->campaign_model->GetProduct();
+    	$data['channel_id'] = $channel_id;
+    	$this->load->model('case_model');
+    	$data['user_list'] = $this->case_model->ReadAllUser();
+    	$this->load->view('dashboard/facebook/facebook_stream',$data);
     }
     
     public function twitter_stream($channel_id,$is_read = null){
@@ -212,32 +212,69 @@ class Media_stream extends CI_Controller {
 	  );
 	  $this->load->library('facebook',$config);
 	  $this->facebook->setaccesstoken($access_token_fb);
-	  $this->facebook->api('/'.$post_id.'/likes','POST');
+	  $LIKES=$this->facebook->api('/'.$post_id.'/likes','POST');
+      print_r($LIKES);
+      
+      $timezone = new DateTimeZone("Asia/Kuala_Lumpur");
+      $currentTime = new DateTime(date('Y-m-d H:i:s e'), $timezone);
+        
+      $filter = array(
+            "post_stream_id" => $post_id
+      );
+               if($_POST['log_action']){
+            $log_action=$_POST['log_action'];
+         }
+
+        
+        $post_ids= $this->facebook_model->RetrieveFeedFB($filter);       
+        $db_log=$this->action_model->actionLog('like_facebook',$post_ids[0]->channel_id,$currentTime->format("Y-m-d H:i:s"),$post_id,$post_id,$post_ids[0]->post_id,$this->session->userdata['user_id']);
     }
     
     public function FbReplyPost(){
         $this->load->model('account_model');
         $this->load->model('facebook_model');
+        $this->load->model('action_model');
         $comment = $this->input->post('comment');
-        $post_id = $this->input->post('post_id');
+        $comment_id = $this->input->post('post_id');
      
-	$filter = array(
+	   $filter = array(
             "connection_type" => "facebook"
         );
+       
         if($this->input->get('channel_id')){
-            $filter['channel_id'] = $this->input->get('channel_id');
+            $channel_id=$this->input->get('channel_id');
+            $filter['channel_id'] = $channel_id;
         }
+       
         $channel_loaded = $this->account_model->GetChannel($filter);
         $newStd = new stdClass();
         $newStd->page_id =  $channel_loaded[0]->social_id;
         $newStd->token = $this->facebook_model->GetPageAccessToken( $channel_loaded[0]->oauth_token, $channel_loaded[0]->social_id);
+       
         $config = array(
 	       'appId' => $this->config->item('fb_appid'),
 	       'secret' => $this->config->item('fb_secretkey')
-	    );
-	$this->load->library('facebook',$config);
-	$this->facebook->setaccesstoken($newStd->token);
-	$this->facebook->api('/'.$post_id.'/comments','post',array('message' => $comment));
+        );
+	
+        $this->load->library('facebook',$config);
+    	$this->facebook->setaccesstoken($newStd->token);
+    	$result=$this->facebook->api('/'.$comment_id.'/comments','post',array('message' => $comment));
+        
+        $timezone = new DateTimeZone("Asia/Kuala_Lumpur");
+        $currentTime = new DateTime(date('Y-m-d H:i:s e'), $timezone);
+        
+         $filter = array(
+            "post_stream_id" => $comment_id
+        );
+        
+        $post_ids= $this->facebook_model->RetrieveFeedFB($filter);       
+         //print_r($post_ids);
+         if($_POST['log_action']){
+            $log_action=$_POST['log_action'];
+         }
+        $db_log=$this->action_model->actionLog($log_action,$channel_loaded[0]->channel_id,$currentTime->format("Y-m-d H:i:s"),$comment_id,$result['id'],$post_ids[0]->post_id,$this->session->userdata['user_id']);
+        //print_r($db_log);
+    
     }
     
     public function load_facebook($type){

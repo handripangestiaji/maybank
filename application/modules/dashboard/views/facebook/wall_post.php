@@ -125,7 +125,7 @@ for($i=0; $i<count($fb_feed);$i++):?>
                             <i class="icon-facebook-sign"></i>&nbsp;<span class="reply-fb-char-count">2000</span>
                         </div>
                         <div class="pull-right">
-                            <button class="btn btn-primary btn-small btn-send-reply">SEND</button>    
+                            <button class="btn btn-primary btn-small btn-send-reply" value="reply_facebook">SEND</button>    
                         </div>
                         <br clear="all" />
                         <div class="reply-status hide">MESSAGE SENT</div>

@@ -16,6 +16,8 @@ class Socialmedia extends MY_Controller {
 	  $this->load->helper('url');
 	  $this->load->helper('array');
 	  $this->load->helper('form');
+      $this->load->model('twitter_model');
+      $this->load->model('action_model');
 		
 	  $this->session->set_userdata('access_token', $this->config->item('twitter_access_token'));
 	  $this->session->set_userdata('access_token_secret', $this->config->item('twitter_access_secret'));
@@ -105,14 +107,15 @@ class Socialmedia extends MY_Controller {
             $parameters = array('status' => $content,'in_reply_to_status_id'=>$str_id);
                 
             $result=$this->connection->post('statuses/update', $parameters);
-            echo json_encode($result);
+            print_r($result);
+            $this->twitter_log($_POST['log_action'],$result->in_reply_to_status_id_str,$result->id_str);
                
         }elseif($action=='retweet'){ //ok
 
             /* statuses/retweet */
             $method = 'statuses/retweet/'.$str_id;
             $this->connection->post($method);
-    
+            
         }elseif($action=='dm_send'){//ok
             
             /* direct_messages/new */
@@ -167,6 +170,20 @@ class Socialmedia extends MY_Controller {
 					  access_token='.$access_token_fb);
 	  echo $result;
 	  */
+    }
+    
+    public function twitter_log($log_action,$post_id,$result_post_id){
+//    print_r($log_action);
+        $timezone = new DateTimeZone("Asia/Kuala_Lumpur");
+        $currentTime = new DateTime(date('Y-m-d H:i:s e'), $timezone);
+        
+         $filter = array(
+            "post_stream_id" => $post_id
+        );
+        $post_ids= $this->twitter_model->ReadTwitterData($filter,1);       
+        //print_r($post_ids);
+        $db_log=$this->action_model->actionLog($log_action,$post_ids[0]->channel_id,$currentTime->format("Y-m-d H:i:s"),$post_ids[0]->post_stream_id,$result_post_id,$post_ids[0]->post_id,$this->session->userdata['user_id']);
+        
     }
     
 }

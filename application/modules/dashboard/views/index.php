@@ -18,7 +18,7 @@
                                 <select class="left compose-channels" id="multipleSelect" multiple="multiple">
                                     <?php
                                         for($i=0;$i<count($channels);$i++){
-                                            echo '<option id="opt'.$channels[$i]->connection_type.'">'.$channels[$i]->name.'</option>';
+                                            echo '<option id="opt'.$channels[$i]->connection_type.'" value="'.$channels[$i]->channel_id.'">'.$channels[$i]->name.'</option>';
                                         }
                                     ?>
                                 </select>

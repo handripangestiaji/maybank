@@ -240,6 +240,25 @@ class Media_stream extends CI_Controller {
 	$this->facebook->api('/'.$post_id.'/comments','post',array('message' => $comment));
     }
     
+    public function SocmedPost(){
+	  $this->load->model('post_model');
+	  $value = array('channel_id' => $this->input->post('channel_id'),
+			 'created_by' => 0,
+			 'messages' => $this->input->post('message')
+			);
+	  if($this->input->post('tags') != ''){
+	    $tags = explode(',',$this->input->post('tags'));
+	    $new_tags = array();
+	    foreach($tags as $tag){
+		$new_tags[] = array('content_tag_id' => $tag);
+	    }
+	  }
+	  else{
+	    $tags = ''
+	  }
+	$this->post_model->InsertPost($value,$tags);      
+    }
+    
     public function load_facebook($type){
 	    $access_token = "CAACEdEose0cBAFGdZB2IH8VzRiPuoLAZC0vQ3u7Tc0PuZAyycV0cs5CCng8Xw3qnni9V6YxgeaQ0p9VCdGzfGGHTeUUsLL6exlGXBTAbWl6T7573l4DnKm3kTPh7dQrqqJNpcvMMWZA9K92p7NtS5eLwjmZCKxZCCEQ4jWk5DtccZBMZAEKS2Meqe1yzhetcUKMZD";
 	    

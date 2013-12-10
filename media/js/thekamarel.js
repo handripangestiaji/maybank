@@ -763,6 +763,26 @@ $(function(){
                         }
                         else
                         {
+                            $('.compose-channels option:selected').each(function() {
+                                me=$(this);
+                                $('.compose-post-status').show();
+                                $('.compose-post-status').html('Posting...');    
+                                $.ajax({
+                                    url : BASEURL + 'dashboard/media_stream/SocmedPost',
+                                    type: "POST",
+                                    data: {
+                                            channel:me.val(),
+                                            content:$('.compose-textbox').val()
+                                            },
+                                    success: function()
+                                    {
+                                        $('.compose-post-status').html('Post Sent');
+                                        $('.compose-post-status').fadeOut(10000);
+                                    },
+                                });
+                            });
+                            
+                            /*
                             if($('#optTw').is(':selected')){
                                 $.ajax({
                                     url : BASEURL + 'dashboard/socialmedia/twitterAction',
@@ -781,7 +801,7 @@ $(function(){
                             
                             if($('#optFb').is(':selected')){
                                 $.ajax({
-                                    url : BASEURL + 'dashboard/socialmedia/fbstatusupdate',
+                                    url : BASEURL + 'dashboard/media_stream/FbStatusUpdate',
                                     type: "POST",
                                     data: {
                                             content:$('.compose-textbox').val()
@@ -793,6 +813,7 @@ $(function(){
                                     },
                                 });
                             }
+                            */
                         }
                     });
                     

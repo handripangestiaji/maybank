@@ -5,7 +5,7 @@
 	if($msg!=NULL){ ?>
         <div class="alert alert-error">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <strong>Create User</strong> failed.
+            <strong>Create User</strong> <?=$msg?>.
         </div>
 <?php }?>
     <div class="cms-content row-fluid">

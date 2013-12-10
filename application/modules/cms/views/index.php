@@ -30,6 +30,7 @@
             	$data['campaigns'] = $campaigns ? $campaigns:'';
             	$data['products'] = $products ? $products:'';
             	$data['tags'] = $tags ? $tags:'';
+            	$data['urls'] = $urls ? $urls:'';
                 $this->load->view($cms_view, $data);
             ?>
         </div>

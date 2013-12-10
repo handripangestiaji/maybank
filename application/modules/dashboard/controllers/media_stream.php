@@ -18,25 +18,6 @@ class Media_stream extends CI_Controller {
 	$this->load->helper('form');
 	$this->load->model('facebook_model');
 	$this->load->model('twitter_model');
-	  
-	$this->session->set_userdata('access_token', $this->config->item('twitter_access_token'));
-	$this->session->set_userdata('access_token_secret', $this->config->item('twitter_access_secret'));
-	  
-	if($this->session->userdata('access_token') && $this->session->userdata('access_token_secret'))
-	{
-		// If user already logged in
-		$this->connection = $this->twitteroauth->create($this->config->item('twitter_consumer_token'), $this->config->item('twitter_consumer_secret'), $this->config->item('twitter_access_token'),  $this->config->item('twitter_access_secret'));
-	}
-	elseif($this->session->userdata('request_token') && $this->session->userdata('request_token_secret'))
-	{
-		// If user in process of authentication
-		$this->connection = $this->twitteroauth->create($this->config->item('twitter_consumer_token'), $this->config->item('twitter_consumer_secret'), $this->session->userdata('request_token'), $this->session->userdata('request_token_secret'));
-	}
-	else
-	{
-		// Unknown user
-		$this->connection = $this->twitteroauth->create($this->config->item('twitter_consumer_token'), $this->config->item('twitter_consumer_secret'));
-	}
     }
     
     
@@ -49,13 +30,12 @@ class Media_stream extends CI_Controller {
 		$filter['is_read'] = $is_read;
 	    }
 	}
-    $limit=10;
+	$limit=10;
 	$data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter,$limit);
 	$data['count_fb_feed']=$this->facebook_model->CountFeedFB($filter);
-    //$data['own_post'] = $this->facebook_model->RetrievePostFB($filter);
+	//$data['own_post'] = $this->facebook_model->RetrievePostFB($filter);
 	$data['fb_pm'] = $this->facebook_model->RetrievePmFB($filter,$limit);
-    $data['CountPmFB']=$this->facebook_model->CountPmFB($filter);
-    
+	$data['CountPmFB']=$this->facebook_model->CountPmFB($filter);
 	$this->load->model('campaign_model');
 	$data['product_list'] = $this->campaign_model->GetProduct();
 	$data['channel_id'] = $channel_id;
@@ -99,76 +79,102 @@ class Media_stream extends CI_Controller {
     	$data['product_list'] = $this->campaign_model->GetProduct();
     	$this->load->view('dashboard/twitter/twitter_stream',$data);
     }
-	
-    public function auth()
-    {
-	    
-	    if($this->session->userdata('access_token') && $this->session->userdata('access_token_secret'))
-	    {
-		    // User is already authenticated.
-		      $data['twiteerAction']=$this->connection->get('statuses/home_timeline');   
-		     $this->load->view('dashboard/index',$data);
-	    }
-	    else
-	    {
-		    // Making a request for request_token
-		    $request_token = $this->connection->getRequestToken(base_url('/index.php/dashboard/callback'));
-		    $this->session->set_userdata('request_token', $request_token['oauth_token']);
-		    $this->session->set_userdata('request_token_secret', $request_token['oauth_token_secret']);
-		    if($this->connection->http_code == 200)
-		    {
-			    $url = $this->connection->getAuthorizeURL($request_token);
-			    redirect($url);
-		    }
-		    else
-		    {
-			    // An error occured. Make sure to put your error notification code here.
-			    redirect(base_url('/error_page_faild_auth'));
-		    }
-	    }
-    }
+
+  
+     public function twitterAction(){
+        
+        if(isset($_POST['action'])){
+            $action=$_POST['action'];   
+        }
+        
+        if(isset($_POST['content'])){
+            $content=$_POST['content'];
+        }
+        
+        if(isset($_POST['str_id'])){
+            $str_id=$_POST['str_id'];
+        }
+        
+        if(isset($_GET['friendid'])){
+            $friendid=$_GET['friendid'];
+        }
+
+        if(isset($_POST['friendid'])){
+            $friendid=$_POST['friendid'];
+        }
+        
+        if(isset($_POST['followid'])){
+            $followid=$_POST['followid'];
+        }
+        
+        if(isset($_POST['id'])){//id user
+            $id=$_POST['id'];
+        }
+        
+        if(isset($_POST['screen_name'])){//id user
+            $screen_name=$_POST['screen_name'];
+        }
+        
+        if($this->input->post('action')=='sendTweet'){ //ok
+
+            /* statuses/update */
+            $parameters = array('status' => $content);
+            $this->connection->post('statuses/update', $parameters);
     
-    public function callback()
-    {
-	    if($this->input->get('oauth_token') && $this->session->userdata('request_token') !== $this->input->get('oauth_token'))
-	    {
-			    $this->reset_session();
-			    redirect('/dashboard/auth');
-	    }
-	    else
-	    {
-		    $access_token = $this->connection->getAccessToken($this->input->get('oauth_verifier'));
+        }elseif($action=='destroy_status'){
     
-		    if ($this->connection->http_code == 200)
-		    {
-			    $this->session->set_userdata('access_token', $access_token['oauth_token']);
-			    $this->session->set_userdata('access_token_secret', $access_token['oauth_token_secret']);
-			    $this->session->set_userdata('twitter_user_id', $access_token['user_id']);
-			    $this->session->set_userdata('twitter_screen_name', $access_token['screen_name']);
-			    $this->session->unset_userdata('request_token');
-			    $this->session->unset_userdata('request_token_secret');
-			    redirect('dashboard');
-		    }
-		    else
-		    {
-			    // An error occured. Add your notification code here.
-			    redirect(base_url('/page_error_callback'));
-		    }
-	    }
-    }
-    //=========================================Twitter function=============================================
-    public function mentions()
-    {
-	$access_token = "CAACEdEose0cBADGyv9cLrxG0ycGrwyZBVrr4jPSG4NKHAZAZBwQS5MF1xrYdgwAiyCLZAnYvx1wBvr5I7MGxVsubO0xPMOIaYhVKsTTeVPvC05YLYfUttS0W3SzfC3wFltkY3Lo11zfH7LTVwF6zwADlv9HlAY7ZBinMshTHMM5dYxeY3ZA6bSY5zSNsDOFOsmE6bb5cbjiQZDZD";
-	    $data['fb_feed'] =  $this->facebook_model->RetrievePost('168151513217686', $access_token, false);
-	    $this->load->view('dashboard/index', $data);
-    }
-    public function twitterAction(){
-	  $data['twiteerAction']=$this->connection->get('statuses/mentions_timeline');   
-	  $data['twiteerAction']=$this->connection->get('statuses/home_timeline');  
-	  $data['twiteerAction']=$this->connection->get('direct_messages');  
-	  $data['twiteerAction']=$this->connection->get('statuses/home_timeline');  
-	  $this->load->view('dashboard/index',$data); 
+            /* statuses/destroy */
+            $method = "statuses/destroy".$str_id;
+            $this->connection->delete($method);    
+    
+        }elseif($action=='replayTweet'){//replay tweet,Direct message        
+            /* statuses/update */
+            $parameters = array('status' => $content,'in_reply_to_status_id'=>$str_id);
+                
+            $result=$this->connection->post('statuses/update', $parameters);
+            echo json_encode($result);
+               
+        }elseif($action=='retweet'){ //ok
+
+            /* statuses/retweet */
+            $method = 'statuses/retweet/'.$str_id;
+            $this->connection->post($method);
+    
+        }elseif($action=='dm_send'){//ok
+            
+            /* direct_messages/new */
+            $parameters = array('user_id' => $friendid, 'text' => $content);
+            $method = 'direct_messages/new';
+            $this->connection->post($method, $parameters);
+            
+        }elseif($action=='favorit'){
+            
+            /* direct_messages/new */
+            $parameters = array('id' => $str_id);
+            $method = 'favorites/create';
+            $this->connection->post($method, $parameters);
+            
+        }elseif($action=='follow'){
+            
+            /* friendships/create */
+            $method = 'friendships/create';
+            $result=$this->connection->post($method,array('follow'=>true,'user_id'=>$followid));
+       
+        }elseif($action=='unfollow'){
+            //echo "<br><br><br><br><br><br>";
+            $method = 'friendships/destroy';
+//            echo $method." ".$followid;
+            $result=$this->connection->post($method,array('user_id'=>$followid));
+            //print_r($result);
+       
+        }elseif($action=='unfriend'){
+            
+            /* friendships/destroy */
+            $method = 'friendships/destroy/'.$followid;
+            $this->connection->post($method);
+       
+        }
+        //redirect(base_url('/index.php/dashboard'));    	
     }
     //=========================================END Twitter function=============================================
 
@@ -204,15 +210,31 @@ class Media_stream extends CI_Controller {
     }
     
     public function FbLikeStatus(){
-	  $post_id=$_POST['post_id'];
-      $access_token_fb = fb_dummy_accesstoken();
-	  $config = array(
-	       'appId' => $this->config->item('fb_appid'),
-	       'secret' => $this->config->item('fb_secretkey')
-	  );
-	  $this->load->library('facebook',$config);
-	  $this->facebook->setaccesstoken($access_token_fb);
-	  $this->facebook->api('/'.$post_id.'/likes','POST');
+	$post_id = $this->input->post('post_id');
+	$this->load->model('account_model');
+	$channel = $this->account_model->GetChannel(array(
+	    "channel_id" => $this->input->post("channel_id")
+	));
+	header('Content-Type: application/x-json');
+	if(count($channel) == 1){
+	    $access_token_fb = $this->facebook_model->GetPageAccessToken($channel[0]->oauth_token, $channel[0]->social_id);
+	    
+	    $config = array(
+		 'appId' => $this->config->item('fb_appid'),
+		 'secret' => $this->config->item('fb_secretkey')
+	    );
+	    $this->load->library('facebook',$config);
+	    $this->facebook->setAccessToken($access_token_fb);
+	    if($this->input->post('like') === 'true')
+		$return = $this->facebook->api('/'.$post_id.'/likes','POST');
+	    else
+		$return = $this->facebook->api('/'.$post_id.'/likes','DELETE');
+	    echo json_encode($return);
+	}
+	else{
+	    echo false;
+	}
+	
     }
     
     public function FbReplyPost(){
@@ -294,10 +316,7 @@ class Media_stream extends CI_Controller {
     	
     	//get current starting point of records
     	$limit = ($group_number * $items_per_group);
-       
-        
-        
-        
+
     	$this->load->model('case_model');
     	$data['user_list'] = $this->case_model->ReadAllUser();
         
@@ -328,7 +347,7 @@ class Media_stream extends CI_Controller {
         }
 //        unset($filter['b.type']);
         if($action=='direct'){
-            $filter=array();
+            $filter['channel_id']=$channel_ids;
             $data['directmessage']=$this->twitter_model->ReadDMFromDb($filter,$limit);
             $data['countDirect']=$this->twitter_model->CountTwitterData($filter);
         	$data['channel_id'] = $channel_id;
@@ -338,38 +357,23 @@ class Media_stream extends CI_Controller {
         
     //$data['own_post'] = $this->facebook_model->RetrievePostFB($filter);
         if($action=='wallPosts'){
-        $filter=array();
+	    $filter['channel_id']=$channel_ids;
              $data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter,$limit);
              $data['count_fb_feed']=$this->facebook_model->CountFeedFB($filter);
              $this->load->view('dashboard/facebook/wall_post.php',$data);
         }
         
         if($action=='privateMessages'){
-            $filter=array();
-        	$data['fb_pm'] = $this->facebook_model->RetrievePmFB($filter,$limit);
+            $filter['channel_id']=$channel_ids;
+            $data['fb_pm'] = $this->facebook_model->RetrievePmFB($filter,$limit);
             $data['CountPmFB']=$this->facebook_model->CountPmFB($filter);
-             $this->load->view('dashboard/facebook/private_message.php',$data);
+            $this->load->view('dashboard/facebook/private_message.php',$data);
         }
         //print_r($data);
     }
     
 
 
-    /**
-     * Reset session data
-     * @access	private
-     * @return	void
-     */
- 
-    public function reset_session()
-    {
-	    $this->session->unset_userdata('access_token');
-	    $this->session->unset_userdata('access_token_secret');
-	    $this->session->unset_userdata('request_token');
-	    $this->session->unset_userdata('request_token_secret');
-	    $this->session->unset_userdata('twitter_user_id');
-	    $this->session->unset_userdata('twitter_screen_name');
-    }
     //=========================================END GENERAL function=============================================    
     
       
@@ -380,4 +384,6 @@ class Media_stream extends CI_Controller {
 	$url = 'http://' . str_replace('http://', '', $url); // Avoid accessing the file system
 	echo file_get_contents($url);
      }
+     
+    
 }

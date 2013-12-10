@@ -174,6 +174,7 @@ class facebook_model extends CI_Model
 	    "attachment" => isset($each_post->attachment->media) ? json_encode($each_post->attachment->media) : "",
 	    "enggagement_count" => 0,
 	    "total_likes" => $each_post->like_info->like_count,
+	    "user_likes" => $each_post->like_info->user_likes,
 	    "total_shares" =>  $each_post->share_count,
 	    "total_comments" => isset($each_post->comments) ? count($each_post->comments) : 0,
 	    "updated_at" => $updated_time->format("Y-m-d H:i:s"),

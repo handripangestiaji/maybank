@@ -488,6 +488,7 @@ $(function(){
                         $(this).closest('.containerHeadline').css( "background-color", "#3B5998" );
                         $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');        
                         $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/facebook_stream/' + $(this).siblings('.channel-stream-id').val());
+                        
                     });
                     
                     $('.twitter_stream').on('click',function() {
@@ -822,7 +823,7 @@ $(function(){
                             data: {
                                 action:'retweet',
                                 str_id: $(this).siblings(".str_id").val()
-                                },
+                            },
                             success: function()
                             {
                                 
@@ -838,10 +839,11 @@ $(function(){
                             url : BASEURL + 'dashboard/socialmedia/twitterAction',
                             type: "POST",
                             data: {
-                                    action:'replayTweet',
-                                    content:$(this).parent().siblings(".replaycontent").val(),
-                                    str_id: $(this).val()
-                                    },
+                                action:'replayTweet',
+                                content:$(this).parent().siblings(".replaycontent").val(),
+                                str_id: $(this).val(),
+                                channel_id : $(this).closest('.floatingBox').find('input.channel-id').val()
+                            },
                             success: function(data)
                             {
                                 $('.compose-post-status').show();
@@ -875,9 +877,9 @@ $(function(){
                             url : BASEURL + 'dashboard/socialmedia/twitterAction',
                             type: "POST",
                             data: {
-                                    action:'favorit',
-                                    str_id: $(this).siblings(".str_id").val()
-                                    },
+                                action:'favorit',
+                                str_id: $(this).siblings(".str_id").val()
+                            },
                             success: function()
                             {
                                 $('.compose-post-status').show();
@@ -922,35 +924,39 @@ $(function(){
                     
                     $(this).on('click','.fblike',
                         function() {
+                        var fbLikeButton = $(this);
+                        isLike = fbLikeButton.html() == "LIKE";
+                        fbLikeButton.html('WAITING...').attr("disabled", "disabled");
                         $.ajax({
                             url : BASEURL + 'dashboard/media_stream/FbLikeStatus',
                             type: "POST",
                             data: {
-                                    post_id: $(this).val()
-                                    },
-                            success: function()
+                                post_id: $(this).val(),
+                                channel_id : $('.floatingBox').find('input.channel-id').val(),
+                                like : isLike
+                            },
+                            success: function(response)
                             {
-                                $('.compose-post-status').show();
-                                $('.compose-post-status').fadeOut(5000);
+                                fbLikeButton.removeAttr("disabled");
+                                if(response == true){
+                                    if(isLike)
+                                        fbLikeButton.html("UNLIKE");
+                                    else
+                                        fbLikeButton.html("LIKE");
+                                }
+                                else{
+                                    alert("Failed to like/unlike status");
+                                    fbLikeButton.html("LIKE");
+                                }
                             },
                         });
                     });
                     
                      $(this).on('click','.send_reply',
                         function() {
-                        $.ajax({
-                            url : BASEURL + 'dashboard/media_stream/FbReplyPost',
-                            type: "POST",
-                            data: {
-                                    post_id:$(this).val(),
-                                    comment: $(this).parent().siblings(".reply_comment").val()
-                                    },
-                            success: function()
-                            {
-                                $('.compose-post-status').show();
-                                $('.compose-post-status').fadeOut(5000);
-                            },
-                        });
+                        $(this).attr("disabled", "disabled");
+                        console.log($(this).closest('.floatingBoxContainers').find('input.channel-id').val());
+                        
                     }); 
                     
                       /*load more content*/  
@@ -1035,13 +1041,14 @@ $(function(){
             }
         });
         $("#channelMg a").click(function(){
+           
             $('.btn').removeClass('btn-primary');
             $(this).LoadContentAsync ({
                 url : BASEURL +"channels/listofchannel/" + $(this).attr('href').replace("#", ""),
                 contentReplaced : $('#channelMg .cms-table '),
                 urlParameter : {
                     "testParameter" : 1
-                }
+                },
             });
         });        
         $(".table-sub-tr").hide();   

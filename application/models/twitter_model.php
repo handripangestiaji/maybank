@@ -137,6 +137,7 @@ class twitter_model extends CI_Model
             "geolocation" => json_encode($tweet->place),
             "source" => $tweet->source,
             "twitter_user_id" => $tweet->user->id_str,
+            "is_following" => $tweet->user->following,
             "created_at" => $created_at->format("Y-m-d H:i:s")
         );
         

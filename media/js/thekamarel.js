@@ -764,33 +764,79 @@ $(function(){
                         }
                         else
                         {
-                            if($('#optTw').is(':selected')){
-                                $.ajax({
-                                    url : BASEURL + 'dashboard/socialmedia/twitterAction',
-                                    type: "POST",
-                                    data: {
-                                            action:'sendTweet',
-                                            content:$('.compose-textbox').val()
-                                            },
-                                    success: function()
-                                    {
-                                        $('.compose-post-status').show();
-                                        $('.compose-post-status').fadeOut(5000);
-                                    },
-                                });
+                            var channels = new Array();
+                            var i = 0;
+                            var check_twitter = false;
+                            var check_fb = false;
+                            var check_youtube = false;
+                        
+                            $('.compose-channels option:selected').each(function() {
+                                if($(this).attr('id') == 'opttwitter'){
+                                    check_twitter = true;
+                                }
+                                else if($(this).attr('id') == 'optfacebook'){
+                                    check_fb = true;
+                                }
+                                else if($(this).attr('id') == 'optyoutube'){
+                                    check_youtube = true;
+                                }
+                            });
+                            
+                            var confirmed = true;
+                            var len = $('.compose-textbox').val().length;
+                            if(len > 140 && check_twitter == true){
+                                var r = confirm('Your message is more than 140 characters. It will not post to Twitter. Do you still want to continue?');
+                                if(r == true){
+                                    $('#opttwitter').removeAttr("selected");
+                                    confirmed = true;
+                                }
+                                else{
+                                    confirmed = false;
+                                }
                             }
                             
-                            if($('#optFb').is(':selected')){
+                            if(len > 500 && check_youtube == true){
+                                var r = confirm('Your message is more than 500 characters. It will not post to Youtube. Do you still want to continue?');
+                                if(r == true){
+                                    $('#optyoutube').removeAttr('selected');
+                                    confirmed = true;
+                                }
+                                else{
+                                    confirmed = false;
+                                }
+                            }
+                            
+                            if(len > 2000 && check_fb == true){
+                                var r = confirm('Your message is more than 2000 characters. It will not post to Facebook. Do you still want to continue?');
+                                if(r == true){
+                                     $('#optfacebook').removeAttr('selected');
+                                    confirmed = true;
+                                }
+                                else{
+                                    confirmed = false;
+                                }
+                            }
+                            
+                            if(confirmed == true){
+                                $('.compose-channels option:selected').each(function() {
+                                    channels[i] = $(this).val();
+                                    i++
+                                });
+                                    
+                                $('.compose-post-status').show();
+                                $('.compose-post-status').html('Posting...');    
                                 $.ajax({
-                                    url : BASEURL + 'dashboard/socialmedia/fbstatusupdate',
+                                    url : BASEURL + 'dashboard/media_stream/SocmedPost',
                                     type: "POST",
                                     data: {
-                                            content:$('.compose-textbox').val()
+                                            channels:channels,
+                                            content:$('.compose-textbox').val(),
+                                            tags:$('.compose-tag-field').val()
                                             },
                                     success: function()
                                     {
-                                        $('.compose-post-status').show();
-                                        $('.compose-post-status').fadeOut(5000);
+                                        $('.compose-post-status').html('Post Sent');
+                                        $('.compose-post-status').fadeOut(7500);
                                     },
                                 });
                             }
@@ -901,7 +947,7 @@ $(function(){
                             {
                                 $('.compose-post-status').show();
                                 $('.compose-post-status').fadeOut(5000);
-                            },
+                            }
                         });
                     });
                     
@@ -939,7 +985,7 @@ $(function(){
                             {
                                 fbLikeButton.removeAttr("disabled");
                                 if(response == true){
-                                    if(isLike)
+                                    if(isLike == true)
                                         fbLikeButton.html("UNLIKE");
                                     else
                                         fbLikeButton.html("LIKE");
@@ -955,6 +1001,7 @@ $(function(){
                      $(this).on('click','.send_reply',
                         function() {
                         $(this).attr("disabled", "disabled");
+                        
                         console.log($(this).closest('.floatingBoxContainers').find('input.channel-id').val());
                         
                     }); 

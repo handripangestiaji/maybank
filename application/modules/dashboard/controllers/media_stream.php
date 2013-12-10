@@ -218,7 +218,6 @@ class Media_stream extends CI_Controller {
 	header('Content-Type: application/x-json');
 	if(count($channel) == 1){
 	    $access_token_fb = $this->facebook_model->GetPageAccessToken($channel[0]->oauth_token, $channel[0]->social_id);
-	    
 	    $config = array(
 		 'appId' => $this->config->item('fb_appid'),
 		 'secret' => $this->config->item('fb_secretkey')
@@ -229,6 +228,15 @@ class Media_stream extends CI_Controller {
 		$return = $this->facebook->api('/'.$post_id.'/likes','POST');
 	    else
 		$return = $this->facebook->api('/'.$post_id.'/likes','DELETE');
+	    $action = array(
+		"action_type" => "like_facebook",
+		"channel_id" => $channel[0]->channel_id,
+		"created_at" => date("Y-m-d H:i:s"),
+		"stream_id" => $this->input->post('post_id'),
+		"created_by" => $this->session->userdata('user_id'),
+		"stream_id_response" => $return
+	    );
+	    $this->account_model->CreateFbLikeAction($action, $this->input->post('like') === 'true' ? 1 : 0);
 	    echo json_encode($return);
 	}
 	else{
@@ -260,6 +268,11 @@ class Media_stream extends CI_Controller {
 	$this->load->library('facebook',$config);
 	$this->facebook->setaccesstoken($newStd->token);
 	$this->facebook->api('/'.$post_id.'/comments','post',array('message' => $comment));
+    }
+    
+    public function SocmedPost(){
+	$this->load->model('post_model');
+	$this->post_model->InsertPost($this->input->post('content'),$this->input->post('channels'),$this->input->post('tags'));
     }
     
     public function load_facebook($type){

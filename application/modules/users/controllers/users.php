@@ -80,7 +80,7 @@ class Users extends MY_Controller {
 	       else
 	       {
 	       $config = array(
-			      'upload_path'   => 'media/dynamic/',
+			      'upload_path'   => './media/dynamic/',
 			      'allowed_types' => 'gif|jpg|png',
 			      'max_size'      => '2048',
 			      'max_width'     => '1024',
@@ -91,7 +91,7 @@ class Users extends MY_Controller {
 	       if ( ! $this->upload->do_upload())
 		{
 		    //$this->upload->display_errors();
-		    $this->session->set_flashdata('failed', TRUE);
+		    $this->session->set_flashdata('failed', $this->upload->display_errors());
 		    redirect('users/create');
 		}
 		else

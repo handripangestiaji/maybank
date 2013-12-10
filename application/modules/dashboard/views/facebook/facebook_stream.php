@@ -28,12 +28,14 @@
 <div id='cfacebook'  class="container-fluid">
     <!-- ==================== ALL ACTIVITIES CONTENT ==================== -->
     <ul class="floatingBoxContainers" id="wallPosts">
+        <input type="hidden" value="" name="channel_id" class="channel-id" />
         <?php $this->load->view('dashboard/facebook/wall_post', array('fb_feed' => $fb_feed))?> 
     </ul>
     <!-- ==================== END OF ALL ACTIVITIES CONTENT ==================== -->
 
     <!-- ==================== RECENT COMMENTS CONTENT ==================== -->
     <ul class="floatingBoxContainers" id="privateMessages" style="display:none">
+        <input type="hidden" value="" name="channel_id" class="channel-id" />
         <?php $this->load->view('dashboard/facebook/private_message', array('fb_feed' => $fb_feed))?> 
     </ul>
     <ul class="floatingBoxContainers" id="maybankpost" style="display:none">

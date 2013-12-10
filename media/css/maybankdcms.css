@@ -605,13 +605,13 @@ border-radius: 3px;
 	text-align: center;
 }
 
-.reply-field .reply-insert-link-text{
+.reply-field .reply-insert-link-text, .reply-engagement-field .reply-insert-link-text{
 	width: 50%;
 	margin-bottom: 0px;
 }
 
 
-.reply-field .reply-insert-link-btn{
+.reply-field .reply-insert-link-btn, .reply-engagement-field .reply-insert-link-btn{
 	margin-left: 5px;
 }
 

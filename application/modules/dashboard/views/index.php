@@ -18,7 +18,7 @@
                                 <select class="left compose-channels" id="multipleSelect" multiple="multiple">
                                     <?php
                                         for($i=0;$i<count($channels);$i++){
-                                            echo '<option id="opt'.$channels[$i]->connection_type.'">'.$channels[$i]->name.'</option>';
+                                            echo '<option id="opt'.$channels[$i]->connection_type.'" value="'.$channels[$i]->channel_id.'">'.$channels[$i]->name.'</option>';
                                         }
                                     ?>
                                 </select>
@@ -41,7 +41,7 @@
                         </div>
                         <div class="right">
                             <i class="icon-tag icon-large"></i>
-                            <input type="text" length="100" placeholder="Separate TAG by ," />
+                            <input type="text" class="compose-tag-field" length="100" placeholder="Separate TAG by ," />
                         </div>
                         <div class="left clear top10">
                         <select class="standard-sel">

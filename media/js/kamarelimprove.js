@@ -103,4 +103,40 @@ $(function(){
         
         $('#relatedCoversation-'+$(this).val()).val(relatedConversation);
     });
+    
+    
+    $('form.update_password').submit(function(e){
+        var pass = $(this).find('input[name=pass]').val();
+        var exist = $(this).find('input[name=exist]').val();
+        var cPas = $(this).find('input[name=cpass]').val();
+        var me = $(this);
+        if(pass != cPas){
+            me.find('.error-pass').html('Password is not equal.');
+            me.find('.error-cpass').html('Password is not equal.');
+        }
+        else{
+            $.ajax({
+                "url" : BASEURL + "users/users_json/CheckPassword",
+                "data" : {exist: exist,
+                            pass: pass },
+                "type" : "POST",
+                "success" : function(response){
+                                if(response == false){
+                                    me.find('.error-exist').html('Password is incorrect.');
+                                }
+                                else{
+                                    me.find('.message').html('<div class="alert alert-success">' +
+                                    '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
+                                    '<h4>Update</h4> Password updated sucessfully!</div>');
+                                }
+                            },
+                "failed" : function(){
+                    
+                }
+            });
+           
+        }
+        
+        e.preventDefault();
+    });
 });

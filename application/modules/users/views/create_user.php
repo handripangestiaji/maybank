@@ -26,37 +26,35 @@
                     <tr>
                         <td>User Name</td>
                         <td><input type='text' name='username' value="<?php echo set_value('username');?>" />
-                        <font color="red"><?php echo form_error('username'); ?></font></td>
+                        <span style='color:red;'><?php echo form_error('username'); ?></span></td>
                     </tr>
                     
                     <tr>
                         <td>Full Name</td>
                         <td><input type="text" name="fullName" value="<?php echo set_value('fullName');?>" />
-                        <font color="red"><?php echo form_error('fullName'); ?></font></td>
+                        <span style='color:red;'><?php echo form_error('fullName'); ?></span></td>
                     </tr>
                     
                     <tr>
                         <td>Display Name</td>
                         <td><input type="text" name="displayName" value="<?php echo set_value('displayName');?>" />
-                        <font color="red"><?php echo form_error('displayName'); ?></font></td>
+                        <span style='color:red;'><?php echo form_error('displayName'); ?></span></td>
                     </tr>
                         
                     <tr>
                         <td>Email</td>
                         <td><input type="text" name="email" value="<?php echo set_value('email');?>" />
-                        <font color="red"><?php echo form_error('email'); ?></font></td>
+                        <span style='color:red;'><?php echo form_error('email'); ?></span></td>
                     </tr>
                     
                     <tr>
                         <td>Role</td>
                         <td>
                             <select name="optRole">
-                                <option>Select Role</option>
                                 <?php foreach($role->result() as $r){?>
                                 <option value='<?php echo $r->role_collection_id;?>'><?php echo $r->role_name;?></option>
                                 <?php }?>
                             </select>
-                            <?php echo form_error('optRole'); ?>
                         </td>
                     </tr>
                     
@@ -64,12 +62,10 @@
                         <td>Group</td>
                         <td>
                             <select name="optGroup">
-                                <option>Select Group</option>
                                 <?php foreach($group->result() as $g){ ?>
                                     <option value='<?php echo $g->group_id;?>'><?php echo $g->group_name;?></option>
                                 <?php }?>
                             </select>
-                            <?php echo form_error('optGroup'); ?>
                         </td>
                     </tr>
                     

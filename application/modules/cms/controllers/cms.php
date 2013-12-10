@@ -6,7 +6,7 @@ class Cms extends MY_Controller {
 	{
 		parent::__construct();
 		$this->load->library('Shorturl');
-		$this->load->model(array('tag_model', 'product_model', 'campaign_model'));
+		$this->load->model(array('tag_model', 'product_model', 'campaign_model', 'shorturl_model', 'campaign_url_model'));
 		$this->load->helper('form');
 		$this->load->library('form_validation');
 	}
@@ -18,6 +18,8 @@ class Cms extends MY_Controller {
     	$data['products'] = $this->product_model->get();
     	
     	$data['tags'] = $this->tag_model->get();
+    	
+    	$data['urls'] = '';
     	
         $data['cms_view'] = 'campaign_table';
         
@@ -31,6 +33,8 @@ class Cms extends MY_Controller {
     	$data['products'] = $this->product_model->get();
     	
     	$data['tags'] = $this->tag_model->get();
+    	
+		$data['urls'] = '';
     	
         $data['cms_view'] = 'create_campaign';
         
@@ -89,6 +93,8 @@ class Cms extends MY_Controller {
     	
     	$data['tags'] = $this->tag_model->get();
     	
+    	$data['urls'] = '';
+    	
     	$action = $this->input->get('action');
     	
         $data['cms_view'] = 'create_tag';
@@ -135,23 +141,58 @@ class Cms extends MY_Controller {
     	$data['products'] = '';
     	
     	$data['tags'] = '';
+    	
+    	$data['urls'] = $this->campaign_url_model->get();
     
 		if ($this->input->server('REQUEST_METHOD') === 'POST')
 		{
 			$params = array();
 			$params = $this->input->post('shorturl');
-			$code = $this->shorturl->urlToShortCode($params);
+			$params['user_id'] = $this->session->userdata('user_id');
+			
+			$config = array(
+						array(
+							'field' => 'shorturl[long_url]',
+							'label' => 'Full Url',
+							'rules' => 'required'
+						),
+						array(
+							'field' => 'shorturl[short_code]|max_length[6]',
+							'label' => 'Full Url',
+							'rules' => 'required'
+						)
+					);
+			
+			$this->form_validation->set_rules($config);
+			
+			if($this->form_validation->run() == TRUE)
+			{
+				$code = $this->shorturl->urlToShortCode($params);
+				
+				if(isset($code['message']))
+				{
+			        $this->session->set_userdata('message', $code['message']);
+				}
+				else
+				{
+					$this->session->unset_userdata('message');
+				}
+				
+				$setparam = array(
+								"campaign_id" => $params['campaign_id'], 
+								"url_id" => $code['url_id'],
+								"user_id" => $params['user_id']
+							);
+				
+				$id_campaign_url = $this->campaign_url_model->insert($setparam);
+			}
+						
+		}
+		else {
+			$this->session->unset_userdata('message');
 		}
 		
-		try {
-			$code = $this->shorturl->urlToShortCode(array("long_url" => "http://www.maybank2u.com.my/"));
-		}
-		catch (Exception $e)
-		{
-			print_r("Error create short url");
-			die();
-		}
-		$data['code'] = $code;
+		$data['code'] = substr( md5( time().uniqid().rand() ), 0, 6 );
         $data['cms_view'] = 'create_short_url';
         $this->load->view('cms/index',$data);
     }
@@ -163,6 +204,8 @@ class Cms extends MY_Controller {
     	$data['tags'] = '';
     	
     	$data['products'] = $this->product_model->get();
+    	
+    	$data['urls'] = '';
     	
     	$action = $this->input->get('action');
         

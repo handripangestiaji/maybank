@@ -901,7 +901,7 @@ $(function(){
                             {
                                 $('.compose-post-status').show();
                                 $('.compose-post-status').fadeOut(5000);
-                            },
+                            }
                         });
                     });
                     
@@ -939,7 +939,7 @@ $(function(){
                             {
                                 fbLikeButton.removeAttr("disabled");
                                 if(response == true){
-                                    if(isLike)
+                                    if(isLike == true)
                                         fbLikeButton.html("UNLIKE");
                                     else
                                         fbLikeButton.html("LIKE");
@@ -955,6 +955,7 @@ $(function(){
                      $(this).on('click','.send_reply',
                         function() {
                         $(this).attr("disabled", "disabled");
+                        
                         console.log($(this).closest('.floatingBoxContainers').find('input.channel-id').val());
                         
                     }); 

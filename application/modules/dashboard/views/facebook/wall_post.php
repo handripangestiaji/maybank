@@ -78,7 +78,7 @@ for($i=0; $i<count($fb_feed);$i++):?>
                 <p>"<?php echo $comment[$j]->comment_content; ?>"</p>
                 <p>
                     <button type="button" class="btn btn-warning btn-mini">OPEN</button>
-                    <button class="btn btn-primary btn-mini">LIKE</button>
+                    <button class="fblike btn btn-primary btn-mini" value="<?=$comment[$j]->post_stream_id?>"><?=$comment[$j]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button>
                     <button type="button" class="btn btn-primary btn-engagement-reply btn-mini"><i class="icon-mail-reply"></i></button>
                     <button type="button" class="btn btn-danger btn-engagement-case btn-mini"><i class="icon-plus"></i> CASE</button>
                 </p>

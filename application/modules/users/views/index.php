@@ -109,7 +109,7 @@
                         <?php }?>
                         <td><?php echo $row->created_at;?></td>
                         <td><?php echo $row->created_by_name;?></td>
-                        <td><a href="<?php echo site_url();?>/users/edit/<?php echo $row->user_id;?>"><span><i class="icon-pencil"></i></span></a></td>
+                        <td><a href="<?php echo site_url('users/edit/'.$row->user_id);?>"><span><i class="icon-pencil"></i></span></a></td>
                         <td>
                             <a href="" onclick="show_confirm('<?php echo $row->user_id;?>');return false;"><span><i class="icon-remove"></i></span></a>
                         </td>
@@ -140,22 +140,22 @@
     function yes_delete_user()
     {
         var usr_id = document.getElementById("user_id_delete").value;
-        window.location = "<?php echo site_url();?>/users/delete/"+usr_id;
+        window.location = "<?php echo site_url('users/delete');?>/"+usr_id;
     }
     
     function btn_add()
     {
-        window.location.href = "<?php echo site_url();?>/users/create";
+        window.location.href = "<?php echo site_url('users/create');?>";
     }
     
     function menu_role()
     {
-        window.location.href = "<?php echo site_url();?>/users/menu_role";
+        window.location.href = "<?php echo site_url('users/menu_role');?>";
     }
     
     function menu_group()
     {
-        window.location.href = "<?php echo site_url();?>/users/menu_group";
+        window.location.href = "<?php echo site_url('users/menu_group');?>";
     }
     
     function show_confirm(tes)
@@ -166,7 +166,7 @@
     
     function menu_user()
     {
-        window.location.href = "<?php echo site_url();?>/users";
+        window.location.href = "<?php echo site_url('users');?>";
     }
     
     function hide_confirm()

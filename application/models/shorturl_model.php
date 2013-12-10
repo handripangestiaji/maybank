@@ -17,11 +17,6 @@ class Shorturl_model extends CI_Model
 			$this->db->where('long_url', $params['long_url']);
 		}
 		
-		if(isset($params['short_code']))
-		{
-			$this->db->where('short_code', $params['short_code']);
-		}
-		
 		$this->db->limit(1);
 		
 		$query = $this->db->get($this->_table);
@@ -31,11 +26,31 @@ class Shorturl_model extends CI_Model
 		return $result;
 	}
 	
+	public function get()
+	{
+		$this->db->join("user", $this->_table.".user_id = user.user_id", "left");
+		
+		$query = $this->db->get($this->_table);
+		
+		return $query->result();
+	}
+	
 	public function insert($params = array())
 	{
-		$this->db->set($params);
+		$params_url = array(
+					"long_url" 		=> $params['long_url'],
+					"short_code" 	=> $params['short_code'],
+					"user_id" 		=> $params['user_id'],
+					"description" 	=> $params['description']
+				);
+		
+		$this->db->trans_start();
+		
+		$this->db->set($params_url);
 		
 		$this->db->insert($this->_table);
+		
+		$this->db->trans_complete();
 		
 		$query = $this->db->query('SELECT LAST_INSERT_ID()');
 		$row = $query->row_array();

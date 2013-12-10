@@ -96,7 +96,7 @@ class Shorturl {
 		$result = $this->_ci->shorturl_model->find($params);
 		
 		if(!empty($result))
-			$arr = array("url_id" => $result->id, "shortcode" => $result->short_code);
+			$arr = array("url_id" => $result->id, "shortcode" => $result->short_code, "message" => "Full Url already exist");
 		
 		return (empty($result)) ? false : $arr;
 	}
@@ -106,9 +106,11 @@ class Shorturl {
 		$params = $url;
 		$id = $this->_ci->shorturl_model->insert($params);
 		
-		$shortCode = $this->convertIntToShortCode($id);
-		//die($shortCode);
-		$this->insertShortCodeInDb($id, $shortCode);
+		//$shortCode = $this->convertIntToShortCode($id);
+		
+		$shortCode = $params['short_code'];
+		
+		//$this->insertShortCodeInDb($id, $shortCode);
 		
 		$arr = array("url_id" => $id, "shortcode" => $shortCode);
 		

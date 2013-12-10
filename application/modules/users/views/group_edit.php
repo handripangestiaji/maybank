@@ -10,7 +10,7 @@
         <div class="cms-table pull-right">
             <h5>Edit Group</h5>
             <hr style="margin-top: 0px;">
-            <form method='post' action='<?php echo site_url();?>/users/update_group'>
+            <form method='post' action='<?php echo site_url('users/update_group');?>'>
                 
             <hr style="margin-top: 0px;">
             <table style='margin-bottom: 10px;'>
@@ -59,16 +59,16 @@
 <script type="text/javascript">
     function menu_role()
     {
-        window.location.href = "<?php echo site_url();?>/users/menu_role";
+        window.location.href = "<?php echo site_url('users/menu_role');?>";
     }
     
     function menu_user()
     {
-        window.location.href = "<?php echo site_url();?>/users";
+        window.location.href = "<?php echo site_url('users');?>";
     }
     
     function menu_group()
     {
-        window.location.href = "<?php echo site_url();?>/users/menu_group";
+        window.location.href = "<?php echo site_url('users/menu_group');?>";
     }
 </script>

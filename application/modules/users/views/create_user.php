@@ -21,28 +21,30 @@
             </div>
             <hr style="margin-top: 0px;">
             
-            <form method="post" action="<?php echo site_url();?>/users/insert_user" enctype="multipart/form-data">
+            <form method="post" action="<?php echo site_url('users/insert_user');?>" enctype="multipart/form-data">
                 <table>
                     <tr>
-                        <td>User ID *</td>
-                        <td><input type="text" name="userID" />
-                            <?php echo form_error('userID'); ?>
-                        </td>
+                        <td>User Name</td>
+                        <td><input type='text' name='username' value="<?php echo set_value('username');?>" />
+                        <font color="red"><?php echo form_error('username'); ?></font></td>
                     </tr>
                     
                     <tr>
-                        <td>Full Name *</td>
-                        <td><input type="text" name="fullName" /></td>
+                        <td>Full Name</td>
+                        <td><input type="text" name="fullName" value="<?php echo set_value('fullName');?>" />
+                        <font color="red"><?php echo form_error('fullName'); ?></font></td>
                     </tr>
                     
                     <tr>
                         <td>Display Name</td>
-                        <td><input type="text" name="displayName" /></td>
+                        <td><input type="text" name="displayName" value="<?php echo set_value('displayName');?>" />
+                        <font color="red"><?php echo form_error('displayName'); ?></font></td>
                     </tr>
                         
                     <tr>
                         <td>Email</td>
-                        <td><input type="text" name="email"</td>
+                        <td><input type="text" name="email" value="<?php echo set_value('email');?>" />
+                        <font color="red"><?php echo form_error('email'); ?></font></td>
                     </tr>
                     
                     <tr>
@@ -54,6 +56,7 @@
                                 <option value='<?php echo $r->role_collection_id;?>'><?php echo $r->role_name;?></option>
                                 <?php }?>
                             </select>
+                            <?php echo form_error('optRole'); ?>
                         </td>
                     </tr>
                     
@@ -66,6 +69,7 @@
                                     <option value='<?php echo $g->group_id;?>'><?php echo $g->group_name;?></option>
                                 <?php }?>
                             </select>
+                            <?php echo form_error('optGroup'); ?>
                         </td>
                     </tr>
                     
@@ -104,20 +108,20 @@
 <script type='text/javascript'>
     function btn_cancel()
     {
-        window.location = "<?php echo site_url();?>/users";
+        window.location = "<?php echo site_url('users');?>";
     }
     function menu_role()
     {
-        window.location.href = "<?php echo site_url();?>/users/menu_role";
+        window.location.href = "<?php echo site_url('users/menu_role');?>";
     }
     
     function menu_user()
     {
-        window.location.href = "<?php echo site_url();?>/users";
+        window.location.href = "<?php echo site_url('users');?>";
     }
     
     function menu_group()
     {
-        window.location.href = "<?php echo site_url();?>/users/menu_group";
+        window.location.href = "<?php echo site_url('users/menu_group');?>";
     }
 </script>

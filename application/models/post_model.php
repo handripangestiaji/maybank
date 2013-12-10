@@ -8,7 +8,7 @@ class post_model extends CI_Model
     }
     
     public function InsertPost($message,$channels,$tags=''){
-        $post = array('created_by' => 1,
+        $post = array('created_by' => $this->session->userdata('user_id'),
 			'messages' => $message,
 			'created_at' => date('Y-m-d H:i;s')
 			);
@@ -52,7 +52,7 @@ class post_model extends CI_Model
     public function InsertTag($tag_name){
         $tag = array('tag_name' => $tag_name,
                      'created_at' => date('Y-m-d H:i:s'),
-                     'user_id' => 1
+                     'user_id' => $this->session->userdata('user_id')
                     );
         $this->db->insert('content_tag',$tag);
         return $this->db->insert_id();

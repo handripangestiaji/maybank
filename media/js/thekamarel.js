@@ -782,47 +782,64 @@ $(function(){
                                 }
                             });
                             
+                            var confirmed = true;
                             var len = $('.compose-textbox').val().length;
                             if(len > 140 && check_twitter == true){
                                 var r = confirm('Your message is more than 140 characters. It will not post to Twitter. Do you still want to continue?');
                                 if(r == true){
                                     $('#opttwitter').removeAttr("selected");
+                                    confirmed = true;
                                 }
-                            }
-                            else if(len > 500 && check_youtube == true){
-                                var r = confirm('Your message is more than 500 characters. It will not post to Youtube. Do you still want to continue?');
-                                if(r == true){
-                                    $('#optyoutube').removeAttr('selected');
-                                }
-                            }
-                            else if(len > 2000 && check_fb == true){
-                                var r = confirm('Your message is more than 2000 characters. It will not post to Facebook. Do you still want to continue?');
-                                if(r == true){
-                                     $('#optfacebook').removeAttr('selected');
+                                else{
+                                    confirmed = false;
                                 }
                             }
                             
-                            $('.compose-channels option:selected').each(function() {
-                                channels[i] = $(this).val();
-                                i++
-                            });
-                                
-                            $('.compose-post-status').show();
-                            $('.compose-post-status').html('Posting...');    
-                            $.ajax({
-                                url : BASEURL + 'dashboard/media_stream/SocmedPost',
-                                type: "POST",
-                                data: {
-                                        channels:channels,
-                                        content:$('.compose-textbox').val(),
-                                        tags:$('.compose-tag-field').val()
-                                        },
-                                success: function()
-                                {
-                                    $('.compose-post-status').html('Post Sent');
-                                    $('.compose-post-status').fadeOut(7500);
-                                },
-                            });
+                            if(len > 500 && check_youtube == true){
+                                var r = confirm('Your message is more than 500 characters. It will not post to Youtube. Do you still want to continue?');
+                                if(r == true){
+                                    $('#optyoutube').removeAttr('selected');
+                                    confirmed = true;
+                                }
+                                else{
+                                    confirmed = false;
+                                }
+                            }
+                            
+                            if(len > 2000 && check_fb == true){
+                                var r = confirm('Your message is more than 2000 characters. It will not post to Facebook. Do you still want to continue?');
+                                if(r == true){
+                                     $('#optfacebook').removeAttr('selected');
+                                    confirmed = true;
+                                }
+                                else{
+                                    confirmed = false;
+                                }
+                            }
+                            
+                            if(confirmed == true){
+                                $('.compose-channels option:selected').each(function() {
+                                    channels[i] = $(this).val();
+                                    i++
+                                });
+                                    
+                                $('.compose-post-status').show();
+                                $('.compose-post-status').html('Posting...');    
+                                $.ajax({
+                                    url : BASEURL + 'dashboard/media_stream/SocmedPost',
+                                    type: "POST",
+                                    data: {
+                                            channels:channels,
+                                            content:$('.compose-textbox').val(),
+                                            tags:$('.compose-tag-field').val()
+                                            },
+                                    success: function()
+                                    {
+                                        $('.compose-post-status').html('Post Sent');
+                                        $('.compose-post-status').fadeOut(7500);
+                                    },
+                                });
+                            }
                         }
                     });
                     

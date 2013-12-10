@@ -47,7 +47,7 @@
         <div class="cms-table pull-right">
             <h5>New Group</h5>
             <hr style="margin-top: 0px;">
-            <form method='post' action='<?php echo site_url();?>/users/insert_group'>
+            <form method='post' action='<?php echo site_url('users/insert_group');?>'>
                 <table style='margin-bottom: 10px;'>
                     <tr>
                         <td>New Group</td>
@@ -116,8 +116,7 @@
                             ?>
                         </td>
                         <td><?php echo $gr->name;?></td>
-                        <td><a href="<?php echo site_url();?>/users/edit_group/<?php echo $gr->group_id;?>"><span><i class="icon-pencil"></i></span></a></td>
-                        <!--<td><a href="<?php echo site_url();?>/users/delete_group/<?php echo $gr->group_id;?>"><span><i class="icon-remove"></i></span></a></td>-->
+                        <td><a href="<?php echo site_url('users/edit_group/'.$gr->group_id);?>"><span><i class="icon-pencil"></i></span></a></td>
                         <td><a href="" onclick="show_confirm('<?php echo $gr->group_id;?>');return false;"><span><i class="icon-remove"></i></span></a></td>
                     </tr>
                     <?php }?>
@@ -143,22 +142,22 @@
     function yes_delete_group()
     {
         var grp_id = document.getElementById("group_id_delete").value;
-        window.location = "<?php echo site_url();?>/users/delete_group/"+grp_id;
+        window.location = "<?php echo site_url('users/delete_group');?>/"+grp_id;
     }
     
     function menu_role()
     {
-        window.location.href = "<?php echo site_url();?>/users/menu_role";
+        window.location.href = "<?php echo site_url('users/menu_role');?>";
     }
     
     function menu_user()
     {
-        window.location.href = "<?php echo site_url();?>/users";
+        window.location.href = "<?php echo site_url('users');?>";
     }
     
     function menu_group()
     {
-        window.location.href = "<?php echo site_url();?>/users/menu_group";
+        window.location.href = "<?php echo site_url('users/menu_group');?>";
     }
     
     function show_confirm(tes)

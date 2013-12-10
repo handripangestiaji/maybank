@@ -44,7 +44,7 @@
         </div>
         
         <div class="cms-table pull-right">
-            <form id="roleform" method='post' action='<?php echo site_url();?>/users/insert_role' >
+            <form id="roleform" method='post' action="<?php echo site_url('users/insert_role');?>" >
             <h5>New User Role</h5>
             <hr style="margin-top: 0px;">
             New Role <input type='text' name='new_role' /><br />
@@ -89,7 +89,7 @@
                         <td><?php echo $row->role_name;?></td>
                         <td>0</td>
                         <td><?php echo $row->display_name;?></td>
-                        <td><a href='<?php echo site_url();?>/users/edit_role/<?php echo $row->role_collection_id;?>'><span><i class="icon-pencil"></i></span></a></td>
+                        <td><a href='<?php echo site_url("users/edit_role/".$row->role_collection_id);?>'><span><i class="icon-pencil"></i></span></a></td>
                         <td><a href="" onclick="show_confirm('<?php echo $row->role_collection_id;?>');return false;"><span><i class="icon-remove"></i></span></a></td>
                     </tr>
                     <?php }?>
@@ -119,25 +119,25 @@
     function yes_delete_role()
     {
         var role_id = document.getElementById("role_id_delete").value;
-        window.location = '<?php echo site_url();?>/users/delete_role/'+role_id;;
+        window.location = '<?php echo site_url("users/delete_role");?>/'+role_id;;
     }
     function btn_createRole()
     {
-        window.location = '<?php echo site_url();?>/users/create_appRole';
+        window.location = '<?php echo site_url("users/create_appRole");?>';
     }
     function menu_role()
     {
-        window.location.href = "<?php echo site_url();?>/users/menu_role";
+        window.location.href = "<?php echo site_url('users/menu_role');?>";
     }
     
     function menu_user()
     {
-        window.location.href = "<?php echo site_url();?>/users";
+        window.location.href = "<?php echo site_url('users');?>";
     }
     
     function menu_group()
     {
-        window.location.href = "<?php echo site_url();?>/users/menu_group";
+        window.location.href = "<?php echo site_url('users/menu_group');?>";
     }
     function showHide(sh) {
                 document.getElementById('tree_tree').style.display = 'block';

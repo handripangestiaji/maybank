@@ -16,7 +16,7 @@ body, p { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; font-size:12
       <tr>
         <td valign="top"><p>Dear <span class="bold"><?php echo $user->row()->full_name;?></span>,<br>
       <p>Welcome to Maybank DCMS account.</p>
-      <p>Your username is : <span class="bold"><?php echo $user->row()->user_id;?></span></p>
+      <p>Your username is : <span class="bold"><?php echo $user->row()->username;?></span></p>
       <p>Your password is : <span class="bold"><?php echo $pass;?></span></p>
     <p>Please login to your account here: <a href="http://admin.maybk.co">http://admin.maybk.co</a></p>
     <br><br>

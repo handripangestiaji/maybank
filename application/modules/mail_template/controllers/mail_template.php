@@ -19,19 +19,19 @@ class mail_template extends CI_Controller{
     }
     
     
-    public function NewUser($id,$pass)
+    public function NewUser($user,$pass)
     {
         $data = array(
-                      'user' => $this->users_model->get_byid($id),
+                      'user' => $this->users_model->get_byname($user),
                       'pass' => $pass
                       );
         $this->load->view('mail_template/User/new_user', $data);
     }
     
-    public function ForgotPass($id,$pass)
+    public function ForgotPass($user,$pass)
     {
         $data = array(
-                      'user' => $this->users_model->get_byid($id),
+                      'user' => $this->users_model->get_byname($user),
                       'pass' => $pass
                       );
         $this->load->view('mail_template/User/forgot_user',$data);

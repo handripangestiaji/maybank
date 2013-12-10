@@ -13,6 +13,7 @@ class Users extends MY_Controller {
 	$config = $this->config->item('mail_provider');
 	$this->load->library('email',$config);
 	$this->load->library('upload');
+	$this->load->library('form_validation');
 
 	
     }
@@ -63,6 +64,21 @@ class Users extends MY_Controller {
     {
 	  if(isset($_POST['Create']))
 	  {
+	       $this->form_validation->set_rules('username', 'User Name', 'required');
+	       $this->form_validation->set_rules('fullName', 'Full Name', 'required');
+	       $this->form_validation->set_rules('displayName', 'Display Name', 'required');
+	       $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
+	       if($this->form_validation->run() == FALSE)
+	       {
+		    $data = array(
+		      'role' => $this->users_model->select_role(),
+		      'group' => $this->users_model->select_group()
+		      );
+		    $this->load->view('users/create_user',$data);
+	       }
+	       
+	       else
+	       {
 	       $config = array(
 			      'upload_path'   => 'media/dynamic/',
 			      'allowed_types' => 'gif|jpg|png',
@@ -94,7 +110,7 @@ class Users extends MY_Controller {
 		    $timezone = new DateTimeZone("Europe/London");
 		    $time = new DateTime(date("Y-m-d H:i:s e"), $timezone);
 		    $data=array(
-				'user_id' => $this->input->post('userID'),
+				'username' => $this->input->post('username'),
 				'full_name' => $this->input->post('fullName'),
 				'display_name' => $this->input->post('displayName'),
 				'email' => $this->input->post('email'),
@@ -114,17 +130,18 @@ class Users extends MY_Controller {
 		    $this->users_model->insert_user($data);
 		  
 				  $this->email->set_newline("\r\n");
-				  $this->email->from('maybank@gmail.com','maybank');
+				  $this->email->from('tes@gmail.com','maybank');
 				  $this->email->to($this->input->post('email'));
 				  
 				  $this->email->subject('New Registration');
-				  $template = curl_get_file_contents(base_url('mail_template/NewUser/'.$this->input->post('userID').'/'.$pass));
+				  $template = curl_get_file_contents(base_url('mail_template/NewUser/'.$this->input->post('username').'/'.$pass));
 				  $this->email->message($template);
 				  $this->email->send();
 		    
 		    $this->session->set_flashdata('succes', TRUE);
 		    redirect('users');
 		}
+	       }
 	       
 	  }
     }
@@ -238,23 +255,34 @@ class Users extends MY_Controller {
     
     function update_password()
     {
-	  $id = $this->session->userdata('user_id');
-	  $check = $this->users_model->get_byid($id);
-	  
-	  $pass_old = $this->input->post('existing_password');
-	  
-	  if($check->row()->password == do_hash($pass_old.$check->row()->salt,'md5'))
-	  {
-	       $pass_new = array(
-				 'password' => do_hash($this->input->post('new_password').$check->row()->salt,'md5')
-				);
-	       $this->users_model->update_user($id,$pass_new);
-	       redirect('users');
-	  }
-	  else
-	  {
-	       echo 'GAGAL';
-	  }
+	       $this->form_validation->set_rules('exist', 'Existing Password', 'required');
+	       $this->form_validation->set_rules('pass', 'New Password', 'required');
+	       $this->form_validation->set_rules('cpass', 'Confirm Password', 'required');
+	       if($this->form_validation->run() == FALSE)
+	       {
+		    //$this->load->view('users/create_user',$data);
+	       }
+	       
+	       else
+	       {
+		    $id = $this->session->userdata('user_id');
+		    $check = $this->users_model->get_byid($id);
+		    
+		    $pass_old = $this->input->post('exist');
+		    
+		    if($check->row()->password == do_hash($pass_old.$check->row()->salt,'md5'))
+		    {
+			 $pass_new = array(
+					   'password' => do_hash($this->input->post('pass').$check->row()->salt,'md5')
+					  );
+			 $this->users_model->update_user($id,$pass_new);
+			 redirect('users');
+		    }
+		    else
+		    {
+			 echo 'GAGAL';
+		    }
+	       }
     }
     
     function update_user_login()

@@ -74,6 +74,12 @@ class Users_model extends CI_Model
         return $this->db->get($this->user);
     }
     
+    function get_byname($username)
+    {
+        $this->db->where('username',$username);
+        return $this->db->get($this->user);
+    }
+    
     function update_user($id,$data)
     {
         $this->db->where('user_id',$id);
@@ -277,7 +283,7 @@ class Users_model extends CI_Model
     //============================== LOGIN ===============================
     function check($username,$password)
     {
-        $this->db->where('user_id',$username);
+        $this->db->where('username',$username);
         $this->db->where('password',$password);
         return $this->db->get($this->user);
     }

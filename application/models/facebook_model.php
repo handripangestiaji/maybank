@@ -174,6 +174,7 @@ class facebook_model extends CI_Model
 	    "attachment" => isset($each_post->attachment->media) ? json_encode($each_post->attachment->media) : "",
 	    "enggagement_count" => 0,
 	    "total_likes" => $each_post->like_info->like_count,
+	    "user_likes" => $each_post->like_info->user_likes,
 	    "total_shares" =>  $each_post->share_count,
 	    "total_comments" => isset($each_post->comments) ? count($each_post->comments) : 0,
 	    "updated_at" => $updated_time->format("Y-m-d H:i:s"),
@@ -443,10 +444,11 @@ class facebook_model extends CI_Model
     }
     
     public function RetriveCommentPostFb($post_id){
-        $sql = "SELECT a.post_id,a.post_content,a.total_comments,b.comment_stream_id,b.from,c.name,b.comment_content,b.created_at  
+        $sql = "SELECT a.post_id,a.post_content,a.total_comments,b.comment_stream_id,b.from,c.name,b.comment_content,b.created_at,b.comment_id
                 FROM social_stream_fb_post a INNER JOIN
                 social_stream_fb_comments b ON b.post_id=a.post_id LEFT OUTER JOIN
-                fb_user_engaged  c ON c.facebook_id=b.from
+                fb_user_engaged  c ON c.facebook_id=b.from LEFT OUTER JOIN
+                social_stream d ON d.POST_ID=a.post_id
                 where a.post_id='".$post_id."'
                 ORDER BY post_id desc";
         $query = $this->db->query($sql);

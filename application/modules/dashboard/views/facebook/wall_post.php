@@ -46,7 +46,7 @@ for($i=0; $i<count($fb_feed);$i++):?>
     ?>
     </p>
 
-    <p><button type="button" class="btn btn-warning btn-mini">OPEN</button><button class="fblike btn btn-primary btn-mini" style="margin-left: 5px;" value="<?php echo $fb_feed[$i]->post_stream_id;?>">LIKE</button> </p>
+    <p><button type="button" class="btn btn-warning btn-mini">OPEN</button><button class="fblike btn btn-primary btn-mini" style="margin-left: 5px;" value="<?php echo $fb_feed[$i]->post_stream_id;?>"><?=$fb_feed[$i]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button> </p>
     <p>
         <span class="btn-engagement"><i class="icon-eye-open"></i> <?php echo $fb_feed[$i]->total_comments;?> Engagements</span> |
         <span class="cyanText"><i class="icon-thumbs-up-alt"></i></i> <?php echo $fb_feed[$i]->total_likes; ?> likes</span> 
@@ -61,7 +61,7 @@ for($i=0; $i<count($fb_feed);$i++):?>
         <?php 
             $comment=$this->facebook_model->RetriveCommentPostFb($fb_feed[$i]->post_id);
             //echo "<pre>";
-            //print_r($comment);
+           // print_r($comment);
             //echo "</pre>";
             for($j=0;$j<count($comment);$j++){
         ?>
@@ -78,9 +78,11 @@ for($i=0; $i<count($fb_feed);$i++):?>
                 <p>"<?php echo $comment[$j]->comment_content; ?>"</p>
                 <p>
                     <button type="button" class="btn btn-warning btn-mini">OPEN</button>
-                    <button class="btn btn-primary btn-mini">LIKE</button>
+                    <button class="fblike btn btn-primary btn-mini" value="<?php echo $comment[$j]->comment_stream_id;?>">LIKE</button>
+                    <?php if($comment[$j]->comment_id==0){ ?>
                     <button type="button" class="btn btn-primary btn-engagement-reply btn-mini"><i class="icon-mail-reply"></i></button>
-                    <button type="button" class="btn btn-danger btn-engagement-case btn-mini"><i class="icon-plus"></i> CASE</button>
+                    <?php } ?>
+                   <button type="button" class="btn btn-danger btn-engagement-case btn-mini"><i class="icon-plus"></i> CASE</button>
                 </p>
                 <div class="reply-engagement-field hide">
                     <div class="row-fluid">
@@ -128,10 +130,9 @@ for($i=0; $i<count($fb_feed);$i++):?>
                             <i class="icon-facebook-sign"></i>&nbsp;<span class="reply-fb-char-count">2000</span>
                         </div>
                         <div class="pull-right">
-                            <button class="btn btn-primary btn-small btn-send-reply" value="reply_facebook">SEND</button>    
+                            <button class="btn btn-primary btn-small btn-send-reply" value="<?php echo $comment[$j]->comment_stream_id;?>">SEND</button>    
                         </div>
                         <br clear="all" />
-                        <div class="reply-status hide">MESSAGE SENT</div>
                     </div>
                 </div>
                 <div class="case-engagement-field hide">

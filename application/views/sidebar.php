@@ -126,13 +126,18 @@
         <span class="btn-close pull-right">Close <i class="icon-remove-sign"></i></span>
         <br clear="all" />
         <div class="profileInfo">
-            <form method='post' action='<?php echo site_url();?>/users/update_password'>
+            <form method='post' action='<?php echo site_url("users/update_password");?>'>
             <p>Existing Password</p>
-            <input type='password' style='width: 175px;' name='existing_password' />
+            <input type='password' value='<?php echo set_value('exist');?>' style='width: 175px;' name='exist' />
+            <font color="red"><?php echo form_error('exist'); ?></font>
+            
             <p>New Password</p>
-            <input type='password' style='width: 175px;' name='new_password' />
+            <input type='password' value='<?php echo set_value('pass');?>' style='width: 175px;' name='pass' />
+            <font color="red"><?php echo form_error('pass'); ?></font>
+            
             <p>Confirm Password</p>
-            <input type='password' style='width: 175px;' name='confirm_password' />
+            <input type='password' value='<?php echo set_value('cpass');?>' style='width: 175px;' name='cpass' />
+            <font color="red"><?php echo form_error('cpass'); ?></font>
             
             <div class="sidebarLine"></div>
             <button class="btn btn-primary" type="submit">Save</button>
@@ -160,12 +165,13 @@
             <p>Role : <?php echo $this->session->userdata('role_name'); ?></p>
             <p>Email : <span class="cyanText"><?php echo $this->session->userdata('web_address'); ?></span></p>
             <br/>
-            <form method='post' action='<?php echo site_url();?>/users/update_user_login'>
+            <form method='post' action='<?php echo site_url("users/update_user_login");?>'>
             <input type='hidden' value='<?php echo $this->session->userdata('user_id'); ?>' name='user_id' />
             <p><strong>Display Name</strong></p>
             <input type="text" name="display-name" value='<?php echo $this->session->userdata('display_name'); ?>'/>
             <p><strong>About Me</strong></p>
             <textarea class="about-me" name="about-me" placeholder="Compose Message"><?php echo $this->session->userdata('description'); ?></textarea>
+
             <div class="sidebarLine"></div>
             <button class="btn btn-primary" type="submit">Save</button>
             <button class="btn sidebar-btn-cancel" type="button">Cancel</button>
@@ -178,6 +184,6 @@
 <script type="text/javascript">
     function logout()
     {
-        window.location = "<?php echo site_url();?>/users/logout";
+        window.location = "<?php echo site_url('users/logout');?>";
     }
 </script>

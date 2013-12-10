@@ -1,3 +1,4 @@
+<form action="" method="post" class="reply-tweet">
 <div class="row-fluid">
     <span class="dm-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
     <div class="pull-left">
@@ -68,9 +69,10 @@
             <i class="icon-twitter-sign"></i>&nbsp;<span class="reply-tw-char-count">140</span>
         </div>
         <div class="pull-right">
-            <button class="replayTweet btn btn-primary btn-small btn-send-dm"  type="button" value="<?=$mentions[$i]->post_stream_id;?>" >SEND</button>    
-                   <input type="hidden" class="screen_name" value="<?php echo $mentions[$i]->screen_name; ?>" />
+                <button class="dm_send replayTweet btn btn-primary btn-small btn-send-dm"  type="submit" value="<?=$mentions[$i]->twitter_user_id;?>" >SEND</button>    
+                <input type="hidden" class="screen_name" value="<?php echo $mentions[$i]->screen_name; ?>" />
         </div>
     <br clear="all" />
     <div class="dm-status hide">MESSAGE SENT</div>
 </div>
+</form>

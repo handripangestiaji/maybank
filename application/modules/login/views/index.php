@@ -1,4 +1,4 @@
-<form id="login_form" class="form-signin" action='<?php echo site_url();?>index.php/login/auth' method="post">
+<form id="login_form" class="form-signin" action='<?php echo site_url('login/auth');?>' method="post">
     <h2 class="form-signin-heading">Digital Channel Management System</h2>
     <div class="input-prepend">
       <span class="add-on"><i class="icon-user"></i></span>
@@ -20,8 +20,8 @@
 </form>
 
 <div class="signInRow">
-    <div class="term"><a href="<?php echo site_url();?>/login/terms">Terms of Use</a></div>
-    <div><a href="<?php echo site_url();?>/login/forgot">Lost your password?</a></div>
+    <div class="term"><a href="<?php echo site_url('login/terms');?>">Terms of Use</a></div>
+    <div><a href="<?php echo site_url('login/forgot');?>">Lost your password?</a></div>
 </div>
      
 <script type="text/javascript">

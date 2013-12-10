@@ -13,7 +13,7 @@
             </div>
             <hr style="margin-top: 0px;">
             
-            <form method='post' action='<?php echo site_url();?>/users/update_user' enctype="multipart/form-data">
+            <form method='post' action='<?php echo site_url('users/update_user');?>' enctype="multipart/form-data">
     <table cellspacing=5px>
         <?php foreach($id->result() as $row){ ?>
         <tr>
@@ -147,20 +147,20 @@
 <script type='text/javascript'>
     function btn_cancel()
     {
-        window.location = "<?php echo site_url();?>/users";
+        window.location = "<?php echo site_url('users');?>";
     }
     function menu_role()
     {
-        window.location.href = "<?php echo site_url();?>/users/menu_role";
+        window.location.href = "<?php echo site_url('users/menu_role');?>";
     }
     
     function menu_user()
     {
-        window.location.href = "<?php echo site_url();?>/users";
+        window.location.href = "<?php echo site_url('users');?>";
     }
     
     function menu_group()
     {
-        window.location.href = "<?php echo site_url();?>/users/menu_group";
+        window.location.href = "<?php echo site_url('users/menu_group');?>";
     }
 </script>

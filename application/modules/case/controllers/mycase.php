@@ -9,8 +9,6 @@ class mycase extends CI_Controller{
         header('Content-Type: application/x-json');
     }
     
-    
-    
     /*Create case by post parameter */
     function CreateCase(){
         $user_id = $this->session->userdata('user_id');

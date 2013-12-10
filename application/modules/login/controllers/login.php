@@ -63,7 +63,7 @@ class Login extends Login_Controller {
         {
             $username = $this->input->post('username');
             
-            $salt = $this->users_model->get_byid($username);
+            $salt = $this->users_model->get_byname($username);
             if($salt->num_rows()==1)
             {
                 $password = do_hash($this->input->post('password').$salt->row()->salt,'md5');
@@ -72,10 +72,11 @@ class Login extends Login_Controller {
                 
                 if($valid->num_rows() == 1)
                 {
-		    $user_login = $this->users_model->select_user_login($username);
+		    $user_login = $this->users_model->select_user_login($valid->row()->user_id);
 		    
 		    $data = array(
-                                'user_id' => $username,
+                                'user_id' => $valid->row()->user_id,
+				'username' => $username,
 				'full_name'=> $user_login->row()->full_name,
 				'display_name' => $user_login->row()->display_name,
 				'role_name' => $user_login->row()->role_name,
@@ -88,7 +89,7 @@ class Login extends Login_Controller {
                     $time = new DateTime(date("Y-m-d H:i:s e"), $timezone);
                     $this->session->set_userdata($data);
 		    $login_activity = array(
-						'user_id' => $username,
+						'user_id' => $valid->row()->user_id,
 						'login_time' => $time->format("Y-m-d H:i:s")
 					    );
                         $this->users_model->insert_activity($login_activity);

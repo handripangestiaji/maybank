@@ -140,7 +140,7 @@ class Cms extends MY_Controller {
 		{
 			$params = array();
 			$params = $this->input->post('shorturl');
-			$code = $this->shorturl->urlToShortCode();
+			$code = $this->shorturl->urlToShortCode($params);
 		}
 		
 		try {

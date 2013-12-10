@@ -91,18 +91,19 @@ class Shorturl {
 	
 	protected function urlExistsInDb($url)
 	{
-		$params = array('long_url' => $url);
+		$params = $url;
 		
 		$result = $this->_ci->shorturl_model->find($params);
 		
-		$arr = array("url_id" => $result->id, "shortcode" => $result->short_code);
+		if(!empty($result))
+			$arr = array("url_id" => $result->id, "shortcode" => $result->short_code);
 		
 		return (empty($result)) ? false : $arr;
 	}
 	
 	protected function createShortCode($url)
 	{
-		$params = array('long_url' => $url);
+		$params = $url;
 		$id = $this->_ci->shorturl_model->insert($params);
 		
 		$shortCode = $this->convertIntToShortCode($id);

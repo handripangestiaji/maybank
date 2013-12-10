@@ -7,7 +7,7 @@
             <div class="control-group">
                 <label class="control-label">Full URL Path</label>
                 <div class="controls">
-                  <input type="text" class="span10" name="shorturl[long_url]">
+                  <input type="text" class="span10" name="shorturl[long_url]" placeholder="http://www.maybank2u.com.my/">
                 </div>
             </div>
             <div class="control-group">

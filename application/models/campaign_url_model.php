@@ -12,7 +12,7 @@ class Campaign_url_model extends CI_Model
 	public function get()
 	{
 		$this->db->join('content_campaign', 'content_campaign.id = '.$this->_table.'.campaign_id', 'left');
-		$this->db->join('short_urls', 'short_urls.id = '.$this->_table.'.campaign_id', 'left');
+		$this->db->join('short_urls', 'short_urls.id = '.$this->_table.'.url_id', 'left');
 		$this->db->join('user', 'user.user_id = '.$this->_table.'.user_id', 'left');
 		
 		$query = $this->db->get($this->_table);

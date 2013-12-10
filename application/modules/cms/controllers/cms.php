@@ -186,7 +186,7 @@ class Cms extends MY_Controller {
 				
 				$id_campaign_url = $this->campaign_url_model->insert($setparam);
 			}
-						
+			redirect('cms/create_short_url');			
 		}
 		else {
 			$this->session->unset_userdata('message');

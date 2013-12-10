@@ -263,22 +263,8 @@ class Media_stream extends CI_Controller {
     }
     
     public function SocmedPost(){
-	  $this->load->model('post_model');
-	  $value = array('channel_id' => $this->input->post('channel_id'),
-			 'created_by' => 0,
-			 'messages' => $this->input->post('message')
-			);
-	  if($this->input->post('tags') != ''){
-	    $tags = explode(',',$this->input->post('tags'));
-	    $new_tags = array();
-	    foreach($tags as $tag){
-		$new_tags[] = array('content_tag_id' => $tag);
-	    }
-	  }
-	  else{
-	    $tags = ''
-	  }
-	$this->post_model->InsertPost($value,$tags);      
+	$this->load->model('post_model');
+	$this->post_model->InsertPost($this->input->post('content'),$this->input->post('channels'),$this->input->post('tags'));
     }
     
     public function load_facebook($type){

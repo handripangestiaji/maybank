@@ -764,57 +764,29 @@ $(function(){
                         }
                         else
                         {
+                            var channels = new Array();
+                            var i = 0;
                             $('.compose-channels option:selected').each(function() {
-                                me=$(this);
-                                $('.compose-post-status').show();
-                                $('.compose-post-status').html('Posting...');    
-                                $.ajax({
-                                    url : BASEURL + 'dashboard/media_stream/SocmedPost',
-                                    type: "POST",
-                                    data: {
-                                            channel:me.val(),
-                                            content:$('.compose-textbox').val()
-                                            },
-                                    success: function()
-                                    {
-                                        $('.compose-post-status').html('Post Sent');
-                                        $('.compose-post-status').fadeOut(10000);
-                                    },
-                                });
+                                channels[i] = $(this).val();
+                                i++
                             });
                             
-                            /*
-                            if($('#optTw').is(':selected')){
-                                $.ajax({
-                                    url : BASEURL + 'dashboard/socialmedia/twitterAction',
-                                    type: "POST",
-                                    data: {
-                                            action:'sendTweet',
-                                            content:$('.compose-textbox').val()
-                                            },
-                                    success: function()
-                                    {
-                                        $('.compose-post-status').show();
-                                        $('.compose-post-status').fadeOut(5000);
-                                    },
-                                });
-                            }
-                            
-                            if($('#optFb').is(':selected')){
-                                $.ajax({
-                                    url : BASEURL + 'dashboard/media_stream/FbStatusUpdate',
-                                    type: "POST",
-                                    data: {
-                                            content:$('.compose-textbox').val()
-                                            },
-                                    success: function()
-                                    {
-                                        $('.compose-post-status').show();
-                                        $('.compose-post-status').fadeOut(5000);
-                                    },
-                                });
-                            }
-                            */
+                            $('.compose-post-status').show();
+                            $('.compose-post-status').html('Posting...');    
+                            $.ajax({
+                                url : BASEURL + 'dashboard/media_stream/SocmedPost',
+                                type: "POST",
+                                data: {
+                                        channels:channels,
+                                        content:$('.compose-textbox').val(),
+                                        tags:$('.compose-tag-field').val()
+                                        },
+                                success: function()
+                                {
+                                    $('.compose-post-status').html('Post Sent');
+                                    $('.compose-post-status').fadeOut(7500);
+                                },
+                            });
                         }
                     });
                     

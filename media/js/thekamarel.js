@@ -978,7 +978,7 @@ $(function(){
                             type: "POST",
                             data: {
                                 post_id: $(this).val(),
-                                channel_id : $('.floatingBox').find('input.channel-id').val(),
+                                channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
                                 like : isLike
                             },
                             success: function(response)
@@ -998,35 +998,33 @@ $(function(){
                         });
                     });
                     
-                     $(this).on('click','.send_reply',
+                     $(this).on('click','.btn-send-reply',
                         function() {
                             var commentButton = $(this);
                             isSend=commentButton.html()=="SEND";
-                            commentButton.html('WAITING...').attr("disabled", "disabled");
+                            commentButton.html('SENDING...').attr("disabled", "disabled");
 
                            $.ajax({
                             url : BASEURL + 'dashboard/media_stream/FbReplyPost',
                             type: "POST",
                             data: {
                                 post_id: $(this).val(),
-                                channel_id : $('.floatingBox').find('input.channel-id').val(),
+                                channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
                                 comment :$(this).parent().siblings(".reply_comment").val(),
                             },
                             success: function(response)
                             {
                                 commentButton.removeAttr("disabled");
-                                 alert(response);
                                 if(response == true){
                                   commentButton.html("SEND");   
                                 }
                                 else{
-                                   
-                                   // $(this).parent().siblings(".reply_comment").val()="",
+                                    alert(response);
                                     commentButton.html("SEND");
                                 }
                             },
                         });
-                        
+                                                
                     }); 
                     
                       /*load more content*/  

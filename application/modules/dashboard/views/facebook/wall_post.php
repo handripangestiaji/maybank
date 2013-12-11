@@ -61,9 +61,9 @@ for($i=0; $i<count($fb_feed);$i++):?>
         <?php 
             $comment=$this->facebook_model->RetriveCommentPostFb($fb_feed[$i]->post_id);
             //echo "<pre>";
-            //print_r($comment);
+           // print_r($comment);
             //echo "</pre>";
-            for($j=0;$j<count($comment);$j++){
+            for($j=0;$j<count($comment);$j++):
         ?>
         <div class="engagement-body">
             <span class="engagement-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>    
@@ -79,14 +79,12 @@ for($i=0; $i<count($fb_feed);$i++):?>
                 <p>
                     <button type="button" class="btn btn-warning btn-mini">OPEN</button>
                     <button class="fblike btn btn-primary btn-mini" value="<?=$comment[$j]->post_stream_id?>"><?=$comment[$j]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button>
-                    <?php if($comment[$j]->comment_id=='0'){?>
                     <button type="button" class="btn btn-primary btn-engagement-reply btn-mini"><i class="icon-mail-reply"></i></button>
-                    <?php } ?>
-                    <button type="button" class="btn btn-danger btn-engagement-case btn-mini"><i class="icon-plus"></i> CASE</button>
+                   <button type="button" class="btn btn-danger btn-engagement-case btn-mini"><i class="icon-plus"></i> CASE</button>
                 </p>
                 <div class="reply-engagement-field hide">
                     <?php
-                    $data['fb_feed'] = $comment;
+                    $data['fb_feed'] = $fb_feed;
                     $data['i'] = $i;
                     $this->load->view('dashboard/reply_field_facebook', $data)?>  
                 </div>
@@ -142,7 +140,7 @@ for($i=0; $i<count($fb_feed);$i++):?>
                 </div>
             </div>
         </div>
-       <?php } ?>
+       <?php endfor; ?>
        <!-- ==================== CONDENSED TABLE HEADLINE ==================== -->
         <div class="containerHeadline specialToggleTable">
             <i class="icon-table"></i><h2>Action Log</h2>

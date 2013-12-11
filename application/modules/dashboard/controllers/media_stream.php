@@ -306,7 +306,7 @@ class Media_stream extends CI_Controller {
     **/
     public function LoadMore($actions,$group_numbers,$channel_ids){
             
-        $items_per_group=10;
+        $items_per_group = 10;
         $group_number=$group_numbers;
         $action=$actions;
         $channel_id=$channel_ids;
@@ -315,6 +315,9 @@ class Media_stream extends CI_Controller {
     	   'channel_id' => $channel_id,
     	);
     	
+	if($this->input->get('last_id')){
+	    $filter['post_id >'] = $this->input->get('last_id');
+	}
         if($is_read != NULL){
     	    if($is_read != 2){
     		$filter['is_read'] = $is_read;
@@ -338,8 +341,8 @@ class Media_stream extends CI_Controller {
 
     
         if($action=='mentions'){
-        	$filter['b.type'] = 'mentions';
-        	$data['mentions']=$this->twitter_model->ReadTwitterData($filter,$limit);
+            $filter['b.type'] = 'mentions';
+            $data['mentions']=$this->twitter_model->ReadTwitterData($filter,$limit);
             $data['countMentions']=$this->twitter_model->CountTwitterData($filter);
             $this->load->view('dashboard/twitter/twitter_mentions.php',$data);
         }
@@ -398,22 +401,9 @@ class Media_stream extends CI_Controller {
 	echo file_get_contents($url);
      }
      
-     public function FbStatusUpdate(){
-	  $access_token_fb = fb_dummy_accesstoken();
-	  $config = array(
-	       'appId' => $this->config->item('fb_appid'),
-	       'secret' => $this->config->item('fb_secretkey')
-	  );
-	  $this->load->library('facebook',$config);
-	  $this->facebook->setaccesstoken($access_token_fb);
-	  $this->facebook->api('/me/feed','POST',array('message'=>$this->input->post('content')));
-	  /*
-	  $result = curl_get_file_contents('https://graph.facebook.com/me?
-					  method=GET&
-					  format=json&
-					  suppress_http_code=1&
-					  access_token='.$access_token_fb);
-	  echo $result;
-	  */
+     
+    function tester(){
+	print_r($this->twitter_model->GetTweetId('369854954577477633', 'twitter_dm'));
     }
+    
 }

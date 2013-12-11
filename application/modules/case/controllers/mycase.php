@@ -36,10 +36,11 @@ class mycase extends CI_Controller{
             "post_id" => $this->input->post('post_id')
             );
             
-            $this->case_model->CreateCase($case);
+            $case_id = $this->case_model->CreateCase($case);
             echo json_encode(array(
                         "success" => true,
-                        "message" => "Assign case successfully done."
+                        "message" => "Assign case successfully done.",
+                        "case_id" => $case_id
                     )
                 );
         }

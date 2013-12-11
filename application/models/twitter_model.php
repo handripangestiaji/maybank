@@ -186,7 +186,7 @@ class twitter_model extends CI_Model
         }
         else{
             $this->db->where('post_id', $post->post_id);
-            $this->db->insert("social_stream", $social_stream);
+            $this->db->update("social_stream", $social_stream);
             $this->db->where('post_id', $post->post_id);
             $this->db->update("twitter_direct_messages", $dm_saved);
             

@@ -73,7 +73,8 @@
                 </table>
             </div>
             <div style="float: right; margin-top: -10px;">
-                <input type="text" placeholder="Search User name, Email or ID" />
+                <input type="text" id="search_user" name="search_user" placeholder="Search User name, Email or ID" />
+                <a href="" onclick='search();'><span><i class="icon-search"></i></span></a>
             </div>
             <div style="clear: both"></div>
             <table class="table table-striped">
@@ -87,7 +88,6 @@
                         <th>Status</th>
                         <th>Date Created</th>
                         <th>Creator</th>
-                        <th>&nbsp;</th>
                         <th>&nbsp;</th>
                     </tr>
                 </thead>
@@ -110,9 +110,9 @@
                         <td><?php echo $row->created_at;?></td>
                         <td><?php echo $row->created_by_name;?></td>
                         <td><a href="<?php echo site_url('users/edit/'.$row->user_id);?>"><span><i class="icon-pencil"></i></span></a></td>
-                        <td>
-                            <a href="" onclick="show_confirm('<?php echo $row->user_id;?>');return false;"><span><i class="icon-remove"></i></span></a>
-                        </td>
+                        <!--<td>
+                            <a href="" onclick="show_confirm('<?php //echo $row->user_id;?>');return false;"><span><i class="icon-remove"></i></span></a>
+                        </td>-->
                     </tr>
                     <?php }
                     }?>
@@ -172,5 +172,10 @@
     function hide_confirm()
     {
         document.getElementById('confirm_user').style.display = 'none';
+    }
+    
+    function search()
+    {
+        alert(document.getElementById('search_user').value);
     }
 </script>

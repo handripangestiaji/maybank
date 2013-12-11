@@ -104,6 +104,18 @@ class Users_model extends CI_Model
         return $this->db->get($this->user);
     }
     
+    function cek_roleid($id)
+    {
+        $this->db->where('role_id',$id);
+        return $this->db->get($this->user);
+    }
+    
+    function check_groupid($id)
+    {
+        $this->db->where('group_id',$id);
+        return $this->db->get($this->user);
+    }
+    
     //============================= ROLE ================================
     function count_record_role()
     {

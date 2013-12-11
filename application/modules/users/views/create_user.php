@@ -5,7 +5,16 @@
 	if($msg!=NULL){ ?>
         <div class="alert alert-error">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <strong>Create User</strong> <?=$msg?>.
+            <strong><?=$msg?></strong>
+        </div>
+<?php }?>
+
+<?php
+	$double = $this->session->flashdata('double');
+	if($double!=NULL){ ?>
+        <div class="alert alert-error">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Your email already registered</strong>
         </div>
 <?php }?>
     <div class="cms-content row-fluid">
@@ -24,25 +33,25 @@
             <form method="post" action="<?php echo site_url('users/insert_user');?>" enctype="multipart/form-data">
                 <table>
                     <tr>
-                        <td>User Name</td>
+                        <td>User Name <span style='color: red;'>*</span></td>
                         <td><input type='text' name='username' value="<?php echo set_value('username');?>" />
                         <span style='color:red;'><?php echo form_error('username'); ?></span></td>
                     </tr>
                     
                     <tr>
-                        <td>Full Name</td>
+                        <td>Full Name <span style='color: red;'>*</span></td>
                         <td><input type="text" name="fullName" value="<?php echo set_value('fullName');?>" />
                         <span style='color:red;'><?php echo form_error('fullName'); ?></span></td>
                     </tr>
                     
                     <tr>
-                        <td>Display Name</td>
+                        <td>Display Name <span style='color: red;'>*</span></td>
                         <td><input type="text" name="displayName" value="<?php echo set_value('displayName');?>" />
                         <span style='color:red;'><?php echo form_error('displayName'); ?></span></td>
                     </tr>
                         
                     <tr>
-                        <td>Email</td>
+                        <td>Email <span style='color: red;'>*</span></td>
                         <td><input type="text" name="email" value="<?php echo set_value('email');?>" />
                         <span style='color:red;'><?php echo form_error('email'); ?></span></td>
                     </tr>
@@ -70,25 +79,31 @@
                     </tr>
                     
                     <tr>
-                        <td>Image</td>
+                        <td>Image <span style='color: red;'>*</span></td>
                         <td>
                             <input type='file' name='userfile' id='userfile' accept='image/*' />
+                            <span style='color:red;'><?php echo form_error('userfile'); ?>
                         </td>
                     </tr>
                     
                     <tr>
                         <td>Description</td>
-                        <td><textarea class="about-me" name='description'></textarea></td>
+                        <td><textarea class="about-me" name='description'><?php echo set_value('description');?></textarea></td>
                     </tr>
                     
                     <tr>
                         <td>Location</td>
-                        <td><input type='text' name='location' /></td>
+                        <td><input type='text' name='location' value="<?php echo set_value('location');?>" /></td>
                     </tr>
                     
                     <tr>
                         <td>Web Addres</td>
-                        <td><input type='text' name='web_addres' /></td>
+                        <td><input type='text' name='web_address' value="<?php echo set_value('web_address');?>" /></td>
+                    </tr>
+                    
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td><span style='color: red;'>* required field</span></td>
                     </tr>
                     
                     <tr>

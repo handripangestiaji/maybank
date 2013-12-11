@@ -126,13 +126,46 @@ class Login extends Login_Controller {
 	    {
 		    $id = $check_mail->row()->user_id;
 		    
-		    $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+		    /*$chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 		    $count = mb_strlen($chars);
 	      
 		    for ($i = 0, $pass = ''; $i < 10; $i++) {
 		    $index = rand(0, $count - 1);
 		    $pass .= mb_substr($chars, $index, 1);
+		    }*/
+		    $lower = 'abcdefghijklmnopqrstuvwxyz';
+		    $upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		    $number = '0123456789';
+		    $simbol = '!@#$%';
+		    
+		    $clower = mb_strlen($lower);
+		    $cupper = mb_strlen($upper);
+		    $cnumber = mb_strlen($number);
+		    $csimbol = mb_strlen($simbol);
+		    
+		    for ($i = 0, $low = ''; $i < 3; $i++) {
+			$index1 = rand(0, $clower - 1);
+			$low  .= mb_substr($lower, $index1, 1);
 		    }
+		    
+		    for ($i = 0, $up = ''; $i < 3; $i++) {
+			$index2 = rand(0, $cupper - 1);
+			$up  .= mb_substr($upper, $index2, 1);
+		    }
+		    
+		    for ($i = 0, $num = ''; $i < 2; $i++) {
+			$index3 = rand(0, $cnumber - 1);
+			$num  .= mb_substr($number, $index3, 1);
+		    }
+		    
+		    for ($i = 0, $sim = ''; $i < 2; $i++) {
+			$index4 = rand(0, $csimbol - 1);
+			$sim  .= mb_substr($simbol, $index4, 1);
+		    }
+		    
+		    $pass = str_shuffle(mb_substr($low.$up.$num.$sim,0,10));
+		    
+		    
 		    $data = array(
 				  'password' => do_hash($pass.$check_mail->row()->salt,'md5')
 				  );
@@ -144,7 +177,7 @@ class Login extends Login_Controller {
 		    $this->email->to($email);
 		    
 		    $this->email->subject('Forgot Password');
-		    $template = curl_get_file_contents(base_url('mail_template/ForgotPass/'.$check_mail->row()->user_id.'/'.$pass));
+		    $template = curl_get_file_contents(base_url('mail_template/ForgotPass/'.$id.'/'.urlencode($pass)));
 		    $this->email->message($template);
 		    
 		    $this->email->send();

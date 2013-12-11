@@ -13,8 +13,8 @@
             <h5>Edit Role</h5>
             <hr style="margin-top: 0px;">
             Role Name <input type='text' name='role_name' value='<?php echo $role->row()->role_name;?>' />
+	    <span style='color:red;'><?php echo form_error('role_name'); ?></span>
             <input type='hidden' name='role_id' value='<?php echo $role->row()->role_collection_id;?>' />
-            <br />
             <hr>
             <div>
                 <div class="tree" id="tree">

@@ -31,7 +31,7 @@ class mail_template extends CI_Controller{
     public function ForgotPass($user,$pass)
     {
         $data = array(
-                      'user' => $this->users_model->get_byname($user),
+                      'user' => $this->users_model->get_byid($user),
                       'pass' => $pass
                       );
         $this->load->view('mail_template/User/forgot_user',$data);

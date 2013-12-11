@@ -157,9 +157,9 @@ class Cms extends MY_Controller {
 							'rules' => 'required'
 						),
 						array(
-							'field' => 'shorturl[short_code]|max_length[6]',
+							'field' => 'shorturl[short_code]',
 							'label' => 'Full Url',
-							'rules' => 'required'
+							'rules' => 'required|max_length[6]'
 						)
 					);
 			
@@ -186,7 +186,7 @@ class Cms extends MY_Controller {
 				
 				$id_campaign_url = $this->campaign_url_model->insert($setparam);
 			}
-						
+			redirect('cms/create_short_url');			
 		}
 		else {
 			$this->session->unset_userdata('message');

@@ -130,18 +130,19 @@
         <span class="btn-close pull-right">Close <i class="icon-remove-sign"></i></span>
         <br clear="all" />
         <div class="profileInfo">
-            <form method='post' action='<?php echo site_url("users/update_password");?>'>
+            <form method='post' action='<?php echo site_url("users/update_password");?>' class='update_password'>
+            <div class="message"></div>
             <p>Existing Password</p>
             <input type='password' value='<?php echo set_value('exist');?>' style='width: 175px;' name='exist' />
-            <font color="red"><?php echo form_error('exist'); ?></font>
+            <span style="color:red" class="error-exist"><?php echo form_error('exist'); ?></span>
             
             <p>New Password</p>
             <input type='password' value='<?php echo set_value('pass');?>' style='width: 175px;' name='pass' />
-            <font color="red"><?php echo form_error('pass'); ?></font>
+            <span style="color:red" class="error-pass"><?php echo form_error('pass'); ?></span>
             
             <p>Confirm Password</p>
             <input type='password' value='<?php echo set_value('cpass');?>' style='width: 175px;' name='cpass' />
-            <font color="red"><?php echo form_error('cpass'); ?></font>
+            <span style="color:red" class="error-cpass"><?php echo form_error('cpass'); ?></span>
             
             <div class="sidebarLine"></div>
             <button class="btn btn-primary" type="submit">Save</button>

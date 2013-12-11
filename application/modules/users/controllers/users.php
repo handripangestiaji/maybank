@@ -71,10 +71,10 @@ class Users extends MY_Controller {
 	       $this->form_validation->set_rules('description');
 	       $this->form_validation->set_rules('location');
 	       $this->form_validation->set_rules('web_address');
-	       if (empty($_FILES['userfile']['name']))
-	       {
-		   $this->form_validation->set_rules('userfile', 'Image', 'required');
-	       }
+	       //if (empty($_FILES['userfile']['name']))
+	       //{
+		//   $this->form_validation->set_rules('userfile', 'Image', 'required');
+	       //}
 	  
 	       $checkMail = $this->users_model->check_email($this->input->post('email'));
 	       
@@ -106,15 +106,15 @@ class Users extends MY_Controller {
 			       );
 	       
 	       $this->upload->initialize($config);
-	       if ( ! $this->upload->do_upload())
+	       /*if ( ! $this->upload->do_upload())
 		{
 		    //$this->upload->display_errors();
 		    $this->session->set_flashdata('failed', $this->upload->display_errors());
 		    redirect('users/create');
-		}
+		}*/
 		
-		else
-		{
+		//else
+		//{
 		    $image = $this->upload->data();
 		    $dir = "media/dynamic/".$image['file_name'];
 		    /*
@@ -192,7 +192,7 @@ class Users extends MY_Controller {
 		    
 		    $this->session->set_flashdata('succes', TRUE);
 		    redirect('users');
-		}
+		//}
 	       }
 	       
 	  }
@@ -273,6 +273,7 @@ class Users extends MY_Controller {
 			 
 			 $data1 = array(
 				     'user_id' => $username,
+				     'username' => $user_login->row()->username,
 				     'full_name'=> $user_login->row()->full_name,
 				     'display_name' => $user_login->row()->display_name,
 				     'role_name' => $user_login->row()->role_name,
@@ -310,6 +311,7 @@ class Users extends MY_Controller {
 			 
 			 $data1 = array(
 				     'user_id' => $username,
+				     'username' => $user_login->row()->username,
 				     'full_name'=> $user_login->row()->full_name,
 				     'display_name' => $user_login->row()->display_name,
 				     'role_name' => $user_login->row()->role_name,
@@ -339,6 +341,7 @@ class Users extends MY_Controller {
 	  $user_login = $this->users_model->select_user_login($id);
 		    $data1 = array(
                                 'user_id' => $id,
+				'username' => $user_login->row()->username,
 				'display_name' => $user_login->row()->display_name,
 				'description' => $user_login->row()->description,
                                 'is_login' => TRUE
@@ -355,7 +358,38 @@ class Users extends MY_Controller {
 	  redirect('users');
     }
     
-    
+    function search_user($value_user)
+    {
+	  $v = urldecode($value_user);
+	  
+	  $config['base_url'] = base_url().'users/index';
+	  $config['total_rows'] = $this->users_model->count_record();
+	  $config['per_page'] = 10;
+	  $config["uri_segment"] = 3;
+	  
+	  $config['next_link'] = 'Next';
+	  $config['prev_link'] = 'Prev';
+	  
+	  $config['first_link'] = 'First';
+	  $config['last_link'] = 'Last';
+     
+	  $config['cur_tag_open'] = '<b style="margin:0px 5px;">';
+	  $config['cur_tag_close'] = '</b>';
+	  
+	  $this->pagination->initialize($config);
+	  
+	  $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+	  
+	  if($this->input->get('role_collection_id'))
+	       $data['show'] = $this->users_model->search_user($config["per_page"], $page, $this->input->get('role_collection_id'),$v);
+	  else
+	       $data['show'] = $this->users_model->search_user($config["per_page"], $page, null,$v);
+	  $data['links'] = $this->pagination->create_links();
+	  $data['role'] = $this->users_model->select_role();
+	  $data['count'] = $this->users_model->count_record();
+	  
+	  $this->load->view('users/index',$data);
+    }
     
     //============================ ROLE ===================================
     function menu_role()

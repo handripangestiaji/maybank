@@ -18,7 +18,8 @@
         <?php foreach($id->result() as $row){ ?>
         <tr>
             <td>User ID</td>
-            <td><input name='userID' type="text" value='<?php echo $row->user_id?>' readonly /></td>
+            <td><input name='userID' type="hidden" value='<?php echo $row->user_id?>' />
+            <input type="text" value='<?php echo $row->username?>' readonly /></td>
         </tr>
         
         <tr>

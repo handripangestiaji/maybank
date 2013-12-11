@@ -47,7 +47,9 @@
             <form id="roleform" method='post' action="<?php echo site_url('users/insert_role');?>" >
             <h5>New User Role</h5>
             <hr style="margin-top: 0px;">
-            New Role <input type='text' name='new_role' /><br />
+            New Role <input type='text' name='new_role' value="<?php set_value('new_role');?>"/>
+            <span style='color:red;'><?php echo form_error('new_role'); ?></span></td>
+            
             <hr>
             <div style='float: right;'>
                 <input type='button' class='btn' id="next" value='Next' onclick="showHide();return false;" />

@@ -61,7 +61,7 @@ for($i=0; $i<count($fb_feed);$i++):?>
         <?php 
             $comment=$this->facebook_model->RetriveCommentPostFb($fb_feed[$i]->post_id);
             //echo "<pre>";
-           // print_r($comment);
+            //print_r($comment);
             //echo "</pre>";
             for($j=0;$j<count($comment);$j++){
         ?>
@@ -78,62 +78,17 @@ for($i=0; $i<count($fb_feed);$i++):?>
                 <p>"<?php echo $comment[$j]->comment_content; ?>"</p>
                 <p>
                     <button type="button" class="btn btn-warning btn-mini">OPEN</button>
-                    <button class="fblike btn btn-primary btn-mini" value="<?php echo $comment[$j]->comment_stream_id;?>">LIKE</button>
-                    <?php if($comment[$j]->comment_id==0){ ?>
+                    <button class="fblike btn btn-primary btn-mini" value="<?=$comment[$j]->post_stream_id?>"><?=$comment[$j]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button>
+                    <?php if($comment[$j]->comment_id=='0'){?>
                     <button type="button" class="btn btn-primary btn-engagement-reply btn-mini"><i class="icon-mail-reply"></i></button>
                     <?php } ?>
-                   <button type="button" class="btn btn-danger btn-engagement-case btn-mini"><i class="icon-plus"></i> CASE</button>
+                    <button type="button" class="btn btn-danger btn-engagement-case btn-mini"><i class="icon-plus"></i> CASE</button>
                 </p>
                 <div class="reply-engagement-field hide">
-                    <div class="row-fluid">
-                        <span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
-                        <div class="pull-left">
-                            <select style="width: 130px;">
-                                <option value="keyword">Feedback</option>
-                                <option value="user">Enquiry</option>
-                                <option value="keyword">Complaint</option>
-                            </select>
-                            <select style="width: 130px;">
-                                <option value="keyword">Accounts & Banking</option>
-                                <option value="user">Cards</option>
-                                <option value="keyword">Investment</option>
-                                <option value="keyword">insurance</option>
-                                <option value="user">Loans</option>
-                                <option value="keyword">Maybank2u</option>
-                                <option value="keyword">Others</option>
-                            </select>
-                        </div>
-                        <textarea class="reply_comment" placeholder="Compose Message"></textarea>
-                        <br clear="all" />
-                        <div class="pull-left">
-                            <i class="icon-link"></i>
-                            <input type="text" class="span8"><button class="btn btn-primary btn-mini" style="margin-left: 5px;">SHORTEN</button>
-                        </div>
-                        <div class="pull-right">
-                            <a href="javascript:void(0);" id="reply-open-img">
-                                <i class="icon-camera"></i> 
-                            </a>
-                        </div>
-                        <br clear="all" />
-                        <br clear="all" />
-                        <div class="compose-schedule" id="reply-url-show">
-                            <div class="compose-form img-attached">
-                                <!-- close button for image attached -->
-                                <a id="close-url" href="javascript:void(0);">
-                                    <i class="icon-remove-sign icon-large"></i>
-                                </a>
-                                <div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="pull-left reply-char-count">
-                            <i class="icon-facebook-sign"></i>&nbsp;<span class="reply-fb-char-count">2000</span>
-                        </div>
-                        <div class="pull-right">
-                            <button class="btn btn-primary btn-small btn-send-reply" value="<?php echo $comment[$j]->comment_stream_id;?>">SEND</button>    
-                        </div>
-                        <br clear="all" />
-                    </div>
+                    <?php
+                    $data['fb_feed'] = $comment;
+                    $data['i'] = $i;
+                    $this->load->view('dashboard/reply_field_facebook', $data)?>  
                 </div>
                 <div class="case-engagement-field hide">
                     <div class="row-fluid">

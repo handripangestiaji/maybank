@@ -52,7 +52,8 @@
                     <tr>
                         <td>New Group</td>
                         <td>&nbsp;</td>
-                        <td><input type='text' name='group_name' /></td>
+                        <td><input type='text' name='group_name' value="<?php set_value('group_name');?>" />
+                        <span style='color: red;'><?php echo form_error('group_name');?></span></td>
                     </tr>
                 </table>
             <hr style="margin-top: 0px;">

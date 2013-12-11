@@ -210,34 +210,38 @@ class Media_stream extends CI_Controller {
     }
     
     public function FbLikeStatus(){
-
-    	$post_id = $this->input->post('post_id');
-    	$this->load->model('account_model');
-    	$channel = $this->account_model->GetChannel(array(
-    	    "channel_id" => $this->input->post("channel_id")
-    	));
-        
-    	header('Content-Type: application/x-json');
-
-    	if(count($channel) == 1){
-    	    $access_token_fb = $this->facebook_model->GetPageAccessToken($channel[0]->oauth_token, $channel[0]->social_id);
-    	    
-    	    $config = array(
-    		 'appId' => $this->config->item('fb_appid'),
-    		 'secret' => $this->config->item('fb_secretkey')
-    	    );
-
-    	    $this->load->library('facebook',$config);
-    	    $this->facebook->setAccessToken($access_token_fb);
-    	    if($this->input->post('like') === 'true')
-    		  $return = $this->facebook->api('/'.$post_id.'/likes','POST');
-    	    else
-    		$return = $this->facebook->api('/'.$post_id.'/likes','DELETE');
-    	    echo json_encode($return);
-    	}
-    	else{
-    	    echo false;
-    	}
+	$post_id = $this->input->post('post_id');
+	$this->load->model('account_model');
+	$channel = $this->account_model->GetChannel(array(
+	    "channel_id" => $this->input->post("channel_id")
+	));
+	header('Content-Type: application/x-json');
+	if(count($channel) == 1){
+	    $access_token_fb = $this->facebook_model->GetPageAccessToken($channel[0]->oauth_token, $channel[0]->social_id);
+	    $config = array(
+		 'appId' => $this->config->item('fb_appid'),
+		 'secret' => $this->config->item('fb_secretkey')
+	    );
+	    $this->load->library('facebook',$config);
+	    $this->facebook->setAccessToken($access_token_fb);
+	    if($this->input->post('like') === 'true')
+		$return = $this->facebook->api('/'.$post_id.'/likes','POST');
+	    else
+		$return = $this->facebook->api('/'.$post_id.'/likes','DELETE');
+	    $action = array(
+		"action_type" => "like_facebook",
+		"channel_id" => $channel[0]->channel_id,
+		"created_at" => date("Y-m-d H:i:s"),
+		"stream_id" => $this->input->post('post_id'),
+		"created_by" => $this->session->userdata('user_id'),
+		"stream_id_response" => $return
+	    );
+	    $this->account_model->CreateFbLikeAction($action, $this->input->post('like') === 'true' ? 1 : 0);
+	    echo json_encode($return);
+	}
+	else{
+	    echo false;
+	}
 	
     }
     
@@ -247,7 +251,7 @@ class Media_stream extends CI_Controller {
         $comment = $this->input->post('comment');
         $post_id = $this->input->post('post_id');
      
-	     $filter = array(
+        $filter = array(
             "connection_type" => "facebook"
         );
         if($this->input->get('channel_id')){
@@ -261,11 +265,27 @@ class Media_stream extends CI_Controller {
 	       'appId' => $this->config->item('fb_appid'),
 	       'secret' => $this->config->item('fb_secretkey')
 	    );
-	$this->load->library('facebook',$config);
-	$this->facebook->setaccesstoken($newStd->token);
-	$this->facebook->api('/'.$post_id.'/comments','post',array('message' => $comment));
+    	$this->load->library('facebook',$config);
+    	$this->facebook->setaccesstoken($newStd->token);
+    	$return=$this->facebook->api('/'.$post_id.'/comments','post',array('message' => $comment));
+        
+        $action = array(
+		"action_type" => "reply_facebook",
+		"channel_id" => $channel_loaded[0]->channel_id,
+		"created_at" => date("Y-m-d H:i:s"),
+		"stream_id" => $this->input->post('post_id'),
+		"created_by" => $this->session->userdata('user_id'),
+		"stream_id_response" => $return
+	    );
+        
+	    $this->account_model->CreateFbCommentAction($action, $this->input->post('like') === 'true' ? 1 : 0);
+    
     }
     
+    public function SocmedPost(){
+	$this->load->model('post_model');
+	$this->post_model->InsertPost($this->input->post('content'),$this->input->post('channels'),$this->input->post('tags'));
+    }
     
     public function load_facebook($type){
 	    $access_token = "CAACEdEose0cBAFGdZB2IH8VzRiPuoLAZC0vQ3u7Tc0PuZAyycV0cs5CCng8Xw3qnni9V6YxgeaQ0p9VCdGzfGGHTeUUsLL6exlGXBTAbWl6T7573l4DnKm3kTPh7dQrqqJNpcvMMWZA9K92p7NtS5eLwjmZCKxZCCEQ4jWk5DtccZBMZAEKS2Meqe1yzhetcUKMZD";

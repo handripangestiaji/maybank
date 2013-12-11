@@ -444,11 +444,11 @@ class facebook_model extends CI_Model
     }
     
     public function RetriveCommentPostFb($post_id){
-        $sql = "SELECT a.post_id,a.post_content,a.total_comments,b.comment_stream_id,b.from,c.name,b.comment_content,b.created_at,b.comment_id
+        $sql = "SELECT a.post_id,a.post_content,a.total_comments,b.comment_stream_id,b.from,c.name,b.comment_id,b.comment_content,b.created_at, b.user_likes, d.post_stream_id
                 FROM social_stream_fb_post a INNER JOIN
-                social_stream_fb_comments b ON b.post_id=a.post_id LEFT OUTER JOIN
-                fb_user_engaged  c ON c.facebook_id=b.from LEFT OUTER JOIN
-                social_stream d ON d.POST_ID=a.post_id
+	social_stream_fb_comments b ON b.post_id=a.post_id LEFT OUTER JOIN
+	fb_user_engaged  c ON c.facebook_id=b.from LEFT OUTER JOIN
+	social_stream d ON d.post_stream_id=b.comment_stream_id
                 where a.post_id='".$post_id."'
                 ORDER BY post_id desc";
         $query = $this->db->query($sql);

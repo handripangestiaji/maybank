@@ -11,7 +11,7 @@ class ChannelMg extends MY_Controller {
     }
     
     function index(){
-        $data['result'] = array();
+        
         $this->load->view("channels/index");
     }
     

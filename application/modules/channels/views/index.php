@@ -1,13 +1,7 @@
-<script type="text/javascript">
-    var currentUrl = "<?=base_url()?>";
-    
-</script>
-
 <div class="row-fluid" style="width: 80%; margin: 0px auto;" id="channelMg">
 <!--<span style="font-size: 14pt; color: black; margin: 5px 0;">USER MANAGEMENT</span>-->
     <div class="cms-content row-fluid">
         <div class="cms-filter pull-left">
-            
             <a class="btn btn-primary" href="#facebook">Facebook</a>
             <a class="btn" href="#twitter">Twitter</a>
             <a class="btn" href="#youtube">YouTube</a>
@@ -20,8 +14,6 @@
     if($this->input->get('FacebookConfirm') == 'yes' && $this->session->userdata('fb_token')):
         $fb_token = $this->session->userdata('fb_token');
         $account_manage = facebook_page_manage($fb_token);
-        
-        
 ?>
 <div class="container-fluid">
     <div class="modal-backdrop fade in"></div>

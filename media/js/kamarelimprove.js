@@ -8,8 +8,8 @@ $(function(){
         var thisElement = $(this);
         $(this).find('button[type=submit]').attr('disabled', 'disabled');
         $(this).find('button[type=submit]').html('<i class="icon-stop icon-large"></i> Assigning case...');
-      
-
+        var openButton = $(this).closest('li').find('button:first');
+        
         $(this).AsyncPost({
             "url" : BASEURL + "case/mycase/CreateCase",
             "urlParameter" : $(this).serialize(),
@@ -22,6 +22,8 @@ $(function(){
                     thisElement.find('.message').html('<div class="alert alert-success">' +
                     '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
                     '<strong>Well done!</strong> ' + response.message + '</div>');
+                    openButton.html('CASE #' + response.case_id);
+                    thisElement.find('.btn-case').removeClass('btn-danger').addClass('btn-purple').html('<i class="icon-check"></i>RESOLVE');
                 }
                 else{
                     var errorMessages = "<ul class='error-list'>";
@@ -49,6 +51,7 @@ $(function(){
         $(modalID + " .loader-image").show();
         $(modalID + " .related-conversation-body").remove();
         var textToAppend = "" ;
+        
         $(this).LoadContentAsync({
             url : BASEURL + "case/mycase/TwitterRelatedConversation/" + twitter_id + "/" + type,
             urlParameter : {

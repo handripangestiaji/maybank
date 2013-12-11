@@ -69,6 +69,7 @@ class case_model extends CI_Model{
         $this->email->send();
         $this->db->trans_complete();
         //print_r($this->email->print_debugger());
+        return $insert_id;
     }
     
     

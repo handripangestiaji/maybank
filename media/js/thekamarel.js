@@ -564,7 +564,7 @@ $(function(){
                             }
                         );
                         
-                        $(this).on('click','.read-mark, .btn-case, .btn-reply, .retweet, .favorit',
+                        $(this).on('click','.read-mark, .btn-case, .btn-reply, .retweet, .favorit .btn-send-reply, .fblike, .dm_send',
                             function(){
                             var me = $(this);
                             $.ajax({
@@ -1039,6 +1039,11 @@ $(function(){
                     
                      $(this).on('click','.btn-send-reply',
                         function() {
+                        var len=$(this).parent().siblings(".reply_comment").val().length
+                        if(len>2000){
+                           var comment = 'Your message is more than 2000 characters. It will not post to Facebook.'; 
+                           alert(comment);
+                        }else{
                             var commentButton = $(this);
                             isSend=commentButton.html()=="SEND";
                             commentButton.html('SENDING...').attr("disabled", "disabled");
@@ -1054,15 +1059,18 @@ $(function(){
                             success: function(response)
                             {
                                 commentButton.removeAttr("disabled");
-                                if(response == true){
+                                if(response == 'true'){
                                   commentButton.html("SEND");   
                                 }
                                 else{
+                                    alert("Failed to reply comment");
                                     alert(response);
                                     commentButton.html("SEND");
                                 }
                             },
                         });
+                            
+                        }
                                                 
                     }); 
                     

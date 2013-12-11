@@ -71,5 +71,5 @@
         <button class="send_reply btn btn-primary btn-small btn-send-reply" value="<?php echo $fb_feed[$i]->post_stream_id;?>">SEND</button>    
     </div>
     <br clear="all" />
-    <div class="reply-status hide">MESSAGE SENT</div>
+    <!--div class="reply-status hide">MESSAGE SENT</div-->
 </div>

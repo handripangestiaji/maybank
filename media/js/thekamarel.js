@@ -689,6 +689,20 @@ $(function(){
                     });
 
                     $(".compose-insert-link-btn").click(function(){
+                        $.ajax({
+                                url : BASEURL + 'dashboard/media_stream/GenerateShortUrl',
+                                type: "POST",
+                                data: {
+                                        long_url:$('.compose-insert-link-text').val(),
+                                        campaign_id:$('.compose-select-campaign').val()
+                                        },
+                                success: function(data){
+                                    var new_data = JSON.parse(data);
+                                    alert(new_data.message);
+                                    $('.compose-textbox').val($('.compose-textbox').val()+ 'http://maybk.co/' + new_data.short_code);
+                                }
+                            });
+                        
                         $(".compose-insert-link-text").linkpreview({
                             previewContainer: "#url-show > .compose-form > div",  //optional
                             //previewContainerClass: ".compose-schedule",
@@ -698,13 +712,10 @@ $(function(){
                                 $('#url-show > .compose-form > div').html('Loading...');
                             },
                             onSuccess: function(data) {                  //optional
-                                console.log("onSuccess");
                             },
                             onError: function() {                    //optional
-                                console.log("onError");
                             },
                             onComplete: function() {                 //optional
-                                console.log("onComplete");
                             }
                        });
                     });
@@ -720,13 +731,10 @@ $(function(){
                                 me.closest('.pull-left').siblings("#reply-url-show").find('div.reply-url-show-content').html('Loading...');
                             },
                             onSuccess: function(data) {                  //optional
-                                console.log("onSuccess");
                             },
                             onError: function() {                    //optional
-                                console.log("onError");
                             },
                             onComplete: function() {                 //optional
-                                console.log("onComplete");
                             }
                        });
                     });
@@ -879,6 +887,44 @@ $(function(){
                                 });
                             }
                         }
+                    });
+                    
+                    $('.compose-select-campaign').on('change', function(){
+                        $.ajax({
+                                url : BASEURL + 'dashboard/media_stream/GetShortenUrlByCampaignId',
+                                type: "GET",
+                                data: {
+                                        campaignId:$(this).val(),
+                                        },
+                                success: function(data){
+                                    var new_data = JSON.parse(data);
+                                    $('.select-shorten-url').html('');
+                                    for(var x=0; x<new_data.length; x++){
+                                        $('.select-shorten-url').append('<option>' + 'http://maybk.co/' + new_data[x].short_code + '</option>');
+                                    }
+                                }
+                            });
+                    });
+                    
+                    $('.select-shorten-url').on('change', function(){
+                        $(".select-shorten-url option:selected").linkpreview({
+                            url: BASEURL + 'dashboard/media_stream/GetUrlPreview?url=' + $(".select-shorten-url option:selected").val(),
+                            previewContainer: "#url-show > .compose-form > div",  //optional
+                            //previewContainerClass: ".compose-schedule",
+                            refreshButton: ".select-shorten-url option",        //optional
+                            preProcess: function() {                //optional
+                                $('#url-show').css({"display": "block"});
+                                $('#url-show > .compose-form > div').html('Loading...');
+                            },
+                            onSuccess: function(data) {                  //optional
+                            },
+                            onError: function() {                    //optional
+                            },
+                            onComplete: function() {                 //optional
+                            }
+                       });
+                        
+                        $('.compose-textbox').val($('.compose-textbox').val() + $(".select-shorten-url option:selected").val());
                     });
                     
                     $(".destroy_status").click(function() {

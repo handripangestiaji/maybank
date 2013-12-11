@@ -44,8 +44,8 @@
                             <input type="text" class="compose-tag-field" length="100" placeholder="Separate TAG by ," />
                         </div>
                         <div class="left clear top10">
-                        <select class="standard-sel">
-                            <option value="#">-- Select Campaign</option>
+                        <select class="standard-sel compose-select-campaign">
+                            <option value=''>-- Select Campaign</option>
                             <?php
                                 for($i=0;$i<count($campaign);$i++){
                                     echo '<option value="'.$campaign[$i]->id.'">'.$campaign[$i]->campaign_name.'</option>';
@@ -54,9 +54,6 @@
                         </select>
                         <select class="standard-sel select-shorten-url">
                             <option value="#">-- Select Shorten URL</option>
-                            <option value="#">Type Satu</option>
-                            <option value="#">Type Dua</option>
-                            <option value="#">Type Tiga</option>
                         </select>
                         </div>
 

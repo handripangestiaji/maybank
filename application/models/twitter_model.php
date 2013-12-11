@@ -164,7 +164,7 @@ class twitter_model extends CI_Model
         $this->db->from("twitter_reply");
         $this->db->where("response_post_id", $tweet['in_reply_to']);
         $result = $this->db->get()->result();
-        print_r($result);
+        //print_r($result);
         foreach($result as $row){
             $notification = array(
                 "social_stream_post_id" => $tweet['post_id'],

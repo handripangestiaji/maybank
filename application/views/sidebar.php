@@ -47,7 +47,22 @@
                 </div>
             </li>
             <?php endforeach?>
+            <?php foreach($reply_pending as $pending):?>
+            <li>
+                <div class="notifHead purple">
+                    New Reply POST ID : #<?=$pending->id?>
+                </div>
+                <div class="notifBody">
+                    <?php
+                        $timezone = new DateTimeZone($this->config->item('timezone'));
+                        $date = new DateTime($each_case->created_at, $timezone);
+                        echo $date->format("M d, Y, h:i A");
+                    ?>
+                </div>
+            </li>
+            <?php endforeach;?>
         </ul>
+        
     </div>   
 </div>
 <!-- ==================== END OF SIDEBAR TASKS ==================== -->

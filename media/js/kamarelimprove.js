@@ -165,6 +165,7 @@ $(function(){
                         me.find('.message').html('<div class="alert alert-success">' +
                         '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
                         '<h4>Reply Tweet</h4> ' + response.message + '!</div>');
+                        me.find('input, textarea').val('');
                     }
                 }
                 catch(e){

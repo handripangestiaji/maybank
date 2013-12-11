@@ -269,17 +269,36 @@ class Media_stream extends CI_Controller {
     	$this->facebook->setaccesstoken($newStd->token);
     	$return=$this->facebook->api('/'.$post_id.'/comments','post',array('message' => $comment));
         
-        $action = array(
-		"action_type" => "reply_facebook",
-		"channel_id" => $channel_loaded[0]->channel_id,
-		"created_at" => date("Y-m-d H:i:s"),
-		"stream_id" => $this->input->post('post_id'),
-		"created_by" => $this->session->userdata('user_id'),
-		"stream_id_response" => $return
-	    );
         
-	    $this->account_model->CreateFbCommentAction($action, $this->input->post('like') === 'true' ? 1 : 0);
-    
+        if(!is_array($return)){//send comment
+          
+            $action = array(
+    		"action_type" => "reply_facebook",
+    		"channel_id" => $channel_loaded[0]->channel_id,
+    		"created_at" => date("Y-m-d H:i:s"),
+    		"stream_id" => $this->input->post('post_id'),
+    		"created_by" => $this->session->userdata('user_id'),
+    		"stream_id_response" => $return
+    	    );
+                $this->account_model->CreateFbCommentAction($action, $this->input->post('like') === 'true' ? 1 : 0);
+                print_r ('true');
+         
+        }elseif(is_array($return)){//replay in reply
+        $action = array(
+    		"action_type" => "reply_facebook",
+    		"channel_id" => $channel_loaded[0]->channel_id,
+    		"created_at" => date("Y-m-d H:i:s"),
+    		"stream_id" => $this->input->post('post_id'),
+    		"created_by" => $this->session->userdata('user_id'),
+    		"stream_id_response" => $return['id']
+    	    );
+              if($return['id']){
+                 $this->account_model->CreateFbCommentAction($action, $this->input->post('like') === 'true' ? 1 : 0);
+                 print_r ('true');
+              }else{
+                 print_r ($return);
+              }
+       }
     }
     
     public function SocmedPost(){

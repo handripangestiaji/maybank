@@ -68,7 +68,13 @@
             <i class="icon-facebook-sign"></i>&nbsp;<span class="reply-fb-char-count">2000</span>
     </div>
     <div class="pull-right">
-        <button class="send_reply btn btn-primary btn-small btn-send-reply" value="<?php echo $fb_feed[$i]->post_stream_id;?>">SEND</button>    
+        <button class="send_reply btn btn-primary btn-small btn-send-reply" value="<?php 
+        if(isset($fb_feed[$i]->comment_id)){
+        echo $fb_feed[$i]->comment_stream_id;
+        }else{
+            echo $fb_feed[$i]->post_stream_id;
+        }
+        ?>">SEND</button>    
     </div>
     <br clear="all" />
     <!--div class="reply-status hide">MESSAGE SENT</div-->

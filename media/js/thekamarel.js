@@ -818,13 +818,56 @@ $(function(){
                             }
                             
                             if(confirmed == true){
+                                var resultPost = 0;
                                 $('.compose-channels option:selected').each(function() {
+                                    if($(this).attr('id') == 'optfacebook'){
+                                        $.ajax({
+                                            url : BASEURL + 'dashboard/media_stream/FbStatusUpdate',
+                                            type: "POST",
+                                            data: {
+                                                    content:$('.compose-textbox').val(),
+                                                    },
+                                            success: function()
+                                            {
+                                                resultPost = 1;
+                                            },
+                                        });
+                                    }
+                                    
+                                    if($(this).attr('id') == 'opttwitter'){
+                                        $.ajax({
+                                            url : BASEURL + 'dashboard/socialmedia/twitterAction',
+                                            type: "POST",
+                                            data: {
+                                                    action:'sendTweet',
+                                                    content:$('.compose-textbox').val(),
+                                                   },
+                                            success: function()
+                                                {
+                                                    resultPost = 1;
+                                                },
+                                            });
+                                    }
+                                    
                                     channels[i] = $(this).val();
                                     i++
                                 });
-                                    
-                                $('.compose-post-status').show();
-                                $('.compose-post-status').html('Posting...');    
+                                
+                                if(resultPost == 0){
+                                    $('.compose-post-status').show();
+                                    $('.compose-post-status').removeClass('green');
+                                    $('.compose-post-status').addClass('red');
+                                    $('.compose-post-status').html('Post Failed');
+                                    $('.compose-post-status').fadeOut(7500);
+                                }
+                                else{
+                                    $('.compose-post-status').show();
+                                    $('.compose-post-status').removeClass('red');
+                                    $('.compose-post-status').addClass('green');
+                                    $('.compose-post-status').html('Post Success');
+                                    $('.compose-post-status').fadeOut(7500);
+                                }
+                                
                                 $.ajax({
                                     url : BASEURL + 'dashboard/media_stream/SocmedPost',
                                     type: "POST",
@@ -833,11 +876,6 @@ $(function(){
                                             content:$('.compose-textbox').val(),
                                             tags:$('.compose-tag-field').val()
                                             },
-                                    success: function()
-                                    {
-                                        $('.compose-post-status').html('Post Sent');
-                                        $('.compose-post-status').fadeOut(7500);
-                                    },
                                 });
                             }
                         }

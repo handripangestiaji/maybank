@@ -398,5 +398,22 @@ class Media_stream extends CI_Controller {
 	echo file_get_contents($url);
      }
      
-    
+     public function FbStatusUpdate(){
+	  $access_token_fb = fb_dummy_accesstoken();
+	  $config = array(
+	       'appId' => $this->config->item('fb_appid'),
+	       'secret' => $this->config->item('fb_secretkey')
+	  );
+	  $this->load->library('facebook',$config);
+	  $this->facebook->setaccesstoken($access_token_fb);
+	  $this->facebook->api('/me/feed','POST',array('message'=>$this->input->post('content')));
+	  /*
+	  $result = curl_get_file_contents('https://graph.facebook.com/me?
+					  method=GET&
+					  format=json&
+					  suppress_http_code=1&
+					  access_token='.$access_token_fb);
+	  echo $result;
+	  */
+    }
 }

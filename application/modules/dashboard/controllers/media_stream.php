@@ -463,4 +463,59 @@ class Media_stream extends CI_Controller {
 	print_r($this->case_model->GetReplyNotification($this->session->userdata('user_id')));
     }
     
+     
+    public function GetShortenUrlByCampaignId(){
+	$this->load->model('campaign_url_model');
+          $result = $this->campaign_url_model->GetByCampaignId($this->input->get('campaignId'));
+          echo json_encode($result);
+    }
+    
+    public function GenerateShortUrl(){
+	$this->load->library('Shorturl');
+	$this->load->model(array('tag_model', 'product_model', 'campaign_model', 'shorturl_model', 'campaign_url_model'));
+	$this->load->helper('form');
+	$this->load->library('form_validation');
+
+	$short_code = substr( md5( time().uniqid().rand() ), 0, 6 );
+	
+	$params = array('long_url' => $this->input->post('long_url'),
+			'campaign_id' => $this->input->post('campaign_id'),
+			'short_code' => $short_code,
+			'description' => 'not yet');
+	$params['user_id'] = $this->session->userdata('user_id');
+	
+	$config = array(
+				array(
+					'field' => 'long_url',
+					'label' => 'Full Url',
+					'rules' => 'required'
+				),
+				array(
+					'field' => 'campaign_id',
+					'label' => 'Full Url',
+					'rules' => 'required'
+				)
+			);
+	
+	$this->form_validation->set_rules($config);
+	
+	if($this->form_validation->run() == TRUE)
+	{
+		$code = $this->shorturl->urlToShortCode($params);
+		
+		$setparam = array(
+				    "campaign_id" => $params['campaign_id'], 
+				    "url_id" => $code['url_id'],
+				    "user_id" => $params['user_id']
+				    );
+		
+		$id_campaign_url = $this->campaign_url_model->insert($setparam);
+		
+		$setparam['short_code'] = $short_code; 
+		echo json_encode($setparam);
+	}
+	else{
+	    echo json_encode(array('message' => 'Something error. Make sure you have select a campaign and put the full url in the insert link box.'));
+	}
+    }
 }

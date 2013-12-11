@@ -18,6 +18,7 @@
                         <td>Name Group</td>
                         <td>
                             <input type='text' name='group_name' value='<?php echo $group->row()->group_name;?>' />
+                            <span style='color:red;'><?php echo form_error('group_name'); ?></span>
                             <input type='hidden' name='group_id' value='<?php echo $group->row()->group_id;?>' />
                         </td>
                     </tr>

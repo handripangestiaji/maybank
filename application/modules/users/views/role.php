@@ -27,6 +27,15 @@
         </div>
     <?php }?>
     
+    <?php
+	$msge = $this->session->flashdata('info_delete_failed');
+	if($msge!=NULL){ ?>
+        <div class="alert alert-info" style='background: #ffe4e4; color: #b94a48; border-color: #eed3d7;'>
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Role</strong> cannot be deleted.
+        </div>
+    <?php }?>
+    
     <div id="confirm_role" class="alert alert-error">
 	    Confirm delete <b>"Role"</b> ?
             <div style="float: right;">

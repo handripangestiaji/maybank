@@ -68,6 +68,17 @@ class Users extends MY_Controller {
 	       $this->form_validation->set_rules('fullName', 'Full Name', 'required');
 	       $this->form_validation->set_rules('displayName', 'Display Name', 'required');
 	       $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
+	       $this->form_validation->set_rules('description');
+	       $this->form_validation->set_rules('location');
+	       $this->form_validation->set_rules('web_address');
+	       //if (empty($_FILES['userfile']['name']))
+	       //{
+		//   $this->form_validation->set_rules('userfile', 'Image', 'required');
+	       //}
+	  
+	       $checkMail = $this->users_model->check_email($this->input->post('email'));
+	       
+	       
 	       if($this->form_validation->run() == FALSE)
 	       {
 		    $data = array(
@@ -75,6 +86,13 @@ class Users extends MY_Controller {
 		      'group' => $this->users_model->select_group()
 		      );
 		    $this->load->view('users/create_user',$data);
+	       }
+	       
+	       elseif($checkMail->num_rows() >= 1)
+	       {
+		    $this->session->set_flashdata('double', TRUE);
+		    
+		    redirect('users/create');
 	       }
 	       
 	       else
@@ -88,24 +106,58 @@ class Users extends MY_Controller {
 			       );
 	       
 	       $this->upload->initialize($config);
-	       if ( ! $this->upload->do_upload())
+	       /*if ( ! $this->upload->do_upload())
 		{
 		    //$this->upload->display_errors();
 		    $this->session->set_flashdata('failed', $this->upload->display_errors());
 		    redirect('users/create');
-		}
-		else
-		{
+		}*/
+		
+		//else
+		//{
 		    $image = $this->upload->data();
 		    $dir = "media/dynamic/".$image['file_name'];
-		    
+		    /*
 		    $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 		    $count = mb_strlen($chars);
 	      
 		    for ($i = 0, $pass = ''; $i < 10; $i++) {
 		    $index = rand(0, $count - 1);
 		    $pass .= mb_substr($chars, $index, 1);
+		    }*/
+		    
+		    $lower = 'abcdefghijklmnopqrstuvwxyz';
+		    $upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		    $number = '0123456789';
+		    $simbol = '!@#$%';
+		    
+		    $clower = mb_strlen($lower);
+		    $cupper = mb_strlen($upper);
+		    $cnumber = mb_strlen($number);
+		    $csimbol = mb_strlen($simbol);
+		    
+		    for ($i = 0, $low = ''; $i < 3; $i++) {
+			$index1 = rand(0, $clower - 1);
+			$low  .= mb_substr($lower, $index1, 1);
 		    }
+		    
+		    for ($i = 0, $up = ''; $i < 3; $i++) {
+			$index2 = rand(0, $cupper - 1);
+			$up  .= mb_substr($upper, $index2, 1);
+		    }
+		    
+		    for ($i = 0, $num = ''; $i < 2; $i++) {
+			$index3 = rand(0, $cnumber - 1);
+			$num  .= mb_substr($number, $index3, 1);
+		    }
+		    
+		    for ($i = 0, $sim = ''; $i < 2; $i++) {
+			$index4 = rand(0, $csimbol - 1);
+			$sim  .= mb_substr($simbol, $index4, 1);
+		    }
+		    
+		    $pass = str_shuffle(mb_substr($low.$up.$num.$sim,0,10));
+		    
 		    $created_by = $this->session->userdata('user_id') == 0 ? NULL : $this->session->userdata('user_id');
 		    $timezone = new DateTimeZone("Europe/London");
 		    $time = new DateTime(date("Y-m-d H:i:s e"), $timezone);
@@ -122,7 +174,7 @@ class Users extends MY_Controller {
 				'image_url' => $dir,
 				'description' => $this->input->post('description'),
 				'location' => $this->input->post('location'),
-				'web_address' => $this->input->post('web_addres'),
+				'web_address' => $this->input->post('web_address'),
 				'created_at' => $time->format("Y-m-d H:i:s"),
 				'created_by' => $created_by
 			 );
@@ -134,13 +186,13 @@ class Users extends MY_Controller {
 				  $this->email->to($this->input->post('email'));
 				  
 				  $this->email->subject('New Registration');
-				  $template = curl_get_file_contents(base_url('mail_template/NewUser/'.$this->input->post('username').'/'.$pass));
+				  $template = curl_get_file_contents(base_url('mail_template/NewUser/'.$this->input->post('username').'/'.urlencode($pass)));
 				  $this->email->message($template);
 				  $this->email->send();
 		    
 		    $this->session->set_flashdata('succes', TRUE);
 		    redirect('users');
-		}
+		//}
 	       }
 	       
 	  }
@@ -166,90 +218,112 @@ class Users extends MY_Controller {
 			      'max_height'    => '768'
 			       );
 	       
-	       $this->upload->initialize($config);
+	  $this->upload->initialize($config);
 	       
-	  if(!empty($_FILES['userfile']['tmp_name']))
+	  $this->form_validation->set_rules('fullName', 'Full Name', 'required');
+	  $this->form_validation->set_rules('displayName', 'Display Name', 'required');
+	  $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
+	  $this->form_validation->set_rules('description');
+	  $this->form_validation->set_rules('location');
+	  $this->form_validation->set_rules('web_address');
+	  
+	  if($this->form_validation->run() == FALSE)
 	  {
-	       if ( ! $this->upload->do_upload())
-		{
-		    //$this->upload->display_errors();
-		    //$this->session->set_flashdata('failed', TRUE);
-		    redirect('users');
-		}
-		else
-		{
-		    $image = $this->upload->data();
-		    $dir = "media/dynamic/".$image['file_name'];
-		    
-		    $id = $this->input->post('userID');
-		    $data = array(
-				'full_name' => $this->input->post('fullName'),
-				'display_name' => $this->input->post('displayName'),
-				'email' => $this->input->post('email'),
-				'role_id' => $this->input->post('optRole'),
-				'group_id' => $this->input->post('optGroup'),
-				'image_url' => $dir,
-				'description' => $this->input->post('description'),
-				'location' => $this->input->post('location'),
-			        'web_address' =>$this->input->post('web_address'),
-				'is_active' => $this->input->post('is_active')
-				  );
-		    
-		    $this->users_model->update_user($id,$data);
-		    
-		    $username = $this->session->userdata('user_id');
-		    $user_login = $this->users_model->select_user_login($username);
-		    
-		    $data1 = array(
-                                'user_id' => $username,
-				'full_name'=> $user_login->row()->full_name,
-				'display_name' => $user_login->row()->display_name,
-				'role_name' => $user_login->row()->role_name,
-				'web_address' => $user_login->row()->web_address,
-				'image_url' => $user_login->row()->image_url,
-				'description' => $user_login->row()->description,
-                                'is_login' => TRUE
-                            );
-                    $this->session->set_userdata($data1);
-		    
-		    $this->session->set_flashdata('info', TRUE);
-		    redirect('users');
-		}
+	       $data = array(
+		   'id' => $this->users_model->get_byid($this->input->post('userID')),
+		   'role' => $this->users_model->select_role(),
+		   'group' => $this->users_model->select_group()
+		   );
+	       $this->load->view('users/edit_user',$data);
 	  }
 	  
-	  elseif(empty($_FILES['userfile']['tmp_name']))
-	  {
-		    $id = $this->input->post('userID');
-		    $data = array(
-				'full_name' => $this->input->post('fullName'),
-				'display_name' => $this->input->post('displayName'),
-				'email' => $this->input->post('email'),
-				'role_id' => $this->input->post('optRole'),
-				'group_id' => $this->input->post('optGroup'),
-				'description' => $this->input->post('description'),
-				'location' => $this->input->post('location'),
-			        'web_address' =>$this->input->post('web_address'),
-				'is_active' => $this->input->post('is_active')
-				  );
-		    
-		    $this->users_model->update_user($id,$data);
-		    
-		    $username = $this->session->userdata('user_id');
-		    $user_login = $this->users_model->select_user_login($username);
-		    
-		    $data1 = array(
-                                'user_id' => $username,
-				'full_name'=> $user_login->row()->full_name,
-				'display_name' => $user_login->row()->display_name,
-				'role_name' => $user_login->row()->role_name,
-				'web_address' => $user_login->row()->web_address,
-				'description' => $user_login->row()->description,
-                                'is_login' => TRUE
-                            );
-                    $this->session->set_userdata($data1);
-		    
-		    $this->session->set_flashdata('info', TRUE);
-		    redirect('users');
+	  else
+	  {    
+	       if(!empty($_FILES['userfile']['tmp_name']))
+	       {
+		    if ( ! $this->upload->do_upload())
+		     {
+			 //$this->upload->display_errors();
+			 //$this->session->set_flashdata('failed', TRUE);
+			 redirect('users');
+		     }
+		     else
+		     {
+			 $image = $this->upload->data();
+			 $dir = "media/dynamic/".$image['file_name'];
+			 
+			 $id = $this->input->post('userID');
+			 $data = array(
+				     'full_name' => $this->input->post('fullName'),
+				     'display_name' => $this->input->post('displayName'),
+				     'email' => $this->input->post('email'),
+				     'role_id' => $this->input->post('optRole'),
+				     'group_id' => $this->input->post('optGroup'),
+				     'image_url' => $dir,
+				     'description' => $this->input->post('description'),
+				     'location' => $this->input->post('location'),
+				     'web_address' =>$this->input->post('web_address'),
+				     'is_active' => $this->input->post('is_active')
+				       );
+			 
+			 $this->users_model->update_user($id,$data);
+			 
+			 $username = $this->session->userdata('user_id');
+			 $user_login = $this->users_model->select_user_login($username);
+			 
+			 $data1 = array(
+				     'user_id' => $username,
+				     'username' => $user_login->row()->username,
+				     'full_name'=> $user_login->row()->full_name,
+				     'display_name' => $user_login->row()->display_name,
+				     'role_name' => $user_login->row()->role_name,
+				     'web_address' => $user_login->row()->web_address,
+				     'image_url' => $user_login->row()->image_url,
+				     'description' => $user_login->row()->description,
+				     'is_login' => TRUE
+				 );
+			 $this->session->set_userdata($data1);
+			 
+			 $this->session->set_flashdata('info', TRUE);
+			 redirect('users');
+		     }
+	       }
+	       
+	       elseif(empty($_FILES['userfile']['tmp_name']))
+	       {
+			 $id = $this->input->post('userID');
+			 $data = array(
+				     'full_name' => $this->input->post('fullName'),
+				     'display_name' => $this->input->post('displayName'),
+				     'email' => $this->input->post('email'),
+				     'role_id' => $this->input->post('optRole'),
+				     'group_id' => $this->input->post('optGroup'),
+				     'description' => $this->input->post('description'),
+				     'location' => $this->input->post('location'),
+				     'web_address' =>$this->input->post('web_address'),
+				     'is_active' => $this->input->post('is_active')
+				       );
+			 
+			 $this->users_model->update_user($id,$data);
+			 
+			 $username = $this->session->userdata('user_id');
+			 $user_login = $this->users_model->select_user_login($username);
+			 
+			 $data1 = array(
+				     'user_id' => $username,
+				     'username' => $user_login->row()->username,
+				     'full_name'=> $user_login->row()->full_name,
+				     'display_name' => $user_login->row()->display_name,
+				     'role_name' => $user_login->row()->role_name,
+				     'web_address' => $user_login->row()->web_address,
+				     'description' => $user_login->row()->description,
+				     'is_login' => TRUE
+				 );
+			 $this->session->set_userdata($data1);
+			 
+			 $this->session->set_flashdata('info', TRUE);
+			 redirect('users');
+	       }
 	  }
     }
     
@@ -267,6 +341,7 @@ class Users extends MY_Controller {
 	  $user_login = $this->users_model->select_user_login($id);
 		    $data1 = array(
                                 'user_id' => $id,
+				'username' => $user_login->row()->username,
 				'display_name' => $user_login->row()->display_name,
 				'description' => $user_login->row()->description,
                                 'is_login' => TRUE
@@ -283,7 +358,38 @@ class Users extends MY_Controller {
 	  redirect('users');
     }
     
-    
+    function search_user($value_user)
+    {
+	  $v = urldecode($value_user);
+	  
+	  $config['base_url'] = base_url().'users/index';
+	  $config['total_rows'] = $this->users_model->count_record();
+	  $config['per_page'] = 10;
+	  $config["uri_segment"] = 3;
+	  
+	  $config['next_link'] = 'Next';
+	  $config['prev_link'] = 'Prev';
+	  
+	  $config['first_link'] = 'First';
+	  $config['last_link'] = 'Last';
+     
+	  $config['cur_tag_open'] = '<b style="margin:0px 5px;">';
+	  $config['cur_tag_close'] = '</b>';
+	  
+	  $this->pagination->initialize($config);
+	  
+	  $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+	  
+	  if($this->input->get('role_collection_id'))
+	       $data['show'] = $this->users_model->search_user($config["per_page"], $page, $this->input->get('role_collection_id'),$v);
+	  else
+	       $data['show'] = $this->users_model->search_user($config["per_page"], $page, null,$v);
+	  $data['links'] = $this->pagination->create_links();
+	  $data['role'] = $this->users_model->select_role();
+	  $data['count'] = $this->users_model->count_record();
+	  
+	  $this->load->view('users/index',$data);
+    }
     
     //============================ ROLE ===================================
     function menu_role()
@@ -418,9 +524,18 @@ class Users extends MY_Controller {
     
     function delete_role($id)
     {
-	  $this->users_model->delete_role($id);
-	  $this->session->set_flashdata('info_delete', TRUE);
-	  redirect('users/menu_role');
+	  $cek_roleid = $this->users_model->cek_roleid($id);
+	  if($cek_roleid->num_rows()==0)
+	  {
+	       $this->users_model->delete_role($id);
+	       $this->session->set_flashdata('info_delete', TRUE);
+	       redirect('users/menu_role');
+	  }
+	  else
+	  {
+	       $this->session->set_flashdata('info_delete_failed', TRUE);
+	       redirect('users/menu_role');
+	  }
     }
     
     function edit_role($id)
@@ -478,7 +593,63 @@ class Users extends MY_Controller {
     
     function update_role()
     {
+	  $this->form_validation->set_rules('role_name', 'Role Name', 'required');
+	  if($this->form_validation->run() == FALSE)
+	  {
+	       $id = $this->input->post('role_id');
+	       $data = array(
+			 'role' => $this->users_model->edit_role($id)
+			);
 	  
+	       $roles = $this->users_model->select_appRole();
+	       $role_detail = $this->users_model->edit_role_detail($id);
+	       
+	       $arr = array();
+	       $tree = array();
+	       $i = 0;
+	       
+	       foreach($role_detail->result_array() as $d){
+		    $c[] = $d['app_role_id']; 
+	       }
+	       
+	       foreach($roles->result_array() as $v)
+	       {
+		    if (in_array($v['app_role_id'], $c)) {
+			 $checked = true;
+		     }
+		     else{
+			 $checked = false;
+		     }
+		    
+		   $arr[$v['app_role_id']] = array_merge(array("label" => $v['role_name'], "parent_id" => $v['parent_id'] , "value" => $v['app_role_id'], "checked" => $checked), array('items' => array()));
+	       }
+	       
+	       //echo "<pre>";
+	       //print_r($arr);
+	       //die();
+	       
+	       foreach($arr as $role_app_id => &$value)
+	       {
+		    if(!$value['parent_id'] || !array_key_exists($value['parent_id'], $arr))
+		    {
+			 $tree[] = &$value;
+		    } else {
+			 $arr[$value['parent_id']]['items'][] = &$value;
+		    }
+	       }
+	       
+	       //echo "<pre>";
+	       //print_r($tree);
+	       //die();
+	       
+	       $data['json'] = json_encode($tree);
+	       
+	       
+	       $this->load->view('users/role_edit',$data);
+	  }
+	  
+	  else
+	  {
 	  $data = array(
 			 'role_name' => $this->input->post('role_name')
 			);
@@ -499,6 +670,7 @@ class Users extends MY_Controller {
 	  }
 	  $this->session->set_flashdata('info', TRUE);
 	  redirect('users/menu_role');
+	  }
     }
     
     
@@ -623,9 +795,18 @@ class Users extends MY_Controller {
     
     function delete_group($id)
     {
-	  $data = $this->users_model->delete_group($id);
-	  $this->session->set_flashdata('info_delete', TRUE);
-	  redirect('users/menu_group?return='.$data);
+	  $check_groupid = $this->users_model->check_groupid($id);
+	  if($check_groupid->num_rows()==0)
+	  {
+	       $data = $this->users_model->delete_group($id);
+	       $this->session->set_flashdata('info_delete', TRUE);
+	       redirect('users/menu_group?return='.$data);
+	  }
+	  else
+	  {
+	       $this->session->set_flashdata('info_delete_failed', TRUE);
+	       redirect('users/menu_group');
+	  }
     }
     
     function edit_group($id)
@@ -640,26 +821,41 @@ class Users extends MY_Controller {
     
     function update_group()
     {
-	  $channel = $this->input->post('channel');
-	  
-	  $group_id = $this->input->post('group_id');
-	  $data = array(
-			'group_name' => $this->input->post('group_name'),
-		       );
-	  $this->users_model->update_group($group_id,$data);
-	  
-	  $this->users_model->delete_group_detail($group_id);
-	  
-	  for($i=0;$i<count($channel);$i++)
+	  $this->form_validation->set_rules('group_name', 'Group Name', 'required');
+	  $id = $this->input->post('group_id');
+	  if($this->form_validation->run() == FALSE)
 	  {
-	       $data_channel = array(
-					'user_group_id' => $group_id,
-					'allowed_channel' => $channel[$i]
-				     );
-	       $this->users_model->insert_group_detail($data_channel);
+	       $data = array(
+			 'group' => $this->users_model->edit_group($id),
+			 'group_detail' => $this->users_model->edit_group_detail($id),
+			 'channel' => $this->users_model->select_channel()
+			);
+	       $this->load->view('users/group_edit',$data);
 	  }
-	  $this->session->set_flashdata('info', TRUE);
-	  redirect('users/menu_group');
+	  
+	  else
+	  {
+	       $channel = $this->input->post('channel');
+	       
+	       $group_id = $this->input->post('group_id');
+	       $data = array(
+			     'group_name' => $this->input->post('group_name'),
+			    );
+	       $this->users_model->update_group($group_id,$data);
+	       
+	       $this->users_model->delete_group_detail($group_id);
+	       
+	       for($i=0;$i<count($channel);$i++)
+	       {
+		    $data_channel = array(
+					     'user_group_id' => $group_id,
+					     'allowed_channel' => $channel[$i]
+					  );
+		    $this->users_model->insert_group_detail($data_channel);
+	       }
+	       $this->session->set_flashdata('info', TRUE);
+	       redirect('users/menu_group');
+	  }
     }
     
     //============================= LOGOUT ================================

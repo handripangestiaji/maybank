@@ -66,7 +66,7 @@
             <div><img src="<?php echo base_url().$this->session->userdata('image_url'); ?>" /></div>
         </div>
         <div class="profileInfo">
-            <p>User Id : <?php echo $this->session->userdata('user_id'); ?></p>
+            <p>User Id : <?php echo $this->session->userdata('username'); ?></p>
             <p>Full Name : <?php echo $this->session->userdata('full_name'); ?></p>
             <p>Display Name : <?php echo $this->session->userdata('display_name'); ?></p>
             <p>Role : <?php echo $this->session->userdata('role_name'); ?></p>
@@ -130,7 +130,7 @@
         <br clear="all" />
         <div class="sidebarLine"></div>
         <div class="profileInfo">
-            <p>User Id : <?php echo $this->session->userdata('user_id'); ?></p>
+            <p>User Id : <?php echo $this->session->userdata('username'); ?></p>
             <p>Full Name : <?php echo $this->session->userdata('full_name'); ?></p>
             <!--<p>Display Name : <?php //echo $this->session->userdata('display_name'); ?></p>-->
             <p>Role : <?php echo $this->session->userdata('role_name'); ?></p>

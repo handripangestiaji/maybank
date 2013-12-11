@@ -6,7 +6,7 @@
             <input class="btn" type="button" onclick="menu_role()" name="btn_role" value="Role"  />   <br />
             <input class="btn" type="button" onclick="menu_group()" name="btn_group" value="Group" />
         </div>
-        
+               
         <div class="cms-table pull-right">
             <div>
                 <h5>Edit user</h5>
@@ -17,23 +17,27 @@
     <table cellspacing=5px>
         <?php foreach($id->result() as $row){ ?>
         <tr>
-            <td>User ID*</td>
-            <td><input name='userID' type="text" value='<?php echo $row->user_id?>' readonly /></td>
+            <td>User ID</td>
+            <td><input name='userID' type="hidden" value='<?php echo $row->user_id?>' />
+            <input type="text" value='<?php echo $row->username?>' readonly /></td>
         </tr>
         
         <tr>
-            <td>Full Name</td>
-            <td><input name='fullName' type="text" value='<?php echo $row->full_name;?>' /></td>
+            <td>Full Name <span style='color: red;'>*</span></td>
+            <td><input name='fullName' type="text" value="<?php echo set_value('fullName',isset($row->full_name) ? $row->full_name : '')?>" />
+            <span style='color:red;'><?php echo form_error('fullName'); ?></span></td>
         </tr>
         
         <tr>
-            <td>Display Name</td>
-            <td><input name='displayName' type="text" value='<?php echo $row->display_name;?>' /></td>
+            <td>Display Name <span style='color: red;'>*</span></td>
+            <td><input name='displayName' type="text" value="<?php echo set_value('displayName',isset($row->display_name) ? $row->display_name : '')?>" />
+            <span style='color:red;'><?php echo form_error('displayName'); ?></span></td>
         </tr>
         
         <tr>
-            <td>Email</td>
-            <td><input name='email' type="text" value='<?php echo $row->email;?>' /></td>
+            <td>Email <span style='color: red;'>*</span></td>
+            <td><input name='email' type="text" value="<?php echo set_value('email',isset($row->email) ? $row->email : '')?>" />
+            <span style='color:red;'><?php echo form_error('email'); ?></span></td></td>
         </tr>
         
         <tr>
@@ -91,17 +95,17 @@
         
         <tr>
             <td>Description</td>
-            <td><textarea name='description' type='text'><?php echo $row->description;?></textarea></td>
+            <td><textarea name='description' type='text'><?php echo set_value('description',isset($row->description) ? $row->description : '')?></textarea></td>
         </tr>
         
         <tr>
             <td>Location</td>
-            <td><input name='location' type='text' value="<?php echo $row->location;?>"</td>
+            <td><input name='location' type='text' value="<?php echo set_value('location',isset($row->location) ? $row->location : '')?>"</td>
         </tr>
         
         <tr>
             <td>Web Address</td>
-            <td><input name='web_address' type='text' value="<?php echo $row->web_address;?>" /></td>
+            <td><input name='web_address' type='text' value="<?php echo set_value('web_address',isset($row->web_address) ? $row->web_address : '')?>" /></td>
         </tr>
         
         <tr>
@@ -127,6 +131,11 @@
                     ?>
                 </select>
             </td>
+        </tr>
+        
+        <tr>
+            <td>&nbsp;</td>
+            <td><span style='color: red;'>* required field</span></td>
         </tr>
         
         <tr>

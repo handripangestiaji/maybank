@@ -73,7 +73,9 @@
                 </table>
             </div>
             <div style="float: right; margin-top: -10px;">
-                <input type="text" placeholder="Search User name, Email or ID" />
+                <input type="text" id="search_user" name="search_user" placeholder="Search User name, Email or ID" />
+                
+                <button onclick=''><span><i class="icon-search"></i></span></button>
             </div>
             <div style="clear: both"></div>
             <table class="table table-striped">
@@ -87,7 +89,6 @@
                         <th>Status</th>
                         <th>Date Created</th>
                         <th>Creator</th>
-                        <th>&nbsp;</th>
                         <th>&nbsp;</th>
                     </tr>
                 </thead>
@@ -110,9 +111,9 @@
                         <td><?php echo $row->created_at;?></td>
                         <td><?php echo $row->created_by_name;?></td>
                         <td><a href="<?php echo site_url('users/edit/'.$row->user_id);?>"><span><i class="icon-pencil"></i></span></a></td>
-                        <td>
-                            <a href="" onclick="show_confirm('<?php echo $row->user_id;?>');return false;"><span><i class="icon-remove"></i></span></a>
-                        </td>
+                        <!--<td>
+                            <a href="" onclick="show_confirm('<?php //echo $row->user_id;?>');return false;"><span><i class="icon-remove"></i></span></a>
+                        </td>-->
                     </tr>
                     <?php }
                     }?>
@@ -137,6 +138,13 @@
 </style>
 
 <script type="text/javascript">
+    function search_user()
+    {
+        var value_search = document.getElementById('search_user').value; 
+        //alert(value_search);
+        window.location.href = "<?php echo site_url('users/search_user');?>/"+encodeURIComponent(value_search);
+    }
+    
     function yes_delete_user()
     {
         var usr_id = document.getElementById("user_id_delete").value;

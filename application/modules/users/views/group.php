@@ -26,6 +26,15 @@
         </div>
     <?php }?>
     
+    <?php
+	$msge = $this->session->flashdata('info_delete_failed');
+	if($msge!=NULL){ ?>
+        <div class="alert alert-info" style='background: #ffe4e4; color: #b94a48; border-color: #eed3d7;'>
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Group</strong> cannot be deleted.
+        </div>
+    <?php }?>
+    
     <div id="confirm_group" class="alert alert-error">
 	    Confirm delete <b>"Group"</b> ?
             <div style="float: right;">
@@ -98,7 +107,7 @@
                     <?php foreach($group as $gr){?>
                     <tr>
                         <td><?php echo $gr->group_name;?></td>
-                        <td>10</td>
+                        <td>0</td>
                         <td>
                             <?php
                                 foreach($group_detail->result() as $gd)

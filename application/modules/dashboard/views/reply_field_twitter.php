@@ -1,4 +1,4 @@
-<form action="" method="post" class="reply-tweet">
+<!--form action="" method="post" class="reply-tweet"-->
 <div class="row-fluid">
     <span class="dm-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
     <div class="pull-left">
@@ -13,7 +13,7 @@
          <?php endforeach?>
         </select>
     </div>
-    <textarea class='replaycontent' placeholder="Compose Message" name="content">@<?php echo $mentions[$i]->screen_name; ?></textarea>
+    <textarea class='replaycontent' placeholder="Compose Message" name="content">@<?php echo $mentions[$i]->screen_name; ?> &nbsp;</textarea>
     <br clear="all" />
      <div class="pull-left"  style="margin-bottom: 5px;">
         <i class="icon-link"></i>
@@ -65,10 +65,10 @@
             <i class="icon-twitter-sign"></i>&nbsp;<span class="reply-tw-char-count">140</span>
         </div>
         <div class="pull-right">
-                <button class="dm_send replayTweet btn btn-primary btn-small btn-send-dm"  value="<?=$mentions[$i]->twitter_user_id;?>" >SEND</button>    
+                <button class="replayTweet btn btn-primary btn-small btn-send-dm"  value="<?=$mentions[$i]->twitter_user_id;?>" >SEND</button>    
                 <input type="hidden" class="screen_name" value="<?php echo $mentions[$i]->screen_name; ?>" />
         </div>
     <br clear="all" />
     <div class="dm-status hide">MESSAGE SENT</div>
 </div>
-</form>
+<!--/form-->

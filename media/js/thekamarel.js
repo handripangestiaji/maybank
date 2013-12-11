@@ -564,7 +564,7 @@ $(function(){
                             }
                         );
                         
-                        $(this).on('click','.read-mark, .btn-case',
+                        $(this).on('click','.read-mark, .btn-case, .btn-send-reply, .fblike, .dm_send',
                             function(){
                             var me = $(this);
                             $.ajax({

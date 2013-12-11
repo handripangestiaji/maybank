@@ -251,7 +251,7 @@ class Media_stream extends CI_Controller {
         $comment = $this->input->post('comment');
         $post_id = $this->input->post('post_id');
      
-	$filter = array(
+	     $filter = array(
             "connection_type" => "facebook"
         );
         if($this->input->get('channel_id')){

@@ -4,8 +4,8 @@ class Dashboard extends MY_Controller {
 
      private $connection;
 	   
-    function __construct()
-	{
+     function __construct()
+     {
 		parent::__construct();
 		// Loading TwitterOauth library. 
 		$this->config->load('twitter');   
@@ -15,8 +15,8 @@ class Dashboard extends MY_Controller {
 		$this->load->library('session');
 		$this->load->helper('url');
 		$this->load->helper('array');
-        $this->load->helper('form');
-        $this->load->helper('date');
+	  $this->load->helper('form');
+	  $this->load->helper('date');
 		
 		$this->session->set_userdata('access_token', $this->config->item('twitter_access_token'));
 		$this->session->set_userdata('access_token_secret', $this->config->item('twitter_access_secret'));

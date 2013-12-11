@@ -18,6 +18,7 @@ class Media_stream extends CI_Controller {
 	$this->load->helper('form');
 	$this->load->model('facebook_model');
 	$this->load->model('twitter_model');
+	$this->load->model('account_model');
     }
     
     
@@ -176,36 +177,91 @@ class Media_stream extends CI_Controller {
         }
         //redirect(base_url('/index.php/dashboard'));    	
     }
+    
+    public function ReplyTwitter($type = 'tweet'){
+	header("Content-Type: application/x-json");
+	$content = $this->input->post('message');
+	$twitter_reply['image_to_post'] = $this->input->post('filename');
+	$twitter_reply['reply_to_post_id'] = $this->input->post('post_id');
+	$twitter_reply['content_products_id'] = $this->input->post('product_type');
+	$twitter_reply['reply_type'] = $this->input->post('reply_type');
+	$twitter_reply['text'] = $this->input->post('content');
+	$twitter_reply['user_id'] = $this->session->userdata('user_id');
+	$twitter_data = $this->twitter_model->ReadTwitterData(
+	    array(
+		'a.post_id' => $this->input->post('post_id')
+	    ),
+	    1
+	);
+	if(count($twitter_data) > 0){
+	    $twitter_data = $twitter_data[0];
+	    $channel = $this->account_model->GetChannel(array(
+		'channel_id' => $this->input->post('channel_id')
+	    ));
+	    if(count($channel) == 0){
+		echo json_encode(
+		    array(
+			'success' => false,
+			'message' => "Invalid Channel Id"
+		    )
+		);
+		return;
+	    }
+	    else{
+		$channel = $channel[0];
+	    }
+	    $parameters = array('status' => $this->input->post('content'),'in_reply_to_status_id'=>$twitter_data->post_stream_id);
+	    $this->load->library('Twitteroauth');
+	    $this->connection = $this->twitteroauth->create($this->config->item('twitter_consumer_token'),$this->config->item('twitter_consumer_secret'), $channel->oauth_token,
+							    $channel->oauth_secret);
+	    $result=$this->connection->post('statuses/update', $parameters);
+	    $return = $this->twitter_model->CreateReply($twitter_reply, $result, $channel);
+	    
+	    if($return){
+		echo json_encode(array(
+		    'success' => true,
+		    'message' => "Reply tweet successfully done."
+		));
+	    }
+	    
+	}
+	else{
+	    echo json_encode(
+		array(
+		    'success' => false,
+		    'message' => "Invalid POST Id"
+		)
+	    );
+	}
+    }
+    
     //=========================================END Twitter function=============================================
 
 
     //=========================================facebook function=============================================
     public function fb_access_token(){
-	    $app_id = $this->config->item('fb_appid');
-	    $app_secret = $this->config->item('fb_appsecret');
-	    $my_url = site_url('dashboard/fb_access_token');  // redirect url
-	    $code = $this->input->get("code");
-     
-	    if(empty($code)) {
-	      // Redirect to Login Dialog
-	      $this->session->set_userdata('state', md5(uniqid(rand(), TRUE))); // CSRF protection
-	      $dialog_url = "https://www.facebook.com/dialog/oauth?client_id=" 
-		    . $app_id . "&redirect_uri=" . urlencode($my_url) . "&state="
-		    . $this->session->userdata('state') . "&scope=publish_stream,read_friendlists,email,manage_pages,export_stream,publish_actions,publish_checkins,read_stream";
-     
-     
-	      redirect($dialog_url);
-	    }
-	    if($this->session->userdata('state') && ($this->session->userdata('state')=== $this->input->get('state'))) {
-		     $token_url = "https://graph.facebook.com/oauth/access_token?"
-		       . "client_id=" . $app_id . "&redirect_uri=" . urlencode($my_url)
-		       . "&client_secret=" . $app_secret . "&code=" . $code;
-		     $response = curl_get_file_contents($token_url);
-		     $params = null;
-		     parse_str($response, $params);
-		     $longtoken=$params['access_token'];
-		     print_r($params);
-	    }
+	$app_id = $this->config->item('fb_appid');
+	$app_secret = $this->config->item('fb_appsecret');
+	$my_url = site_url('dashboard/fb_access_token');  // redirect url
+	$code = $this->input->get("code");
+	if(empty($code)) {
+	  // Redirect to Login Dialog
+	    $this->session->set_userdata('state', md5(uniqid(rand(), TRUE))); // CSRF protection
+	    $dialog_url = "https://www.facebook.com/dialog/oauth?client_id=" 
+		. $app_id . "&redirect_uri=" . urlencode($my_url) . "&state="
+		. $this->session->userdata('state') . "&scope=publish_stream,read_friendlists,email,manage_pages,export_stream,publish_actions,publish_checkins,read_stream";
+	    redirect($dialog_url);
+	}
+	if($this->session->userdata('state') && ($this->session->userdata('state')=== $this->input->get('state'))) {
+	    $token_url = "https://graph.facebook.com/oauth/access_token?"
+	      . "client_id=" . $app_id . "&redirect_uri=" . urlencode($my_url)
+	      . "&client_secret=" . $app_secret . "&code=" . $code;
+	    $response = curl_get_file_contents($token_url);
+	    $params = null;
+	    parse_str($response, $params);
+	    $longtoken=$params['access_token'];
+	    print_r($params);
+	}
 
     }
     
@@ -403,7 +459,8 @@ class Media_stream extends CI_Controller {
      
      
     function tester(){
-	print_r($this->twitter_model->GetTweetId('369854954577477633', 'twitter_dm'));
+	$this->load->model('case_model');
+	print_r($this->case_model->GetReplyNotification($this->session->userdata('user_id')));
     }
     
 }

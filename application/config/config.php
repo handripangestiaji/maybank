@@ -62,7 +62,7 @@ $config['uri_protocol']	= 'AUTO';
 */
 $config['item_perpage']=10;
 
-$config['timezone']='asia/jakarta';
+$config['timezone']='Asia/Jakarta';
 
 $config['url_suffix'] = '';
 

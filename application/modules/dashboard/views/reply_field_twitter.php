@@ -2,7 +2,9 @@
 <div class="row-fluid">
     <span class="dm-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
     <div class="pull-left">
-        <select style="width: 130px;" name="case_type">
+        <input type="hidden" value="<?=$mentions[$i]->post_id?>" name="post_id" />
+        <div class="message"></div>
+        <select style="width: 130px;" name="reply_type">
             <option value="Feedback">Feedback</option>
             <option value="Enquiry">Enquiry</option>
             <option value="Complaint">Complaint</option>

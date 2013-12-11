@@ -116,8 +116,8 @@ class twitter_model extends CI_Model
         $timezone = new DateTimeZone("Europe/London");
         $created_at = new DateTime($tweet->created_at, $timezone);
         $retrieved_at = new DateTime(date("Y-m-d H:i:s e"), $timezone);
-        $post_id = $this->GetTweetId($tweet->id_str);
-        $in_reply_to = $this->GetTweetId($tweet->in_reply_to_status_id_str);
+        $post_id = $this->GetTweetId($tweet->id_str, "twitter", $channel->channel_id);
+        $in_reply_to = $this->GetTweetId($tweet->in_reply_to_status_id_str, "twitter", $channel->channel_id);
         $social_stream = array(
 	    "post_stream_id" => $tweet->id_str,
 	    "channel_id" => $channel->channel_id,
@@ -146,15 +146,35 @@ class twitter_model extends CI_Model
             $post_id = $this->db->insert_id();
             $tweet_to_save['post_id'] = $post_id;
             $this->db->insert("social_stream_twitter", $tweet_to_save);
+            $this->CreateTwitterReplyNotification($tweet_to_save);
         }
         else{
             $this->db->where("post_id", $post_id->post_id);
             $this->db->update("social_stream", $social_stream);
             $this->db->where("post_id", $post_id->post_id);
             $this->db->update("social_stream_twitter", $tweet_to_save);
+            $tweet_to_save['post_id'] = $post_id->post_id;
         }
         $this->db->trans_complete();
         return array($tweet_to_save, $social_stream);
+    }
+    
+    public function CreateTwitterReplyNotification($tweet){
+        $this->db->select("*");
+        $this->db->from("twitter_reply");
+        $this->db->where("response_post_id", $tweet['in_reply_to']);
+        $result = $this->db->get()->result();
+        print_r($result);
+        foreach($result as $row){
+            $notification = array(
+                "social_stream_post_id" => $tweet['post_id'],
+                "is_read" => 0,
+                "created_at" => date("Y-m-d H:i:s"),
+                "read_at" => null,
+                "user_id" => $row->user_id
+            );
+            $this->db->insert("social_stream_notification", $notification);
+        }
     }
     
     public function SaveDirectMessages($direct_message, $channel){
@@ -162,7 +182,7 @@ class twitter_model extends CI_Model
         $created_at = new DateTime($direct_message->created_at, $timezone);
         $retrieved_at = new DateTime(date("Y-m-d H:i:s e"), $timezone);
         $this->db->trans_start();
-        $post = $this->GetTweetId($direct_message->id_str, "twitter_dm");
+        $post = $this->GetTweetId($direct_message->id_str, "twitter_dm", $channel->channel_id);
         $social_stream = array(
 	    "post_stream_id" => $direct_message->id_str,
 	    "channel_id" => $channel->channel_id,
@@ -233,12 +253,13 @@ class twitter_model extends CI_Model
         return $this->db->get()->row();
     }
     
-    public function GetTweetId($post_stream_id, $type = "twitter"){
+    public function GetTweetId($post_stream_id, $type = "twitter", $channel_id){
         $this->db->select("post_id");
         $this->db->from("social_stream");
         $this->db->where(array(
                                "post_stream_id" => $post_stream_id,
-                               "type" => $type
+                               "type" => $type,
+                               "channel_id" => $channel_id
                         ));
         return $this->db->get()->row();
     }
@@ -275,11 +296,11 @@ class twitter_model extends CI_Model
     
     public function ReadTwitterData($filter,$limit){
         $this->db->select("a.channel_id, a.post_stream_id, a.retrieved_at, a.created_at, a.type as social_stream_type, 
-                            b.*, c.screen_name, c.profile_image_url, c.name, c.description, c.following, a.is_read, d.*,a.post_id");
+                            b.*, c.screen_name, c.profile_image_url, c.name, c.description, c.following, a.is_read, d.*,a.post_id, e.response_post_id");
         $this->db->from("social_stream a INNER JOIN social_stream_twitter b ON a.post_id = b.post_id 
                         INNER JOIN twitter_user_engaged c ON
                         c.twitter_user_id = b.twitter_user_id LEFT JOIN
-                         `case` d on d.post_id = a.post_id");
+                         `case` d on d.post_id = a.post_id LEFT JOIN `twitter_reply` e on e.reply_to_post_id = a.post_id");
         if(count($filter) > 0)
 	    $this->db->where($filter);
         $this->db->limit($limit);
@@ -307,5 +328,19 @@ class twitter_model extends CI_Model
         return $this->db->get()->result();
     }
     
-   
+    
+    public function CreateReply($reply, $tweet_replied, $channel, $type = "twitter"){
+        $saved_tweet = $this->SaveTweets($tweet_replied, $channel, "user_timeline");
+        if(isset($saved_tweet)){
+            $reply['created_at'] = date("Y-m-d H:i:s");
+            $reply['response_post_id'] = $saved_tweet[0]['post_id'];
+            $this->db->insert('twitter_reply',$reply);
+            return $this->db->insert_id();    
+        }
+        else{
+            return null;
+        }
+        
+    }
+    
 }

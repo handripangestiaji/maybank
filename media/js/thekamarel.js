@@ -564,7 +564,7 @@ $(function(){
                             }
                         );
                         
-                        $(this).on('click','.read-mark, .btn-case',
+                        $(this).on('click','.read-mark, .btn-case, .btn-reply, .retweet, .favorit',
                             function(){
                             var me = $(this);
                             $.ajax({
@@ -572,7 +572,7 @@ $(function(){
                                     type: "POST",
                                     data: {
                                         post_id:me.closest('li').find('.postId').val(),
-                                        read : $(this).val() == 'case' ? 1 : null
+                                        read : $(this).val() != '' ? 1 : null
                                     },
                                     success: function(result)
                                     {
@@ -587,11 +587,11 @@ $(function(){
                                         if(result == 1){
                                             currentNumber -=  1;
                                             currentNumber = currentNumber < 0 ? 0 : currentNumber;
-                                            me.removeClass('redText').addClass('greyText');
+                                            me.closest('li').find('.read-mark').removeClass('redText').addClass('greyText');
                                         }
                                         else{
                                             currentNumber += 1;
-                                            me.removeClass('greyText').addClass('redText');
+                                            me.closest('li').find('.read-mark').addClass('redText');
                                         }
                                         
                                         me.closest('.container-fluid').siblings('.floatingBoxMenu').find('li.active .notifyCircle').html(currentNumber);
@@ -638,18 +638,10 @@ $(function(){
 
                         $(this).on('click','.dm-field-btn-close',
                             function() {
-                                 $(this).parent().parent().hide();
+                                $(this).closest('.dm-field').hide();
+                                $(this).closest('.reply-field').hide();
                             }
                         );
-                        
-                        
-                        $(this).on('click','.btn-send-dm',
-                           function() {
-                                $(this).parent().siblings('.dm-status').show();
-                                $(this).parent().siblings('.dm-status').fadeOut(3000);
-                            }
-                        );
-                
                         
                         $(this).on('click','.toggleTable',
                             function(){
@@ -879,52 +871,15 @@ $(function(){
                         });
                     });
                     
-                    $(this).on('click','.replayTweet',
-                        function() {
-                        $.ajax({
-                            url : BASEURL + 'dashboard/socialmedia/twitterAction',
-                            type: "POST",
-                            data: {
-                                action:'replayTweet',
-                                content:$(this).parent().siblings(".replaycontent").val(),
-                                str_id: $(this).val(),
-                                channel_id : $(this).closest('.floatingBox').find('input.channel-id').val()
-                            },
-                            success: function(data)
-                            {
-                                $('.compose-post-status').show();
-                                $('.compose-post-status').fadeOut(5000);
-                            },
-                        });
-                    });
-                    
-                    $(this).on('click','.dm_send',
-                        function() {
-                        $.ajax({
-                            url : BASEURL + 'dashboard/socialmedia/twitterAction',
-                            type: "POST",
-                            data: {
-                                    action:'dm_send',
-                                    content:$(this).parent().siblings(".replaycontent").val(),
-                                    screen_name: $(this).siblings(".screen_name").val(),
-                                    friendid: $(this).val()
-                                    },
-                            success: function(data)
-                            {
-                                //alert(data)
-                            },
-                        });
-                    });
-                    
-                    
                     $(this).on('click','.favorit',
                         function() {
                         $.ajax({
                             url : BASEURL + 'dashboard/socialmedia/twitterAction',
                             type: "POST",
                             data: {
-                                action:'favorit',
-                                str_id: $(this).siblings(".str_id").val()
+                                action :'favorit',
+                                str_id : $(this).siblings(".str_id").val(),
+                                channel_id : $(this).closest('.floatingBox').find('input.channel-id').val()
                             },
                             success: function()
                             {

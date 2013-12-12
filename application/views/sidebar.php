@@ -27,7 +27,7 @@
         <div class="sidebarLine"></div>
         <div class="sidebarInfo">
             <?php if(isset($case)):?>
-            <div class="replies"><span class="badge cyan"><?php echo count($reply_pending); ?></span> Replies</div>
+            <!--div class="replies"><span class="badge cyan"><?php echo count($reply_pending); ?></span> Replies</div-->
             <div class="newCases"><span class="badge purple"><?php echo count($case); ?></span> New Cases</div>
             <?php endif;?>
         </div>
@@ -48,7 +48,7 @@
             </li>
             <?php endforeach?>
             <?php foreach($reply_pending as $pending):?>
-            <li>
+            <!--li>
                 <div class="notifHead purple">
                     New Reply POST ID : #<?php echo $pending->id?>
                 </div>
@@ -59,7 +59,7 @@
                         echo $date->format("M d, Y, h:i A");
                     ?>
                 </div>
-            </li>
+            </li-->
             <?php endforeach;?>
         </ul>
         

@@ -765,7 +765,6 @@ $(function(){
                         $('.compose-fb-char-count').html(2000-len);
                         $('.compose-tw-char-count').html(140-len);
                         $('.compose-yt-char-count').html(500-len);
-                        console.log('ddddd');
                      }
                      
                      $('.compose-textbox').bind('input propertychange', ComposeCharCheck);
@@ -833,21 +832,25 @@ $(function(){
                                 }
                             }
                             
-                            $('.compose-post-status').show();
-                            $('.compose-post-status').removeClass('green');
-                            $('.compose-post-status').removeClass('red');
-                            $('.compose-post-status').addClass('grey');
-                            $('.compose-post-status').html('Posting...');
                             if(confirmed == true){
+                                $('.compose-post-status').show();
+                                $('.compose-post-status').removeClass('green');
+                                $('.compose-post-status').removeClass('red');
+                                $('.compose-post-status').addClass('grey');
+                                $('.compose-post-status').html('Posting...');
+                                
                                 var resultPost = 0;
+                                var y = 0;
+                                var req = new Array();
                                 $('.compose-channels option:selected').each(function() {
-                                    if($(this).attr('id') == 'optfacebook'){        
-                                        
+                                    y++;
+                                    if($(this).attr('id') == 'optfacebook'){
                                         $.ajax({
                                             url : BASEURL + 'dashboard/socialmedia/FbStatusUpdate',
                                             type: "POST",
                                             data: {
                                                     content:$('.compose-textbox').val(),
+                                                    channel_id:$(this).val()
                                                     },
                                             success: function()
                                             {
@@ -857,7 +860,10 @@ $(function(){
                                                 $('.compose-post-status').addClass('green');
                                                 $('.compose-post-status').show();
                                                 $('.compose-post-status').html('Post to Facebook Success');
-                                                $('.compose-post-status').fadeOut(7500);
+                                                $('.compose-post-status').fadeOut(7500,function(){
+                                                    $('.compose-innercontainer').addClass("compose-collapsed");
+                                                    $('.compose-innercontainer').removeClass("compose-expanded");
+                                                    });
                                             },
                                         });
                                     }
@@ -877,7 +883,10 @@ $(function(){
                                                     $('.compose-post-status').addClass('green');                        
                                                     $('.compose-post-status').show();
                                                     $('.compose-post-status').html('Post to Twitter Success');
-                                                    $('.compose-post-status').fadeOut(7500);
+                                                    $('.compose-post-status').fadeOut(7500,function(){
+                                                        $('.compose-innercontainer').addClass("compose-collapsed");
+                                                        $('.compose-innercontainer').removeClass("compose-expanded");
+                                                        });
                                                     resultPost = 1;
                                                 },
                                             });
@@ -885,6 +894,10 @@ $(function(){
                                     
                                     channels[i] = $(this).val();
                                     i++
+                                });
+                                
+                                $.when( req ).done(function(){
+                                    console.log("all done")
                                 });
 
                                 $.ajax({

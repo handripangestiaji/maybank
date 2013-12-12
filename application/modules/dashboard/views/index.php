@@ -61,9 +61,11 @@
                             <a href="javascript:void(0);" id="open-img">
                                 <i class="icon-camera icon-dark icon-2x"></i>
                             </a>
+                            <!--
                             <a href="javascript:void(0);" id="open-cal">
                                 <i class="icon-calendar icon-2x"></i>
                             </a>
+                            -->
                         </div>
                 </div>
                 <div class="compose-schedule" id="img-show">

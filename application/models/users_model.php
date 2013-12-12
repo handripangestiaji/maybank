@@ -138,7 +138,7 @@ class Users_model extends CI_Model
     //============================= ROLE ================================
     function count_role_user($id_role)
     {
-        $this->db->select('count(role_id) as count_role');
+        $this->db->select('count(*) as count_role');
         $this->db->where('role_id',$id_role);
         return $this->db->get($this->user);
     }
@@ -216,7 +216,7 @@ class Users_model extends CI_Model
     //============================ GROUP ================================
     function count_group_user($id_group)
     {
-        $this->db->select('count(group_id) as count_group');
+        $this->db->select('count(*) as count_group');
         $this->db->where('group_id',$id_group);
         return $this->db->get($this->user);
     }
@@ -228,6 +228,12 @@ class Users_model extends CI_Model
     
     function select_group()
     {
+        return $this->db->get($this->group);
+    }
+    
+    function select_byName($name)
+    {
+        $this->db->where('group_name',$name);
         return $this->db->get($this->group);
     }
     

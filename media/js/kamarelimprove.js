@@ -143,6 +143,34 @@ $(function(){
         e.preventDefault();
     });
     
+    $('form.update_profil').submit(function(e){
+        var display = $(this).find('input[name=display-name]').val();
+        var about = $(this).find('.about-me').val();
+        var me = $(this);
+        
+        $.ajax({
+                "url" : BASEURL + "users/users_json/update_profil",
+                "data" : {display : display,
+                          about: about  },
+                "type" : "POST",
+                "success" : function(response){
+                                if(response == false){
+                                    alert("GAGAL1");
+                                }
+                                else{
+                                    me.find('.yes_update').html('<div class="alert alert-success">' +
+                                    '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
+                                    '<h4>Update</h4> Profile updated sucessfully!</div>');
+                                }
+                            },
+                "failed" : function()
+                {
+                    alert("GAGAL2");
+                }
+            });
+        e.preventDefault();
+    });
+    
     
     $(this).on('submit','.reply-tweet ', function(e){
         var buttonSubmit = $(this).find('button[type=submit]');

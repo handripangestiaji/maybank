@@ -10,7 +10,14 @@
 <?php }?>
 
 <?php
-	$double = $this->session->flashdata('double');
+	if($doubleUser!=NULL){ ?>
+        <div class="alert alert-error">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Username already registered</strong>
+        </div>
+<?php }?>
+
+<?php
 	if($double!=NULL){ ?>
         <div class="alert alert-error">
             <button type="button" class="close" data-dismiss="alert">&times;</button>

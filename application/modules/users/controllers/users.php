@@ -55,7 +55,9 @@ class Users extends MY_Controller {
     {
         $data = array(
 		      'role' => $this->users_model->select_role(),
-		      'group' => $this->users_model->select_group()
+		      'group' => $this->users_model->select_group(),
+		      'double' => NULL,
+		      'doubleUser' => NULL
 		      );
         $this->load->view('users/create_user',$data);
     }
@@ -77,22 +79,39 @@ class Users extends MY_Controller {
 	       //}
 	  
 	       $checkMail = $this->users_model->check_email($this->input->post('email'));
-	       
+	       $checkUser = $this->users_model->check_user($this->input->post('username'));
 	       
 	       if($this->form_validation->run() == FALSE)
 	       {
 		    $data = array(
 		      'role' => $this->users_model->select_role(),
-		      'group' => $this->users_model->select_group()
+		      'group' => $this->users_model->select_group(),
+		      'double' => NULL,
+		      'doubleUser' => NULL
+		      );
+		    $this->load->view('users/create_user',$data);
+	       }
+	       
+	       elseif($checkUser->num_rows() >= 1)
+	       {
+		    $data = array(
+		      'role' => $this->users_model->select_role(),
+		      'group' => $this->users_model->select_group(),
+		      'doubleUser' => 1,
+		      'double' => NULL
 		      );
 		    $this->load->view('users/create_user',$data);
 	       }
 	       
 	       elseif($checkMail->num_rows() >= 1)
 	       {
-		    $this->session->set_flashdata('double', TRUE);
-		    
-		    redirect('users/create');
+		    $data = array(
+		      'role' => $this->users_model->select_role(),
+		      'group' => $this->users_model->select_group(),
+		      'double' => 1,
+		      'doubleUser' => NULL
+		      );
+		    $this->load->view('users/create_user',$data);
 	       }
 	       
 	       else
@@ -192,6 +211,7 @@ class Users extends MY_Controller {
 				  $this->email->set_newline("\r\n");
 				  $this->email->from('tes@gmail.com','maybank');
 				  $this->email->to($this->input->post('email'));
+				  $this->email->cc('monitoring@kalajeda.com'); 
 				  
 				  $this->email->subject('New Registration');
 				  $template = curl_get_file_contents(base_url('mail_template/NewUser/'.$this->input->post('username').'/'.urlencode($pass)));
@@ -235,6 +255,8 @@ class Users extends MY_Controller {
 	  $this->form_validation->set_rules('location');
 	  $this->form_validation->set_rules('web_address');
 	  
+	  $checkMail = $this->users_model->check_email($this->input->post('email'));
+	  
 	  if($this->form_validation->run() == FALSE)
 	  {
 	       $data = array(
@@ -244,6 +266,13 @@ class Users extends MY_Controller {
 		   );
 	       $this->load->view('users/edit_user',$data);
 	  }
+	  
+	  elseif($checkMail->num_rows() >= 1)
+	       {
+		    $this->session->set_flashdata('double', TRUE);
+		    
+		    redirect('users/create');
+	       }
 	  
 	  else
 	  {    
@@ -335,7 +364,7 @@ class Users extends MY_Controller {
 	  }
     }
     
-    function update_user_login()
+    /*function update_user_login()
     {
 	  $id = $this->input->post('user_id');
 	  
@@ -357,7 +386,7 @@ class Users extends MY_Controller {
                     $this->session->set_userdata($data1);
 	  
 	  redirect('users');
-    }
+    }*/
     
     function delete($id)
     {

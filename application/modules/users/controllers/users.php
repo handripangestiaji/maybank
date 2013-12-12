@@ -267,13 +267,13 @@ class Users extends MY_Controller {
 	       $this->load->view('users/edit_user',$data);
 	  }
 	  
-	  elseif($checkMail->num_rows() >= 1)
+	  /*elseif($checkMail->num_rows() >= 1)
 	       {
 		    $this->session->set_flashdata('double', TRUE);
 		    
 		    redirect('users/create');
 	       }
-	  
+	  */
 	  else
 	  {    
 	       if(!empty($_FILES['userfile']['tmp_name']))
@@ -890,7 +890,8 @@ class Users extends MY_Controller {
 	  $data = array(
 			 'group' => $this->users_model->edit_group($id),
 			 'group_detail' => $this->users_model->edit_group_detail($id),
-			 'channel' => $this->users_model->select_channel()
+			 'channel' => $this->users_model->select_channel(),
+			 'msge' => NULL
 			);
 	  $this->load->view('users/group_edit',$data);
     }
@@ -901,7 +902,7 @@ class Users extends MY_Controller {
 	  $id = $this->input->post('group_id');
 	  $group = $this->input->post('group_name');
 	  $cek = $this->users_model->select_byName($group);
-	  if($group!=$this->input->post('g_name'))
+	  /*if($group!=$this->input->post('g_name'))
 	  {
 	       if($cek->row()->group_name==$group)
 	       {
@@ -920,9 +921,9 @@ class Users extends MY_Controller {
 	  elseif($group==$this->input->post('g_name'))
 	  {
 	       redirect('users/menu_group');
-	  }
+	  }*/
 	  
-	  elseif($this->form_validation->run() == FALSE)
+	  if($this->form_validation->run() == FALSE)
 	  {
 	       $data = array(
 			 'group' => $this->users_model->edit_group($id),

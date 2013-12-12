@@ -28,7 +28,7 @@
 	                    <div class="pull-left" style="width: 70%; color: #FFFFFF;">
 	                        <p><span style="font-weight: bold">TAG: <?php echo isset($v['tag_name']) ? implode(" , ",$v['tag_name']) : ""; ?></span></p>
 	                        <p><span style="font-weight: bold">Description:</span> <?php echo $v['description']?></p>
-	                        <p><span style="font-weight: bold">Total Clicks:</span> <?php echo $v['total_clicks']?> Clicks &nbsp;&nbsp;&nbsp; <span style="font-weight: bold">Total URL Created:</span> <?php echo count($v['short_urls']) ?></p>
+	                        <p><span style="font-weight: bold">Total Clicks:</span> <?php echo $v['total_clicks']?> Clicks &nbsp;&nbsp;&nbsp; <span style="font-weight: bold">Total URL Created:</span> <?php echo count(isset($v['short_urls']) ? $v['short_urls'] : 0) ?></p>
 	                    </div>
 	                    <div class="pull-right" style="width: 25%; text-align: right">
 	                        <p>
@@ -53,7 +53,7 @@
 	                                  </tr>
 	                                </thead>
 	                                <tbody>
-	                                <?php if($v['short_urls']): ?>
+	                                <?php if(isset($v['short_urls'])): ?>
 	                                	<?php foreach($v['short_urls'] as $x): ?>
 	                                		<tr>
 		                                		<td><a href="<?php echo site_url('cms/url/'.$x['short_code'])?>" target="_blank"><?php echo $x['short_code']?></a></td>

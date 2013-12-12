@@ -38,15 +38,17 @@ for($i=0;$i<count($mentions);$i++){
             }
     ?>
     </p>
-    <p>
+    <p class="indicator">
     <?php if($mentions[$i]->case_id):?>
         <button type="button" class="btn btn-purple" value="<?=$mentions[$i]->case_id?>">CASE ID #<?=$mentions[$i]->case_id?></button>
-    <?php else:?>
-        <button type="button" class="btn btn-warning btn-mini">OPEN</button>
     <?php endif?>
     <?php if($mentions[$i]->response_post_id):?>
         <button type="button" class="btn btn-inverse btn-mini" value="<?=$mentions[$i]->response_post_id?>">REPLIED</button>
-    <?php endif;?>
+    <?php endif?>
+    <?php if(!$mentions[$i]->response_post_id && !$mentions[$i]->case_id):?>
+        <button type="button" class="btn btn-warning btn-mini">OPEN</button>
+    <?php endif?>
+   
     
     <?php if ($mentions[$i]->retweeted==1) { ?>
         <button type="button" class="btn btn-success btn-mini"><i class="icon-retweet"></i></button>
@@ -135,8 +137,8 @@ for($i=0;$i<count($mentions);$i++){
         <!--a role="button" class='destroy_status'><i class="icon-trash greyText"></i></a-->
         <div class="pull-right">
             <!--form class="contentForm" action="<?php //echo base_url('index.php/dashboard/socialmedia/twitteraction');?>" method="post"-->
-                <button class="btn btn-reply btn-primary" data-toggle="modal"><i class="icon-mail-reply"></i></button>
-                <button type="button" class="retweet btn btn-primary"><i class="icon-retweet"></i></button>
+                <button class="btn btn-reply btn-primary" data-toggle="modal" value="<?=$mentions[$i]->post_id?>"><i class="icon-mail-reply"></i></button>
+                <button type="button" class="retweet btn btn-primary" value="<?=$mentions[$i]->post_id?>"><i class="icon-retweet"><span></span></i></button>
                 <button class="btn btn-dm btn-primary" data-toggle="modal"><i class="icon-envelope"></i></button>
                 <button type="button" class="favorit btn btn-primary"><i class="icon-star"></i></button>
                 

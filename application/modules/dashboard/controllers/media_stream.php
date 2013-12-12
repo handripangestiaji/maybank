@@ -55,6 +55,9 @@ class Media_stream extends CI_Controller {
     	    if($is_read != 2){
     		$filter['is_read'] = $is_read;
     	    }
+	    else{
+		$filter['case_id is NOT NULL'] = null;
+	    }
     	}
     
     	$this->load->model('case_model');
@@ -180,7 +183,6 @@ class Media_stream extends CI_Controller {
     
     public function ReplyTwitter($type = 'tweet'){
 	header("Content-Type: application/x-json");
-	$content = $this->input->post('message');
 	$twitter_reply['image_to_post'] = $this->input->post('filename');
 	$twitter_reply['reply_to_post_id'] = $this->input->post('post_id');
 	$twitter_reply['content_products_id'] = $this->input->post('product_type');
@@ -235,7 +237,59 @@ class Media_stream extends CI_Controller {
 	}
     }
     
-    public function TwitterRetweet(){
+    public function ActionTwitter($type = 'retweet'){
+	header("Content-Type: application/x-json");
+	$action['channel_id'] = $this->input->post('channel_id');
+	$action['post_id'] = $this->input->post('post_id');
+	$action['created_by'] = $this->session->userdata('user_id');
+	$twitter_data = $this->twitter_model->ReadTwitterData(
+	    array(
+		'a.post_id' => $this->input->post('post_id')
+	    ),
+	    1
+	);
+	if(count($twitter_data) > 0){
+	    $twitter_data = $twitter_data[0];
+	    $channel = $this->account_model->GetChannel(array(
+		'channel_id' => $this->input->post('channel_id')
+	    ));
+	    if(count($channel) == 0){
+		echo json_encode(
+		    array(
+			'success' => false,
+			'message' => "Invalid Channel Id"
+		    )
+		);
+		return;
+	    }
+	    else{
+		$channel = $channel[0];
+		$this->connection = $this->twitteroauth->create($this->config->item('twitter_consumer_token'),$this->config->item('twitter_consumer_secret'), $channel->oauth_token,
+							    $channel->oauth_secret);
+		if($type == 'retweet'){
+		    $result = $this->connection->post('statuses/retweet/'.$twitter_data->post_stream_id);
+		    $this->account_model->CreateRetweetAction($action, $result, $twitter_data, $channel);
+		}
+		else if($type == 'favorite'){
+		    $result = $this->connection->post('favorite/create', array('id' => $twitter_data->post_stream_id));
+		    $this->account_model->CreateFavoriteAction($action, $result, $twitter_data, $channel);
+		}
+		echo json_encode(array(
+		    'success' => true,
+		    'message' => $type." successfully done.",
+		    'result' => $result
+		));
+	    }
+	    //$this->account_model->CreateRetweetAction($action);
+	}
+	else{
+	    echo json_encode(
+		array(
+		    'success' => false,
+		    'message' => "Invalid POST Id"
+		)
+	    );
+	}
 	
     }
 

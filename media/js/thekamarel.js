@@ -449,7 +449,7 @@ $(function(){
                         $(href).fadeIn();
                         */
                     });
-    
+                    
                     $('.change-read-unread-stream').on('change', function(){
                         var social_id = $(this).closest('.containerHeadline').next().children('.channel-id').val();
                         var is_read = $(this).val();
@@ -461,6 +461,15 @@ $(function(){
                             $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');        
                             $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/twitter_stream/' + social_id + '/' + is_read);
                         }
+                    });
+                    var increment = 1;
+                    setInterval(function(){
+                        $(document).RefreshAllStream();
+                        increment ++;
+                        console.log(increment);
+                    }, 120000);
+                    $('#refreshAllStream').click(function(){
+                        $(this).RefreshAllStream();
                     });
                     var i = 0;
                     $('.containerHeadline .dropdown-stream-channels').each(function(){
@@ -953,20 +962,26 @@ $(function(){
                      $(this).on('click','.retweet',
                         function() {
                         var retweetBtn = $(this);
-                        retweetBtn.attr('disabled', 'disabled');
+                        retweetBtn.attr('disabled', 'disabled').find('span').html('Retweeting...');
                         $.ajax({
-                            url : BASEURL + 'dashboard/socialmedia/twitterAction',
+                            url : BASEURL + 'dashboard/media_stream/ActionTwitter/retweet',
                             type: "POST",
                             data: {
-                                action:'retweet',
-                                str_id: $(this).siblings(".str_id").val()
+                                post_id : retweetBtn.closest('li').find('.postId').val(),
+                                channel_id : $(this).closest('.floatingBox').find('input.channel-id').val()
                             },
-                            success: function()
-                            {
+                            success: function(response){
+                                retweetBtn.removeAttr('disabled').find('span').html('');
+                                if(response.success == true){
+                                    retweetedBtn.closest('li').find('.indicator').append('<button type="button" class="btn btn-success btn-mini"><i class="icon-retweet"></i></button>');
+                                }
+                                else{
+                                    
+                                }
+                            },
+                            failed : function(response){
                                 
-                                $('.compose-post-status').show();
-                                $('.compose-post-status').fadeOut(5000);
-                            },
+                            }
                         });
                     });
                     
@@ -1302,13 +1317,21 @@ jQuery.fn.AsyncPost = function(options){
     });
 };
 
-$(function() {
-//    startRefresh();
-//    alert(location.href);
-});
+$.fn.RefreshAllStream = function(){
+    $('.floatingBox').each(function(){
+        var channelId = $(this).find('.channel-id').val();
+        if(channelId != undefined){
+            var is_read = $(this).siblings('.containerHeadline').find('.change-read-unread-stream').val();
+            if($(this).closest('div').prev().find('i').attr('class') == 'icon-facebook'){
+                $(this).html('&nbsp;&nbsp;Loading...');        
+                $(this).load(BASEURL + 'dashboard/media_stream/facebook_stream/' + channelId + '/' + is_read);
+            }
+            else if($(this).closest('div').prev().find('i').attr('class') == 'icon-twitter'){
+                $(this).html('&nbsp;&nbsp;Loading...');        
+                $(this).load(BASEURL + 'dashboard/media_stream/twitter_stream/' + channelId + '/'+ is_read);
+            }
+        }
+    });
+};
 
-function startRefresh() {
-    setTimeout(startRefresh,14000);
-    //alert(location.href + ' #ctwitter');
-    $('#ctwitter').parent().load(BASEURL + 'dashboard/media_stream/twitter_stream/' + $(this).siblings('.channel-stream-id').val());
-}
+

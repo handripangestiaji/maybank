@@ -11,7 +11,7 @@ for($i=0;$i<count($senttweets);$i++){
         <p class="headLine">
             <span class="author"><?php echo $senttweets[$i]->screen_name; ?></span>
             <i class="icon-circle"></i>
-            <span>mentions</span>
+            <span>Sent Tweets</span>
             <i class="icon-circle"></i>
             <span><?php 
             $date=new DateTime($senttweets[$i]->social_stream_created_at.' Europe/London');

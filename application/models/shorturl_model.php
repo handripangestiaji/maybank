@@ -17,6 +17,11 @@ class Shorturl_model extends CI_Model
 			$this->db->where('long_url', $params['long_url']);
 		}
 		
+		if (isset($params['short_code']))
+		{
+			$this->db->where('short_code', $params['short_code']);
+		}
+		
 		$this->db->limit(1);
 		
 		$query = $this->db->get($this->_table);

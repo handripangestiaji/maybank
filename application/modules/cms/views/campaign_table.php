@@ -26,8 +26,8 @@
           		<tr class="table-sub-tr">
 	                <td colspan="5" class="table-sub-td" style="background-color: #7F7B96; padding: 15px;">
 	                    <div class="pull-left" style="width: 70%; color: #FFFFFF;">
-	                        <p><span style="font-weight: bold">TAG: MayBank, Credit Card</span></p>
-	                        <p><span style="font-weight: bold">Description:</span> Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Vivamus et magna. Fusce sed sem sed magna suscipit egestas.</p>
+	                        <p><span style="font-weight: bold">TAG: <?php echo implode(" , ",$v['tag_name']); ?></span></p>
+	                        <p><span style="font-weight: bold">Description:</span> <?php echo $v['description']?></p>
 	                        <p><span style="font-weight: bold">Total Clicks:</span> 123 Clicks &nbsp;&nbsp;&nbsp; <span style="font-weight: bold">Total URL Created:</span> 5</p>
 	                    </div>
 	                    <div class="pull-right" style="width: 25%; text-align: right">
@@ -51,30 +51,18 @@
 	                                  </tr>
 	                                </thead>
 	                                <tbody>
-	                                  <tr>
-	                                    <td>http</td>
-	                                    <td>www.abc.com</td>
-	                                    <td>Aug 13, 2013</td>
-	                                    <td>13</td>
-	                                    <td>Nicole Lee</td>
-	                                    <td><a href="#">view</a></td>
-	                                  </tr>
-	                                <tr>
-	                                    <td>http</td>
-	                                    <td>www.abc.com</td>
-	                                    <td>Aug 13, 2013</td>
-	                                    <td>13</td>
-	                                    <td>Nicole Lee</td>
-	                                    <td><a href="#">view</a></td>
-	                                </tr>
-	                                <tr>
-	                                    <td>http</td>
-	                                    <td>www.abc.com</td>
-	                                    <td>Aug 13, 2013</td>
-	                                    <td>13</td>
-	                                    <td>Nicole Lee</td>
-	                                    <td><a href="#">view</a></td>
-	                                  </tr>
+	                                <?php if($v['short_urls']): ?>
+	                                	<?php foreach($v['short_urls'] as $x): ?>
+	                                		<tr>
+		                                		<td><?php echo $x['short_code']?></td>
+		                                		<td><?php echo $x['long_url']?></td>
+		                                		<td><?php echo $x['created_at']?></td>
+		                                		<td><?php echo $x['increment']?></td>
+		                                		<td><?php echo $x['display_name']?></td>
+		                                		<td><a href="#">view</a></td>
+	                                		</tr>
+	                                	<?php endforeach;?>
+	                                <?php endif; ?>
 	                                </tbody>
 	                            </table>
 	                        </div>

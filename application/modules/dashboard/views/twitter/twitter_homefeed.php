@@ -40,16 +40,16 @@ for($i=0;$i<count($homefeed);$i++){
     <p class="indicator"><?php
     
     if(isset($entities->media[0])):    ?>
-        <img src="<?=$entities->media[0]->media_url_https?>" alt="" />
+        <img src="<?php echo $entities->media[0]->media_url_https?>" alt="" />
     <?php endif;?>
     
     <?php if($homefeed[$i]->case_id):?>
-        <button type="button" class="btn btn-purple" value="<?=$homefeed[$i]->case_id?>">CASE ID #<?=$homefeed[$i]->case_id?></button>
+        <button type="button" class="btn btn-purple" value="<?php echo $homefeed[$i]->case_id?>">CASE ID #<?php echo $homefeed[$i]->case_id?></button>
     <?php else:?>
         <button type="button" class="btn btn-warning btn-mini">OPEN</button>
     <?php endif?>
     <?php if($homefeed[$i]->response_post_id):?>
-        <button type="button" class="btn btn-inverse btn-mini" value="<?=$homefeed[$i]->response_post_id?>">REPLIED</button>
+        <button type="button" class="btn btn-inverse btn-mini" value="<?php echo $homefeed[$i]->response_post_id?>">REPLIED</button>
     <?php endif;?>
     
     <?php if ($homefeed[$i]->retweeted==1): ?>
@@ -94,7 +94,7 @@ for($i=0;$i<count($homefeed);$i++){
                         <span>2 hours ago</span>
                     </p>
                     <div>
-                        <p>"<?=$comment[$j]->text?>"</p>
+                        <p>"<?php echo $comment[$j]->text?>"</p>
                         <p><input type="hidden" class="str_id" value="<?php echo $comment[$j]->post_stream_id; ?>" /><button type="button" class="btn btn-warning btn-mini">OPEN</button>
                         <button class="retweet btn btn-primary btn-mini" style="margin-left: 5px;">RE-TWEET</button></p>
                     </div>
@@ -144,8 +144,8 @@ for($i=0;$i<count($homefeed);$i++){
         <!--a role="button" class='destroy_status'><i class="icon-trash greyText"></i></a-->
         <div class="pull-right">
             <!--form class="contentForm" action="<?php //echo base_url('index.php/dashboard/socialmedia/twitteraction');?>" method="post"-->
-                <button class="btn btn-reply btn-primary" data-toggle="modal" value="<?=$homefeed[$i]->post_id?>"><i class="icon-mail-reply"></i></button>
-                <button type="button" class="retweet btn btn-primary" value="<?=$homefeed[$i]->post_id?>"><i class="icon-retweet"></i><span></span></button>
+                <button class="btn btn-reply btn-primary" data-toggle="modal" value="<?php echo $homefeed[$i]->post_id?>"><i class="icon-mail-reply"></i></button>
+                <button type="button" class="retweet btn btn-primary" value="<?php echo $homefeed[$i]->post_id?>"><i class="icon-retweet"></i><span></span></button>
                  <button class="btn btn-dm btn-primary" data-toggle="modal"><i class="icon-envelope"></i></button>
                 <button type="button" class="favorit btn btn-primary"><i class="icon-star"></i></button>
                 <?php if($homefeed[$i]->following=='1'){ ?>
@@ -206,7 +206,7 @@ for($i=0;$i<count($homefeed);$i++){
                 <i class="icon-twitter-sign"></i>&nbsp;<span class="reply-tw-char-count">140</span>
             </div>
             <div class="pull-right">
-                <button class="dm_send btn btn-primary btn-small btn-send-dm"  type="button" value="<?=$homefeed[$i]->post_stream_id;?>" >SEND</button>    
+                <button class="dm_send btn btn-primary btn-small btn-send-dm"  type="button" value="<?php echo $homefeed[$i]->post_stream_id;?>" >SEND</button>    
             </div>
             <br clear="all" />
             <div class="dm-status hide">MESSAGE SENT</div>
@@ -227,5 +227,5 @@ for($i=0;$i<count($homefeed);$i++){
     </li>
 <?php } ?>
 <?php if(count($homefeed) > 0):?>
-<div class="filled" style="text-align: center;"><input type="hidden" class="channel_id" value="<?=$homefeed[0]->channel_id?>" /><input type="hidden"  class="channel_id" value="<?=$homefeed[0]->channel_id?>"/><input type="hidden" class="total_groups" value="<?=$total_groups?>" /><input type="hidden"  class="looppage" value=""/><button class="loadmore btn btn-info" value="feed"><i class="icon-chevron-down"></i> LOAD MORE</button></div>
+<div class="filled" style="text-align: center;"><input type="hidden" class="channel_id" value="<?php echo $homefeed[0]->channel_id?>" /><input type="hidden"  class="channel_id" value="<?php echo $homefeed[0]->channel_id?>"/><input type="hidden" class="total_groups" value="<?php echo $total_groups?>" /><input type="hidden"  class="looppage" value=""/><button class="loadmore btn btn-info" value="feed"><i class="icon-chevron-down"></i> LOAD MORE</button></div>
 <?php endif;?>

@@ -56,7 +56,7 @@
 	                                <?php if($v['short_urls']): ?>
 	                                	<?php foreach($v['short_urls'] as $x): ?>
 	                                		<tr>
-		                                		<td><?php echo $x['short_code']?></td>
+		                                		<td><a href="<?php echo site_url('cms/url/'.$x['short_code'])?>" target="_blank"><?php echo $x['short_code']?></a></td>
 		                                		<td><?php echo $x['long_url']?></td>
 		                                		<td><?php echo $x['created_at']?></td>
 		                                		<td><?php echo $x['increment']?></td>

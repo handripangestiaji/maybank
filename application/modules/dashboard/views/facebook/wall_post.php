@@ -6,7 +6,7 @@ $timezone=new DateTimeZone($this->config->item('timezone'));
 for($i=0; $i<count($fb_feed);$i++):?>
 <li>
     <input type="hidden" class="postId" value="<?php echo $fb_feed[$i]->post_id; ?>" />
-    <div class="circleAvatar"><img src="https://graph.facebook.com/<?=number_format($fb_feed[$i]->facebook_id, 0,'.','')?>/picture?small" alt=""></div>
+    <div class="circleAvatar"><img src="https://graph.facebook.com/<?php echo number_format($fb_feed[$i]->facebook_id, 0,'.','')?>/picture?small" alt=""></div>
     <div class="read-mark <?php if($fb_feed[$i]->is_read==0){echo 'redText';} else { echo 'greyText'; } ?>"><i class="icon-bookmark icon-large"></i></div>
     <br />
     <p class="headLine">
@@ -22,7 +22,7 @@ for($i=0; $i<count($fb_feed);$i++):?>
         ?>
         
     </p>
-    <p><?=$fb_feed[$i]->post_content?></p>
+    <p><?php echo $fb_feed[$i]->post_content?></p>
     <p>
     <?php
     if($fb_feed[$i]->attachment){ 
@@ -37,8 +37,8 @@ for($i=0; $i<count($fb_feed);$i++):?>
            }elseif($attachment[$att]->type=='link'){
                 echo    "<a href='".$attachment[$att]->href."'>".$attachment[0]->href."</a>";
            }elseif($attachment[$att]->type=='video'){?>
-                <iframe width="320" height="auto" src="<?=$attachment[$att]->video->source_url."?version=3&autohide=1&autoplay=0"?>"></iframe>
-                <a href="<?=$attachment[$att]->video->display_url?>" ><?=$attachment[0]->alt?></a>
+                <iframe width="320" height="auto" src="<?php echo $attachment[$att]->video->source_url."?version=3&autohide=1&autoplay=0"?>"></iframe>
+                <a href="<?php echo $attachment[$att]->video->display_url?>" ><?php echo $attachment[0]->alt?></a>
        <?php 
             }
       } 
@@ -46,8 +46,8 @@ for($i=0; $i<count($fb_feed);$i++):?>
     ?>
     </p>
 
-    <p><button type="button" class="btn <?=$fb_feed[$i]->case_id != null ? "btn-purple" : "btn-warning btn-mini" ?>"><?=$fb_feed[$i]->case_id != null ? 'CASE #'.$fb_feed[$i]->case_id : 'OPEN'?></button>
-        <button class="fblike btn btn-primary btn-mini" style="margin-left: 5px;" value="<?php echo $fb_feed[$i]->post_stream_id;?>"><?=$fb_feed[$i]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button> </p>
+    <p><button type="button" class="btn <?php echo $fb_feed[$i]->case_id != null ? "btn-purple" : "btn-warning btn-mini" ?>"><?php echo $fb_feed[$i]->case_id != null ? 'CASE #'.$fb_feed[$i]->case_id : 'OPEN'?></button>
+        <button class="fblike btn btn-primary btn-mini" style="margin-left: 5px;" value="<?php echo $fb_feed[$i]->post_stream_id;?>"><?php echo $fb_feed[$i]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button> </p>
     <p>
         <span class="btn-engagement"><i class="icon-eye-open"></i> <?php echo $fb_feed[$i]->total_comments;?> Engagements</span> |
         <span class="cyanText"><i class="icon-thumbs-up-alt"></i></i> <?php echo $fb_feed[$i]->total_likes; ?> likes</span> 
@@ -80,7 +80,7 @@ for($i=0; $i<count($fb_feed);$i++):?>
                 <p>"<?php echo $comment[$j]->comment_content; ?>"</p>
                 <p>
                     <button type="button" class="btn btn-warning btn-mini">OPEN</button>
-                    <button class="fblike btn btn-primary btn-mini" value="<?=$comment[$j]->post_stream_id?>"><?=$comment[$j]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button>
+                    <button class="fblike btn btn-primary btn-mini" value="<?php echo $comment[$j]->post_stream_id?>"><?php echo $comment[$j]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button>
                     <?php if(($comment[$j]->comment_id)=='0'){?>
                     <button type="button" class="btn btn-primary btn-engagement-reply btn-mini" ><i class="icon-mail-reply"></i></button>
                     <?php } ?>
@@ -218,5 +218,5 @@ for($i=0; $i<count($fb_feed);$i++):?>
 </li>
 <?php endfor;?>
 <?php if(count($fb_feed) > 0):?>
-<div class="filled" style="text-align: center;"><input type="hidden" class="total_groups" value="<?=$total_groups?>" /><input type="hidden"  class="looppage" value=""/><input type="hidden"  class="channel_id" value="<?=$fb_feed[0]->channel_id?>"/><button class="loadmore btn btn-info" value="wallPosts"><i class="icon-chevron-down"></i> LOAD MORE</button></div>
+<div class="filled" style="text-align: center;"><input type="hidden" class="total_groups" value="<?php echo $total_groups?>" /><input type="hidden"  class="looppage" value=""/><input type="hidden"  class="channel_id" value="<?php echo $fb_feed[0]->channel_id?>"/><button class="loadmore btn btn-info" value="wallPosts"><i class="icon-chevron-down"></i> LOAD MORE</button></div>
 <?php endif;?>

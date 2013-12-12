@@ -8,5 +8,5 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>media/js/vendor/jqwidgets/styles/jqx.base.css"/> <!-- jquery widget tree -->
 <link rel="stylesheet" href="<?php echo base_url()?>media/css/styles.css">
 <script type="text/javascript">
-    var BASEURL = "<?=base_url()?>";
+    var BASEURL = "<?php echo base_url()?>";
 </script>

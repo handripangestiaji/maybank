@@ -216,13 +216,45 @@ class Media_stream extends CI_Controller {
 	    $this->load->library('Twitteroauth');
 	    $this->connection = $this->twitteroauth->create($this->config->item('twitter_consumer_token'),$this->config->item('twitter_consumer_secret'), $channel->oauth_token,
 							    $channel->oauth_secret);
-	    $result=$this->connection->post('statuses/update', $parameters);
+	    
+	    if($twitter_reply['image_to_post']){
+		
+		$this->load->helper('file');
+		$img = $twitter_reply['image_to_post'];
+		$img = str_replace('data:image/png;base64,', '', $img);
+		$img = str_replace('data:image/jpeg;base64,', '', $img);
+		$img = str_replace(' ', '+', $img);
+		$data = base64_decode($img);
+		$file_name = uniqid().'.png';
+		$pathToSave = $this->config->item('assets_folder').'/'.$file_name;
+		if ( ! write_file($pathToSave, $data)){
+		    $validation = array('result' => FALSE,'name' => 'image '.$pathToSave,'error_code' => 112);
+		    $result=$this->connection->post('statuses/update', $parameters);
+		}
+		else{
+		    $parameters['media[]'] = "@{getcwd()./media/dynamic/".$file_name.'}';
+		    $result=$this->connection->post('statuses/update_with_media', $parameters);
+		}
+	    }
+	    else{
+		$result=$this->connection->post('statuses/update', $parameters);
+	    }
+	   
+	    
 	    $return = $this->twitter_model->CreateReply($twitter_reply, $result, $channel);
 	    
 	    if($return){
 		echo json_encode(array(
 		    'success' => true,
-		    'message' => "Reply tweet successfully done."
+		    'message' => "Reply tweet successfully done.",
+		    'result' => $result
+		));
+	    }
+	    else{
+		echo json_encode(array(
+		    'success' => false,
+		    'message' => "Reply tweet was failed.",
+		    'result' => $result
 		));
 	    }
 	    
@@ -618,5 +650,9 @@ class Media_stream extends CI_Controller {
 				    'short_code' => $short_code,
 				    "description" => "quick_reply",
 				    'increment' => 0)));
+    }
+    
+    public function CreateImage(){
+	
     }
 }

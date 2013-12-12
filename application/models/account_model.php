@@ -82,18 +82,21 @@ class account_model extends CI_Model
     
     function CreateRetweetAction($action, $result, $twitter_data, $channel){
 	$this->db->trans_start();
-	$action['action_type'] = 'twitter_retweet';
-	$action['created_at'] = date("Y-m-d H:i:s");
-	$action['stream_id_response'] = $result->id_str;
-	$this->load->model('twitter_model');
-	$saved_tweet = $this->twitter_model->SaveTweets($result, $channel, "user_timeline");
-	$this->db->insert('channel_action', $action);
-	$this->db->where('post_id', $twitter_data->post_id);
-	$this->db->update('social_stream_twitter', array(
-		'retweet_count' => $result->retweet_count,
-		'retweeted' => $result->retweeted
-	    )
-	);
+	if(isset($result->id_str)){
+	    $action['action_type'] = 'twitter_retweet';
+	    $action['created_at'] = date("Y-m-d H:i:s");
+	    $action['stream_id_response'] = $result->id_str;
+	    $this->load->model('twitter_model');
+	    $saved_tweet = $this->twitter_model->SaveTweets($result, $channel, "user_timeline");
+	    $this->db->insert('channel_action', $action);
+	    $this->db->where('post_id', $twitter_data->post_id);
+	    $this->db->update('social_stream_twitter', array(
+		    'retweet_count' => $result->retweet_count,
+		    'retweeted' => $result->retweeted
+		)
+	    );
+	}
+	
 	$this->db->trans_complete();
     }
     

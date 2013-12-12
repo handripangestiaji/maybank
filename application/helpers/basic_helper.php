@@ -280,3 +280,19 @@ function find_anchors($html)
     }
     return $links;
 }
+
+
+function convert_image($image, $path){
+    $img = $image;
+    $img = str_replace('data:image/png;base64,', '', $img);
+    $img = str_replace(' ', '+', $img);
+    $data = base64_decode($img);
+    $file_name = time().'.png';
+    $pathToSave = $path.'/'.$file_name;
+    if ( ! write_file($pathToSave, $data)){
+        $validation = array('result' => FALSE,'name' => 'image '.$pathToSave,'error_code' => 112);
+    }
+    else{
+        //file_get_contents($this->config->item('giziku_url').'food/getPhoto/'.$file_name);
+    }
+}

@@ -12,10 +12,13 @@
                         <ul class="dropdown-menu dropdown-stream-channels">
                             <?php
                                 for($i=0;$i<count($channels);$i++){
-                                    echo '<li>
+                                    for($x = 0; $x < count($group); $x++){
+                                        if($group[$x]->allowed_channel === $channels[$i]->channel_id)
+                                        echo '<li>
                                             <a class="'.$channels[$i]->connection_type.'_stream change_stream">'.$channels[$i]->name.' ('.$channels[$i]->connection_type.')</a>
                                             <input type="hidden" class="channel-stream-id" value="'.$channels[$i]->channel_id.'">
                                             </li>';
+                                    }
                                 }
                             ?>
                         </ul>

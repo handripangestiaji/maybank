@@ -228,9 +228,11 @@ class Users_model extends CI_Model
         return $this->db->count_all($this->group);
     }
     
-    function select_group()
+    function select_group($filter = array())
     {
         $this->db->select('*');
+        if(count($filter) > 0)
+            $this->db->where($filter);
         return $this->db->get($this->group);
     }
     
@@ -357,5 +359,10 @@ class Users_model extends CI_Model
         $this->db->where('user_id',$id);
         $this->db->where('logout_time',NULL);
         return $this->db->update($this->activity,$data);
+    }
+    
+    function get_group_detail($filter){
+        $this->db->where($filter);
+        return $this->db->get($this->user_group_detail);
     }
 }

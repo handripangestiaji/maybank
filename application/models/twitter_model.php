@@ -338,16 +338,19 @@ class twitter_model extends CI_Model
     
     
     public function CreateReply($reply, $tweet_replied, $channel, $type = "twitter"){
-        $saved_tweet = $this->SaveTweets($tweet_replied, $channel, "user_timeline");
-        if(isset($saved_tweet)){
-            $reply['created_at'] = date("Y-m-d H:i:s");
-            $reply['response_post_id'] = $saved_tweet[0]['post_id'];
-            $this->db->insert('twitter_reply',$reply);
-            return $this->db->insert_id();    
+        if(isset($tweet_replied->id_str)){
+            $saved_tweet = $this->SaveTweets($tweet_replied, $channel, "user_timeline");
+            if(isset($saved_tweet)){
+                $reply['created_at'] = date("Y-m-d H:i:s");
+                $reply['response_post_id'] = $saved_tweet[0]['post_id'];
+                $this->db->insert('twitter_reply',$reply);
+                return $this->db->insert_id();    
+            }
+            else{
+                return null;
+            }
         }
-        else{
-            return null;
-        }
+        return null;
         
     }
     

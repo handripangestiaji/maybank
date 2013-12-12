@@ -44,7 +44,7 @@ for($i=0;$i<count($homefeed);$i++){
     <?php endif;?>
     
     <?php if($homefeed[$i]->case_id):?>
-        <button type="button" class="btn btn-purple" value="<?php echo $homefeed[$i]->case_id?>">CASE ID #<?php echo $homefeed[$i]->case_id?></button>
+        <button type="button" class="btn btn-purple  btn-mini" value="<?php echo $homefeed[$i]->case_id?>">CASE ID #<?php echo $homefeed[$i]->case_id?></button>
     <?php else:?>
         <button type="button" class="btn btn-warning btn-mini">OPEN</button>
     <?php endif?>

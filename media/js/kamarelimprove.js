@@ -152,7 +152,8 @@ $(function(){
         $.ajax({
             "url" : BASEURL + "dashboard/media_stream/ReplyTwitter",
             "type" : "POST",
-            "data" : $(this).serialize() + "&channel_id=" + $(this).closest('.floatingBox').find('input.channel-id').val(),
+            "data" : $(this).serialize() + "&channel_id=" + $(this).closest('.floatingBox').find('input.channel-id').val() +
+                        "&filename=" + ($(this).find('#reply-preview-img').attr('src') == undefined ? '' :  $(this).find('#reply-preview-img').attr('src') == undefined),
             "success" : function(response){
                 buttonSubmit.removeAttr('disabled').html('SEND');
                 try{

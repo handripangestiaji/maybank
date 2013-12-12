@@ -5,6 +5,9 @@
             <div class="left">
                 <div class="ref" id="refreshAllStream">
                     <a href="#"><img src="<?php echo base_url() ?>media/img/ref.png" /></a>
+                    <?php $group =  $this->users_model->get_group_detail(array('user_group_id'=> $this->session->userdata('group_id')))->result();
+                    
+                    ?>
                 </div>
             </div>
             <!-- button-refresh end -->
@@ -18,7 +21,11 @@
                                 <select class="left compose-channels" id="multipleSelect" multiple="multiple">
                                     <?php
                                         for($i=0;$i<count($channels);$i++){
-                                            echo '<option id="opt'.$channels[$i]->connection_type.'" value="'.$channels[$i]->channel_id.'">'.$channels[$i]->name.'</option>';
+                                                for($x = 0; $x < count($group); $x++){
+                                                        if($group[$x]->allowed_channel === $channels[$i]->channel_id)
+                                                                echo '<option id="opt'.$channels[$i]->connection_type.'" value="'.$channels[$i]->channel_id.'">'.$channels[$i]->name.'</option>';
+                                                }
+                                            
                                         }
                                     ?>
                                 </select>
@@ -189,7 +196,7 @@
 <?php
     //$data['channels'] = $channels;
     $data['color'] = '#3B5998';
-    
+    $data['group'] = $group;
     $this->load->view('dashboard/box_stream',$data);
     $data['color'] = '#4099FF';
     

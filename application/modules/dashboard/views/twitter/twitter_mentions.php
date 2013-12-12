@@ -34,7 +34,7 @@ for($i=0;$i<count($mentions);$i++){
     </p>
     <p class="indicator">
     <?php if($mentions[$i]->case_id):?>
-        <button type="button" class="btn btn-purple" value="<?php echo $mentions[$i]->case_id?>">CASE ID #<?php echo $mentions[$i]->case_id?></button>
+        <button type="button" class="btn btn-purple btn-mini" value="<?php echo $mentions[$i]->case_id?>">CASE ID #<?php echo $mentions[$i]->case_id?></button>
     <?php endif?>
     <?php if($mentions[$i]->response_post_id):?>
         <button type="button" class="btn btn-inverse btn-mini" value="<?php echo $mentions[$i]->response_post_id?>">REPLIED</button>

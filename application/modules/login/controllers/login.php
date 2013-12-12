@@ -83,6 +83,7 @@ class Login extends Login_Controller {
 				'web_address' => $user_login->row()->web_address,
 				'image_url' => $user_login->row()->image_url,
 				'description' => $user_login->row()->description,
+				'group_id' => $user_login->row()->group_id,
                                 'is_login' => TRUE
                             );
                     $timezone = new DateTimeZone("Europe/London");

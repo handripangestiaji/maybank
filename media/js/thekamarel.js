@@ -1002,6 +1002,7 @@ $(function(){
                                 }
                             },
                             failed : function(response){
+                                retweetBtn.removeAttr('disabled').find('span').html('');
                                 if(action == 'favorite')
                                         retweetedBtn.closest('li').find('.indicator').append('<button type="button" class="btn btn-success btn-mini"><i class="icon-star"></i></button>');
                                 else

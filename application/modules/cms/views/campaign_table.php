@@ -17,7 +17,7 @@
           	
           		<tr class="table-head-tr">
 	          		<td><?php echo $v['campaign_name']; ?></td>
-	          		<td><?php echo implode(" , ",$v['product_name']); ?></td>
+	          		<td><?php echo isset($v['product_name']) ? implode(" , ",$v['product_name']) : ""; ?></td>
 	          		<td><?php echo $v['created_at']; ?></td>
 	          		<td><?php echo $v['display_name']; ?></td>
 	          		<td><button class="btn btn-mini btn-primary pull-right table-btn-show-sub" type="button">Show <i class="icon-caret-down"></i></button></td>
@@ -26,14 +26,16 @@
           		<tr class="table-sub-tr">
 	                <td colspan="5" class="table-sub-td" style="background-color: #7F7B96; padding: 15px;">
 	                    <div class="pull-left" style="width: 70%; color: #FFFFFF;">
-	                        <p><span style="font-weight: bold">TAG: <?php echo implode(" , ",$v['tag_name']); ?></span></p>
+	                        <p><span style="font-weight: bold">TAG: <?php echo isset($v['tag_name']) ? implode(" , ",$v['tag_name']) : ""; ?></span></p>
 	                        <p><span style="font-weight: bold">Description:</span> <?php echo $v['description']?></p>
 	                        <p><span style="font-weight: bold">Total Clicks:</span> 123 Clicks &nbsp;&nbsp;&nbsp; <span style="font-weight: bold">Total URL Created:</span> 5</p>
 	                    </div>
 	                    <div class="pull-right" style="width: 25%; text-align: right">
 	                        <p>
+	                        <!--
 	                        <button class="btn btn-success" type="button">Download</button>
 	                        <button class="btn btn-danger" type="button">Delete</button>    
+	                        -->
 	                        </p>
 	                    </div>
 	                    <br clear="all" />
@@ -54,7 +56,7 @@
 	                                <?php if($v['short_urls']): ?>
 	                                	<?php foreach($v['short_urls'] as $x): ?>
 	                                		<tr>
-		                                		<td><?php echo $x['short_code']?></td>
+		                                		<td><a href="<?php echo site_url('cms/url/'.$x['short_code'])?>" target="_blank"><?php echo $x['short_code']?></a></td>
 		                                		<td><?php echo $x['long_url']?></td>
 		                                		<td><?php echo $x['created_at']?></td>
 		                                		<td><?php echo $x['increment']?></td>

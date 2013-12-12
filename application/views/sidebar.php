@@ -36,7 +36,7 @@
             <?php foreach($case as $each_case):?>
             <li>
                 <div class="notifHead purple">
-                    CASE ID: #<?=$each_case->case_id?>
+                    CASE ID: #<?php echo $each_case->case_id?>
                 </div>
                 <div class="notifBody">
                     <?php
@@ -50,7 +50,7 @@
             <?php foreach($reply_pending as $pending):?>
             <li>
                 <div class="notifHead purple">
-                    New Reply POST ID : #<?=$pending->id?>
+                    New Reply POST ID : #<?php echo $pending->id?>
                 </div>
                 <div class="notifBody">
                     <?php

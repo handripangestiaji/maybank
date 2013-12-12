@@ -3,8 +3,8 @@
 <?php if($posts){?>
            <span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
            
-           <form method="post" class="assign-case" action="<?=base_url("case/mycase/CreateCase")?>">
-           <input type="hidden" value="<?=$posts[$i]->post_id?>" name="post_id" />
+           <form method="post" class="assign-case" action="<?php echo base_url("case/mycase/CreateCase")?>">
+           <input type="hidden" value="<?php echo $posts[$i]->post_id?>" name="post_id" />
            <div class="message"></div>
            <div class="pull-left">
                <select style="width: 130px;" name="case_type">
@@ -14,15 +14,15 @@
                </select>
                <select style="width: 130px;" name="product_type">
                 <?php foreach($product_list as $product):?>
-                    <option value="<?=$product->id?>"><?=$product->product_name?></option>
+                    <option value="<?php echo $product->id?>"><?php echo $product->product_name?></option>
                 <?php endforeach?>
                </select>
            </div>
            <br clear="all" />
-           <button href="#modalConfirm-<?php echo $posts[$i]->post_id ?>" data-toggle="modal"
+           <button href="#modalConfirm-<?php echo isset($posts[$i]->post_id) ? "" : "" ?>" data-toggle="modal"
             class="btn btn-small btn-purple btn-add-related <?php echo $posts[$i]->social_stream_type?>">Add Related Conversation</button>
             
-           <input type="hidden" id="relatedCoversation-<?=$posts[$i]->post_id ?>" name="related_conversation" value="<?=$posts[$i]->post_id?>" />
+           <input type="hidden" id="relatedCoversation-<?php echo $posts[$i]->post_id ?>" name="related_conversation" value="<?php echo $posts[$i]->post_id?>" />
            <br clear="all" />
            <div class="pull-left">
                Assign To:
@@ -31,7 +31,7 @@
                <select name="assign_to">
                 <option value=""></option>
                    <?php foreach($user_list as $user):?>
-                   <option value="<?=$user->user_id?>"><?=$user->full_name."($user->email)"?></option>
+                   <option value="<?php echo $user->user_id?>"><?php echo $user->full_name."($user->email)"?></option>
                    <?php endforeach;?>
                </select>
            </div>
@@ -55,11 +55,11 @@
 
 <!-- ==================== MODALS FLOATING BOX ==================== -->
 <div id="modalConfirm-<?php echo $posts[$i]->post_id ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
-    <input type="hidden" value="<?=$posts[$i]->post_id?>" name="post_id" />
+    <input type="hidden" value="<?php echo $posts[$i]->post_id?>" name="post_id" />
     
     <?php if($posts[$i]->social_stream_type=="twitter"):?>
-        <input type="hidden" value="<?=$posts[$i]->twitter_user_id?>" name="twitter_user_id" />
-        <input type="hidden" value="<?=$posts[$i]->type?>" name="type" />
+        <input type="hidden" value="<?php echo $posts[$i]->twitter_user_id?>" name="twitter_user_id" />
+        <input type="hidden" value="<?php echo $posts[$i]->type?>" name="type" />
     <?php else:?>
     <?php endif?>
     <div class="modal-header">
@@ -68,7 +68,7 @@
     </div>
     <div class="modal-body">
         <form class="form-horizontal contentForm">
-            <img style="width:56px;margin:20px 0 0 45%;" src="<?=base_url()?>/media/img/loader.gif" alt="" class="loader-image">
+            <img style="width:56px;margin:20px 0 0 45%;" src="<?php echo base_url()?>/media/img/loader.gif" alt="" class="loader-image">
         </form>
     </div>
     <div class="modal-footer">

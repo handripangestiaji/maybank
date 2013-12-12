@@ -1,6 +1,6 @@
 <?php for($i=0; $i<count($own_post);$i++):?>  
 <li>
-    <div class="circleAvatar"><img src="https://graph.facebook.com/<?=number_format($own_post[$i]->actor_id, 0,'.','')?>/picture?small" alt=""></div>
+    <div class="circleAvatar"><img src="https://graph.facebook.com/<?php echo number_format($own_post[$i]->actor_id, 0,'.','')?>/picture?small" alt=""></div>
     <div class="read-mark <?php if($own_post[$i]->is_read==0){echo 'redText';} else { echo 'greyText'; } ?>"><i class="icon-bookmark icon-large"></i></div>
     <br />
     <p class="headLine">
@@ -12,15 +12,15 @@
         echo " at ".$date
         ?></span>
     </p>
-    <p><?=$own_post[$i]->message?></p>
+    <p><?php echo $own_post[$i]->message?></p>
     <p><button type="button" class="btn btn-warning btn-mini">OPEN</button><button class="btn btn-primary btn-mini" style="margin-left: 5px;">LIKE</button> </p>
-    <p><a data-toggle="modal" role="button" href="#modalDialog2"><i class="icon-eye-open"></i> View Entire Thread</a> | <a  data-toggle="modal" role="button" href="#modalDialog"><i class="icon-thumbs-up-alt"></i></i> <?=$own_post[$i]->like_info->like_count?> like this</a></p>
+    <p><a data-toggle="modal" role="button" href="#modalDialog2"><i class="icon-eye-open"></i> View Entire Thread</a> | <a  data-toggle="modal" role="button" href="#modalDialog"><i class="icon-thumbs-up-alt"></i></i> <?php echo $own_post[$i]->like_info->like_count?> like this</a></p>
 
     <!-- MODAL DIALOG PER CONVERSATION -->    
     <div id="modalDialog2" class="modal modalDialog hide fade" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-            <h3><?=$own_post[$i]->users->name?></h3>
+            <h3><?php echo $own_post[$i]->users->name?></h3>
         </div>
         <div class="modal-body">
                     <p class="headLine">

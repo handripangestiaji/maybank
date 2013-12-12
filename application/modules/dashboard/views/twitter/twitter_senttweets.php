@@ -35,7 +35,7 @@ for($i=0;$i<count($senttweets);$i++){
     ?></p>
      <p class="indicator"><?php
     if(isset($entities->media[0])):    ?>
-        <img src="<?=$entities->media[0]->media_url_https?>" alt="" />
+        <img src="<?php echo $entities->media[0]->media_url_https?>" alt="" />
     <?php endif;?>
     </p>
     <p><button type="button" class="btn btn-warning btn-mini">OPEN</button>
@@ -80,7 +80,7 @@ for($i=0;$i<count($senttweets);$i++){
                         <span>2 hours ago</span>
                     </p>
                     <div>
-                        <p>"<?=$comment[$j]->text?>"</p>
+                        <p>"<?php echo $comment[$j]->text?>"</p>
                         <p><input type="hidden" class="str_id" value="<?php echo $comment[$j]->post_stream_id; ?>" /><button type="button" class="btn btn-warning btn-mini">OPEN</button><button class="retweet btn btn-primary btn-mini" style="margin-left: 5px;">RE-TWEET</button></p>
                     </div>
                 </div>
@@ -204,5 +204,5 @@ for($i=0;$i<count($senttweets);$i++){
     </li>
 <?php } ?>
 <?php if(count($senttweets) > 0):?>
- <div class="filled" style="text-align: center;"><button class="loadmore btn btn-info" value="sendmessage"><input type="hidden"  class="channel_id" value="<?=$senttweets[0]->channel_id?>"/><input type="hidden" class="channel_id" value="<?=$channel_id?>" /><i class="icon-chevron-down"></i> LOAD MORE</button></div>
+ <div class="filled" style="text-align: center;"><button class="loadmore btn btn-info" value="sendmessage"><input type="hidden"  class="channel_id" value="<?php echo $senttweets[0]->channel_id?>"/><input type="hidden" class="channel_id" value="<?php echo $channel_id?>" /><i class="icon-chevron-down"></i> LOAD MORE</button></div>
 <?php endif?>

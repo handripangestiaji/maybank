@@ -872,16 +872,25 @@ class Users extends MY_Controller {
 	  $id = $this->input->post('group_id');
 	  $group = $this->input->post('group_name');
 	  $cek = $this->users_model->select_byName($group);
-	  if($cek->num_rows()>=1 )
+	  if($group!=$this->input->post('g_name'))
 	  {
-	       $id = $this->input->post('group_id');
-	       $data = array(
-			 'group' => $this->users_model->edit_group($id),
-			 'group_detail' => $this->users_model->edit_group_detail($id),
-			 'channel' => $this->users_model->select_channel()
-			);
-	       $this->session->set_flashdata('double', TRUE);
-	       redirect();
+	       if($cek->row()->group_name==$group)
+	       {
+		    $id = $this->input->post('group_id');
+		    $data = array(
+			      'group' => $this->users_model->edit_group($id),
+			      'group_detail' => $this->users_model->edit_group_detail($id),
+			      'channel' => $this->users_model->select_channel(),
+			      'msge' => 1
+			     );
+		    //$this->session->set_flashdata('double', TRUE);
+		    $this->load->view('users/group_edit',$data);
+	       }
+	  }
+	  
+	  elseif($group==$this->input->post('g_name'))
+	  {
+	       redirect('users/menu_group');
 	  }
 	  
 	  elseif($this->form_validation->run() == FALSE)

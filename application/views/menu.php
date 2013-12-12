@@ -46,7 +46,7 @@
         <?php } ?>-->
         <li class="divider-vertical"></li>
         <li class="dropdown <?php echo $active[5]; ?>">
-            <a href="<?=base_url('users')?>" id="interface"><i class="icon-user"></i> USER MANAGEMENT</a>
+            <a href="<?php echo base_url('users')?>" id="interface"><i class="icon-user"></i> USER MANAGEMENT</a>
         </li>
 	<li class="divider-vertical"></li>
         <!--li class="dropdown <?php echo $active[6]; ?>">
@@ -58,7 +58,7 @@
         </li-->
 	<li class="divider-vertical"></li>
         <li class="dropdown <?php echo $active[2]; ?>">
-            <a href="<?=base_url('channels/channelmg')?>" id="interface"><i class="icon-building"></i> CHANNEL MANAGEMENT</a>
+            <a href="<?php echo base_url('channels/channelmg')?>" id="interface"><i class="icon-building"></i> CHANNEL MANAGEMENT</a>
         </li>
     </ul>
 </div>

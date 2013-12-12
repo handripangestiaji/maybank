@@ -29,15 +29,15 @@ for($i=0;$i<count($mentions);$i++){
         
     ?></p>
     <p><?php if(isset($entities->media[0])):?>
-        <img src="<?=$entities->media[0]->media_url_https?>" alt="" />
+        <img src="<?php echo $entities->media[0]->media_url_https?>" alt="" />
     <?php endif;?>
     </p>
     <p class="indicator">
     <?php if($mentions[$i]->case_id):?>
-        <button type="button" class="btn btn-purple" value="<?=$mentions[$i]->case_id?>">CASE ID #<?=$mentions[$i]->case_id?></button>
+        <button type="button" class="btn btn-purple" value="<?php echo $mentions[$i]->case_id?>">CASE ID #<?php echo $mentions[$i]->case_id?></button>
     <?php endif?>
     <?php if($mentions[$i]->response_post_id):?>
-        <button type="button" class="btn btn-inverse btn-mini" value="<?=$mentions[$i]->response_post_id?>">REPLIED</button>
+        <button type="button" class="btn btn-inverse btn-mini" value="<?php echo $mentions[$i]->response_post_id?>">REPLIED</button>
     <?php endif?>
     <?php if(!$mentions[$i]->response_post_id && !$mentions[$i]->case_id):?>
         <button type="button" class="btn btn-warning btn-mini">OPEN</button>
@@ -83,7 +83,7 @@ for($i=0;$i<count($mentions);$i++){
                         <span>2 hours ago</span>
                     </p>
                     <div>
-                        <p>"<?=$comment[$j]->text?>"</p>
+                        <p>"<?php echo $comment[$j]->text?>"</p>
                         <p><input type="hidden" class="str_id" value="<?php echo $comment[$j]->post_stream_id; ?>" /><button type="button" class="btn btn-warning btn-mini">OPEN</button><button class="retweet btn btn-primary btn-mini" style="margin-left: 5px;">RE-TWEET</button></p>
                     </div>
                 </div>
@@ -132,8 +132,8 @@ for($i=0;$i<count($mentions);$i++){
         <!--a role="button" class='destroy_status'><i class="icon-trash greyText"></i></a-->
         <div class="pull-right">
             <!--form class="contentForm" action="<?php //echo base_url('index.php/dashboard/socialmedia/twitteraction');?>" method="post"-->
-                <button class="btn btn-reply btn-primary" data-toggle="modal" value="<?=$mentions[$i]->post_id?>"><i class="icon-mail-reply"></i></button>
-                <button type="button" class="retweet btn btn-primary" value="<?=$mentions[$i]->post_id?>"><i class="icon-retweet"><span></span></i></button>
+                <button class="btn btn-reply btn-primary" data-toggle="modal" value="<?php echo $mentions[$i]->post_id?>"><i class="icon-mail-reply"></i></button>
+                <button type="button" class="retweet btn btn-primary" value="<?php echo $mentions[$i]->post_id?>"><i class="icon-retweet"><span></span></i></button>
                 <button class="btn btn-dm btn-primary" data-toggle="modal"><i class="icon-envelope"></i></button>
                 <button type="button" class="favorit btn btn-primary"><i class="icon-star"></i><span></span></button>
                 
@@ -171,7 +171,7 @@ for($i=0;$i<count($mentions);$i++){
                 </select>
                 <select style="width: 40%;">
                    <?php foreach($product_list as $product):?>
-                        <option value="<?=$product->id?>"><?=$product->product_name?></option>
+                        <option value="<?php echo $product->id?>"><?php echo $product->product_name?></option>
                     <?php endforeach?>
                 </select>
             </div>
@@ -189,7 +189,7 @@ for($i=0;$i<count($mentions);$i++){
                 <i class="icon-twitter-sign"></i>&nbsp;<span class="reply-tw-char-count">140</span>
             </div>
             <div class="pull-right">
-                <button class="dm_send btn btn-primary btn-small btn-send-dm"  type="button" value="<?=$mentions[$i]->twitter_user_id;?>" >SEND</button>    
+                <button class="dm_send btn btn-primary btn-small btn-send-dm"  type="button" value="<?php echo $mentions[$i]->twitter_user_id;?>" >SEND</button>    
                        <input type="hidden" class="screen_name" value="<?php echo $mentions[$i]->screen_name; ?>" />
             </div>
             <br clear="all" />
@@ -220,5 +220,5 @@ for($i=0;$i<count($mentions);$i++){
 <?php } 
 ?>
 <?php if(count($mentions) > 0):?>
- <div class="filled" style="text-align: center;"><input type="hidden" class="total_groups" value="<?=$total_groups?>" /><input type="hidden"  class="channel_id" value="<?=$mentions[0]->channel_id?>"/><input type="hidden"  class="looppage" value=""/><button class="loadmore btn btn-info" value="mentions"><i class="icon-chevron-down"></i> LOAD MORE</button></div>
+ <div class="filled" style="text-align: center;"><input type="hidden" class="total_groups" value="<?php echo $total_groups?>" /><input type="hidden"  class="channel_id" value="<?php echo $mentions[0]->channel_id?>"/><input type="hidden"  class="looppage" value=""/><button class="loadmore btn btn-info" value="mentions"><i class="icon-chevron-down"></i> LOAD MORE</button></div>
 <?php endif;?>

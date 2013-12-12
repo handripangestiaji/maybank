@@ -2,7 +2,7 @@
 <div class="row-fluid">
     <span class="dm-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
     <div class="pull-left">
-        <input type="hidden" value="<?=$mentions[$i]->post_id?>" name="post_id" />
+        <input type="hidden" value="<?php echo $mentions[$i]->post_id?>" name="post_id" />
         <div class="message"></div>
         <select style="width: 130px;" name="reply_type">
             <option value="Feedback">Feedback</option>
@@ -11,7 +11,7 @@
         </select>
         <select style="width: 130px;" name="product_type">
          <?php foreach($product_list as $product):?>
-             <option value="<?=$product->id?>"><?=$product->product_name?></option>
+             <option value="<?php echo $product->id?>"><?php echo $product->product_name?></option>
          <?php endforeach?>
         </select>
     </div>
@@ -67,7 +67,7 @@
             <i class="icon-twitter-sign"></i>&nbsp;<span class="reply-tw-char-count">140</span>
         </div>
         <div class="pull-right">
-                <button class="replayTweet btn btn-primary btn-small btn-send-dm"  value="<?=$mentions[$i]->twitter_user_id;?>" type="submit" >SEND</button>    
+                <button class="replayTweet btn btn-primary btn-small btn-send-dm"  value="<?php echo $mentions[$i]->twitter_user_id;?>" type="submit" >SEND</button>    
                 <input type="hidden" class="screen_name" value="<?php echo $mentions[$i]->screen_name; ?>" />
         </div>
     <br clear="all" />

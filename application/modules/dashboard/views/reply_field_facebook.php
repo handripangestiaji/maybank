@@ -8,7 +8,7 @@
         </select>
         <select style="width: 130px;">
             <?php foreach($product_list as $product):?>
-                <option value="<?=$product->id?>"><?=$product->product_name?></option>
+                <option value="<?php echo $product->id?>"><?php echo $product->product_name?></option>
             <?php endforeach?>
         </select>
     </div>

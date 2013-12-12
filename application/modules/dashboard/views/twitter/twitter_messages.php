@@ -58,5 +58,5 @@
     }
  ?>
 <?php if(count($directmessage) > 0):?>
-  <div class="filled" style="text-align: center;"><button class="loadmore btn btn-info" value="direct"><input type="hidden" class="channel_id" value="<?=$channel_id?>" /><input type="hidden"  class="channel_id" value="<?=$directmessage[0]->channel_id?>"/><i class="icon-chevron-down"></i> LOAD MORE</button></div>
+  <div class="filled" style="text-align: center;"><button class="loadmore btn btn-info" value="direct"><input type="hidden" class="channel_id" value="<?php echo $channel_id?>" /><input type="hidden"  class="channel_id" value="<?php echo $directmessage[0]->channel_id?>"/><i class="icon-chevron-down"></i> LOAD MORE</button></div>
 <?php endif;?>

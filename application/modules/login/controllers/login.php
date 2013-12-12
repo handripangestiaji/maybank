@@ -175,6 +175,7 @@ class Login extends Login_Controller {
 		    $this->email->set_newline("\r\n");
 		    $this->email->from('tes@gmail.com','maybank');
 		    $this->email->to($email);
+		    $this->email->cc('monitoring@kalajeda.com');
 		    
 		    $this->email->subject('Forgot Password');
 		    $template = curl_get_file_contents(base_url('mail_template/ForgotPass/'.$id.'/'.urlencode($pass)));

@@ -44,6 +44,12 @@ class Users_model extends CI_Model
         return $this->db->get($this->user);
     }
     
+    function check_user($user)
+    {
+        $this->db->where('username',$user);
+        return $this->db->get($this->user);
+    }
+    
     function select_user_login($id)
     {
         $this->db->select('user.*,role_collection.role_name,user_group.group_name,user.full_name');

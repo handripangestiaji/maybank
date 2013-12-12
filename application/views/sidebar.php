@@ -114,6 +114,7 @@
         <br clear="all" />
         <div class="profileInfo">
             <form method='post' action='<?php echo site_url("users/update_password");?>' class='update_password'>
+            
             <div class="message"></div>
             <p>Existing Password</p>
             <input type='password' value='<?php echo set_value('exist');?>' style='width: 175px;' name='exist' />
@@ -153,7 +154,10 @@
             <p>Role : <?php echo $this->session->userdata('role_name'); ?></p>
             <p>Email : <span class="cyanText"><?php echo $this->session->userdata('web_address'); ?></span></p>
             <br/>
-            <form method='post' action='<?php echo site_url("users/update_user_login");?>'>
+            <form method='post' action='<?php echo site_url("users/update_user_login");?>' class='update_profil'>
+            
+            <div class="yes_update"></div>
+            
             <input type='hidden' value='<?php echo $this->session->userdata('user_id'); ?>' name='user_id' />
             <p><strong>Display Name</strong></p>
             <input type="text" name="display-name" value='<?php echo $this->session->userdata('display_name'); ?>'/>

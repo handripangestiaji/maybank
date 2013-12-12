@@ -36,4 +36,30 @@ class Users_Json extends CI_Controller {
             echo json_encode(false);
         }
     }
+    
+    function update_profil()
+    {
+	$display = $this->input->post('display');
+	$about = $this->input->post('about');
+	
+	$id = $this->session->userdata('user_id');
+	  
+	$data = array(
+		       'description' => $about,
+		       'display_name' => $display
+		      );
+	header("Content-type: application/x-json");
+	$this->users_model->update_user($id,$data);
+	
+	$user_login = $this->users_model->select_user_login($id);
+	$data1 = array(
+		    'user_id' => $id,
+		    'username' => $user_login->row()->username,
+		    'display_name' => $user_login->row()->display_name,
+		    'description' => $user_login->row()->description,
+		    'is_login' => TRUE
+		);
+	$this->session->set_userdata($data1);
+	echo json_encode(true);
+    }
 }

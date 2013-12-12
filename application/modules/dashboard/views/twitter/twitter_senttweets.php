@@ -11,7 +11,7 @@ for($i=0;$i<count($senttweets);$i++){
         <p class="headLine">
             <span class="author"><?php echo $senttweets[$i]->screen_name; ?></span>
             <i class="icon-circle"></i>
-            <span>mentions</span>
+            <span>Sent Tweets</span>
             <i class="icon-circle"></i>
             <span><?php 
             $date=new DateTime($senttweets[$i]->social_stream_created_at.' Europe/London');
@@ -33,7 +33,7 @@ for($i=0;$i<count($senttweets);$i++){
     $html =  linkify(html_entity_decode($html), true, false);
     echo $html;
     ?></p>
-     <p><?php
+     <p class="indicator"><?php
     if(isset($entities->media[0])):    ?>
         <img src="<?=$entities->media[0]->media_url_https?>" alt="" />
     <?php endif;?>

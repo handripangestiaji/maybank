@@ -2,7 +2,9 @@
 <div class="row-fluid">
     <span class="dm-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
     <div class="pull-left">
-        <select style="width: 130px;" name="case_type">
+        <input type="hidden" value="<?=$mentions[$i]->post_id?>" name="post_id" />
+        <div class="message"></div>
+        <select style="width: 130px;" name="reply_type">
             <option value="Feedback">Feedback</option>
             <option value="Enquiry">Enquiry</option>
             <option value="Complaint">Complaint</option>
@@ -13,7 +15,7 @@
          <?php endforeach?>
         </select>
     </div>
-    <textarea class='replaycontent' placeholder="Compose Message" name="content">@<?php echo $mentions[$i]->screen_name; ?></textarea>
+    <textarea class='replaycontent' placeholder="Compose Message" name="content">@<?php echo $mentions[$i]->screen_name; ?> &nbsp;</textarea>
     <br clear="all" />
      <div class="pull-left"  style="margin-bottom: 5px;">
         <i class="icon-link"></i>
@@ -65,7 +67,7 @@
             <i class="icon-twitter-sign"></i>&nbsp;<span class="reply-tw-char-count">140</span>
         </div>
         <div class="pull-right">
-                <button class="dm_send replayTweet btn btn-primary btn-small btn-send-dm"  type="submit" value="<?=$mentions[$i]->twitter_user_id;?>" >SEND</button>    
+                <button class="replayTweet btn btn-primary btn-small btn-send-dm"  value="<?=$mentions[$i]->twitter_user_id;?>" type="submit" >SEND</button>    
                 <input type="hidden" class="screen_name" value="<?php echo $mentions[$i]->screen_name; ?>" />
         </div>
     <br clear="all" />

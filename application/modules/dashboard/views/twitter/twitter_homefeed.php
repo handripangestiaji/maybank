@@ -48,6 +48,9 @@ for($i=0;$i<count($homefeed);$i++){
     <?php else:?>
         <button type="button" class="btn btn-warning btn-mini">OPEN</button>
     <?php endif?>
+    <?php if($homefeed[$i]->response_post_id):?>
+        <button type="button" class="btn btn-inverse btn-mini" value="<?=$homefeed[$i]->response_post_id?>">REPLIED</button>
+    <?php endif;?>
     </p>
     <?php if ($homefeed[$i]->retweeted==1) { ?>
         <button type="button" class="btn btn-inverse btn-mini"><i class="icon-retweet"></i></button>

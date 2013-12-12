@@ -74,7 +74,8 @@
             </div>
             <div style="float: right; margin-top: -10px;">
                 <input type="text" id="search_user" name="search_user" placeholder="Search User name, Email or ID" />
-                <a href="" onclick='search();'><span><i class="icon-search"></i></span></a>
+                
+                <button onclick=''><span><i class="icon-search"></i></span></button>
             </div>
             <div style="clear: both"></div>
             <table class="table table-striped">
@@ -137,6 +138,13 @@
 </style>
 
 <script type="text/javascript">
+    function search_user()
+    {
+        var value_search = document.getElementById('search_user').value; 
+        //alert(value_search);
+        window.location.href = "<?php echo site_url('users/search_user');?>/"+encodeURIComponent(value_search);
+    }
+    
     function yes_delete_user()
     {
         var usr_id = document.getElementById("user_id_delete").value;
@@ -172,10 +180,5 @@
     function hide_confirm()
     {
         document.getElementById('confirm_user').style.display = 'none';
-    }
-    
-    function search()
-    {
-        alert(document.getElementById('search_user').value);
     }
 </script>

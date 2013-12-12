@@ -100,4 +100,12 @@ class case_model extends CI_Model{
             return $query_result->row();
     }
     
+    function GetReplyNotification($user_id){
+        $this->db->select("*");
+        $this->db->from("social_stream_notification a inner join social_stream b on a.social_stream_post_id = b.post_id");
+        $this->db->where("a.user_id", $user_id);
+        $this->db->where("a.is_read", 0);
+        return $this->db->get()->result();
+    }
+
 }

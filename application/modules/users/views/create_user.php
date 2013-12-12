@@ -33,7 +33,7 @@
             <form method="post" action="<?php echo site_url('users/insert_user');?>" enctype="multipart/form-data">
                 <table>
                     <tr>
-                        <td>User Name <span style='color: red;'>*</span></td>
+                        <td>User ID <span style='color: red;'>*</span></td>
                         <td><input type='text' name='username' value="<?php echo set_value('username');?>" />
                         <span style='color:red;'><?php echo form_error('username'); ?></span></td>
                     </tr>
@@ -79,7 +79,7 @@
                     </tr>
                     
                     <tr>
-                        <td>Image <span style='color: red;'>*</span></td>
+                        <td>Image <span style='color: red;'></span></td>
                         <td>
                             <input type='file' name='userfile' id='userfile' accept='image/*' />
                             <span style='color:red;'><?php echo form_error('userfile'); ?>

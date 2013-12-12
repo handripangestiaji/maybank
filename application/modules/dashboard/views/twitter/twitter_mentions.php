@@ -37,6 +37,9 @@ for($i=0;$i<count($mentions);$i++){
     <?php else:?>
         <button type="button" class="btn btn-warning btn-mini">OPEN</button>
     <?php endif?>
+    <?php if($mentions[$i]->response_post_id):?>
+        <button type="button" class="btn btn-inverse btn-mini" value="<?=$mentions[$i]->response_post_id?>">REPLIED</button>
+    <?php endif;?>
     
     <?php if ($mentions[$i]->retweeted==1) { ?>
         <button type="button" class="btn btn-success btn-mini"><i class="icon-retweet"></i></button>
@@ -130,6 +133,7 @@ for($i=0;$i<count($mentions);$i++){
                 <button type="button" class="retweet btn btn-primary"><i class="icon-retweet"></i></button>
                 <button class="btn btn-dm btn-primary" data-toggle="modal"><i class="icon-envelope"></i></button>
                 <button type="button" class="favorit btn btn-primary"><i class="icon-star"></i></button>
+                
                 <?php if($mentions[$i]->following=='1'){ ?>
                 <button type="button" class="unfollow btn"><i class="icon-user"></i></button>
                 <?php }else{ ?>
@@ -138,7 +142,7 @@ for($i=0;$i<count($mentions);$i++){
                 <?php if(!$mentions[$i]->case_id):?>
                     <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>
                 <?php else:?>
-                    <button type="button" class="btn btn-purple btn-case" name="action" value="Resolved"><i class="icon-check"></i> RESOLVE</button>
+                    <button type="button" class="btn btn-purple btn-resolve" name="action" value="Resolved"><i class="icon-check"></i> RESOLVE</button>
                 <?php endif?>
                 <input type="hidden" class="str_id" value="<?php echo $mentions[$i]->post_stream_id; ?>" />
                 <input type="hidden" class="id" value="<?php echo json_decode($mentions[$i]->twitter_entities)->user_mentions[0]->id; ?>" />
@@ -163,13 +167,9 @@ for($i=0;$i<count($mentions);$i++){
                     <option value="keyword">Complaint</option>
                 </select>
                 <select style="width: 40%;">
-                    <option value="keyword">Accounts & Banking</option>
-                    <option value="user">Cards</option>
-                    <option value="keyword">Investment</option>
-                    <option value="keyword">insurance</option>
-                    <option value="user">Loans</option>
-                    <option value="keyword">Maybank2u</option>
-                    <option value="keyword">Others</option>
+                   <?php foreach($product_list as $product):?>
+                        <option value="<?=$product->id?>"><?=$product->product_name?></option>
+                    <?php endforeach?>
                 </select>
             </div>
             <textarea class='replaycontent' placeholder="Compose Message" name="content"></textarea>

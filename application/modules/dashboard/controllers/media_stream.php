@@ -18,6 +18,7 @@ class Media_stream extends CI_Controller {
 	$this->load->helper('form');
 	$this->load->model('facebook_model');
 	$this->load->model('twitter_model');
+	$this->load->model('account_model');
     }
     
     
@@ -176,36 +177,91 @@ class Media_stream extends CI_Controller {
         }
         //redirect(base_url('/index.php/dashboard'));    	
     }
+    
+    public function ReplyTwitter($type = 'tweet'){
+	header("Content-Type: application/x-json");
+	$content = $this->input->post('message');
+	$twitter_reply['image_to_post'] = $this->input->post('filename');
+	$twitter_reply['reply_to_post_id'] = $this->input->post('post_id');
+	$twitter_reply['content_products_id'] = $this->input->post('product_type');
+	$twitter_reply['reply_type'] = $this->input->post('reply_type');
+	$twitter_reply['text'] = $this->input->post('content');
+	$twitter_reply['user_id'] = $this->session->userdata('user_id');
+	$twitter_data = $this->twitter_model->ReadTwitterData(
+	    array(
+		'a.post_id' => $this->input->post('post_id')
+	    ),
+	    1
+	);
+	if(count($twitter_data) > 0){
+	    $twitter_data = $twitter_data[0];
+	    $channel = $this->account_model->GetChannel(array(
+		'channel_id' => $this->input->post('channel_id')
+	    ));
+	    if(count($channel) == 0){
+		echo json_encode(
+		    array(
+			'success' => false,
+			'message' => "Invalid Channel Id"
+		    )
+		);
+		return;
+	    }
+	    else{
+		$channel = $channel[0];
+	    }
+	    $parameters = array('status' => $this->input->post('content'),'in_reply_to_status_id'=>$twitter_data->post_stream_id);
+	    $this->load->library('Twitteroauth');
+	    $this->connection = $this->twitteroauth->create($this->config->item('twitter_consumer_token'),$this->config->item('twitter_consumer_secret'), $channel->oauth_token,
+							    $channel->oauth_secret);
+	    $result=$this->connection->post('statuses/update', $parameters);
+	    $return = $this->twitter_model->CreateReply($twitter_reply, $result, $channel);
+	    
+	    if($return){
+		echo json_encode(array(
+		    'success' => true,
+		    'message' => "Reply tweet successfully done."
+		));
+	    }
+	    
+	}
+	else{
+	    echo json_encode(
+		array(
+		    'success' => false,
+		    'message' => "Invalid POST Id"
+		)
+	    );
+	}
+    }
+    
     //=========================================END Twitter function=============================================
 
 
     //=========================================facebook function=============================================
     public function fb_access_token(){
-	    $app_id = $this->config->item('fb_appid');
-	    $app_secret = $this->config->item('fb_appsecret');
-	    $my_url = site_url('dashboard/fb_access_token');  // redirect url
-	    $code = $this->input->get("code");
-     
-	    if(empty($code)) {
-	      // Redirect to Login Dialog
-	      $this->session->set_userdata('state', md5(uniqid(rand(), TRUE))); // CSRF protection
-	      $dialog_url = "https://www.facebook.com/dialog/oauth?client_id=" 
-		    . $app_id . "&redirect_uri=" . urlencode($my_url) . "&state="
-		    . $this->session->userdata('state') . "&scope=publish_stream,read_friendlists,email,manage_pages,export_stream,publish_actions,publish_checkins,read_stream";
-     
-     
-	      redirect($dialog_url);
-	    }
-	    if($this->session->userdata('state') && ($this->session->userdata('state')=== $this->input->get('state'))) {
-		     $token_url = "https://graph.facebook.com/oauth/access_token?"
-		       . "client_id=" . $app_id . "&redirect_uri=" . urlencode($my_url)
-		       . "&client_secret=" . $app_secret . "&code=" . $code;
-		     $response = curl_get_file_contents($token_url);
-		     $params = null;
-		     parse_str($response, $params);
-		     $longtoken=$params['access_token'];
-		     print_r($params);
-	    }
+	$app_id = $this->config->item('fb_appid');
+	$app_secret = $this->config->item('fb_appsecret');
+	$my_url = site_url('dashboard/fb_access_token');  // redirect url
+	$code = $this->input->get("code");
+	if(empty($code)) {
+	  // Redirect to Login Dialog
+	    $this->session->set_userdata('state', md5(uniqid(rand(), TRUE))); // CSRF protection
+	    $dialog_url = "https://www.facebook.com/dialog/oauth?client_id=" 
+		. $app_id . "&redirect_uri=" . urlencode($my_url) . "&state="
+		. $this->session->userdata('state') . "&scope=publish_stream,read_friendlists,email,manage_pages,export_stream,publish_actions,publish_checkins,read_stream";
+	    redirect($dialog_url);
+	}
+	if($this->session->userdata('state') && ($this->session->userdata('state')=== $this->input->get('state'))) {
+	    $token_url = "https://graph.facebook.com/oauth/access_token?"
+	      . "client_id=" . $app_id . "&redirect_uri=" . urlencode($my_url)
+	      . "&client_secret=" . $app_secret . "&code=" . $code;
+	    $response = curl_get_file_contents($token_url);
+	    $params = null;
+	    parse_str($response, $params);
+	    $longtoken=$params['access_token'];
+	    print_r($params);
+	}
 
     }
     
@@ -251,7 +307,7 @@ class Media_stream extends CI_Controller {
         $comment = $this->input->post('comment');
         $post_id = $this->input->post('post_id');
      
-	     $filter = array(
+        $filter = array(
             "connection_type" => "facebook"
         );
         if($this->input->get('channel_id')){
@@ -265,9 +321,40 @@ class Media_stream extends CI_Controller {
 	       'appId' => $this->config->item('fb_appid'),
 	       'secret' => $this->config->item('fb_secretkey')
 	    );
-	$this->load->library('facebook',$config);
-	$this->facebook->setaccesstoken($newStd->token);
-	$this->facebook->api('/'.$post_id.'/comments','post',array('message' => $comment));
+    	$this->load->library('facebook',$config);
+    	$this->facebook->setaccesstoken($newStd->token);
+    	$return=$this->facebook->api('/'.$post_id.'/comments','post',array('message' => $comment));
+        
+        
+        if(!is_array($return)){//send comment
+          
+            $action = array(
+    		"action_type" => "reply_facebook",
+    		"channel_id" => $channel_loaded[0]->channel_id,
+    		"created_at" => date("Y-m-d H:i:s"),
+    		"stream_id" => $this->input->post('post_id'),
+    		"created_by" => $this->session->userdata('user_id'),
+    		"stream_id_response" => $return
+    	    );
+                $this->account_model->CreateFbCommentAction($action, $this->input->post('like') === 'true' ? 1 : 0);
+                print_r ('true');
+         
+        }elseif(is_array($return)){//replay in reply
+        $action = array(
+    		"action_type" => "reply_facebook",
+    		"channel_id" => $channel_loaded[0]->channel_id,
+    		"created_at" => date("Y-m-d H:i:s"),
+    		"stream_id" => $this->input->post('post_id'),
+    		"created_by" => $this->session->userdata('user_id'),
+    		"stream_id_response" => $return['id']
+    	    );
+              if($return['id']){
+                 $this->account_model->CreateFbCommentAction($action, $this->input->post('like') === 'true' ? 1 : 0);
+                 print_r ('true');
+              }else{
+                 print_r ($return);
+              }
+       }
     }
     
     public function SocmedPost(){
@@ -403,7 +490,63 @@ class Media_stream extends CI_Controller {
      
      
     function tester(){
-	print_r($this->twitter_model->GetTweetId('369854954577477633', 'twitter_dm'));
+	$this->load->model('case_model');
+	print_r($this->case_model->GetReplyNotification($this->session->userdata('user_id')));
     }
     
+     
+    public function GetShortenUrlByCampaignId(){
+	$this->load->model('campaign_url_model');
+          $result = $this->campaign_url_model->GetByCampaignId($this->input->get('campaignId'));
+          echo json_encode($result);
+    }
+    
+    public function GenerateShortUrl(){
+	$this->load->library('Shorturl');
+	$this->load->model(array('tag_model', 'product_model', 'campaign_model', 'shorturl_model', 'campaign_url_model'));
+	$this->load->helper('form');
+	$this->load->library('form_validation');
+
+	$short_code = substr( md5( time().uniqid().rand() ), 0, 6 );
+	
+	$params = array('long_url' => $this->input->post('long_url'),
+			'campaign_id' => $this->input->post('campaign_id'),
+			'short_code' => $short_code,
+			'description' => 'not yet');
+	$params['user_id'] = $this->session->userdata('user_id');
+	
+	$config = array(
+				array(
+					'field' => 'long_url',
+					'label' => 'Full Url',
+					'rules' => 'required'
+				),
+				array(
+					'field' => 'campaign_id',
+					'label' => 'Full Url',
+					'rules' => 'required'
+				)
+			);
+	
+	$this->form_validation->set_rules($config);
+	
+	if($this->form_validation->run() == TRUE)
+	{
+		$code = $this->shorturl->urlToShortCode($params);
+		
+		$setparam = array(
+				    "campaign_id" => $params['campaign_id'], 
+				    "url_id" => $code['url_id'],
+				    "user_id" => $params['user_id']
+				    );
+		
+		$id_campaign_url = $this->campaign_url_model->insert($setparam);
+		
+		$setparam['short_code'] = $short_code; 
+		echo json_encode($setparam);
+	}
+	else{
+	    echo json_encode(array('message' => 'Something error. Make sure you have select a campaign and put the full url in the insert link box.'));
+	}
+    }
 }

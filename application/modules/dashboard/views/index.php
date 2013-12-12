@@ -3,7 +3,7 @@
         <div>
              <!-- button-refresh -->
             <div class="left">
-                <div class="ref">
+                <div class="ref" id="refreshAllStream">
                     <a href="#"><img src="<?php echo base_url() ?>media/img/ref.png" /></a>
                 </div>
             </div>

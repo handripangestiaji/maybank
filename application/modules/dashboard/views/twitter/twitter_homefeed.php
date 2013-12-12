@@ -11,7 +11,7 @@ for($i=0;$i<count($homefeed);$i++){
         <p class="headLine">
             <span class="author"><?php echo $homefeed[$i]->screen_name; ?></span>
             <i class="icon-circle"></i>
-            <span>mentions</span>
+            <span>Home Feed</span>
             <i class="icon-circle"></i>
             <span>
             <?php 
@@ -37,7 +37,7 @@ for($i=0;$i<count($homefeed);$i++){
     $html =  linkify(html_entity_decode($html), true, false);
     echo $html;
     ?></p>
-    <p><?php
+    <p class="indicator"><?php
     
     if(isset($entities->media[0])):    ?>
         <img src="<?=$entities->media[0]->media_url_https?>" alt="" />
@@ -51,19 +51,17 @@ for($i=0;$i<count($homefeed);$i++){
     <?php if($homefeed[$i]->response_post_id):?>
         <button type="button" class="btn btn-inverse btn-mini" value="<?=$homefeed[$i]->response_post_id?>">REPLIED</button>
     <?php endif;?>
-    </p>
-    <?php if ($homefeed[$i]->retweeted==1) { ?>
+    
+    <?php if ($homefeed[$i]->retweeted==1): ?>
         <button type="button" class="btn btn-inverse btn-mini"><i class="icon-retweet"></i></button>
-    <?php } ?>    
-    <?php if ($homefeed[$i]->favorited=='1') { ?>
+    <?php endif; ?>    
+    <?php if ($homefeed[$i]->favorited=='1'): ?>
         <button type="button" class="btn btn-inverse btn-mini"><i class="icon-star">&nbsp;</i></button>
-    <?php } ?></p>
+    <?php endif ?></p>
     
     <p>
         <a role="button" class="btn-engagement"><i class="icon-eye-open"></i> Engagement</a> |
-        <a data-toggle="modal" role="button" href="#modaltweet<?php echo $i; ?>" ><i class="icon-retweet greyText"></i><?php //echo $homefeed[$i]->retweeted; ?> re-tweets</a> | 
-        <span class="btn-mark-as-read cyanText" style="display: <?php if($homefeed[$i]->is_read==1){echo 'none';} ?>"><i class="icon-bookmark"></i> Mark as Read</span>
-        <span class="btn-mark-as-unread cyanText" style="display: <?php if($homefeed[$i]->is_read==0){echo 'none';} ?>"><i class="icon-bookmark-empty"></i> Mark as Unread</span>
+        <a data-toggle="modal" role="button" href="#modaltweet<?php echo $i; ?>" ><i class="icon-retweet greyText"></i><?php //echo $homefeed[$i]->retweeted; ?> re-tweets</a>         
     </p>
     
     
@@ -97,7 +95,8 @@ for($i=0;$i<count($homefeed);$i++){
                     </p>
                     <div>
                         <p>"<?=$comment[$j]->text?>"</p>
-                        <p><input type="hidden" class="str_id" value="<?php echo $comment[$j]->post_stream_id; ?>" /><button type="button" class="btn btn-warning btn-mini">OPEN</button><button class="retweet btn btn-primary btn-mini" style="margin-left: 5px;">RE-TWEET</button></p>
+                        <p><input type="hidden" class="str_id" value="<?php echo $comment[$j]->post_stream_id; ?>" /><button type="button" class="btn btn-warning btn-mini">OPEN</button>
+                        <button class="retweet btn btn-primary btn-mini" style="margin-left: 5px;">RE-TWEET</button></p>
                     </div>
                 </div>
         <?php } ?>
@@ -145,8 +144,8 @@ for($i=0;$i<count($homefeed);$i++){
         <!--a role="button" class='destroy_status'><i class="icon-trash greyText"></i></a-->
         <div class="pull-right">
             <!--form class="contentForm" action="<?php //echo base_url('index.php/dashboard/socialmedia/twitteraction');?>" method="post"-->
-                <button class="btn btn-reply btn-primary" data-toggle="modal"><i class="icon-mail-reply"></i></button>
-                <button type="button" class="retweet btn btn-primary"><i class="icon-retweet"></i></button>
+                <button class="btn btn-reply btn-primary" data-toggle="modal" value="<?=$homefeed[$i]->post_id?>"><i class="icon-mail-reply"></i></button>
+                <button type="button" class="retweet btn btn-primary" value="<?=$homefeed[$i]->post_id?>"><i class="icon-retweet"></i><span></span></button>
                  <button class="btn btn-dm btn-primary" data-toggle="modal"><i class="icon-envelope"></i></button>
                 <button type="button" class="favorit btn btn-primary"><i class="icon-star"></i></button>
                 <?php if($homefeed[$i]->following=='1'){ ?>

@@ -23,6 +23,7 @@
                 </div>
                 <div class="pull-right">
                     <select class="change-read-unread-stream" style="width: 130px;">
+                        <option value="">All</option>
                         <option value="0">Unread</option>
                         <option value="1">Read</option>
                         <option value="2">Assigned Cases</option>

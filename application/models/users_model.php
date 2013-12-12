@@ -136,6 +136,13 @@ class Users_model extends CI_Model
     }
     
     //============================= ROLE ================================
+    function count_role_user($id_role)
+    {
+        $this->db->select('count(*) as count_role');
+        $this->db->where('role_id',$id_role);
+        return $this->db->get($this->user);
+    }
+    
     function count_record_role()
     {
         return $this->db->count_all($this->role);
@@ -143,14 +150,15 @@ class Users_model extends CI_Model
     
     function select_role()
     {
-        $this->db->join('user','user.user_id=role_collection.created_by','inner');
+        $this->db->select('*');
+        $this->db->join('user','user.user_id=role_collection.created_by','left');
         return $this->db->get($this->role);
     }
     function select_role1($limit, $start)
     {
-        $this->db->limit($limit, $start);
-        
-        $this->db->join('user','user.user_id=role_collection.created_by','inner');
+        //$this->db->limit($limit, $start);
+        $this->db->select('*');
+        $this->db->join('user','user.user_id=role_collection.created_by','left');
         $query = $this->db->get($this->role);
         
         if ($query->num_rows() > 0) {
@@ -207,21 +215,37 @@ class Users_model extends CI_Model
     }
     
     //============================ GROUP ================================
+    function count_group_user($id_group)
+    {
+        $this->db->select('count(*) as count_group');
+        $this->db->where('group_id',$id_group);
+        return $this->db->get($this->user);
+    }
+    
     function count_record_group()
     {
+        $this->db->select('*');
         return $this->db->count_all($this->group);
     }
     
     function select_group()
     {
+        $this->db->select('*');
+        return $this->db->get($this->group);
+    }
+    
+    function select_byName($name)
+    {
+        $this->db->where('group_name',$name);
         return $this->db->get($this->group);
     }
     
     function select_group1($limit, $start)
     {
-        $this->db->limit($limit, $start);
+        $this->db->select('*');
+        //$this->db->limit($limit, $start);
         $this->db->select('user_group.*,user.full_name as name');
-        $this->db->join('user','user_group.created_by=user.user_id','inner');
+        $this->db->join('user','user_group.created_by=user.user_id','left');
         $query = $this->db->get($this->group);
         
         if ($query->num_rows() > 0) {

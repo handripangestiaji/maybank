@@ -412,7 +412,7 @@ class facebook_model extends CI_Model
     }
     
     public function RetrieveFeedFB($filter,$limit = 20){
-        $this->db->select('*, c.type as social_stream_type');
+        $this->db->select('*, c.type as social_stream_type, b.post_id as social_stream_post_id');
         $this->db->from("fb_user_engaged a INNER JOIN social_stream_fb_post b  
 			 ON b.author_id = a.facebook_id inner join social_stream c on c.post_id = b.post_id LEFT JOIN
                          `case` d on d.post_id = c.post_id ");
@@ -435,7 +435,7 @@ class facebook_model extends CI_Model
     }
     
     public function RetrievePostFB($filter){
-        $this->db->select('*, c.type as social_stream_type');
+        $this->db->select('*, c.type as social_stream_type, a.post_id as social_stream_post_id');
         $this->db->from("fb_user_engaged a INNER JOIN social_stream_fb_post b ON b.author_id=a.facebook_id
 			inner join social_stream c on c.post_id = b.post_id LEFT JOIN
                         `case` d on d.post_id = c.post_id ");
@@ -455,7 +455,7 @@ class facebook_model extends CI_Model
                 where a.post_id='".$post_id."'
                 ORDER BY post_id desc";
         $query = $this->db->query($sql);
-        $result = $query->result();       
+        $result = $query->result();
         return $result;  
     }
     

@@ -116,7 +116,15 @@ class Users extends MY_Controller {
 		//else
 		//{
 		    $image = $this->upload->data();
-		    $dir = "media/dynamic/".$image['file_name'];
+		    if (empty($_FILES['userfile']['name']))
+		    {
+			 $dir = NULL;
+		    }
+		    else
+		    {
+			$dir = "media/dynamic/".$image['file_name']; 
+		    }
+		    
 		    /*
 		    $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 		    $count = mb_strlen($chars);
@@ -394,6 +402,13 @@ class Users extends MY_Controller {
     //============================ ROLE ===================================
     function menu_role()
     {
+	  $select_role = $this->users_model->select_role();
+	  foreach($select_role->result() as $v1)
+	  {
+	       $select_user = $this->users_model->count_role_user($v1->role_collection_id);
+	       $count_role[] = $select_user->row()->count_role;
+	  }
+	  
 	  $config['base_url'] = base_url().'users/menu_role';
 	  $config['total_rows'] = $this->users_model->count_record_role();
 	  $config['per_page'] = 10;
@@ -412,7 +427,7 @@ class Users extends MY_Controller {
 	  
 	  $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
 	  $data['show'] = $this->users_model->select_role1($config["per_page"], $page);
-     
+	  $data['count_role'] = $count_role;
 	  $data['links'] = $this->pagination->create_links();
 	  $data['count'] = $this->users_model->count_record_role();
 	  
@@ -443,6 +458,13 @@ class Users extends MY_Controller {
     
     function insert_role()
     {
+	  $select_role = $this->users_model->select_role();
+	  foreach($select_role->result() as $v1)
+	  {
+	       $select_user = $this->users_model->count_role_user($v1->role_collection_id);
+	       $count_role[] = $select_user->row()->count_role;
+	  }
+     
 	  $this->form_validation->set_rules('new_role', 'Role Name', 'required');
 	  if($this->form_validation->run() == FALSE)
 	       {
@@ -464,6 +486,7 @@ class Users extends MY_Controller {
 		    
 		    $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
 		    $data['show'] = $this->users_model->select_role1($config["per_page"], $page);
+		    $data['count_role'] = $count_role;
 	       
 		    $data['links'] = $this->pagination->create_links();
 		    $data['count'] = $this->users_model->count_record_role();
@@ -703,6 +726,13 @@ class Users extends MY_Controller {
     //============================= GROUP =================================
     function menu_group()
     {
+	  $select_group = $this->users_model->select_group();
+	  foreach($select_group->result() as $v1)
+	  {
+	       $select_user = $this->users_model->count_group_user($v1->group_id);
+	       $count_group[] = $select_user->row()->count_group; 
+	  }
+	  
 	  $config['base_url'] = base_url().'users/menu_group';
 	  $config['total_rows'] = $this->users_model->count_record_group();
 	  $config['per_page'] = 10;
@@ -721,6 +751,7 @@ class Users extends MY_Controller {
 	  
 	  $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
 	  $data['group'] = $this->users_model->select_group1($config["per_page"], $page);
+	  $data['count_group'] = $count_group;
      
 	  $data['links'] = $this->pagination->create_links();
 	  $data['count'] = $this->users_model->count_record_group();
@@ -732,8 +763,23 @@ class Users extends MY_Controller {
     
     function insert_group()
     {	
+	  $select_group = $this->users_model->select_group();
+	  foreach($select_group->result() as $v1)
+	  {
+	       $select_user = $this->users_model->count_group_user($v1->group_id);
+	       $count_group[] = $select_user->row()->count_group; 
+	  }
+	  
 	  $this->form_validation->set_rules('group_name', 'Group Name', 'required');
-	  if($this->form_validation->run() == FALSE)
+	  
+	  $group = $this->input->post('group_name');
+	  $cek = $this->users_model->select_byName($group);
+	  if($cek->num_rows()>=1)
+	  {
+	       $this->session->set_flashdata('double', TRUE);
+	       redirect('users/menu_group');
+	  }
+	  elseif($this->form_validation->run() == FALSE)
 	       {
 		    $config['base_url'] = base_url().'users/menu_group';
 		    $config['total_rows'] = $this->users_model->count_record_group();
@@ -753,6 +799,7 @@ class Users extends MY_Controller {
 		    
 		    $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
 		    $data['group'] = $this->users_model->select_group1($config["per_page"], $page);
+		    $data['count_group'] = $count_group;
 	       
 		    $data['links'] = $this->pagination->create_links();
 		    $data['count'] = $this->users_model->count_record_group();
@@ -823,7 +870,30 @@ class Users extends MY_Controller {
     {
 	  $this->form_validation->set_rules('group_name', 'Group Name', 'required');
 	  $id = $this->input->post('group_id');
-	  if($this->form_validation->run() == FALSE)
+	  $group = $this->input->post('group_name');
+	  $cek = $this->users_model->select_byName($group);
+	  if($group!=$this->input->post('g_name'))
+	  {
+	       if($cek->row()->group_name==$group)
+	       {
+		    $id = $this->input->post('group_id');
+		    $data = array(
+			      'group' => $this->users_model->edit_group($id),
+			      'group_detail' => $this->users_model->edit_group_detail($id),
+			      'channel' => $this->users_model->select_channel(),
+			      'msge' => 1
+			     );
+		    //$this->session->set_flashdata('double', TRUE);
+		    $this->load->view('users/group_edit',$data);
+	       }
+	  }
+	  
+	  elseif($group==$this->input->post('g_name'))
+	  {
+	       redirect('users/menu_group');
+	  }
+	  
+	  elseif($this->form_validation->run() == FALSE)
 	  {
 	       $data = array(
 			 'group' => $this->users_model->edit_group($id),

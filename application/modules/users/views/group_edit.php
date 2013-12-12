@@ -1,5 +1,13 @@
 <div class="row-fluid" style="width: 80%; margin: 0px auto;">
 <!--<span style="font-size: 14pt; color: black; margin: 5px 0;">USER MANAGEMENT</span>-->
+    <?php
+	//$msge = $this->session->flashdata('double');
+	if($msge!=NULL){ ?>
+        <div class="alert alert-info" style='background: #ffe4e4; color: #b94a48; border-color: #eed3d7;'>
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Group Name already registered.</strong>
+        </div>
+    <?php }?>
     <div class="cms-content row-fluid">
         <div class="cms-filter pull-left">
             <input class="btn" onclick='menu_user()' type="button" name="btn_user" value="User" /> <br />
@@ -20,6 +28,7 @@
                             <input type='text' name='group_name' value='<?php echo $group->row()->group_name;?>' />
                             <span style='color:red;'><?php echo form_error('group_name'); ?></span>
                             <input type='hidden' name='group_id' value='<?php echo $group->row()->group_id;?>' />
+                            <input type='hidden' name='g_name' value='<?php echo $group->row()->group_name;?>' />
                         </td>
                     </tr>
                     <tr>

@@ -116,7 +116,7 @@ class twitter_model extends CI_Model
         $timezone = new DateTimeZone("Europe/London");
         $created_at = new DateTime($tweet->created_at, $timezone);
         $retrieved_at = new DateTime(date("Y-m-d H:i:s e"), $timezone);
-        $post_id = $this->GetTweetId($tweet->id_str, "twitter", $channel->channel_id);
+        $post_id = $this->GetTweetId($tweet->id_str, "twitter", $channel->channel_id, $come_from);
         $in_reply_to = $this->GetTweetId($tweet->in_reply_to_status_id_str, "twitter", $channel->channel_id);
         $social_stream = array(
 	    "post_stream_id" => $tweet->id_str,
@@ -253,14 +253,22 @@ class twitter_model extends CI_Model
         return $this->db->get()->row();
     }
     
-    public function GetTweetId($post_stream_id, $type = "twitter", $channel_id){
-        $this->db->select("post_id");
-        $this->db->from("social_stream");
-        $this->db->where(array(
-                               "post_stream_id" => $post_stream_id,
-                               "type" => $type,
-                               "channel_id" => $channel_id
-                        ));
+    public function GetTweetId($post_stream_id, $type = "twitter", $channel_id, $detail_type = "mentions"){
+        $this->db->select("a.post_id");
+        $filter = array(
+                    "post_stream_id" => $post_stream_id,
+                    "a.type" => $type,
+                    "channel_id" => $channel_id
+             );
+        if($type == "twitter"){
+            $this->db->from("social_stream a left join social_stream_twitter b on a.post_id = b.post_id");
+            $filter['b.type'] = $detail_type;
+        }
+        else{
+            $this->db->from("social_stream a");
+            
+        }
+        $this->db->where($filter);
         return $this->db->get()->row();
     }
 
@@ -273,7 +281,7 @@ class twitter_model extends CI_Model
     
     public function ReadDMFromDb($filter,$limit){
          $this->db->select("a.channel_id, a.is_read, a.post_stream_id, a.retrieved_at, a.created_at,b.*,c.*");
-         $this->db->from("social_stream a inner join twitter_direct_messages b on a.post_id = b.post_id LEFT OUTER JOIN twitter_user_engaged c ON c.twitter_user_id=b.sender"); 
+         $this->db->from("social_stream a inner join twitter_direct_messages b on a.post_id = b.post_id LEFT OUTER JOIN twitter_user_engaged c ON c.twitter_user_id=b.sender left join `case` d on d.post_id = a.post_id"); 
          if(count($filter) > 0)
 	     $this->db->where($filter);
          $this->db->limit($limit);           
@@ -312,7 +320,7 @@ class twitter_model extends CI_Model
         $this->db->select("count(b.post_id) as count_post_id");
         $this->db->from("social_stream a INNER JOIN social_stream_twitter b ON a.post_id = b.post_id 
                         INNER JOIN twitter_user_engaged c ON
-                        c.twitter_user_id = b.twitter_user_id");
+                        c.twitter_user_id = b.twitter_user_id left join `case` d on d.post_id = a.post_id");
         if(count($filter) > 0)
 	    $this->db->where($filter);
         $this->db->order_by('b.created_at','desc');           
@@ -323,7 +331,7 @@ class twitter_model extends CI_Model
         $this->db->select("SELECT a.`type`, SUM(a.is_read)");
         $this->db->from("social_stream a INNER JOIN social_stream_twitter b ON a.post_id = b.post_id 
                         INNER JOIN twitter_user_engaged c ON
-                        c.twitter_user_id = b.twitter_user_id");
+                        c.twitter_user_id = b.twitter_user_id left join `case` d on d.post_id = a.post_id");
         $this->db->group_by("a.type");
         return $this->db->get()->result();
     }

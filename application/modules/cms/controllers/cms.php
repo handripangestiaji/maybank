@@ -245,4 +245,21 @@ class Cms extends MY_Controller {
         
         $this->load->view('cms/index',$data);
     }
+    
+    public function url()
+    {
+	    $c = $this->uri->segment(3);
+	    
+	    if($c)
+	    {
+		    try {
+			    $url = $this->shorturl->shortCodeToUrl($c);
+			    redirect($url);
+			    exit;
+		    } catch (Exception $e) {
+			    redirect('cms/create_short_url');
+		    }
+	    }
+	    
+    }
 }

@@ -104,10 +104,10 @@
                 </thead>
                 
                 <tbody>
-                    <?php foreach($group as $gr){?>
+                    <?php $i=0; foreach($group as $gr){?>
                     <tr>
                         <td><?php echo $gr->group_name;?></td>
-                        <td>0</td>
+                        <td><?php echo $count_group[$i]?></td>
                         <td>
                             <?php
                                 foreach($group_detail->result() as $gd)
@@ -129,16 +129,16 @@
                         <td><a href="<?php echo site_url('users/edit_group/'.$gr->group_id);?>"><span><i class="icon-pencil"></i></span></a></td>
                         <td><a href="" onclick="show_confirm('<?php echo $gr->group_id;?>');return false;"><span><i class="icon-remove"></i></span></a></td>
                     </tr>
-                    <?php }?>
+                    <?php $i++;}?>
                 </tbody>
                 
             </table>
-            <?php if($count>10){?>
+            <!--<?php //if($count>10){?>
             <div class="page pull-right" style="margin-top: 30px;">
-                <?php echo $links; ?>
+                <?php //echo $links; ?>
             </div>
-            <?php }?>
-            
+            <?php //}?>
+            -->
         </div>
     </div>
 </div>

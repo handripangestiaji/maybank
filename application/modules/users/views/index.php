@@ -73,7 +73,7 @@
                 </table>
             </div>
             <div style="float: right; margin-top: -10px;">
-                <input type="text" id="search_user" name="search_user" placeholder="Search User name, Email or ID" />
+                <input type="text" id="search_user" name="search_user" placeholder="Search Name, Email or User ID" />
                 
                 <button onclick=''><span><i class="icon-search"></i></span></button>
             </div>
@@ -98,7 +98,7 @@
                     {
                         foreach($show as $row){?>
                     <tr>
-                        <td><?php echo $row->user_id;?></td>
+                        <td><?php echo $row->username;?></td>
                         <td><?php echo $row->display_name;?></td>
                         <td><?php echo $row->email;?></td>
                         <td><?php echo $row->role_name;?></td>

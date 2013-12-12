@@ -216,13 +216,45 @@ class Media_stream extends CI_Controller {
 	    $this->load->library('Twitteroauth');
 	    $this->connection = $this->twitteroauth->create($this->config->item('twitter_consumer_token'),$this->config->item('twitter_consumer_secret'), $channel->oauth_token,
 							    $channel->oauth_secret);
-	    $result=$this->connection->post('statuses/update', $parameters);
+	    
+	    if($twitter_reply['image_to_post']){
+		
+		$this->load->helper('file');
+		$img = $twitter_reply['image_to_post'];
+		$img = str_replace('data:image/png;base64,', '', $img);
+		$img = str_replace('data:image/jpeg;base64,', '', $img);
+		$img = str_replace(' ', '+', $img);
+		$data = base64_decode($img);
+		$file_name = uniqid().'.png';
+		$pathToSave = $this->config->item('assets_folder').'/'.$file_name;
+		if ( ! write_file($pathToSave, $data)){
+		    $validation = array('result' => FALSE,'name' => 'image '.$pathToSave,'error_code' => 112);
+		    $result=$this->connection->post('statuses/update', $parameters);
+		}
+		else{
+		    $parameters['media[]'] = "@{getcwd()./media/dynamic/".$file_name.'}';
+		    $result=$this->connection->post('statuses/update_with_media', $parameters);
+		}
+	    }
+	    else{
+		$result=$this->connection->post('statuses/update', $parameters);
+	    }
+	   
+	    
 	    $return = $this->twitter_model->CreateReply($twitter_reply, $result, $channel);
 	    
 	    if($return){
 		echo json_encode(array(
 		    'success' => true,
-		    'message' => "Reply tweet successfully done."
+		    'message' => "Reply tweet successfully done.",
+		    'result' => $result
+		));
+	    }
+	    else{
+		echo json_encode(array(
+		    'success' => false,
+		    'message' => "Reply tweet was failed.",
+		    'result' => $result
 		));
 	    }
 	    
@@ -271,7 +303,7 @@ class Media_stream extends CI_Controller {
 		    $this->account_model->CreateRetweetAction($action, $result, $twitter_data, $channel);
 		}
 		else if($type == 'favorite'){
-		    $result = $this->connection->post('favorite/create', array('id' => $twitter_data->post_stream_id));
+		    $result = $this->connection->post('favorites/create', array('id' => $twitter_data->post_stream_id));
 		    $this->account_model->CreateFavoriteAction($action, $result, $twitter_data, $channel);
 		}
 		echo json_encode(array(
@@ -292,7 +324,9 @@ class Media_stream extends CI_Controller {
 	}
 	
     }
-
+    function ActionTwitterDelete(){
+	
+    }
     //=========================================facebook function=============================================
     public function fb_access_token(){
 	$app_id = $this->config->item('fb_appid');
@@ -571,7 +605,7 @@ class Media_stream extends CI_Controller {
 	$params['user_id'] = $this->session->userdata('user_id');
 	
 	$config = array(
-				array(
+				array(	
 					'field' => 'long_url',
 					'label' => 'Full Url',
 					'rules' => 'required'
@@ -601,7 +635,24 @@ class Media_stream extends CI_Controller {
 		echo json_encode($setparam);
 	}
 	else{
-	    echo json_encode(array('message' => 'Something error. Make sure you have select a campaign and put the full url in the insert link box.'));
+	    echo json_encode(array('message' => 'Something error. Make sure you have select a campaign and put the full url in the insert link box.', "success" => FALSE));
 	}
+    }
+    
+    public function GenerateShortUrlWithoutCampaign(){
+	header("Content-Type: application/x-json");
+	$this->load->model(array('tag_model', 'product_model', 'campaign_model', 'shorturl_model', 'campaign_url_model'));
+	$this->load->library('Shorturl');
+	$short_code = substr( md5( time().uniqid().rand() ), 0, 6 );
+	echo json_encode($this->shorturl->urlToShortCode(array(
+				    'long_url' => $this->input->post('url'),
+				    "user_id" => $this->session->userdata('user_id'),
+				    'short_code' => $short_code,
+				    "description" => "quick_reply",
+				    'increment' => 0)));
+    }
+    
+    public function CreateImage(){
+	
     }
 }

@@ -65,7 +65,7 @@ $config['item_perpage']=10;
 $config['timezone']='Asia/Jakarta';
 
 $config['url_suffix'] = '';
-
+$config['assets_folder'] = './media/dynamic/';
 /*
 |--------------------------------------------------------------------------
 | Default Language

@@ -58,7 +58,7 @@ $(function(){
                 post_id : $(modalID + " input[name=twitter_user_id]").val()
             },
             callback : function(response){
-                console.log(response);
+                //console.log(response);
                 $(modalID + " .loader-image").hide();
                 for(i = 0; i<response.length;i++){
                     $(modalID + ' form').append(
@@ -143,8 +143,36 @@ $(function(){
         e.preventDefault();
     });
     
+    $('form.update_profil').submit(function(e){
+        var display = $(this).find('input[name=display-name]').val();
+        var about = $(this).find('.about-me').val();
+        var me = $(this);
+        
+        $.ajax({
+                "url" : BASEURL + "users/users_json/update_profil",
+                "data" : {display : display,
+                          about: about  },
+                "type" : "POST",
+                "success" : function(response){
+                                if(response == false){
+                                    alert("GAGAL1");
+                                }
+                                else{
+                                    me.find('.yes_update').html('<div class="alert alert-success">' +
+                                    '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
+                                    '<h4>Update</h4> Profile updated sucessfully!</div>');
+                                }
+                            },
+                "failed" : function()
+                {
+                    alert("GAGAL2");
+                }
+            });
+        e.preventDefault();
+    });
     
-    $(this).on('submit','.reply-tweet', function(e){
+    
+    $(this).on('submit','.reply-tweet ', function(e){
         var buttonSubmit = $(this).find('button[type=submit]');
         buttonSubmit.attr('disabled', 'disabled').html('SENDING...');
         var me = $(this);
@@ -152,7 +180,8 @@ $(function(){
         $.ajax({
             "url" : BASEURL + "dashboard/media_stream/ReplyTwitter",
             "type" : "POST",
-            "data" : $(this).serialize() + "&channel_id=" + $(this).closest('.floatingBox').find('input.channel-id').val(),
+            "data" : $(this).serialize() + "&channel_id=" + $(this).closest('.floatingBox').find('input.channel-id').val() +
+                        "&filename=" + ($(this).find('#reply-preview-img').attr('src') == undefined ? '' :  $(this).find('#reply-preview-img').attr('src') == undefined),
             "success" : function(response){
                 buttonSubmit.removeAttr('disabled').html('SEND');
                 try{

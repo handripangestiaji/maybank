@@ -89,7 +89,8 @@ for($i=0; $i<count($fb_feed);$i++):?>
                 <div class="reply-engagement-field hide">
                     <?php
                     $data['fb_feed'] = $comment;
-                    $data['i'] = $i;
+                    $data['i'] = $j;
+                    $data['reply_type']='reply_nested';
                     $this->load->view('dashboard/reply_field_facebook', $data)?>  
                 </div>
                 <div class="case-engagement-field hide">
@@ -202,6 +203,7 @@ for($i=0; $i<count($fb_feed);$i++):?>
     <?php
     $data['fb_feed'] = $fb_feed;
     $data['i'] = $i;
+    $data['reply_type']='reply_comment';
     $this->load->view('dashboard/reply_field_facebook', $data)?>  
     </div>
     <!-- END REPLY -->

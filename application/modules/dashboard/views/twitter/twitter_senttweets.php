@@ -19,7 +19,7 @@ for($i=0;$i<count($senttweets);$i++){
             echo $date->format('l, M j, Y h:i A');
             $entities = json_decode($senttweets[$i]->twitter_entities);
             //echo date('l, M j, Y H:i:s',strtotime($senttweets[$i]->created_at));?></span>
-            <i class="icon-play-circle moreOptions pull-right"></i>
+            
         </p>
     <p><?php
     

@@ -280,8 +280,12 @@ class twitter_model extends CI_Model
     }
     
     public function ReadDMFromDb($filter,$limit){
-         $this->db->select("a.channel_id, a.is_read, a.post_stream_id, a.retrieved_at, a.created_at,b.*,c.*");
-         $this->db->from("social_stream a inner join twitter_direct_messages b on a.post_id = b.post_id LEFT OUTER JOIN twitter_user_engaged c ON c.twitter_user_id=b.sender left join `case` d on d.post_id = a.post_id"); 
+        $filter['b.type'] = 'inbox';
+         $this->db->select("a.post_id as social_stream_post_id, a.channel_id, a.is_read, a.post_stream_id, a.retrieved_at, a.created_at, b.text as dm_text, b.*,c.*, d.*, e.*");
+         $this->db->from("social_stream a inner join twitter_direct_messages b on a.post_id = b.post_id
+            LEFT OUTER JOIN twitter_user_engaged c ON c.twitter_user_id=b.sender left join `case` d on d.post_id = a.post_id
+            LEFT JOIN twitter_reply e on a.post_id = e.reply_to_post_id
+            "); 
          if(count($filter) > 0)
 	     $this->db->where($filter);
          $this->db->limit($limit);           
@@ -338,16 +342,19 @@ class twitter_model extends CI_Model
     
     
     public function CreateReply($reply, $tweet_replied, $channel, $type = "twitter"){
-        $saved_tweet = $this->SaveTweets($tweet_replied, $channel, "user_timeline");
-        if(isset($saved_tweet)){
-            $reply['created_at'] = date("Y-m-d H:i:s");
-            $reply['response_post_id'] = $saved_tweet[0]['post_id'];
-            $this->db->insert('twitter_reply',$reply);
-            return $this->db->insert_id();    
+        if(isset($tweet_replied->id_str)){
+            $saved_tweet = $this->SaveTweets($tweet_replied, $channel, "user_timeline");
+            if(isset($saved_tweet)){
+                $reply['created_at'] = date("Y-m-d H:i:s");
+                $reply['response_post_id'] = $saved_tweet[0]['post_id'];
+                $this->db->insert('twitter_reply',$reply);
+                return $this->db->insert_id();    
+            }
+            else{
+                return null;
+            }
         }
-        else{
-            return null;
-        }
+        return null;
         
     }
     

@@ -44,6 +44,12 @@ class Users_model extends CI_Model
         return $this->db->get($this->user);
     }
     
+    function check_user($user)
+    {
+        $this->db->where('username',$user);
+        return $this->db->get($this->user);
+    }
+    
     function select_user_login($id)
     {
         $this->db->select('user.*,role_collection.role_name,user_group.group_name,user.full_name');
@@ -228,9 +234,11 @@ class Users_model extends CI_Model
         return $this->db->count_all($this->group);
     }
     
-    function select_group()
+    function select_group($filter = array())
     {
         $this->db->select('*');
+        if(count($filter) > 0)
+            $this->db->where($filter);
         return $this->db->get($this->group);
     }
     
@@ -357,5 +365,10 @@ class Users_model extends CI_Model
         $this->db->where('user_id',$id);
         $this->db->where('logout_time',NULL);
         return $this->db->update($this->activity,$data);
+    }
+    
+    function get_group_detail($filter){
+        $this->db->where($filter);
+        return $this->db->get($this->user_group_detail);
     }
 }

@@ -46,7 +46,7 @@ class Shorturl_model extends CI_Model
 					"long_url" 		=> $params['long_url'],
 					"short_code" 	=> $params['short_code'],
 					"user_id" 		=> $params['user_id'],
-					"description" 	=> $params['description']
+					"description" 	=> isset($params['description']) ? $params['description'] : ""
 				);
 		
 		$this->db->trans_start();

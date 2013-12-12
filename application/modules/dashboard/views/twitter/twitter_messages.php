@@ -4,7 +4,7 @@
     for($i=0;$i<count($directmessage);$i++){
     ?>
     <li>
-        <input type="hidden" class="postId" value="<?php echo $directmessage[$i]->post_id; ?>" />
+        <input type="hidden" class="postId" value="<?php echo $directmessage[$i]->social_stream_post_id; ?>" />
         <div class="circleAvatar"><img src="<?php echo $directmessage[$i]->sender->profile_image_url; ?>" alt=""></div>
         <div class="read-mark <?php if($directmessage[$i]->is_read==0){echo 'redText';} else { echo 'greyText'; } ?>"><i class="icon-bookmark icon-large"></i></div>
         <br />
@@ -23,8 +23,19 @@
             </span>
             
         </p>
-        <p><?php echo $directmessage[$i]->text;?></p>
-        <p><button type="button" class="btn btn-warning btn-mini">OPEN</button></p>
+        <p><?php echo $directmessage[$i]->dm_text;?>
+        </p>
+        <p class="indicator">
+        <?php if($directmessage[$i]->case_id):?>
+            <button type="button" class="btn btn-purple btn-mini" value="<?php echo $directmessage[$i]->case_id?>">CASE ID #<?php echo $directmessage[$i]->case_id?> </button>
+        <?php endif?>
+        <?php if($directmessage[$i]->response_post_id):?>
+            <button type="button" class="btn btn-inverse btn-mini" value="<?php echo $directmessage[$i]->response_post_id?>">REPLIED</button>
+        <?php endif?>
+        <?php if(!$directmessage[$i]->response_post_id && !$directmessage[$i]->case_id):?>
+            <button type="button" class="btn btn-warning btn-mini">OPEN</button>
+        <?php endif?>
+        </p>
         <h4 class="filled">
         <a role="button" href="#"><i class="icon-trash greyText"></i></a>
         <div class="pull-right">

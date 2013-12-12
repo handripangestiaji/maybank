@@ -17,7 +17,7 @@
           	
           		<tr class="table-head-tr">
 	          		<td><?php echo $v['campaign_name']; ?></td>
-	          		<td><?php echo implode(" , ",$v['product_name']); ?></td>
+	          		<td><?php echo isset($v['product_name']) ? implode(" , ",$v['product_name']) : ""; ?></td>
 	          		<td><?php echo $v['created_at']; ?></td>
 	          		<td><?php echo $v['display_name']; ?></td>
 	          		<td><button class="btn btn-mini btn-primary pull-right table-btn-show-sub" type="button">Show <i class="icon-caret-down"></i></button></td>
@@ -26,7 +26,7 @@
           		<tr class="table-sub-tr">
 	                <td colspan="5" class="table-sub-td" style="background-color: #7F7B96; padding: 15px;">
 	                    <div class="pull-left" style="width: 70%; color: #FFFFFF;">
-	                        <p><span style="font-weight: bold">TAG: <?php echo implode(" , ",$v['tag_name']); ?></span></p>
+	                        <p><span style="font-weight: bold">TAG: <?php echo isset($v['tag_name']) ? implode(" , ",$v['tag_name']) : ""; ?></span></p>
 	                        <p><span style="font-weight: bold">Description:</span> <?php echo $v['description']?></p>
 	                        <p><span style="font-weight: bold">Total Clicks:</span> <?php echo $v['total_clicks']?> Clicks &nbsp;&nbsp;&nbsp; <span style="font-weight: bold">Total URL Created:</span> <?php echo count($v['short_urls']) ?></p>
 	                    </div>

@@ -271,7 +271,7 @@ class Media_stream extends CI_Controller {
 		    $this->account_model->CreateRetweetAction($action, $result, $twitter_data, $channel);
 		}
 		else if($type == 'favorite'){
-		    $result = $this->connection->post('favorite/create', array('id' => $twitter_data->post_stream_id));
+		    $result = $this->connection->post('favorites/create', array('id' => $twitter_data->post_stream_id));
 		    $this->account_model->CreateFavoriteAction($action, $result, $twitter_data, $channel);
 		}
 		echo json_encode(array(
@@ -292,7 +292,9 @@ class Media_stream extends CI_Controller {
 	}
 	
     }
-
+    function ActionTwitterDelete(){
+	
+    }
     //=========================================facebook function=============================================
     public function fb_access_token(){
 	$app_id = $this->config->item('fb_appid');
@@ -571,7 +573,7 @@ class Media_stream extends CI_Controller {
 	$params['user_id'] = $this->session->userdata('user_id');
 	
 	$config = array(
-				array(
+				array(	
 					'field' => 'long_url',
 					'label' => 'Full Url',
 					'rules' => 'required'
@@ -601,7 +603,20 @@ class Media_stream extends CI_Controller {
 		echo json_encode($setparam);
 	}
 	else{
-	    echo json_encode(array('message' => 'Something error. Make sure you have select a campaign and put the full url in the insert link box.'));
+	    echo json_encode(array('message' => 'Something error. Make sure you have select a campaign and put the full url in the insert link box.', "success" => FALSE));
 	}
+    }
+    
+    public function GenerateShortUrlWithoutCampaign(){
+	header("Content-Type: application/x-json");
+	$this->load->model(array('tag_model', 'product_model', 'campaign_model', 'shorturl_model', 'campaign_url_model'));
+	$this->load->library('Shorturl');
+	$short_code = substr( md5( time().uniqid().rand() ), 0, 6 );
+	echo json_encode($this->shorturl->urlToShortCode(array(
+				    'long_url' => $this->input->post('url'),
+				    "user_id" => $this->session->userdata('user_id'),
+				    'short_code' => $short_code,
+				    "description" => "quick_reply",
+				    'increment' => 0)));
     }
 }

@@ -144,7 +144,7 @@ $(function(){
     });
     
     
-    $(this).on('submit','.reply-tweet', function(e){
+    $(this).on('submit','.reply-tweet ', function(e){
         var buttonSubmit = $(this).find('button[type=submit]');
         buttonSubmit.attr('disabled', 'disabled').html('SENDING...');
         var me = $(this);

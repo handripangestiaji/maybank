@@ -71,10 +71,11 @@
         <button class="send_reply btn btn-primary btn-small btn-send-reply" value="<?php 
         if(isset($fb_feed[$i]->comment_id)){
         echo $fb_feed[$i]->comment_stream_id;
-        }else{
-            echo $fb_feed[$i]->post_stream_id;
+        }else if(isset($fb_feed[$i]->social_stream_post_id)){
+            echo $fb_feed[$i]->social_stream_post_id;
         }
-        ?>">SEND</button>    
+        ?>">SEND</button>
+        
     </div>
     <br clear="all" />
     <!--div class="reply-status hide">MESSAGE SENT</div-->

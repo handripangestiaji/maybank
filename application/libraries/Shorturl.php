@@ -106,7 +106,7 @@ class Shorturl {
 		$params = $url;
 		$id = $this->_ci->shorturl_model->insert($params);
 		
-		//$shortCode = $this->convertIntToShortCode($id);
+		$shortCode = $this->convertIntToShortCode($id);
 		
 		$shortCode = $params['short_code'];
 		

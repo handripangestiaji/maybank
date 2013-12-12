@@ -19,7 +19,7 @@
                </select>
            </div>
            <br clear="all" />
-           <button href="#modalConfirm-<?php echo $posts[$i]->post_id ?>" data-toggle="modal"
+           <button href="#modalConfirm-<?php echo isset($posts[$i]->post_id) ? "" : "" ?>" data-toggle="modal"
             class="btn btn-small btn-purple btn-add-related <?php echo $posts[$i]->social_stream_type?>">Add Related Conversation</button>
             
            <input type="hidden" id="relatedCoversation-<?=$posts[$i]->post_id ?>" name="related_conversation" value="<?=$posts[$i]->post_id?>" />

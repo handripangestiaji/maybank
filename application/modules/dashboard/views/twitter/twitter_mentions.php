@@ -135,7 +135,7 @@ for($i=0;$i<count($mentions);$i++){
                 <button class="btn btn-reply btn-primary" data-toggle="modal" value="<?=$mentions[$i]->post_id?>"><i class="icon-mail-reply"></i></button>
                 <button type="button" class="retweet btn btn-primary" value="<?=$mentions[$i]->post_id?>"><i class="icon-retweet"><span></span></i></button>
                 <button class="btn btn-dm btn-primary" data-toggle="modal"><i class="icon-envelope"></i></button>
-                <button type="button" class="favorit btn btn-primary"><i class="icon-star"></i></button>
+                <button type="button" class="favorit btn btn-primary"><i class="icon-star"></i><span></span></button>
                 
                 <?php if($mentions[$i]->following=='1'){ ?>
                 <button type="button" class="unfollow btn"><i class="icon-user"></i></button>
@@ -179,7 +179,7 @@ for($i=0;$i<count($mentions);$i++){
             <br clear="all" />
             <div class="pull-left">
                 <i class="icon-link"></i>
-                <input type="text" class="span8"><button class="btn btn-primary btn-mini" style="margin-left: 5px;">SHORTEN</button>
+                <input type="text" class="span8"><a href="#" class="btn btn-primary btn-mini" style="margin-left: 5px;">SHORTEN</a>
             </div>
             <div class="pull-right">
                 <i class="icon-camera"></i>

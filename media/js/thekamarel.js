@@ -455,11 +455,15 @@ $(function(){
                         var is_read = $(this).val();
                         if($(this).closest('div').prev().find('i').attr('class') == 'icon-facebook'){
                             $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');        
-                            $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/facebook_stream/' + social_id + '/' + is_read);
+                            $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/facebook_stream/' + social_id + '/' + is_read, function(){
+                                $(this).find('.channel-id').val(social_id);
+                            });
                         }
                         else if($(this).closest('div').prev().find('i').attr('class') == 'icon-twitter'){
                             $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');        
-                            $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/twitter_stream/' + social_id + '/' + is_read);
+                            $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/twitter_stream/' + social_id + '/' + is_read, function(){
+                                $(this).find('.channel-id').val(social_id);
+                            });
                         }
                     });
                     var increment = 1;
@@ -721,8 +725,10 @@ $(function(){
                        });
                     });
                     
-                    $(this).on('click','.reply-insert-link-btn', function(){
+                    $(this).on('click','.reply-insert-link-btn', function(e){
                         var me = $(this);
+                        e.preventDefault();
+                        me.attr("disabled", "disabled").html("SHORTENING...");
                         me.siblings(".reply-insert-link-text").linkpreview({
                             previewContainer: me.closest('.pull-left').siblings('#reply-url-show').find('div.reply-url-show-content'),  //optional
                             //previewContainerClass: ".compose-schedule",
@@ -738,6 +744,23 @@ $(function(){
                             onComplete: function() {                 //optional
                             }
                        });
+                        
+                        $.ajax({
+                           "url" : BASEURL + "dashboard/media_stream/GenerateShortUrlWithoutCampaign",
+                           "data" : {
+                                "url" : me.siblings(".reply-insert-link-text").val()
+                           },
+                           "type" : "POST",
+                           "success" : function (response){
+                                me.removeAttr("disabled").html("SHORTEN");
+                                tweetsText = me.closest('form').find(".replaycontent");
+                                tweetsText.val(tweetsText.val() + " http://maybank.co/" + response.shortcode);
+                           },
+                           failed : function(response){
+                                me.removeAttr("disabled").html("SHORTEN");
+                           }
+                           
+                        });
                     });
 
                      $( "#close-url" ).click(function() {
@@ -928,28 +951,39 @@ $(function(){
                         $('.compose-textbox').val($('.compose-textbox').val() + $(".select-shorten-url option:selected").val());
                     });
                     
-                    $(".destroy_status").click(function() {
-                        $.ajax({
-                            url : BASEURL + 'dashboard/socialmedia/twitterAction',
-                            type: "POST",
-                            data: {
-                                    action:'destroy_status',
-                                    str_id: $(".pull-right").siblings(".str_id").val()
-                                   },
-                            success: function()
-                            {
-                                $('.compose-post-status').show();
-                                $('.compose-post-status').fadeOut(5000);
-                            },
-                        });
+                    $(this).on('click', ".destroy_status", function() {
+                        var btnDestroyStatus = $(this);
+                        var confirmStatus = confirm("Are you sure want to delete this status?")
+                        if(confirmStatus == true){
+                            $.ajax({
+                                url : BASEURL + 'dashboard/socialmedia/TwitterDeleteStatus',
+                                type: "POST",
+                                data: {
+                                    post_id : btnDestroyStatus.closest('li').find('.postId').val(),
+                                    channel_id : $(this).closest('.floatingBox').find('input.channel-id').val()
+                                },
+                                success: function(response)
+                                {
+                                    
+                                },
+                                failed : function(response){
+                                    
+                                }
+                            });    
+                        }
+                        
                     });
                     
-                     $(this).on('click','.retweet',
+                     $(this).on('click','.retweet, .favorit',
                         function() {
                         var retweetBtn = $(this);
-                        retweetBtn.attr('disabled', 'disabled').find('span').html('Retweeting...');
+                        var action = $(this).hasClass('favorit') ? "favorite" : "retweet";
+                        if(action == "retweet")
+                            retweetBtn.attr('disabled', 'disabled').find('span').html('Retweeting...');
+                        else
+                            retweetBtn.attr('disabled', 'disabled').find('span').html('Favoriting...');
                         $.ajax({
-                            url : BASEURL + 'dashboard/media_stream/ActionTwitter/retweet',
+                            url : BASEURL + 'dashboard/media_stream/ActionTwitter/' + action,
                             type: "POST",
                             data: {
                                 post_id : retweetBtn.closest('li').find('.postId').val(),
@@ -958,35 +992,24 @@ $(function(){
                             success: function(response){
                                 retweetBtn.removeAttr('disabled').find('span').html('');
                                 if(response.success == true){
-                                    retweetedBtn.closest('li').find('.indicator').append('<button type="button" class="btn btn-success btn-mini"><i class="icon-retweet"></i></button>');
+                                    if(action == 'favorite')
+                                        retweetedBtn.closest('li').find('.indicator').append('<button type="button" class="btn btn-success btn-mini"><i class="icon-star"></i></button>');
+                                    else
+                                        retweetedBtn.closest('li').find('.indicator').append('<button type="button" class="btn btn-success btn-mini"><i class="icon-retweet"></i></button>');
                                 }
                                 else{
                                     
                                 }
                             },
                             failed : function(response){
-                                
+                                if(action == 'favorite')
+                                        retweetedBtn.closest('li').find('.indicator').append('<button type="button" class="btn btn-success btn-mini"><i class="icon-star"></i></button>');
+                                else
+                                        retweetedBtn.closest('li').find('.indicator').append('<button type="button" class="btn btn-success btn-mini"><i class="icon-retweet"></i></button>');
                             }
                         });
                     });
                     
-                    $(this).on('click','.favorit',
-                        function() {
-                        $.ajax({
-                            url : BASEURL + 'dashboard/socialmedia/twitterAction',
-                            type: "POST",
-                            data: {
-                                action :'favorit',
-                                str_id : $(this).siblings(".str_id").val(),
-                                channel_id : $(this).closest('.floatingBox').find('input.channel-id').val()
-                            },
-                            success: function()
-                            {
-                                $('.compose-post-status').show();
-                                $('.compose-post-status').fadeOut(5000);
-                            },
-                        });
-                    });
 
                     $(this).on('click','.follow',
                         function() {
@@ -1309,11 +1332,15 @@ $.fn.RefreshAllStream = function(){
             var is_read = $(this).siblings('.containerHeadline').find('.change-read-unread-stream').val();
             if($(this).closest('div').prev().find('i').attr('class') == 'icon-facebook'){
                 $(this).html('&nbsp;&nbsp;Loading...');        
-                $(this).load(BASEURL + 'dashboard/media_stream/facebook_stream/' + channelId + '/' + is_read);
+                $(this).load(BASEURL + 'dashboard/media_stream/facebook_stream/' + channelId + '/' + is_read, function(){
+                    $(this).find('.channel-id').val(channelId);
+                });
             }
             else if($(this).closest('div').prev().find('i').attr('class') == 'icon-twitter'){
                 $(this).html('&nbsp;&nbsp;Loading...');        
-                $(this).load(BASEURL + 'dashboard/media_stream/twitter_stream/' + channelId + '/'+ is_read);
+                $(this).load(BASEURL + 'dashboard/media_stream/twitter_stream/' + channelId + '/'+ is_read, function(){
+                    $(this).find('.channel-id').val(channelId);
+                });
             }
         }
     });

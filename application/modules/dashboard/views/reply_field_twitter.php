@@ -20,7 +20,7 @@
      <div class="pull-left"  style="margin-bottom: 5px;">
         <i class="icon-link"></i>
         <input type="text" class="reply-insert-link-text">
-        <button class="reply-insert-link-btn btn btn-primary btn-mini" style="margin-left: 5px;">SHORTEN</button>
+        <a class="reply-insert-link-btn btn btn-primary btn-mini" style="margin-left: 5px;" href="#">SHORTEN</a>
     </div>
     <div class="pull-right">
         <a href="javascript:void(0);" id="reply-open-img">

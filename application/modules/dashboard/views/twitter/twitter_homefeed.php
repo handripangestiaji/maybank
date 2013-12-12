@@ -61,7 +61,7 @@ for($i=0;$i<count($homefeed);$i++){
     
     <p>
         <a role="button" class="btn-engagement"><i class="icon-eye-open"></i> Engagement</a> |
-        <a data-toggle="modal" role="button" href="#modaltweet<?php echo $i; ?>" ><i class="icon-retweet greyText"></i><?php //echo $homefeed[$i]->retweeted; ?> re-tweets</a>         
+        <a data-toggle="modal" role="button" href="#modaltweet<?php echo $i; ?>" ><i class="icon-retweet greyText"></i><?php echo $homefeed[$i]->retweet_count; ?> re-tweets</a>         
     </p>
     
     
@@ -147,7 +147,7 @@ for($i=0;$i<count($homefeed);$i++){
                 <button class="btn btn-reply btn-primary" data-toggle="modal" value="<?=$homefeed[$i]->post_id?>"><i class="icon-mail-reply"></i></button>
                 <button type="button" class="retweet btn btn-primary" value="<?=$homefeed[$i]->post_id?>"><i class="icon-retweet"></i><span></span></button>
                  <button class="btn btn-dm btn-primary" data-toggle="modal"><i class="icon-envelope"></i></button>
-                <button type="button" class="favorit btn btn-primary"><i class="icon-star"></i></button>
+                <button type="button" class="favorit btn btn-primary"><i class="icon-star"></i><span></span></button>
                 <?php if($homefeed[$i]->following=='1'){ ?>
                 <button type="button" class="unfollow btn"><i class="icon-user"></i></button>
                 <?php }else{ ?>

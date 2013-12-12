@@ -106,7 +106,7 @@ for($i=0; $i<count($fb_pm);$i++):?>
     <div class="reply-field hide">
         <?php
         $to_reply_field['fb_feed'] = $fb_pm;
-        $to_reply_field['i'] = $i;
+        $to_reply_field['i'] = $i - 1;
         $this->load->view('dashboard/reply_field_facebook', $to_reply_field)?>
      </div>
     <!-- END REPLY -->

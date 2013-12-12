@@ -46,7 +46,8 @@ for($i=0; $i<count($fb_feed);$i++):?>
     ?>
     </p>
 
-    <p><button type="button" class="btn btn-warning btn-mini">OPEN</button><button class="fblike btn btn-primary btn-mini" style="margin-left: 5px;" value="<?php echo $fb_feed[$i]->post_stream_id;?>"><?=$fb_feed[$i]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button> </p>
+    <p><button type="button" class="btn <?=$fb_feed[$i]->case_id != null ? "btn-purple" : "btn-warning btn-mini" ?>"><?=$fb_feed[$i]->case_id != null ? 'CASE #'.$fb_feed[$i]->case_id : 'OPEN'?></button>
+        <button class="fblike btn btn-primary btn-mini" style="margin-left: 5px;" value="<?php echo $fb_feed[$i]->post_stream_id;?>"><?=$fb_feed[$i]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button> </p>
     <p>
         <span class="btn-engagement"><i class="icon-eye-open"></i> <?php echo $fb_feed[$i]->total_comments;?> Engagements</span> |
         <span class="cyanText"><i class="icon-thumbs-up-alt"></i></i> <?php echo $fb_feed[$i]->total_likes; ?> likes</span> 
@@ -79,12 +80,14 @@ for($i=0; $i<count($fb_feed);$i++):?>
                 <p>
                     <button type="button" class="btn btn-warning btn-mini">OPEN</button>
                     <button class="fblike btn btn-primary btn-mini" value="<?=$comment[$j]->post_stream_id?>"><?=$comment[$j]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button>
-                    <button type="button" class="btn btn-primary btn-engagement-reply btn-mini"><i class="icon-mail-reply"></i></button>
+                    <?php if(($comment[$j]->comment_id)=='0'){?>
+                    <button type="button" class="btn btn-primary btn-engagement-reply btn-mini" ><i class="icon-mail-reply"></i></button>
+                    <?php } ?>
                    <button type="button" class="btn btn-danger btn-engagement-case btn-mini"><i class="icon-plus"></i> CASE</button>
                 </p>
                 <div class="reply-engagement-field hide">
                     <?php
-                    $data['fb_feed'] = $fb_feed;
+                    $data['fb_feed'] = $comment;
                     $data['i'] = $i;
                     $this->load->view('dashboard/reply_field_facebook', $data)?>  
                 </div>
@@ -184,7 +187,11 @@ for($i=0; $i<count($fb_feed);$i++):?>
         <a style="font-size: 20px;"><i class="icon-trash greyText"></i></a>
         <div class="pull-right">
             <button type="button" class="btn btn-primary btn-reply"><i class="icon-mail-reply"></i></button>
-            <button type="button" class="btn btn-danger btn-case"><i class="icon-plus"></i> CASE</button>
+            <?php if(!$fb_feed[$i]->case_id):?>
+                <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>
+            <?php else:?>
+                <button type="button" class="btn btn-purple btn-case" name="action" value="Resolved"><i class="icon-check"></i> RESOLVE</button>
+            <?php endif?>
         </div>
         <br clear="all" />
     </h4>

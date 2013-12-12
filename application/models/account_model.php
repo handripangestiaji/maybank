@@ -80,6 +80,10 @@ class account_model extends CI_Model
 	return $this->db->insert_id();
     }
     
+    function CreateRetweetAction($action){
+	$action['action_type'] = 'twitter_retweet';
+    }
+    
     
     function CreateFbLikeAction($action, $like = 0){
 	$this->db->trans_start();

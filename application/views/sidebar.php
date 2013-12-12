@@ -4,7 +4,7 @@
     <div class="sidebarContent">
         <ul class="collapsedSidebarMenu">
             <li><a href="#tasksContent" class="sidebar">Tasks <div class="notifyCircle cyan">3</div><i class="icon-chevron-sign-right"></i></a></li>
-            <li><a href="#profileContent" class="sidebar">Adrian Lee<i class="icon-chevron-sign-right"></i></a></li>
+            <li><a href="#profileContent" class="sidebar"><?php echo $this->session->userdata('display_name'); ?><i class="icon-chevron-sign-right"></i></a></li>
             <li class="sublevel"><a href="#">edit profile<i class="icon-user"></i></a></li>
             <li class="sublevel"><a href="#">change password<i class="icon-lock"></i></a></li>
             <li class="sublevel"><a href="#">logout<i class="icon-off"></i></a></li>
@@ -16,72 +16,53 @@
 <!-- ==================== SIDEBAR TASKS ==================== -->
 <div id="tasksContent">
     <div class="sidebarDivider"></div>
-    <div class="sidebarContent">
+    <div class="sidebarContent" style="overflow-y: scroll;">
         <div class="sidebarHead pull-left">
-            <?php if(isset($count_new_cases)):?>
-            <p class="title pull-left">NOTIFICATION&nbsp;<span class="badge">Total <?php echo $count_new_cases + $count_replies; ?></span></p>
+            <?php if(isset($case)):?>
+            <p class="title pull-left">NOTIFICATION&nbsp;<span class="badge">Total <?php echo count($case)+count($reply_pending); ?></span></p>
             <?php endif;?>
         </div>
         <span class="btn-close pull-right">Close <i class="icon-remove-sign"></i></span>
         <br clear="all" />
         <div class="sidebarLine"></div>
         <div class="sidebarInfo">
-            <?php if(isset($count_replies)):?>
-            <div class="replies"><span class="badge cyan"><?php echo $count_replies; ?></span> Replies</div>
-            <div class="newCases"><span class="badge purple"><?php echo $count_new_cases; ?></span> New Cases</div>
+            <?php if(isset($case)):?>
+            <div class="replies"><span class="badge cyan"><?php echo count($reply_pending); ?></span> Replies</div>
+            <div class="newCases"><span class="badge purple"><?php echo count($case); ?></span> New Cases</div>
             <?php endif;?>
         </div>
         <div class="sidebarLine"></div>
         <ul class="tasksList">
+            <?php foreach($case as $each_case):?>
             <li>
                 <div class="notifHead purple">
-                    CASE ID: #A123
+                    CASE ID: #<?=$each_case->case_id?>
                 </div>
                 <div class="notifBody">
-                    Oct 11, 2013, 12:09 AM
+                    <?php
+                        $timezone = new DateTimeZone($this->config->item('timezone'));
+                        $date = new DateTime($each_case->created_at, $timezone);
+                        echo $date->format("M d, Y, h:i A");
+                    ?>
                 </div>
             </li>
-            <li>
-                <div class="notifHead cyan">
-                    CASE ID: #A123
-                </div>
-                <div class="notifBody">
-                    Oct 11, 2013, 12:09 AM
-                </div>
-            </li>
-            <li>
-                <div class="notifHead cyan">
-                    CASE ID: #A123
-                </div>
-                <div class="notifBody">
-                    Oct 11, 2013, 12:09 AM
-                </div>
-            </li>
+            <?php endforeach?>
+            <?php foreach($reply_pending as $pending):?>
             <li>
                 <div class="notifHead purple">
-                    CASE ID: #A123
+                    New Reply POST ID : #<?=$pending->id?>
                 </div>
                 <div class="notifBody">
-                    Oct 11, 2013, 12:09 AM
+                    <?php
+                        $timezone = new DateTimeZone($this->config->item('timezone'));
+                        $date = new DateTime($each_case->created_at, $timezone);
+                        echo $date->format("M d, Y, h:i A");
+                    ?>
                 </div>
             </li>
-            <li>
-                <div class="notifHead purple">
-                    CASE ID: #A123
-                </div>
-                <div class="notifBody">
-                    Oct 11, 2013, 12:09 AM
-                </div>
-            </li>
-            <li>
-                <div class="notifHead cyan">
-                    CASE ID: #A123
-                </div>
-                <div class="notifBody">
-                    Oct 11, 2013, 12:09 AM
-                </div>
-            </li>
+            <?php endforeach;?>
         </ul>
+        
     </div>   
 </div>
 <!-- ==================== END OF SIDEBAR TASKS ==================== -->

@@ -63,10 +63,10 @@ class Shorturl {
 		
 		if ($increment == true)
 		{
-			$this->incrementCounter($urlRow["id"]);
+			$this->incrementCounter($urlRow->id);
 		}
 		
-		return $urlRow["long_url"];
+		return $urlRow->long_url;
 	}
 	
 	protected function validateUrlFormat($url)
@@ -179,6 +179,13 @@ class Shorturl {
 		$result = $this->_ci->shorturl_model->find($params);
 		
 		return $result;
+	}
+	
+	protected function incrementCounter($id)
+	{
+		$params = array("increment" => "increment + 1");
+		
+		$this->_ci->shorturl_model->update($id, $params);
 	}
 	
 }

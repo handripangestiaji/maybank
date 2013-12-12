@@ -22,8 +22,8 @@ $(function(){
                     thisElement.find('.message').html('<div class="alert alert-success">' +
                     '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
                     '<strong>Well done!</strong> ' + response.message + '</div>');
-                    openButton.html('CASE #' + response.case_id);
-                    thisElement.find('.btn-case').removeClass('btn-danger').addClass('btn-purple').html('<i class="icon-check"></i>RESOLVE');
+                    openButton.removeClass('btn-mini').removeClass('btn-warning').addClass('btn-purple').html('CASE #' + response.case_id);
+                    thisElement.closest('li').find('.btn-case').removeClass('btn-danger').addClass('btn-purple').html('<i class="icon-check"></i>RESOLVE');
                 }
                 else{
                     var errorMessages = "<ul class='error-list'>";
@@ -141,5 +141,46 @@ $(function(){
         }
         
         e.preventDefault();
+    });
+    
+    
+    $(this).on('submit','.reply-tweet', function(e){
+        var buttonSubmit = $(this).find('button[type=submit]');
+        buttonSubmit.attr('disabled', 'disabled').html('SENDING...');
+        var me = $(this);
+        e.preventDefault();
+        $.ajax({
+            "url" : BASEURL + "dashboard/media_stream/ReplyTwitter",
+            "type" : "POST",
+            "data" : $(this).serialize() + "&channel_id=" + $(this).closest('.floatingBox').find('input.channel-id').val(),
+            "success" : function(response){
+                buttonSubmit.removeAttr('disabled').html('SEND');
+                try{
+                    if(response.success == false){
+                        me.find('.message').html('<div class="alert alert-warning">' +
+                        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
+                        '<strong>Error!</strong> ' + response.message + '</div>');
+                    }
+                    else{
+                        me.find('.message').html('<div class="alert alert-success">' +
+                        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
+                        '<h4>Reply Tweet</h4> ' + response.message + '!</div>');
+                        me.find('input, textarea').val('');
+                    }
+                }
+                catch(e){
+                      me.find('.message').html('<div class="alert alert-danger">' +
+                        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
+                        '<strong>Error!</strong> Replying tweet failed.</div>');
+                }
+                
+            },
+            "error" :  function( jqXHR, textStatus, errorThrown ){
+                buttonSubmit.removeAttr('disabled').html('SEND');
+                 me.find('.message').html('<div class="alert alert-danger">' +
+                        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
+                        '<strong>Error!</strong> Replying tweet failed.</div>');
+            }
+        });
     });
 });

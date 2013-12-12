@@ -183,7 +183,7 @@ class Cms extends MY_Controller {
 								"url_id" => $code['url_id'],
 								"user_id" => $params['user_id']
 							);
-				
+			 
 				$id_campaign_url = $this->campaign_url_model->insert($setparam);
 			}
 			redirect('cms/create_short_url');			
@@ -244,5 +244,22 @@ class Cms extends MY_Controller {
         }
         
         $this->load->view('cms/index',$data);
+    }
+    
+    public function url()
+    {
+	    $c = $this->uri->segment(3);
+	    
+	    if($c)
+	    {
+		    try {
+			    $url = $this->shorturl->shortCodeToUrl($c);
+			    redirect($url);
+			    exit;
+		    } catch (Exception $e) {
+			    redirect('cms/create_short_url');
+		    }
+	    }
+	    
     }
 }

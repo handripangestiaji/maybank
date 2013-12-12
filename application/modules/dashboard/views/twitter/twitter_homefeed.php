@@ -15,9 +15,9 @@ for($i=0;$i<count($homefeed);$i++){
             <i class="icon-circle"></i>
             <span>
             <?php 
-            $date=new DateTime($homefeed[$i]->created_at.' Europe/London');
+            $date=new DateTime($homefeed[$i]->social_stream_created_at.' Europe/London');
             $date->setTimezone($timezone);
-            echo $date->format('l, M j, Y H:i:s');
+            echo $date->format('l, M j, Y h:i A');
             
             $entities = json_decode($homefeed[$i]->twitter_entities);
             
@@ -48,6 +48,9 @@ for($i=0;$i<count($homefeed);$i++){
     <?php else:?>
         <button type="button" class="btn btn-warning btn-mini">OPEN</button>
     <?php endif?>
+    <?php if($homefeed[$i]->response_post_id):?>
+        <button type="button" class="btn btn-inverse btn-mini" value="<?=$homefeed[$i]->response_post_id?>">REPLIED</button>
+    <?php endif;?>
     </p>
     <?php if ($homefeed[$i]->retweeted==1) { ?>
         <button type="button" class="btn btn-inverse btn-mini"><i class="icon-retweet"></i></button>

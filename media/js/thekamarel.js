@@ -564,7 +564,7 @@ $(function(){
                             }
                         );
                         
-                        $(this).on('click','.read-mark, .btn-case',
+                        $(this).on('click','.read-mark, .btn-case, .btn-reply, .retweet, .favorit .btn-send-reply, .fblike, .dm_send',
                             function(){
                             var me = $(this);
                             $.ajax({
@@ -572,7 +572,7 @@ $(function(){
                                     type: "POST",
                                     data: {
                                         post_id:me.closest('li').find('.postId').val(),
-                                        read : $(this).val() == 'case' ? 1 : null
+                                        read : $(this).val() != '' ? 1 : null
                                     },
                                     success: function(result)
                                     {
@@ -587,11 +587,11 @@ $(function(){
                                         if(result == 1){
                                             currentNumber -=  1;
                                             currentNumber = currentNumber < 0 ? 0 : currentNumber;
-                                            me.removeClass('redText').addClass('greyText');
+                                            me.closest('li').find('.read-mark').removeClass('redText').addClass('greyText');
                                         }
                                         else{
                                             currentNumber += 1;
-                                            me.removeClass('greyText').addClass('redText');
+                                            me.closest('li').find('.read-mark').addClass('redText');
                                         }
                                         
                                         me.closest('.container-fluid').siblings('.floatingBoxMenu').find('li.active .notifyCircle').html(currentNumber);
@@ -638,18 +638,10 @@ $(function(){
 
                         $(this).on('click','.dm-field-btn-close',
                             function() {
-                                 $(this).parent().parent().hide();
+                                $(this).closest('.dm-field').hide();
+                                $(this).closest('.reply-field').hide();
                             }
                         );
-                        
-                        
-                        $(this).on('click','.btn-send-dm',
-                           function() {
-                                $(this).parent().siblings('.dm-status').show();
-                                $(this).parent().siblings('.dm-status').fadeOut(3000);
-                            }
-                        );
-                
                         
                         $(this).on('click','.toggleTable',
                             function(){
@@ -689,6 +681,20 @@ $(function(){
                     });
 
                     $(".compose-insert-link-btn").click(function(){
+                        $.ajax({
+                                url : BASEURL + 'dashboard/media_stream/GenerateShortUrl',
+                                type: "POST",
+                                data: {
+                                        long_url:$('.compose-insert-link-text').val(),
+                                        campaign_id:$('.compose-select-campaign').val()
+                                        },
+                                success: function(data){
+                                    var new_data = JSON.parse(data);
+                                    alert(new_data.message);
+                                    $('.compose-textbox').val($('.compose-textbox').val()+ 'http://maybk.co/' + new_data.short_code);
+                                }
+                            });
+                        
                         $(".compose-insert-link-text").linkpreview({
                             previewContainer: "#url-show > .compose-form > div",  //optional
                             //previewContainerClass: ".compose-schedule",
@@ -698,13 +704,10 @@ $(function(){
                                 $('#url-show > .compose-form > div').html('Loading...');
                             },
                             onSuccess: function(data) {                  //optional
-                                console.log("onSuccess");
                             },
                             onError: function() {                    //optional
-                                console.log("onError");
                             },
                             onComplete: function() {                 //optional
-                                console.log("onComplete");
                             }
                        });
                     });
@@ -720,13 +723,10 @@ $(function(){
                                 me.closest('.pull-left').siblings("#reply-url-show").find('div.reply-url-show-content').html('Loading...');
                             },
                             onSuccess: function(data) {                  //optional
-                                console.log("onSuccess");
                             },
                             onError: function() {                    //optional
-                                console.log("onError");
                             },
                             onComplete: function() {                 //optional
-                                console.log("onComplete");
                             }
                        });
                     });
@@ -818,13 +818,56 @@ $(function(){
                             }
                             
                             if(confirmed == true){
+                                var resultPost = 0;
                                 $('.compose-channels option:selected').each(function() {
+                                    if($(this).attr('id') == 'optfacebook'){
+                                        $.ajax({
+                                            url : BASEURL + 'dashboard/media_stream/FbStatusUpdate',
+                                            type: "POST",
+                                            data: {
+                                                    content:$('.compose-textbox').val(),
+                                                    },
+                                            success: function()
+                                            {
+                                                resultPost = 1;
+                                            },
+                                        });
+                                    }
+                                    
+                                    if($(this).attr('id') == 'opttwitter'){
+                                        $.ajax({
+                                            url : BASEURL + 'dashboard/socialmedia/twitterAction',
+                                            type: "POST",
+                                            data: {
+                                                    action:'sendTweet',
+                                                    content:$('.compose-textbox').val(),
+                                                   },
+                                            success: function()
+                                                {
+                                                    resultPost = 1;
+                                                },
+                                            });
+                                    }
+                                    
                                     channels[i] = $(this).val();
                                     i++
                                 });
-                                    
-                                $('.compose-post-status').show();
-                                $('.compose-post-status').html('Posting...');    
+                                
+                                if(resultPost == 0){
+                                    $('.compose-post-status').show();
+                                    $('.compose-post-status').removeClass('green');
+                                    $('.compose-post-status').addClass('red');
+                                    $('.compose-post-status').html('Post Failed');
+                                    $('.compose-post-status').fadeOut(7500);
+                                }
+                                else{
+                                    $('.compose-post-status').show();
+                                    $('.compose-post-status').removeClass('red');
+                                    $('.compose-post-status').addClass('green');
+                                    $('.compose-post-status').html('Post Success');
+                                    $('.compose-post-status').fadeOut(7500);
+                                }
+                                
                                 $.ajax({
                                     url : BASEURL + 'dashboard/media_stream/SocmedPost',
                                     type: "POST",
@@ -833,14 +876,47 @@ $(function(){
                                             content:$('.compose-textbox').val(),
                                             tags:$('.compose-tag-field').val()
                                             },
-                                    success: function()
-                                    {
-                                        $('.compose-post-status').html('Post Sent');
-                                        $('.compose-post-status').fadeOut(7500);
-                                    },
                                 });
                             }
                         }
+                    });
+                    
+                    $('.compose-select-campaign').on('change', function(){
+                        $.ajax({
+                                url : BASEURL + 'dashboard/media_stream/GetShortenUrlByCampaignId',
+                                type: "GET",
+                                data: {
+                                        campaignId:$(this).val(),
+                                        },
+                                success: function(data){
+                                    var new_data = JSON.parse(data);
+                                    $('.select-shorten-url').html('');
+                                    for(var x=0; x<new_data.length; x++){
+                                        $('.select-shorten-url').append('<option>' + 'http://maybk.co/' + new_data[x].short_code + '</option>');
+                                    }
+                                }
+                            });
+                    });
+                    
+                    $('.select-shorten-url').on('change', function(){
+                        $(".select-shorten-url option:selected").linkpreview({
+                            url: BASEURL + 'dashboard/media_stream/GetUrlPreview?url=' + $(".select-shorten-url option:selected").val(),
+                            previewContainer: "#url-show > .compose-form > div",  //optional
+                            //previewContainerClass: ".compose-schedule",
+                            refreshButton: ".select-shorten-url option",        //optional
+                            preProcess: function() {                //optional
+                                $('#url-show').css({"display": "block"});
+                                $('#url-show > .compose-form > div').html('Loading...');
+                            },
+                            onSuccess: function(data) {                  //optional
+                            },
+                            onError: function() {                    //optional
+                            },
+                            onComplete: function() {                 //optional
+                            }
+                       });
+                        
+                        $('.compose-textbox').val($('.compose-textbox').val() + $(".select-shorten-url option:selected").val());
                     });
                     
                     $(".destroy_status").click(function() {
@@ -879,52 +955,15 @@ $(function(){
                         });
                     });
                     
-                    $(this).on('click','.replayTweet',
-                        function() {
-                        $.ajax({
-                            url : BASEURL + 'dashboard/socialmedia/twitterAction',
-                            type: "POST",
-                            data: {
-                                action:'replayTweet',
-                                content:$(this).parent().siblings(".replaycontent").val(),
-                                str_id: $(this).val(),
-                                channel_id : $(this).closest('.floatingBox').find('input.channel-id').val()
-                            },
-                            success: function(data)
-                            {
-                                $('.compose-post-status').show();
-                                $('.compose-post-status').fadeOut(5000);
-                            },
-                        });
-                    });
-                    
-                    $(this).on('click','.dm_send',
-                        function() {
-                        $.ajax({
-                            url : BASEURL + 'dashboard/socialmedia/twitterAction',
-                            type: "POST",
-                            data: {
-                                    action:'dm_send',
-                                    content:$(this).parent().siblings(".replaycontent").val(),
-                                    screen_name: $(this).siblings(".screen_name").val(),
-                                    friendid: $(this).val()
-                                    },
-                            success: function(data)
-                            {
-                                //alert(data)
-                            },
-                        });
-                    });
-                    
-                    
                     $(this).on('click','.favorit',
                         function() {
                         $.ajax({
                             url : BASEURL + 'dashboard/socialmedia/twitterAction',
                             type: "POST",
                             data: {
-                                action:'favorit',
-                                str_id: $(this).siblings(".str_id").val()
+                                action :'favorit',
+                                str_id : $(this).siblings(".str_id").val(),
+                                channel_id : $(this).closest('.floatingBox').find('input.channel-id').val()
                             },
                             success: function()
                             {
@@ -1000,6 +1039,11 @@ $(function(){
                     
                      $(this).on('click','.btn-send-reply',
                         function() {
+                        var len=$(this).parent().siblings(".reply_comment").val().length
+                        if(len>2000){
+                           var comment = 'Your message is more than 2000 characters. It will not post to Facebook.'; 
+                           alert(comment);
+                        }else{
                             var commentButton = $(this);
                             isSend=commentButton.html()=="SEND";
                             commentButton.html('SENDING...').attr("disabled", "disabled");
@@ -1015,15 +1059,18 @@ $(function(){
                             success: function(response)
                             {
                                 commentButton.removeAttr("disabled");
-                                if(response == true){
+                                if(response == 'true'){
                                   commentButton.html("SEND");   
                                 }
                                 else{
+                                    alert("Failed to reply comment");
                                     alert(response);
                                     commentButton.html("SEND");
                                 }
                             },
                         });
+                            
+                        }
                                                 
                     }); 
                     

@@ -414,7 +414,8 @@ class facebook_model extends CI_Model
     public function RetrieveFeedFB($filter,$limit = 20){
         $this->db->select('*, c.type as social_stream_type');
         $this->db->from("fb_user_engaged a INNER JOIN social_stream_fb_post b  
-			 ON b.author_id = a.facebook_id inner join social_stream c on c.post_id = b.post_id ");
+			 ON b.author_id = a.facebook_id inner join social_stream c on c.post_id = b.post_id LEFT JOIN
+                         `case` d on d.post_id = c.post_id ");
         $this->db->limit($limit);
         $this->db->order_by('c.created_at','desc');
         if(count($filter) >= 1)
@@ -425,7 +426,8 @@ class facebook_model extends CI_Model
      public function CountFeedFB($filter){
         $this->db->select('count(b.post_id) as count_post_id');
         $this->db->from("fb_user_engaged a INNER JOIN social_stream_fb_post b  
-			 ON b.author_id = a.facebook_id inner join social_stream c on c.post_id = b.post_id ");
+			 ON b.author_id = a.facebook_id inner join social_stream c on c.post_id = b.post_id LEFT JOIN
+                         `case` d on d.post_id = c.post_id ");
         $this->db->order_by('c.created_at','desc');
         if(count($filter) >= 1)
             $this->db->where($filter);
@@ -435,9 +437,11 @@ class facebook_model extends CI_Model
     public function RetrievePostFB($filter){
         $this->db->select('*, c.type as social_stream_type');
         $this->db->from("fb_user_engaged a INNER JOIN social_stream_fb_post b ON b.author_id=a.facebook_id
-			inner join social_stream c on c.post_id = b.post_id");
+			inner join social_stream c on c.post_id = b.post_id LEFT JOIN
+                        `case` d on d.post_id = c.post_id ");
         if(count($filter) > 0)
 	    $this->db->where($filter);
+	$this->db->where('d.status', 'pending');
         $this->db->limit(20);
         $this->db->order_by('c.created_at','desc');
         return $this->db->get()->result();
@@ -466,12 +470,11 @@ class facebook_model extends CI_Model
         if(count($filter) > 0){
 	    $this->db->where("detail_id_from_facebook LIKE '%_0' ");
 	    $this->db->where($filter);
-	    
-        }else{
-        $this->db->where("detail_id_from_facebook LIKE '%_0'");    
+        }
+	else{
+	    $this->db->where("detail_id_from_facebook LIKE '%_0'");    
         }
         $this->db->limit($limit);
-        
         $this->db->order_by('created_at','desc');
         return $this->db->get()->result();
     }
@@ -479,7 +482,7 @@ class facebook_model extends CI_Model
     public function CountPmFB($filter){
         $this->db->select('count(a.conversation_id) as count_post_id');
         $this->db->from("social_stream_facebook_conversation a LEFT OUTER JOIN 
-                        social_stream d ON d.post_id=a.conversation_id");
+                        social_stream d ON d.post_id = a.conversation_id");
 	   if(count($filter) > 0){
 	    $this->db->where($filter);
 	   } 
@@ -500,10 +503,8 @@ class facebook_model extends CI_Model
     }
     
     public function likePost($post_id, $access_token, $type = 'feed'){
-	
         $requestResult = curl_get_file_contents('https://graph.facebook.com/32423425 453423/likes');
         $result  = json_decode($requestResult);
-
     }
 
  

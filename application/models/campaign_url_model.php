@@ -35,4 +35,12 @@ class Campaign_url_model extends CI_Model
 		
 		return $row['LAST_INSERT_ID()'];
 	}
+	
+	public function GetByCampaignId($id){
+		$this->db->select('*');
+		$this->db->from('content_campaign_url');
+		$this->db->join('short_urls', 'content_campaign_url.url_id = short_urls.id', 'inner');
+		$this->db->where('content_campaign_url.campaign_id',$id);
+		return $this->db->get()->result();
+	}
 }

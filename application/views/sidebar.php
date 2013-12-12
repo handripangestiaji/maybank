@@ -78,7 +78,9 @@
         <br clear="all" />
         <div class="sidebarLine"></div>
         <div>
+            <?php if(($this->session->userdata('image_url'))!= NULL) {?>
             <div><img src="<?php echo base_url().$this->session->userdata('image_url'); ?>" /></div>
+            <?php }?>
         </div>
         <div class="profileInfo">
             <p>User Id : <?php echo $this->session->userdata('username'); ?></p>

@@ -16,19 +16,22 @@ class Shorturl {
 	{
 		if (empty($url)) 
 		{
-			throw new \Exception("No URL was supplied");
+			//throw new \Exception("No URL was supplied");
+			return false;
 		}
 		
 		if ($this->validateUrlFormat($url['long_url']) == false)
 		{
-			throw new \Exception("URL does not have a valid format");
+			//throw new \Exception("URL does not have a valid format");
+			return false;
 		}
 		
 		if (self::$checkUrlExists)
 		{
 			if (!$this->verifyUrlExists($url['long_url'])) 
 			{
-				throw new \Exception("URL does not appear to exist");
+				//throw new \Exception("URL does not appear to exist");
+				return false;
 			}
 		}
 		
@@ -46,19 +49,22 @@ class Shorturl {
 	{
 		if (empty($code))
 		{
-			throw new \Exception("No short code was supplied");
+			//throw new \Exception("No short code was supplied");
+			return false;
 		}
 		
 		if ($this->validateShortCode($code) == false)
 		{
-			throw new \Exception("Short code does not have a valid format");
+			//throw new \Exception("Short code does not have a valid format");
+			return false;
 		}
 		
 		$urlRow = $this->getUrlFromDb($code);
 		
 		if (empty($urlRow))
 		{
-			throw new \Exception("Short code does not appear to exist");
+			//throw new \Exception("Short code does not appear to exist");
+			return false;
 		}
 		
 		if ($increment == true)
@@ -123,14 +129,16 @@ class Shorturl {
 		
 		if ($id < 1)
 		{
-			throw new \Exception("The ID is not a valid integer");
+			//throw new \Exception("The ID is not a valid integer");
+			return false;
 		}
 		
 		$length = strlen(self::$chars);
 		
 		if ($length < 10)
 		{
-			throw new \Exception("Length of chars is too small");
+			//throw new \Exception("Length of chars is too small");
+			return false;
 		}
 		
 		$code = "";
@@ -154,14 +162,16 @@ class Shorturl {
 	{
 		if ($id == null || $code == null)
 		{
-			throw new \Exception("Input parameter(s) invalid");
+			//throw new \Exception("Input parameter(s) invalid");
+			return false;
 		}
 		
 		$row = $this->_ci->shorturl_model->update($id, array("short_code" => $code));
 		
 		if ($row == FALSE)
 		{
-			throw new \Exception("Row was not updated with short code");
+			//throw new \Exception("Row was not updated with short code");
+			return false;
 		}
 		
 		return true;

@@ -32,8 +32,10 @@
 	                    </div>
 	                    <div class="pull-right" style="width: 25%; text-align: right">
 	                        <p>
+	                        <!--
 	                        <button class="btn btn-success" type="button">Download</button>
 	                        <button class="btn btn-danger" type="button">Delete</button>    
+	                        -->
 	                        </p>
 	                    </div>
 	                    <br clear="all" />

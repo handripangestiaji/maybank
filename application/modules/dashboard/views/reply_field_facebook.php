@@ -8,7 +8,7 @@
         </select>
         <select style="width: 130px;">
             <?php foreach($product_list as $product):?>
-                <option value="<?php echo $product->id?>"><?php echo $product->product_name?></option>
+                <option value="<?=$product->id?>"><?=$product->product_name?></option>
             <?php endforeach?>
         </select>
     </div>
@@ -67,15 +67,30 @@
     <div class="pull-left reply-char-count">
             <i class="icon-facebook-sign"></i>&nbsp;<span class="reply-fb-char-count">2000</span>
     </div>
-    <div class="pull-right">
-        <button class="send_reply btn btn-primary btn-small btn-send-reply" value="<?php 
-        if(isset($fb_feed[$i]->comment_id)){
-        echo $fb_feed[$i]->comment_stream_id;
-        }else if(isset($fb_feed[$i]->social_stream_post_id)){
-            echo $fb_feed[$i]->social_stream_post_id;
+    <?php
+        if($reply_type=='reply_comment'){
+         
+        //echo 'reply_comment';   
+        echo $fb_feed[$i]->post_stream_id;
+        //print_r($fb_feed);
+        }elseif($reply_type=='reply_nested'){
+        //print_r(fb_feed[$i]->comment_stream_id);
+        //print_r($fb_feed);
+        //echo 'reply_nested'; 
+        }else{
+            
+            echo '';
         }
-        ?>">SEND</button>
-        
+    
+    ?>
+    <div class="pull-right">
+      <?php if($reply_type=='reply_comment'){?>
+        <button class="btn btn-primary btn-small btn-send-reply" value="<?php echo $fb_feed[$i]->post_stream_id; ?>">SEND</button>    
+      <?php }elseif($reply_type=='reply_nested'){ ?>
+        <button class="btn btn-primary btn-small btn-send-reply" value="<?php echo $fb_feed[$i]->comment_stream_id; ?>">SEND</button> 
+      <?php }elseif($reply_type=='reply_dm'){  ?>
+          <button class="dm_send btn btn-primary btn-small" value="<?php //echo $fb_feed[$i]->comment_stream_id; ?>">SEND</button> 
+      <?php } ?>           
     </div>
     <br clear="all" />
     <!--div class="reply-status hide">MESSAGE SENT</div-->

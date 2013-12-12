@@ -5,7 +5,7 @@ $timezone=new DateTimeZone($this->config->item('timezone'));
 for($i=0; $i<count($fb_pm);$i++):?>
 <li>
     <input type="hidden" class="postId" value="<?php echo $fb_pm[$i]->post_id; ?>" />
-    <div class="circleAvatar"><img src="https://graph.facebook.com/<?php echo number_format($fb_pm[$i]->sender, 0,'.','')?>/picture?small" alt=""></div>
+    <div class="circleAvatar"><img src="https://graph.facebook.com/<?=number_format($fb_pm[$i]->sender, 0,'.','')?>/picture?small" alt=""></div>
     <div class="read-mark <?php if($fb_pm[$i]->is_read==0){echo 'redText';} else { echo 'greyText'; } ?>"><i class="icon-bookmark icon-large"></i></div>
     <br />
     <p class="headLine">
@@ -21,7 +21,7 @@ for($i=0; $i<count($fb_pm);$i++):?>
         ?>
         
     </p>
-    <p><?php echo $fb_pm[$i]->messages?></p>
+    <p><?=$fb_pm[$i]->messages?></p>
     <p><button type="button" class="btn btn-warning btn-mini">OPEN</button>
         <!--button class="btn btn-primary btn-mini" style="margin-left: 5px;">LIKE</button--> </p>
     <p>
@@ -106,7 +106,8 @@ for($i=0; $i<count($fb_pm);$i++):?>
     <div class="reply-field hide">
         <?php
         $to_reply_field['fb_feed'] = $fb_pm;
-        $to_reply_field['i'] = $i - 1;
+        $to_reply_field['i'] = $i;
+        $to_reply_field['reply_type']='reply_dm';
         $this->load->view('dashboard/reply_field_facebook', $to_reply_field)?>
      </div>
     <!-- END REPLY -->
@@ -119,5 +120,5 @@ for($i=0; $i<count($fb_pm);$i++):?>
 </li>
 <?php endfor;?>
 <?php if(count($fb_pm) > 0):?>
-<div class="filled" style="text-align: center;"><input type="hidden" class="total_groups" value="<?php echo $total_groups?>" /><input type="hidden"  class="channel_id" value="<?php echo $fb_pm[0]->channel_id?>"/><input type="hidden"  class="looppage" value=""/><button class="loadmore btn btn-info" value="privateMessages"><i class="icon-chevron-down"></i> LOAD MORE</button></div>
+<div class="filled" style="text-align: center;"><input type="hidden" class="total_groups" value="<?=$total_groups?>" /><input type="hidden"  class="channel_id" value="<?=$fb_pm[0]->channel_id?>"/><input type="hidden"  class="looppage" value=""/><button class="loadmore btn btn-info" value="privateMessages"><i class="icon-chevron-down"></i> LOAD MORE</button></div>
 <?php endif?>

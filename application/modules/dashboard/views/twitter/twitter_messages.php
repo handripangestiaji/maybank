@@ -11,13 +11,13 @@
         <p class="headLine">
             <span class="author"><?php echo $directmessage[$i]->sender->screen_name; ?></span>
             <i class="icon-circle"></i>
-            <span>mentions</span>
+            <span>Direct Messages</span>
             <i class="icon-circle"></i>
             <span>
             <?php 
             $date=new DateTime($directmessage[$i]->created_at.' Europe/London');
             $date->setTimezone($timezone);
-            echo $date->format('l, M j, Y H:i:s');
+            echo $date->format('l, M j, Y h:i A');
             
             ?>
             </span>

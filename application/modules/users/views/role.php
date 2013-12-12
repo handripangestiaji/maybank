@@ -95,23 +95,23 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach($show as $row){?>
+                    <?php $i=0; foreach($show as $row){ ?>
                     <tr>
                         <td><?php echo $row->role_name;?></td>
-                        <td>0</td>
+                        <td><?php echo $count_role[$i];?></td>
                         <td><?php echo $row->display_name;?></td>
                         <td><a href='<?php echo site_url("users/edit_role/".$row->role_collection_id);?>'><span><i class="icon-pencil"></i></span></a></td>
                         <td><a href="" onclick="show_confirm('<?php echo $row->role_collection_id;?>');return false;"><span><i class="icon-remove"></i></span></a></td>
                     </tr>
-                    <?php }?>
+                    <?php $i++;}?>
                 </tbody>
             </table>
-            <?php if($count>10){?>
+            <!--<?php //if($count>10){?>
             <div class="page pull-right" style="margin-top: 30px; margin-left:10px; margin-right:10px;">
-               <?php echo $links; ?>
+               <?php //echo $links; ?>
             </div>
-            <?php }?>
-            </div>
+            <?php //}?>
+            --></div>
            
     </div>
     </div>

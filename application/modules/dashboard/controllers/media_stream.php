@@ -235,8 +235,9 @@ class Media_stream extends CI_Controller {
 	}
     }
     
-    //=========================================END Twitter function=============================================
-
+    public function TwitterRetweet(){
+	
+    }
 
     //=========================================facebook function=============================================
     public function fb_access_token(){

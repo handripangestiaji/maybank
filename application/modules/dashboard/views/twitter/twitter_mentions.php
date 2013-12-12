@@ -16,10 +16,11 @@ for($i=0;$i<count($mentions);$i++){
             <i class="icon-circle"></i>
             <span>mentions</span>
             <i class="icon-circle"></i>
-            <span><?php 
-            $date=new DateTime($mentions[$i]->created_at.' Europe/London');
+            <span><?php
+            
+            $date = new DateTime($mentions[$i]->social_stream_created_at.' Europe/London');
             $date->setTimezone($timezone);
-            echo $date->format('l, M j, Y H:i');
+            echo $date->format('l, M j, Y h:i A');
             $entities = json_decode($mentions[$i]->twitter_entities);
             ?></span>
         </p>

@@ -14,9 +14,9 @@ for($i=0;$i<count($senttweets);$i++){
             <span>mentions</span>
             <i class="icon-circle"></i>
             <span><?php 
-            $date=new DateTime($senttweets[$i]->created_at.' Europe/London');
+            $date=new DateTime($senttweets[$i]->social_stream_created_at.' Europe/London');
             $date->setTimezone($timezone);
-            echo $date->format('l, M j, Y H:i:s');
+            echo $date->format('l, M j, Y h:i A');
             $entities = json_decode($senttweets[$i]->twitter_entities);
             //echo date('l, M j, Y H:i:s',strtotime($senttweets[$i]->created_at));?></span>
             <i class="icon-play-circle moreOptions pull-right"></i>

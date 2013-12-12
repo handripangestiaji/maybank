@@ -15,9 +15,9 @@ for($i=0;$i<count($homefeed);$i++){
             <i class="icon-circle"></i>
             <span>
             <?php 
-            $date=new DateTime($homefeed[$i]->created_at.' Europe/London');
+            $date=new DateTime($homefeed[$i]->social_stream_created_at.' Europe/London');
             $date->setTimezone($timezone);
-            echo $date->format('l, M j, Y H:i:s');
+            echo $date->format('l, M j, Y h:i A');
             
             $entities = json_decode($homefeed[$i]->twitter_entities);
             

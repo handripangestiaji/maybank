@@ -543,11 +543,12 @@ class Media_stream extends CI_Controller {
 		
 		$id_campaign_url = $this->campaign_url_model->insert($setparam);
 		
-		$setparam['short_code'] = $short_code; 
+		$setparam['short_code'] = $short_code;
+		$setparam['is_success'] = true;
 		echo json_encode($setparam);
 	}
 	else{
-	    echo json_encode(array('message' => 'Something error. Make sure you have select a campaign and put the full url in the insert link box.'));
+	    echo json_encode(array('is_success' => FALSE,'message' => 'Something error. Make sure you have select a campaign and put the full url in the insert link box.'));
 	}
     }
 }

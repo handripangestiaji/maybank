@@ -87,9 +87,8 @@ for($i=0;$i<count($mentions);$i++){
                 </div>
         <?php } ?>
         <!-- ==================== CONDENSED TABLE HEADLINE ==================== -->
-        <div class="containerHeadline">
+        <div class="containerHeadline specialToggleTable">
             <i class="icon-table"></i><h2>Action Log</h2>
-            <div class="controlButton pull-right"><i class="icon-caret-down toggleTable"></i></div>
         </div>
         <!-- ==================== END OF CONDENSED TABLE HEADLINE ==================== -->
 

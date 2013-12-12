@@ -1,6 +1,7 @@
 <?php
 $total_groups = ceil($countFeed[0]->count_post_id/$this->config->item('item_perpage'));
 $timezone=new DateTimeZone($this->config->item('timezone'));
+
 for($i=0;$i<count($homefeed);$i++){
 ?>
     <li <?php if($homefeed[$i]->is_read==0){echo 'class="unread-post"';} ?>>
@@ -37,12 +38,17 @@ for($i=0;$i<count($homefeed);$i++){
     $html =  linkify(html_entity_decode($html), true, false);
     echo $html;
     ?></p>
-    <p><?php
-    
-    if(isset($entities->media[0])):    ?>
-        <img src="<?=$entities->media[0]->media_url_https?>" alt="" />
-    <?php endif;?>
-    
+    <p>
+    <?php if(isset($entities->media[0])){
+            echo "<a href='#modal-".$homefeed[$i]->post_id."' data-toggle='modal' ><img src='".$entities->media[0]->media_url_https."' /></a>";
+            echo '<div id="modal-'.$homefeed[$i]->post_id.'" class="attachment-modal modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+                            <button type="button" class="close " data-dismiss="modal"><i class="icon-remove"></i></button>
+                            <img src="'.$entities->media[0]->media_url_https.'" />
+                </div>';
+            }
+    ?>
+    </p>
+    <p>
     <?php if($homefeed[$i]->case_id):?>
         <button type="button" class="btn btn-purple" value="<?=$homefeed[$i]->case_id?>">CASE ID #<?=$homefeed[$i]->case_id?></button>
     <?php else:?>

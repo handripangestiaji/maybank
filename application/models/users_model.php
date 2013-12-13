@@ -202,6 +202,12 @@ class Users_model extends CI_Model
         return $this->db->update($this->role,$data);
     }
     
+    function check_role($name)
+    {
+        $this->db->where('role_name',$name);
+        return $this->db->get($this->role);
+    }
+    
     //============================ ROLE DETAIL =========================
     function insert_role_detail($data)
     {

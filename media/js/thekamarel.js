@@ -884,9 +884,20 @@ $(function(){
                                                 $('.compose-post-status').show();
                                                 $('.compose-post-status').html('Post to Facebook Success');
                                                 $('.compose-post-status').fadeOut(7500,function(){
-                                                    $('.compose-innercontainer').addClass("compose-collapsed");
                                                     $('.compose-innercontainer').removeClass("compose-expanded");
-                                                    });
+                                                    $('.compose-innercontainer').addClass("compose-collapsed");
+                                                    $('.compose-textbox').val('');
+                                                    $('.compose-insert-link-text').val('');
+                                                    $("#compose-tags").tagit("removeAll");
+                                                    $('.select-shorten-url').html('<option value="#">-- Select Shorten URL</option>');
+                                                    $('.compose-channels').find('option').removeAttr('selected');
+                                                    $('.compose-channels').next().find('button').html('None Selected <b class="caret"></b>');
+                                                    $('.compose-channels').next().find('li').removeClass('active');
+                                                    $('.compose-channels').next().find('input').removeAttr('checked');
+                                                    $('.compose-fb-char-count').html(2000);
+                                                    $('.compose-tw-char-count').html(140);
+                                                    $('.youtube-character-count').html(500);
+                                                });
                                             },
                                         });
                                     }
@@ -901,16 +912,27 @@ $(function(){
                                                    },
                                             success: function()
                                                 {
+                                                    resultPost = 1;
                                                     $('.compose-post-status').removeClass('grey');
                                                     $('.compose-post-status').removeClass('red');
                                                     $('.compose-post-status').addClass('green');                        
                                                     $('.compose-post-status').show();
                                                     $('.compose-post-status').html('Post to Twitter Success');
                                                     $('.compose-post-status').fadeOut(7500,function(){
-                                                        $('.compose-innercontainer').addClass("compose-collapsed");
                                                         $('.compose-innercontainer').removeClass("compose-expanded");
-                                                        });
-                                                    resultPost = 1;
+                                                        $('.compose-innercontainer').addClass("compose-collapsed");
+                                                        $('.compose-textbox').val('');
+                                                        $('.compose-insert-link-text').val('');
+                                                        $("#compose-tags").tagit("removeAll");
+                                                        $('.select-shorten-url').html('<option value="#">-- Select Shorten URL</option>');
+                                                        $('.compose-channels').find('option').removeAttr('selected');
+                                                        $('.compose-channels').next().find('button').html('None Selected <b class="caret"></b>');
+                                                        $('.compose-channels').next().find('li').removeClass('active');
+                                                        $('.compose-channels').next().find('input').removeAttr('checked');
+                                                        $('.compose-fb-char-count').html(2000);
+                                                        $('.compose-tw-char-count').html(140);
+                                                        $('.compose-yt-count').html(500);
+                                                    });
                                                 },
                                             });
                                     }

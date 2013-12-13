@@ -147,11 +147,11 @@ for($i=0;$i<count($homefeed);$i++){
                 <button class="btn btn-reply btn-primary" data-toggle="modal" value="<?php echo $homefeed[$i]->post_id?>"><i class="icon-mail-reply"></i></button>
                 <button type="button" class="retweet btn btn-primary" value="<?php echo $homefeed[$i]->post_id?>"><i class="icon-retweet"></i><span></span></button>
                  <button class="btn btn-dm btn-primary" data-toggle="modal"><i class="icon-envelope"></i></button>
-                <button type="button" class="favorit btn btn-primary"><i class="icon-star"></i><span></span></button>
-                <?php if($homefeed[$i]->following=='1'){ ?>
-                <button type="button" class="unfollow btn"><i class="icon-user"></i></button>
+                <button type="button" class="favorit btn btn-primary"  value="<?php echo $homefeed[$i]->twitter_user_id?>"  ><i class="icon-star"></i><span></span></button>
+                <?php if($homefeed[$i]->is_following=='1'){ ?>
+                <button type="button" class="unfollow btn btn-inverse"><i class="icon-user"></i></button>
                 <?php }else{ ?>
-                <button type="button" class="follow btn btn-primary" value="follow"><i class="icon-user"></i></button>
+                <button type="button" class="follow btn " value="<?php echo $homefeed[$i]->twitter_user_id?>"><i class="icon-user"></i></button>
                 <?php } ?>
                 <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i>CASE</button>
                 <input type="hidden" class="str_id" value="<?php echo $homefeed[$i]->post_stream_id; ?>" />

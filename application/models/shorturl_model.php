@@ -64,19 +64,36 @@ class Shorturl_model extends CI_Model
 	}
 	
 	public function update($id, $params = array())
-	{
-		$this->db->set($params);
+	{	
+		$status = 0;
 		
-		if ($id == null)
-		{
-			throw new Exception("Input parameter(s) invalid");
-		}
+        if (isset($params['increment']))
+        {
+        	$query = $this->db->query('UPDATE short_urls SET increment = increment + 1 WHERE id = '.$id);
+        	
+        	$query = $this->db->query('SELECT LAST_INSERT_ID()');
+        	$row = $query->row_array();
+        	
+        	$count = count($row['LAST_INSERT_ID()']);
+        	
+        	$status = $count;
+        }
+        else
+        {
+	        $this->db->set($params);
 		
-		$this->db->where('id', $id);
-		
-		$this->db->update($this->_table);
-		
-		$status = $this->db->affected_rows();
+			if ($id == null)
+			{
+				throw new Exception("Input parameter(s) invalid");
+			}
+			
+			$this->db->where('id', $id);
+			
+			$this->db->update($this->_table);
+			
+			$status = $this->db->affected_rows();
+
+        }
         
         return ($status == 0) ? FALSE : TRUE;
 	}

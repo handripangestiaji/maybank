@@ -919,17 +919,13 @@ $(function(){
                                     i++
                                 });
                                 
-                                $.when( req ).done(function(){
-                                    console.log("all done")
-                                });
-
                                 $.ajax({
                                     url : BASEURL + 'dashboard/media_stream/SocmedPost',
                                     type: "POST",
                                     data: {
                                             channels:channels,
                                             content:$('.compose-textbox').val(),
-                                            tags:$('.compose-tag-field').val()
+                                            tags:$("#compose-tags").tagit("assignedTags")
                                             },
                                     success: function(){
                                         
@@ -1177,6 +1173,28 @@ $(function(){
                         function() {
                         $(this).next().toggle();
                     });                                                         
+                });
+                  
+                var sampleTags = [];
+                $.ajax({
+                    url : BASEURL + 'dashboard/media_stream/GetAllTags',
+                    type: "GET",
+                    success: function(data)
+                    {
+                        var new_data = JSON.parse(data);
+                        var x=0;
+                        $.each(new_data, function(){
+                           sampleTags.push(new_data[x].tag_name);
+                            x++;
+                        });
+                    },
+                });
+                //-------------------------------
+                // Allow spaces without quotes.
+                //-------------------------------
+                $('#compose-tags').tagit({
+                    availableTags: sampleTags,
+                    allowSpaces: true
                 });
                   
                 /*==============================================================================================

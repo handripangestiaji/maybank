@@ -642,7 +642,8 @@ class Media_stream extends CI_Controller {
 	}
 	else{
 	    echo json_encode(array('is_success' => FALSE,'message' => 'Something error. Make sure you have select a campaign and put the full url in the insert link box.'));
-}
+	}
+    }
     
     public function GenerateShortUrlWithoutCampaign(){
 	header("Content-Type: application/x-json");
@@ -659,5 +660,10 @@ class Media_stream extends CI_Controller {
     
     public function CreateImage(){
 	
+    }
+    
+    public function GetAllTags(){
+	$this->load->model('tag_model');
+	echo json_encode($this->tag_model->get());
     }
 }

@@ -124,9 +124,6 @@ $(function(){
                 
             }
         });
-        
-        
-        
     });
     
     $(this).on('click','.add-related-conversation', function(){

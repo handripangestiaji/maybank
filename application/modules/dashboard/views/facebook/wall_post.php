@@ -207,7 +207,7 @@ for($i=0; $i<count($fb_feed);$i++):?>
     <?php
     $data['fb_feed'] = $fb_feed;
     $data['i'] = $i;
-    $data['reply_type']='reply_comment';
+    $data['reply_type']='replaycontent';
     $this->load->view('dashboard/reply_field_facebook', $data)?>  
     </div>
     <!-- END REPLY -->

@@ -662,7 +662,7 @@ $(function(){
                             }
                         );
                         
-                        $(this).on('input propertychange', '.reply_comment',
+                        $(this).on('input propertychange', '.replaycontent',
                             function() {
                                 var len = $(this).val().length;
                                 $(this).siblings('.reply-char-count').children('.reply-fb-char-count').html(2000-len);
@@ -1078,7 +1078,7 @@ $(function(){
                     
                      $(this).on('click','.btn-send-reply',
                         function() {
-                        var len=$(this).parent().siblings(".reply_comment").val().length
+                        var len=$(this).parent().siblings(".replaycontent").val().length
                         if(len>2000){
                            var comment = 'Your message is more than 2000 characters. It will not post to Facebook.'; 
                            alert(comment);
@@ -1093,7 +1093,7 @@ $(function(){
                             data: {
                                 post_id: $(this).val(),
                                 channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
-                                comment :$(this).parent().siblings(".reply_comment").val(),
+                                comment :$(this).parent().siblings(".replaycontent").val(),
                             },
                             success: function(response)
                             {

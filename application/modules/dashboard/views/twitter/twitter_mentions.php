@@ -137,10 +137,10 @@ for($i=0;$i<count($mentions);$i++){
                 <button class="btn btn-dm btn-primary" data-toggle="modal"><i class="icon-envelope"></i></button>
                 <button type="button" class="favorit btn btn-primary"><i class="icon-star"></i><span></span></button>
                 
-                <?php if($mentions[$i]->following=='1'){ ?>
-                <button type="button" class="unfollow btn"><i class="icon-user"></i></button>
+                <?php if($mentions[$i]->is_following=='1'){ ?>
+                <button type="button" class="follow unfollow btn btn-inverse"  value="<?php echo $mentions[$i]->twitter_user_id?>"><i class="icon-user"></i></button>
                 <?php }else{ ?>
-                <button type="button" class="follow btn btn-primary" value="follow"><i class="icon-user"></i></button>
+                <button type="button" class="follow btn " value="<?php echo $mentions[$i]->twitter_user_id?>"><i class="icon-user"></i></button>
                 <?php } ?>
                 <?php if(!$mentions[$i]->case_id):?>
                     <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>

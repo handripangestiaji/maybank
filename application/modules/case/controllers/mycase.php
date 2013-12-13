@@ -65,9 +65,12 @@ class mycase extends CI_Controller{
     }
     
     
-    function CaseRelatedConversation(){
-        
-        
+    function FacebookRelatedConversation(){
+        $this->load->model('facebook_model');
+        $filter["b.twitter_user_id"] = $twitter_user_id;
+        $filter["b.type"] = $type;
+        $filter["a.post_id !="] = $this->input->get('post_id');
+        echo json_encode($this->twitter_model->ReadTwitterData($filter, 3));
     }
     
 }

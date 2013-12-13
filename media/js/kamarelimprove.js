@@ -58,7 +58,7 @@ $(function(){
                 post_id : $(modalID + " input[name=twitter_user_id]").val()
             },
             callback : function(response){
-                console.log(response);
+                //console.log(response);
                 $(modalID + " .loader-image").hide();
                 for(i = 0; i<response.length;i++){
                     $(modalID + ' form').append(

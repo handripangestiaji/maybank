@@ -5,7 +5,7 @@ class Cms extends MY_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->library('Shorturl');
+		$this->load->library(array('Shorturl', 'ciqrcode'));
 		$this->load->model(array('tag_model', 'product_model', 'campaign_model', 'shorturl_model', 'campaign_url_model'));
 		$this->load->helper('form');
 		$this->load->library('form_validation');

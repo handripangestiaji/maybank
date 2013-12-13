@@ -133,6 +133,7 @@ class Campaign_model extends CI_Model
 			$res = $this->db->get('content_campaign_url');
 			
 			$x = 0;
+			$totalclicks = 0;
 			foreach($res->result() as $v)
 			{
 				$campaigns[$i]['short_urls'][$x]['long_url'] = $v->long_url;
@@ -140,8 +141,11 @@ class Campaign_model extends CI_Model
 				$campaigns[$i]['short_urls'][$x]['increment'] = $v->increment;
 				$campaigns[$i]['short_urls'][$x]['created_at'] = $v->created_at;
 				$campaigns[$i]['short_urls'][$x]['display_name'] = $v->display_name;
+				$totalclicks = $totalclicks + $v->increment;
 				$x++;
 			}
+			
+			$campaigns[$i]['total_clicks'] = $totalclicks;
 			
 			$i++;
 		}

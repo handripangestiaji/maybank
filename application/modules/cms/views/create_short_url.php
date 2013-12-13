@@ -79,6 +79,7 @@
                 <th>Full Url Path</th>
                 <th>Short Code</th>
                 <th>Total Used</th>
+                <th>Date Created</th>
                 <th>Creator</th>
                 <th>&nbsp;</th>
               </tr>
@@ -91,6 +92,7 @@
 		                <td><?php echo $v->long_url ?></td>
 		                <td><a href="<?php echo site_url('cms/url/'.$v->short_code) ?>" target="_blank" ><?php echo $v->short_code ?></a></td>
 		                <td><?php echo $v->increment ?></td>
+		                <td><?php echo date('M d, Y', strtotime($v->created_at)) ?></td>
 		                <td><?php echo $v->display_name ?></td>
 		                <td>
 		                <a href="<?php echo site_url('cms/create_short_url?action=delete&id='.$v->id)?>" class="btn btn-mini btn-danger pull-right">delete</a>

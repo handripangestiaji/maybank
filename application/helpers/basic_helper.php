@@ -296,3 +296,13 @@ function convert_image($image, $path){
         //file_get_contents($this->config->item('giziku_url').'food/getPhoto/'.$file_name);
     }
 }
+
+
+function IsRoleFriendlyNameExist($user_role, $currentPermission){
+    foreach($user_role as $role){
+        if($role->role_friendly_name == $currentPermission)
+            return true;
+    }
+    
+    return false;
+}

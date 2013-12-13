@@ -80,6 +80,7 @@ class Login extends Login_Controller {
 				'full_name'=> $user_login->row()->full_name,
 				'display_name' => $user_login->row()->display_name,
 				'role_name' => $user_login->row()->role_name,
+				'role_id' => $user_login->row()->role_id,
 				'web_address' => $user_login->row()->web_address,
 				'image_url' => $user_login->row()->image_url,
 				'description' => $user_login->row()->description,

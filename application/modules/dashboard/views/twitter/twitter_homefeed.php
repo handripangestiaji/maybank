@@ -32,7 +32,6 @@ for($i=0;$i<count($homefeed);$i++){
         $html = substr($html, 0, $url->indices[0]);
         $html .= "<a href='$url->expanded_url' target='_blank'>$url->display_url</a>";
         $html .= substr($homefeed[$i]->text, $url->indices[1] );
-        
     }
     $html =  linkify(html_entity_decode($html), true, false);
     echo $html;
@@ -40,17 +39,18 @@ for($i=0;$i<count($homefeed);$i++){
     <p class="indicator"><?php
     
     if(isset($entities->media[0])):    ?>
-        <img src="<?php echo $entities->media[0]->media_url_https?>" alt="" />
+        <img src="<?php echo $entities->media[0]->media_url_https?>" alt="" /> <br />
     <?php endif;?>
     
     <?php if($homefeed[$i]->case_id):?>
-        <button type="button" class="btn btn-purple  btn-mini" value="<?php echo $homefeed[$i]->case_id?>">CASE ID #<?php echo $homefeed[$i]->case_id?></button>
-    <?php else:?>
+        <button type="button" class="btn btn-purple btn-mini" value="<?php echo $homefeed[$i]->case_id?>">CASE ID #<?php echo $homefeed[$i]->case_id?></button>
+    <?php endif?>
+    <?php if(count($homefeed[$i]->reply_post) > 0):?>
+        <button type="button" class="btn btn-inverse btn-mini" value="<?php echo $homefeed[$i]->reply_post[0]->response_post_id?>">REPLIED</button>
+    <?php endif?>
+    <?php if(count($homefeed[$i]->reply_post) == 0 && !$homefeed[$i]->case_id):?>
         <button type="button" class="btn btn-warning btn-mini">OPEN</button>
     <?php endif?>
-    <?php if($homefeed[$i]->response_post_id):?>
-        <button type="button" class="btn btn-inverse btn-mini" value="<?php echo $homefeed[$i]->response_post_id?>">REPLIED</button>
-    <?php endif;?>
     
     <?php if ($homefeed[$i]->retweeted==1): ?>
         <button type="button" class="btn btn-inverse btn-mini"><i class="icon-retweet"></i></button>

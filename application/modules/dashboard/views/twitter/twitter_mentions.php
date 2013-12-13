@@ -25,21 +25,29 @@ for($i=0;$i<count($mentions);$i++){
             ?></span>
         </p>
     <p><?php 
-        echo linkify(html_entity_decode($mentions[$i]->text),true); 
+         $pattern = "/_(?=[^>]*<)/";
+    $html = html_entity_decode($mentions[$i]->text);
+    foreach($entities->urls as $url){
+        $html = substr($html, 0, $url->indices[0]);
+        $html .= "<a href='$url->expanded_url' target='_blank'>$url->display_url</a>";
+        $html .= substr($mentions[$i]->text, $url->indices[1] );
+    }
+    $html =  linkify(html_entity_decode($html), true, false);
+    echo $html;
         
     ?></p>
     <p><?php if(isset($entities->media[0])):?>
-        <img src="<?php echo $entities->media[0]->media_url_https?>" alt="" />
+        <img src="<?php echo $entities->media[0]->media_url_https?>" alt="" /> <br />
     <?php endif;?>
     </p>
     <p class="indicator">
     <?php if($mentions[$i]->case_id):?>
         <button type="button" class="btn btn-purple btn-mini" value="<?php echo $mentions[$i]->case_id?>">CASE ID #<?php echo $mentions[$i]->case_id?></button>
     <?php endif?>
-    <?php if($mentions[$i]->response_post_id):?>
-        <button type="button" class="btn btn-inverse btn-mini" value="<?php echo $mentions[$i]->response_post_id?>">REPLIED</button>
+    <?php if(count($mentions[$i]->reply_post) > 0):?>
+        <button type="button" class="btn btn-inverse btn-mini" value="<?php echo $mentions[$i]->reply_post[0]->response_post_id?>">REPLIED</button>
     <?php endif?>
-    <?php if(!$mentions[$i]->response_post_id && !$mentions[$i]->case_id):?>
+    <?php if(count($mentions[$i]->reply_post) == 0 && !$mentions[$i]->case_id):?>
         <button type="button" class="btn btn-warning btn-mini">OPEN</button>
     <?php endif?>
    

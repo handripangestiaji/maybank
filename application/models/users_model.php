@@ -371,4 +371,12 @@ class Users_model extends CI_Model
         $this->db->where($filter);
         return $this->db->get($this->user_group_detail);
     }
+    
+    function get_collection_detail($filter = array()){
+        $this->db->select('b.role_friendly_name, role_name');
+        $this->db->from('role_collection_detail a inner join application_role b on a.app_role_id = b.app_role_id');
+        if(count($filter) > 0)
+            $this->db->where($filter);
+        return $this->db->get()->result();
+    }
 }

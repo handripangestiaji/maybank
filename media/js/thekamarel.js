@@ -1016,7 +1016,7 @@ $(function(){
                         
                         function() {
                         $.ajax({
-                            url : BASEURL + 'dashboard/socialmedia/ActionFollow',
+                            url : BASEURL + 'dashboard/socialmedia/ActionFollow/' + ($(this).hasClass('unfollow') ? 'unfollow' : 'follow'),
                             type: "POST",
                             data: {
                                 post_id : retweetBtn.closest('li').find('.postId').val(),
@@ -1027,23 +1027,6 @@ $(function(){
                             {
                              
                             }
-                        });
-                    });
-                    
-                    $(this).on('click','.unfollow',
-                        function() {
-                        $.ajax({
-                            url : BASEURL + 'dashboard/socialmedia/twitterAction',
-                            type: "POST",
-                            data: {
-                                    action:'unfollow',
-                                    followid: $(this).siblings(".followid").val()
-                                    },
-                            success: function()
-                            {
-                                $('.compose-post-status').show();
-                                $('.compose-post-status').fadeOut(5000);
-                            },
                         });
                     });
                     

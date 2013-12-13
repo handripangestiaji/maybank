@@ -3,6 +3,7 @@
 class Users extends MY_Controller {
 
     private $connection;
+    public $user_role;
 	   
     function __construct()
     {
@@ -14,7 +15,8 @@ class Users extends MY_Controller {
 	$this->load->library('email',$config);
 	$this->load->library('upload');
 	$this->load->library('form_validation');
-
+	$this->user_role = $this->users_model->get_collection_detail(
+		array('role_collection_id'=>$this->session->userdata('role_id')));
 	
     }
     
@@ -53,13 +55,20 @@ class Users extends MY_Controller {
     //view create user
     function create()
     {
-        $data = array(
+	if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_Create_Delete'))
+	{
+	    $data = array(
 		      'role' => $this->users_model->select_role(),
 		      'group' => $this->users_model->select_group(),
 		      'double' => NULL,
 		      'doubleUser' => NULL
 		      );
-        $this->load->view('users/create_user',$data);
+	    $this->load->view('users/create_user',$data);
+	}
+	else{
+	    redirect('users/index');
+	}
+        
     }
     
     function insert_user()
@@ -228,12 +237,18 @@ class Users extends MY_Controller {
     
     function edit($id)
     {
+	if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_Edit'))
+	{
 	  $data = array(
 			'id' => $this->users_model->get_byid($id),
 			'role' => $this->users_model->select_role(),
 			'group' => $this->users_model->select_group()
 			);
 	  $this->load->view('users/edit_user',$data);
+	}
+	else{
+	    redirect('users/index');
+	}
     }
     
     function update_user()
@@ -973,4 +988,6 @@ class Users extends MY_Controller {
             $this->session->sess_destroy();
             redirect('login');
         }
+	
+    
 }

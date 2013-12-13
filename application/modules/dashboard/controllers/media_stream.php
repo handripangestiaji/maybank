@@ -327,6 +327,10 @@ class Media_stream extends CI_Controller {
     function ActionTwitterDelete(){
 	
     }
+    
+    function ActionFollow($type = 'follow'){
+	
+    }
     //=========================================facebook function=============================================
     public function fb_access_token(){
 	$app_id = $this->config->item('fb_appid');
@@ -652,7 +656,4 @@ class Media_stream extends CI_Controller {
 				    'increment' => 0)));
     }
     
-    public function CreateImage(){
-	
-    }
 }

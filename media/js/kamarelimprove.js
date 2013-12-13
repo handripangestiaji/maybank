@@ -1,5 +1,4 @@
 /*
-
     This file was created by Eko Purnomo to improve kamarel.js
 */
 
@@ -86,6 +85,50 @@ $(function(){
         
         
     });
+    
+    $(this).on('click', '.assign-case .facebook', function(e){
+        var modalID = $(this).attr("href");
+        var facebook_id = $(modalID + " input[name=post_id]").val();
+        var type = $(modalID + " input[name=type]").val();
+        $(modalID + " .loader-image").show();
+        $(modalID + " .related-conversation-body").remove();
+        var textToAppend = "" ;
+        
+        $(this).LoadContentAsync({
+            url : BASEURL + "case/mycase/FacebookRelatedConversation/" + facebook_id + "",
+            urlParameter : {
+                post_id : $(modalID + " input[name=post_id]").val()
+            },
+            callback : function(response){
+                //console.log(response);
+                $(modalID + " .loader-image").hide();
+                for(i = 0; i<response.length;i++){
+                    $(modalID + ' form').append(
+                         '<div class="related-conversation-body">' + 
+                        '<span class="related-conversation-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>' + 
+                        '<p class="headLine">' + 
+                            '<input type="checkbox" class="related-conversation-check" value="' + response[i].post_id + '">' + 
+                            '<span class="author">' +  response[i].name + '</span>' + 
+                            '<i class="icon-circle"></i>' + 
+                            '<span>posted a <span class="cyanText">Wall post</span></span>' + 
+                            '<i class="icon-circle"></i>' + 
+                            '<span>' + response[i].created_at + '</span>' + 
+                            '<i class="icon-play-circle moreOptions pull-right"></i>' +
+                        '</p>' + 
+                        '<div>' +
+                            '<p>' + response[i].comment_content + '</p>' +
+                            '<!--p><button class="btn btn-primary btn-mini btn-reply" style="margin-left: 5px;">Reply</button></p-->' +
+                        '</div></div>'
+                    );
+                }
+                
+            }
+        });
+        
+        
+        
+    });
+    
     $(this).on('click','.add-related-conversation', function(){
         var modalBody = $(this).parent().parent().find('.modal-body');
         currentElement = $(this);

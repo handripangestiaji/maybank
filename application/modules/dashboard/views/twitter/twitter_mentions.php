@@ -28,9 +28,15 @@ for($i=0;$i<count($mentions);$i++){
         echo linkify(html_entity_decode($mentions[$i]->text),true); 
         
     ?></p>
-    <p><?php if(isset($entities->media[0])):?>
-        <img src="<?php echo $entities->media[0]->media_url_https?>" alt="" />
-    <?php endif;?>
+    <p>
+    <?php if(isset($entities->media[0])){
+            echo "<a href='#modal-".$mentions[$i]->post_id."' data-toggle='modal' ><img src='".$entities->media[0]->media_url_https."' /></a>";
+            echo '<div id="modal-'.$mentions[$i]->post_id.'" class="attachment-modal modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+                            <button type="button" class="close " data-dismiss="modal"><i class="icon-remove"></i></button>
+                            <img src="'.$entities->media[0]->media_url_https.'" />
+                </div>';
+            }
+    ?>
     </p>
     <p class="indicator">
     <?php if($mentions[$i]->case_id):?>
@@ -89,9 +95,8 @@ for($i=0;$i<count($mentions);$i++){
                 </div>
         <?php } ?>
         <!-- ==================== CONDENSED TABLE HEADLINE ==================== -->
-        <div class="containerHeadline">
+        <div class="containerHeadline specialToggleTable">
             <i class="icon-table"></i><h2>Action Log</h2>
-            <div class="controlButton pull-right"><i class="icon-caret-down toggleTable"></i></div>
         </div>
         <!-- ==================== END OF CONDENSED TABLE HEADLINE ==================== -->
 

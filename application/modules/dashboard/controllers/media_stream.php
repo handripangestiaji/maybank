@@ -622,22 +622,27 @@ class Media_stream extends CI_Controller {
 	if($this->form_validation->run() == TRUE)
 	{
 		$code = $this->shorturl->urlToShortCode($params);
-		
-		$setparam = array(
-				    "campaign_id" => $params['campaign_id'], 
-				    "url_id" => $code['url_id'],
-				    "user_id" => $params['user_id']
-				    );
-		
-		$id_campaign_url = $this->campaign_url_model->insert($setparam);
-		
-		$setparam['short_code'] = $short_code; 
-		echo json_encode($setparam);
+		if($code != false){
+		    $setparam = array(
+					"campaign_id" => $params['campaign_id'], 
+					"url_id" => $code['url_id'],
+					"user_id" => $params['user_id']
+					);
+		    
+		    $id_campaign_url = $this->campaign_url_model->insert($setparam);
+		    $setparam['short_code'] = $short_code;
+		    $setparam['is_success'] = $code;
+		    echo json_encode($setparam);
+		}
+		else{		
+	     	$setparam['is_success'] = $code;
+		    $setparam['message'] = 'Something Error. Make sure url is valid';
+		    echo json_encode($setparam);
+		}
 	}
 	else{
-	    echo json_encode(array('message' => 'Something error. Make sure you have select a campaign and put the full url in the insert link box.', "success" => FALSE));
-	}
-    }
+	    echo json_encode(array('is_success' => FALSE,'message' => 'Something error. Make sure you have select a campaign and put the full url in the insert link box.'));
+}
     
     public function GenerateShortUrlWithoutCampaign(){
 	header("Content-Type: application/x-json");

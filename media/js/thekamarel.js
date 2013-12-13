@@ -468,7 +468,7 @@ $(function(){
                     });
                     var increment = 1;
                     setInterval(function(){
-                        $(document).RefreshAllStream();
+                        //$(document).RefreshAllStream();
                         increment ++;
                         console.log(increment);
                     }, 120000);
@@ -993,9 +993,9 @@ $(function(){
                                 retweetBtn.removeAttr('disabled').find('span').html('');
                                 if(response.success == true){
                                     if(action == 'favorite')
-                                        retweetedBtn.closest('li').find('.indicator').append('<button type="button" class="btn btn-success btn-mini"><i class="icon-star"></i></button>');
+                                        retweetBtn.closest('li').find('.indicator').append('<button type="button" class="btn btn-inverse btn-mini"><i class="icon-star"></i></button>');
                                     else
-                                        retweetedBtn.closest('li').find('.indicator').append('<button type="button" class="btn btn-success btn-mini"><i class="icon-retweet"></i></button>');
+                                        retweetBtn.closest('li').find('.indicator').append('<button type="button" class="btn btn-success btn-mini"><i class="icon-retweet"></i></button>');
                                 }
                                 else{
                                     
@@ -1004,45 +1004,29 @@ $(function(){
                             failed : function(response){
                                 retweetBtn.removeAttr('disabled').find('span').html('');
                                 if(action == 'favorite')
-                                        retweetedBtn.closest('li').find('.indicator').append('<button type="button" class="btn btn-success btn-mini"><i class="icon-star"></i></button>');
+                                        retweetBtn.closest('li').find('.indicator').append('<button type="button" class="btn btn-inverse btn-mini"><i class="icon-star"></i></button>');
                                 else
-                                        retweetedBtn.closest('li').find('.indicator').append('<button type="button" class="btn btn-success btn-mini"><i class="icon-retweet"></i></button>');
+                                        retweetBtn.closest('li').find('.indicator').append('<button type="button" class="btn btn-success btn-mini"><i class="icon-retweet"></i></button>');
                             }
                         });
                     });
                     
 
                     $(this).on('click','.follow',
+                        
                         function() {
                         $.ajax({
-                            url : BASEURL + 'dashboard/socialmedia/twitterAction',
+                            url : BASEURL + 'dashboard/socialmedia/ActionFollow/' + ($(this).hasClass('unfollow') ? 'unfollow' : 'follow'),
                             type: "POST",
                             data: {
-                                    action:'follow',
-                                    followid: $(this).siblings(".followid").val()
-                                    },
-                            success: function()
-                            {
-                                $('.compose-post-status').show();
-                                $('.compose-post-status').fadeOut(5000);
-                            }
-                        });
-                    });
-                    
-                    $(this).on('click','.unfollow',
-                        function() {
-                        $.ajax({
-                            url : BASEURL + 'dashboard/socialmedia/twitterAction',
-                            type: "POST",
-                            data: {
-                                    action:'unfollow',
-                                    followid: $(this).siblings(".followid").val()
-                                    },
-                            success: function()
-                            {
-                                $('.compose-post-status').show();
-                                $('.compose-post-status').fadeOut(5000);
+                                post_id : retweetBtn.closest('li').find('.postId').val(),
+                                channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
+                                
                             },
+                            success: function()
+                            {
+                             
+                            }
                         });
                     });
                     

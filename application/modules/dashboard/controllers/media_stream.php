@@ -329,7 +329,49 @@ class Media_stream extends CI_Controller {
     }
     
     function ActionFollow($type = 'follow'){
-	
+	header("Content-Type: application/x-json");
+	$action['channel_id'] = $this->input->post('channel_id');
+	$action['post_id'] = $this->input->post('post_id');
+	$action['created_by'] = $this->session->userdata('user_id');
+	$twitter_data = $this->twitter_model->ReadTwitterData(
+	    array(
+		'a.post_id' => $this->input->post('post_id')
+	    ),
+	    1
+	);
+	if(count($twitter_data) > 0){
+	    $twitter_data = $twitter_data[0];
+	    $channel = $this->account_model->GetChannel(array(
+		'channel_id' => $this->input->post('channel_id')
+	    ));
+	    if(count($channel) == 0){
+		echo json_encode(
+		    array(
+			'success' => false,
+			'message' => "Invalid Channel Id"
+		    )
+		);
+		return;
+	    }
+	    else{
+		$channel = $channel[0];
+		$this->twitter_model->InitConnection($channel->oauth_token, $channel->oauth_secret);
+		$return_value = null;
+		if($type == 'follow'){
+		    $return_value = $this->twitter_model->CreateFriends($twitter_data, $this->session->userdata('user_id'));
+		}
+		else if($type == 'unfollow'){
+		    $return_value = $this->twitter_model->RemoveFriends($twitter_data, $this->session->userdata('user_id'));
+		}
+		echo json_encode(
+		    array(
+			'success' => true,
+			'message' => "Relation was sucessfully made.",
+			'result' => $return_value
+		    )
+		);
+	    }
+	}
     }
     //=========================================facebook function=============================================
     public function fb_access_token(){

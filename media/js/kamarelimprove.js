@@ -212,4 +212,8 @@ $(function(){
             }
         });
     });
+    
+    $(this).on('click', '.btn-resolve', function(e){
+         
+    });
 });

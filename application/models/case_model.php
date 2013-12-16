@@ -107,5 +107,13 @@ class case_model extends CI_Model{
         $this->db->where("a.is_read", 0);
         return $this->db->get()->result();
     }
-
+    
+    
+    function ResolveCase($case_id, $solved_by){
+        $this->db->where('case_id', $case_id);
+        $this->db->update('case', array(
+            'status' => 'solved',
+            'solved_by' => $solved_by
+        ));
+    }
 }

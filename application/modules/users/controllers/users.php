@@ -24,7 +24,7 @@ class Users extends MY_Controller {
     function index()
     {
      //if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_View'))
-     {
+     //{
 	  $config['base_url'] = base_url().'users/index';
 	  $config['total_rows'] = $this->users_model->count_record();
 	  $config['per_page'] = 10;
@@ -254,7 +254,7 @@ class Users extends MY_Controller {
 			'double' => NULL
 			);
 	  $this->load->view('users/edit_user',$data);
-	}
+	//}
 	//else{
 	    //redirect('users');
 	//}
@@ -263,7 +263,7 @@ class Users extends MY_Controller {
     function update_user()
     {
      //if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_Edit'))
-	{
+	//{
 	  $config = array(
 			      'upload_path'   => 'media/dynamic/',
 			      'allowed_types' => 'gif|jpg|png',
@@ -494,16 +494,16 @@ class Users extends MY_Controller {
     
     function delete($id)
     {
-        if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_Create_Delete'))
-	{
+        //if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_Create_Delete'))
+	//{
 	  $this->users_model->delete_user($id);
 	  $this->session->set_flashdata('info_delete', TRUE);
 	  redirect('users');
-	}
-	else
-	{
-	  redirect('users');
-	}
+	//}
+	//else
+	//{
+	  //redirect('users');
+	//}
     }
     //============================END USER=================================
     

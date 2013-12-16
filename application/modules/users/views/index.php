@@ -61,14 +61,14 @@
             <div style="float: left;">
                 <h5>User List</h5>
             </div>
-            <?php for($i=0;$i<count($this->user_role);$i++)
+            <?php //for($i=0;$i<count($this->user_role);$i++)
                 {
-                    if($this->user_role[$i]->role_friendly_name=='User Management_User_Create_Delete'){
+                    //if($this->user_role[$i]->role_friendly_name=='User Management_User_Create_Delete'){
                 ?>
             <div style="float: right;">
                 <input class="btn btn-primary" onclick="btn_add()" type="button" name="btn_new" value="+ New User" />
             </div>
-            <?php }}?>
+            <?php //}}?>
             
             <div style="clear: both;"></div>
             <hr style="margin-top: 0px;">

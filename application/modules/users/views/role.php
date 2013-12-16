@@ -69,6 +69,10 @@
         </div>
         
         <div class="cms-table pull-right">
+            <?php
+                for($i=0;$i<count($this->user_role);$i++){
+                    if($this->user_role[$i]->role_friendly_name=='User Management_Role_Create_Delete'){
+            ?>
             <form id="roleform" method='post' action="<?php echo site_url('users/insert_role');?>" >
             <h5>New User Role</h5>
             <hr style="margin-top: 0px;">
@@ -96,18 +100,22 @@
                     </form>
                 </div>
                 </div>
-    <hr />
-                
+        <hr />
+        <?php }}?>
             <!--<input type='button' value='Create Role Permission' onclick='btn_createRole()' />
             --><h5>Current User Role</h5>
             <table class="table table-striped table-role">
                 <thead>
                     <tr>
-                        <td>User Role</td>
-                        <td>Users</td>
-                        <td>Creator</td>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
+                        <th>User Role</th>
+                        <th>Users</th>
+                        <th>Creator</th>
+                        <?php for($i=0;$i<count($this->user_role);$i++){?>
+                            <?php if($this->user_role[$i]->role_friendly_name=='User Management_User_Edit'){?>
+                            <th>&nbsp;</th>
+                            <?php }if($this->user_role[$i]->role_friendly_name=='User Management_User_Create_Delete'){?>
+                            <th>&nbsp;</th>
+                        <?php }}?>
                     </tr>
                 </thead>
                 <tbody>
@@ -116,8 +124,12 @@
                         <td><?php echo $row->role_name;?></td>
                         <td><?php echo $count_role[$i];?></td>
                         <td><?php echo $row->display_name;?></td>
-                        <td><a href='<?php echo site_url("users/edit_role/".$row->role_collection_id);?>'><span><i class="icon-pencil"></i></span></a></td>
+                        <?php for($x=0;$x<count($this->user_role);$x++){
+                                if($this->user_role[$x]->role_friendly_name=='User Management_Role_Edit'){?>
+                            <td><a href='<?php echo site_url("users/edit_role/".$row->role_collection_id);?>'><span><i class="icon-pencil"></i></span></a></td>
+                        <?php   }if($this->user_role[$x]->role_friendly_name=='User Management_Role_Create_Delete'){?>
                         <td><a href="" onclick="show_confirm('<?php echo $row->role_collection_id;?>');return false;"><span><i class="icon-remove"></i></span></a></td>
+                        <?php }}?>
                     </tr>
                     <?php $i++;}?>
                 </tbody>

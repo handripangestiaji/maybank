@@ -63,6 +63,9 @@
         </div>
         
         <div class="cms-table pull-right">
+            <?php for($x=0;$x<count($this->user_role);$x++){
+                if($this->user_role[$x]->role_friendly_name=='User Management_Group_Create_Delete'){
+            ?>
             <h5>New Group</h5>
             <hr style="margin-top: 0px;">
             <form method='post' action='<?php echo site_url('users/insert_group');?>'>
@@ -97,8 +100,9 @@
                     <input type='submit' class="btn" value='Create' ?>
                 </div>
             </from>
-                <div style='clear: both'></div><br />
+            <div style='clear: both'></div><br />
             <hr style="margin-top: 0px;">
+            <?php }}?>
             <h5>Current Group</h5>
             <table class="table table-striped">
                 <thead>
@@ -107,8 +111,13 @@
                         <th>Users</th>
                         <th>Channel</th>
                         <th>Creator</th>
+                        <?php for($x=0;$x<count($this->user_role);$x++){
+                                if($this->user_role[$x]->role_friendly_name=='User Management_Group_Edit'){
+                        ?>
                         <th>&nbsp;</th>
+                        <?php }if($this->user_role[$x]->role_friendly_name=='User Management_Group_Create_Delete'){?>
                         <th>&nbsp;</th>
+                        <?php }}?>
                     </tr>
                 </thead>
                 
@@ -135,8 +144,13 @@
                             ?>
                         </td>
                         <td><?php echo $gr->name;?></td>
+                        <?php for($x=0;$x<count($this->user_role);$x++){
+                                if($this->user_role[$x]->role_friendly_name=='User Management_Group_Edit'){
+                        ?>
                         <td><a href="<?php echo site_url('users/edit_group/'.$gr->group_id);?>"><span><i class="icon-pencil"></i></span></a></td>
+                        <?php }if($this->user_role[$x]->role_friendly_name=='User Management_Group_Create_Delete'){?>
                         <td><a href="" onclick="show_confirm('<?php echo $gr->group_id;?>');return false;"><span><i class="icon-remove"></i></span></a></td>
+                        <?php }}?>
                     </tr>
                     <?php $i++;}?>
                 </tbody>

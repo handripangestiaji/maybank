@@ -1,8 +1,3 @@
-<?php
-    //echo '<pre>'; print_r($this->user_role);echo'</pre>';
-?>
-
-
 <div class="row-fluid" style="width: 100%; margin: 0px auto;">
     
     <?php
@@ -44,26 +39,31 @@
 <!--<span style="font-size: 14pt; color: black; margin: 5px 0;">USER MANAGEMENT</span>-->
     <div class="cms-content row-fluid">
         <div class="cms-filter pull-left">
-	    <?php for($i=0; $i < count($this->user_role ); $i++):?>
-		<?php if($this->user_role[$i]->role_friendly_name == 'User Management_User_View'):?>
+	    <?php //for($i=0; $i < count($this->user_role ); $i++):?>
+		<?php //if($this->user_role[$i]->role_friendly_name == 'User Management_User_View'):?>
 		    <input class="btn btn-primary" onclick="menu_user()" type="button" name="btn_user" value="User" /> <br />
-		<?php endif;?>
-		<?php if($this->user_role[$i]->role_friendly_name == 'User Management_Role_View'):?>
+		<?php //endif;?>
+		<?php //if($this->user_role[$i]->role_friendly_name == 'User Management_Role_View'):?>
 		    <input class="btn" type="button" onclick="menu_role()" name="btn_role" value="Role"  />   <br />
-		<?php endif;?>
-		<?php if($this->user_role[$i]->role_friendly_name == 'User Management_Group_View'):?>
+		<?php //endif;?>
+		<?php //if($this->user_role[$i]->role_friendly_name == 'User Management_Group_View'):?>
 		    <input class="btn" type="button" onclick="menu_group()" name="btn_group" value="Group" />
-		<?php endif;?>
-	    <?php endfor?>
+		<?php //endif;?>
+	    <?php //endfor?>
         </div>
         
         <div class="cms-table pull-right">
             <div style="float: left;">
                 <h5>User List</h5>
             </div>
+            <?php //for($i=0;$i<count($this->user_role);$i++)
+                //{
+                    //if($this->user_role[$i]->role_friendly_name=='User Management_User_Create_Delete'){
+                ?>
             <div style="float: right;">
                 <input class="btn btn-primary" onclick="btn_add()" type="button" name="btn_new" value="+ New User" />
             </div>
+            <?php //}}?>
             
             <div style="clear: both;"></div>
             <hr style="margin-top: 0px;">
@@ -86,9 +86,14 @@
                 </table>
             </div>
             <div style="float: right; margin-top: -10px;">
-                <input type="text" id="search_user" name="search_user" placeholder="Search Name, Email or User ID" />
-                
-                <button onclick=''><span><i class="icon-search"></i></span></button>
+                <form id="search_form" method="post" action="<?php echo site_url('users');?>">
+                <table>
+                    <tr>
+                        <td><input type="text" id="search_user" name="search_user" placeholder="Search Name, Email or User ID" /></td>
+                        <td style='padding-bottom: 10px;'><button onclick="search_user();return false;"><span class="add-on" id="login"><i class="icon-search"></i></span></button></td>
+                    </tr>
+                </table>
+                </form>
             </div>
             <div style="clear: both"></div>
             <table class="table table-striped">
@@ -102,7 +107,9 @@
                         <th>Status</th>
                         <th>Date Created</th>
                         <th>Creator</th>
+                        <?php for($i=0;$i<count($this->user_role);$i++){if($this->user_role[$i]->role_friendly_name=='User Management_User_Edit'){?>
                         <th>&nbsp;</th>
+                        <?php }}?>
                     </tr>
                 </thead>
                 
@@ -123,7 +130,9 @@
                         <?php }?>
                         <td><?php echo $row->created_at;?></td>
                         <td><?php echo $row->created_by_name;?></td>
+                        <?php for($i=0;$i<count($this->user_role);$i++){if($this->user_role[$i]->role_friendly_name=='User Management_User_Edit'){?>
                         <td><a href="<?php echo site_url('users/edit/'.$row->user_id);?>"><span><i class="icon-pencil"></i></span></a></td>
+                        <?php }}?>
                         <!--<td>
                             <a href="" onclick="show_confirm('<?php //echo $row->user_id;?>');return false;"><span><i class="icon-remove"></i></span></a>
                         </td>-->
@@ -153,9 +162,7 @@
 <script type="text/javascript">
     function search_user()
     {
-        var value_search = document.getElementById('search_user').value; 
-        //alert(value_search);
-        window.location.href = "<?php echo site_url('users/search_user');?>/"+encodeURIComponent(value_search);
+        document.getElementById("search_form").submit();
     }
     
     function yes_delete_user()

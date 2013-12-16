@@ -63,12 +63,17 @@
 <!--<span style="font-size: 14pt; color: black; margin: 5px 0;">USER MANAGEMENT</span>-->
     <div class="cms-content row-fluid">
         <div class="cms-filter pull-left">
-            <input class="btn" onclick='menu_user()' type="button" name="btn_user" value="User" /> <br />
-            <input class="btn btn-primary" type="button" onclick="menu_role()" name="btn_role" value="Role"  />   <br />
-            <input class="btn" type="button" onclick='menu_group()' name="btn_group" value="Group" />
+            
+		    <input class="btn" onclick="menu_user()" type="button" name="btn_user" value="User" /> <br />
+		
+		    <input class="btn btn-primary" type="button" onclick="menu_role()" name="btn_role" value="Role"  />   <br />
+		
+		    <input class="btn" type="button" onclick="menu_group()" name="btn_group" value="Group" />
+		
         </div>
         
         <div class="cms-table pull-right">
+           
             <form id="roleform" method='post' action="<?php echo site_url('users/insert_role');?>" >
             <h5>New User Role</h5>
             <hr style="margin-top: 0px;">
@@ -96,18 +101,20 @@
                     </form>
                 </div>
                 </div>
-    <hr />
-                
+        <hr />
+        <?php //}}?>
             <!--<input type='button' value='Create Role Permission' onclick='btn_createRole()' />
             --><h5>Current User Role</h5>
             <table class="table table-striped table-role">
                 <thead>
                     <tr>
-                        <td>User Role</td>
-                        <td>Users</td>
-                        <td>Creator</td>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
+                        <th>User Role</th>
+                        <th>Users</th>
+                        <th>Creator</th>
+                            <th>&nbsp;</th>
+                           
+                            <th>&nbsp;</th>
+                        
                     </tr>
                 </thead>
                 <tbody>
@@ -116,8 +123,11 @@
                         <td><?php echo $row->role_name;?></td>
                         <td><?php echo $count_role[$i];?></td>
                         <td><?php echo $row->display_name;?></td>
-                        <td><a href='<?php echo site_url("users/edit_role/".$row->role_collection_id);?>'><span><i class="icon-pencil"></i></span></a></td>
+                        
+                            <td><a href='<?php echo site_url("users/edit_role/".$row->role_collection_id);?>'><span><i class="icon-pencil"></i></span></a></td>
+                        
                         <td><a href="" onclick="show_confirm('<?php echo $row->role_collection_id;?>');return false;"><span><i class="icon-remove"></i></span></a></td>
+                        
                     </tr>
                     <?php $i++;}?>
                 </tbody>

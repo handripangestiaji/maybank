@@ -18,12 +18,17 @@ class Users_model extends CI_Model
     
     //======================== USER ==========================
     //view user
-    function select_user1($limit, $start, $role_id = null)
+    function select_user1($limit, $start, $role_id = null,$value)
     {
         $this->db->distinct();
         $this->db->limit($limit, $start);
         $this->db->select('a.*, b.full_name as created_by_name,c.group_name,d.role_name');
         $this->db->from('user a left outer join user b on b.user_id = a.created_by inner join user_group c on a.group_id = c.group_id inner join role_collection d on a.role_id=d.role_collection_id');
+        if($value != null)
+        {
+            $where = "a.email like '%".$value."%' OR a.display_name like '%".$value."%' OR a.username like '%".$value."%'";
+            $this->db->where($where);
+        }
         $this->db->order_by('a.user_id','asc');
         if($role_id != null)
         $this->db->where("a.role_id", $role_id);
@@ -57,25 +62,6 @@ class Users_model extends CI_Model
         $this->db->join('role_collection','user.role_id = role_collection.role_collection_id','left');
         $this->db->where('user_id',$id);
         return $this->db->get($this->user);
-    }
-    
-    function search_user($limit, $start, $role_id = null,$value_user)
-    {
-        $this->db->distinct();
-        $this->db->limit($limit, $start);
-        $this->db->select('a.*, b.full_name as created_by_name,c.group_name,d.role_name');
-        $this->db->from('user a left outer join user b on b.user_id = a.created_by inner join user_group c on a.group_id = c.group_id inner join role_collection d on a.role_id=d.role_collection_id');
-        $this->db->order_by('a.user_id','asc');
-        if($role_id != null)
-        $this->db->where("a.role_id", $role_id);
-        $query = $this->db->get($this->user);
-        if ($query->num_rows() > 0) {
-            foreach ($query->result() as $row) {
-                $data[] = $row;
-            }
-            return $data;
-        }
-        return false;
     }
     
     function count_record()

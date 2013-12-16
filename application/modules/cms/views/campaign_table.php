@@ -61,7 +61,11 @@
 		                                		<td><?php echo $x['created_at']?></td>
 		                                		<td><?php echo $x['increment']?></td>
 		                                		<td><?php echo $x['display_name']?></td>
-		                                		<td><a href="#">view</a></td>
+		                                		<td><a href="#modal-<?php echo $x['short_code'] ?>" data-toggle='modal'>view</a></td>
+                                                                                <div id="modal-<?php echo $x['short_code'] ?>" class="attachment-modal modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+                                                                                    <button type="button" class="close " data-dismiss="modal"><i class="icon-remove"></i></button>
+                                                                                    <img src="http://assets.econsultancy.com/images/resized/0002/4236/qr_code-blog-third.png" style="padding: 30px;"/>
+                                                                                </div>
 	                                		</tr>
 	                                	<?php endforeach;?>
 	                                <?php endif; ?>

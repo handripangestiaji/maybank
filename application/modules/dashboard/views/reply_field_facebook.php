@@ -67,22 +67,6 @@
     <div class="pull-left reply-char-count">
             <i class="icon-facebook-sign"></i>&nbsp;<span class="reply-fb-char-count">2000</span>
     </div>
-    <?php
-        if($reply_type=='reply_comment'){
-         
-        //echo 'reply_comment';   
-        echo $fb_feed[$i]->post_stream_id;
-        //print_r($fb_feed);
-        }elseif($reply_type=='reply_nested'){
-        //print_r(fb_feed[$i]->comment_stream_id);
-        //print_r($fb_feed);
-        //echo 'reply_nested'; 
-        }else{
-            
-            echo '';
-        }
-    
-    ?>
     <div class="pull-right">
       <?php if($reply_type=='reply_comment'){?>
         <button class="btn btn-primary btn-small btn-send-reply" value="<?php echo $fb_feed[$i]->post_stream_id; ?>">SEND</button>    

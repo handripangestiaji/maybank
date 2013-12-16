@@ -39,11 +39,11 @@
         <h4 class="filled">
         <a role="button" href="#"><i class="icon-trash greyText"></i></a>
         <div class="pull-right">
-           <button class="btn btn-dm btn-primary" data-toggle="modal"><i class="icon-envelope"></i></button>
-                <button type="button" class="btn btn-primary" name="action" value="follow"><i class="icon-user"></i></button>
-                <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>
-                <input type="hidden" name="str_id" value="<?php //echo json$directmessage[$i]->id_str; ?>" />
-                <input type="hidden" name="id" value="<?php //echo $directmessage[$i]->id; ?>" />
+            <button class="btn btn-dm btn-primary" data-toggle="modal"><i class="icon-envelope"></i></button>
+            <button type="button" class="btn btn-inverse follow unfollow" name="action" value="<?php echo $directmessage[$i]->sender->twitter_user_id?>"><i class="icon-user"></i></button>
+            <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>
+            <input type="hidden" name="str_id" value="<?php //echo json$directmessage[$i]->id_str; ?>" />
+            <input type="hidden" name="id" value="<?php //echo $directmessage[$i]->id; ?>" />
         </div>
         <br clear="all" />
         </h4>

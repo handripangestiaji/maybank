@@ -1,7 +1,7 @@
 <div class="row-fluid" style="width: 80%; margin: 0px auto;">
 <!--<span style="font-size: 14pt; color: black; margin: 5px 0;">USER MANAGEMENT</span>-->
     <?php
-	$msge = $this->session->flashdata('double');
+	//$msge = $this->session->flashdata('double');
 	if($msge!=NULL){ ?>
         <div class="alert alert-info" style='background: #ffe4e4; color: #b94a48; border-color: #eed3d7;'>
             <button type="button" class="close" data-dismiss="alert">&times;</button>

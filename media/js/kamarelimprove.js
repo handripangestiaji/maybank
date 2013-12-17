@@ -256,10 +256,11 @@ $(function(){
     
     $(this).on('click', '.btn-resolve', function(e){
         var btnResolve = $(this);
-        btnResolve.attr("disabled", "disabled");
+        
         confirmed = confirm('Are you sure to solve this case?');
         e.preventDefault();
         if(confirmed){
+            btnResolve.attr("disabled", "disabled");
             $.ajax({
                "url" : BASEURL + "case/mycase/ResolveCase",
                "type" : "POST",

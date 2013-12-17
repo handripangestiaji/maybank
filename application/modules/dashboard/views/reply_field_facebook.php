@@ -67,6 +67,8 @@
     <div class="pull-left reply-char-count">
             <i class="icon-facebook-sign"></i>&nbsp;<span class="reply-fb-char-count">2000</span>
     </div>
+    
+                                <ul id="compose-tags-reply" style="width: 200px; height: 50px;"></ul>   
     <div class="pull-right">
       <?php if($reply_type=='reply_comment'){?>
         <button class="btn btn-primary btn-small btn-send-reply" value="<?php echo $fb_feed[$i]->post_stream_id; ?>">SEND</button>    

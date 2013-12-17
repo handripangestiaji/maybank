@@ -91,7 +91,8 @@
         
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="<?php echo base_url('media/js/vendor/jquery-1.9.1.min.js')?>"><\/script>')</script>
-        <script src="<?php echo base_url('media/js/vendor/bootstrap-slider.js')?>"></script>                   <!-- bootstrap slider plugin -->
+        <script src="<?php echo base_url(); ?>media/js/vendor/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script> <!-- jquery tag-it -->
+	<script src="<?php echo base_url('media/js/vendor/bootstrap-slider.js')?>"></script>                   <!-- bootstrap slider plugin -->
         <script src="<?php echo base_url('media/js/vendor/jquery.sparkline.min.js')?>"></script>               <!-- small charts plugin -->
         <script src="<?php echo base_url('media/js/vendor/jquery.flot.min.js')?>"></script>                    <!-- charts plugin -->
         <script src="<?php echo base_url('media/js/vendor/jquery.flot.resize.min.js')?>"></script>             <!-- charts plugin / resizing extension -->
@@ -122,8 +123,7 @@
 
         <script src="<?php echo base_url(); ?>media/js/vendor/bootstrap-linkpreview.js"></script> <!-- jquery linkpreview -->
         
-        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script> <!-- jquery tag-it -->
-	<script src="<?php echo base_url(); ?>media/js/vendor/tag-it.js"></script> <!-- jquery tag-it -->
+        <script src="<?php echo base_url(); ?>media/js/vendor/tag-it.js"></script> <!-- jquery tag-it -->
 
         <script src="<?php echo base_url('media/js/thekamarel.min.js')?>"></script>                            <!-- main project js file -->
         <script src="<?php echo base_url('media/js/thekamarel.js')?>"></script>                            <!-- main project js file -->

@@ -23,8 +23,8 @@ class Users extends MY_Controller {
     //===============================USER=======================================
     function index()
     {
-     //if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_View'))
-     //{
+     if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_View'))
+     {
 	  $config['base_url'] = base_url().'users/index';
 	  $config['total_rows'] = $this->users_model->count_record();
 	  $config['per_page'] = 10;
@@ -55,18 +55,18 @@ class Users extends MY_Controller {
 	  $data['count'] = $this->users_model->count_record();
 	  
 	  $this->load->view('users/index',$data);
-     //}
-     //else
-     //{
-	//  redirect('dashboard');
-     //}
+     }
+     else
+     {
+	  redirect('dashboard');
+     }
     }
     
     //view create user
     function create()
     {
-	//if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_Create_Delete'))
-	//{
+	if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_Create_Delete'))
+	{
 	    $data = array(
 		      'role' => $this->users_model->select_role(),
 		      'group' => $this->users_model->select_group(),
@@ -74,16 +74,16 @@ class Users extends MY_Controller {
 		      'doubleUser' => NULL
 		      );
 	    $this->load->view('users/create_user',$data);
-	//}
-	//else{
-	  //  redirect('users');
-	//}
+	}
+	else{
+	    redirect('users');
+	}
         
     }
     
     function insert_user()
     {
-	  //if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_Create_Delete')){
+	  if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_Create_Delete')){
 	  if(isset($_POST['Create']))
 	  {
 	       $this->form_validation->set_rules('username', 'User Name', 'required');
@@ -236,17 +236,17 @@ class Users extends MY_Controller {
 	       }
 	       
 	  }
-	  //}
-	  //else
-	  //{
-	   //    redirect('users');
-	  //}
+	  }
+	  else
+	  {
+	       redirect('users');
+	  }
     }
     
     function edit($id)
     {
-	//if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_Edit'))
-	//{
+	if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_Edit'))
+	{
 	  $data = array(
 			'id' => $this->users_model->get_byid($id),
 			'role' => $this->users_model->select_role(),
@@ -254,16 +254,16 @@ class Users extends MY_Controller {
 			'double' => NULL
 			);
 	  $this->load->view('users/edit_user',$data);
-	//}
-	//else{
-	    //redirect('users');
-	//}
+	}
+	else{
+	    redirect('users');
+	}
     }
     
     function update_user()
     {
-     //if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_Edit'))
-	//{
+     if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_Edit'))
+	{
 	  $config = array(
 			      'upload_path'   => 'media/dynamic/',
 			      'allowed_types' => 'gif|jpg|png',
@@ -486,31 +486,31 @@ class Users extends MY_Controller {
 			 redirect('users');
 	       }
 	  }
-	  //}
-	  //else{
-		//  redirect('users');
-	      //}
+	  }
+	  else{
+		  redirect('users');
+	      }
     }
     
     function delete($id)
     {
-        //if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_Create_Delete'))
-	//{
+        if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_Create_Delete'))
+	{
 	  $this->users_model->delete_user($id);
 	  $this->session->set_flashdata('info_delete', TRUE);
 	  redirect('users');
-	//}
-	//else
-	//{
-	  //redirect('users');
-	//}
+	}
+	else
+	{
+	  redirect('users');
+	}
     }
     //============================END USER=================================
     
     //============================ ROLE ===================================
     function menu_role()
     {
-	//if(IsRoleFriendlyNameExist($this->user_role, 'User Management_Role_View')){  
+	if(IsRoleFriendlyNameExist($this->user_role, 'User Management_Role_View')){  
 	  $select_role = $this->users_model->select_role();
 	  foreach($select_role->result() as $v1)
 	  {
@@ -565,15 +565,15 @@ class Users extends MY_Controller {
 	  $data['json'] = json_encode($tree);
 	  
 	  $this->load->view('users/role',$data);
-	 // }
-	  //else{
-	//  redirect('users');
-	  //}
+	  }
+	  else{
+	  redirect('users');
+	  }
      }
     
     function insert_role()
     {
-	  //if(IsRoleFriendlyNameExist($this->user_role, 'User Management_Role_Create_Delete')){
+	  if(IsRoleFriendlyNameExist($this->user_role, 'User Management_Role_Create_Delete')){
 	  $select_role = $this->users_model->select_role();
 	  foreach($select_role->result() as $v1)
 	  {
@@ -773,15 +773,15 @@ class Users extends MY_Controller {
 	       $this->session->set_flashdata('succes', TRUE);
 	       redirect('users/menu_role');
 	  }
-	  //}
-	  //else{
-	  //     redirect('users');
-	  //}
+	  }
+	  else{
+	       redirect('users');
+	  }
     }
     
     function delete_role($id)
     {
-     //if(IsRoleFriendlyNameExist($this->user_role, 'User Management_Role_Create_Delete')){
+     if(IsRoleFriendlyNameExist($this->user_role, 'User Management_Role_Create_Delete')){
 	  $cek_roleid = $this->users_model->cek_roleid($id);
 	  if($cek_roleid->num_rows()==0)
 	  {
@@ -794,16 +794,16 @@ class Users extends MY_Controller {
 	       $this->session->set_flashdata('info_delete_failed', TRUE);
 	       redirect('users/menu_role');
 	  }
-     //}
-     //else
-     //{
-	//  redirect('users');
-     //}
+     }
+     else
+     {
+	  redirect('users');
+     }
     }
     
     function edit_role($id)
     {
-     //if(IsRoleFriendlyNameExist($this->user_role, 'User Management_Role_Edit')){
+     if(IsRoleFriendlyNameExist($this->user_role, 'User Management_Role_Edit')){
 	  $data = array(
 			 'role' => $this->users_model->edit_role($id)
 			);
@@ -847,15 +847,15 @@ class Users extends MY_Controller {
 	  
 	  
 	  $this->load->view('users/role_edit',$data);
-     //}
-    // else{
-	//  redirect('users');
-    // }
+     }
+     else{
+	  redirect('users');
+     }
     }
     
     function update_role()
     {
-     //if(IsRoleFriendlyNameExist($this->user_role, 'User Management_Role_Edit')){
+     if(IsRoleFriendlyNameExist($this->user_role, 'User Management_Role_Edit')){
 	  $this->form_validation->set_rules('role_name', 'Role Name', 'required');
 	  $this->form_validation->set_rules('role','Role Permission', 'required');
 	  $cek = $this->input->post('role');
@@ -963,7 +963,7 @@ class Users extends MY_Controller {
 	  
 	  elseif($check_role->num_rows()>=1)
 	  {
-	       if($role_name!=$role_name1)
+	       if(strtolower($role_name)!=strtolower($role_name1))
 	       {
 		    $id = $this->input->post('role_id');
 		    $data = array(
@@ -1010,7 +1010,7 @@ class Users extends MY_Controller {
 		    
 		    $this->load->view('users/role_edit',$data);
 	       }
-	       else
+	       elseif(strtolower($role_name)==strtolower($role_name1))
 	       {
 		    $data = array(
 				   'role_name' => $this->input->post('role_name')
@@ -1058,10 +1058,10 @@ class Users extends MY_Controller {
 	       $this->session->set_flashdata('info', TRUE);
 	       redirect('users/menu_role');
 	  }
-    //}
-   // else{
-   //  redirect('users');
-   // }
+    }
+    else{
+     redirect('users');
+    }
     }
     //============================END ROLE=================================
     
@@ -1281,7 +1281,7 @@ class Users extends MY_Controller {
 	  
 	  elseif($cek->num_rows()>=1)
 	  {
-	       if($group!=$group1)
+	       if(strtolower($group)!=strtolower($group1))
 	       {
 		    $id = $this->input->post('group_id');
 		    $data = array(

@@ -45,6 +45,7 @@
 		    </div>
                     <input type='hidden' id='role_id' name='role[]' value='' />
 		    <input type='button' id='save' value='Save' />
+		    <input type='button' onclick="menu_role()" value='Cancel' />
                     </form>
                 </div>
                 </div>

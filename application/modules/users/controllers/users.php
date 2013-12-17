@@ -20,36 +20,46 @@ class Users extends MY_Controller {
 	
     }
     
+    //===============================USER=======================================
     function index()
     {
-     $config['base_url'] = base_url().'users/index';
-     $config['total_rows'] = $this->users_model->count_record();
-     $config['per_page'] = 10;
-     $config["uri_segment"] = 3;
+     if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_View'))
+     {
+	  $config['base_url'] = base_url().'users/index';
+	  $config['total_rows'] = $this->users_model->count_record();
+	  $config['per_page'] = 10;
+	  $config["uri_segment"] = 3;
+	  
+	  $config['next_link'] = 'Next';
+	  $config['prev_link'] = 'Prev';
+	  
+	  $config['first_link'] = 'First';
+	  $config['last_link'] = 'Last';
      
-     $config['next_link'] = 'Next';
-     $config['prev_link'] = 'Prev';
-     
-     $config['first_link'] = 'First';
-     $config['last_link'] = 'Last';
+	  $config['cur_tag_open'] = '<b style="margin:0px 5px;">';
+	  $config['cur_tag_close'] = '</b>';
+	  
+	  $this->pagination->initialize($config);
+	  $search =$this->input->post('search_user');
+	  $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
 
-     $config['cur_tag_open'] = '<b style="margin:0px 5px;">';
-     $config['cur_tag_close'] = '</b>';
-     
-     $this->pagination->initialize($config);
-     
-     $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-     
-     if($this->input->get('role_collection_id'))
-	  $data['show'] = $this->users_model->select_user1($config["per_page"], $page, $this->input->get('role_collection_id'));
+	  if($this->input->get('role_collection_id') || $search!=NULL)
+	  {
+	       $data['show'] = $this->users_model->select_user1($config["per_page"], $page, $this->input->get('role_collection_id'),$search);
+	  }
+	  else{
+	       $data['show'] = $this->users_model->select_user1($config["per_page"], $page, null,$search);
+	  }
+	  $data['links'] = $this->pagination->create_links();
+	  $data['role'] = $this->users_model->select_role();
+	  $data['count'] = $this->users_model->count_record();
+	  
+	  $this->load->view('users/index',$data);
+     }
      else
-	  $data['show'] = $this->users_model->select_user1($config["per_page"], $page, null);
-     $data['links'] = $this->pagination->create_links();
-     $data['role'] = $this->users_model->select_role();
-     $data['count'] = $this->users_model->count_record();
-     //$data['show1'] = $this->users_model->select_user();
-     
-     $this->load->view('users/index',$data);
+     {
+	  redirect('dashboard');
+     }
     }
     
     //view create user
@@ -66,13 +76,14 @@ class Users extends MY_Controller {
 	    $this->load->view('users/create_user',$data);
 	}
 	else{
-	    redirect('users/index');
+	    redirect('users');
 	}
         
     }
     
     function insert_user()
     {
+	  if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_Create_Delete')){
 	  if(isset($_POST['Create']))
 	  {
 	       $this->form_validation->set_rules('username', 'User Name', 'required');
@@ -153,14 +164,6 @@ class Users extends MY_Controller {
 			$dir = "media/dynamic/".$image['file_name']; 
 		    }
 		    
-		    /*
-		    $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-		    $count = mb_strlen($chars);
-	      
-		    for ($i = 0, $pass = ''; $i < 10; $i++) {
-		    $index = rand(0, $count - 1);
-		    $pass .= mb_substr($chars, $index, 1);
-		    }*/
 		    
 		    $lower = 'abcdefghijklmnopqrstuvwxyz';
 		    $upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -233,6 +236,11 @@ class Users extends MY_Controller {
 	       }
 	       
 	  }
+	  }
+	  else
+	  {
+	       redirect('users');
+	  }
     }
     
     function edit($id)
@@ -248,12 +256,14 @@ class Users extends MY_Controller {
 	  $this->load->view('users/edit_user',$data);
 	}
 	else{
-	    redirect('users/index');
+	    redirect('users');
 	}
     }
     
     function update_user()
     {
+     if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_Edit'))
+	{
 	  $config = array(
 			      'upload_path'   => 'media/dynamic/',
 			      'allowed_types' => 'gif|jpg|png',
@@ -476,75 +486,31 @@ class Users extends MY_Controller {
 			 redirect('users');
 	       }
 	  }
+	  }
+	  else{
+		  redirect('users');
+	      }
     }
-    
-    /*function update_user_login()
-    {
-	  $id = $this->input->post('user_id');
-	  
-	  $data = array(
-			 'description' => $this->input->post('about-me'),
-			 'display_name' => $this->input->post('display-name')
-			);
-
-	  $this->users_model->update_user($id,$data);
-	  
-	  $user_login = $this->users_model->select_user_login($id);
-		    $data1 = array(
-                                'user_id' => $id,
-				'username' => $user_login->row()->username,
-				'display_name' => $user_login->row()->display_name,
-				'description' => $user_login->row()->description,
-                                'is_login' => TRUE
-                            );
-                    $this->session->set_userdata($data1);
-	  
-	  redirect('users');
-    }*/
     
     function delete($id)
     {
+        if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_Create_Delete'))
+	{
 	  $this->users_model->delete_user($id);
 	  $this->session->set_flashdata('info_delete', TRUE);
 	  redirect('users');
+	}
+	else
+	{
+	  redirect('users');
+	}
     }
-    
-    function search_user($value_user)
-    {
-	  $v = urldecode($value_user);
-	  
-	  $config['base_url'] = base_url().'users/index';
-	  $config['total_rows'] = $this->users_model->count_record();
-	  $config['per_page'] = 10;
-	  $config["uri_segment"] = 3;
-	  
-	  $config['next_link'] = 'Next';
-	  $config['prev_link'] = 'Prev';
-	  
-	  $config['first_link'] = 'First';
-	  $config['last_link'] = 'Last';
-     
-	  $config['cur_tag_open'] = '<b style="margin:0px 5px;">';
-	  $config['cur_tag_close'] = '</b>';
-	  
-	  $this->pagination->initialize($config);
-	  
-	  $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-	  
-	  if($this->input->get('role_collection_id'))
-	       $data['show'] = $this->users_model->search_user($config["per_page"], $page, $this->input->get('role_collection_id'),$v);
-	  else
-	       $data['show'] = $this->users_model->search_user($config["per_page"], $page, null,$v);
-	  $data['links'] = $this->pagination->create_links();
-	  $data['role'] = $this->users_model->select_role();
-	  $data['count'] = $this->users_model->count_record();
-	  
-	  $this->load->view('users/index',$data);
-    }
+    //============================END USER=================================
     
     //============================ ROLE ===================================
     function menu_role()
     {
+	if(IsRoleFriendlyNameExist($this->user_role, 'User Management_Role_View')){  
 	  $select_role = $this->users_model->select_role();
 	  foreach($select_role->result() as $v1)
 	  {
@@ -599,10 +565,15 @@ class Users extends MY_Controller {
 	  $data['json'] = json_encode($tree);
 	  
 	  $this->load->view('users/role',$data);
-    }
+	  }
+	  else{
+	  redirect('users');
+	  }
+     }
     
     function insert_role()
     {
+	  if(IsRoleFriendlyNameExist($this->user_role, 'User Management_Role_Create_Delete')){
 	  $select_role = $this->users_model->select_role();
 	  foreach($select_role->result() as $v1)
 	  {
@@ -802,10 +773,15 @@ class Users extends MY_Controller {
 	       $this->session->set_flashdata('succes', TRUE);
 	       redirect('users/menu_role');
 	  }
+	  }
+	  else{
+	       redirect('users');
+	  }
     }
     
     function delete_role($id)
     {
+     if(IsRoleFriendlyNameExist($this->user_role, 'User Management_Role_Create_Delete')){
 	  $cek_roleid = $this->users_model->cek_roleid($id);
 	  if($cek_roleid->num_rows()==0)
 	  {
@@ -818,10 +794,16 @@ class Users extends MY_Controller {
 	       $this->session->set_flashdata('info_delete_failed', TRUE);
 	       redirect('users/menu_role');
 	  }
+     }
+     else
+     {
+	  redirect('users');
+     }
     }
     
     function edit_role($id)
     {
+     if(IsRoleFriendlyNameExist($this->user_role, 'User Management_Role_Edit')){
 	  $data = array(
 			 'role' => $this->users_model->edit_role($id)
 			);
@@ -865,10 +847,15 @@ class Users extends MY_Controller {
 	  
 	  
 	  $this->load->view('users/role_edit',$data);
+     }
+     else{
+	  redirect('users');
+     }
     }
     
     function update_role()
     {
+     if(IsRoleFriendlyNameExist($this->user_role, 'User Management_Role_Edit')){
 	  $this->form_validation->set_rules('role_name', 'Role Name', 'required');
 	  $this->form_validation->set_rules('role','Role Permission', 'required');
 	  $cek = $this->input->post('role');
@@ -976,7 +963,7 @@ class Users extends MY_Controller {
 	  
 	  elseif($check_role->num_rows()>=1)
 	  {
-	       if($role_name!=$role_name1)
+	       if(strtolower($role_name)!=strtolower($role_name1))
 	       {
 		    $id = $this->input->post('role_id');
 		    $data = array(
@@ -1023,7 +1010,7 @@ class Users extends MY_Controller {
 		    
 		    $this->load->view('users/role_edit',$data);
 	       }
-	       else
+	       elseif(strtolower($role_name)==strtolower($role_name1))
 	       {
 		    $data = array(
 				   'role_name' => $this->input->post('role_name')
@@ -1072,6 +1059,11 @@ class Users extends MY_Controller {
 	       redirect('users/menu_role');
 	  }
     }
+    else{
+     redirect('users');
+    }
+    }
+    //============================END ROLE=================================
     
     
     //============================ APP_ROLE ===============================
@@ -1103,6 +1095,7 @@ class Users extends MY_Controller {
     //============================= GROUP =================================
     function menu_group()
     {
+     if(IsRoleFriendlyNameExist($this->user_role, 'User Management_Group_View')){
 	  $select_group = $this->users_model->select_group();
 	  foreach($select_group->result() as $v1)
 	  {
@@ -1136,10 +1129,15 @@ class Users extends MY_Controller {
 	  $data['group_detail'] = $this->users_model->select_user_group_d();
 			
 	  $this->load->view('users/group',$data);
+     }
+     else{
+	  redirect('users');
+     }
     }
     
     function insert_group()
-    {	
+    {
+     if(IsRoleFriendlyNameExist($this->user_role, 'User Management_Group_Create_Delete')){
 	  $select_group = $this->users_model->select_group();
 	  foreach($select_group->result() as $v1)
 	  {
@@ -1216,9 +1214,15 @@ class Users extends MY_Controller {
 		    redirect('users/menu_group');
 	  }
     }
+    else
+    {
+     redirect('users');
+    }
+    }
     
     function delete_group($id)
     {
+     if(IsRoleFriendlyNameExist($this->user_role, 'User Management_Group_Create_Delete')){
 	  $check_groupid = $this->users_model->check_groupid($id);
 	  if($check_groupid->num_rows()==0)
 	  {
@@ -1231,10 +1235,16 @@ class Users extends MY_Controller {
 	       $this->session->set_flashdata('info_delete_failed', TRUE);
 	       redirect('users/menu_group');
 	  }
+     }
+     else
+     {
+	  redirect('users');
+     }
     }
     
     function edit_group($id)
     {
+     if(IsRoleFriendlyNameExist($this->user_role, 'User Management_Group_Edit')){
 	  $data = array(
 			 'group' => $this->users_model->edit_group($id),
 			 'group_detail' => $this->users_model->edit_group_detail($id),
@@ -1243,9 +1253,15 @@ class Users extends MY_Controller {
 			);
 	  $this->load->view('users/group_edit',$data);
     }
+    else
+    {
+	  redirect('users');
+    }
+    }
     
     function update_group()
     {
+     if(IsRoleFriendlyNameExist($this->user_role, 'User Management_Group_Edit')){
 	  $this->form_validation->set_rules('group_name', 'Group Name', 'required');
 	  $id = $this->input->post('group_id');
 	  $group = $this->input->post('group_name');
@@ -1265,7 +1281,7 @@ class Users extends MY_Controller {
 	  
 	  elseif($cek->num_rows()>=1)
 	  {
-	       if($group!=$group1)
+	       if(strtolower($group)!=strtolower($group1))
 	       {
 		    $id = $this->input->post('group_id');
 		    $data = array(
@@ -1325,6 +1341,12 @@ class Users extends MY_Controller {
 	       redirect('users/menu_group');
 	  }
     }
+    else
+    {
+	  redirect('users');
+    }
+    }
+    //=============================END GROUP===============================
     
     //============================= LOGOUT ================================
     function logout()

@@ -1,4 +1,3 @@
-
 <div class="row-fluid">
 <?php if($posts){?>
            <span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
@@ -61,8 +60,7 @@
         <input type="hidden" value="<?php echo $posts[$i]->twitter_user_id?>" name="twitter_user_id" />
         <input type="hidden" value="<?php echo $posts[$i]->type?>" name="type" />
     <?php else:?>
-        <?php print_r($posts[$i])?>
-        <input type="hidden" value="<?php echo $posts[$i]->author_id?>" name="facebook_user_id" />
+        <input type="hidden" value="<?php echo $posts[$i]->post_id?>" name="post_id" />
         <input type="hidden" value="<?php echo $posts[$i]->type?>" name="type" />
     <?php endif?>
     <div class="modal-header">

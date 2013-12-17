@@ -662,7 +662,7 @@ $(function(){
                             }
                         );
                         
-                        $(this).on('input propertychange', '.reply_comment',
+                        $(this).on('input propertychange', '.replaycontent',
                             function() {
                                 var len = $(this).val().length;
                                 $(this).siblings('.reply-char-count').children('.reply-fb-char-count').html(2000-len);
@@ -1075,21 +1075,36 @@ $(function(){
                     
 
                     $(this).on('click','.follow',
-                        
                         function() {
-                        $.ajax({
-                            url : BASEURL + 'dashboard/socialmedia/ActionFollow/' + ($(this).hasClass('unfollow') ? 'unfollow' : 'follow'),
-                            type: "POST",
-                            data: {
-                                post_id : retweetBtn.closest('li').find('.postId').val(),
-                                channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
-                                
-                            },
-                            success: function()
-                            {
-                             
-                            }
-                        });
+                        var confirmResult = confirm('Are you sure want to ' + ($(this).hasClass('unfollow') ? 'unfollow' : 'follow') + " this account");
+                        var followButton = $(this);
+                        
+                        if(confirmResult){
+                            followButton.attr('disabled', 'disabled').find('span').html(($(this).hasClass('unfollow') ? 'Unfollowing...' : 'following...'));
+                            $.ajax({
+                                url : BASEURL + 'dashboard/media_stream/ActionFollow/' + ($(this).hasClass('unfollow') ? 'unfollow' : 'follow'),
+                                type: "POST",
+                                data: {
+                                    post_id : $(this).closest('li').find('.postId').val(),
+                                    channel_id : $(this).closest('.floatingBox').find('input.channel-id').val()
+                                },
+                                success: function(response)
+                                {
+                                    followButton.removeAttr('disabled').find('span').html('');
+                                    if(response.success == true){
+                                        if(followButton.hasClass('unfollow'))
+                                            followButton.removeClass('btn-inverse');
+                                        else
+                                            followButton.addClass('btn-inverse');
+                                    }
+                                },
+                                error : function(x, y, z){
+                                    followButton.closest('li').toggle('slow');
+                                    followButton.removeAttr('disabled').find('span').html('');
+                                }
+                            });
+                        }                        
+                        
                     });
                     
                     $(this).on('click','.fblike',
@@ -1124,7 +1139,7 @@ $(function(){
                     
                      $(this).on('click','.btn-send-reply',
                         function() {
-                        var len=$(this).parent().siblings(".reply_comment").val().length
+                        var len=$(this).parent().siblings(".replaycontent").val().length
                         if(len>2000){
                            var comment = 'Your message is more than 2000 characters. It will not post to Facebook.'; 
                            alert(comment);
@@ -1139,7 +1154,7 @@ $(function(){
                             data: {
                                 post_id: $(this).val(),
                                 channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
-                                comment :$(this).parent().siblings(".reply_comment").val(),
+                                comment :$(this).parent().siblings(".replaycontent").val(),
                             },
                             success: function(response)
                             {

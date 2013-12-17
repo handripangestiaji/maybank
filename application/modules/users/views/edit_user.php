@@ -95,7 +95,9 @@
         <tr>
             <td>Image</td>
             <td>
+                <?php if($row->image_url!=NULL){?>
                 <img src="<?php echo base_url();echo $row->image_url;?>" style='width: auto; height: 105px;' />
+                <?php }?>
                 <input type='file' name='userfile' id='userfile' accept='image/*' />
             </td>
             

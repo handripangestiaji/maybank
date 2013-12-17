@@ -52,6 +52,7 @@ class Login extends Login_Controller {
 	    $this->load->config('mail_config');
 	    $config = $this->config->item('mail_provider');
 	    $this->load->library('email',$config);
+	    $this->load->library('form_validation');
         }
         
         function index()
@@ -116,7 +117,9 @@ class Login extends Login_Controller {
 	}
 	
 	public function forgot(){
-		$this->load->view('forgot');	
+		$data1['success']=NULL;
+		$data1['failed']=NULL;
+		$this->load->view('forgot',$data1);	
 	}
 	
 	function reset_pass()
@@ -124,7 +127,15 @@ class Login extends Login_Controller {
 	    $email = $this->input->post('username');
 	    $check_mail = $this->users_model->check_email($email);
 	    
-	    if($check_mail->num_rows() == 1)
+	    $this->form_validation->set_rules('username', 'Email', 'required|valid_email');
+	    if($this->form_validation->run() == FALSE)
+	    {
+		$data1['success']=NULL;
+		$data1['failed']=NULL;
+		$this->load->view('forgot',$data1);
+	    }
+	    
+	    elseif($check_mail->num_rows() == 1)
 	    {
 		    $id = $check_mail->row()->user_id;
 		    
@@ -185,11 +196,16 @@ class Login extends Login_Controller {
 		    
 		    $this->email->send();
 		    
-		    redirect('login');
+		    $data1['success']=1;
+		    $data1['failed']=NULL;
+		    $this->load->view('forgot',$data1);
+		    //redirect('login');
 	    }
 	    else
 	    {
-		    echo '';
+		    $data1['success']=NULL;
+		    $data1['failed']=1;
+		    $this->load->view('forgot',$data1);
 	    }
 	}
 }

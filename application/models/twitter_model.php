@@ -356,6 +356,14 @@ class twitter_model extends CI_Model
             if(isset($saved_tweet)){
                 $reply['created_at'] = date("Y-m-d H:i:s");
                 $reply['response_post_id'] = $saved_tweet[0]['post_id'];
+                $channel_action = array(
+                    'action_type' => "twitter_reply",
+                    'channel_id' => $channel->channel_id,
+                    'created_at' => date("Y-m-d H:i:s"),
+                    'post_id' => $saved_tweet[0]['post_id'],
+                    'created_by' => $reply['user_id']
+                );
+                $this->db->insert('channel_action', $channel_action);
                 $this->db->insert('twitter_reply',$reply);
                 return $this->db->insert_id();    
             }
@@ -363,8 +371,93 @@ class twitter_model extends CI_Model
                 return null;
             }
         }
-        return null;
         
+        return null;
     }
     
+    /*
+     * Create Following on Twitter Channel based on Twitter Post Object
+     * $twitter_post:  post variable that inidicated from which post request was made. 
+    */
+    public function CreateFriends($twitter_post, $created_by, $is_removed = false){
+        if($this->connection != null){
+            $this->db->trans_start();
+            $twitter_user_friends = array(
+                'channel_id' => $twitter_post->channel_id,
+                'twitter_user_id'=>$twitter_post->twitter_user_id,
+                'is_following' => $is_removed ? 0 : 1
+            );
+            
+            $channel_action = array(
+                'action_type' => "twitter_".($is_removed ? 'unfollow' : 'follow'),
+                'channel_id' => $twitter_post->channel_id,
+                'created_at' => date("Y-m-d H:i:s"),
+                'post_id' => $twitter_post->post_id,
+                'created_by' => $created_by
+            );
+            $current_relation = $this->GetRelation($twitter_post->channel_id, $twitter_post->twitter_user_id);
+            if(!$is_removed)
+                $return = $this->connection->post('friendships/create', array('user_id' => $twitter_post->twitter_user_id));
+            else
+                $return = $this->connection->post('friendships/destroy', array('user_id' => $twitter_post->twitter_user_id));
+            if($current_relation == null){
+                $twitter_user_friends['is_follower'] = 0;
+                $this->db->insert('twitter_user_relation', $twitter_user_friends);
+                $twitter_user_friends['relation_id'] = $this->db->insert_id();
+            }
+            else{
+                $this->db->where('relation_id', $current_relation->relation_id);
+                $this->db->update('twitter_user_relation', $twitter_user_friends);
+                $twitter_user_friends['is_follower'] = $current_relation->is_follower;
+                $twitter_user_friends['relation_id'] = $current_relation->relation_id;
+            }
+            $twitter_user_friends['twitter_response'] = $return;
+            $channel_action['stream_id_response'] = $return->id_str;
+            $this->db->where('twitter_user_id', $twitter_post->twitter_user_id);
+            $this->db->update('social_stream_twitter', array('is_following' => $is_removed ? 0 : 1));
+            $this->db->trans_complete();
+            return $twitter_user_friends;
+        }
+        else
+            return null;
+    }
+    
+    
+    /*
+     * Destroy Following on Twitter Channel based on Twitter Post Object. This action is commonly called 'Unfollow'
+     * $twitter_post: post variable that inidicated from which post request was made. 
+    */
+    public function RemoveFriends($twitter_post, $created_by){
+        if($this->connection != null){
+            $return = $this->CreateFriends($twitter_post, $created_by, true);
+            
+            return $return;
+        }
+    }
+    
+    
+    /*
+     * Get existing relation based on twitter user id and channel
+     *
+     * $channel_id = CHANNEL ID from [CHANNEL] table
+     * $twitter_user_id = USER ID from [twitter_user_enganged] table
+    */
+    public function GetRelation($channel_id, $twitter_user_id){
+        $this->db->select('*');
+        $this->db->from('twitter_user_relation');
+        $this->db->where(array(
+            'channel_id' => $channel_id,
+            'twitter_user_id' => $twitter_user_id
+        ));
+        $this->db->get()->row();
+    }
+    
+    /*
+     * Logging all interaction from user to database
+     * $action = Channel action object which is ready to store into database
+    */
+    function CreateChannelAction($action){
+	$this->db->insert('channel_action',$action);
+	return $this->db->insert_id();
+    }
 }

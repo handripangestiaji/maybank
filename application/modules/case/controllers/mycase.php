@@ -6,6 +6,13 @@ class mycase extends CI_Controller{
         $this->load->model('case_model');
         $this->load->library('validation');
         header('Content-Type: application/x-json');
+        
+        if(!$this->session->userdata('user_id')){
+            die(json_encode(array(
+                'success' => false,
+                'message' => 'You don\'t have active session'
+            )));
+        }
     }
     
     /*Create case by post parameter */
@@ -35,18 +42,18 @@ class mycase extends CI_Controller{
                 "post_id" => $this->input->post('post_id')
             );
             
-            $case_id = $this->case_model->CreateCase($case);
+            $case['case_id'] = $this->case_model->CreateCase($case);
             echo json_encode(array(
                         "success" => true,
-                        "message" => "Assign case successfully done.",
-                        "case_id" => $case_id
+                        "message" => "Assigning case successfully done.",
+                        "result" => $case
                     )
                 );
         }
         else{
              echo json_encode(array(
                         "success" => false,
-                        "message" => "Assign case was failed.",
+                        "message" => "Assigning case was failed.",
                         "errors" => $is_valid
                     )
                 );
@@ -71,7 +78,16 @@ class mycase extends CI_Controller{
     
     function ResolveCase(){
         if($this->input->is_ajax_request()){
-            
+            $solved_case = $this->case_model->ResolveCase($this->input->post('case_id'), $this->session->userdata('user_id'));
+            if($solved_case)
+                    echo json_encode(array(
+                        "success" => true,
+                        "message" => "Resolving case successfully done.",
+                        "result" => $solved_case
+                    )
+                );
         }
     }
+    
+ 
 }

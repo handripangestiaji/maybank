@@ -113,7 +113,10 @@ class case_model extends CI_Model{
         $this->db->where('case_id', $case_id);
         $this->db->update('case', array(
             'status' => 'solved',
-            'solved_by' => $solved_by
+            'solved_by' => $solved_by,
+            'solved_at' => date("Y-m-d H:i:s")
         ));
+        $solved_case = $this->LoadCase(array('case_id' => $case_id));
+        return count($solved_by) > 0 ? $solved_case : null;
     }
 }

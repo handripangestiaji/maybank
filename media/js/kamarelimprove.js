@@ -20,9 +20,9 @@ $(function(){
                     });
                     thisElement.find('.message').html('<div class="alert alert-success">' +
                     '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
-                    '<strong>Well done!</strong> ' + response.message + '</div>');
-                    openButton.removeClass('btn-mini').removeClass('btn-warning').addClass('btn-purple').html('CASE #' + response.case_id);
-                    thisElement.closest('li').find('.btn-case').removeClass('btn-danger').addClass('btn-purple').html('<i class="icon-check"></i>RESOLVE');
+                    '<strong>Well done!</strong> CASE #' + response.result.case_id + " was made. " +  response.message + '</div>');
+                    openButton.removeClass('btn-warning').addClass('btn-purple').html('CASE #' + response.result.case_id ).val(response.result.case_id);
+                    thisElement.closest('li').find('.btn-case').removeClass('btn-danger btn-case').addClass('btn-purple btn-resolve').html('<i class="icon-check"></i><span>RESOLVE</span>');
                 }
                 else{
                     var errorMessages = "<ul class='error-list'>";
@@ -221,7 +221,7 @@ $(function(){
             "url" : BASEURL + "dashboard/media_stream/ReplyTwitter",
             "type" : "POST",
             "data" : $(this).serialize() + "&channel_id=" + $(this).closest('.floatingBox').find('input.channel-id').val() +
-                        "&filename=" + ($(this).find('#reply-preview-img').attr('src') == undefined ? '' :  $(this).find('#reply-preview-img').attr('src') == undefined),
+                        "&filename=" + ($(this).find('.reply-preview-img').attr('src') == undefined ? '' :  $(this).find('.reply-preview-img').attr('src')),
             "success" : function(response){
                 buttonSubmit.removeAttr('disabled').html('SEND');
                 try{
@@ -235,6 +235,7 @@ $(function(){
                         '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
                         '<h4>Reply Tweet</h4> ' + response.message + '!</div>');
                         me.find('input, textarea').val('');
+                        $(this).find('.reply-preview-img').toggle('slow');
                     }
                 }
                 catch(e){
@@ -254,6 +255,26 @@ $(function(){
     });
     
     $(this).on('click', '.btn-resolve', function(e){
-         
+        var btnResolve = $(this);
+        btnResolve.attr("disabled", "disabled");
+        confirmed = confirm('Are you sure to solve this case?');
+        e.preventDefault();
+        if(confirmed){
+            $.ajax({
+               "url" : BASEURL + "case/mycase/ResolveCase",
+               "type" : "POST",
+               "data" : "case_id=" + btnResolve.val(),
+               "success" : function(response){
+                    if(response.success){
+                        btnResolve.removeAttr("disabled").html('<i class="icon-plus"></i> <span>CASE</span>').removeClass('btn-resolve btn-purple').addClass('btn-case btn-danger');
+                        btnResolve.closest('li').find('.btn-purple:first').html('OPEN').removeClass('btn-purple').addClass('btn-warning');
+                    }
+               },
+               "error" : function(){
+                    alert("There is something error when resolve this case.")
+               }
+        
+            });
+        }
     });
 });

@@ -29,7 +29,7 @@ for($i=0;$i<count($homefeed);$i++){
         </p>
     <p><?php
     $pattern = "/_(?=[^>]*<)/";
-    $html = html_entity_decode($homefeed[$i]->text);
+    $html = $homefeed[$i]->text;
     foreach($entities->urls as $url){
         $html = substr($html, 0, $url->indices[0]);
         $html .= "<a href='$url->expanded_url' target='_blank'>$url->display_url</a>";

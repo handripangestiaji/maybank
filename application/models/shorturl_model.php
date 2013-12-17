@@ -8,6 +8,7 @@ class Shorturl_model extends CI_Model
 	public function __construct()
 	{
 		parent::__construct();
+		$this->load->library('ciqrcode');
 	}
 	
 	public function find($params = array())
@@ -42,11 +43,13 @@ class Shorturl_model extends CI_Model
 	
 	public function insert($params = array())
 	{
+		$qrcode_name = md5( time().uniqid().rand() ).".png";
 		$params_url = array(
 					"long_url" 		=> $params['long_url'],
 					"short_code" 	=> $params['short_code'],
 					"user_id" 		=> $params['user_id'],
-					"description" 	=> isset($params['description']) ? $params['description'] : ""
+					"description" 	=> isset($params['description']) ? $params['description'] : "",
+					"qrcode_image"  => $qrcode_name
 				);
 		
 		$this->db->trans_start();
@@ -56,6 +59,16 @@ class Shorturl_model extends CI_Model
 		$this->db->insert($this->_table);
 		
 		$this->db->trans_complete();
+		
+		$qrparams['data'] = $params['long_url'];
+		
+	    $qrparams['level'] = 'H';
+	    
+	    $qrparams['size'] = 4;
+	    
+	    $qrparams['savename'] = FCPATH.'media/dynamic/qrcode/'.$qrcode_name;
+	    
+	    $this->ciqrcode->generate($qrparams);
 		
 		$query = $this->db->query('SELECT LAST_INSERT_ID()');
 		$row = $query->row_array();

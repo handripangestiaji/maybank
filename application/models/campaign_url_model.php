@@ -54,4 +54,18 @@ class Campaign_url_model extends CI_Model
 		$this->db->where('content_campaign_url.campaign_id',$id);
 		return $this->db->get()->result();
 	}
+	
+	public function delete($id)
+	{
+		if ($id == null)
+		{
+			return false;
+		}
+		
+		$this->db->where('id', $id);
+		
+		$this->db->delete($this->_table);
+		
+		return true;
+	}
 }

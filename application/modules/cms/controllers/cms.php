@@ -170,6 +170,8 @@ class Cms extends MY_Controller {
     	$data['tags'] = '';
     	
     	$data['urls'] = $this->campaign_url_model->get();
+    	
+    	$action = $this->input->get('action');
     
 		if ($this->input->server('REQUEST_METHOD') === 'POST')
 		{
@@ -214,6 +216,16 @@ class Cms extends MY_Controller {
 				$id_campaign_url = $this->campaign_url_model->insert($setparam);
 			}
 			redirect('cms/create_short_url');			
+		}
+		else if ($action == "delete")
+		{
+			$id = $this->input->get("id");
+			
+			$this->campaign_url_model->delete($id);
+			
+			$this->session->unset_userdata('message');
+			
+			redirect('cms/create_short_url');
 		}
 		else {
 			$this->session->unset_userdata('message');

@@ -755,6 +755,7 @@ $(function(){
                                 me.removeAttr("disabled").html("SHORTEN");
                                 tweetsText = me.closest('form').find(".replaycontent");
                                 tweetsText.val(tweetsText.val() + " http://maybank.co/" + response.shortcode);
+                               // alert("http://maybank.co/" + response.shortcode)
                            },
                            failed : function(response){
                                 me.removeAttr("disabled").html("SHORTEN");
@@ -906,7 +907,7 @@ $(function(){
                                     data: {
                                             channels:channels,
                                             content:$('.compose-textbox').val(),
-                                            tags:$('.compose-tag-field').val()
+                                            tags:$("#compose-tags").tagit("assignedTags")
                                             },
                                 });
                             }
@@ -1080,34 +1081,43 @@ $(function(){
                         function() {
                         var len=$(this).parent().siblings(".replaycontent").val().length
                         if(len>2000){
-                           var comment = 'Your message is more than 2000 characters. It will not post to Facebook.'; 
-                           alert(comment);
+                            $(this).parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
+                            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
+                            '<strong>Error!</strong> Your message is more than 2000 characters. It will not post to Facebook. </div>');
+                            
                         }else{
                             var commentButton = $(this);
                             isSend=commentButton.html()=="SEND";
                             commentButton.html('SENDING...').attr("disabled", "disabled");
 
                            $.ajax({
-                            url : BASEURL + 'dashboard/media_stream/FbReplyPost',
-                            type: "POST",
-                            data: {
-                                post_id: $(this).val(),
-                                channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
-                                comment :$(this).parent().siblings(".replaycontent").val(),
-                            },
-                            success: function(response)
-                            {
-                                commentButton.removeAttr("disabled");
-                                if(response == 'true'){
-                                  commentButton.html("SEND");   
-                                }
-                                else{
-                                    alert("Failed to reply comment");
-                                    alert(response);
-                                    commentButton.html("SEND");
-                                }
-                            },
-                        });
+                                url : BASEURL + 'dashboard/media_stream/FbReplyPost',
+                                type: "POST",
+                                data: {
+                                    post_id: $(this).val(),
+                                    channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
+                                    comment :$(this).parent().siblings(".replaycontent").val(),
+                                    url :$(this).parent().siblings('.link_url').find(".reply-insert-link-text").val(),
+                                    img :$(this).parent().siblings('#reply-img-show').find("#replyInputImageFile").val(),
+                                },
+                                success: function(response)
+                                {
+                                    commentButton.removeAttr("disabled");
+                                    if(response.success === true){
+                                        commentButton.parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
+                                        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
+                                        '<strong>Success!</strong> '+response.message+' </div>');
+                                        commentButton.parent().siblings(".replaycontent").val("");
+                                        commentButton.html("SEND");  
+                                    }
+                                    else{
+                                        commentButton.parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
+                                        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
+                                        '<strong>Error!</strong>'+response.message+'</div>');
+                                        commentButton.html("SEND");
+                                    }
+                                },
+                            });
                             
                         }
                                                 
@@ -1150,7 +1160,37 @@ $(function(){
                         $(this).next().toggle();
                     });                                                         
                 });
+                
+
+                var sampleTags = [];
+                $.ajax({
+                    url : BASEURL + 'dashboard/media_stream/GetAllTags',
+                    type: "GET",
+                    success: function(data)
+                    {
+                        var new_data = JSON.parse(data);
+                        var x=0;
+                        $.each(new_data, function(){
+                           sampleTags.push(new_data[x].tag_name);
+                            x++;
+                        });
+                    },
+                });
+                //-------------------------------
+                // Allow spaces without quotes.
+                //--
                   
+                $('#compose-tags').tagit({
+                    availableTags: sampleTags,
+                    allowSpaces: true
+                });
+                
+                $(this).on('click','.btn-reply',function(){
+                    $(this).closest('h4').siblings('.reply-field').find('#compose-tags-reply').tagit({
+                        availableTags: sampleTags,
+                        allowSpaces: true
+                    });
+                });                
                 /*==============================================================================================
                  ====================================== LOAD WYSIWYG EDITOR ====================================
                  =============================================================================================*/   

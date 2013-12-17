@@ -7,10 +7,11 @@ class post_model extends CI_Model
         $this->load->helper('basic');
     }
     
-    public function InsertPost($message,$channels,$tags=''){
+    public function InsertPost($message,$channels,$tags='',$scheduleTime=''){
         $post = array('created_by' => $this->session->userdata('user_id'),
 			'messages' => $message,
-			'created_at' => date('Y-m-d H:i;s')
+			'created_at' => date('Y-m-d H:i;s'),
+			'time_to_post' => $scheduleTime
 			);
 	$this->db->insert('post',$post);
         $post_id = $this->db->insert_id();
@@ -20,13 +21,12 @@ class post_model extends CI_Model
                              'post_id' => $post_id);
             $this->db->insert('post_to',$post_to);
         }
-        
+	
 	if($tags != ''){
-	    $tags = explode(',',$tags);
-	    for($i=0;$i<count($tags);$i++){
-                $get_tag = $this->GetTagByTagName($tags[$i]);
+	    foreach($tags as $tag){
+		$get_tag = $this->GetTagByTagName($tag);
                 if($get_tag == NULL){
-                    $tag_id = $this->InsertTag($tags[$i]);
+                    $tag_id = $this->InsertTag($tag);
                 }
                 else{
                     $tag_id = $get_tag->id;
@@ -38,7 +38,7 @@ class post_model extends CI_Model
                 $new_tag = array('schedule_post_id' => $post_id,
                                  'content_tag_id' => $tag_id);
 	        $this->db->insert('post_tag',$new_tag);
-            }
+	    }
 	}
     }
     

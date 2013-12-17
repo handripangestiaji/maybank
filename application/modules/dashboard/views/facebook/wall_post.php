@@ -65,10 +65,6 @@ for($i=0; $i<count($fb_feed);$i++):?>
         <br />
         <?php 
             $comment=$this->facebook_model->RetriveCommentPostFb($fb_feed[$i]->social_stream_post_id);
-            //echo "<pre>";
-           // print_r($comment);
-            //echo "</pre>";
-            
             for($j=0;$j<count($comment);$j++):
         ?>
         <div class="engagement-body">

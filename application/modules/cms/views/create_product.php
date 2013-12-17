@@ -39,7 +39,11 @@
                 <th>Description</th>
                 <th>Total Used</th>
                 <th>Creator</th>
+		<?php for($i=0;$i<count($this->user_role);$i++){
+		    if($this->user_role[$i]->role_friendly_name=='Content Management_Product_Delete'){
+		    ?>
                 <th>&nbsp;</th>
+		<?php }}?>
               </tr>
             </thead>
             <tbody>
@@ -51,9 +55,13 @@
 		                <td><?php echo $v->increment; ?></td>
 		                <td><?php echo $v->display_name; ?></td>
 		                <td>
+				    <?php for($i=0;$i<count($this->user_role);$i++){
+				    if($this->user_role[$i]->role_friendly_name=='Content Management_Product_Delete'){
+				    ?>
 		                	<a href="<?php echo site_url('cms/create_product?action=delete&id='.$v->id)?>" class="btn btn-mini btn-danger pull-right">delete</a>
 		                	<!--<button class="btn btn-mini btn-danger pull-right" type="button">delete</button>-->
-		                </td>
+				    <?php }}?>
+				</td>
 					</tr>
             	<?php endforeach; ?>
             <?php endif; ?>

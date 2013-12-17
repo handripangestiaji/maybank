@@ -133,9 +133,13 @@
                         <td><?php echo $count_role[$i];?></td>
                         <td><?php echo $row->display_name;?></td>
                         <?php for($x=0;$x<count($this->user_role);$x++){
-                                if($this->user_role[$x]->role_friendly_name=='User Management_Role_Edit'){?>
+                                if($this->user_role[$x]->role_friendly_name=='User Management_Role_Edit'){
+                        ?>
                             <td><a href='<?php echo site_url("users/edit_role/".$row->role_collection_id);?>'><span><i class="icon-pencil"></i></span></a></td>
-                        <?php   }if($this->user_role[$x]->role_friendly_name=='User Management_Role_Create_Delete'){?>
+                        <?php   }}
+                            for($y=0;$y<count($this->user_role);$y++){
+                            if($this->user_role[$y]->role_friendly_name=='User Management_Role_Create_Delete'){
+                        ?>
                         <td><a href="" onclick="show_confirm('<?php echo $row->role_collection_id;?>');return false;"><span><i class="icon-remove"></i></span></a></td>
                         <?php }}?>
                     </tr>

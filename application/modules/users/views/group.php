@@ -156,7 +156,10 @@
                                 if($this->user_role[$x]->role_friendly_name=='User Management_Group_Edit'){
                         ?>
                         <td><a href="<?php echo site_url('users/edit_group/'.$gr->group_id);?>"><span><i class="icon-pencil"></i></span></a></td>
-                        <?php }if($this->user_role[$x]->role_friendly_name=='User Management_Group_Create_Delete'){?>
+                        <?php }}
+                        for($y=0;$y<count($this->user_role);$y++){
+                            if($this->user_role[$y]->role_friendly_name=='User Management_Group_Create_Delete'){
+                        ?>
                         <td><a href="" onclick="show_confirm('<?php echo $gr->group_id;?>');return false;"><span><i class="icon-remove"></i></span></a></td>
                         <?php }}?>
                     </tr>

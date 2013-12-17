@@ -1,18 +1,25 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Cms extends MY_Controller {
-
+     
+     public $user_role;
 	public function __construct()
 	{
 		parent::__construct();
+                $this->load->model('users_model');
 		$this->load->library(array('Shorturl', 'ciqrcode'));
 		$this->load->model(array('tag_model', 'product_model', 'campaign_model', 'shorturl_model', 'campaign_url_model'));
 		$this->load->helper('form');
 		$this->load->library('form_validation');
+                $this->user_role=$this->users_model->get_collection_detail(
+                                        array('role_collection_id'=>$this->session->userdata('role_id')));
 	}
 
     public function index()
     {
+     if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Campaign_View')||IsRoleFriendlyNameExist($this->user_role,'Content Management_Short_URL_View')
+        ||IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_View')||IsRoleFriendlyNameExist($this->user_role,'Content Management_TAG_View'))
+     {
     	$data['campaigns'] = $this->campaign_model->getAllArray();
     	
     	$data['products'] = $this->product_model->get();
@@ -24,10 +31,17 @@ class Cms extends MY_Controller {
         $data['cms_view'] = 'campaign_table';
         
         $this->load->view('cms/index',$data);
+     }
+     else
+     {
+          redirect('dashboard');
+     }
     }
      
     public function create_campaign()
     {
+     if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Campaign_Create'))
+     {
     	$data['campaigns'] = $this->campaign_model->getAllArray();
     	
     	$data['products'] = $this->product_model->get();
@@ -83,10 +97,16 @@ class Cms extends MY_Controller {
         }
         
         $this->load->view('cms/index',$data);
+     }
+     else
+     {
+          redirect('cms');
+     }
     }
      
     public function create_tag(){
-    	
+     if(IsRoleFriendlyNameExist($this->user_role,'Content Management_TAG_Create'))
+     {
     	$data['campaigns'] = '';
     	
     	$data['products'] = '';
@@ -132,10 +152,17 @@ class Cms extends MY_Controller {
         }
         
         $this->load->view('cms/index',$data);
+     }
+     else
+     {
+          redirect('cms');
+     }
     }
      
     public function create_short_url()
     {
+     if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Short_URL_Create'))
+     {
     	$data['campaigns'] = $this->campaign_model->get();
     	
     	$data['products'] = '';
@@ -195,10 +222,17 @@ class Cms extends MY_Controller {
 		$data['code'] = substr( md5( time().uniqid().rand() ), 0, 6 );
         $data['cms_view'] = 'create_short_url';
         $this->load->view('cms/index',$data);
+     }
+     else
+     {
+          redirect('cms');
+     }
     }
      
     public function create_product()
     {
+     if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_Create'))
+     {
     	$data['campaigns'] = '';
     	
     	$data['tags'] = '';
@@ -230,20 +264,31 @@ class Cms extends MY_Controller {
 	        }
 	        redirect('cms/create_product');
         }
-        
-        if ($action == 'delete')
+        if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_Delete'))
         {
-	        $id = $this->input->get('id');
-	        
-	        if ($id)
-	        {
-		       $this->product_model->delete($id);
-	        }
-	        
-	        redirect('cms/create_product');
-        }
-        
-        $this->load->view('cms/index',$data);
+               if ($action == 'delete')
+               {
+                       $id = $this->input->get('id');
+                       
+                       if ($id)
+                       {
+                              $this->product_model->delete($id);
+                       }
+                       
+                       redirect('cms/create_product');
+               }
+               
+               $this->load->view('cms/index',$data);
+          }
+          else
+               {
+                    redirect('cms/create_product');
+               }
+     }
+     else
+     {
+          redirect('cms');
+     }
     }
     
     public function url()

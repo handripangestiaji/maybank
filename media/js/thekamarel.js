@@ -826,7 +826,6 @@ $(function(){
                                 var r = confirm('Your message is more than 140 characters. It will not post to Twitter. Do you still want to continue?');
                                 if(r == true){
                                     $('#opttwitter').removeAttr("selected");
-                                    confirmed = true;
                                 }
                                 else{
                                     confirmed = false;
@@ -837,7 +836,6 @@ $(function(){
                                 var r = confirm('Your message is more than 500 characters. It will not post to Youtube. Do you still want to continue?');
                                 if(r == true){
                                     $('#optyoutube').removeAttr('selected');
-                                    confirmed = true;
                                 }
                                 else{
                                     confirmed = false;
@@ -848,11 +846,28 @@ $(function(){
                                 var r = confirm('Your message is more than 2000 characters. It will not post to Facebook. Do you still want to continue?');
                                 if(r == true){
                                      $('#optfacebook').removeAttr('selected');
-                                    confirmed = true;
                                 }
                                 else{
                                     confirmed = false;
                                 }
+                            }
+                            
+                            var scheduleTime;
+                            if($('#datepickerField').val() != ''){
+                                if($('#compose-schedule-hours').val() == ''){
+                                    alert("You haven't set your post schedule hours");
+                                    confirmed = false;
+                                }
+                                else if($('#compose-schedule-minutes').val() == ''){
+                                    alert("You haven't set your post schedule minutes");
+                                    confirmed = false;
+                                }
+                                else{
+                                    scheduleTime = $('#datepickerField').val() + ' ' + $('#compose-schedule-hours').val() + ':' + $('#compose-schedule-minutes').val() + ' ' + $('#compose-schedule-ampm').val();        
+                                }
+                            }
+                            else{
+                                scheduleTime = '';
                             }
                             
                             if(confirmed == true){
@@ -947,7 +962,8 @@ $(function(){
                                     data: {
                                             channels:channels,
                                             content:$('.compose-textbox').val(),
-                                            tags:$("#compose-tags").tagit("assignedTags")
+                                            tags:$("#compose-tags").tagit("assignedTags"),
+                                            schedule:scheduleTime
                                             },
                                     success: function(){
                                         
@@ -1213,11 +1229,12 @@ $(function(){
                 //-------------------------------
                 // Allow spaces without quotes.
                 //-------------------------------
+                
                 $('#compose-tags').tagit({
                     availableTags: sampleTags,
                     allowSpaces: true
                 });
-                  
+                
                 /*==============================================================================================
                  ====================================== LOAD WYSIWYG EDITOR ====================================
                  =============================================================================================*/   

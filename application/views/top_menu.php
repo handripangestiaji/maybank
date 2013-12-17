@@ -1,6 +1,6 @@
 <div class="navbar-inner">
     <div class="container-fluid">
-         <a class="brand" href="#" style="margin: 10px 0px; padding: 0px;">
+         <a class="brand" href="#" style="margin: 7.5px 0px; padding: 0px;">
 	    <img src="<?php echo base_url() ?>media/img/DCMS-Logo.png" />
 	 </a>
 	<div class="nav pull-right">

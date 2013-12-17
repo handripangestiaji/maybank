@@ -44,7 +44,7 @@
                     <a id="reply-remove-img" href="javascript:void(0); class="hide">
                         <i class="icon-remove icon-2x"></i>
                     </a>
-                    <img id="reply-preview-img"/>
+                    <img id="reply-preview-img" class="reply-preview-img"/>
                 </div>
                 <!-- img-place end -->
             </div>

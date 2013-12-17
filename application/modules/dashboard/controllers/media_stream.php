@@ -227,13 +227,20 @@ class Media_stream extends CI_Controller {
 		$data = base64_decode($img);
 		$file_name = uniqid().'.png';
 		$pathToSave = $this->config->item('assets_folder').'/'.$file_name;
+		$twitter_reply['image_to_post'] = $pathToSave;
 		if ( ! write_file($pathToSave, $data)){
 		    $validation = array('result' => FALSE,'name' => 'image '.$pathToSave,'error_code' => 112);
 		    $result=$this->connection->post('statuses/update', $parameters);
 		}
 		else{
-		    $parameters['media[]'] = "@{getcwd()./media/dynamic/".$file_name.'}';
-		    $result=$this->connection->post('statuses/update_with_media', $parameters);
+		    require_once './application/libraries/codebird.php';
+		    $this->load->config('twitter');
+		    Codebird::setConsumerKey($this->config->item('twitter_consumer_token'), $this->config->item('twitter_consumer_secret'));
+		    $cb = Codebird::getInstance();
+		    $cb->setToken($channel->oauth_token, $channel->oauth_secret);
+		    $parameters['media[]'] = $pathToSave;
+		    $result = $cb->statuses_updateWithMedia($parameters);
+		    $result->params = $parameters;
 		}
 	    }
 	    else{
@@ -494,7 +501,16 @@ class Media_stream extends CI_Controller {
     
     public function SocmedPost(){
 	$this->load->model('post_model');
-	$this->post_model->InsertPost($this->input->post('content'),$this->input->post('channels'),$this->input->post('tags'));
+	
+	/* schedule date convert */
+	$schedules = explode(' ',$this->input->post('schedule'));
+	$the_dates = explode('/',$schedules[0]);
+	$the_hours = date("H:i", strtotime($schedules[1].' '.$schedules[2]));
+	$compose_date = $the_dates[2].'-'.$the_dates[0].'-'.$the_dates[1];
+	$compose_hour = $the_hours.':00';
+	$compose_date_hour = $compose_date.' '.$compose_hour;
+	
+	$this->post_model->InsertPost($this->input->post('content'),$this->input->post('channels'),$this->input->post('tags'),$compose_date_hour);
     }
     
     public function load_facebook($type){

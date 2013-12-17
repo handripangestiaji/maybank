@@ -59,7 +59,7 @@
         
         <div class="cms-table pull-right">
             <div style="float: left;">
-                <h5>User List</h5>
+                <h4>User List</h4>
             </div>
             <?php for($i=0;$i<count($this->user_role);$i++)
                 {

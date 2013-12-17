@@ -7,13 +7,13 @@
         </div>
         <div class="pull-right">
             <?php for($i=0;$i<count($this->user_role);$i++){?>
-                <?php if($this->user_role[$i]->role_friendly_name=='Content Management_Short_URL_Create'){?>
+                <?php if($this->user_role[$i]->role_friendly_name=='Content Management_Short_URL_View'){?>
             <a href="<?php echo base_url('cms/create_short_url'); ?>"><button class="btn btn-inverse" type="button"><i class="icon-code"></i> Create Short URL</button></a>
-                <?php } if($this->user_role[$i]->role_friendly_name=='Content Management_Campaign_Create'){?>
+                <?php } if($this->user_role[$i]->role_friendly_name=='Content Management_Campaign_View'){?>
             <a href="<?php echo base_url('cms/create_campaign'); ?>"><button class="btn btn-inverse" type="button"><i class="icon-bullhorn"></i> Create Campaign</button></a>
-                <?php } if($this->user_role[$i]->role_friendly_name=='Content Management_Product_Create'){?>
+                <?php } if($this->user_role[$i]->role_friendly_name=='Content Management_Product_View'){?>
             <a href="<?php echo base_url('cms/create_product'); ?>"><button class="btn btn-inverse" type="button"><i class="icon-gift"></i> Create Product</button></a>
-                <?php } if($this->user_role[$i]->role_friendly_name=='Content Management_TAG_Create'){?>
+                <?php } if($this->user_role[$i]->role_friendly_name=='Content Management_TAG_View'){?>
             <a href="<?php echo base_url('cms/create_tag'); ?>"><button class="btn btn-inverse" type="button"><i class="icon-tag"></i> Create Tag</button></a>
             <?php }}?>
         </div>

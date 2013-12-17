@@ -40,7 +40,7 @@ class Cms extends MY_Controller {
      
     public function create_campaign()
     {
-     if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Campaign_Create'))
+     if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Campaign_View'))
      {
     	$data['campaigns'] = $this->campaign_model->getAllArray();
     	
@@ -105,7 +105,7 @@ class Cms extends MY_Controller {
     }
      
     public function create_tag(){
-     if(IsRoleFriendlyNameExist($this->user_role,'Content Management_TAG_Create'))
+     if(IsRoleFriendlyNameExist($this->user_role,'Content Management_TAG_View'))
      {
     	$data['campaigns'] = '';
     	
@@ -121,6 +121,7 @@ class Cms extends MY_Controller {
         
         if ($this->input->server('REQUEST_METHOD') === "POST")
         {
+          if(IsRoleFriendlyNameExist($this->user_role,'Content Management_TAG_Create')){
 	        $arr = array();
 	        $arr['tag_name'] = $this->input->post('tag_name');
 	        $arr['user_id'] = $this->session->userdata('user_id');
@@ -137,10 +138,16 @@ class Cms extends MY_Controller {
 		        $this->session->set_flashdata('message_body', 'Please insert Tag name');
 	        }
 	        redirect('cms/create_tag');
+          }
+          else
+          {
+               redirect('cms/create_tag');
+          }
         }
         
         if ($action == 'delete')
         {
+          if(IsRoleFriendlyNameExist($this->user_role,'Content Management_TAG_Delete')){
 	        $id = $this->input->get('id');
 	        
 	        if ($id)
@@ -149,6 +156,11 @@ class Cms extends MY_Controller {
 	        }
 	        
 	        redirect('cms/create_tag');
+          }
+          else
+          {
+               redirect('cms/create_tag');
+          }
         }
         
         $this->load->view('cms/index',$data);
@@ -161,7 +173,7 @@ class Cms extends MY_Controller {
      
     public function create_short_url()
     {
-     if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Short_URL_Create'))
+     if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Short_URL_View'))
      {
     	$data['campaigns'] = $this->campaign_model->get();
     	
@@ -243,7 +255,7 @@ class Cms extends MY_Controller {
      
     public function create_product()
     {
-     if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_Create'))
+     if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_View'))
      {
     	$data['campaigns'] = '';
     	
@@ -259,6 +271,8 @@ class Cms extends MY_Controller {
         
         if ($this->input->server('REQUEST_METHOD') === "POST")
         {
+          if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_Create'))
+          {
         	$params = array();
 	        $params = $this->input->post('product');
 	        $params['user_id'] = $this->session->userdata('user_id');
@@ -275,11 +289,16 @@ class Cms extends MY_Controller {
 		        $this->session->set_flashdata('message_body', 'Please insert Tag name');
 	        }
 	        redirect('cms/create_product');
+          }
+          else
+          {
+               redirect('cms');
+          }
         }
-        if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_Delete'))
-        {
                if ($action == 'delete')
                {
+                    if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_Delete'))
+                    {
                        $id = $this->input->get('id');
                        
                        if ($id)
@@ -288,14 +307,14 @@ class Cms extends MY_Controller {
                        }
                        
                        redirect('cms/create_product');
+                    }
+                    else
+                    {
+                        redirect('cms/create_product');
+                    }
                }
                
-               $this->load->view('cms/index',$data);
-          }
-          else
-               {
-                    redirect('cms/create_product');
-               }
+          $this->load->view('cms/index',$data);
      }
      else
      {

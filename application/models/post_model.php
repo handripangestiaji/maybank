@@ -7,10 +7,11 @@ class post_model extends CI_Model
         $this->load->helper('basic');
     }
     
-    public function InsertPost($message,$channels,$tags=''){
+    public function InsertPost($message,$channels,$tags='',$scheduleTime=''){
         $post = array('created_by' => $this->session->userdata('user_id'),
 			'messages' => $message,
-			'created_at' => date('Y-m-d H:i;s')
+			'created_at' => date('Y-m-d H:i;s'),
+			'time_to_post' => $scheduleTime
 			);
 	$this->db->insert('post',$post);
         $post_id = $this->db->insert_id();

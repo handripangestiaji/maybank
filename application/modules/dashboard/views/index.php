@@ -47,8 +47,13 @@
                             </button>
                         </div>
                         <div class="right">
-                            <i class="icon-tag icon-large"></i>
-                            <input type="text" class="compose-tag-field" length="100" placeholder="Separate TAG by ," />
+                            <div class="left">
+                                <i class="icon-tag icon-large"></i>    
+                            </div>
+                            <div class="left" style="margin-left:5px;">
+                                <ul id="compose-tags" style="width: 200px;"></ul>        
+                            </div>
+                            <br clear="all" />
                         </div>
                         <div class="left clear top10">
                         <select class="standard-sel compose-select-campaign">
@@ -68,9 +73,11 @@
                             <a href="javascript:void(0);" id="open-img">
                                 <i class="icon-camera icon-dark icon-2x"></i>
                             </a>
+                            <!--
                             <a href="javascript:void(0);" id="open-cal">
                                 <i class="icon-calendar icon-2x"></i>
                             </a>
+                            -->
                         </div>
                 </div>
                 <div class="compose-schedule" id="img-show">

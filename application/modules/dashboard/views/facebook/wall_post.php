@@ -45,8 +45,12 @@ for($i=0; $i<count($fb_feed);$i++):?>
     }
     ?>
     </p>
-
-    <p><button type="button" class="btn <?php echo $fb_feed[$i]->case_id != null ? "btn-purple" : "btn-warning btn-mini" ?>"><?php echo $fb_feed[$i]->case_id != null ? 'CASE #'.$fb_feed[$i]->case_id : 'OPEN'?></button>
+<p>
+<?php if($fb_feed[$i]->total_comments>0){ ?>
+        <button type="button" class="btn <?php echo $fb_feed[$i]->case_id != null ? "btn-purple" : "btn-inverse btn-mini" ?>"><?php echo $fb_feed[$i]->case_id != null ? 'CASE #'.$fb_feed[$i]->case_id : 'REPLIED'?></button>
+<?php }else{ ?>
+        <button type="button" class="btn <?php echo $fb_feed[$i]->case_id != null ? "btn-purple" : "btn-warning btn-mini" ?>"><?php echo $fb_feed[$i]->case_id != null ? 'CASE #'.$fb_feed[$i]->case_id : 'OPEN'?></button>
+<?php } ?>        
         <button class="fblike btn btn-primary btn-mini" style="margin-left: 5px;" value="<?php echo $fb_feed[$i]->post_stream_id;?>"><?php echo $fb_feed[$i]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button> </p>
     <p>
         <span class="btn-engagement"><i class="icon-eye-open"></i> <?php echo $fb_feed[$i]->total_comments;?> Engagements</span> |
@@ -203,7 +207,7 @@ for($i=0; $i<count($fb_feed);$i++):?>
     <?php
     $data['fb_feed'] = $fb_feed;
     $data['i'] = $i;
-    $data['reply_type']='reply_comment';
+    $data['reply_type']='replaycontent';
     $this->load->view('dashboard/reply_field_facebook', $data)?>  
     </div>
     <!-- END REPLY -->

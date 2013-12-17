@@ -329,7 +329,49 @@ class Media_stream extends CI_Controller {
     }
     
     function ActionFollow($type = 'follow'){
-	
+	header("Content-Type: application/x-json");
+	$action['channel_id'] = $this->input->post('channel_id');
+	$action['post_id'] = $this->input->post('post_id');
+	$action['created_by'] = $this->session->userdata('user_id');
+	$twitter_data = $this->twitter_model->ReadTwitterData(
+	    array(
+		'a.post_id' => $this->input->post('post_id')
+	    ),
+	    1
+	);
+	if(count($twitter_data) > 0){
+	    $twitter_data = $twitter_data[0];
+	    $channel = $this->account_model->GetChannel(array(
+		'channel_id' => $this->input->post('channel_id')
+	    ));
+	    if(count($channel) == 0){
+		echo json_encode(
+		    array(
+			'success' => false,
+			'message' => "Invalid Channel Id"
+		    )
+		);
+		return;
+	    }
+	    else{
+		$channel = $channel[0];
+		$this->twitter_model->InitConnection($channel->oauth_token, $channel->oauth_secret);
+		$return_value = null;
+		if($type == 'follow'){
+		    $return_value = $this->twitter_model->CreateFriends($twitter_data, $this->session->userdata('user_id'));
+		}
+		else if($type == 'unfollow'){
+		    $return_value = $this->twitter_model->RemoveFriends($twitter_data, $this->session->userdata('user_id'));
+		}
+		echo json_encode(
+		    array(
+			'success' => true,
+			'message' => "Relation was sucessfully made.",
+			'result' => $return_value
+		    )
+		);
+	    }
+	}
     }
     //=========================================facebook function=============================================
     public function fb_access_token(){
@@ -626,20 +668,26 @@ class Media_stream extends CI_Controller {
 	if($this->form_validation->run() == TRUE)
 	{
 		$code = $this->shorturl->urlToShortCode($params);
-		
-		$setparam = array(
-				    "campaign_id" => $params['campaign_id'], 
-				    "url_id" => $code['url_id'],
-				    "user_id" => $params['user_id']
-				    );
-		
-		$id_campaign_url = $this->campaign_url_model->insert($setparam);
-		
-		$setparam['short_code'] = $short_code; 
-		echo json_encode($setparam);
+		if($code != false){
+		    $setparam = array(
+					"campaign_id" => $params['campaign_id'], 
+					"url_id" => $code['url_id'],
+					"user_id" => $params['user_id']
+					);
+		    
+		    $id_campaign_url = $this->campaign_url_model->insert($setparam);
+		    $setparam['short_code'] = $short_code;
+		    $setparam['is_success'] = $code;
+		    echo json_encode($setparam);
+		}
+		else{		
+	     	$setparam['is_success'] = $code;
+		    $setparam['message'] = 'Something Error. Make sure url is valid';
+		    echo json_encode($setparam);
+		}
 	}
 	else{
-	    echo json_encode(array('message' => 'Something error. Make sure you have select a campaign and put the full url in the insert link box.', "success" => FALSE));
+	    echo json_encode(array('is_success' => FALSE,'message' => 'Something error. Make sure you have select a campaign and put the full url in the insert link box.'));
 	}
     }
     
@@ -656,4 +704,12 @@ class Media_stream extends CI_Controller {
 				    'increment' => 0)));
     }
     
+    public function CreateImage(){
+	
+    }
+    
+    public function GetAllTags(){
+	$this->load->model('tag_model');
+	echo json_encode($this->tag_model->get());
+    }
 }

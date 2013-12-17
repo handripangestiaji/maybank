@@ -1,3 +1,4 @@
+<form action="" method="post" class="facebook-tweet">
 <div class="row-fluid">
     <span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
     <div class="pull-left">
@@ -12,7 +13,7 @@
             <?php endforeach?>
         </select>
     </div>
-    <textarea class='reply_comment' placeholder="Compose Message"></textarea>
+    <textarea class='replaycontent' placeholder="Compose Message"></textarea>
     <br clear="all" />
     <div class="pull-left"  style="margin-bottom: 5px;">
         <i class="icon-link"></i>
@@ -67,24 +68,8 @@
     <div class="pull-left reply-char-count">
             <i class="icon-facebook-sign"></i>&nbsp;<span class="reply-fb-char-count">2000</span>
     </div>
-    <?php
-        if($reply_type=='reply_comment'){
-         
-        //echo 'reply_comment';   
-        echo $fb_feed[$i]->post_stream_id;
-        //print_r($fb_feed);
-        }elseif($reply_type=='reply_nested'){
-        //print_r(fb_feed[$i]->comment_stream_id);
-        //print_r($fb_feed);
-        //echo 'reply_nested'; 
-        }else{
-            
-            echo '';
-        }
-    
-    ?>
     <div class="pull-right">
-      <?php if($reply_type=='reply_comment'){?>
+      <?php if($reply_type=='replaycontent'){?>
         <button class="btn btn-primary btn-small btn-send-reply" value="<?php echo $fb_feed[$i]->post_stream_id; ?>">SEND</button>    
       <?php }elseif($reply_type=='reply_nested'){ ?>
         <button class="btn btn-primary btn-small btn-send-reply" value="<?php echo $fb_feed[$i]->comment_stream_id; ?>">SEND</button> 
@@ -95,3 +80,4 @@
     <br clear="all" />
     <!--div class="reply-status hide">MESSAGE SENT</div-->
 </div>
+</form>

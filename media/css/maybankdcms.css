@@ -17,9 +17,16 @@
 .signInRow a{
 	font-size: 11px;
 }
+
+.mid-box{
+	margin-bottom: 50px;
+}
 /*==============================================================================================
 ======================================== DASHBOARD =============================================
 ==============================================================================================*/
+.btn-post-indicator{
+	cursor: default;
+}
 
 .floatingBoxContainers li p{
 	padding: 0px 5px 0px 0px;
@@ -84,6 +91,7 @@
 	margin-top: 10px;
 	border: 0px solid #F00;
 }
+
 
 .compose-expanded .compose-form{
 	width: 585px;

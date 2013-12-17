@@ -662,7 +662,7 @@ $(function(){
                             }
                         );
                         
-                        $(this).on('input propertychange', '.reply_comment',
+                        $(this).on('input propertychange', '.replaycontent',
                             function() {
                                 var len = $(this).val().length;
                                 $(this).siblings('.reply-char-count').children('.reply-fb-char-count').html(2000-len);
@@ -703,26 +703,30 @@ $(function(){
                                         },
                                 success: function(data){
                                     var new_data = JSON.parse(data);
-                                    alert(new_data.message);
-                                    $('.compose-textbox').val($('.compose-textbox').val()+ 'http://maybk.co/' + new_data.short_code);
+                                    if(new_data.is_success != false){
+                                        $('.compose-textbox').val($('.compose-textbox').val()+ 'http://maybk.co/' + new_data.short_code);            
+                                        ComposeCharCheck();
+                                        $(".compose-insert-link-text").linkpreview({
+                                            previewContainer: "#url-show > .compose-form > div",  //optional
+                                            //previewContainerClass: ".compose-schedule",
+                                            refreshButton: ".compose-insert-link-btn",        //optional
+                                            preProcess: function() {                //optional
+                                                $('#url-show').css({"display": "block"});
+                                                $('#url-show > .compose-form > div').html('Loading...');
+                                            },
+                                            onSuccess: function(data) {                  //optional
+                                            },
+                                            onError: function() {                    //optional
+                                            },
+                                            onComplete: function() {                 //optional
+                                            }
+                                       });
+                                    }
+                                    else{
+                                        alert(new_data.message);
+                                    }
                                 }
                             });
-                        
-                        $(".compose-insert-link-text").linkpreview({
-                            previewContainer: "#url-show > .compose-form > div",  //optional
-                            //previewContainerClass: ".compose-schedule",
-                            refreshButton: ".compose-insert-link-btn",        //optional
-                            preProcess: function() {                //optional
-                                $('#url-show').css({"display": "block"});
-                                $('#url-show > .compose-form > div').html('Loading...');
-                            },
-                            onSuccess: function(data) {                  //optional
-                            },
-                            onError: function() {                    //optional
-                            },
-                            onComplete: function() {                 //optional
-                            }
-                       });
                     });
                     
                     $(this).on('click','.reply-insert-link-btn', function(e){
@@ -779,12 +783,14 @@ $(function(){
                        $(this).closest("#reply-img-show").hide();
                     });
                      
-                     $('.compose-textbox').bind('input propertychange', function() {
-                        var len = this.value.length;
+                     function ComposeCharCheck(){
+                        var len = $('.compose-textbox').val().length;
                         $('.compose-fb-char-count').html(2000-len);
                         $('.compose-tw-char-count').html(140-len);
                         $('.compose-yt-char-count').html(500-len);
-                    });
+                     }
+                     
+                     $('.compose-textbox').bind('input propertychange', ComposeCharCheck);
                      
                      $(".btn-compose-post").click(function() {
                         if(!$('.compose-channels option:selected').length){
@@ -850,23 +856,53 @@ $(function(){
                             }
                             
                             if(confirmed == true){
+                                $('.compose-post-status').show();
+                                $('.compose-post-status').removeClass('green');
+                                $('.compose-post-status').removeClass('red');
+                                $('.compose-post-status').addClass('grey');
+                                $('.compose-post-status').html('Posting...');
+                                
                                 var resultPost = 0;
+                                var y = 0;
+                                var req = new Array();
                                 $('.compose-channels option:selected').each(function() {
+                                    y++;
                                     if($(this).attr('id') == 'optfacebook'){
                                         $.ajax({
-                                            url : BASEURL + 'dashboard/media_stream/FbStatusUpdate',
+                                            url : BASEURL + 'dashboard/socialmedia/FbStatusUpdate',
                                             type: "POST",
                                             data: {
                                                     content:$('.compose-textbox').val(),
+                                                    channel_id:$(this).val()
                                                     },
                                             success: function()
                                             {
                                                 resultPost = 1;
+                                                $('.compose-post-status').removeClass('grey');
+                                                $('.compose-post-status').removeClass('red');
+                                                $('.compose-post-status').addClass('green');
+                                                $('.compose-post-status').show();
+                                                $('.compose-post-status').html('Post to Facebook Success');
+                                                $('.compose-post-status').fadeOut(7500,function(){
+                                                    $('.compose-innercontainer').removeClass("compose-expanded");
+                                                    $('.compose-innercontainer').addClass("compose-collapsed");
+                                                    $('.compose-textbox').val('');
+                                                    $('.compose-insert-link-text').val('');
+                                                    $("#compose-tags").tagit("removeAll");
+                                                    $('.select-shorten-url').html('<option value="#">-- Select Shorten URL</option>');
+                                                    $('.compose-channels').find('option').removeAttr('selected');
+                                                    $('.compose-channels').next().find('button').html('None Selected <b class="caret"></b>');
+                                                    $('.compose-channels').next().find('li').removeClass('active');
+                                                    $('.compose-channels').next().find('input').removeAttr('checked');
+                                                    $('.compose-fb-char-count').html(2000);
+                                                    $('.compose-tw-char-count').html(140);
+                                                    $('.youtube-character-count').html(500);
+                                                });
                                             },
                                         });
                                     }
                                     
-                                    if($(this).attr('id') == 'opttwitter'){
+                                    if($(this).attr('id') == 'opttwitter'){                
                                         $.ajax({
                                             url : BASEURL + 'dashboard/socialmedia/twitterAction',
                                             type: "POST",
@@ -877,6 +913,26 @@ $(function(){
                                             success: function()
                                                 {
                                                     resultPost = 1;
+                                                    $('.compose-post-status').removeClass('grey');
+                                                    $('.compose-post-status').removeClass('red');
+                                                    $('.compose-post-status').addClass('green');                        
+                                                    $('.compose-post-status').show();
+                                                    $('.compose-post-status').html('Post to Twitter Success');
+                                                    $('.compose-post-status').fadeOut(7500,function(){
+                                                        $('.compose-innercontainer').removeClass("compose-expanded");
+                                                        $('.compose-innercontainer').addClass("compose-collapsed");
+                                                        $('.compose-textbox').val('');
+                                                        $('.compose-insert-link-text').val('');
+                                                        $("#compose-tags").tagit("removeAll");
+                                                        $('.select-shorten-url').html('<option value="#">-- Select Shorten URL</option>');
+                                                        $('.compose-channels').find('option').removeAttr('selected');
+                                                        $('.compose-channels').next().find('button').html('None Selected <b class="caret"></b>');
+                                                        $('.compose-channels').next().find('li').removeClass('active');
+                                                        $('.compose-channels').next().find('input').removeAttr('checked');
+                                                        $('.compose-fb-char-count').html(2000);
+                                                        $('.compose-tw-char-count').html(140);
+                                                        $('.compose-yt-count').html(500);
+                                                    });
                                                 },
                                             });
                                     }
@@ -885,29 +941,17 @@ $(function(){
                                     i++
                                 });
                                 
-                                if(resultPost == 0){
-                                    $('.compose-post-status').show();
-                                    $('.compose-post-status').removeClass('green');
-                                    $('.compose-post-status').addClass('red');
-                                    $('.compose-post-status').html('Post Failed');
-                                    $('.compose-post-status').fadeOut(7500);
-                                }
-                                else{
-                                    $('.compose-post-status').show();
-                                    $('.compose-post-status').removeClass('red');
-                                    $('.compose-post-status').addClass('green');
-                                    $('.compose-post-status').html('Post Success');
-                                    $('.compose-post-status').fadeOut(7500);
-                                }
-                                
                                 $.ajax({
                                     url : BASEURL + 'dashboard/media_stream/SocmedPost',
                                     type: "POST",
                                     data: {
                                             channels:channels,
                                             content:$('.compose-textbox').val(),
-                                            tags:$('.compose-tag-field').val()
+                                            tags:$("#compose-tags").tagit("assignedTags")
                                             },
+                                    success: function(){
+                                        
+                                    }
                                 });
                             }
                         }
@@ -931,6 +975,7 @@ $(function(){
                     });
                     
                     $('.select-shorten-url').on('change', function(){
+                        /*
                         $(".select-shorten-url option:selected").linkpreview({
                             url: BASEURL + 'dashboard/media_stream/GetUrlPreview?url=' + $(".select-shorten-url option:selected").val(),
                             previewContainer: "#url-show > .compose-form > div",  //optional
@@ -940,15 +985,16 @@ $(function(){
                                 $('#url-show').css({"display": "block"});
                                 $('#url-show > .compose-form > div').html('Loading...');
                             },
-                            onSuccess: function(data) {                  //optional
+                            onSuccess: function(data) {                  //optional    
                             },
                             onError: function() {                    //optional
                             },
                             onComplete: function() {                 //optional
                             }
                        });
-                        
+                       */
                         $('.compose-textbox').val($('.compose-textbox').val() + $(".select-shorten-url option:selected").val());
+                        ComposeCharCheck();
                     });
                     
                     $(this).on('click', ".destroy_status", function() {
@@ -1013,21 +1059,36 @@ $(function(){
                     
 
                     $(this).on('click','.follow',
-                        
                         function() {
-                        $.ajax({
-                            url : BASEURL + 'dashboard/socialmedia/ActionFollow/' + ($(this).hasClass('unfollow') ? 'unfollow' : 'follow'),
-                            type: "POST",
-                            data: {
-                                post_id : retweetBtn.closest('li').find('.postId').val(),
-                                channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
-                                
-                            },
-                            success: function()
-                            {
-                             
-                            }
-                        });
+                        var confirmResult = confirm('Are you sure want to ' + ($(this).hasClass('unfollow') ? 'unfollow' : 'follow') + " this account");
+                        var followButton = $(this);
+                        
+                        if(confirmResult){
+                            followButton.attr('disabled', 'disabled').find('span').html(($(this).hasClass('unfollow') ? 'Unfollowing...' : 'following...'));
+                            $.ajax({
+                                url : BASEURL + 'dashboard/media_stream/ActionFollow/' + ($(this).hasClass('unfollow') ? 'unfollow' : 'follow'),
+                                type: "POST",
+                                data: {
+                                    post_id : $(this).closest('li').find('.postId').val(),
+                                    channel_id : $(this).closest('.floatingBox').find('input.channel-id').val()
+                                },
+                                success: function(response)
+                                {
+                                    followButton.removeAttr('disabled').find('span').html('');
+                                    if(response.success == true){
+                                        if(followButton.hasClass('unfollow'))
+                                            followButton.removeClass('btn-inverse');
+                                        else
+                                            followButton.addClass('btn-inverse');
+                                    }
+                                },
+                                error : function(x, y, z){
+                                    followButton.closest('li').toggle('slow');
+                                    followButton.removeAttr('disabled').find('span').html('');
+                                }
+                            });
+                        }                        
+                        
                     });
                     
                     $(this).on('click','.fblike',
@@ -1062,7 +1123,7 @@ $(function(){
                     
                      $(this).on('click','.btn-send-reply',
                         function() {
-                        var len=$(this).parent().siblings(".reply_comment").val().length
+                        var len=$(this).parent().siblings(".replaycontent").val().length
                         if(len>2000){
                            var comment = 'Your message is more than 2000 characters. It will not post to Facebook.'; 
                            alert(comment);
@@ -1077,7 +1138,7 @@ $(function(){
                             data: {
                                 post_id: $(this).val(),
                                 channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
-                                comment :$(this).parent().siblings(".reply_comment").val(),
+                                comment :$(this).parent().siblings(".replaycontent").val(),
                             },
                             success: function(response)
                             {
@@ -1133,6 +1194,28 @@ $(function(){
                         function() {
                         $(this).next().toggle();
                     });                                                         
+                });
+                  
+                var sampleTags = [];
+                $.ajax({
+                    url : BASEURL + 'dashboard/media_stream/GetAllTags',
+                    type: "GET",
+                    success: function(data)
+                    {
+                        var new_data = JSON.parse(data);
+                        var x=0;
+                        $.each(new_data, function(){
+                           sampleTags.push(new_data[x].tag_name);
+                            x++;
+                        });
+                    },
+                });
+                //-------------------------------
+                // Allow spaces without quotes.
+                //-------------------------------
+                $('#compose-tags').tagit({
+                    availableTags: sampleTags,
+                    allowSpaces: true
                 });
                   
                 /*==============================================================================================

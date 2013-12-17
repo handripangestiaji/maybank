@@ -15,7 +15,7 @@
         <div class="navbar navbar-inverse navbar-fixed-top">
                 <div class="navbar-inner-yellow">
                     <div class="container-fluid">
-                        <a class="brand" href="#" style="margin: 10px 0px; padding: 0px;"><img src="https://clientstaging.yolk.com.sg/maybank/2013DCMS/Assets/DCMS-Logo.png" /></a>
+                        <a class="brand" href="#" style="margin: 10px 0px; padding: 0px;"><img src="<?php echo base_url() ?>media/img/DCMS-Logo.png" /></a>
                     </div>
                 </div>
             </div>

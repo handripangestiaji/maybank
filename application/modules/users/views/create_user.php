@@ -13,7 +13,7 @@
 	if($doubleUser!=NULL){ ?>
         <div class="alert alert-error">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <strong>Username already registered</strong>
+            <strong>User ID already registered</strong>
         </div>
 <?php }?>
 

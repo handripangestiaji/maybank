@@ -37,6 +37,7 @@
             	$data['products'] = $products ? $products:'';
             	$data['tags'] = $tags ? $tags:'';
             	$data['urls'] = $urls ? $urls:'';
+            	$data['pagination'] = $pagination ? $pagination : '';
                 $this->load->view($cms_view, $data);
             ?>
         </div>

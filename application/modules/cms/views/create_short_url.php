@@ -1,22 +1,34 @@
+<?php for($i=0;$i<count($this->user_role);$i++){
+    if($this->user_role[$i]->role_friendly_name=='Content Management_Short_URL_Create'){    
+?>
 <div class="row-fluid" style="border-bottom: solid 1px #C9C9C9; margin-bottom: 10px;">
     <h4>Create Short URL</h4>    
 </div>
+<?php }}?>
     <!-- ==================== TAB ROW ==================== -->
 <div class="row-fluid">
         <!-- ==================== TAB NAVIGATION ==================== -->
+	<?php for($x=0;$x<count($this->user_role);$x++){
+	    if($this->user_role[$x]->role_friendly_name=='Content Management_Short_URL_Create'){    
+	?>
         <ul class="nav nav-tabs">
             <li class="active">
                 <a href="#firstTab">Campaign</a>
             </li>
             <li><a href="#secondTab">Non Campaign</a></li>
         </ul>
+	<?php }}?>
         <!-- ==================== END OF TAB NAVIGATIION ==================== -->
 
         <div class="container-fluid">
             <!-- ==================== FIRST TAB CONTENT ==================== -->
             <div class="tabContent" id="firstTab">
+		<?php for($x=0;$x<count($this->user_role);$x++){
+		    if($this->user_role[$x]->role_friendly_name=='Content Management_Short_URL_Create'){    
+		?>
                <div class="floatingBox span12">
                     <div class="container-fluid campaignForm">
+			
                         <form class="form-horizontal contentForm" method="post" action="<?php echo site_url('cms/create_short_url')?>">
                             <div class="control-group">
                                 <label class="control-label">Full URL Path</label>
@@ -79,9 +91,10 @@
                                 </div>
                             </div>
                         </form>
+			
                     </div>
                     </div>
-               </div>
+               </div><?php }}?>
                 <div class="row-fluid" style="border-bottom: solid 1px #C9C9C9; margin-bottom: 10px;">
                     <h4>Short URL List</h4>    
                 </div>                                
@@ -96,8 +109,12 @@
                                 <th>Total Used</th>
                                 <th>Date Created</th>
                                 <th>Creator</th>
+				<?php for($x=0;$x<count($this->user_role);$x++){
+				    if($this->user_role[$x]->role_friendly_name=='Content Management_Short_URL_Delete'){    
+				?>
                                 <th>&nbsp;</th>
-                              </tr>
+				<?php }}?>
+			      </tr>
                             </thead>
                             <tbody>
                             <?php if($urls): ?>
@@ -109,11 +126,15 @@
                                                 <td><?php echo $v->increment ?></td>
                                                 <td><?php echo date('M d, Y', strtotime($v->created_at)) ?></td>
                                                 <td><?php echo $v->display_name ?></td>
-                                                <td>
+                                                <?php for($x=0;$x<count($this->user_role);$x++){
+						    if($this->user_role[$x]->role_friendly_name=='Content Management_Short_URL_Delete'){    
+						?>
+						<td>
                                                 <a href="<?php echo site_url('cms/create_short_url?action=delete&id='.$v->id)?>" class="btn btn-mini btn-danger pull-right">delete</a>
                                                 <!-- <button id="delete_btn" class="btn btn-mini btn-danger pull-right" type="button">delete</button> -->
                                                 </td>
-                                                        </tr>
+						<?php }}?>
+                                        </tr>
                                 <?php endforeach; ?>
                             <?php endif;?>
                             </tbody>

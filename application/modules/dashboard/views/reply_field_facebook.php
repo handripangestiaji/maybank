@@ -2,6 +2,7 @@
 <div class="row-fluid">
     <span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
     <div class="pull-left">
+        <div class="message"></div>
         <select style="width: 130px;">
             <option value="keyword">Feedback</option>
             <option value="user">Enquiry</option>
@@ -15,11 +16,11 @@
     </div>
     <textarea class='replaycontent' placeholder="Compose Message"></textarea>
     <br clear="all" />
-    <div class="pull-left"  style="margin-bottom: 5px;">
+    <div class="link_url pull-left"  style="margin-bottom: 5px;">
         <i class="icon-link"></i>
         <input type="text" class="reply-insert-link-text">
         <button class="reply-insert-link-btn btn btn-primary btn-mini" style="margin-left: 5px;">SHORTEN</button>
-    </div>
+    </div>    
     <div class="pull-right">
         <a href="javascript:void(0);" id="reply-open-img">
             <i class="icon-camera"></i> 
@@ -27,7 +28,7 @@
     </div>
     <br clear="all"/>
     <div id="reply-img-show" class="hide">
-        <div class="compose-form img-attached">
+            <div class="compose-form img-attached">
             <!-- close button for image attached -->
             <a id="close-reply-img-show" href="javascript:void(0);">
                 <i class="icon-remove-sign icon-large"></i>
@@ -63,6 +64,15 @@
             </div>
         </div>
     </div>
+    <div class="left">
+        <div class="left">
+            <i class="icon-tag icon-large"></i>    
+        </div>
+        <div class="left">
+            <ul id="compose-tags-reply" style="width: 200px;"></ul>        
+        </div>
+        <br clear="all" />
+    </div>    
     <br clear="all" />
     <br />
     <div class="pull-left reply-char-count">

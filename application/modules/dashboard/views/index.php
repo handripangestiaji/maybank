@@ -47,7 +47,7 @@
                             </button>
                         </div>
                         <div class="right">
-                            <div class="left">
+                           <div class="left">
                                 <i class="icon-tag icon-large"></i>    
                             </div>
                             <div class="left" style="margin-left:5px;">
@@ -55,6 +55,8 @@
                             </div>
                             <br clear="all" />
                         </div>
+                          
+                        
                         <div class="left clear top10">
                         <select class="standard-sel compose-select-campaign">
                             <option value=''>-- Select Campaign</option>

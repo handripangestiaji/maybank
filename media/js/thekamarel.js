@@ -1372,6 +1372,60 @@ $(function(){
  *  Load Content Asyncronously
 */
 
+/*=============================================================================================
+ ==================================== PUBLISHER ACTIONS =======================================
+ =============================================================================================*/
+    
+/* initialize the calendar
+-----------------------------------------------------------------*/
+$(document).ready(function(){
+    var content;
+    $('#calendar').fullCalendar({
+        header: {
+            left: 'prev,next,today',
+            center: 'title',
+            right: 'month,agendaWeek,agendaDay'
+        },
+        editable: true,
+        eventSources:[
+            {
+                url: BASEURL + 'dashboard/media_stream/GetScheduleData',
+                type: 'GET'
+            }
+        ],
+        eventClick: function(calEvent, jsEvent, view) {
+            //alert('Event: ' + calEvent.title);
+            //alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
+            //alert('View: ' + view.name);
+            $(this).find('.tooltip-event').toggle();
+        },
+        eventRender: function(event, element){
+            console.log($('#calendar').width());
+            //console.log(element.coord().left);
+            var tooltip =
+            "<div class='tooltip-event hide'>" +
+                "<div class='pull-left'>" + event.post_date + " | " + event.post_time + "</div>" +
+                "<br>" +
+                "<div class='tooltip-content pull-left'>" +
+                    "<div class='tooltip-content-head'>" + event.title + "</div>" +
+                    "<div class='tooltip-content-body'>" +
+                        "<p>" +
+                            event.description +
+                        "</p>" +
+                        "<p>" +
+                            "Set By : <strong>" + event.user_name + "</strong>" +
+                        "</p>" +
+                    "</div>" +
+                "</div>" +
+            "</div>";
+            element.append(tooltip);
+            
+            if(($('#calendar').width() - element.coord().left) < 270){
+                element.find('.tooltip-event').css('left','-100px');
+            }
+        }
+    });
+});
 
 serialize = function(obj) {
   var str = [];

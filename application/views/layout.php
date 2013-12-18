@@ -110,7 +110,7 @@
         <script src="<?php echo base_url('media/js/vendor/bootstrap-colorpicker.js')?>"></script>              <!-- colorpicker plugin -->
         <script src="<?php echo base_url('media/js/vendor/parsley.min.js')?>"></script>                        <!-- parsley validator plugin -->
         <script src="<?php echo base_url('media/js/vendor/formToWizard.js')?>"></script>                       <!-- form wizard plugin -->
-	<!-- <script src="<?php //echo base_url('media/js/vendor/fullcalendar.min.js')?>"</script>        		<!-- fullcalendar plugin -->
+	<script src="<?php echo base_url('media/js/vendor/fullcalendar.min.js')?>"></script>        		<!-- fullcalendar plugin -->
         <script src="<?php echo base_url('media/js/vendor/bootstrap.min.js')?>"></script>
         <script src="<?php echo base_url('media/js/vendor/bootstrap-editable.min.js')?>"></script>             <!-- editable fields plugin -->
 	

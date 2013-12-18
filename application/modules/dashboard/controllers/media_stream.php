@@ -799,4 +799,33 @@ class Media_stream extends CI_Controller {
 	$this->load->model('tag_model');
 	echo json_encode($this->tag_model->get());
     }
+    
+    public function GetScheduleData(){
+	$this->load->model('post_model');
+	$posts = $this->post_model->GetPosts();
+	
+	$encodeme = [];
+	foreach($posts as $post){
+	    if($post->time_to_post != NULL){
+		$time_to_post = explode(' ',$post->time_to_post);
+		$post_date = $time_to_post[0];
+		$post_time = $time_to_post[1];
+		
+		$short_date = explode('-',$post_date);
+		$new_short_date = $short_date[2].'/'.$short_date[1];
+		
+		$short_time = date('H:i A',strtotime($post_time));
+		
+		$encodeme[] = array('id' => $post->id,
+				'title' => $post->name,
+				'start' => $post_date,
+				'description' => $post->messages,
+				'user_name' => $post->display_name,
+				'post_date' => $new_short_date,
+				'post_time' => $short_time
+			       );
+	    }
+	}
+        echo json_encode($encodeme);
+    }
 }

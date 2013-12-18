@@ -139,8 +139,9 @@ class Campaign_model extends CI_Model
 				$campaigns[$i]['short_urls'][$x]['long_url'] = $v->long_url;
 				$campaigns[$i]['short_urls'][$x]['short_code'] = $v->short_code;
 				$campaigns[$i]['short_urls'][$x]['increment'] = $v->increment;
-				$campaigns[$i]['short_urls'][$x]['created_at'] = $v->created_at;
+				$campaigns[$i]['short_urls'][$x]['created_at'] = date('M d, Y', strtotime($v->created_at));
 				$campaigns[$i]['short_urls'][$x]['display_name'] = $v->display_name;
+				$campaigns[$i]['short_urls'][$x]['qrcode_image'] = $v->qrcode_image;
 				$totalclicks = $totalclicks + $v->increment;
 				$x++;
 			}

@@ -11,6 +11,17 @@ class Campaign_url_model extends CI_Model
 	
 	public function get()
 	{
+		$this->db->select('
+						content_campaign_url.*, 
+						content_campaign.id AS campaign_id, 
+						content_campaign.campaign_name, 
+						short_urls.id AS url_id,
+						short_urls.long_url,
+						short_urls.short_code,
+						short_urls.description,
+						short_urls.increment,
+						user.user_id,
+						user.display_name');
 		$this->db->join('content_campaign', 'content_campaign.id = '.$this->_table.'.campaign_id', 'left');
 		$this->db->join('short_urls', 'short_urls.id = '.$this->_table.'.url_id', 'left');
 		$this->db->join('user', 'user.user_id = '.$this->_table.'.user_id', 'left');
@@ -42,5 +53,19 @@ class Campaign_url_model extends CI_Model
 		$this->db->join('short_urls', 'content_campaign_url.url_id = short_urls.id', 'inner');
 		$this->db->where('content_campaign_url.campaign_id',$id);
 		return $this->db->get()->result();
+	}
+	
+	public function delete($id)
+	{
+		if ($id == null)
+		{
+			return false;
+		}
+		
+		$this->db->where('id', $id);
+		
+		$this->db->delete($this->_table);
+		
+		return true;
 	}
 }

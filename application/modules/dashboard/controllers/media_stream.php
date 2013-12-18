@@ -227,13 +227,20 @@ class Media_stream extends CI_Controller {
 		$data = base64_decode($img);
 		$file_name = uniqid().'.png';
 		$pathToSave = $this->config->item('assets_folder').'/'.$file_name;
+		$twitter_reply['image_to_post'] = $pathToSave;
 		if ( ! write_file($pathToSave, $data)){
 		    $validation = array('result' => FALSE,'name' => 'image '.$pathToSave,'error_code' => 112);
 		    $result=$this->connection->post('statuses/update', $parameters);
 		}
 		else{
-		    $parameters['media[]'] = "@{getcwd()./media/dynamic/".$file_name.'}';
-		    $result=$this->connection->post('statuses/update_with_media', $parameters);
+		    require_once './application/libraries/codebird.php';
+		    $this->load->config('twitter');
+		    Codebird::setConsumerKey($this->config->item('twitter_consumer_token'), $this->config->item('twitter_consumer_secret'));
+		    $cb = Codebird::getInstance();
+		    $cb->setToken($channel->oauth_token, $channel->oauth_secret);
+		    $parameters['media[]'] = $pathToSave;
+		    $result = $cb->statuses_updateWithMedia($parameters);
+		    $result->params = $parameters;
 		}
 	    }
 	    else{
@@ -327,6 +334,52 @@ class Media_stream extends CI_Controller {
     function ActionTwitterDelete(){
 	
     }
+    
+    function ActionFollow($type = 'follow'){
+	header("Content-Type: application/x-json");
+	$action['channel_id'] = $this->input->post('channel_id');
+	$action['post_id'] = $this->input->post('post_id');
+	$action['created_by'] = $this->session->userdata('user_id');
+	$twitter_data = $this->twitter_model->ReadTwitterData(
+	    array(
+		'a.post_id' => $this->input->post('post_id')
+	    ),
+	    1
+	);
+	if(count($twitter_data) > 0){
+	    $twitter_data = $twitter_data[0];
+	    $channel = $this->account_model->GetChannel(array(
+		'channel_id' => $this->input->post('channel_id')
+	    ));
+	    if(count($channel) == 0){
+		echo json_encode(
+		    array(
+			'success' => false,
+			'message' => "Invalid Channel Id"
+		    )
+		);
+		return;
+	    }
+	    else{
+		$channel = $channel[0];
+		$this->twitter_model->InitConnection($channel->oauth_token, $channel->oauth_secret);
+		$return_value = null;
+		if($type == 'follow'){
+		    $return_value = $this->twitter_model->CreateFriends($twitter_data, $this->session->userdata('user_id'));
+		}
+		else if($type == 'unfollow'){
+		    $return_value = $this->twitter_model->RemoveFriends($twitter_data, $this->session->userdata('user_id'));
+		}
+		echo json_encode(
+		    array(
+			'success' => true,
+			'message' => "Relation was sucessfully made.",
+			'result' => $return_value
+		    )
+		);
+	    }
+	}
+    }
     //=========================================facebook function=============================================
     public function fb_access_token(){
 	$app_id = $this->config->item('fb_appid');
@@ -391,34 +444,18 @@ class Media_stream extends CI_Controller {
     }
     
     public function FbReplyPost(){
-        header("Content-Type: application/x-json");
-	    $this->load->model('account_model');
+        $this->load->model('account_model');
         $this->load->model('facebook_model');
         $comment = $this->input->post('comment');
         $post_id = $this->input->post('post_id');
-        $url = $this->input->post('url');
-             
+     
         $filter = array(
             "connection_type" => "facebook"
         );
-        
         if($this->input->get('channel_id')){
             $filter['channel_id'] = $this->input->get('channel_id');
         }
         $channel_loaded = $this->account_model->GetChannel($filter);
-        if(count($channel_loaded) == 0){
-    		echo json_encode(
-    		    array(
-    			'success' => false,
-    			'message' => "Invalid Channel Id"
-    		    )
-    		);
-		return;
-	    }
-	    else{
-		  $channel =  $channel_loaded[0]->channel_id;
-	    }
-        
         $newStd = new stdClass();
         $newStd->page_id =  $channel_loaded[0]->social_id;
         $newStd->token = $this->facebook_model->GetPageAccessToken( $channel_loaded[0]->oauth_token, $channel_loaded[0]->social_id);
@@ -430,81 +467,50 @@ class Media_stream extends CI_Controller {
     	$this->facebook->setaccesstoken($newStd->token);
     	$return=$this->facebook->api('/'.$post_id.'/comments','post',array('message' => $comment));
         
-        $case=$this->account_model->isCaseIdExists($post_id);
-            if(count($case)>0){
-                $post_at=$case[0]->created_at;  
-                $caseid=$case[0]->case_id;
-            }else{
-                $caseid='';
-                $post_at='';       
-            }
         
-        if(!is_array($return)){//send comment          
+        if(!is_array($return)){//send comment
+          
             $action = array(
-        		"action_type" => "reply_facebook",
-        		"channel_id" =>$channel,
-        		"created_at" => date("Y-m-d H:i:s"),
-        		"stream_id" => $this->input->post('post_id'),
-        		"created_by" => $this->session->userdata('user_id'),
-        		"stream_id_response" => $return
+    		"action_type" => "reply_facebook",
+    		"channel_id" => $channel_loaded[0]->channel_id,
+    		"created_at" => date("Y-m-d H:i:s"),
+    		"stream_id" => $this->input->post('post_id'),
+    		"created_by" => $this->session->userdata('user_id'),
+    		"stream_id_response" => $return
     	    );
-            $this->account_model->CreateFbCommentAction($action, $this->input->post('like') === 'true' ? 1 : 0);
-            echo json_encode(
-    		    array(
-                'success' => true,
-    			'message' => "successfully done",
-    			'result' => $return
-    		    )
-    		);
-		                                        
-        }elseif(is_array($return)){//replay in reply
-        
-        if($return['id']){
-            $action = array(
-        		"action_type" => "reply_facebook",
-        		"channel_id" => $channel_loaded[0]->channel_id,
-        		"created_at" => date("Y-m-d H:i:s"),
-        		"stream_id" => $this->input->post('post_id'),
-        		"created_by" => $this->session->userdata('user_id'),
-        		"stream_id_response" => $return['id']
-        	);
+                $this->account_model->CreateFbCommentAction($action, $this->input->post('like') === 'true' ? 1 : 0);
+                print_r ('true');
          
-            $replyAction = array(
-        		"case_id" => $caseid,
-        		"channel" => $channel_loaded[0]->channel_id,
-        		"url" => $url,
-        		"message" =>$comment,
-        		"stream_id" => $return['id'],
-        		"comment_id" => $post_id,
-        	    "conversation_detail_id" => '',
-                "type" => "reply_facebook",
-                "post_at" => $post_at,
-                "created_at" => date("Y-m-d H:i:s")
-            );
-            $this->account_model->CreateFbCommentAction($action, $this->input->post('like') === 'true' ? 1 : 0);
-            echo json_encode(
-    		    array(
-                'success' => true,
-    			'message' => "successfully done",
-    			'result' => $return
-    		    )
-    		);
-            
-            }else{
-                echo json_encode(
-        		    array(
-                    'success' => false,
-        			'message' => "reply was failed",
-        			'result' => $return
-        		    )
-    		    );
-            }
+        }elseif(is_array($return)){//replay in reply
+        $action = array(
+    		"action_type" => "reply_facebook",
+    		"channel_id" => $channel_loaded[0]->channel_id,
+    		"created_at" => date("Y-m-d H:i:s"),
+    		"stream_id" => $this->input->post('post_id'),
+    		"created_by" => $this->session->userdata('user_id'),
+    		"stream_id_response" => $return['id']
+    	    );
+              if($return['id']){
+                 $this->account_model->CreateFbCommentAction($action, $this->input->post('like') === 'true' ? 1 : 0);
+                 print_r ('true');
+              }else{
+                 print_r ($return);
+              }
        }
     }
     
     public function SocmedPost(){
 	$this->load->model('post_model');
-	$this->post_model->InsertPost($this->input->post('content'),$this->input->post('channels'),$this->input->post('tags'));
+	
+	/* schedule date convert */
+	$schedules = explode(' ',$this->input->post('schedule'));
+	$the_dates = explode('/',$schedules[0]);
+	$the_hours = date("H:i", strtotime($schedules[1].' '.$schedules[2]));
+	$compose_date = $the_dates[2].'-'.$the_dates[0].'-'.$the_dates[1];
+	$compose_hour = $the_hours.':00';
+	$compose_date_hour = $compose_date.' '.$compose_hour;
+	
+	$this->post_model->InsertPost($this->input->post('content'),$this->input->post('channels'),$this->input->post('tags'),$compose_date_hour);
     }
     
     public function load_facebook($type){
@@ -678,20 +684,26 @@ class Media_stream extends CI_Controller {
 	if($this->form_validation->run() == TRUE)
 	{
 		$code = $this->shorturl->urlToShortCode($params);
-		
-		$setparam = array(
-				    "campaign_id" => $params['campaign_id'], 
-				    "url_id" => $code['url_id'],
-				    "user_id" => $params['user_id']
-				    );
-		
-		$id_campaign_url = $this->campaign_url_model->insert($setparam);
-		
-		$setparam['short_code'] = $short_code; 
-		echo json_encode($setparam);
+		if($code != false){
+		    $setparam = array(
+					"campaign_id" => $params['campaign_id'], 
+					"url_id" => $code['url_id'],
+					"user_id" => $params['user_id']
+					);
+		    
+		    $id_campaign_url = $this->campaign_url_model->insert($setparam);
+		    $setparam['short_code'] = $short_code;
+		    $setparam['is_success'] = $code;
+		    echo json_encode($setparam);
+		}
+		else{		
+	     	$setparam['is_success'] = $code;
+		    $setparam['message'] = 'Something Error. Make sure url is valid';
+		    echo json_encode($setparam);
+		}
 	}
 	else{
-	    echo json_encode(array('message' => 'Something error. Make sure you have select a campaign and put the full url in the insert link box.', "success" => FALSE));
+	    echo json_encode(array('is_success' => FALSE,'message' => 'Something error. Make sure you have select a campaign and put the full url in the insert link box.'));
 	}
     }
     
@@ -713,8 +725,7 @@ class Media_stream extends CI_Controller {
     }
     
     public function GetAllTags(){
-    	$this->load->model('tag_model');
-    	echo json_encode($this->tag_model->get());
+	$this->load->model('tag_model');
+	echo json_encode($this->tag_model->get());
     }
-    
 }

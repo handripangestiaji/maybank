@@ -57,12 +57,23 @@
 <!--<span style="font-size: 14pt; color: black; margin: 5px 0;">USER MANAGEMENT</span>-->
     <div class="cms-content row-fluid">
         <div class="cms-filter pull-left">
-            <input class="btn" onclick='menu_user()' type="button" name="btn_user" value="User" /> <br />
-            <input class="btn" type="button" onclick="menu_role()" name="btn_role" value="Role"  />   <br />
-            <input class="btn btn-primary" type="button" name="btn_group" value="Group" />
+            <?php for($i=0; $i < count($this->user_role ); $i++):?>
+		<?php if($this->user_role[$i]->role_friendly_name == 'User Management_User_View'):?>
+		    <input class="btn" onclick="menu_user()" type="button" name="btn_user" value="User" /> <br />
+		<?php endif;?>
+		<?php if($this->user_role[$i]->role_friendly_name == 'User Management_Role_View'):?>
+		    <input class="btn" type="button" onclick="menu_role()" name="btn_role" value="Role"  />   <br />
+		<?php endif;?>
+		<?php if($this->user_role[$i]->role_friendly_name == 'User Management_Group_View'):?>
+		    <input class="btn btn-primary" type="button" onclick="menu_group()" name="btn_group" value="Group" />
+		<?php endif;?>
+	    <?php endfor?>
         </div>
         
         <div class="cms-table pull-right">
+            <?php for($x=0;$x<count($this->user_role);$x++){
+                if($this->user_role[$x]->role_friendly_name=='User Management_Group_Create_Delete'){
+            ?>
             <h5>New Group</h5>
             <hr style="margin-top: 0px;">
             <form method='post' action='<?php echo site_url('users/insert_group');?>'>
@@ -97,8 +108,9 @@
                     <input type='submit' class="btn" value='Create' ?>
                 </div>
             </from>
-                <div style='clear: both'></div><br />
+            <div style='clear: both'></div><br />
             <hr style="margin-top: 0px;">
+            <?php }}?>
             <h5>Current Group</h5>
             <table class="table table-striped">
                 <thead>
@@ -107,8 +119,13 @@
                         <th>Users</th>
                         <th>Channel</th>
                         <th>Creator</th>
+                        <?php for($x=0;$x<count($this->user_role);$x++){
+                                if($this->user_role[$x]->role_friendly_name=='User Management_Group_Edit'){
+                        ?>
                         <th>&nbsp;</th>
+                        <?php }if($this->user_role[$x]->role_friendly_name=='User Management_Group_Create_Delete'){?>
                         <th>&nbsp;</th>
+                        <?php }}?>
                     </tr>
                 </thead>
                 
@@ -135,8 +152,13 @@
                             ?>
                         </td>
                         <td><?php echo $gr->name;?></td>
+                        <?php for($x=0;$x<count($this->user_role);$x++){
+                                if($this->user_role[$x]->role_friendly_name=='User Management_Group_Edit'){
+                        ?>
                         <td><a href="<?php echo site_url('users/edit_group/'.$gr->group_id);?>"><span><i class="icon-pencil"></i></span></a></td>
+                        <?php }if($this->user_role[$x]->role_friendly_name=='User Management_Group_Create_Delete'){?>
                         <td><a href="" onclick="show_confirm('<?php echo $gr->group_id;?>');return false;"><span><i class="icon-remove"></i></span></a></td>
+                        <?php }}?>
                     </tr>
                     <?php $i++;}?>
                 </tbody>

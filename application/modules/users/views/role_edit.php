@@ -2,6 +2,22 @@
 
 <div class="row-fluid" style="width: 80%; margin: 0px auto;">
 <!--<span style="font-size: 14pt; color: black; margin: 5px 0;">USER MANAGEMENT</span>-->
+	<?php
+		//$msge = $this->session->flashdata('double');
+		if($msg_role!=NULL){ ?>
+		<div class="alert alert-info" style='background: #ffe4e4; color: #b94a48; border-color: #eed3d7;'>
+		    <button type="button" class="close" data-dismiss="alert">&times;</button>
+		    <strong>Role Name already registered.</strong>
+		</div>
+	    <?php }?>
+	<?php
+		//$msge = $this->session->flashdata('double');
+		if($role_check!=NULL){ ?>
+		<div class="alert alert-info" style='background: #ffe4e4; color: #b94a48; border-color: #eed3d7;'>
+		    <button type="button" class="close" data-dismiss="alert">&times;</button>
+		    <strong>Role Permission cannot empty.</strong>
+		</div>
+	    <?php }?>
     <div class="cms-content row-fluid">
         <div class="cms-filter pull-left">
             <input class="btn" onclick='menu_user()' type="button" name="btn_user" value="User" /> <br />
@@ -15,6 +31,7 @@
             Role Name <input type='text' name='role_name' value='<?php echo $role->row()->role_name;?>' />
 	    <span style='color:red;'><?php echo form_error('role_name'); ?></span>
             <input type='hidden' name='role_id' value='<?php echo $role->row()->role_collection_id;?>' />
+	    <input type='hidden' name='role_name1' value='<?php echo $role->row()->role_name;?>' />
             <hr>
             <div>
                 <div class="tree" id="tree">
@@ -28,9 +45,11 @@
 		    </div>
                     <input type='hidden' id='role_id' name='role[]' value='' />
 		    <input type='button' id='save' value='Save' />
+		    <input type='button' onclick="menu_role()" value='Cancel' />
                     </form>
                 </div>
                 </div>
+	    <span style='color:red;'><?php echo form_error('role'); ?></span>
             </div>
            
     </div>

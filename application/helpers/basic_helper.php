@@ -257,6 +257,7 @@ function linkify($string, $twitter=false, $url=false) {
         $pattern = '/@([a-zA-Z0-9_]+)/';
         $replace = '<a href="http://twitter.com/\1" target="_blank">@\1</a>';
         $new_string = preg_replace($pattern, $replace, $new_string);
+        $new_string = preg_replace('/(^|\s)#(\w*[a-zA-Z_]+\w*)/', '\1<a href="http://twitter.com/search?q=%23\2">#\2</a>', $new_string);
     }
 
     return $new_string;
@@ -295,4 +296,14 @@ function convert_image($image, $path){
     else{
         //file_get_contents($this->config->item('giziku_url').'food/getPhoto/'.$file_name);
     }
+}
+
+
+function IsRoleFriendlyNameExist($user_role, $currentPermission){
+    foreach($user_role as $role){
+        if($role->role_friendly_name == $currentPermission)
+            return true;
+    }
+    
+    return false;
 }

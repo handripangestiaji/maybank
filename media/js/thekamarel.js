@@ -468,7 +468,7 @@ $(function(){
                     });
                     var increment = 1;
                     setInterval(function(){
-                        $(document).RefreshAllStream();
+                        //$(document).RefreshAllStream();
                         increment ++;
                         console.log(increment);
                     }, 120000);
@@ -703,26 +703,30 @@ $(function(){
                                         },
                                 success: function(data){
                                     var new_data = JSON.parse(data);
-                                    alert(new_data.message);
-                                    $('.compose-textbox').val($('.compose-textbox').val()+ 'http://maybk.co/' + new_data.short_code);
+                                    if(new_data.is_success != false){
+                                        $('.compose-textbox').val($('.compose-textbox').val()+ 'http://maybk.co/' + new_data.short_code);            
+                                        ComposeCharCheck();
+                                        $(".compose-insert-link-text").linkpreview({
+                                            previewContainer: "#url-show > .compose-form > div",  //optional
+                                            //previewContainerClass: ".compose-schedule",
+                                            refreshButton: ".compose-insert-link-btn",        //optional
+                                            preProcess: function() {                //optional
+                                                $('#url-show').css({"display": "block"});
+                                                $('#url-show > .compose-form > div').html('Loading...');
+                                            },
+                                            onSuccess: function(data) {                  //optional
+                                            },
+                                            onError: function() {                    //optional
+                                            },
+                                            onComplete: function() {                 //optional
+                                            }
+                                       });
+                                    }
+                                    else{
+                                        alert(new_data.message);
+                                    }
                                 }
                             });
-                        
-                        $(".compose-insert-link-text").linkpreview({
-                            previewContainer: "#url-show > .compose-form > div",  //optional
-                            //previewContainerClass: ".compose-schedule",
-                            refreshButton: ".compose-insert-link-btn",        //optional
-                            preProcess: function() {                //optional
-                                $('#url-show').css({"display": "block"});
-                                $('#url-show > .compose-form > div').html('Loading...');
-                            },
-                            onSuccess: function(data) {                  //optional
-                            },
-                            onError: function() {                    //optional
-                            },
-                            onComplete: function() {                 //optional
-                            }
-                       });
                     });
                     
                     $(this).on('click','.reply-insert-link-btn', function(e){
@@ -755,7 +759,6 @@ $(function(){
                                 me.removeAttr("disabled").html("SHORTEN");
                                 tweetsText = me.closest('form').find(".replaycontent");
                                 tweetsText.val(tweetsText.val() + " http://maybank.co/" + response.shortcode);
-                               // alert("http://maybank.co/" + response.shortcode)
                            },
                            failed : function(response){
                                 me.removeAttr("disabled").html("SHORTEN");
@@ -780,12 +783,14 @@ $(function(){
                        $(this).closest("#reply-img-show").hide();
                     });
                      
-                     $('.compose-textbox').bind('input propertychange', function() {
-                        var len = this.value.length;
+                     function ComposeCharCheck(){
+                        var len = $('.compose-textbox').val().length;
                         $('.compose-fb-char-count').html(2000-len);
                         $('.compose-tw-char-count').html(140-len);
                         $('.compose-yt-char-count').html(500-len);
-                    });
+                     }
+                     
+                     $('.compose-textbox').bind('input propertychange', ComposeCharCheck);
                      
                      $(".btn-compose-post").click(function() {
                         if(!$('.compose-channels option:selected').length){
@@ -821,7 +826,6 @@ $(function(){
                                 var r = confirm('Your message is more than 140 characters. It will not post to Twitter. Do you still want to continue?');
                                 if(r == true){
                                     $('#opttwitter').removeAttr("selected");
-                                    confirmed = true;
                                 }
                                 else{
                                     confirmed = false;
@@ -832,7 +836,6 @@ $(function(){
                                 var r = confirm('Your message is more than 500 characters. It will not post to Youtube. Do you still want to continue?');
                                 if(r == true){
                                     $('#optyoutube').removeAttr('selected');
-                                    confirmed = true;
                                 }
                                 else{
                                     confirmed = false;
@@ -843,31 +846,78 @@ $(function(){
                                 var r = confirm('Your message is more than 2000 characters. It will not post to Facebook. Do you still want to continue?');
                                 if(r == true){
                                      $('#optfacebook').removeAttr('selected');
-                                    confirmed = true;
                                 }
                                 else{
                                     confirmed = false;
                                 }
                             }
                             
+                            var scheduleTime;
+                            if($('#datepickerField').val() != ''){
+                                if($('#compose-schedule-hours').val() == ''){
+                                    alert("You haven't set your post schedule hours");
+                                    confirmed = false;
+                                }
+                                else if($('#compose-schedule-minutes').val() == ''){
+                                    alert("You haven't set your post schedule minutes");
+                                    confirmed = false;
+                                }
+                                else{
+                                    scheduleTime = $('#datepickerField').val() + ' ' + $('#compose-schedule-hours').val() + ':' + $('#compose-schedule-minutes').val() + ' ' + $('#compose-schedule-ampm').val();        
+                                }
+                            }
+                            else{
+                                scheduleTime = '';
+                            }
+                            
                             if(confirmed == true){
+                                $('.compose-post-status').show();
+                                $('.compose-post-status').removeClass('green');
+                                $('.compose-post-status').removeClass('red');
+                                $('.compose-post-status').addClass('grey');
+                                $('.compose-post-status').html('Posting...');
+                                
                                 var resultPost = 0;
+                                var y = 0;
+                                var req = new Array();
                                 $('.compose-channels option:selected').each(function() {
+                                    y++;
                                     if($(this).attr('id') == 'optfacebook'){
                                         $.ajax({
-                                            url : BASEURL + 'dashboard/media_stream/FbStatusUpdate',
+                                            url : BASEURL + 'dashboard/socialmedia/FbStatusUpdate',
                                             type: "POST",
                                             data: {
                                                     content:$('.compose-textbox').val(),
+                                                    channel_id:$(this).val()
                                                     },
                                             success: function()
                                             {
                                                 resultPost = 1;
+                                                $('.compose-post-status').removeClass('grey');
+                                                $('.compose-post-status').removeClass('red');
+                                                $('.compose-post-status').addClass('green');
+                                                $('.compose-post-status').show();
+                                                $('.compose-post-status').html('Post to Facebook Success');
+                                                $('.compose-post-status').fadeOut(7500,function(){
+                                                    $('.compose-innercontainer').removeClass("compose-expanded");
+                                                    $('.compose-innercontainer').addClass("compose-collapsed");
+                                                    $('.compose-textbox').val('');
+                                                    $('.compose-insert-link-text').val('');
+                                                    $("#compose-tags").tagit("removeAll");
+                                                    $('.select-shorten-url').html('<option value="#">-- Select Shorten URL</option>');
+                                                    $('.compose-channels').find('option').removeAttr('selected');
+                                                    $('.compose-channels').next().find('button').html('None Selected <b class="caret"></b>');
+                                                    $('.compose-channels').next().find('li').removeClass('active');
+                                                    $('.compose-channels').next().find('input').removeAttr('checked');
+                                                    $('.compose-fb-char-count').html(2000);
+                                                    $('.compose-tw-char-count').html(140);
+                                                    $('.youtube-character-count').html(500);
+                                                });
                                             },
                                         });
                                     }
                                     
-                                    if($(this).attr('id') == 'opttwitter'){
+                                    if($(this).attr('id') == 'opttwitter'){                
                                         $.ajax({
                                             url : BASEURL + 'dashboard/socialmedia/twitterAction',
                                             type: "POST",
@@ -878,6 +928,26 @@ $(function(){
                                             success: function()
                                                 {
                                                     resultPost = 1;
+                                                    $('.compose-post-status').removeClass('grey');
+                                                    $('.compose-post-status').removeClass('red');
+                                                    $('.compose-post-status').addClass('green');                        
+                                                    $('.compose-post-status').show();
+                                                    $('.compose-post-status').html('Post to Twitter Success');
+                                                    $('.compose-post-status').fadeOut(7500,function(){
+                                                        $('.compose-innercontainer').removeClass("compose-expanded");
+                                                        $('.compose-innercontainer').addClass("compose-collapsed");
+                                                        $('.compose-textbox').val('');
+                                                        $('.compose-insert-link-text').val('');
+                                                        $("#compose-tags").tagit("removeAll");
+                                                        $('.select-shorten-url').html('<option value="#">-- Select Shorten URL</option>');
+                                                        $('.compose-channels').find('option').removeAttr('selected');
+                                                        $('.compose-channels').next().find('button').html('None Selected <b class="caret"></b>');
+                                                        $('.compose-channels').next().find('li').removeClass('active');
+                                                        $('.compose-channels').next().find('input').removeAttr('checked');
+                                                        $('.compose-fb-char-count').html(2000);
+                                                        $('.compose-tw-char-count').html(140);
+                                                        $('.compose-yt-count').html(500);
+                                                    });
                                                 },
                                             });
                                     }
@@ -886,29 +956,18 @@ $(function(){
                                     i++
                                 });
                                 
-                                if(resultPost == 0){
-                                    $('.compose-post-status').show();
-                                    $('.compose-post-status').removeClass('green');
-                                    $('.compose-post-status').addClass('red');
-                                    $('.compose-post-status').html('Post Failed');
-                                    $('.compose-post-status').fadeOut(7500);
-                                }
-                                else{
-                                    $('.compose-post-status').show();
-                                    $('.compose-post-status').removeClass('red');
-                                    $('.compose-post-status').addClass('green');
-                                    $('.compose-post-status').html('Post Success');
-                                    $('.compose-post-status').fadeOut(7500);
-                                }
-                                
                                 $.ajax({
                                     url : BASEURL + 'dashboard/media_stream/SocmedPost',
                                     type: "POST",
                                     data: {
                                             channels:channels,
                                             content:$('.compose-textbox').val(),
-                                            tags:$("#compose-tags").tagit("assignedTags")
+                                            tags:$("#compose-tags").tagit("assignedTags"),
+                                            schedule:scheduleTime
                                             },
+                                    success: function(){
+                                        
+                                    }
                                 });
                             }
                         }
@@ -932,6 +991,7 @@ $(function(){
                     });
                     
                     $('.select-shorten-url').on('change', function(){
+                        /*
                         $(".select-shorten-url option:selected").linkpreview({
                             url: BASEURL + 'dashboard/media_stream/GetUrlPreview?url=' + $(".select-shorten-url option:selected").val(),
                             previewContainer: "#url-show > .compose-form > div",  //optional
@@ -941,15 +1001,16 @@ $(function(){
                                 $('#url-show').css({"display": "block"});
                                 $('#url-show > .compose-form > div').html('Loading...');
                             },
-                            onSuccess: function(data) {                  //optional
+                            onSuccess: function(data) {                  //optional    
                             },
                             onError: function() {                    //optional
                             },
                             onComplete: function() {                 //optional
                             }
                        });
-                        
+                       */
                         $('.compose-textbox').val($('.compose-textbox').val() + $(".select-shorten-url option:selected").val());
+                        ComposeCharCheck();
                     });
                     
                     $(this).on('click', ".destroy_status", function() {
@@ -994,9 +1055,9 @@ $(function(){
                                 retweetBtn.removeAttr('disabled').find('span').html('');
                                 if(response.success == true){
                                     if(action == 'favorite')
-                                        retweetedBtn.closest('li').find('.indicator').append('<button type="button" class="btn btn-success btn-mini"><i class="icon-star"></i></button>');
+                                        retweetBtn.closest('li').find('.indicator').append('<button type="button" class="btn btn-inverse btn-mini"><i class="icon-star"></i></button>');
                                     else
-                                        retweetedBtn.closest('li').find('.indicator').append('<button type="button" class="btn btn-success btn-mini"><i class="icon-retweet"></i></button>');
+                                        retweetBtn.closest('li').find('.indicator').append('<button type="button" class="btn btn-success btn-mini"><i class="icon-retweet"></i></button>');
                                 }
                                 else{
                                     
@@ -1005,9 +1066,9 @@ $(function(){
                             failed : function(response){
                                 retweetBtn.removeAttr('disabled').find('span').html('');
                                 if(action == 'favorite')
-                                        retweetedBtn.closest('li').find('.indicator').append('<button type="button" class="btn btn-success btn-mini"><i class="icon-star"></i></button>');
+                                        retweetBtn.closest('li').find('.indicator').append('<button type="button" class="btn btn-inverse btn-mini"><i class="icon-star"></i></button>');
                                 else
-                                        retweetedBtn.closest('li').find('.indicator').append('<button type="button" class="btn btn-success btn-mini"><i class="icon-retweet"></i></button>');
+                                        retweetBtn.closest('li').find('.indicator').append('<button type="button" class="btn btn-success btn-mini"><i class="icon-retweet"></i></button>');
                             }
                         });
                     });
@@ -1015,36 +1076,35 @@ $(function(){
 
                     $(this).on('click','.follow',
                         function() {
-                        $.ajax({
-                            url : BASEURL + 'dashboard/socialmedia/twitterAction',
-                            type: "POST",
-                            data: {
-                                    action:'follow',
-                                    followid: $(this).siblings(".followid").val()
-                                    },
-                            success: function()
-                            {
-                                $('.compose-post-status').show();
-                                $('.compose-post-status').fadeOut(5000);
-                            }
-                        });
-                    });
-                    
-                    $(this).on('click','.unfollow',
-                        function() {
-                        $.ajax({
-                            url : BASEURL + 'dashboard/socialmedia/twitterAction',
-                            type: "POST",
-                            data: {
-                                    action:'unfollow',
-                                    followid: $(this).siblings(".followid").val()
-                                    },
-                            success: function()
-                            {
-                                $('.compose-post-status').show();
-                                $('.compose-post-status').fadeOut(5000);
-                            },
-                        });
+                        var confirmResult = confirm('Are you sure want to ' + ($(this).hasClass('unfollow') ? 'unfollow' : 'follow') + " this account");
+                        var followButton = $(this);
+                        
+                        if(confirmResult){
+                            followButton.attr('disabled', 'disabled').find('span').html(($(this).hasClass('unfollow') ? 'Unfollowing...' : 'following...'));
+                            $.ajax({
+                                url : BASEURL + 'dashboard/media_stream/ActionFollow/' + ($(this).hasClass('unfollow') ? 'unfollow' : 'follow'),
+                                type: "POST",
+                                data: {
+                                    post_id : $(this).closest('li').find('.postId').val(),
+                                    channel_id : $(this).closest('.floatingBox').find('input.channel-id').val()
+                                },
+                                success: function(response)
+                                {
+                                    followButton.removeAttr('disabled').find('span').html('');
+                                    if(response.success == true){
+                                        if(followButton.hasClass('unfollow'))
+                                            followButton.removeClass('btn-inverse');
+                                        else
+                                            followButton.addClass('btn-inverse');
+                                    }
+                                },
+                                error : function(x, y, z){
+                                    followButton.closest('li').toggle('slow');
+                                    followButton.removeAttr('disabled').find('span').html('');
+                                }
+                            });
+                        }                        
+                        
                     });
                     
                     $(this).on('click','.fblike',
@@ -1081,43 +1141,34 @@ $(function(){
                         function() {
                         var len=$(this).parent().siblings(".replaycontent").val().length
                         if(len>2000){
-                            $(this).parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
-                            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
-                            '<strong>Error!</strong> Your message is more than 2000 characters. It will not post to Facebook. </div>');
-                            
+                           var comment = 'Your message is more than 2000 characters. It will not post to Facebook.'; 
+                           alert(comment);
                         }else{
                             var commentButton = $(this);
                             isSend=commentButton.html()=="SEND";
                             commentButton.html('SENDING...').attr("disabled", "disabled");
 
                            $.ajax({
-                                url : BASEURL + 'dashboard/media_stream/FbReplyPost',
-                                type: "POST",
-                                data: {
-                                    post_id: $(this).val(),
-                                    channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
-                                    comment :$(this).parent().siblings(".replaycontent").val(),
-                                    url :$(this).parent().siblings('.link_url').find(".reply-insert-link-text").val(),
-                                    img :$(this).parent().siblings('#reply-img-show').find("#replyInputImageFile").val(),
-                                },
-                                success: function(response)
-                                {
-                                    commentButton.removeAttr("disabled");
-                                    if(response.success === true){
-                                        commentButton.parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
-                                        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
-                                        '<strong>Success!</strong> '+response.message+' </div>');
-                                        commentButton.parent().siblings(".replaycontent").val("");
-                                        commentButton.html("SEND");  
-                                    }
-                                    else{
-                                        commentButton.parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
-                                        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
-                                        '<strong>Error!</strong>'+response.message+'</div>');
-                                        commentButton.html("SEND");
-                                    }
-                                },
-                            });
+                            url : BASEURL + 'dashboard/media_stream/FbReplyPost',
+                            type: "POST",
+                            data: {
+                                post_id: $(this).val(),
+                                channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
+                                comment :$(this).parent().siblings(".replaycontent").val(),
+                            },
+                            success: function(response)
+                            {
+                                commentButton.removeAttr("disabled");
+                                if(response == 'true'){
+                                  commentButton.html("SEND");   
+                                }
+                                else{
+                                    alert("Failed to reply comment");
+                                    alert(response);
+                                    commentButton.html("SEND");
+                                }
+                            },
+                        });
                             
                         }
                                                 
@@ -1160,8 +1211,7 @@ $(function(){
                         $(this).next().toggle();
                     });                                                         
                 });
-                
-
+                  
                 var sampleTags = [];
                 $.ajax({
                     url : BASEURL + 'dashboard/media_stream/GetAllTags',
@@ -1178,19 +1228,13 @@ $(function(){
                 });
                 //-------------------------------
                 // Allow spaces without quotes.
-                //--
-                  
+                //-------------------------------
+                
                 $('#compose-tags').tagit({
                     availableTags: sampleTags,
                     allowSpaces: true
                 });
                 
-                $(this).on('click','.btn-reply',function(){
-                    $(this).closest('h4').siblings('.reply-field').find('#compose-tags-reply').tagit({
-                        availableTags: sampleTags,
-                        allowSpaces: true
-                    });
-                });                
                 /*==============================================================================================
                  ====================================== LOAD WYSIWYG EDITOR ====================================
                  =============================================================================================*/   

@@ -5,7 +5,7 @@ class Cms extends MY_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->library('Shorturl');
+		$this->load->library(array('Shorturl', 'ciqrcode'));
 		$this->load->model(array('tag_model', 'product_model', 'campaign_model', 'shorturl_model', 'campaign_url_model'));
 		$this->load->helper('form');
 		$this->load->library('form_validation');
@@ -143,6 +143,8 @@ class Cms extends MY_Controller {
     	$data['tags'] = '';
     	
     	$data['urls'] = $this->campaign_url_model->get();
+    	
+    	$action = $this->input->get('action');
     
 		if ($this->input->server('REQUEST_METHOD') === 'POST')
 		{
@@ -187,6 +189,16 @@ class Cms extends MY_Controller {
 				$id_campaign_url = $this->campaign_url_model->insert($setparam);
 			}
 			redirect('cms/create_short_url');			
+		}
+		else if ($action == "delete")
+		{
+			$id = $this->input->get("id");
+			
+			$this->campaign_url_model->delete($id);
+			
+			$this->session->unset_userdata('message');
+			
+			redirect('cms/create_short_url');
 		}
 		else {
 			$this->session->unset_userdata('message');

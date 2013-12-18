@@ -47,7 +47,7 @@
                             </button>
                         </div>
                         <div class="right">
-                           <div class="left">
+                            <div class="left">
                                 <i class="icon-tag icon-large"></i>    
                             </div>
                             <div class="left" style="margin-left:5px;">
@@ -55,8 +55,6 @@
                             </div>
                             <br clear="all" />
                         </div>
-                          
-                        
                         <div class="left clear top10">
                         <select class="standard-sel compose-select-campaign">
                             <option value=''>-- Select Campaign</option>
@@ -116,12 +114,12 @@
                         <div class="img-list-upload">
                                 <div class="left">
                                 <label class="left">Date</label>
-                                <input id="datepickerField" type="text" class="span3" value="04/26/2013">
+                                <input id="datepickerField" type="text" class="span3">
                                 </div>
                                 <div class="right">
                                 <p>
                                     <label class="left">Time</label>
-                                    <select class="time-sel">
+                                    <select class="time-sel" id="compose-schedule-hours">
                                         <option value="">Hours</option>
                                         <option value="1">1</option>
                                         <option value="2">2</option>
@@ -136,7 +134,7 @@
                                         <option value="11">11</option>
                                         <option value="12">12</option>
                                     </select>
-                                    <select class="time-sel">
+                                    <select class="time-sel" id="compose-schedule-minutes">
                                         <option value="">Minutes</option>
                                         <option value="5">5</option>
                                         <option value="10">10</option>
@@ -150,7 +148,7 @@
                                         <option value="50">50</option>
                                         <option value="55">55</option>
                                     </select>
-                                    <select class="time-sel">
+                                    <select class="time-sel" id="compose-schedule-ampm">
                                         <option value="AM">AM</option>
                                         <option value="PM">PM</option>
                                     </select>

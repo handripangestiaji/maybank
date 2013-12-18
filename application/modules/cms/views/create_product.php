@@ -51,7 +51,7 @@
 		                <td><?php echo $v->increment; ?></td>
 		                <td><?php echo $v->display_name; ?></td>
 		                <td>
-		                	<a href="<?php echo site_url('cms/create_product?action=delete&id='.$v->id)?>" class="btn btn-mini btn-danger pull-right">delete</a>
+		                	<a href="<?php echo site_url('cms/create_product?action=delete&id='.$v->id)?>" onclick="return window.confirm('Are you sure want to delete this record?')" class="btn btn-mini btn-danger pull-right">delete</a>
 		                	<!--<button class="btn btn-mini btn-danger pull-right" type="button">delete</button>-->
 		                </td>
 					</tr>

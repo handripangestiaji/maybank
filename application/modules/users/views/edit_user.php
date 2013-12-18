@@ -1,5 +1,12 @@
 <div class="row-fluid" style="width: 80%; margin: 0px auto;">    
 <!--<span style="font-size: 14pt; color: black; margin: 5px 0;">USER MANAGEMENT</span>-->
+    <?php
+        if($double!=NULL){ ?>
+        <div class="alert alert-error">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Your email already registered</strong>
+        </div>
+    <?php }?>
     <div class="cms-content row-fluid">
         <div class="cms-filter pull-left">
             <input class="btn btn-primary" type="button" onclick="menu_user()" name="btn_user" value="User" /> <br />
@@ -38,6 +45,7 @@
             <td>Email <span style='color: red;'>*</span></td>
             <td><input name='email' type="text" value="<?php echo set_value('email',isset($row->email) ? $row->email : '')?>" />
             <span style='color:red;'><?php echo form_error('email'); ?></span></td></td>
+            <input name='email1' type="hidden" value="<?php echo $row->email;?>" />
         </tr>
         
         <tr>
@@ -87,7 +95,9 @@
         <tr>
             <td>Image</td>
             <td>
+                <?php if($row->image_url!=NULL){?>
                 <img src="<?php echo base_url();echo $row->image_url;?>" style='width: auto; height: 105px;' />
+                <?php }?>
                 <input type='file' name='userfile' id='userfile' accept='image/*' />
             </td>
             

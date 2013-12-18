@@ -78,11 +78,13 @@ class Campaign_model extends CI_Model
 		return $query->result();
 	}
 	
-	public function getAllArray()
+	public function getAllArray($limit = '', $offset = '')
 	{
 		$this->db->select($this->_table.'.*, user.display_name');
 		
 		$this->db->join('user', $this->_table.'.user_id = user.user_id', 'left');
+		
+		$this->db->limit($limit, $offset);
 		
 		$query = $this->db->get($this->_table);
 		
@@ -245,5 +247,10 @@ echo "<pre>";
 		$this->db->delete($this->_table);
 		
 		return true;
+	}
+	
+	public function count_record()
+	{
+		return $this->db->count_all($this->_table);
 	}
 }

@@ -9,7 +9,7 @@ class Campaign_url_model extends CI_Model
 		parent::__construct();
 	}
 	
-	public function get()
+	public function get($limit = '', $offset = '')
 	{
 		$this->db->select('
 						content_campaign_url.*, 
@@ -25,6 +25,8 @@ class Campaign_url_model extends CI_Model
 		$this->db->join('content_campaign', 'content_campaign.id = '.$this->_table.'.campaign_id', 'left');
 		$this->db->join('short_urls', 'short_urls.id = '.$this->_table.'.url_id', 'left');
 		$this->db->join('user', 'user.user_id = '.$this->_table.'.user_id', 'left');
+		
+		$this->db->limit($limit, $offset);
 		
 		$query = $this->db->get($this->_table);
 		
@@ -68,4 +70,9 @@ class Campaign_url_model extends CI_Model
 		
 		return true;
 	}
+	
+	function count_record()
+    {
+        return $this->db->count_all($this->_table);
+    }
 }

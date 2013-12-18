@@ -26,7 +26,10 @@ class Campaign_url_model extends CI_Model
 		$this->db->join('short_urls', 'short_urls.id = '.$this->_table.'.url_id', 'left');
 		$this->db->join('user', 'user.user_id = '.$this->_table.'.user_id', 'left');
 		
-		$this->db->limit($limit, $offset);
+		if($limit || $offset)
+		{
+			$this->db->limit($limit, $offset);
+		}
 		
 		$query = $this->db->get($this->_table);
 		

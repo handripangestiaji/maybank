@@ -26,7 +26,10 @@ class Tag_model extends CI_Model
 		
 		$this->db->join('user', $this->_table.'.user_id = user.user_id', 'left');
 		
-		$this->db->limit($limit, $offset);
+		if($limit || $offset)
+		{
+			$this->db->limit($limit, $offset);
+		}
 		
 		$query = $this->db->get($this->_table);
 		

@@ -6,7 +6,7 @@ for($i=0;$i<count($homefeed);$i++){
 ?>
     <li <?php if($homefeed[$i]->is_read==0){echo 'class="unread-post"';} ?>>
         <div class="message"></div>
-        <input type="hidden" class="postId" value="<?php echo $homefeed[$i]->post_id; ?>" />
+        <input type="hidden" class="postId" value="<?php echo $homefeed[$i]->social_stream_post_id; ?>" />
         <div class="circleAvatar"><img src="<?php echo $homefeed[$i]->profile_image_url;?>" alt=""></div>
         <div class="read-mark <?php if($homefeed[$i]->is_read==0){echo 'redText';} else { echo 'greyText'; } ?>"><i class="icon-bookmark icon-large"></i></div>
         <br />
@@ -153,48 +153,18 @@ for($i=0;$i<count($homefeed);$i++){
         <?php
         $data['mentions'] = $homefeed;
         $data['i'] = $i;
+        $data['type'] = 'reply';
         $this->load->view('dashboard/reply_field_twitter', $data);?>
     </div>
     <!-- END REPLY -->
     
     <!-- DM -->  
     <div class="dm-field hide">
-        <div class="row-fluid">
-            <span class="dm-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
-            <div class="pull-left">
-                <select style="width: 130px;">
-                    <option value="keyword">Feedback</option>
-                    <option value="user">Enquiry</option>
-                    <option value="keyword">Complaint</option>
-                </select>
-                <select style="width: 130px;">
-                    <option value="keyword">Accounts & Banking</option>
-                    <option value="user">Cards</option>
-                    <option value="keyword">Investment</option>
-                    <option value="keyword">insurance</option>
-                    <option value="user">Loans</option>
-                    <option value="keyword">Maybank2u</option>
-                    <option value="keyword">Others</option>
-                </select>
-            </div>
-            <textarea class='replaycontent' placeholder="Compose Message" name="content"></textarea>
-            <br clear="all" />
-            <div class="pull-left">
-                <i class="icon-link"></i>
-                <input type="text" class="span8"><button class="btn btn-primary btn-mini" style="margin-left: 5px;">SHORTEN</button>
-            </div>
-            <div class="pull-right">
-                <i class="icon-camera"></i>
-            </div>
-            <br clear="all" />
-            <div class="pull-left reply-char-count">
-                <i class="icon-twitter-sign"></i>&nbsp;<span class="reply-tw-char-count">140</span>
-            </div>
-            <div class="pull-right">
-                <button class="dm_send btn btn-primary btn-small btn-send-dm"  type="button" value="<?php echo $homefeed[$i]->post_stream_id;?>" >SEND</button>    
-            </div>
-            <br clear="all" />
-        </div>
+         <?php
+        $data['mentions'] = $homefeed;
+        $data['type'] = 'direct_message';
+        $data['i'] = $i;
+        $this->load->view('dashboard/reply_field_twitter', $data);?>
     </div>
     <!-- END DM -->
     

@@ -189,14 +189,22 @@ class Media_stream extends CI_Controller {
 	$twitter_reply['reply_type'] = $this->input->post('reply_type');
 	$twitter_reply['text'] = $this->input->post('content');
 	$twitter_reply['user_id'] = $this->session->userdata('user_id');
-	$twitter_data = $this->twitter_model->ReadTwitterData(
-	    array(
-		'a.post_id' => $this->input->post('post_id')
-	    ),
-	    1
-	);
-	if(count($twitter_data) > 0){
-	    $twitter_data = $twitter_data[0];
+	if($this->input->post('type') == 'reply')
+	    $twitter_data = $this->twitter_model->ReadTwitterData(
+		array(
+		    'a.post_id' => $this->input->post('post_id')
+		),
+		1
+	    );
+	else
+	    $twitter_data = $this->twitter_model->ReadDMFromDb(
+		array(
+		    'a.post_id' => $this->input->post('post_id')
+		),
+		1
+	    );
+	if(count($twitter_data) > 0 || $this->input->post('type') == 'direct_message'){
+	    
 	    $channel = $this->account_model->GetChannel(array(
 		'channel_id' => $this->input->post('channel_id')
 	    ));
@@ -212,44 +220,51 @@ class Media_stream extends CI_Controller {
 	    else{
 		$channel = $channel[0];
 	    }
-	    $parameters = array('status' => $this->input->post('content'),'in_reply_to_status_id'=>$twitter_data->post_stream_id);
+	    
 	    $this->load->library('Twitteroauth');
 	    $this->connection = $this->twitteroauth->create($this->config->item('twitter_consumer_token'),$this->config->item('twitter_consumer_secret'), $channel->oauth_token,
 							    $channel->oauth_secret);
-	    
-	    if($twitter_reply['image_to_post']){
-		
-		$this->load->helper('file');
-		$img = $twitter_reply['image_to_post'];
-		$img = str_replace('data:image/png;base64,', '', $img);
-		$img = str_replace('data:image/jpeg;base64,', '', $img);
-		$img = str_replace(' ', '+', $img);
-		$data = base64_decode($img);
-		$file_name = uniqid().'.png';
-		$pathToSave = $this->config->item('assets_folder').'/'.$file_name;
-		$twitter_reply['image_to_post'] = $pathToSave;
-		if ( ! write_file($pathToSave, $data)){
-		    $validation = array('result' => FALSE,'name' => 'image '.$pathToSave,'error_code' => 112);
-		    $result=$this->connection->post('statuses/update', $parameters);
+	    if($this->input->post('type') == 'reply'){
+		$twitter_data = $twitter_data[0];
+		$parameters = array('status' => $this->input->post('content'),'in_reply_to_status_id'=>$twitter_data->post_stream_id);
+		 if($twitter_reply['image_to_post']){
+		    $this->load->helper('file');
+		    $img = $twitter_reply['image_to_post'];
+		    $img = str_replace('data:image/png;base64,', '', $img);
+		    $img = str_replace('data:image/jpeg;base64,', '', $img);
+		    $img = str_replace(' ', '+', $img);
+		    $data = base64_decode($img);
+		    $file_name = uniqid().'.png';
+		    $pathToSave = $this->config->item('assets_folder').'/'.$file_name;
+		    $twitter_reply['image_to_post'] = $pathToSave;
+		    if ( ! write_file($pathToSave, $data)){
+			$validation = array('result' => FALSE,'name' => 'image '.$pathToSave,'error_code' => 112);
+			$result=$this->connection->post('statuses/update', $parameters);
+		    }
+		    else{
+			require_once './application/libraries/codebird.php';
+			$this->load->config('twitter');
+			Codebird::setConsumerKey($this->config->item('twitter_consumer_token'), $this->config->item('twitter_consumer_secret'));
+			$cb = Codebird::getInstance();
+			$cb->setToken($channel->oauth_token, $channel->oauth_secret);
+			$parameters['media[]'] = $pathToSave;
+			$result = $cb->statuses_updateWithMedia($parameters);
+			$result->params = $parameters;
+		    }
 		}
 		else{
-		    require_once './application/libraries/codebird.php';
-		    $this->load->config('twitter');
-		    Codebird::setConsumerKey($this->config->item('twitter_consumer_token'), $this->config->item('twitter_consumer_secret'));
-		    $cb = Codebird::getInstance();
-		    $cb->setToken($channel->oauth_token, $channel->oauth_secret);
-		    $parameters['media[]'] = $pathToSave;
-		    $result = $cb->statuses_updateWithMedia($parameters);
-		    $result->params = $parameters;
+		    $result=$this->connection->post('statuses/update', $parameters);
 		}
+		$return = $this->twitter_model->CreateReply($twitter_reply, $result, $channel, 'reply');
 	    }
 	    else{
-		$result=$this->connection->post('statuses/update', $parameters);
+		$parameters = array(
+		    'user_id' => $this->input->post('twitter_user_id'),
+		    'text' => $this->input->post('content')
+		);
+		$result = $this->connection->post('direct_messages/new', $parameters);
+		$return = $this->twitter_model->CreateReply($twitter_reply, $result, $channel, 'direct_message');
 	    }
-	   
-	    
-	    $return = $this->twitter_model->CreateReply($twitter_reply, $result, $channel);
-	    
 	    if($return){
 		echo json_encode(array(
 		    'success' => true,

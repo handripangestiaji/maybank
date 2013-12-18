@@ -7,7 +7,7 @@ class post_model extends CI_Model
         $this->load->helper('basic');
     }
     
-    public function InsertPost($message,$channels,$tags='',$scheduleTime=''){
+    public function InsertPost($message,$channels,$tags='',$scheduleTime=NULL){
         $post = array('created_by' => $this->session->userdata('user_id'),
 			'messages' => $message,
 			'created_at' => date('Y-m-d H:i;s'),
@@ -71,5 +71,14 @@ class post_model extends CI_Model
     public function UpdateTag($tag_id,$value){
         $this->db->where('id',$tag_id);
         $this->db->update('content_tag',$value);
+    }
+    
+    public function GetPosts($filter = null){
+	$this->db->select('*');
+	$this->db->from('post');
+	$this->db->join('post_to','post.id = post_to.post_id');
+	$this->db->join('channel','channel.channel_id = post_to.channel_id');
+	$this->db->join('user','post.created_by = user.user_id');
+	return $this->db->get()->result();
     }
 }

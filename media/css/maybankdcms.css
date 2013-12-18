@@ -905,3 +905,13 @@ input.related-conversation-check{
 	list-style:  disc;
 	background: none;
 }
+
+/*==============================================================================================
+======================================== PUBLISHER =============================================
+==============================================================================================*/
+.fc-button{position: static;}
+.fc-header-title h2 {line-height: 0px;font-size: 18px;font-weight: bold;margin-top: 20px;}
+.tooltip-event{z-index: 1;position: absolute;background: #DBDBDB;border: solid 1px black;margin: 5px;width: 250px;padding: 10px 5px 5px 5px;border-radius: 3px;}
+.tooltip-event .tooltip-content{background: white;width: 100%;margin-top:5px;border-radius:3px;}
+.tooltip-event .tooltip-content .tooltip-content-head{padding: 5px;font-size: 16px;border-bottom: solid 1px;font-weight: bold;}
+.tooltip-event .tooltip-content .tooltip-content-body{padding: 5px;}

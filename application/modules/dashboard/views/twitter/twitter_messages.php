@@ -61,6 +61,7 @@
         <?php
         $data['mentions'] = $directmessage;
         $data['i'] = $i;
+        $data['type'] = 'direct_message';
         $this->load->view('dashboard/reply_field_twitter', $data);?>
     </div>
     <!-- END DM -->  

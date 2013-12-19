@@ -17,22 +17,20 @@ for($i=0;$i<count($senttweets);$i++){
             $date=new DateTime($senttweets[$i]->social_stream_created_at.' Europe/London');
             $date->setTimezone($timezone);
             echo $date->format('l, M j, Y h:i A');
-            $entities = json_decode($senttweets[$i]->twitter_entities);
-            //echo date('l, M j, Y H:i:s',strtotime($senttweets[$i]->created_at));?></span>
-            
+            $entities = json_decode($senttweets[$i]->twitter_entities);?></span>
         </p>
-    <p><?php
-    
-     $html = html_entity_decode($senttweets[$i]->text);
-    foreach($entities->urls as $url){
-        $html = substr($html, 0, $url->indices[0]);
-        $html .= "<a href='$url->expanded_url' target='_blank'>$url->display_url</a>";
-        $html .= substr($senttweets[$i]->text, $url->indices[1] );
-        
-    }
-    $html =  linkify(html_entity_decode($html), true, false);
-    echo $html;
-    ?></p>
+    <p>
+        <?php
+            $html = html_entity_decode($senttweets[$i]->text);
+            foreach($entities->urls as $url){
+                $html = substr($html, 0, $url->indices[0]);
+                $html .= "<a href='$url->expanded_url' target='_blank'>$url->display_url</a>";
+                $html .= substr($senttweets[$i]->text, $url->indices[1]);
+            }
+            $html =  linkify(html_entity_decode($html), true, false);
+            echo $html;
+        ?>
+    </p>
     <p>
         <?php if(isset($entities->media[0])){
                 echo "<a href='#modal-".$senttweets[$i]->post_id."' data-toggle='modal' ><img src='".$entities->media[0]->media_url_https."' /></a>";

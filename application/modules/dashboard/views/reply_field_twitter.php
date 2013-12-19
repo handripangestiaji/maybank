@@ -2,7 +2,9 @@
 <div class="row-fluid">
     <span class="dm-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
     <div class="pull-left">
-        <input type="hidden" value="<?php echo $mentions[$i]->post_id?>" name="post_id" />
+        <input type="hidden" value="<?php echo $mentions[$i]->social_stream_post_id ?>" name="post_id" />
+        <input type="hidden" value="<?php echo $mentions[$i]->twitter_user_id?>" name="twitter_user_id" />
+        <input type="hidden" value="<?php echo $type?>" name="type" />
         <div class="message"></div>
         <select style="width: 130px;" name="reply_type">
             <option value="Feedback">Feedback</option>
@@ -15,8 +17,9 @@
          <?php endforeach?>
         </select>
     </div>
-    <textarea class='replaycontent' placeholder="Compose Message" name="content">@<?php echo $mentions[$i]->screen_name; ?> &nbsp;</textarea>
+    <textarea class='replaycontent' placeholder="Compose Message" name="content"><?php echo $type == 'reply' ? '@'.$mentions[$i]->screen_name : ''; ?> &nbsp;</textarea>
     <br clear="all" />
+     <?php  if($type == 'reply'):?>
      <div class="pull-left"  style="margin-bottom: 5px;">
         <i class="icon-link"></i>
         <input type="text" class="reply-insert-link-text">
@@ -28,6 +31,7 @@
         </a>
     </div>
     <br clear="all" />
+   
     <div id="reply-img-show" class="hide">
         <div class="compose-form img-attached">
             <!-- close button for image attached -->
@@ -62,6 +66,7 @@
         </div>
     </div>
     <br clear="all" />
+    <?php endif?>
     <br/>
         <div class="pull-left reply-char-count">
             <i class="icon-twitter-sign"></i>&nbsp;<span class="reply-tw-char-count">140</span>

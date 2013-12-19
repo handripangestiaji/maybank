@@ -183,6 +183,7 @@ class twitter_model extends CI_Model
         $retrieved_at = new DateTime(date("Y-m-d H:i:s e"), $timezone);
         $this->db->trans_start();
         $post = $this->GetTweetId($direct_message->id_str, "twitter_dm", $channel->channel_id);
+        
         $social_stream = array(
 	    "post_stream_id" => $direct_message->id_str,
 	    "channel_id" => $channel->channel_id,
@@ -209,9 +210,11 @@ class twitter_model extends CI_Model
             $this->db->update("social_stream", $social_stream);
             $this->db->where('post_id', $post->post_id);
             $this->db->update("twitter_direct_messages", $dm_saved);
-            
+            $dm_saved['post_id'] = $post->post_id;
         }
+        
         $this->db->trans_complete();
+        return array($dm_saved, $social_stream);
     }
     
     public function SaveTwitterUsers($user){
@@ -294,6 +297,7 @@ class twitter_model extends CI_Model
         
         for($i=0;$i<count($result);$i++){
             $result[$i]->sender = $this->ReadTwitterUserFromDb($result[$i]->sender);
+            $result[$i]->channel_action = $this->GetChannelAction(array('post_id'=>$result[$i]->social_stream_post_id));
         }
         return $result;
     }
@@ -309,7 +313,7 @@ class twitter_model extends CI_Model
     public function ReadTwitterData($filter,$limit){
         
         $this->db->select("a.channel_id, a.post_stream_id, a.retrieved_at, a.created_at as social_stream_created_at, a.type as social_stream_type, 
-                            b.*, c.screen_name, c.profile_image_url, c.name, c.description, c.following, a.is_read, d.*,a.post_id");
+                            b.*, c.screen_name, c.profile_image_url, c.name, c.description, c.following, a.is_read, d.*,a.post_id as social_stream_post_id");
         $this->db->from("social_stream a INNER JOIN social_stream_twitter b ON a.post_id = b.post_id 
                         INNER JOIN twitter_user_engaged c ON
                         c.twitter_user_id = b.twitter_user_id LEFT JOIN
@@ -321,11 +325,9 @@ class twitter_model extends CI_Model
         $result = $this->db->get()->result();
         
         foreach($result as $row){
-            $this->db->select('*');
-            $this->db->from('twitter_reply');
-            $this->db->where('reply_to_post_id', $row->post_id);
-            $row->reply_post = $this->db->get()->result();
-            $row->channel_action = $this->GetChannelAction(array('post_id'=>$row->post_id));
+
+            $row->reply_post = $this->GetReplyPost(array('reply_to_post_id'=> $row->social_stream_post_id));
+            $row->channel_action = $this->GetChannelAction(array('post_id'=>$row->social_stream_post_id));
         }
         
         return $result;
@@ -352,17 +354,20 @@ class twitter_model extends CI_Model
     }
     
     
-    public function CreateReply($reply, $tweet_replied, $channel, $type = "twitter"){
+    public function CreateReply($reply, $tweet_replied, $channel, $type = "reply"){
         if(isset($tweet_replied->id_str)){
-            $saved_tweet = $this->SaveTweets($tweet_replied, $channel, "user_timeline");
+            if($type == 'reply')
+                $saved_tweet = $this->SaveTweets($tweet_replied, $channel, "user_timeline");
+            else
+                $saved_tweet = $this->SaveDirectMessages($tweet_replied, $channel);
             if(isset($saved_tweet)){
                 $reply['created_at'] = date("Y-m-d H:i:s");
-                $reply['response_post_id'] = $saved_tweet[0]['post_id'];
+                $reply['response_post_id'] = isset($saved_tweet[0]['post_id']) ? $saved_tweet[0]['post_id'] : $saved_tweet['post_id'];
                 $channel_action = array(
-                    'action_type' => "twitter_reply",
+                    'action_type' => "twitter_".$type,
                     'channel_id' => $channel->channel_id,
                     'created_at' => date("Y-m-d H:i:s"),
-                    'post_id' => $saved_tweet[0]['post_id'],
+                    'post_id' => isset($saved_tweet[0]['post_id']) ? $saved_tweet[0]['post_id'] : $saved_tweet['post_id'],
                     'created_by' => $reply['user_id']
                 );
                 $this->db->insert('channel_action', $channel_action);
@@ -464,11 +469,22 @@ class twitter_model extends CI_Model
     }
     
     /*
-     * 
+     * Get Action from database
     */
     function GetChannelAction($filter){
         $this->db->select("a.*, b.username, b.display_name");
         $this->db->from('channel_action a inner join user b on b.user_id = a.created_by');
+        $this->db->where($filter);
+        return $this->db->get()->result();
+    }
+    
+    /*
+     *Get Reply Post
+    */
+    
+    function GetReplyPost($filter){
+        $this->db->select('*');
+        $this->db->from('twitter_reply');
         $this->db->where($filter);
         return $this->db->get()->result();
     }

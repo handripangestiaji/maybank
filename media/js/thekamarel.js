@@ -34,7 +34,10 @@ $(function(){
     // Create two variable with the names of the months and days in an array
     var monthNames = [ "Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec" ],
         dayNames= ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-
+    $(document).on('load', 'img', function(){
+        console.log('error');
+        $(this).hide();
+    });
     // Create a newDate() object
     var newDate = new Date();
     // Extract the current date from Date object
@@ -1017,9 +1020,11 @@ $(function(){
                     $(this).on('click', ".destroy_status", function() {
                         var btnDestroyStatus = $(this);
                         var confirmStatus = confirm("Are you sure want to delete this status?")
+                        
                         if(confirmStatus == true){
+                            $(this).attr('disabled', 'disabled');
                             $.ajax({
-                                url : BASEURL + 'dashboard/socialmedia/TwitterDeleteStatus',
+                                url : BASEURL + 'dashboard/media_stream/ActionTwitterDelete',
                                 type: "POST",
                                 data: {
                                     post_id : btnDestroyStatus.closest('li').find('.postId').val(),
@@ -1027,10 +1032,18 @@ $(function(){
                                 },
                                 success: function(response)
                                 {
-                                    
+                                    if(response.success == true){
+                                        btnDestroyStatus.closest('li').toggle('slow');
+                                    }
+                                    else
+                                    {
+                                        btnDestroyStatus.removeAttr('disabled');
+                                        alert(response.message);
+                                    }
                                 },
                                 failed : function(response){
-                                    
+                                    btnDestroyStatus.removeAttr('disabled');
+                                    alert(response.message);
                                 }
                             });    
                         }

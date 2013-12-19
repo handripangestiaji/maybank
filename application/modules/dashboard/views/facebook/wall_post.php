@@ -37,7 +37,7 @@ for($i=0; $i<count($fb_feed);$i++):?>
            }elseif($attachment[$att]->type=='link'){
                 echo    "<a href='".$attachment[$att]->href."'>".$attachment[0]->href."</a>";
            }elseif($attachment[$att]->type=='video'){?>
-                <iframe width="320" height="auto" src="<?php echo $attachment[$att]->video->source_url."?version=3&autohide=1&autoplay=0"?>"></iframe>
+                <iframe width="90%" height="240" src="<?php echo $attachment[$att]->video->source_url."?version=3&autohide=1&autoplay=0"?>"></iframe>
                 <a href="<?php echo $attachment[$att]->video->display_url?>" ><?php echo $attachment[0]->alt?></a>
        <?php 
             }

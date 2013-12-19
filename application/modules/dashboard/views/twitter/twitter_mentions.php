@@ -36,8 +36,8 @@ for($i=0;$i<count($mentions);$i++){
     ?></p>
     <p>
     <?php if(isset($entities->media[0])){
-            echo "<a href='#modal-".$mentions[$i]->post_id."' data-toggle='modal' ><img src='".$entities->media[0]->media_url_https."' /></a>";
-            echo '<div id="modal-'.$mentions[$i]->post_id.'" class="attachment-modal modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+            echo "<a href='#modal-".$mentions[$i]->social_stream_post_id."' data-toggle='modal' ><img src='".$entities->media[0]->media_url_https."' /></a>";
+            echo '<div id="modal-'.$mentions[$i]->social_stream_post_id.'" class="attachment-modal modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
                             <button type="button" class="close " data-dismiss="modal"><i class="icon-remove"></i></button>
                             <img src="'.$entities->media[0]->media_url_https.'" />
                 </div>';
@@ -74,11 +74,14 @@ for($i=0;$i<count($mentions);$i++){
         </div>
         <br/>
         <?php 
-               // $filtera["b.twitter_user_id"] = $mentions[$i]->twitter_user_id;
-                $filterm["b.in_reply_to = "] = $mentions[$i]->post_id.' ';     
-                $comment=$this->twitter_model->ReadTwitterData($filterm, 3);
-               
-                for($j=0;$j<count($comment);$j++){
+            // $filtera["b.twitter_user_id"] = $mentions[$i]->twitter_user_id;
+             $filterm["b.in_reply_to = "] = $mentions[$i]->social_stream_post_id.' ';
+             $comment=$this->twitter_model->ReadTwitterData($filterm, 3);
+             $currComment = '';
+             for($j=0;$j<count($comment);$j++):
+                
+                if($currComment != $comment[$j]->{'text'}):
+                $currComment = $comment[$j]->text;
         ?>
                 <div class="engagement-body">
                     <span class="engagement-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>    
@@ -98,11 +101,12 @@ for($i=0;$i<count($mentions);$i++){
                         ?></span>
                     </p>
                     <div>
-                        <p>"<?php echo $comment[$j]->text?>"</p>
+                        <p><?php echo $comment[$j]->text?></p>
                         <p><input type="hidden" class="str_id" value="<?php echo $comment[$j]->post_stream_id; ?>" /><button type="button" class="btn btn-warning btn-mini">OPEN</button><button class="retweet btn btn-primary btn-mini" style="margin-left: 5px;">RE-TWEET</button></p>
                     </div>
                 </div>
-        <?php } ?>
+                <?php endif;?>
+            <?php endfor; ?>
         <!-- ==================== CONDENSED TABLE HEADLINE ==================== -->
         <div class="containerHeadline specialToggleTable">
             <i class="icon-table"></i><h2>Action Log</h2>
@@ -121,8 +125,8 @@ for($i=0;$i<count($mentions);$i++){
         <!--a role="button" class='destroy_status'><i class="icon-trash greyText"></i></a-->
         <div class="pull-right">
             <!--form class="contentForm" action="<?php //echo base_url('index.php/dashboard/socialmedia/twitteraction');?>" method="post"-->
-                <button class="btn btn-reply btn-primary" data-toggle="modal" value="<?php echo $mentions[$i]->post_id?>"><i class="icon-mail-reply"></i></button>
-                <button type="button" class="retweet btn btn-primary" value="<?php echo $mentions[$i]->post_id?>"><i class="icon-retweet"><span></span></i></button>
+                <button class="btn btn-reply btn-primary" data-toggle="modal" value="<?php echo $mentions[$i]->social_stream_post_id?>"><i class="icon-mail-reply"></i></button>
+                <button type="button" class="retweet btn btn-primary" value="<?php echo $mentions[$i]->social_stream_post_id?>"><i class="icon-retweet"><span></span></i></button>
                 <button class="btn btn-dm btn-primary" data-toggle="modal"><i class="icon-envelope"></i></button>
                 <button type="button" class="favorit btn btn-primary"><i class="icon-star"></i><span></span></button>
                 

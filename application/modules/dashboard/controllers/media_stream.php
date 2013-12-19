@@ -347,7 +347,67 @@ class Media_stream extends CI_Controller {
 	
     }
     function ActionTwitterDelete(){
-	
+	header("Content-Type: application/x-json");
+	$action['channel_id'] = $this->input->post('channel_id');
+	$action['post_id'] = $this->input->post('post_id');
+	$action['created_by'] = $this->session->userdata('user_id');
+	$twitter_data = $this->twitter_model->ReadTwitterData(
+	    array(
+		'a.post_id' => $this->input->post('post_id')
+	    ),
+	    1
+	);
+	if(count($twitter_data) > 0){
+	    $twitter_data = $twitter_data[0];
+	    $channel = $this->account_model->GetChannel(array(
+		'channel_id' => $this->input->post('channel_id')
+	    ));
+	    
+	    if(count($channel) == 0){
+		echo json_encode(
+		    array(
+			'success' => false,
+			'message' => "Invalid Channel Id"
+		    )
+		);
+		return;
+	    }
+	    else{
+		$channel = $channel[0];
+		$this->connection = $this->twitteroauth->create($this->config->item('twitter_consumer_token'),$this->config->item('twitter_consumer_secret'), $channel->oauth_token,
+							    $channel->oauth_secret);
+		$result = $this->connection->post('statuses/destroy/'.$twitter_data->post_stream_id);
+		if(!isset($result->error)){
+		    $row_affected = $this->twitter_model->DeletePost($twitter_data->post_stream_id);
+		    echo json_encode(
+			array(
+			    'success' => true,
+			    'message' => "Tweet was sucessfully deleted.",
+			    'result' => $result,
+			    'row_affected' => $row_affected
+			)
+		    );
+		}
+		else{
+		     echo json_encode(
+		    array(
+			'success' => false,
+			'message' => "Delete tweet was failed.",
+			'result' => $result
+			)
+		    );
+		}
+		
+		return;
+	    }
+	}
+	echo json_encode(
+		array(
+		    'success' => false,
+		    'message' => "Invalid POST_ID"
+		)
+	);
+	    
     }
     
     function ActionFollow($type = 'follow'){

@@ -481,11 +481,17 @@ class twitter_model extends CI_Model
     /*
      *Get Reply Post
     */
-    
     function GetReplyPost($filter){
         $this->db->select('*');
         $this->db->from('twitter_reply');
         $this->db->where($filter);
         return $this->db->get()->result();
+    }
+    
+    function DeletePost($post_stream_id){
+        $this->db->where(array(
+            'post_stream_id' => $post_stream_id,
+        ));
+        return $this->db->delete('social_stream');
     }
 }

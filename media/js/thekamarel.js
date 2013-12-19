@@ -887,8 +887,12 @@ $(function(){
                                         $.ajax({
                                             url : BASEURL + 'dashboard/socialmedia/FbStatusUpdate',
                                             type: "POST",
-                                            data: {
+                                         data: {
                                                     content:$('.compose-textbox').val(),
+                                                    link:$(this).parent().siblings('.compose-url-shortener').find('.compose-insert-link-text').val(),
+                                                    name:'text title',
+                                                    description: $(this).parent().siblings('#url-show').find('.descr_link').val(),
+                                                    picture:'http://www.maybank.com/iwov-resources/corporate/img/my/en/m/Banners-home-PW.jpg',
                                                     channel_id:$(this).val()
                                                     },
                                             success: function()

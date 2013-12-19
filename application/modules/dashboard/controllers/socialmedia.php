@@ -154,6 +154,7 @@ class Socialmedia extends MY_Controller {
     }
 
     public function FbStatusUpdate(){
+      header("Content-Type: application/x-json");
 	  $this->load->model('account_model');
 	  $this->load->model('facebook_model');
        
@@ -175,8 +176,18 @@ class Socialmedia extends MY_Controller {
 	  );
 	  $this->load->library('facebook',$config);
 	  $this->facebook->setaccesstoken($newStd->token);
-	  $this->facebook->api('/me/feed','POST',array('message'=>$this->input->post('content')));
-	
+      if($this->input->post('link')!=''){
+          $attachment = array(
+                'message' => $this->input->post('content'),
+                'name' => $this->input->post('name'),
+                'link' => $this->input->post('link'),
+                'description' => $this->input->post('description'),
+                'picture'=> $this->input->post('pictrue')
+          );  
+        $this->facebook->api('/'.$this->facebook->getUser().'/feed', 'POST', $this->input->post('content'),$attachment);
+      }else{
+        $this->facebook->api('/'.$this->facebook->getUser().'/feed','POST',array('message'=>$this->input->post('content')));
+	   }
     }
     
     public function twitter_log($log_action,$post_id,$result_post_id){

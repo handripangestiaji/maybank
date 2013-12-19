@@ -162,9 +162,9 @@
                 image = that.findImageInDom($dom);
 
             // build dom elements
-            var $text_input = '<input type="text" placeholder="" value="' + title + '"/>',
+            var $text_input = '<input class="title_link" type="text" placeholder="" value="' + title + '"/>',
                 $url = '<p>' + url.replace(BASEURL + 'dashboard/media_stream/GetUrlPreview?url=','') + '</p>',
-                $textarea = '<textarea>' + description + '</textarea>';
+                $textarea = '<textarea class="descr-link">' + description + '</textarea>';
                 
             var $spanLeft = $("<div></div>").addClass("img-url"),
                 $spanRight = $("<div></div>").addClass("content-url");

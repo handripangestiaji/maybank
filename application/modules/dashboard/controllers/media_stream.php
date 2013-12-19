@@ -496,7 +496,17 @@ class Media_stream extends CI_Controller {
 	    );
     	$this->load->library('facebook',$config);
     	$this->facebook->setaccesstoken($newStd->token);
-    	$return=$this->facebook->api('/'.$post_id.'/comments','post',array('message' => $comment));
+        $attachment = array(
+            'message' => $comment,
+            'name' => $title,
+            'link' => $link_source,
+            'description' => $descr_link,
+            'picture'=> $picture,
+        );  
+         $return=$this->facebook->api('/'.$this->facebook->getUser().'/feed', 'POST', $attachment);
+       
+    
+        
         
         $case=$this->account_model->isCaseIdExists($post_id);
             if(count($case)>0){
@@ -701,9 +711,7 @@ class Media_stream extends CI_Controller {
 
     //=========================================END GENERAL function=============================================    
     
-      
-  
-     public function GetUrlPreview(){
+    public function GetUrlPreview(){
 	if (!isset($_GET['url'])) die();
 	$url = urldecode($_GET['url']);
 	$url = 'http://' . str_replace('http://', '', $url); // Avoid accessing the file system

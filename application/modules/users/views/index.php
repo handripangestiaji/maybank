@@ -95,7 +95,7 @@
                 <table>
                     <tr>
                         <td><input type="text" id="search_user" name="search_user" placeholder="Search Name, Email or User ID" /></td>
-                        <td style='padding-bottom: 10px;'><button onclick="search_user();return false;"><span class="add-on" id="login"><i class="icon-search"></i></span></button></td>
+                        <td style='padding-bottom: 10px;'><button name='isi' onclick="search_user();return false;"><span class="add-on" id="login"><i class="icon-search"></i></span></button></td>
                     </tr>
                 </table>
                 </form>

@@ -804,7 +804,7 @@ class Media_stream extends CI_Controller {
 	$this->load->model('post_model');
 	$posts = $this->post_model->GetPosts();
 	
-	$encodeme = [];
+	$encodeme = array();
 	foreach($posts as $post){
 	    if($post->time_to_post != NULL){
 		$time_to_post = explode(' ',$post->time_to_post);

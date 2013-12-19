@@ -215,6 +215,7 @@ $(function(){
     $(this).on('submit','.reply-tweet ', function(e){
         var buttonSubmit = $(this).find('button[type=submit]');
         buttonSubmit.attr('disabled', 'disabled').html('SENDING...');
+        var openButton = $(this).closest('li').find('button:first');
         var me = $(this);
         e.preventDefault();
         $.ajax({
@@ -226,16 +227,24 @@ $(function(){
                 buttonSubmit.removeAttr('disabled').html('SEND');
                 try{
                     if(response.success == false){
+                        var message = '';
+                        if(response.result.errors){
+                            for(x=0; x<response.result.errors.length; x++){
+                                message += response.result.errors[x].message + "<br />";
+                            }
+                        }
+                        
                         me.find('.message').html('<div class="alert alert-warning">' +
                         '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
-                        '<strong>Error!</strong> ' + response.message + '</div>');
+                        '<strong>Error!</strong> ' + response.message + '<br />' + message + '</div>');
                     }
                     else{
                         me.find('.message').html('<div class="alert alert-success">' +
                         '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
                         '<h4>Reply Tweet</h4> ' + response.message + '!</div>');
                         me.find('input, textarea').val('');
-                        $(this).find('.reply-preview-img').toggle('slow');
+                        me.find('.reply-preview-img').toggle('slow');
+                        openButton.removeClass('btn-warning').addClass('btn-inverse').html('REPLIED').val('');
                     }
                 }
                 catch(e){

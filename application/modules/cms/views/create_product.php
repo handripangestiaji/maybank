@@ -1,3 +1,7 @@
+<?php for($i=0;$i<count($this->user_role);$i++){
+    if($this->user_role[$i]->role_friendly_name=='Content Management_Product_Create')
+    {
+?>
 <div class="row-fluid" style="border-bottom: solid 1px #C9C9C9; margin-bottom: 10px;">
     <h4>Create Product</h4>    
 </div>
@@ -27,6 +31,7 @@
         </form>
     </div>
 </div>
+ <?php }}?>
  <div class="row-fluid" style="border-bottom: solid 1px #C9C9C9; margin-bottom: 10px;">
     <h4>Product List</h4>    
 </div>
@@ -39,7 +44,11 @@
                 <th>Description</th>
                 <th>Total Used</th>
                 <th>Creator</th>
+		<?php for($i=0;$i<count($this->user_role);$i++){
+		    if($this->user_role[$i]->role_friendly_name=='Content Management_Product_Delete'){
+		    ?>
                 <th>&nbsp;</th>
+		<?php }}?>
               </tr>
             </thead>
             <tbody>
@@ -50,10 +59,14 @@
 		                <td><?php echo $v->description; ?></td>
 		                <td><?php echo $v->increment; ?></td>
 		                <td><?php echo $v->display_name; ?></td>
-		                <td>
-		                	<a href="<?php echo site_url('cms/create_product?action=delete&id='.$v->id)?>" onclick="return window.confirm('Are you sure want to delete this record?')" class="btn btn-mini btn-danger pull-right">delete</a>
+		                <?php for($i=0;$i<count($this->user_role);$i++){
+				    if($this->user_role[$i]->role_friendly_name=='Content Management_Product_Delete'){
+				    ?>
+				<td>
+		                	<a href="<?php echo site_url('cms/create_product?action=delete&id='.$v->id)?>" class="btn btn-mini btn-danger pull-right">delete</a>
 		                	<!--<button class="btn btn-mini btn-danger pull-right" type="button">delete</button>-->
-		                </td>
+				</td>
+				<?php }}?>
 					</tr>
             	<?php endforeach; ?>
             <?php endif; ?>
@@ -61,11 +74,6 @@
         </table>
     </div>
      <div class="page pull-right">
-            <a href="#">First</a>
-            <a href="#" class="active">1</a>
-            <a href="#">2</a>
-            <a href="#">3</a>
-            <a href="#">4</a>
-            <a href="#">Last</a>
-        </div>
+     	<?php echo $pagination; ?>
+     </div>
 </div>

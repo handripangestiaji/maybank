@@ -74,7 +74,7 @@
             <?php for($x=0;$x<count($this->user_role);$x++){
                 if($this->user_role[$x]->role_friendly_name=='User Management_Group_Create_Delete'){
             ?>
-            <h5>New Group</h5>
+            <h4>New Group</h4>
             <hr style="margin-top: 0px;">
             <form method='post' action='<?php echo site_url('users/insert_group');?>'>
                 <table style='margin-bottom: 10px;'>
@@ -111,7 +111,7 @@
             <div style='clear: both'></div><br />
             <hr style="margin-top: 0px;">
             <?php }}?>
-            <h5>Current Group</h5>
+            <h4>Current Group</h4>
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -156,7 +156,10 @@
                                 if($this->user_role[$x]->role_friendly_name=='User Management_Group_Edit'){
                         ?>
                         <td><a href="<?php echo site_url('users/edit_group/'.$gr->group_id);?>"><span><i class="icon-pencil"></i></span></a></td>
-                        <?php }if($this->user_role[$x]->role_friendly_name=='User Management_Group_Create_Delete'){?>
+                        <?php }}
+                        for($y=0;$y<count($this->user_role);$y++){
+                            if($this->user_role[$y]->role_friendly_name=='User Management_Group_Create_Delete'){
+                        ?>
                         <td><a href="" onclick="show_confirm('<?php echo $gr->group_id;?>');return false;"><span><i class="icon-remove"></i></span></a></td>
                         <?php }}?>
                     </tr>

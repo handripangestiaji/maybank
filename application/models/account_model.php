@@ -95,7 +95,7 @@ class account_model extends CI_Model
 	    $this->load->model('twitter_model');
 	    $saved_tweet = $this->twitter_model->SaveTweets($result, $channel, "user_timeline");
 	    $this->db->insert('channel_action', $action);
-	    $this->db->where('post_id', $twitter_data->post_id);
+	    $this->db->where('post_id', $twitter_data->social_stream_post_id);
 	    $this->db->update('social_stream_twitter', array(
 		    'retweet_count' => $result->retweet_count,
 		    'retweeted' => $result->retweeted
@@ -110,10 +110,10 @@ class account_model extends CI_Model
 	$this->db->trans_start();
 	$action['action_type'] = 'twitter_favourite';
 	$action['created_at'] = date("Y-m-d H:i:s");
-	$action['stream_id_response'] = $result->id_str;
+	$action['stream_id_response'] = isset($result->id_str) ? $result->id_str : '';
 	$this->load->model('twitter_model');
 	$this->db->insert('channel_action', $action);
-	$this->db->where('post_id', $twitter_data->post_id);
+	$this->db->where('post_id', $twitter_data->social_stream_post_id);
 	$this->db->update('social_stream_twitter', array(
 		'favorited' => 1
 	    )

@@ -189,14 +189,22 @@ class Media_stream extends CI_Controller {
 	$twitter_reply['reply_type'] = $this->input->post('reply_type');
 	$twitter_reply['text'] = $this->input->post('content');
 	$twitter_reply['user_id'] = $this->session->userdata('user_id');
-	$twitter_data = $this->twitter_model->ReadTwitterData(
-	    array(
-		'a.post_id' => $this->input->post('post_id')
-	    ),
-	    1
-	);
-	if(count($twitter_data) > 0){
-	    $twitter_data = $twitter_data[0];
+	if($this->input->post('type') == 'reply')
+	    $twitter_data = $this->twitter_model->ReadTwitterData(
+		array(
+		    'a.post_id' => $this->input->post('post_id')
+		),
+		1
+	    );
+	else
+	    $twitter_data = $this->twitter_model->ReadDMFromDb(
+		array(
+		    'a.post_id' => $this->input->post('post_id')
+		),
+		1
+	    );
+	if(count($twitter_data) > 0 || $this->input->post('type') == 'direct_message'){
+	    
 	    $channel = $this->account_model->GetChannel(array(
 		'channel_id' => $this->input->post('channel_id')
 	    ));
@@ -212,44 +220,51 @@ class Media_stream extends CI_Controller {
 	    else{
 		$channel = $channel[0];
 	    }
-	    $parameters = array('status' => $this->input->post('content'),'in_reply_to_status_id'=>$twitter_data->post_stream_id);
+	    
 	    $this->load->library('Twitteroauth');
 	    $this->connection = $this->twitteroauth->create($this->config->item('twitter_consumer_token'),$this->config->item('twitter_consumer_secret'), $channel->oauth_token,
 							    $channel->oauth_secret);
-	    
-	    if($twitter_reply['image_to_post']){
-		
-		$this->load->helper('file');
-		$img = $twitter_reply['image_to_post'];
-		$img = str_replace('data:image/png;base64,', '', $img);
-		$img = str_replace('data:image/jpeg;base64,', '', $img);
-		$img = str_replace(' ', '+', $img);
-		$data = base64_decode($img);
-		$file_name = uniqid().'.png';
-		$pathToSave = $this->config->item('assets_folder').'/'.$file_name;
-		$twitter_reply['image_to_post'] = $pathToSave;
-		if ( ! write_file($pathToSave, $data)){
-		    $validation = array('result' => FALSE,'name' => 'image '.$pathToSave,'error_code' => 112);
-		    $result=$this->connection->post('statuses/update', $parameters);
+	    if($this->input->post('type') == 'reply'){
+		$twitter_data = $twitter_data[0];
+		$parameters = array('status' => $this->input->post('content'),'in_reply_to_status_id'=>$twitter_data->post_stream_id);
+		 if($twitter_reply['image_to_post']){
+		    $this->load->helper('file');
+		    $img = $twitter_reply['image_to_post'];
+		    $img = str_replace('data:image/png;base64,', '', $img);
+		    $img = str_replace('data:image/jpeg;base64,', '', $img);
+		    $img = str_replace(' ', '+', $img);
+		    $data = base64_decode($img);
+		    $file_name = uniqid().'.png';
+		    $pathToSave = $this->config->item('assets_folder').'/'.$file_name;
+		    $twitter_reply['image_to_post'] = $pathToSave;
+		    if ( ! write_file($pathToSave, $data)){
+			$validation = array('result' => FALSE,'name' => 'image '.$pathToSave,'error_code' => 112);
+			$result=$this->connection->post('statuses/update', $parameters);
+		    }
+		    else{
+			require_once './application/libraries/codebird.php';
+			$this->load->config('twitter');
+			Codebird::setConsumerKey($this->config->item('twitter_consumer_token'), $this->config->item('twitter_consumer_secret'));
+			$cb = Codebird::getInstance();
+			$cb->setToken($channel->oauth_token, $channel->oauth_secret);
+			$parameters['media[]'] = $pathToSave;
+			$result = $cb->statuses_updateWithMedia($parameters);
+			$result->params = $parameters;
+		    }
 		}
 		else{
-		    require_once './application/libraries/codebird.php';
-		    $this->load->config('twitter');
-		    Codebird::setConsumerKey($this->config->item('twitter_consumer_token'), $this->config->item('twitter_consumer_secret'));
-		    $cb = Codebird::getInstance();
-		    $cb->setToken($channel->oauth_token, $channel->oauth_secret);
-		    $parameters['media[]'] = $pathToSave;
-		    $result = $cb->statuses_updateWithMedia($parameters);
-		    $result->params = $parameters;
+		    $result=$this->connection->post('statuses/update', $parameters);
 		}
+		$return = $this->twitter_model->CreateReply($twitter_reply, $result, $channel, 'reply');
 	    }
 	    else{
-		$result=$this->connection->post('statuses/update', $parameters);
+		$parameters = array(
+		    'user_id' => $this->input->post('twitter_user_id'),
+		    'text' => $this->input->post('content')
+		);
+		$result = $this->connection->post('direct_messages/new', $parameters);
+		$return = $this->twitter_model->CreateReply($twitter_reply, $result, $channel, 'direct_message');
 	    }
-	   
-	    
-	    $return = $this->twitter_model->CreateReply($twitter_reply, $result, $channel);
-	    
 	    if($return){
 		echo json_encode(array(
 		    'success' => true,
@@ -444,18 +459,34 @@ class Media_stream extends CI_Controller {
     }
     
     public function FbReplyPost(){
-        $this->load->model('account_model');
+        header("Content-Type: application/x-json");
+	    $this->load->model('account_model');
         $this->load->model('facebook_model');
         $comment = $this->input->post('comment');
         $post_id = $this->input->post('post_id');
-     
+        $url = $this->input->post('url');
+             
         $filter = array(
             "connection_type" => "facebook"
         );
+        
         if($this->input->get('channel_id')){
             $filter['channel_id'] = $this->input->get('channel_id');
         }
         $channel_loaded = $this->account_model->GetChannel($filter);
+        if(count($channel_loaded) == 0){
+    		echo json_encode(
+    		    array(
+    			'success' => false,
+    			'message' => "Invalid Channel Id"
+    		    )
+    		);
+		return;
+	    }
+	    else{
+		  $channel =  $channel_loaded[0]->channel_id;
+	    }
+        
         $newStd = new stdClass();
         $newStd->page_id =  $channel_loaded[0]->social_id;
         $newStd->token = $this->facebook_model->GetPageAccessToken( $channel_loaded[0]->oauth_token, $channel_loaded[0]->social_id);
@@ -467,35 +498,75 @@ class Media_stream extends CI_Controller {
     	$this->facebook->setaccesstoken($newStd->token);
     	$return=$this->facebook->api('/'.$post_id.'/comments','post',array('message' => $comment));
         
+        $case=$this->account_model->isCaseIdExists($post_id);
+            if(count($case)>0){
+                $post_at=$case[0]->created_at;  
+                $caseid=$case[0]->case_id;
+            }else{
+                $caseid='';
+                $post_at='';       
+            }
         
-        if(!is_array($return)){//send comment
-          
+        if(!is_array($return)){//send comment          
             $action = array(
-    		"action_type" => "reply_facebook",
-    		"channel_id" => $channel_loaded[0]->channel_id,
-    		"created_at" => date("Y-m-d H:i:s"),
-    		"stream_id" => $this->input->post('post_id'),
-    		"created_by" => $this->session->userdata('user_id'),
-    		"stream_id_response" => $return
+        		"action_type" => "reply_facebook",
+        		"channel_id" =>$channel,
+        		"created_at" => date("Y-m-d H:i:s"),
+        		"stream_id" => $this->input->post('post_id'),
+        		"created_by" => $this->session->userdata('user_id'),
+        		"stream_id_response" => $return
     	    );
-                $this->account_model->CreateFbCommentAction($action, $this->input->post('like') === 'true' ? 1 : 0);
-                print_r ('true');
-         
+            $this->account_model->CreateFbCommentAction($action, $this->input->post('like') === 'true' ? 1 : 0);
+            echo json_encode(
+    		    array(
+                'success' => true,
+    			'message' => "successfully done",
+    			'result' => $return
+    		    )
+    		);
+		                                        
         }elseif(is_array($return)){//replay in reply
-        $action = array(
-    		"action_type" => "reply_facebook",
-    		"channel_id" => $channel_loaded[0]->channel_id,
-    		"created_at" => date("Y-m-d H:i:s"),
-    		"stream_id" => $this->input->post('post_id'),
-    		"created_by" => $this->session->userdata('user_id'),
-    		"stream_id_response" => $return['id']
-    	    );
-              if($return['id']){
-                 $this->account_model->CreateFbCommentAction($action, $this->input->post('like') === 'true' ? 1 : 0);
-                 print_r ('true');
-              }else{
-                 print_r ($return);
-              }
+        
+        if($return['id']){
+            $action = array(
+        		"action_type" => "reply_facebook",
+        		"channel_id" => $channel_loaded[0]->channel_id,
+        		"created_at" => date("Y-m-d H:i:s"),
+        		"stream_id" => $this->input->post('post_id'),
+        		"created_by" => $this->session->userdata('user_id'),
+        		"stream_id_response" => $return['id']
+        	);
+         
+            $replyAction = array(
+        		"case_id" => $caseid,
+        		"channel" => $channel_loaded[0]->channel_id,
+        		"url" => $url,
+        		"message" =>$comment,
+        		"stream_id" => $return['id'],
+        		"comment_id" => $post_id,
+        	    "conversation_detail_id" => '',
+                "type" => "reply_facebook",
+                "post_at" => $post_at,
+                "created_at" => date("Y-m-d H:i:s")
+            );
+            $this->account_model->CreateFbCommentAction($action, $this->input->post('like') === 'true' ? 1 : 0);
+            echo json_encode(
+    		    array(
+                'success' => true,
+    			'message' => "successfully done",
+    			'result' => $return
+    		    )
+    		);
+            
+            }else{
+                echo json_encode(
+        		    array(
+                    'success' => false,
+        			'message' => "reply was failed",
+        			'result' => $return
+        		    )
+    		    );
+            }
        }
     }
     
@@ -727,5 +798,34 @@ class Media_stream extends CI_Controller {
     public function GetAllTags(){
 	$this->load->model('tag_model');
 	echo json_encode($this->tag_model->get());
+    }
+    
+    public function GetScheduleData(){
+	$this->load->model('post_model');
+	$posts = $this->post_model->GetPosts();
+	
+	$encodeme = [];
+	foreach($posts as $post){
+	    if($post->time_to_post != NULL){
+		$time_to_post = explode(' ',$post->time_to_post);
+		$post_date = $time_to_post[0];
+		$post_time = $time_to_post[1];
+		
+		$short_date = explode('-',$post_date);
+		$new_short_date = $short_date[2].'/'.$short_date[1];
+		
+		$short_time = date('H:i A',strtotime($post_time));
+		
+		$encodeme[] = array('id' => $post->id,
+				'title' => $post->name,
+				'start' => $post_date,
+				'description' => $post->messages,
+				'user_name' => $post->display_name,
+				'post_date' => $new_short_date,
+				'post_time' => $short_time
+			       );
+	    }
+	}
+        echo json_encode($encodeme);
     }
 }

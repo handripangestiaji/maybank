@@ -3,7 +3,7 @@
            <span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
            
            <form method="post" class="assign-case" action="<?php echo base_url("case/mycase/CreateCase")?>">
-           <input type="hidden" value="<?php echo $posts[$i]->post_id?>" name="post_id" />
+           <input type="hidden" value="<?php echo ($posts[$i]->post_id ? $posts[$i]->post_id : $posts[$i]->social_stream_post_id)?>" name="post_id" />
            <div class="message"></div>
            <div class="pull-left">
                <select style="width: 130px;" name="case_type">

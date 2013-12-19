@@ -82,7 +82,7 @@
                     if($this->user_role[$i]->role_friendly_name=='User Management_Role_Create_Delete'){
             ?>
             <form id="roleform" method='post' action="<?php echo site_url('users/insert_role');?>" >
-            <h5>New User Role</h5>
+            <h4>New User Role</h4>
             <hr style="margin-top: 0px;">
             New Role <input type='text' name='new_role' value="<?php set_value('new_role');?>"/>
             <span style='color:red;'><?php echo form_error('new_role'); ?></span></td>
@@ -111,7 +111,7 @@
         <hr />
         <?php }}?>
             <!--<input type='button' value='Create Role Permission' onclick='btn_createRole()' />
-            --><h5>Current User Role</h5>
+            --><h4>Current User Role</h4>
             <table class="table table-striped table-role">
                 <thead>
                     <tr>
@@ -133,9 +133,13 @@
                         <td><?php echo $count_role[$i];?></td>
                         <td><?php echo $row->display_name;?></td>
                         <?php for($x=0;$x<count($this->user_role);$x++){
-                                if($this->user_role[$x]->role_friendly_name=='User Management_Role_Edit'){?>
+                                if($this->user_role[$x]->role_friendly_name=='User Management_Role_Edit'){
+                        ?>
                             <td><a href='<?php echo site_url("users/edit_role/".$row->role_collection_id);?>'><span><i class="icon-pencil"></i></span></a></td>
-                        <?php   }if($this->user_role[$x]->role_friendly_name=='User Management_Role_Create_Delete'){?>
+                        <?php   }}
+                            for($y=0;$y<count($this->user_role);$y++){
+                            if($this->user_role[$y]->role_friendly_name=='User Management_Role_Create_Delete'){
+                        ?>
                         <td><a href="" onclick="show_confirm('<?php echo $row->role_collection_id;?>');return false;"><span><i class="icon-remove"></i></span></a></td>
                         <?php }}?>
                     </tr>

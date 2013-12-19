@@ -9,8 +9,8 @@ class case_model extends CI_Model{
         
         
     function LoadCase($filter = array()){
-        $this->db->select("*");
-        $this->db->from("case");
+        $this->db->select("a.*, b.channel_id, b.post_stream_id");
+        $this->db->from("`case` a inner join social_stream b on a.post_id = b.post_id");
         $this->db->where($filter);
         $result = $this->db->get()->result();
         foreach($result as $eachrow){
@@ -57,17 +57,32 @@ class case_model extends CI_Model{
         
         
         $user = is_array($user) && count($user) > 0 ? $user[0] : $user;
-        if($user == null)
-            $this->email->to($case['email']);
-        else
-            $this->email->to($user->email);
-            
+        if($case['email'])
+            $this->email->cc($case['email']);
+        
+        $this->email->to($user->email);
+       
+        
+        
+        
+        $solved_case = $this->LoadCase(array('case_id' => $insert_id));
+        if(count($solved_case) > 0){
+            $this->load->model('account_model');
+            $solved_case = $solved_case[0];
+            $channel_action = array(
+                'action_type' => "case_created",
+                'channel_id' => $solved_case->channel_id,
+                'created_at' => date("Y-m-d H:i:s"),
+                'post_id' => $solved_case->post_id,
+                'created_by' => $user->user_id
+            );
+            $solved_case->action_id = $this->account_model->CreateChannelAction($channel_action);
+        }
+        $this->db->trans_complete();
         $content_email = curl_get_file_contents(site_url('mail_template/AssignCase/newcase/'.$insert_id));
         $this->email->subject('One case has been Assigned to you');
         $this->email->message($content_email);
-        
         $this->email->send();
-        $this->db->trans_complete();
         //print_r($this->email->print_debugger());
         return $insert_id;
     }
@@ -117,6 +132,20 @@ class case_model extends CI_Model{
             'solved_at' => date("Y-m-d H:i:s")
         ));
         $solved_case = $this->LoadCase(array('case_id' => $case_id));
-        return count($solved_by) > 0 ? $solved_case : null;
+        if(count($solved_case) > 0){
+            $this->load->model('account_model');
+            $solved_case = $solved_case[0];
+            $channel_action = array(
+                'action_type' => "case_solved",
+                'channel_id' => $solved_case->channel_id,
+                'created_at' => date("Y-m-d H:i:s"),
+                'post_id' => $solved_case->post_id,
+                'created_by' => $solved_by
+            );
+            $solved_case->action_id = $this->account_model->CreateChannelAction($channel_action);
+            return $solved_case;
+        }
+        else
+            return null;
     }
 }

@@ -759,6 +759,7 @@ $(function(){
                                 me.removeAttr("disabled").html("SHORTEN");
                                 tweetsText = me.closest('form').find(".replaycontent");
                                 tweetsText.val(tweetsText.val() + " http://maybank.co/" + response.shortcode);
+                               // alert("http://maybank.co/" + response.shortcode)
                            },
                            failed : function(response){
                                 me.removeAttr("disabled").html("SHORTEN");
@@ -1141,34 +1142,43 @@ $(function(){
                         function() {
                         var len=$(this).parent().siblings(".replaycontent").val().length
                         if(len>2000){
-                           var comment = 'Your message is more than 2000 characters. It will not post to Facebook.'; 
-                           alert(comment);
+                            $(this).parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
+                            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
+                            '<strong>Error!</strong> Your message is more than 2000 characters. It will not post to Facebook. </div>');
+                            
                         }else{
                             var commentButton = $(this);
                             isSend=commentButton.html()=="SEND";
                             commentButton.html('SENDING...').attr("disabled", "disabled");
 
                            $.ajax({
-                            url : BASEURL + 'dashboard/media_stream/FbReplyPost',
-                            type: "POST",
-                            data: {
-                                post_id: $(this).val(),
-                                channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
-                                comment :$(this).parent().siblings(".replaycontent").val(),
-                            },
-                            success: function(response)
-                            {
-                                commentButton.removeAttr("disabled");
-                                if(response == 'true'){
-                                  commentButton.html("SEND");   
-                                }
-                                else{
-                                    alert("Failed to reply comment");
-                                    alert(response);
-                                    commentButton.html("SEND");
-                                }
-                            },
-                        });
+                                url : BASEURL + 'dashboard/media_stream/FbReplyPost',
+                                type: "POST",
+                                data: {
+                                    post_id: $(this).val(),
+                                    channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
+                                    comment :$(this).parent().siblings(".replaycontent").val(),
+                                    url :$(this).parent().siblings('.link_url').find(".reply-insert-link-text").val(),
+                                    img :$(this).parent().siblings('#reply-img-show').find("#replyInputImageFile").val(),
+                                },
+                                success: function(response)
+                                {
+                                    commentButton.removeAttr("disabled");
+                                    if(response.success === true){
+                                        commentButton.parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
+                                        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
+                                        '<strong>Success!</strong> '+response.message+' </div>');
+                                        commentButton.parent().siblings(".replaycontent").val("");
+                                        commentButton.html("SEND");  
+                                    }
+                                    else{
+                                        commentButton.parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
+                                        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
+                                        '<strong>Error!</strong>'+response.message+'</div>');
+                                        commentButton.html("SEND");
+                                    }
+                                },
+                            });
                             
                         }
                                                 
@@ -1211,7 +1221,8 @@ $(function(){
                         $(this).next().toggle();
                     });                                                         
                 });
-                  
+                
+
                 var sampleTags = [];
                 $.ajax({
                     url : BASEURL + 'dashboard/media_stream/GetAllTags',
@@ -1228,13 +1239,19 @@ $(function(){
                 });
                 //-------------------------------
                 // Allow spaces without quotes.
-                //-------------------------------
-                
+                //--
+                  
                 $('#compose-tags').tagit({
                     availableTags: sampleTags,
                     allowSpaces: true
                 });
                 
+                $(this).on('click','.btn-reply',function(){
+                    $(this).closest('h4').siblings('.reply-field').find('#compose-tags-reply').tagit({
+                        availableTags: sampleTags,
+                        allowSpaces: true
+                    });
+                });                
                 /*==============================================================================================
                  ====================================== LOAD WYSIWYG EDITOR ====================================
                  =============================================================================================*/   
@@ -1355,6 +1372,60 @@ $(function(){
  *  Load Content Asyncronously
 */
 
+/*=============================================================================================
+ ==================================== PUBLISHER ACTIONS =======================================
+ =============================================================================================*/
+    
+/* initialize the calendar
+-----------------------------------------------------------------*/
+$(document).ready(function(){
+    var content;
+    $('#calendar').fullCalendar({
+        header: {
+            left: 'prev,next,today',
+            center: 'title',
+            right: 'month,agendaWeek,agendaDay'
+        },
+        editable: true,
+        eventSources:[
+            {
+                url: BASEURL + 'dashboard/media_stream/GetScheduleData',
+                type: 'GET'
+            }
+        ],
+        eventClick: function(calEvent, jsEvent, view) {
+            //alert('Event: ' + calEvent.title);
+            //alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
+            //alert('View: ' + view.name);
+            $(this).find('.tooltip-event').toggle();
+        },
+        eventRender: function(event, element){
+            console.log($('#calendar').width());
+            //console.log(element.coord().left);
+            var tooltip =
+            "<div class='tooltip-event hide'>" +
+                "<div class='pull-left'>" + event.post_date + " | " + event.post_time + "</div>" +
+                "<br>" +
+                "<div class='tooltip-content pull-left'>" +
+                    "<div class='tooltip-content-head'>" + event.title + "</div>" +
+                    "<div class='tooltip-content-body'>" +
+                        "<p>" +
+                            event.description +
+                        "</p>" +
+                        "<p>" +
+                            "Set By : <strong>" + event.user_name + "</strong>" +
+                        "</p>" +
+                    "</div>" +
+                "</div>" +
+            "</div>";
+            element.append(tooltip);
+            
+            if(($('#calendar').width() - element.coord().left) < 270){
+                element.find('.tooltip-event').css('left','-100px');
+            }
+        }
+    });
+});
 
 serialize = function(obj) {
   var str = [];

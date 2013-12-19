@@ -110,7 +110,7 @@
         <script src="<?php echo base_url('media/js/vendor/bootstrap-colorpicker.js')?>"></script>              <!-- colorpicker plugin -->
         <script src="<?php echo base_url('media/js/vendor/parsley.min.js')?>"></script>                        <!-- parsley validator plugin -->
         <script src="<?php echo base_url('media/js/vendor/formToWizard.js')?>"></script>                       <!-- form wizard plugin -->
-	<!-- <script src="<?php //echo base_url('media/js/vendor/fullcalendar.min.js')?>"</script>        		<!-- fullcalendar plugin -->
+	<script src="<?php echo base_url('media/js/vendor/fullcalendar.min.js')?>"></script>        		<!-- fullcalendar plugin -->
         <script src="<?php echo base_url('media/js/vendor/bootstrap.min.js')?>"></script>
         <script src="<?php echo base_url('media/js/vendor/bootstrap-editable.min.js')?>"></script>             <!-- editable fields plugin -->
 	
@@ -123,8 +123,9 @@
 
         <script src="<?php echo base_url(); ?>media/js/vendor/bootstrap-linkpreview.js"></script> <!-- jquery linkpreview -->
         
-        <script src="<?php echo base_url(); ?>media/js/vendor/tag-it.js"></script> <!-- jquery tag-it -->
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script> <!-- jquery tag-it -->
+    <script src="<?php echo base_url(); ?>media/js/vendor/tag-it.js"></script> <!-- jquery tag-it -->
+        
         <script src="<?php echo base_url('media/js/thekamarel.min.js')?>"></script>                            <!-- main project js file -->
         <script src="<?php echo base_url('media/js/thekamarel.js')?>"></script>                            <!-- main project js file -->
 	

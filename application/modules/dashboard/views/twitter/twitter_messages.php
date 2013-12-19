@@ -14,8 +14,9 @@
             <span>Direct Messages</span>
             <i class="icon-circle"></i>
             <span>
-            <?php 
-            $date=new DateTime($directmessage[$i]->created_at.' Europe/London');
+            <?php
+            
+            $date=new DateTime($directmessage[$i]->social_stream_created_at.' Europe/London');
             $date->setTimezone($timezone);
             echo $date->format('l, M j, Y h:i A');
             
@@ -40,8 +41,14 @@
         <a role="button" href="#"><i class="icon-trash greyText"></i></a>
         <div class="pull-right">
             <button class="btn btn-dm btn-primary" data-toggle="modal"><i class="icon-envelope"></i></button>
+            
             <button type="button" class="btn btn-inverse follow unfollow" name="action" value="<?php echo $directmessage[$i]->sender->twitter_user_id?>"><i class="icon-user"></i></button>
-            <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>
+            <?php if($directmessage[$i]->case_id):?>
+                <button type="button" class="btn btn-purple btn-resolve" name="action" value="<?php echo $directmessage[$i]->case_id?>"><i class="icon-check"></i> <span>RESOLVE</span></button>
+            <?php else:?>
+                <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> <span>CASE</span></button>
+            <?php endif?>
+            
             <input type="hidden" name="str_id" value="<?php //echo json$directmessage[$i]->id_str; ?>" />
             <input type="hidden" name="id" value="<?php //echo $directmessage[$i]->id; ?>" />
         </div>
@@ -60,7 +67,10 @@
     
     <!-- CASE -->  
     <div class="case-field hide">
-       <?php $this->load->view('dashboard/case_field');?>
+       <?php
+       $data['posts'] = $directmessage;
+       $data['i'] = $i;
+       $this->load->view('dashboard/case_field', $data);?>
     </div>
     <!-- END CASE --> 
         
@@ -69,5 +79,7 @@
     }
  ?>
 <?php if(count($directmessage) > 0):?>
-  <div class="filled" style="text-align: center;"><button class="loadmore btn btn-info" value="direct"><input type="hidden" class="channel_id" value="<?php echo $channel_id?>" /><input type="hidden"  class="channel_id" value="<?php echo $directmessage[0]->channel_id?>"/><i class="icon-chevron-down"></i> LOAD MORE</button></div>
+  <div class="filled" style="text-align: center;">
+     <input type="hidden"  class="channel_id" value="<?php echo $directmessage[0]->channel_id?>"/>
+    <button class="loadmore btn btn-info" value="direct"><i class="icon-chevron-down"></i> LOAD MORE</button></div>
 <?php endif;?>

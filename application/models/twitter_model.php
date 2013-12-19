@@ -281,7 +281,7 @@ class twitter_model extends CI_Model
     
     public function ReadDMFromDb($filter,$limit){
         $filter['b.type'] = 'inbox';
-         $this->db->select("a.post_id as social_stream_post_id, a.channel_id, a.is_read, a.post_stream_id, a.retrieved_at, a.created_at, b.text as dm_text, b.*,c.*, d.*, e.*");
+         $this->db->select("a.post_id as social_stream_post_id, a.channel_id, a.is_read, a.post_stream_id, a.retrieved_at, a.created_at as social_stream_created_at, b.text as dm_text, b.*,c.*, d.*, e.*, a.type as social_stream_type");
          $this->db->from("social_stream a inner join twitter_direct_messages b on a.post_id = b.post_id
             LEFT OUTER JOIN twitter_user_engaged c ON c.twitter_user_id=b.sender left join `case` d on d.post_id = a.post_id and d.status='pending'
             LEFT JOIN twitter_reply e on a.post_id = e.reply_to_post_id 
@@ -325,6 +325,7 @@ class twitter_model extends CI_Model
             $this->db->from('twitter_reply');
             $this->db->where('reply_to_post_id', $row->post_id);
             $row->reply_post = $this->db->get()->result();
+            $row->channel_action = $this->GetChannelAction(array('post_id'=>$row->post_id));
         }
         
         return $result;
@@ -460,5 +461,15 @@ class twitter_model extends CI_Model
     function CreateChannelAction($action){
 	$this->db->insert('channel_action',$action);
 	return $this->db->insert_id();
+    }
+    
+    /*
+     * 
+    */
+    function GetChannelAction($filter){
+        $this->db->select("a.*, b.username, b.display_name");
+        $this->db->from('channel_action a inner join user b on b.user_id = a.created_by');
+        $this->db->where($filter);
+        return $this->db->get()->result();
     }
 }

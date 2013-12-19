@@ -107,11 +107,6 @@
         </table>
     </div>
      <div class="page pull-right">
-            <a href="#">First</a>
-            <a href="#" class="active">1</a>
-            <a href="#">2</a>
-            <a href="#">3</a>
-            <a href="#">4</a>
-            <a href="#">Last</a>
-        </div>
+     	<?php echo $pagination ?>
+     </div>
 </div>

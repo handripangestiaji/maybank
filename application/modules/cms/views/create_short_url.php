@@ -1,10 +1,13 @@
-<?php for($i=0;$i<count($this->user_role);$i++){
+<?php 
+for($i=0;$i<count($this->user_role);$i++){
     if($this->user_role[$i]->role_friendly_name=='Content Management_Short_URL_Create'){    
 ?>
 <div class="row-fluid" style="border-bottom: solid 1px #C9C9C9; margin-bottom: 10px;">
     <h4>Create Short URL</h4>    
 </div>
 <?php }}?>
+<?php $tab = $this->uri->segment(4) ? $this->uri->segment(4): 'firstTab'; ?>
+
     <!-- ==================== TAB ROW ==================== -->
 <div class="row-fluid">
         <!-- ==================== TAB NAVIGATION ==================== -->
@@ -12,10 +15,10 @@
 	    if($this->user_role[$x]->role_friendly_name=='Content Management_Short_URL_Create'){    
 	?>
         <ul class="nav nav-tabs">
-            <li class="active">
+            <li class="<?php echo $tab=='firstTab'?"active":"" ?>">
                 <a href="#firstTab">Campaign</a>
             </li>
-            <li><a href="#secondTab">Non Campaign</a></li>
+            <li class="<?php echo $tab=='secondTab'?"active":"" ?>"><a href="#secondTab">Non Campaign</a></li>
         </ul>
 	<?php }}?>
         <!-- ==================== END OF TAB NAVIGATIION ==================== -->
@@ -141,13 +144,8 @@
                         </table>
                     </div>
                      <div class="page pull-right">
-                            <a href="#">First</a>
-                            <a href="#" class="active">1</a>
-                            <a href="#">2</a>
-                            <a href="#">3</a>
-                            <a href="#">4</a>
-                            <a href="#">Last</a>
-                        </div>
+                     	<?php echo $links ?>
+                     </div>
                 </div>
             </div>
             <!-- ==================== END OF FIRST TAB CONTENT ==================== -->
@@ -216,7 +214,6 @@
                         <table class="table table-striped">
                             <thead>
                               <tr>
-                                <th>Campaign Name</th>
                                 <th>Full Url Path</th>
                                 <th>Short Code</th>
                                 <th>Total Used</th>
@@ -226,10 +223,9 @@
                               </tr>
                             </thead>
                             <tbody>
-                            <?php if($urls): ?>
-                                <?php foreach($urls as $v): ?>
+                            <?php if($shorturls): ?>
+                                <?php foreach($shorturls as $v): ?>
                                         <tr>
-                                                <td><?php echo $v->campaign_name ?></td>
                                                 <td><?php echo $v->long_url ?></td>
                                                 <td><a href="<?php echo site_url('cms/url/'.$v->short_code) ?>" target="_blank" ><?php echo $v->short_code ?></a></td>
                                                 <td><?php echo $v->increment ?></td>
@@ -246,12 +242,7 @@
                         </table>
                     </div>
                      <div class="page pull-right">
-                        <a href="#">First</a>
-                        <a href="#" class="active">1</a>
-                        <a href="#">2</a>
-                        <a href="#">3</a>
-                        <a href="#">4</a>
-                        <a href="#">Last</a>
+                     <?php echo $pagination ?>
                     </div>
             </div>
             <!-- ==================== END OF SECOND TAB CONTENT ==================== -->
@@ -259,3 +250,18 @@
     </div>
 </div>
 <!-- ==================== END OF TAB ROW ==================== -->
+<script src="<?php echo base_url('media/js/vendor/jquery-1.9.1.min.js')?>"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		var tab = '<?php echo $tab ?>';
+		
+		if(tab!='')
+		{
+			if(tab == 'secondTab')
+			{
+				$('#secondTab').show();
+				$('#firstTab').hide();
+			}
+		}
+	});
+</script>

@@ -1,7 +1,4 @@
 <?php
-//print_r($countMentions);
-//print_r($mentions);
-//
 $total_groups = ceil($countMentions[0]->count_post_id/$this->config->item('item_perpage'));
 $timezone=new DateTimeZone($this->config->item('timezone'));
 for($i=0;$i<count($mentions);$i++){
@@ -113,34 +110,9 @@ for($i=0;$i<count($mentions);$i++){
         <!-- ==================== END OF CONDENSED TABLE HEADLINE ==================== -->
 
         <!-- ==================== CONDENSED TABLE FLOATING BOX ==================== -->
-        <div class="floatingBox table hide">
-            <div class="container-fluid">
-                <table class="table table-striped">
-                  <thead>
-                    <tr>
-                      <th>Time Stamp</th>
-                      <th>Username</th>
-                      <th>Action Taken</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>2013-09-30 19:52:46</td>
-                      <td>Teo Eu Gene</td>
-                      <td>Resolved</td>
-                      <td><button class="btn btn-primary icon-book"></button></td>
-                    </tr>
-                    <tr>
-                      <td>2013-09-30 19:52:46</td>
-                      <td>Teo Eu Gene</td>
-                      <td>Resolved</td>
-                      <td><button class="btn btn-primary icon-book"></button></td>
-                    </tr>
-                  </tbody>
-                </table>  
-            </div>
-        </div>
+        <?php
+            $data_loaded['post'] = $mentions[$i];
+            $this->load->view('dashboard/action_taken', $data_loaded);?>
         <!-- ==================== END OF CONDENSED TABLE FLOATING BOX ==================== --> 
     </div>
     <!-- END ENGAGEMENT -->

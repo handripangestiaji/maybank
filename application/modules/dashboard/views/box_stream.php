@@ -1,5 +1,8 @@
+<?php
+    $span = 12/count($group);
+?>
 <!-- ==================== MIDDLE COL ==================== -->
-<div class="span4">
+<div class="span<?php echo $span ?>">
     <!-- ==================== ACTIVITIES CONTAINER ==================== -->
     <div class="row-fluid">
         <div class="span12">

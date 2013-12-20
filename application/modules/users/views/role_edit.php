@@ -24,8 +24,8 @@
             <input class="btn btn-primary" type="button" onclick="menu_role()" name="btn_role" value="Role"  />   <br />
             <input class="btn" type="button" onclick='menu_group()' name="btn_group" value="Group" />
         </div>
+	<form id="roleform" method='post' action='<?php echo site_url("users/update_role");?>' >
         <div class="cms-table pull-right">
-        <form id="roleform" method='post' action='<?php echo site_url("users/update_role");?>' >
             <h5>Edit Role</h5>
             <hr style="margin-top: 0px;">
             Role Name <input type='text' name='role_name' value='<?php echo $role->row()->role_name;?>' />
@@ -44,14 +44,14 @@
 			</div>
 		    </div>
                     <input type='hidden' id='role_id' name='role[]' value='' />
-		    <input type='button' id='save' value='Save' />
+		    <input type='submit' id='save' value='Save' />
 		    <input type='button' onclick="menu_role()" value='Cancel' />
-                    </form>
+                    
                 </div>
                 </div>
 	    <span style='color:red;'><?php echo form_error('role'); ?></span>
             </div>
-           
+	</form>
     </div>
 </div>
 <script type="text/javascript">

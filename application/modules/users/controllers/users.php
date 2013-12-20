@@ -25,11 +25,16 @@ class Users extends MY_Controller {
     {
      if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_View'))
      {
-	  if(isset($_POST['isi'])){
+	  $cek = $this->session->userdata('search_value');
+	  $cek1 = $this->session->userdata('roleId');
+	  
+	  if($this->input->get('role_collection_id')!=NULL)
+	  {
+	       $this->session->unset_userdata('search_value');
 	       $config['base_url'] = base_url().'users/index';
-	       $config['total_rows'] = $this->users_model->count_record();
+	       $config['total_rows'] = $this->users_model->count_record('role_id',$this->input->get('role_collection_id'));
 	       $config['per_page'] = 10;
-	       $config["uri_segment"] = 3;
+	       $config["uri_segment"] = 1;
 	       
 	       $config['next_link'] = 'Next';
 	       $config['prev_link'] = 'Prev';
@@ -40,33 +45,76 @@ class Users extends MY_Controller {
 	       $config['cur_tag_open'] = '<b style="margin:0px 5px;">';
 	       $config['cur_tag_close'] = '</b>';
 	       
-	       $this->pagination->initialize($config);
+	       $set = array('roleId' => $this->input->get('role_collection_id'));
+	       $this->session->set_userdata($set);
+	       $roleId = $this->session->userdata('roleId');
 	       
+	       $this->pagination->initialize($config);
+
+	       $search = NULL;
+	       $page = 0;
+     
+	       if($this->session->userdata('roleId'))
+	       {
+		    $data['show'] = $this->users_model->select_user1($config["per_page"], $page, $roleId,$search);
+	       }
+	       else{
+		    $data['show'] = $this->users_model->select_user1($config["per_page"], $page, null,$search);
+	       }
+	       $data['links'] = $this->pagination->create_links();
+	       $data['role'] = $this->users_model->select_role();
+	       $data['count'] = $this->users_model->count_record('role_id',$this->input->get('role_collection_id'));
+	       
+	       $this->load->view('users/index',$data);
+	  }
+	  elseif(isset($_POST['isi'])){
 	       $set = array(
 			      'search_value' => $this->input->post('search_user')
 			      );
 	       $this->session->set_userdata($set);
 	       
 	       $search = $this->session->userdata('search_value');
+	       
+	       $config['base_url'] = base_url().'users/index';
+	       $config['total_rows'] = $this->users_model->count_record('teks',$search);
+	       $config['per_page'] = 10;
+	       $config["uri_segment"] = 3;
+	       
+	       $config['next_link'] = 'Next';
+	       $config['prev_link'] = 'Prev';
+	       
+	       $config['first_link'] = 'First';
+	       $config['last_link'] = 'Last';
+	  
+	       $config['cur_tag_open'] = '<b style="margin:0px 5px;">';
+	       $config['cur_tag_close'] = '</b>';
+	       
+	       $this->pagination->initialize($config);
+	       
+	       $this->session->unset_userdata('roleId');
+	       
+	       
 	       $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
      
-	       if($this->input->get('role_collection_id') || $search!=NULL)
+	       if($this->session->userdata('roleId'))
 	       {
-		    $data['show'] = $this->users_model->select_user1($config["per_page"], $page, $this->input->get('role_collection_id'),$search);
+		    $data['show'] = $this->users_model->select_user1($config["per_page"], $page, $this->session->userdata('roleId'),$search);
 	       }
 	       else{
 		    $data['show'] = $this->users_model->select_user1($config["per_page"], $page, null,$search);
 	       }
 	       $data['links'] = $this->pagination->create_links();
 	       $data['role'] = $this->users_model->select_role();
-	       $data['count'] = $this->users_model->count_record();
+	       $data['count'] = $this->users_model->count_record('teks',$this->input->post('search_user'));
 	       
 	       $this->load->view('users/index',$data);
 	  }
-	  elseif($this->uri->segment(2)=='index')
+	  elseif($this->uri->segment(2)=='index' && $cek!=NULL)
 	  {
+	       $this->session->unset_userdata('roleId');
+	       $search = $this->session->userdata('search_value');
 	       $config['base_url'] = base_url().'users/index';
-	       $config['total_rows'] = $this->users_model->count_record();
+	       $config['total_rows'] = $this->users_model->count_record('teks',$search);
 	       $config['per_page'] = 10;
 	       $config["uri_segment"] = 3;
 	       
@@ -81,26 +129,72 @@ class Users extends MY_Controller {
 	       
 	       $this->pagination->initialize($config);
 
-	       $search = $this->session->userdata('search_value');
+	       
+	       
 	       $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
      
-	       if($this->input->get('role_collection_id') || $search!=NULL)
+	       if($this->session->userdata('roleId'))
 	       {
-		    $data['show'] = $this->users_model->select_user1($config["per_page"], $page, $this->input->get('role_collection_id'),$search);
+		    $data['show'] = $this->users_model->select_user1($config["per_page"], $page, $this->session->userdata('roleId'),$search);
 	       }
 	       else{
 		    $data['show'] = $this->users_model->select_user1($config["per_page"], $page, null,$search);
 	       }
 	       $data['links'] = $this->pagination->create_links();
 	       $data['role'] = $this->users_model->select_role();
-	       $data['count'] = $this->users_model->count_record();
+	       $data['count'] = $this->users_model->count_record('teks',$this->input->post('search_user'));
+	       
+	       $this->load->view('users/index',$data);
+	  }
+	  elseif($this->uri->segment(2)==NULL)
+	  {
+	       //echo 'elseif3';
+	       //die();
+	       $config['base_url'] = base_url().'users/index';
+	       $config['total_rows'] = $this->users_model->count_record(null,null);
+	       $config['per_page'] = 10;
+	       $config["uri_segment"] = 3;
+	       
+	       $config['next_link'] = 'Next';
+	       $config['prev_link'] = 'Prev';
+	       
+	       $config['first_link'] = 'First';
+	       $config['last_link'] = 'Last';
+	  
+	       $config['cur_tag_open'] = '<b style="margin:0px 5px;">';
+	       $config['cur_tag_close'] = '</b>';
+	       
+	       $this->pagination->initialize($config);
+	       $this->session->unset_userdata('roleId');
+	       $this->session->unset_userdata('search_value');
+	       $search = NULL;
+	       $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+     
+	       if($this->session->userdata('roleId'))
+	       {
+		    $data['show'] = $this->users_model->select_user1($config["per_page"], $page, $this->session->userdata('roleId'),$search);
+	       }
+	       else{
+		    $data['show'] = $this->users_model->select_user1($config["per_page"], $page, null,$search);
+	       }
+	       $data['links'] = $this->pagination->create_links();
+	       $data['role'] = $this->users_model->select_role();
+	       $data['count'] = $this->users_model->count_record(null,null);
 	       
 	       $this->load->view('users/index',$data);
 	  }
 	  else
 	  {
 	       $config['base_url'] = base_url().'users/index';
-	       $config['total_rows'] = $this->users_model->count_record();
+	       
+	       if($cek1!=NULL)
+	       {
+	  	    $config['total_rows'] = $this->users_model->count_record('role_id',$this->session->userdata('roleId'));
+	       }
+	       else
+	       {
+		    $config['total_rows'] = $this->users_model->count_record(null,null);
+	       }
 	       $config['per_page'] = 10;
 	       $config["uri_segment"] = 3;
 	       
@@ -114,20 +208,20 @@ class Users extends MY_Controller {
 	       $config['cur_tag_close'] = '</b>';
 	       
 	       $this->pagination->initialize($config);
-
+	       $this->session->unset_userdata('search_value');
 	       $search = NULL;
 	       $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
      
-	       if($this->input->get('role_collection_id') || $search!=NULL)
+	       if($this->session->userdata('roleId'))
 	       {
-		    $data['show'] = $this->users_model->select_user1($config["per_page"], $page, $this->input->get('role_collection_id'),$search);
+		    $data['show'] = $this->users_model->select_user1($config["per_page"], $page, $this->session->userdata('roleId'),$search);
 	       }
 	       else{
 		    $data['show'] = $this->users_model->select_user1($config["per_page"], $page, null,$search);
 	       }
 	       $data['links'] = $this->pagination->create_links();
 	       $data['role'] = $this->users_model->select_role();
-	       $data['count'] = $this->users_model->count_record();
+	       $data['count'] = $this->users_model->count_record(null,null);
 	       
 	       $this->load->view('users/index',$data);
 	  }
@@ -431,7 +525,7 @@ class Users extends MY_Controller {
 				      );
 			      $this->session->set_userdata($data1);
 			      
-			      //$this->session->set_flashdata('info', TRUE);
+			      $this->session->set_flashdata('info', TRUE);
 			      redirect('users');
 			  }
 		    }
@@ -468,7 +562,7 @@ class Users extends MY_Controller {
 				      );
 			      $this->session->set_userdata($data1);
 			      
-			      //$this->session->set_flashdata('info', TRUE);
+			      $this->session->set_flashdata('info', TRUE);
 			      redirect('users');
 		    }
 	       }

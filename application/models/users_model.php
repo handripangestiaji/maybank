@@ -66,7 +66,12 @@ class Users_model extends CI_Model
     
     function count_record($var , $value)
     {
-            if($var == 'role_id')
+            if($var=='role_id' && $value==0)
+            {
+                $tes = $this->db->get($this->user);
+                return $tes->num_rows();
+            }
+            elseif($var == 'role_id')
             {
                 $this->db->where('role_id',$value);
                 $tes = $this->db->get($this->user);

@@ -916,3 +916,4 @@ input.related-conversation-check{
 .tooltip-event .tooltip-content .tooltip-content-body{padding: 5px;}
 .no-pointer {cursor: default !important}
 .pointer{cursor: pointer !important}
+.indicator button, .indicator .btn{cursor: default !important}

@@ -50,35 +50,29 @@ for($i=0;$i<count($senttweets);$i++){
         <?php } ?></p>
         
         <p>
-            <a role="button" class="btn-engagement"><i class="icon-eye-open"></i> Engagement</a> |
-            <a data-toggle="modal" role="button" href="#modaltweet<?php echo $i; ?>" ><i class="icon-retweet greyText"></i><?php if($senttweets[$i]->retweet_count>0)echo $senttweets[$i]->retweet_count; ?> re-tweets</a> 
+            <a role="button" class="btn-engagement"><i class="icon-eye-open"></i> Engagement</a> 
+            <?php if($senttweets[$i]->retweet_count>0): ?> |
+            <span><i class="icon-retweet greyText"></i><?php echo $senttweets[$i]->retweet_count; ?> re-tweet(s)</span><?php endif;?>
         </p>
         
         
         <!-- ENGAGEMENT -->    
         <div class="engagement hide">
+            
         </div>
         <!-- END ENGAGEMENT -->
         
         <h4 class="filled">
             <a role="button" class='destroy_status'><i class="icon-trash greyText"></i></a>
             <div class="pull-right">
-                    <!--form class="contentForm" action="<?php //echo base_url('index.php/dashboard/socialmedia/twitteraction');?>" method="post">
-                    <button type="button" class="retweet btn btn-primary"><i class="icon-retweet"></i></button-->
-                    <button type="button" class="favorit btn btn-primary"><i class="icon-star"></i></button>
-                    
-                    <?php /*if($senttweets[$i]->following=='1'){ ?>
-                            <button type="button" class="unfollow btn"><i class="icon-user"></i></button>
-                    <?php }else{ ?>
-                            <button type="button" class="follow btn btn-primary" value="follow"><i class="icon-user"></i></button>
-                    <?php } */?>
-                    <!--button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i>CASE</button-->
-                    <input type="hidden" class="str_id" value="<?php echo $senttweets[$i]->post_stream_id; ?>" />
-                    <input type="hidden" class="userid" value="<?php echo $senttweets[$i]->twitter_user_id; ?>" />
-                    <input type="hidden" class="followid" value="<?php echo $senttweets[$i]->twitter_user_id; ?>" />
-                   <!--/form-->    
+                <?php
+                    $data = array(
+                        'come_from' => "user_timeline",
+                        'post' => $senttweets[$i]
+                    );
+                    $this->load->view('dashboard/twitter/twitter_button', $data);
+                ?>
             </div>
-             <!--div class="actionreport compose-post-status green hide">Message Post</div-->
             <br clear="all" />
         </h4>
         
@@ -87,5 +81,10 @@ for($i=0;$i<count($senttweets);$i++){
     </li>
 <?php } ?>
 <?php if(count($senttweets) > 0):?>
- <div class="filled" style="text-align: center;"><button class="loadmore btn btn-info" value="sendmessage"><input type="hidden"  class="channel_id" value="<?php echo $senttweets[0]->channel_id?>"/><input type="hidden" class="channel_id" value="<?php echo $channel_id?>" /><i class="icon-chevron-down"></i> LOAD MORE</button></div>
+ <div class="filled" style="text-align: center;">
+    <input type="hidden"  class="channel_id" value="<?php echo $senttweets[0]->channel_id?>"/>
+    <button class="loadmore btn btn-info" value="homefeed">
+ 
+ 
+ <i class="icon-chevron-down"></i> LOAD MORE</button></div>
 <?php endif?>

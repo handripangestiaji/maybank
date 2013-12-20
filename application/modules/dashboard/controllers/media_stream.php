@@ -681,7 +681,7 @@ class Media_stream extends CI_Controller {
         $channel_id=$channel_ids;
         $is_read=0;
         $filter = array(
-    	   'channel_id' => $channel_id,
+    	   'a.channel_id' => $channel_id,
     	);
     	
 	if($this->input->get('last_id')){
@@ -723,7 +723,7 @@ class Media_stream extends CI_Controller {
              $this->load->view('dashboard/twitter/twitter_homefeed.php',$data);
         }
         
-        if($action=='sendmessage'){
+        if($action=='user_timeline'){
         	$filter['b.type'] = 'user_timeline';
         	$data['senttweets']=$this->twitter_model->ReadTwitterData($filter,$limit);
             $data['countTweets']=$this->twitter_model->CountTwitterData($filter);

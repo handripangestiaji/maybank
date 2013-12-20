@@ -1,7 +1,6 @@
 <?php
 $total_groups = ceil($countFeed[0]->count_post_id/$this->config->item('item_perpage'));
 $timezone=new DateTimeZone($this->config->item('timezone'));
-
 for($i=0;$i<count($homefeed);$i++){
 ?>
     <li <?php if($homefeed[$i]->is_read==0){echo 'class="unread-post"';} ?>>
@@ -27,16 +26,17 @@ for($i=0;$i<count($homefeed);$i++){
             </span>
           
         </p>
-    <p><?php
-    $pattern = "/_(?=[^>]*<)/";
-    $html = $homefeed[$i]->text;
-    foreach($entities->urls as $url){
-        $html = substr($html, 0, $url->indices[0]);
-        $html .= "<a href='$url->expanded_url' target='_blank'>$url->display_url</a>";
-        $html .= substr($homefeed[$i]->text, $url->indices[1] );
-    }
-    $html =  linkify(html_entity_decode($html), true, false);
-    echo $html;
+    <p>
+    <?php
+        $pattern = "/_(?=[^>]*<)/";
+        $html = $homefeed[$i]->text;
+        foreach($entities->urls as $url){
+            $html = substr($html, 0, $url->indices[0]);
+            $html .= "<a href='$url->expanded_url' target='_blank'>$url->display_url</a>";
+            $html .= substr($homefeed[$i]->text, $url->indices[1] );
+        }
+        $html =  linkify(html_entity_decode($html), true, false);
+        echo $html;
     ?></p>
     <p>
     <?php if(isset($entities->media[0])){
@@ -67,8 +67,8 @@ for($i=0;$i<count($homefeed);$i++){
     <?php endif ?></p>
     
     <p>
-        <a role="button" class="btn-engagement"><i class="icon-eye-open"></i> Engagement</a> |
-        <a data-toggle="modal" role="button" href="#modaltweet<?php echo $i; ?>" ><i class="icon-retweet greyText"></i><?php echo $homefeed[$i]->retweet_count; ?> re-tweets</a>         
+        <a role="button" class="btn-engagement"><i class="icon-eye-open"></i> Engagement</a> <?php if($homefeed[$i]->retweet_count>0): ?>|
+        <span><i class="icon-retweet greyText"></i><?php echo $homefeed[$i]->retweet_count; ?> re-tweet(s)</span><?php endif;?>
     </p>
     
     
@@ -79,12 +79,11 @@ for($i=0;$i<count($homefeed);$i++){
         </div>
         <br>
         <?php 
-                //$filterh["b.twitter_user_id"] = $homefeed[$i]->twitter_user_id;
-                //  $filterh["b.type"] = $mentions[$i]->type;
-                $filterh["b.in_reply_to = "] = $homefeed[$i]->post_id.' ';     
-                $comment=$this->twitter_model->ReadTwitterData($filterh, 3); 
-
-                for($j=0;$j<count($comment);$j++){
+            //$filterh["b.twitter_user_id"] = $homefeed[$i]->twitter_user_id;
+            //  $filterh["b.type"] = $mentions[$i]->type;
+            $filterh["b.in_reply_to = "] = $homefeed[$i]->post_id.' ';     
+            $comment=$this->twitter_model->ReadTwitterData($filterh, 3);    
+            for($j=0;$j<count($comment);$j++){
         ?>
                 <div class="engagement-body">
                     <span class="engagement-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>    
@@ -122,29 +121,16 @@ for($i=0;$i<count($homefeed);$i++){
     <!-- END ENGAGEMENT -->
     
     <h4 class="filled">
-        <!--a role="button" class='destroy_status'><i class="icon-trash greyText"></i></a-->
         <div class="pull-right">
-            <!--form class="contentForm" action="<?php //echo base_url('index.php/dashboard/socialmedia/twitteraction');?>" method="post"-->
-                <button class="btn btn-reply btn-primary" data-toggle="modal" value="<?php echo $homefeed[$i]->post_id?>"><i class="icon-mail-reply"></i></button>
-                <button type="button" class="retweet btn btn-primary" value="<?php echo $homefeed[$i]->post_id?>"><i class="icon-retweet"></i><span></span></button>
-                 <button class="btn btn-dm btn-primary" data-toggle="modal"><i class="icon-envelope"></i></button>
-                <button type="button" class="favorit btn btn-primary"  value="<?php echo $homefeed[$i]->twitter_user_id?>"  ><i class="icon-star"></i><span></span></button>
-                <?php if($homefeed[$i]->is_following=='1'){ ?>
-                <button type="button" class="follow unfollow btn btn-inverse"><i class="icon-user"></i><span></span></button>
-                <?php }else{ ?>
-                <button type="button" class="follow btn " value="<?php echo $homefeed[$i]->twitter_user_id?>"><i class="icon-user"></i><span></span></button>
-                <?php } ?>
-                  <?php if(!$homefeed[$i]->case_id):?>
-                    <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> <span>CASE</span></button>
-                <?php else:?>
-                    <button type="button" class="btn btn-purple btn-resolve" name="action" value="<?=$homefeed[$i]->case_id?>"><i class="icon-check"></i> <span>RESOLVE</span></button>
-                <?php endif?>
-                <input type="hidden" class="str_id" value="<?php echo $homefeed[$i]->post_stream_id; ?>" />
-                <input type="hidden" class="userid" value="<?php echo $homefeed[$i]->twitter_user_id; ?>" />
-                <input type="hidden" class="followid" value="<?php echo $homefeed[$i]->twitter_user_id; ?>" />
-               <!--/form-->    
+         <?php
+            $data = array(
+                'come_from' => "home_feed",
+                'post' => $homefeed[$i]
+            );
+            $this->load->view('dashboard/twitter/twitter_button', $data);
+        ?>
         </div>
-         <!--div class="actionreport compose-post-status green hide">Message Post</div-->
+         
         <br clear="all" />
     </h4>
     

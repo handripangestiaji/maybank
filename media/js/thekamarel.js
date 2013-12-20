@@ -762,6 +762,7 @@ $(function(){
                                 me.removeAttr("disabled").html("SHORTEN");
                                 tweetsText = me.closest('form').find(".replaycontent");
                                 tweetsText.val(tweetsText.val() + " http://maybank.co/" + response.shortcode);
+                                me.closest('reply-shorturl-show-content').val()=" http://maybank.co/" + response.shortcode;
                                // alert("http://maybank.co/" + response.shortcode)
                            },
                            failed : function(response){
@@ -891,12 +892,14 @@ $(function(){
                                             url : BASEURL + 'dashboard/socialmedia/FbStatusUpdate',
                                             type: "POST",
                                          data: {
+                                                    channel_id:$(this).val(),
                                                     content:$('.compose-textbox').val(),
-                                                    link:$(this).parent().siblings('.compose-url-shortener').find('.compose-insert-link-text').val(),
-                                                    name:'text title',
-                                                    description: $(this).parent().siblings('#url-show').find('.descr_link').val(),
-                                                    picture:'http://www.maybank.com/iwov-resources/corporate/img/my/en/m/Banners-home-PW.jpg',
-                                                    channel_id:$(this).val()
+                                                    name:$(this).parent().siblings('#reply-url-show').find(".title_link").val(),
+                                                    link:$('.compose-url-shortener').find('.compose-insert-link-text').val(),
+                                                    title :$('#url-show').find(".title_link").val(),
+                                                    desc :$('#url-show').find(".descr-link").val(),
+                                                    img :$('#url-show').find(".img-link").val()
+
                                                     },
                                             success: function()
                                             {
@@ -1175,7 +1178,9 @@ $(function(){
                                     post_id: $(this).val(),
                                     channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
                                     comment :$(this).parent().siblings(".replaycontent").val(),
-                                    url :$(this).parent().siblings('.link_url').find(".reply-insert-link-text").val(),
+                                    url:'',
+                                    title :$(this).parent().siblings('#reply-url-show').find(".title_link").val(),
+                                    desc :$(this).parent().siblings('#reply-url-show').find(".descr-link").val(),
                                     img :$(this).parent().siblings('#reply-img-show').find("#replyInputImageFile").val(),
                                 },
                                 success: function(response)

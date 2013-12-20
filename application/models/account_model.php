@@ -140,9 +140,9 @@ class account_model extends CI_Model
     	return $result;
     }
     
-    function CreateFbCommentAction($action,$replyAction, $like = 0){
+    function CreateFbCommentAction($action,$stream_id,$replyAction, $like = 0){
     	$this->db->trans_start();
-    	$post = $this->facebook_model->IsStreamIdExists($action['stream_id']);
+    	$post = $this->facebook_model->IsStreamIdExists($stream_id);
     	if($post != null){
     	    $action['post_id'] = $post->post_id;
     	    $this->db->where("post_id", $post->post_id);

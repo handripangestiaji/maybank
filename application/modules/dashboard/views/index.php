@@ -14,7 +14,7 @@
             <div class="compose-innercontainer compose-collapsed left">
                 <textarea class="span8 compose-textbox" placeholder="Compose Message" id="compose-message"></textarea>
                 <!-- ==================== URL SHORTERNER AJAX THIS WILL BE HIDDEN BY DEFAULT ==================== -->
-                <div class="compose-url-shortener">
+                <div class="compose-url-shortener compose-link">
                     <div class="post-channel">
                         <div class="left">
                                 <label class="left">Add Channel : </label>

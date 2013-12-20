@@ -28,7 +28,7 @@
            'action_type'=> $action_type,
            'channel_id'=> $channel_id,
            'created_at'=> $created_at,
-           'stream_id'=> $stream_id,
+           //'stream_id'=> $stream_id,
            'stream_id_response'=> $stream_id_response,
            'post_id'=> $post_id,
            'created_by'=> $created_by
@@ -44,7 +44,7 @@
             'channel'=>$channel,
             'url'=>$url,
             'message'=>$message,
-            'stream_id'=>$stream_id,
+            //'stream_id'=>$stream_id,
             'comment_id'=>$comment_id,
             'conversation_detail_id'=>$conversation_detail_id,
             'type'=>$type,

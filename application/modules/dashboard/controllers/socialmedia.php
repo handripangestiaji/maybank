@@ -157,13 +157,22 @@ class Socialmedia extends MY_Controller {
       header("Content-Type: application/x-json");
 	  $this->load->model('account_model');
 	  $this->load->model('facebook_model');
+      
+      
+      if($this->input->post('img')){
+      $img= $this->input->post('img');
+      }else{
+        $img='';        
+      }
        
 	  $filter = array(
 	      "connection_type" => "facebook"
 	  );
+      
 	  if($this->input->post('channel_id')){
 	      $filter['channel_id'] = $this->input->post('channel_id');
 	  }
+      
 	  $channel_loaded = $this->account_model->GetChannel($filter);
 	  $newStd = new stdClass();
 	  $newStd->page_id =  $channel_loaded[0]->social_id;
@@ -176,15 +185,16 @@ class Socialmedia extends MY_Controller {
 	  );
 	  $this->load->library('facebook',$config);
 	  $this->facebook->setaccesstoken($newStd->token);
+      
       if($this->input->post('link')!=''){
           $attachment = array(
                 'message' => $this->input->post('content'),
-                'name' => $this->input->post('name'),
+                'name' => $this->input->post('title'),
                 'link' => $this->input->post('link'),
-                'description' => $this->input->post('description'),
-                'picture'=> $this->input->post('pictrue')
+                'description' => $this->input->post('desc'),
+                'picture'=> $img, //'http://www.maybank.com/iwov-resources/corporate/img/my/en/m/Banners-home-PW.jpg',//$this->input->post('img')
           );  
-        $this->facebook->api('/'.$this->facebook->getUser().'/feed', 'POST', $this->input->post('content'),$attachment);
+        $this->facebook->api('/'.$this->facebook->getUser().'/feed', 'POST',$attachment);
       }else{
         $this->facebook->api('/'.$this->facebook->getUser().'/feed','POST',array('message'=>$this->input->post('content')));
 	   }

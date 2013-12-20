@@ -914,3 +914,5 @@ input.related-conversation-check{
 .tooltip-event .tooltip-content{background: white;width: 100%;margin-top:5px;border-radius:3px;}
 .tooltip-event .tooltip-content .tooltip-content-head{padding: 5px;font-size: 16px;border-bottom: solid 1px;font-weight: bold;}
 .tooltip-event .tooltip-content .tooltip-content-body{padding: 5px;}
+.no-pointer {cursor: default !important}
+.pointer{cursor: pointer !important}

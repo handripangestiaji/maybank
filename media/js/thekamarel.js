@@ -875,68 +875,36 @@ $(function(){
                             }
                             
                             if(confirmed == true){
-                                $('.compose-post-status').show();
-                                $('.compose-post-status').removeClass('green');
-                                $('.compose-post-status').removeClass('red');
-                                $('.compose-post-status').addClass('grey');
-                                $('.compose-post-status').html('Posting...');
-                                
-                                var resultPost = 0;
-                                var y = 0;
-                                var req = new Array();
-                                $('.compose-channels option:selected').each(function() {
-                                    y++;
-                                    if($(this).attr('id') == 'optfacebook'){
-                                        $.ajax({
-                                            url : BASEURL + 'dashboard/socialmedia/FbStatusUpdate',
-                                            type: "POST",
-                                            data: {
-                                                    content:$('.compose-textbox').val(),
-                                                    channel_id:$(this).val()
-                                                    },
-                                            success: function()
-                                            {
-                                                resultPost = 1;
-                                                $('.compose-post-status').removeClass('grey');
-                                                $('.compose-post-status').removeClass('red');
-                                                $('.compose-post-status').addClass('green');
-                                                $('.compose-post-status').show();
-                                                $('.compose-post-status').html('Post to Facebook Success');
-                                                $('.compose-post-status').fadeOut(7500,function(){
-                                                    $('.compose-innercontainer').removeClass("compose-expanded");
-                                                    $('.compose-innercontainer').addClass("compose-collapsed");
-                                                    $('.compose-textbox').val('');
-                                                    $('.compose-insert-link-text').val('');
-                                                    $("#compose-tags").tagit("removeAll");
-                                                    $('.select-shorten-url').html('<option value="#">-- Select Shorten URL</option>');
-                                                    $('.compose-channels').find('option').removeAttr('selected');
-                                                    $('.compose-channels').next().find('button').html('None Selected <b class="caret"></b>');
-                                                    $('.compose-channels').next().find('li').removeClass('active');
-                                                    $('.compose-channels').next().find('input').removeAttr('checked');
-                                                    $('.compose-fb-char-count').html(2000);
-                                                    $('.compose-tw-char-count').html(140);
-                                                    $('.youtube-character-count').html(500);
-                                                });
-                                            },
-                                        });
-                                    }
+                                if(scheduleTime == ''){
+                                    $('.compose-post-status').show();
+                                    $('.compose-post-status').removeClass('green');
+                                    $('.compose-post-status').removeClass('red');
+                                    $('.compose-post-status').addClass('grey');
+                                    $('.compose-post-status').html('Posting...');
                                     
-                                    if($(this).attr('id') == 'opttwitter'){                
-                                        $.ajax({
-                                            url : BASEURL + 'dashboard/socialmedia/twitterAction',
-                                            type: "POST",
-                                            data: {
-                                                    action:'sendTweet',
-                                                    content:$('.compose-textbox').val(),
-                                                   },
-                                            success: function()
+                                    var resultPost = 0;
+                                    var y = 0;
+                                    var req = new Array();
+                                    $('.compose-channels option:selected').each(function() {
+                                        y++;
+                                        if($(this).attr('id') == 'optfacebook'){
+                                            $.ajax({
+                                                url : BASEURL + 'dashboard/socialmedia/FbStatusUpdate',
+                                                type: "POST",
+                                                data: {
+                                                        content:$('.compose-textbox').val(),
+                                                        channel_id:$(this).val()
+                                                        },
+                                                success: function()
                                                 {
+                                                    $('.compose-innercontainer').removeClass("compose-collapsed");
+                                                    $('.compose-innercontainer').addClass("compose-expanded");
                                                     resultPost = 1;
                                                     $('.compose-post-status').removeClass('grey');
                                                     $('.compose-post-status').removeClass('red');
-                                                    $('.compose-post-status').addClass('green');                        
+                                                    $('.compose-post-status').addClass('green');
                                                     $('.compose-post-status').show();
-                                                    $('.compose-post-status').html('Post to Twitter Success');
+                                                    $('.compose-post-status').html('Post to Facebook Success');
                                                     $('.compose-post-status').fadeOut(7500,function(){
                                                         $('.compose-innercontainer').removeClass("compose-expanded");
                                                         $('.compose-innercontainer').addClass("compose-collapsed");
@@ -950,15 +918,80 @@ $(function(){
                                                         $('.compose-channels').next().find('input').removeAttr('checked');
                                                         $('.compose-fb-char-count').html(2000);
                                                         $('.compose-tw-char-count').html(140);
-                                                        $('.compose-yt-count').html(500);
+                                                        $('.youtube-character-count').html(500);
                                                     });
                                                 },
                                             });
-                                    }
+                                        }
+                                        
+                                        if($(this).attr('id') == 'opttwitter'){                
+                                            $.ajax({
+                                                url : BASEURL + 'dashboard/socialmedia/twitterAction',
+                                                type: "POST",
+                                                data: {
+                                                        action:'sendTweet',
+                                                        content:$('.compose-textbox').val(),
+                                                       },
+                                                success: function()
+                                                    {
+                                                        $('.compose-innercontainer').removeClass("compose-collapsed");
+                                                        $('.compose-innercontainer').addClass("compose-expanded");
+                                                        resultPost = 1;
+                                                        $('.compose-post-status').removeClass('grey');
+                                                        $('.compose-post-status').removeClass('red');
+                                                        $('.compose-post-status').addClass('green');                        
+                                                        $('.compose-post-status').show();
+                                                        $('.compose-post-status').html('Post to Twitter Success');
+                                                        $('.compose-post-status').fadeOut(7500,function(){
+                                                            $('.compose-innercontainer').removeClass("compose-expanded");
+                                                            $('.compose-innercontainer').addClass("compose-collapsed");
+                                                            $('.compose-textbox').val('');
+                                                            $('.compose-insert-link-text').val('');
+                                                            $("#compose-tags").tagit("removeAll");
+                                                            $('.select-shorten-url').html('<option value="#">-- Select Shorten URL</option>');
+                                                            $('.compose-channels').find('option').removeAttr('selected');
+                                                            $('.compose-channels').next().find('button').html('None Selected <b class="caret"></b>');
+                                                            $('.compose-channels').next().find('li').removeClass('active');
+                                                            $('.compose-channels').next().find('input').removeAttr('checked');
+                                                            $('.compose-fb-char-count').html(2000);
+                                                            $('.compose-tw-char-count').html(140);
+                                                            $('.compose-yt-count').html(500);
+                                                        });
+                                                    },
+                                                });
+                                        }
+                                        
+                                        channels[i] = $(this).val();
+                                        i++;
+                                    });
+                                }
+                                else{
+                                    $('.compose-channels option:selected').each(function() {        
+                                        channels[i] = $(this).val();
+                                        i++;
+                                    });
                                     
-                                    channels[i] = $(this).val();
-                                    i++
-                                });
+                                    $('.compose-post-status').show();
+                                    $('.compose-post-status').addClass('green');
+                                    $('.compose-post-status').removeClass('red');
+                                    $('.compose-post-status').removeClass('grey');
+                                    $('.compose-post-status').html('Post has been scheduled');
+                                    $('.compose-post-status').fadeOut(7500,function(){
+                                        $('.compose-innercontainer').removeClass("compose-expanded");
+                                        $('.compose-innercontainer').addClass("compose-collapsed");
+                                        $('.compose-textbox').val('');
+                                        $('.compose-insert-link-text').val('');
+                                        $("#compose-tags").tagit("removeAll");
+                                        $('.select-shorten-url').html('<option value="#">-- Select Shorten URL</option>');
+                                        $('.compose-channels').find('option').removeAttr('selected');
+                                        $('.compose-channels').next().find('button').html('None Selected <b class="caret"></b>');
+                                        $('.compose-channels').next().find('li').removeClass('active');
+                                        $('.compose-channels').next().find('input').removeAttr('checked');
+                                        $('.compose-fb-char-count').html(2000);
+                                        $('.compose-tw-char-count').html(140);
+                                        $('.compose-yt-count').html(500);
+                                    });
+                                }
                                 
                                 $.ajax({
                                     url : BASEURL + 'dashboard/media_stream/SocmedPost',
@@ -970,7 +1003,7 @@ $(function(){
                                             schedule:scheduleTime
                                             },
                                     success: function(){
-                                        
+                                       
                                     }
                                 });
                             }

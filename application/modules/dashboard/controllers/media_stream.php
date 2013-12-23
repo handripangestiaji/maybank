@@ -515,7 +515,6 @@ class Media_stream extends CI_Controller {
 	else{
 	    echo false;
 	}
-	
     }
     
     public function FbReplyPost(){

@@ -152,7 +152,90 @@ class Cronjob extends CI_Controller {
         }
     }
     
+    function SendScheduledPost(){
+        $this->load->model('post_model');
+        
+        $time_now = date('Y-m-d H:i:s');
+        $time_3_min_ago = date('Y-m-d H:i:s',strtotime('-3 min'));
+        
+        $where = "time_to_post Between '".$time_3_min_ago."' AND '".$time_now."' AND is_posted is NULL";
+        $posts = $this->post_model->GetPosts($where);
+        foreach($posts as $post){
+            //handle if facebook
+            if($post->connection_type == 'facebook'){
+                $this->FbStatusUpdate($post);
+            }
+            //handle if twitter
+            elseif($post->connection_type == 'twitter'){
+                $this->TwitterStatusUpdate($post);
+            }
+            
+            //write to database is_posted = true;
+            $value = array('post_created_at' => date('Y-m-d H:i:s'),
+                            'is_posted' => 1);
+            $this->post_model->UpdatePostTo($post->post_to_id,$value);
+        }
+    }
     
+    public function FbStatusUpdate($post = NULL){
+        if($post == NULL){
+            $messages = $this->input->post('content');
+            $channel_id = $this->input->post('channel_id');
+        }
+        else{
+            $messages = $post->messages;
+            $channel_id = $post->channel_id;
+        }
+        
+        $this->load->model('account_model');
+        $this->load->model('facebook_model');
+     
+        $filter = array(
+            "connection_type" => "facebook"
+        );
+        $filter['channel_id'] = $channel_id;
+        $channel_loaded = $this->account_model->GetChannel($filter);
+        $newStd = new stdClass();
+        $newStd->page_id =  $channel_loaded[0]->social_id;
+        $newStd->token = $this->facebook_model->GetPageAccessToken( $channel_loaded[0]->oauth_token, $channel_loaded[0]->social_id);
+      
+        $access_token_fb = fb_dummy_accesstoken();
+        $config = array(
+             'appId' => $this->config->item('fb_appid'),
+             'secret' => $this->config->item('fb_secretkey')
+        );
+        $this->load->library('facebook',$config);
+        $this->facebook->setaccesstoken($newStd->token);
+        $result = $this->facebook->api('/me/feed','POST',array('message'=>$messages));
+        echo json_encode($result);
+    }
     
-    
+    public function TwitterStatusUpdate($post = NULL){
+        if($post == NULL){
+            $messages = $this->input->post('content');
+            $channel_id = $this->input->post('channel_id');
+        }
+        else{
+            $messages = $post->messages;
+            $channel_id = $post->channel_id;
+        }
+        
+        $this->load->helper('basic');
+        $this->load->library('Twitteroauth');
+        $this->config->load('twitter');
+        
+        $filter['channel_id'] = $channel_id;
+        $channel_loaded = $this->account_model->GetChannel($filter);
+        $newStd = new stdClass();
+        $newStd->page_id =  $channel_loaded[0]->social_id;
+        
+        $this->connection = $this->twitteroauth->create($this->config->item('twitter_consumer_token'),
+                                                        $this->config->item('twitter_consumer_secret'),
+                                                        $channel_loaded[0]->oauth_token,
+                                                        $channel_loaded[0]->oauth_secret);
+        
+        $parameters = array('status' => $messages);
+        $result = $this->connection->post('statuses/update', $parameters);
+        echo json_encode($result);
+    }
 }

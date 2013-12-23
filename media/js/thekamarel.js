@@ -889,59 +889,32 @@ $(function(){
                                         y++;
                                         if($(this).attr('id') == 'optfacebook'){
                                             $.ajax({
-                                                url : BASEURL + 'dashboard/socialmedia/FbStatusUpdate',
+                                                url : BASEURL + 'cronjob/FbStatusUpdate',
                                                 type: "POST",
                                                 data: {
                                                         content:$('.compose-textbox').val(),
                                                         channel_id:$(this).val()
                                                         },
-                                                success: function()
+                                                success: function(data)
                                                 {
+                                                    var IS_JSON = true;
+                                                    try
+                                                    {
+                                                        var new_data = jQuery.parseJSON(data);
+                                                    }
+                                                    catch(err)
+                                                    {
+                                                        IS_JSON = false;
+                                                    }                
                                                     $('.compose-innercontainer').removeClass("compose-collapsed");
                                                     $('.compose-innercontainer').addClass("compose-expanded");
                                                     resultPost = 1;
-                                                    $('.compose-post-status').removeClass('grey');
-                                                    $('.compose-post-status').removeClass('red');
-                                                    $('.compose-post-status').addClass('green');
-                                                    $('.compose-post-status').show();
-                                                    $('.compose-post-status').html('Post to Facebook Success');
-                                                    $('.compose-post-status').fadeOut(7500,function(){
-                                                        $('.compose-innercontainer').removeClass("compose-expanded");
-                                                        $('.compose-innercontainer').addClass("compose-collapsed");
-                                                        $('.compose-textbox').val('');
-                                                        $('.compose-insert-link-text').val('');
-                                                        $("#compose-tags").tagit("removeAll");
-                                                        $('.select-shorten-url').html('<option value="#">-- Select Shorten URL</option>');
-                                                        $('.compose-channels').find('option').removeAttr('selected');
-                                                        $('.compose-channels').next().find('button').html('None Selected <b class="caret"></b>');
-                                                        $('.compose-channels').next().find('li').removeClass('active');
-                                                        $('.compose-channels').next().find('input').removeAttr('checked');
-                                                        $('.compose-fb-char-count').html(2000);
-                                                        $('.compose-tw-char-count').html(140);
-                                                        $('.youtube-character-count').html(500);
-                                                    });
-                                                },
-                                            });
-                                        }
-                                        
-                                        if($(this).attr('id') == 'opttwitter'){                
-                                            $.ajax({
-                                                url : BASEURL + 'dashboard/socialmedia/twitterAction',
-                                                type: "POST",
-                                                data: {
-                                                        action:'sendTweet',
-                                                        content:$('.compose-textbox').val(),
-                                                       },
-                                                success: function()
-                                                    {
-                                                        $('.compose-innercontainer').removeClass("compose-collapsed");
-                                                        $('.compose-innercontainer').addClass("compose-expanded");
-                                                        resultPost = 1;
+                                                    if(IS_JSON == true){
                                                         $('.compose-post-status').removeClass('grey');
                                                         $('.compose-post-status').removeClass('red');
-                                                        $('.compose-post-status').addClass('green');                        
+                                                        $('.compose-post-status').addClass('green');
                                                         $('.compose-post-status').show();
-                                                        $('.compose-post-status').html('Post to Twitter Success');
+                                                        $('.compose-post-status').html('Post to Facebook Success');
                                                         $('.compose-post-status').fadeOut(7500,function(){
                                                             $('.compose-innercontainer').removeClass("compose-expanded");
                                                             $('.compose-innercontainer').addClass("compose-collapsed");
@@ -955,8 +928,67 @@ $(function(){
                                                             $('.compose-channels').next().find('input').removeAttr('checked');
                                                             $('.compose-fb-char-count').html(2000);
                                                             $('.compose-tw-char-count').html(140);
-                                                            $('.compose-yt-count').html(500);
+                                                            $('.youtube-character-count').html(500);
                                                         });
+                                                    }
+                                                    else{
+                                                        $('.compose-post-status').removeClass('grey');
+                                                        $('.compose-post-status').removeClass('green');
+                                                        $('.compose-post-status').addClass('red');
+                                                        $('.compose-post-status').show();
+                                                        $('.compose-post-status').html('Post to Facebook Failed');    
+                                                        $('.compose-post-status').fadeOut(7500)  
+                                                    }
+                                                },
+                                            });
+                                        }
+                                        
+                                        if($(this).attr('id') == 'opttwitter'){                
+                                            $.ajax({
+                                                url : BASEURL + 'cronjob/TwitterStatusUpdate',
+                                                type: "POST",
+                                                data: {
+                                                        content:$('.compose-textbox').val(),
+                                                        channel_id:$(this).val()
+                                                       },
+                                                success: function(data)
+                                                    {
+                                                        $('.compose-innercontainer').removeClass("compose-collapsed");
+                                                        $('.compose-innercontainer').addClass("compose-expanded");
+                                                        resultPost = 1;
+                                                        
+                                                        var new_data = jQuery.parseJSON(data);
+                                                    
+                                                        if(new_data.id){
+                                                            $('.compose-post-status').removeClass('grey');
+                                                            $('.compose-post-status').removeClass('red');
+                                                            $('.compose-post-status').addClass('green');
+                                                            $('.compose-post-status').show();
+                                                            $('.compose-post-status').html('Post to Twitter Success');    
+                                                            $('.compose-post-status').fadeOut(7500,function(){
+                                                                $('.compose-innercontainer').removeClass("compose-expanded");
+                                                                $('.compose-innercontainer').addClass("compose-collapsed");
+                                                                $('.compose-textbox').val('');
+                                                                $('.compose-insert-link-text').val('');
+                                                                $("#compose-tags").tagit("removeAll");
+                                                                $('.select-shorten-url').html('<option value="#">-- Select Shorten URL</option>');
+                                                                $('.compose-channels').find('option').removeAttr('selected');
+                                                                $('.compose-channels').next().find('button').html('None Selected <b class="caret"></b>');
+                                                                $('.compose-channels').next().find('li').removeClass('active');
+                                                                $('.compose-channels').next().find('input').removeAttr('checked');
+                                                                $('.compose-fb-char-count').html(2000);
+                                                                $('.compose-tw-char-count').html(140);
+                                                                $('.compose-yt-count').html(500);
+                                                            });
+                                                        }
+                                                        else{
+                                                            $('.compose-post-status').removeClass('grey');
+                                                            $('.compose-post-status').removeClass('green');
+                                                            $('.compose-post-status').addClass('red');
+                                                            $('.compose-post-status').show();
+                                                            $('.compose-post-status').html('Post to Twitter Failed');    
+                                                            $('.compose-post-status').fadeOut(7500);
+                                                        }
                                                     },
                                                 });
                                         }

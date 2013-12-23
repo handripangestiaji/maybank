@@ -1463,7 +1463,6 @@ $(document).ready(function(){
             center: 'title',
             right: 'month,agendaWeek,agendaDay'
         },
-        editable: true,
         eventSources:[
             {
                 url: BASEURL + 'dashboard/media_stream/GetScheduleData',

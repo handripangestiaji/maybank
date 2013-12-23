@@ -8,6 +8,9 @@ class Cronjob extends CI_Controller {
         $this->load->model('facebook_model');
         $this->load->model('account_model');
         $this->load->model('twitter_model');
+        $this->load->config('mail_config');
+	$config = $this->config->item('mail_provider');
+	$this->load->library('email',$config);
     }
     
     function index(){
@@ -156,25 +159,34 @@ class Cronjob extends CI_Controller {
         $this->load->model('post_model');
         
         $time_now = date('Y-m-d H:i:s');
-        $time_3_min_ago = date('Y-m-d H:i:s',strtotime('-3 min'));
+        $time_few_min_ago = date('Y-m-d H:i:s',strtotime('-10 min'));
         
-        $where = "time_to_post Between '".$time_3_min_ago."' AND '".$time_now."' AND is_posted is NULL";
+        $where = "time_to_post Between '".$time_few_min_ago."' AND '".$time_now."' AND is_posted is NULL";
         $posts = $this->post_model->GetPosts($where);
         foreach($posts as $post){
             //handle if facebook
             if($post->connection_type == 'facebook'){
-                $this->FbStatusUpdate($post);
+                $post_to = json_decode($this->FbStatusUpdate($post));
             }
             //handle if twitter
             elseif($post->connection_type == 'twitter'){
-                $this->TwitterStatusUpdate($post);
+                $post_to = json_decode($this->TwitterStatusUpdate($post));
             }
             
             //write to database is_posted = true;
             $value = array('post_created_at' => date('Y-m-d H:i:s'),
                             'is_posted' => 1);
             $this->post_model->UpdatePostTo($post->post_to_id,$value);
-        }
+            
+            //send email
+            $this->email->set_newline("\r\n");
+            $this->email->from('tes@gmail.com','maybank');
+            $this->email->to('benawv@gmail.com');    
+            $this->email->subject('Message Posted');
+            $template = curl_get_file_contents(base_url().'mail_template/PostSent/'.$post->post_to_id);
+            $this->email->message($template);
+            $this->email->send();
+        }	    
     }
     
     public function FbStatusUpdate($post = NULL){

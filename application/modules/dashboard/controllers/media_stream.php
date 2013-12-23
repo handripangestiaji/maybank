@@ -882,7 +882,8 @@ class Media_stream extends CI_Controller {
 		
 		$encodeme[] = array('id' => $post->id,
 				'title' => $post->name,
-				'start' => $post_date,
+				'start' => date('c',strtotime($post->time_to_post)),
+				'end' => date('c',strtotime($post->time_to_post)),
 				'description' => $post->messages,
 				'user_name' => $post->display_name,
 				'post_date' => $new_short_date,

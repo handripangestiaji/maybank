@@ -98,6 +98,7 @@
                                            <option value="<?php echo $ch->channel_id; ?>"><?php echo $ch->name;?></option>
                                         <?php }?>
                                     </select>
+                                    <span style='color:red;'><?php echo form_error('channel'); ?>
                                 </div>
                             </div>
                         </td>
@@ -133,7 +134,7 @@
                     <?php $i=0; foreach($group as $gr){?>
                     <tr>
                         <td><?php echo $gr->group_name;?></td>
-                        <td><?php echo $count_group[$i]?></td>
+                        <td><?php echo $count_group[$i+$plus]?></td>
                         <td>
                             <?php
                                 foreach($group_detail->result() as $gd)
@@ -167,12 +168,12 @@
                 </tbody>
                 
             </table>
-            <!--<?php //if($count>10){?>
+            <?php if($count>10){?>
             <div class="page pull-right" style="margin-top: 30px;">
-                <?php //echo $links; ?>
+                <?php echo $links; ?>
             </div>
-            <?php //}?>
-            -->
+            <?php }?>
+            
         </div>
     </div>
 </div>

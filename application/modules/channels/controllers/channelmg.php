@@ -1,6 +1,8 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class ChannelMg extends MY_Controller {
+    
+    public $user_role;
 
     function __construct()
     {
@@ -8,6 +10,10 @@ class ChannelMg extends MY_Controller {
         $this->load->model('facebook_model');
         $this->load->library("Twitteroauth");
         $this->load->model('account_model');
+        $this->load->model('users_model');
+        
+        $this->user_role = $this->users_model->get_collection_detail(
+		array('role_collection_id'=>$this->session->userdata('role_id')));
     }
     
     function index(){
@@ -16,46 +22,57 @@ class ChannelMg extends MY_Controller {
     }
     
     function AddFacebook(){
-        $this->load->config('facebook');
-        $this->load->library('Facebook', array(
-            'appId' => $this->config->item('fb_appid'),
-            'secret' => $this->config->item('fb_appsecret')
-        ));
-        
-        $user = $this->facebook->getUser();
-        if ($user) {
-            $logoutUrl = $this->facebook->getLogoutUrl();
-        }else {
-
-            $params = array(
-                'scope' => 'read_stream, manage_pages, publish_stream, read_mailbox, export_stream, publish_checkins, read_insights, read_requests,
-                        status_update, photo_upload, email, read_page_mailboxes',
-                'redirect_uri' => base_url('channels/channelmg/TokenFacebook')
-            );
-            $loginUrl = $this->facebook->getLoginUrl($params);
-            redirect($loginUrl);
+        if(IsRoleFriendlyNameExist($this->user_role,'Social Channel Management_Add')){
+            $this->load->config('facebook');
+            $this->load->library('Facebook', array(
+                'appId' => $this->config->item('fb_appid'),
+                'secret' => $this->config->item('fb_appsecret')
+            ));
+            
+            $user = $this->facebook->getUser();
+            if ($user) {
+                $logoutUrl = $this->facebook->getLogoutUrl();
+            }else {
+    
+                $params = array(
+                    'scope' => 'read_stream, manage_pages, publish_stream, read_mailbox, export_stream, publish_checkins, read_insights, read_requests,
+                            status_update, photo_upload, email, read_page_mailboxes',
+                    'redirect_uri' => base_url('channels/channelmg/TokenFacebook')
+                );
+                $loginUrl = $this->facebook->getLoginUrl($params);
+                redirect($loginUrl);
+            }
+        }
+        else
+        {
+            redirect('channels/channelmg');
         }
     }
     
     function AddTwitter(){
         // Making a request for request_token
-        
-        $connection = $this->twitteroauth->create($this->config->item('twitter_consumer_token'),
-                                                  $this->config->item('twitter_consumer_secret'));
-        
-        $request_token = $connection->getRequestToken(site_url('channels/channelmg/TokenTwitter'));
-        //print_r($connection);
-        $this->session->set_userdata('request_token', $request_token['oauth_token']);
-        $this->session->set_userdata('request_token_secret', $request_token['oauth_token_secret']);
-        if($connection->http_code == 200)
-        {
-            $url = $connection->getAuthorizeURL($request_token);
-            redirect($url);
+        if(IsRoleFriendlyNameExist($this->user_role,'Social Channel Management_Add')){
+            $connection = $this->twitteroauth->create($this->config->item('twitter_consumer_token'),
+                                                      $this->config->item('twitter_consumer_secret'));
+            
+            $request_token = $connection->getRequestToken(site_url('channels/channelmg/TokenTwitter'));
+            //print_r($connection);
+            $this->session->set_userdata('request_token', $request_token['oauth_token']);
+            $this->session->set_userdata('request_token_secret', $request_token['oauth_token_secret']);
+            if($connection->http_code == 200)
+            {
+                $url = $connection->getAuthorizeURL($request_token);
+                redirect($url);
+            }
+            else
+            {
+                // An error occured. Make sure to put your error notification code here.
+                redirect('/error_page_faild_auth');
+            }
         }
         else
         {
-            // An error occured. Make sure to put your error notification code here.
-            redirect('/error_page_faild_auth');
+            redirect('channels/channelmg');
         }
     }
     
@@ -114,14 +131,20 @@ class ChannelMg extends MY_Controller {
     }
     
     public function DeleteChannel(){
-        $channel_id = $this->input->get('channel_id');
-        if($this->session->userdata('channel_token_delete') == $this->input->get('token')){
-            //DELETE channel
-            $this->account_model->DeleteChannel($channel_id);
-            $this->session->unset_userdata('channel_token_delete');
+        if(IsRoleFriendlyNameExist($this->user_role,'Social Channel Management_Remove')){
+            $channel_id = $this->input->get('channel_id');
+            if($this->session->userdata('channel_token_delete') == $this->input->get('token')){
+                //DELETE channel
+                $this->account_model->DeleteChannel($channel_id);
+                $this->session->unset_userdata('channel_token_delete');
+                redirect('channels/channelmg');
+            }
+        //redirect('channels/channelmg');
+        }
+        else
+        {
             redirect('channels/channelmg');
         }
-        //redirect('channels/channelmg');
     }
     
     

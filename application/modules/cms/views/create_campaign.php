@@ -1,3 +1,8 @@
+<?php
+    for($i=0;$i<count($this->user_role);$i++){
+	if($this->user_role[$i]->role_friendly_name=='Content Management_Campaign_Create'){
+?>
+
 <div class="row-fluid" style="border-bottom: solid 1px #C9C9C9; margin-bottom: 10px;">
     <h4>Create Campaign</h4>    
 </div>
@@ -55,6 +60,7 @@
         </form>
     </div>
 </div>
+ <?php }}?>
 <div class="row-fluid" style="border-bottom: solid 1px #C9C9C9; margin-bottom: 10px;">
     <h4>Campaign List</h4>    
 </div>
@@ -68,7 +74,12 @@
                 <th>Product</th>
                 <th>Total Used</th>
                 <th>Creator</th>
+		<?php
+		    for($i=0;$i<count($this->user_role);$i++){
+			if($this->user_role[$i]->role_friendly_name=='Content Management_Campaign_Delete'){
+		?>
                 <th>&nbsp;</th>
+		<?php }}?>
               </tr>
             </thead>
             <tbody>
@@ -80,10 +91,15 @@
 		                <td><?php echo implode(" , ",$v['product_name']); ?></td>
 		                <td><?php echo "0" ?></td>
 		                <td><?php echo $v['display_name']; ?></td>
+				<?php
+				    for($i=0;$i<count($this->user_role);$i++){
+					if($this->user_role[$i]->role_friendly_name=='Content Management_Campaign_Delete'){
+				?>
 		                <td>
 		                	<a href="<?php echo site_url('cms/create_campaign?action=delete&id='.$v['id'])?>" class="btn btn-mini btn-danger pull-right">delete</a>
 		                	<!--<button class="btn btn-mini btn-danger pull-right" type="button">delete</button>-->
 		                </td>
+				<?php }}?>
 					</tr>
             	<?php endforeach; ?>
             <?php endif; ?>

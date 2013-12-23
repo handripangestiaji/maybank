@@ -91,11 +91,14 @@
                 </table>
             </div>
             <div style="float: right; margin-top: -10px;">
-                <form id="search_form" method="post" action="<?php echo site_url('users');?>">
+                <form id="search_form" method="get" action="<?php echo site_url('users');?>">
                 <table>
                     <tr>
-                        <td><input type="text" id="search_user" name="search_user" placeholder="Search Name, Email or User ID" /></td>
-                        <td style='padding-bottom: 10px;'><button onclick="search_user();return false;"><span class="add-on" id="login"><i class="icon-search"></i></span></button></td>
+                        <td><input type="text" id="search_user" name="q" placeholder="Search Name, Email or User ID" /></td>
+                        <td style='padding-bottom: 10px;'>
+                            <button class="btn-primary" type="submit"><span class="add-on" id="login"><i class="icon-search"></i></span>
+                            </button>
+                        </td>
                     </tr>
                 </table>
                 </form>

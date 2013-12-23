@@ -1,3 +1,6 @@
+<?php for($x=0;$x<count($this->user_role);$x++){
+        if($this->user_role[$x]->role_friendly_name=='Social Channel Management_Add'){    
+?>
 <div class="row-fluid" style="width: 80%; margin: 0px auto;" id="channelMg">
 <!--<span style="font-size: 14pt; color: black; margin: 5px 0;">USER MANAGEMENT</span>-->
     <div class="cms-content row-fluid">
@@ -40,3 +43,4 @@
     </div>
 </div>
 <?php endif?>
+<?php }}?>

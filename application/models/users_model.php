@@ -18,12 +18,12 @@ class Users_model extends CI_Model
     
     //======================== USER ==========================
     //view user
-    function select_user1($limit, $start, $role_id = null,$value)
+    function select_user1($limit, $start, $role_id,$value)
     {
         $this->db->distinct();
         $this->db->limit($limit, $start);
         $this->db->select('a.*, b.full_name as created_by_name,c.group_name,d.role_name');
-        $this->db->from('user a left outer join user b on b.user_id = a.created_by inner join user_group c on a.group_id = c.group_id inner join role_collection d on a.role_id=d.role_collection_id');
+        $this->db->from('user a left outer join user b on b.user_id = a.created_by left join user_group c on a.group_id = c.group_id left join role_collection d on a.role_id=d.role_collection_id');
         if($value != null)
         {
             $where = "a.email like '%".$value."%' OR a.display_name like '%".$value."%' OR a.username like '%".$value."%'";
@@ -64,9 +64,30 @@ class Users_model extends CI_Model
         return $this->db->get($this->user);
     }
     
-    function count_record()
+    function count_record($var , $value)
     {
-        return $this->db->count_all($this->user);
+            if($var=='role_id' && $value==0)
+            {
+                $tes = $this->db->get($this->user);
+                return $tes->num_rows();
+            }
+            elseif($var == 'role_id')
+            {
+                $this->db->where('role_id',$value);
+                $tes = $this->db->get($this->user);
+                return $tes->num_rows();
+            }
+            elseif($var == 'teks' )
+            {
+                $where = "email like '%".$value."%' OR display_name like '%".$value."%' OR username like '%".$value."%'";
+                $this->db->where($where);
+                $tes = $this->db->get($this->user);
+                return $tes->num_rows();
+            }
+            else
+            {
+                return $this->db->count_all($this->user);
+            }
     }
     
     //insert user

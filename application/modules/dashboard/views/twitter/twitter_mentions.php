@@ -23,16 +23,15 @@ for($i=0;$i<count($mentions);$i++){
             ?></span>
         </p>
     <p><?php 
-         $pattern = "/_(?=[^>]*<)/";
-    $html = html_entity_decode($mentions[$i]->text);
-    foreach($entities->urls as $url){
-        $html = substr($html, 0, $url->indices[0]);
-        $html .= "<a href='$url->expanded_url' target='_blank'>$url->display_url</a>";
-        $html .= substr($mentions[$i]->text, $url->indices[1] );
-    }
-    $html =  linkify(html_entity_decode($html), true, false);
-    echo $html;
-        
+        $pattern = "/_(?=[^>]*<)/";
+        $html = $mentions[$i]->text;
+        foreach($entities->urls as $url){
+            $html = substr($html, 0, $url->indices[0]);
+            $html .= "<a href='$url->expanded_url' target='_blank'>$url->display_url</a>";
+            $html .= substr($mentions[$i]->text, $url->indices[1] );
+        }
+        $html =  linkify(html_entity_decode($html), true, false);
+        echo $html;
     ?></p>
     <p>
     <?php if(isset($entities->media[0])){
@@ -52,7 +51,7 @@ for($i=0;$i<count($mentions);$i++){
         <button type="button" class="btn btn-inverse btn-mini" value="<?php echo $mentions[$i]->reply_post[0]->response_post_id?>">REPLIED</button>
     <?php endif?>
     <?php if(count($mentions[$i]->reply_post) == 0 && !$mentions[$i]->case_id):?>
-        <button type="button" class="btn btn-warning btn-mini">OPEN</button>
+        <button type="button" class="btn btn-warning btn-mini no-cursor">OPEN</button>
     <?php endif?>
    
     
@@ -64,8 +63,9 @@ for($i=0;$i<count($mentions);$i++){
     <?php } ?></p>
     
     <p>
-        <a role="button" class="btn-engagement"><i class="icon-eye-open"></i> Engagement</a> |
-        <a data-toggle="modal" role="button" href="#modaltweet<?php echo $i; ?>" ><i class="icon-retweet greyText"></i><?php if($mentions[$i]->retweet_count>0)echo $mentions[$i]->retweet_count; ?> re-tweets</a>  
+        <a role="button" class="btn-engagement"><i class="icon-eye-open"></i> Engagement</a> 
+        <?php if($mentions[$i]->retweet_count>0): ?>|
+        <span><i class="icon-retweet greyText"></i><?php echo $mentions[$i]->retweet_count; ?> re-tweet(s)</span><?php endif;?>
     </p>
     <!-- ENGAGEMENT -->    
     <div class="engagement hide">
@@ -122,36 +122,17 @@ for($i=0;$i<count($mentions);$i++){
     <!-- END ENGAGEMENT -->
     
     <h4 class="filled">
-        <!--a role="button" class='destroy_status'><i class="icon-trash greyText"></i></a-->
         <div class="pull-right">
-            <!--form class="contentForm" action="<?php //echo base_url('index.php/dashboard/socialmedia/twitteraction');?>" method="post"-->
-                <button class="btn btn-reply btn-primary" data-toggle="modal" value="<?php echo $mentions[$i]->social_stream_post_id?>"><i class="icon-mail-reply"></i></button>
-                <button type="button" class="retweet btn btn-primary" value="<?php echo $mentions[$i]->social_stream_post_id?>"><i class="icon-retweet"><span></span></i></button>
-                <button class="btn btn-dm btn-primary" data-toggle="modal"><i class="icon-envelope"></i></button>
-                <button type="button" class="favorit btn btn-primary"><i class="icon-star"></i><span></span></button>
-                
-                <?php if($mentions[$i]->is_following=='1'){ ?>
-                <button type="button" class="follow unfollow btn btn-inverse"  value="<?php echo $mentions[$i]->twitter_user_id?>"><i class="icon-user"></i><span></span></button>
-                <?php }else{ ?>
-                <button type="button" class="follow btn " value="<?php echo $mentions[$i]->twitter_user_id?>"><i class="icon-user"></i><span></span></button>
-                <?php } ?>
-                <?php if(!$mentions[$i]->case_id):?>
-                    <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> <span>CASE</span></button>
-                <?php else:?>
-                    <button type="button" class="btn btn-purple btn-resolve" name="action" value="<?=$mentions[$i]->case_id?>"><i class="icon-check"></i> <span>RESOLVE</span></button>
-                <?php endif?>
-                <input type="hidden" class="str_id" value="<?php echo $mentions[$i]->post_stream_id; ?>" />
-                <input type="hidden" class="id" value="<?php echo json_decode($mentions[$i]->twitter_entities)->user_mentions[0]->id; ?>" />
-                <input type="hidden" class="userid" value="<?php echo $mentions[$i]->twitter_user_id; ?>" />
-                <input type="hidden" class="followid" value="<?php echo $mentions[$i]->twitter_user_id; ?>" />
-               <!--/form-->    
+            <?php
+                $data = array(
+                    'come_from' => "mentions",
+                    'post' => $mentions[$i]
+                );
+                $this->load->view('dashboard/twitter/twitter_button', $data);
+            ?>
         </div>
-         <!--div class="actionreport compose-post-status green hide">Message Post</div-->
         <br clear="all" />
     </h4>
-    
-   
-
     <!-- DM -->  
     <div class="dm-field hide">
         <?php
@@ -185,5 +166,8 @@ for($i=0;$i<count($mentions);$i++){
 <?php } 
 ?>
 <?php if(count($mentions) > 0):?>
- <div class="filled" style="text-align: center;"><input type="hidden" class="total_groups" value="<?php echo $total_groups?>" /><input type="hidden"  class="channel_id" value="<?php echo $mentions[0]->channel_id?>"/><input type="hidden"  class="looppage" value=""/><button class="loadmore btn btn-info" value="mentions"><i class="icon-chevron-down"></i> LOAD MORE</button></div>
+    <div class="filled" style="text-align: center;"><input type="hidden" class="total_groups" value="<?php echo $total_groups?>" />
+    <input type="hidden"  class="channel_id" value="<?php echo $mentions[0]->channel_id?>"/>
+    <input type="hidden"  class="looppage" value=""/>
+    <button class="loadmore btn btn-info" value="mentions"><i class="icon-chevron-down"></i> LOAD MORE</button></div>
 <?php endif;?>

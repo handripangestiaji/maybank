@@ -237,6 +237,7 @@ $(function(){
                         me.find('.message').html('<div class="alert alert-warning">' +
                         '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
                         '<strong>Error!</strong> ' + response.message + '<br />' + message + '</div>');
+                        
                     }
                     else{
                         me.find('.message').html('<div class="alert alert-success">' +
@@ -245,6 +246,10 @@ $(function(){
                         me.find('input, textarea').val('');
                         me.find('.reply-preview-img').toggle('slow');
                         openButton.removeClass('btn-warning').addClass('btn-inverse').html('REPLIED').val('');
+                        setTimeout(function(){
+                            me.closest('.reply-field').toggle('slow');
+                        }, 3000);
+                        
                     }
                 }
                 catch(e){

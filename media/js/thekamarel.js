@@ -707,7 +707,7 @@ $(function(){
                                 success: function(data){
                                     var new_data = JSON.parse(data);
                                     if(new_data.is_success != false){
-                                        //$('.compose-textbox').val($('.compose-textbox').val()+ 'http://maybk.co/' + new_data.short_code);            
+                                        $('.compose-textbox').val($('.compose-textbox').val()+ 'http://maybk.co/' + new_data.short_code);            
                                         ComposeCharCheck();
                                         $(".compose-insert-link-text").linkpreview({
                                             previewContainer: "#url-show > .compose-form > div",  //optional
@@ -724,7 +724,6 @@ $(function(){
                                             onComplete: function() {                 //optional
                                             }
                                        });
-                                        /*
                                     }
                                     else{
                                         alert(new_data.message);
@@ -873,11 +872,6 @@ $(function(){
                             }
                             else{
                                 scheduleTime = '';
-                            }
-                            
-                            var img;
-                            if($('#composeInputImageFile').val() != ''){
-                                img = $('#composeInputImageFile').val();
                             }
                             
                             if(confirmed == true){

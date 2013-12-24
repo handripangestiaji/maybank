@@ -707,7 +707,7 @@ $(function(){
                                 success: function(data){
                                     var new_data = JSON.parse(data);
                                     if(new_data.is_success != false){
-                                        $('.compose-textbox').val($('.compose-textbox').val()+ 'http://maybk.co/' + new_data.short_code);            
+                                        //$('.compose-textbox').val($('.compose-textbox').val()+ 'http://maybk.co/' + new_data.short_code);            
                                         ComposeCharCheck();
                                         $(".compose-insert-link-text").linkpreview({
                                             previewContainer: "#url-show > .compose-form > div",  //optional
@@ -724,6 +724,7 @@ $(function(){
                                             onComplete: function() {                 //optional
                                             }
                                        });
+                                        /*
                                     }
                                     else{
                                         alert(new_data.message);
@@ -874,6 +875,11 @@ $(function(){
                                 scheduleTime = '';
                             }
                             
+                            var img;
+                            if($('#composeInputImageFile').val() != ''){
+                                img = $('#composeInputImageFile').val();
+                            }
+                            
                             if(confirmed == true){
                                 if(scheduleTime == ''){
                                     $('.compose-post-status').show();
@@ -893,8 +899,12 @@ $(function(){
                                                 type: "POST",
                                                 data: {
                                                         content:$('.compose-textbox').val(),
-                                                        channel_id:$(this).val()
-                                                        },
+                                                        channel_id:$(this).val(),
+                                                        title:$('#url-show').find('input').val(),
+                                                        link:$('#url-show').find('p').html(),
+                                                        description:$('#url-show').find('textarea').val(),
+                                                        image:$('#compose-preview-img').attr('src') == undefined ? '' :  $('#compose-preview-img').attr('src')
+                                                       },
                                                 success: function(data)
                                                 {
                                                     var IS_JSON = true;
@@ -949,7 +959,8 @@ $(function(){
                                                 type: "POST",
                                                 data: {
                                                         content:$('.compose-textbox').val(),
-                                                        channel_id:$(this).val()
+                                                        channel_id:$(this).val(),
+                                                        image:$('#compose-preview-img').attr('src') == undefined ? '' :  $('#compose-preview-img').attr('src')
                                                        },
                                                 success: function(data)
                                                     {

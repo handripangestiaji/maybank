@@ -762,6 +762,7 @@ $(function(){
                                 me.removeAttr("disabled").html("SHORTEN");
                                 tweetsText = me.closest('form').find(".replaycontent");
                                 tweetsText.val(tweetsText.val() + " http://maybank.co/" + response.shortcode);
+                                me.closest('reply-shorturl-show-content').val()=" http://maybank.co/" + response.shortcode;
                                // alert("http://maybank.co/" + response.shortcode)
                            },
                            failed : function(response){
@@ -1241,7 +1242,9 @@ $(function(){
                                     post_id: $(this).val(),
                                     channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
                                     comment :$(this).parent().siblings(".replaycontent").val(),
-                                    url :$(this).parent().siblings('.link_url').find(".reply-insert-link-text").val(),
+                                    url:'',
+                                    title :$(this).parent().siblings('#reply-url-show').find(".title_link").val(),
+                                    desc :$(this).parent().siblings('#reply-url-show').find(".descr-link").val(),
                                     img :$(this).parent().siblings('#reply-img-show').find("#replyInputImageFile").val(),
                                 },
                                 success: function(response)

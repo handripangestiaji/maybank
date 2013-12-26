@@ -192,7 +192,7 @@ for($i=0; $i<count($fb_feed);$i++):?>
             <?php if(!$fb_feed[$i]->case_id):?>
                 <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>
             <?php else:?>
-                <button type="button" class="btn btn-purple btn-case" name="action" value="Resolved"><i class="icon-check"></i> RESOLVE</button>
+                <button type="button" class="btn btn-purple  btn-resolve" name="action" value="<?=$fb_feed[$i]->case_id?>"><i class="icon-check"></i> RESOLVE</button>
             <?php endif?>
         </div>
         <br clear="all" />

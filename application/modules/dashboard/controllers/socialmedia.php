@@ -94,8 +94,8 @@ class Socialmedia extends MY_Controller {
 
             /* statuses/update */
             $parameters = array('status' => $content);
-            $result = $this->connection->post('statuses/update', $parameters);
-	       print_r($result);
+            $this->connection->post('statuses/update', $parameters);
+    
         }elseif($action=='destroy_status'){
     
             /* statuses/destroy */
@@ -154,15 +154,25 @@ class Socialmedia extends MY_Controller {
     }
 
     public function FbStatusUpdate(){
+      header("Content-Type: application/x-json");
 	  $this->load->model('account_model');
 	  $this->load->model('facebook_model');
+      
+      
+      if($this->input->post('img')){
+      $img= $this->input->post('img');
+      }else{
+        $img='';        
+      }
        
 	  $filter = array(
 	      "connection_type" => "facebook"
 	  );
+      
 	  if($this->input->post('channel_id')){
 	      $filter['channel_id'] = $this->input->post('channel_id');
 	  }
+      
 	  $channel_loaded = $this->account_model->GetChannel($filter);
 	  $newStd = new stdClass();
 	  $newStd->page_id =  $channel_loaded[0]->social_id;
@@ -175,8 +185,20 @@ class Socialmedia extends MY_Controller {
 	  );
 	  $this->load->library('facebook',$config);
 	  $this->facebook->setaccesstoken($newStd->token);
-	  $result = $this->facebook->api('/me/feed','POST',array('message'=>$this->input->post('content')));
-     }
+      
+      if($this->input->post('link')!=''){
+          $attachment = array(
+                'message' => $this->input->post('content'),
+                'name' => $this->input->post('title'),
+                'link' => $this->input->post('link'),
+                'description' => $this->input->post('desc'),
+                'picture'=> $img, //'http://www.maybank.com/iwov-resources/corporate/img/my/en/m/Banners-home-PW.jpg',//$this->input->post('img')
+          );  
+        $this->facebook->api('/'.$this->facebook->getUser().'/feed', 'POST',$attachment);
+      }else{
+        $this->facebook->api('/'.$this->facebook->getUser().'/feed','POST',array('message'=>$this->input->post('content')));
+	   }
+    }
     
     public function twitter_log($log_action,$post_id,$result_post_id){
 	  //print_r($log_action);

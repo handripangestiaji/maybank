@@ -25,36 +25,66 @@ class Users extends MY_Controller {
     {
      if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_View'))
      {
-	  $config['base_url'] = base_url().'users/index';
-	  $config['total_rows'] = $this->users_model->count_record();
-	  $config['per_page'] = 10;
-	  $config["uri_segment"] = 3;
+	  $cek = $this->session->userdata('search_value');
+	  $cek1 = $this->session->userdata('roleId');
+	  $config['page_query_string'] = TRUE;
 	  
-	  $config['next_link'] = 'Next';
-	  $config['prev_link'] = 'Prev';
-	  
-	  $config['first_link'] = 'First';
-	  $config['last_link'] = 'Last';
-     
-	  $config['cur_tag_open'] = '<b style="margin:0px 5px;">';
-	  $config['cur_tag_close'] = '</b>';
-	  
-	  $this->pagination->initialize($config);
-	  $search =$this->input->post('search_user');
-	  $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-
-	  if($this->input->get('role_collection_id') || $search!=NULL)
+	  if($this->input->get('role_collection_id'))
 	  {
-	       $data['show'] = $this->users_model->select_user1($config["per_page"], $page, $this->input->get('role_collection_id'),$search);
-	  }
-	  else{
-	       $data['show'] = $this->users_model->select_user1($config["per_page"], $page, null,$search);
-	  }
-	  $data['links'] = $this->pagination->create_links();
-	  $data['role'] = $this->users_model->select_role();
-	  $data['count'] = $this->users_model->count_record();
+	       $config['base_url'] = base_url('users/index').'?role_collection_id='.$this->input->get('role_collection_id');
+	       $this->session->unset_userdata('search_value');
+	       
+	       $config['total_rows'] = $this->users_model->count_record('role_id',$this->input->get('role_collection_id'));
+	       $config['per_page'] = 10;
+	       $config["uri_segment"] = 1;
+	       
+	       $config['next_link'] = 'Next';
+	       $config['prev_link'] = 'Prev';
+	       
+	       $config['first_link'] = 'First';
+	       $config['last_link'] = 'Last';
 	  
-	  $this->load->view('users/index',$data);
+	       $config['cur_tag_open'] = '<b style="margin:0px 5px;">';
+	       $config['cur_tag_close'] = '</b>';
+	       $this->pagination->initialize($config);
+	       $page = $this->input->get('per_page');
+	       $data['show'] = $this->users_model->select_user1($config["per_page"], $page, $this->input->get('role_collection_id'), null);
+	       $data['links'] = $this->pagination->create_links();
+	       $data['role'] = $this->users_model->select_role();
+	       $data['count'] = $this->users_model->count_record('role_id',$this->input->get('role_collection_id'));
+	       
+	       $this->load->view('users/index',$data);
+	  }
+	  else
+	  {
+	       $search = $this->session->userdata('search_value') ? $this->session->userdata('search_value') : $this->input->get('q') ;
+	       $config['base_url'] = base_url('users/index').'?q='.$search;
+	       $config['per_page'] = 10;
+	       $config["uri_segment"] = 3;
+	       
+	       $config['next_link'] = 'Next';
+	       $config['prev_link'] = 'Prev';
+	       
+	       $config['first_link'] = 'First';
+	       $config['last_link'] = 'Last';
+	  
+	       $config['cur_tag_open'] = '<b style="margin:0px 5px;">';
+	       $config['cur_tag_close'] = '</b>';
+	       
+	       
+	       
+	       
+	       $config['total_rows'] = $this->users_model->count_record('teks',$search);
+	       $this->pagination->initialize($config);
+	       $page =$this->input->get('per_page');
+	       $data['show'] = $this->users_model->select_user1($config["per_page"], $page, null,$search);
+
+	       $data['links'] = $this->pagination->create_links();
+	       $data['role'] = $this->users_model->select_role();
+	       $data['count'] = $this->users_model->count_record(null,null);
+	       
+	       $this->load->view('users/index',$data);
+	  }
      }
      else
      {
@@ -355,7 +385,7 @@ class Users extends MY_Controller {
 				      );
 			      $this->session->set_userdata($data1);
 			      
-			      //$this->session->set_flashdata('info', TRUE);
+			      $this->session->set_flashdata('info', TRUE);
 			      redirect('users');
 			  }
 		    }
@@ -392,7 +422,7 @@ class Users extends MY_Controller {
 				      );
 			      $this->session->set_userdata($data1);
 			      
-			      //$this->session->set_flashdata('info', TRUE);
+			      $this->session->set_flashdata('info', TRUE);
 			      redirect('users');
 		    }
 	       }
@@ -541,6 +571,7 @@ class Users extends MY_Controller {
 	  $data['count'] = $this->users_model->count_record_role();
 	  $data['msg_role'] = NULL;
 	  $data['role_check'] = NULL;
+	  $data['plus'] = $this->uri->segment(3);
 	  
 	  $roles = $this->users_model->select_appRole();
 	  $arr = array();
@@ -573,6 +604,7 @@ class Users extends MY_Controller {
     
     function insert_role()
     {
+	  $data['plus'] = $this->uri->segment(3);
 	  if(IsRoleFriendlyNameExist($this->user_role, 'User Management_Role_Create_Delete')){
 	  $select_role = $this->users_model->select_role();
 	  foreach($select_role->result() as $v1)
@@ -580,7 +612,6 @@ class Users extends MY_Controller {
 	       $select_user = $this->users_model->count_role_user($v1->role_collection_id);
 	       $count_role[] = $select_user->row()->count_role;
 	  }
-	  
 	  $name_role = $this->input->post('new_role');
 	  $check_role = $this->users_model->check_role($name_role);
 	  $cek = $this->input->post('role');
@@ -1122,6 +1153,7 @@ class Users extends MY_Controller {
 	  $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
 	  $data['group'] = $this->users_model->select_group1($config["per_page"], $page);
 	  $data['count_group'] = $count_group;
+	  $data['plus'] = $this->uri->segment(3);
      
 	  $data['links'] = $this->pagination->create_links();
 	  $data['count'] = $this->users_model->count_record_group();
@@ -1144,7 +1176,11 @@ class Users extends MY_Controller {
 	       $select_user = $this->users_model->count_group_user($v1->group_id);
 	       $count_group[] = $select_user->row()->count_group; 
 	  }
-	  
+	  $data['plus'] = $this->uri->segment(3);
+	  if ($this->input->post('channel')==NULL)
+	  {
+	      $this->form_validation->set_rules('channel', 'Channel', 'required');
+	  }
 	  $this->form_validation->set_rules('group_name', 'Group Name', 'required');
 	  
 	  $group = $this->input->post('group_name');

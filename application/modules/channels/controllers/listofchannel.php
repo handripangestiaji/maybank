@@ -2,11 +2,18 @@
 
 class listofchannel extends CI_Controller {
 
+    public $user_role;
+
     function __construct()
     {
         parent::__construct();
         $this->load->model('facebook_model');
         $this->load->model('account_model');
+        
+        $this->load->model('users_model');
+        
+        $this->user_role = $this->users_model->get_collection_detail(
+		array('role_collection_id'=>$this->session->userdata('role_id')));
     }
     
     function Facebook(){

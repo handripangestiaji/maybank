@@ -162,14 +162,14 @@
                 image = that.findImageInDom($dom);
 
             // build dom elements
-            var $text_input = '<input type="text" placeholder="" value="' + title + '"/>',
+            var $text_input = '<input class="title_link" type="text" placeholder="" value="' + title + '"/>',
                 $url = '<p>' + url.replace(BASEURL + 'dashboard/media_stream/GetUrlPreview?url=','') + '</p>',
-                $textarea = '<textarea>' + description + '</textarea>';
+                $textarea = '<textarea class="descr-link">' + description + '</textarea>';
                 
             var $spanLeft = $("<div></div>").addClass("img-url"),
                 $spanRight = $("<div></div>").addClass("content-url");
             if (image) {
-                var $image = $("<img></img>").attr("src", image);
+                var $image = $("<img class='img-link'></img>").attr("src", image);
                 $spanLeft
                     .append($image);
                 that.$previewContainer
@@ -240,11 +240,11 @@
             var $img;
             $images.each(function() {
                 $img = $(this);
-                if ($img.attr("height") && $img.attr("height") > 40 &&
-                    $img.attr("width") && $img.attr("width") > 40) {
-                    result = this.src;
-                    return false;
-                }
+                //if ($img.attr("height") && $img.attr("height") > 40 &&
+//                    $img.attr("width") && $img.attr("width") > 40) {
+                   result = $img.src;
+                    //return false;
+                //}
             });
 
             return result;

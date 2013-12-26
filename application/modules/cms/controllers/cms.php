@@ -108,6 +108,7 @@ class Cms extends MY_Controller {
         
         if ($this->input->server('REQUEST_METHOD') === "POST")
         {
+          if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Campaign_Create')){
 	        $campaigns = array();
 	        
 	        $campaigns = $this->input->post('campaign');
@@ -134,10 +135,16 @@ class Cms extends MY_Controller {
 	        }
 	        
 	        redirect('cms/create_campaign');
+          }
+          else
+          {
+            redirect('cms');
+          }
         }
         
         if($action == 'delete')
         {
+          If(IsRoleFriendlyNameExist($this->user_role,'Content Management_Campaign_Delete')){
 	        $id = $this->input->get('id');
 	        
 	        if ($id)
@@ -146,6 +153,11 @@ class Cms extends MY_Controller {
 	        }
 	        
 	        redirect('cms/create_campaign');
+          }
+          else
+          {
+               redirect('cms');
+          }
         }
         
         $this->load->view('cms/index',$data);
@@ -331,50 +343,57 @@ class Cms extends MY_Controller {
     
 		if ($this->input->server('REQUEST_METHOD') === 'POST')
 		{
-			$params = array();
-			$params = $this->input->post('shorturl');
-			$params['user_id'] = $this->session->userdata('user_id');
-			
-			$config = array(
-						array(
-							'field' => 'shorturl[long_url]',
-							'label' => 'Full Url',
-							'rules' => 'required'
-						),
-						array(
-							'field' => 'shorturl[short_code]',
-							'label' => 'Full Url',
-							'rules' => 'required|max_length[6]'
-						)
-					);
-			
-			$this->form_validation->set_rules($config);
-			
-			if($this->form_validation->run() == TRUE)
-			{
-				$code = $this->shorturl->urlToShortCode($params);
-				
-				if(isset($code['message']))
-				{
-			        $this->session->set_userdata('message', $code['message']);
-				}
-				else
-				{
-					$this->session->unset_userdata('message');
-				}
-				
-				$setparam = array(
-								"campaign_id" => $params['campaign_id'], 
-								"url_id" => $code['url_id'],
-								"user_id" => $params['user_id']
-							);
-			 
-				$id_campaign_url = $this->campaign_url_model->insert($setparam);
-			}
-			redirect('cms/create_short_url');			
+                    if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Short_URL_Create')){
+                              $params = array();
+                              $params = $this->input->post('shorturl');
+                              $params['user_id'] = $this->session->userdata('user_id');
+                              
+                              $config = array(
+                                                      array(
+                                                              'field' => 'shorturl[long_url]',
+                                                              'label' => 'Full Url',
+                                                              'rules' => 'required'
+                                                      ),
+                                                      array(
+                                                              'field' => 'shorturl[short_code]',
+                                                              'label' => 'Full Url',
+                                                              'rules' => 'required|max_length[6]'
+                                                      )
+                                              );
+                              
+                              $this->form_validation->set_rules($config);
+                              
+                              if($this->form_validation->run() == TRUE)
+                              {
+                                      $code = $this->shorturl->urlToShortCode($params);
+                                      
+                                      if(isset($code['message']))
+                                      {
+                                      $this->session->set_userdata('message', $code['message']);
+                                      }
+                                      else
+                                      {
+                                              $this->session->unset_userdata('message');
+                                      }
+                                      
+                                      $setparam = array(
+                                                                      "campaign_id" => $params['campaign_id'], 
+                                                                      "url_id" => $code['url_id'],
+                                                                      "user_id" => $params['user_id']
+                                                              );
+                               
+                                      $id_campaign_url = $this->campaign_url_model->insert($setparam);
+                              }
+                              redirect('cms/create_short_url');
+                         }
+                         else
+                         {
+                              redirect('cms');
+                         }
 		}
 		else if ($action == "delete")
 		{
+                    if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Short_URL_Delete')){
 			$id = $this->input->get("id");
 			
 			$this->campaign_url_model->delete($id);
@@ -382,7 +401,12 @@ class Cms extends MY_Controller {
 			$this->session->unset_userdata('message');
 			
 			redirect('cms/create_short_url');
-		}
+                    }
+                    else
+                    {
+                         redirect('cms');
+                    }
+                }
 		else {
 			$this->session->unset_userdata('message');
 		}

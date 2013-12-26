@@ -523,7 +523,10 @@ class Media_stream extends CI_Controller {
         $this->load->model('facebook_model');
         $comment = $this->input->post('comment');
         $post_id = $this->input->post('post_id');
+        $title = $this->input->post('title');
         $url = $this->input->post('url');
+        $descr = $this->input->post('desc');
+        $img = $this->input->post('img');
              
         $filter = array(
             "connection_type" => "facebook"
@@ -555,7 +558,19 @@ class Media_stream extends CI_Controller {
 	    );
     	$this->load->library('facebook',$config);
     	$this->facebook->setaccesstoken($newStd->token);
-    	$return=$this->facebook->api('/'.$post_id.'/comments','post',array('message' => $comment));
+        $attachment = array(
+            'message' => $comment,
+            'name' => $title,
+            'link' => $url,
+            'description' => $descr,
+            'picture'=> $img,
+        );  
+        
+        if($title != ''){
+            $return=$this->facebook->api('/'.$this->facebook->getUser().'/feed', 'POST', $attachment);
+        }else{
+            $return=$this->facebook->api('/'.$post_id.'/comments', 'POST', array('message'=>$comment,'attachment'=>$attachment));
+        }
         
         $case=$this->account_model->isCaseIdExists($post_id);
             if(count($case)>0){
@@ -571,7 +586,7 @@ class Media_stream extends CI_Controller {
         		"action_type" => "reply_facebook",
         		"channel_id" =>$channel,
         		"created_at" => date("Y-m-d H:i:s"),
-        		"stream_id" => $this->input->post('post_id'),
+        		//"stream_id" => $this->input->post('post_id'),
         		"created_by" => $this->session->userdata('user_id'),
         		"stream_id_response" => $return
     	    );
@@ -591,7 +606,7 @@ class Media_stream extends CI_Controller {
         		"action_type" => "reply_facebook",
         		"channel_id" => $channel_loaded[0]->channel_id,
         		"created_at" => date("Y-m-d H:i:s"),
-        		"stream_id" => $this->input->post('post_id'),
+        		//"stream_id" => $this->input->post('post_id'),
         		"created_by" => $this->session->userdata('user_id'),
         		"stream_id_response" => $return['id']
         	);
@@ -608,7 +623,7 @@ class Media_stream extends CI_Controller {
                 "post_at" => $post_at,
                 "created_at" => date("Y-m-d H:i:s")
             );
-            $this->account_model->CreateFbCommentAction($action, $this->input->post('like') === 'true' ? 1 : 0);
+            $this->account_model->CreateFbCommentAction($action,$return['id'],$this->input->post('like') === 'true' ? 1 : 0);
             echo json_encode(
     		    array(
                 'success' => true,
@@ -765,9 +780,7 @@ class Media_stream extends CI_Controller {
 
     //=========================================END GENERAL function=============================================    
     
-      
-  
-     public function GetUrlPreview(){
+    public function GetUrlPreview(){
 	if (!isset($_GET['url'])) die();
 	$url = urldecode($_GET['url']);
 	$url = 'http://' . str_replace('http://', '', $url); // Avoid accessing the file system

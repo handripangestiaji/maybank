@@ -415,7 +415,7 @@ class facebook_model extends CI_Model
         $this->db->select('*, c.type as social_stream_type, b.post_id as social_stream_post_id,b.post_id');
         $this->db->from("fb_user_engaged a INNER JOIN social_stream_fb_post b  
 			 ON b.author_id = a.facebook_id inner join social_stream c on c.post_id = b.post_id LEFT JOIN
-                         `case` d on d.post_id = c.post_id ");
+                         `case` d on d.post_id = c.post_id and d.status='pending'");
         $this->db->limit($limit);
         $this->db->order_by('c.created_at','desc');
         if(count($filter) >= 1)
@@ -438,10 +438,9 @@ class facebook_model extends CI_Model
         $this->db->select('*, c.type as social_stream_type, a.post_id as social_stream_post_id');
         $this->db->from("fb_user_engaged a INNER JOIN social_stream_fb_post b ON b.author_id=a.facebook_id
 			inner join social_stream c on c.post_id = b.post_id LEFT JOIN
-                        `case` d on d.post_id = c.post_id ");
+                        `case` d on d.post_id = c.post_id AND d.status='pending'");
         if(count($filter) > 0)
 	    $this->db->where($filter);
-	$this->db->where('d.status', 'pending');
         $this->db->limit(20);
         $this->db->order_by('c.created_at','desc');
         return $this->db->get()->result();

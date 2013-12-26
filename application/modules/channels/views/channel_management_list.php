@@ -1,4 +1,6 @@
-
+<?php for($y=0;$y<count($this->user_role);$y++){
+        if($this->user_role[$y]->role_friendly_name=='Social Channel Management_Add'){    
+?>
 <div style="float: left;">
     <h5><?=$title?> Channel List</h5>
 </div>
@@ -71,3 +73,4 @@
     <a href="#">Last</a>
 </div>
 <?php endif;?>
+<?php }}?>

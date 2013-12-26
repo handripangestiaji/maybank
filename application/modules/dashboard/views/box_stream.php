@@ -1,5 +1,5 @@
 <?php
-    $span = 12/count($group);
+    $span = 12/2;
 ?>
 <!-- ==================== MIDDLE COL ==================== -->
 <div class="span<?php echo $span ?>">

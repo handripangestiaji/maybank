@@ -17,9 +17,13 @@ class post_model extends CI_Model
         $post_id = $this->db->insert_id();
         
         for($i=0;$i<count($channels);$i++){
-            $post_to = array('channel_id' => $channels[$i],
+	    $post_to = array('channel_id' => $channels[$i],
                              'post_id' => $post_id);
-            $this->db->insert('post_to',$post_to);
+            if($scheduleTime == NULL){
+		$post_to['is_posted'] = 1;
+		$post_to['post_created_at'] = date('Y-m-d H:i:s');
+	    }
+	    $this->db->insert('post_to',$post_to);
         }
 	
 	if($tags != ''){
@@ -79,6 +83,14 @@ class post_model extends CI_Model
 	$this->db->join('post_to','post.id = post_to.post_id');
 	$this->db->join('channel','channel.channel_id = post_to.channel_id');
 	$this->db->join('user','post.created_by = user.user_id');
+	if($filter != null){
+	    $this->db->where($filter);
+	}
 	return $this->db->get()->result();
+    }
+    
+    public function UpdatePostTo($id,$value){
+	$this->db->where('post_to_id',$id);
+    	$this->db->update('post_to',$value);
     }
 }

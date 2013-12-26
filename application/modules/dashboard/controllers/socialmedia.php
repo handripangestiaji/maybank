@@ -94,8 +94,8 @@ class Socialmedia extends MY_Controller {
 
             /* statuses/update */
             $parameters = array('status' => $content);
-            $this->connection->post('statuses/update', $parameters);
-    
+            $result = $this->connection->post('statuses/update', $parameters);
+	       print_r($result);
         }elseif($action=='destroy_status'){
     
             /* statuses/destroy */
@@ -175,12 +175,11 @@ class Socialmedia extends MY_Controller {
 	  );
 	  $this->load->library('facebook',$config);
 	  $this->facebook->setaccesstoken($newStd->token);
-	  $this->facebook->api('/me/feed','POST',array('message'=>$this->input->post('content')));
-	
-    }
+	  $result = $this->facebook->api('/me/feed','POST',array('message'=>$this->input->post('content')));
+     }
     
     public function twitter_log($log_action,$post_id,$result_post_id){
-//    print_r($log_action);
+	  //print_r($log_action);
         $timezone = new DateTimeZone("Asia/Kuala_Lumpur");
         $currentTime = new DateTime(date('Y-m-d H:i:s e'), $timezone);
         
@@ -192,5 +191,4 @@ class Socialmedia extends MY_Controller {
         $db_log=$this->action_model->actionLog($log_action,$post_ids[0]->channel_id,$currentTime->format("Y-m-d H:i:s"),$post_ids[0]->post_stream_id,$result_post_id,$post_ids[0]->post_id,$this->session->userdata['user_id']);
         
     }
-    
 }

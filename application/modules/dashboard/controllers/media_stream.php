@@ -515,7 +515,6 @@ class Media_stream extends CI_Controller {
 	else{
 	    echo false;
 	}
-	
     }
     
     public function FbReplyPost(){
@@ -633,13 +632,18 @@ class Media_stream extends CI_Controller {
     public function SocmedPost(){
 	$this->load->model('post_model');
 	
-	/* schedule date convert */
-	$schedules = explode(' ',$this->input->post('schedule'));
-	$the_dates = explode('/',$schedules[0]);
-	$the_hours = date("H:i", strtotime($schedules[1].' '.$schedules[2]));
-	$compose_date = $the_dates[2].'-'.$the_dates[0].'-'.$the_dates[1];
-	$compose_hour = $the_hours.':00';
-	$compose_date_hour = $compose_date.' '.$compose_hour;
+	if($this->input->post('schedule') != ''){
+	    /* schedule date convert */
+	    $schedules = explode(' ',$this->input->post('schedule'));
+	    $the_dates = explode('/',$schedules[0]);
+	    $the_hours = date("H:i", strtotime($schedules[1].' '.$schedules[2]));
+	    $compose_date = $the_dates[2].'-'.$the_dates[0].'-'.$the_dates[1];
+	    $compose_hour = $the_hours.':00';
+	    $compose_date_hour = $compose_date.' '.$compose_hour;
+	}
+	else{
+	    $compose_date_hour = null;
+	}
 	
 	$this->post_model->InsertPost($this->input->post('content'),$this->input->post('channels'),$this->input->post('tags'),$compose_date_hour);
     }
@@ -878,7 +882,8 @@ class Media_stream extends CI_Controller {
 		
 		$encodeme[] = array('id' => $post->id,
 				'title' => $post->name,
-				'start' => $post_date,
+				'start' => date('c',strtotime($post->time_to_post)),
+				'end' => date('c',strtotime($post->time_to_post)),
 				'description' => $post->messages,
 				'user_name' => $post->display_name,
 				'post_date' => $new_short_date,

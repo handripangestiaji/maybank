@@ -8,6 +8,9 @@ class Cronjob extends CI_Controller {
         $this->load->model('facebook_model');
         $this->load->model('account_model');
         $this->load->model('twitter_model');
+        $this->load->config('mail_config');
+	$config = $this->config->item('mail_provider');
+	$this->load->library('email',$config);
     }
     
     function index(){
@@ -152,7 +155,167 @@ class Cronjob extends CI_Controller {
         }
     }
     
+    function SendScheduledPost(){
+        $this->load->model('post_model');
+        
+        $time_now = date('Y-m-d H:i:s');
+        $time_few_min_ago = date('Y-m-d H:i:s',strtotime('-10 min'));
+        
+        $where = "time_to_post Between '".$time_few_min_ago."' AND '".$time_now."' AND is_posted is NULL";
+        $posts = $this->post_model->GetPosts($where);
+        foreach($posts as $post){
+            //handle if facebook
+            if($post->connection_type == 'facebook'){
+                $post_to = json_decode($this->FbStatusUpdate($post));
+            }
+            //handle if twitter
+            elseif($post->connection_type == 'twitter'){
+                $post_to = json_decode($this->TwitterStatusUpdate($post));
+            }
+            
+            //write to database is_posted = true;
+            $value = array('post_created_at' => date('Y-m-d H:i:s'),
+                            'is_posted' => 1);
+            $this->post_model->UpdatePostTo($post->post_to_id,$value);
+            
+            //send email
+            $this->email->set_newline("\r\n");
+            $this->email->from('tes@gmail.com','maybank');
+            $this->email->to('benawv@gmail.com');    
+            $this->email->subject('Message Posted');
+            $template = curl_get_file_contents(base_url().'mail_template/PostSent/'.$post->post_to_id);
+            $this->email->message($template);
+            $this->email->send();
+        }	    
+    }
     
+    public function FbStatusUpdate($post = NULL){
+        if($post == NULL){
+            $messages = $this->input->post('content');
+            $channel_id = $this->input->post('channel_id');
+            $title = $this->input->post('title');
+            $link = $this->input->post('link');
+            $description = $this->input->post('description');
+            $image_to_post = $this->input->post('image');
+        }
+        else{
+            $messages = $post->messages;
+            $channel_id = $post->channel_id;
+        }
+        
+        $this->load->model('account_model');
+        $this->load->model('facebook_model');
+     
+        $filter = array(
+            "connection_type" => "facebook"
+        );
+        $filter['channel_id'] = $channel_id;
+        $channel_loaded = $this->account_model->GetChannel($filter);
+        $newStd = new stdClass();
+        $newStd->page_id =  $channel_loaded[0]->social_id;
+        $newStd->token = $this->facebook_model->GetPageAccessToken( $channel_loaded[0]->oauth_token, $channel_loaded[0]->social_id);
+      
+        $access_token_fb = fb_dummy_accesstoken();
+        $config = array(
+             'appId' => $this->config->item('fb_appid'),
+             'secret' => $this->config->item('fb_secretkey'),
+        );
+        $this->load->library('facebook',$config);
+        $this->facebook->setaccesstoken($newStd->token);
+        
+        if($image_to_post != ''){
+            $this->load->helper('file');
+            $img = $image_to_post;
+            $img = str_replace('data:image/png;base64,', '', $img);
+            $img = str_replace('data:image/jpeg;base64,', '', $img);
+            $img = str_replace(' ', '+', $img);
+            $data = base64_decode($img);
+            $file_name = uniqid().'.png';
+            $pathToSave = $this->config->item('assets_folder').$file_name;
+            if (write_file($pathToSave, $data)){    
+                $this->facebook->setFileUploadSupport(true);
+                $args = array('message' => $messages);
+                $args['image'] = '@' . realpath($pathToSave);
+                $result = $this->facebook->api('/me/photos', 'post', $args);
+            }
+            else{
+                $result = $this->facebook->api('/me/feed','POST',array('message'=>$messages));
+            }
+        }
+        
+        if($link != '')
+        {
+            $attachment = array(
+                'message' => $messages,
+                'name' => $title,
+                'link' => $link,
+                'description' => $description,
+            );  
+            $result = $this->facebook->api('/me/feed','POST',$attachment);
+        }
+        
+        if(($link == '') && ($image_to_post == '')){
+            $result = $this->facebook->api('/me/feed','POST',array('message' => $messages));    
+        }
+        
+        echo json_encode($result);
+    }
     
-    
+    public function TwitterStatusUpdate($post = NULL){
+        if($post == NULL){
+            $messages = $this->input->post('content');
+            $channel_id = $this->input->post('channel_id');
+            $image_to_post = $this->input->post('image');
+        }
+        else{
+            $messages = $post->messages;
+            $channel_id = $post->channel_id;
+        }
+        
+        $this->load->helper('basic');
+        $this->load->library('Twitteroauth');
+        $this->config->load('twitter');
+        
+        $filter['channel_id'] = $channel_id;
+        $channel_loaded = $this->account_model->GetChannel($filter);
+        $newStd = new stdClass();
+        $newStd->page_id =  $channel_loaded[0]->social_id;
+        
+        $this->connection = $this->twitteroauth->create($this->config->item('twitter_consumer_token'),
+                                                        $this->config->item('twitter_consumer_secret'),
+                                                        $channel_loaded[0]->oauth_token,
+                                                        $channel_loaded[0]->oauth_secret);
+        
+        $parameters = array('status' => $messages);
+        
+        if($image_to_post != ''){
+            $this->load->helper('file');
+            $img = $image_to_post;
+            $img = str_replace('data:image/png;base64,', '', $img);
+            $img = str_replace('data:image/jpeg;base64,', '', $img);
+            $img = str_replace(' ', '+', $img);
+            $data = base64_decode($img);
+            $file_name = uniqid().'.png';
+            $pathToSave = $this->config->item('assets_folder').$file_name;
+            $image_to_post = $pathToSave;
+            if ( ! write_file($pathToSave, $data)){
+                $validation = array('result' => FALSE,'name' => 'image '.$pathToSave,'error_code' => 112);
+                $result=$this->connection->post('statuses/update', $parameters);
+            }
+            else{
+                require_once './application/libraries/codebird.php';
+                $this->load->config('twitter');
+                Codebird::setConsumerKey($this->config->item('twitter_consumer_token'), $this->config->item('twitter_consumer_secret'));
+                $cb = Codebird::getInstance();
+                $cb->setToken($channel_loaded[0]->oauth_token, $channel_loaded[0]->oauth_secret);
+                $parameters['media[]'] = $pathToSave;
+                $result = $cb->statuses_updateWithMedia($parameters);
+                $result->params = $parameters;
+            }
+        }
+        else{
+            $result = $this->connection->post('statuses/update', $parameters);        
+        }
+        echo json_encode($result);
+    }
 }

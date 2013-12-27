@@ -66,6 +66,8 @@ $config['timezone']='Asia/Jakarta';
 
 $config['url_suffix'] = '';
 $config['assets_folder'] = './media/dynamic/';
+$config['youtube_api_key'] = 'AIzaSyDWnKLFbmNAzHErkXRZ_wvyFl4Pf8hqK-Y';
+
 /*
 |--------------------------------------------------------------------------
 | Default Language

@@ -146,7 +146,6 @@ class twitter_model extends CI_Model
             $post_id = $this->db->insert_id();
             $tweet_to_save['post_id'] = $post_id;
             $this->db->insert("social_stream_twitter", $tweet_to_save);
-            $this->CreateTwitterReplyNotification($tweet_to_save);
         }
         else{
             $this->db->where("post_id", $post_id->post_id);

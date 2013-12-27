@@ -571,6 +571,7 @@ class Users extends MY_Controller {
 	  $data['count'] = $this->users_model->count_record_role();
 	  $data['msg_role'] = NULL;
 	  $data['role_check'] = NULL;
+	  $data['plus'] = $this->uri->segment(3);
 	  
 	  $roles = $this->users_model->select_appRole();
 	  $arr = array();
@@ -603,6 +604,7 @@ class Users extends MY_Controller {
     
     function insert_role()
     {
+	  $data['plus'] = $this->uri->segment(3);
 	  if(IsRoleFriendlyNameExist($this->user_role, 'User Management_Role_Create_Delete')){
 	  $select_role = $this->users_model->select_role();
 	  foreach($select_role->result() as $v1)
@@ -610,7 +612,6 @@ class Users extends MY_Controller {
 	       $select_user = $this->users_model->count_role_user($v1->role_collection_id);
 	       $count_role[] = $select_user->row()->count_role;
 	  }
-	  
 	  $name_role = $this->input->post('new_role');
 	  $check_role = $this->users_model->check_role($name_role);
 	  $cek = $this->input->post('role');
@@ -1152,6 +1153,7 @@ class Users extends MY_Controller {
 	  $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
 	  $data['group'] = $this->users_model->select_group1($config["per_page"], $page);
 	  $data['count_group'] = $count_group;
+	  $data['plus'] = $this->uri->segment(3);
      
 	  $data['links'] = $this->pagination->create_links();
 	  $data['count'] = $this->users_model->count_record_group();
@@ -1174,7 +1176,11 @@ class Users extends MY_Controller {
 	       $select_user = $this->users_model->count_group_user($v1->group_id);
 	       $count_group[] = $select_user->row()->count_group; 
 	  }
-	  
+	  $data['plus'] = $this->uri->segment(3);
+	  if ($this->input->post('channel')==NULL)
+	  {
+	      $this->form_validation->set_rules('channel', 'Channel', 'required');
+	  }
 	  $this->form_validation->set_rules('group_name', 'Group Name', 'required');
 	  
 	  $group = $this->input->post('group_name');

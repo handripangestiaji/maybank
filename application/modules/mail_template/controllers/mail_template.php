@@ -36,6 +36,20 @@ class mail_template extends CI_Controller{
                       );
         $this->load->view('mail_template/User/forgot_user',$data);
     }
+    
+    public function PostSent($post_to_id){
+        $this->load->model('post_model'); 
+        $where = "post_to_id = '".$post_to_id."'";
+        $post = $this->post_model->GetPosts($where);
+        $data['post'] = array(
+                        'messages' => $post[0]->messages,
+                        'socmeds' => $post[0]->connection_type,
+                        'posted_at' => $post[0]->post_created_at,
+                        'result' => 'Success',
+                        'error_message' => '-'
+                        );
+        $this->load->view('mail_template/Post/post_sent.php',$data);
+    }
 }
 
 ?>

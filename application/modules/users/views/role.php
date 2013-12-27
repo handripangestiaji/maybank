@@ -130,7 +130,7 @@
                     <?php $i=0; foreach($show as $row){ ?>
                     <tr>
                         <td><?php echo $row->role_name;?></td>
-                        <td><?php echo $count_role[$i];?></td>
+                        <td><?php echo $count_role[$i+$plus];?></td>
                         <td><?php echo $row->display_name;?></td>
                         <?php for($x=0;$x<count($this->user_role);$x++){
                                 if($this->user_role[$x]->role_friendly_name=='User Management_Role_Edit'){
@@ -146,12 +146,12 @@
                     <?php $i++;}?>
                 </tbody>
             </table>
-            <!--<?php //if($count>10){?>
+            <?php if($count>10){?>
             <div class="page pull-right" style="margin-top: 30px; margin-left:10px; margin-right:10px;">
-               <?php //echo $links; ?>
+               <?php echo $links; ?>
             </div>
-            <?php //}?>
-            --></div>
+            <?php }?>
+            </div>
            
     </div>
     </div>

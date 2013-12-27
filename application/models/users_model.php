@@ -169,7 +169,7 @@ class Users_model extends CI_Model
     }
     function select_role1($limit, $start)
     {
-        //$this->db->limit($limit, $start);
+        $this->db->limit($limit, $start);
         $this->db->select('*');
         $this->db->join('user','user.user_id=role_collection.created_by','left');
         $query = $this->db->get($this->role);
@@ -264,7 +264,7 @@ class Users_model extends CI_Model
     function select_group1($limit, $start)
     {
         $this->db->select('*');
-        //$this->db->limit($limit, $start);
+        $this->db->limit($limit, $start);
         $this->db->select('user_group.*,user.full_name as name');
         $this->db->join('user','user_group.created_by=user.user_id','left');
         $query = $this->db->get($this->group);

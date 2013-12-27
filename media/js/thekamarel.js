@@ -734,15 +734,18 @@ $(function(){
                     
                     $(this).on('click','.reply-insert-link-btn', function(e){
                         var me = $(this);
-                        e.preventDefault();
+                        var isComment=me.closest('form').html();
+                                                e.preventDefault();
                         me.attr("disabled", "disabled").html("SHORTENING...");
                         me.siblings(".reply-insert-link-text").linkpreview({
                             previewContainer: me.closest('.pull-left').siblings('#reply-url-show').find('div.reply-url-show-content'),  //optional
                             //previewContainerClass: ".compose-schedule",
                             refreshButton: ".reply-insert-link-btn",        //optional
                             preProcess: function() {                //optional
-                                me.closest('.pull-left').siblings("#reply-url-show").show();
-                                me.closest('.pull-left').siblings("#reply-url-show").find('div.reply-url-show-content').html('Loading...');
+                                if(isComment==''){
+                                    me.closest('.pull-left').siblings("#reply-url-show").show();
+                                    me.closest('.pull-left').siblings("#reply-url-show").find('div.reply-url-show-content').html('Loading...');
+                                }
                             },
                             onSuccess: function(data) {                  //optional
                             },
@@ -1181,7 +1184,7 @@ $(function(){
                                     url:'',
                                     title :$(this).parent().siblings('#reply-url-show').find(".title_link").val(),
                                     desc :$(this).parent().siblings('#reply-url-show').find(".descr-link").val(),
-                                    img :$(this).parent().siblings('#reply-img-show').find("#replyInputImageFile").val(),
+                                    img :$(this).parent().siblings('#reply-img-show').find("#reply-preview-img").attr('src'),
                                 },
                                 success: function(response)
                                 {

@@ -709,6 +709,7 @@ $(function(){
                                     if(new_data.is_success != false){
                                         $('.compose-textbox').val($('.compose-textbox').val()+ 'http://maybk.co/' + new_data.short_code);            
                                         ComposeCharCheck();
+                                        $('.compose-insert-link-short-url-hidden').val(new_data.short_code);
                                         $(".compose-insert-link-text").linkpreview({
                                             previewContainer: "#url-show > .compose-form > div",  //optional
                                             //previewContainerClass: ".compose-schedule",
@@ -896,7 +897,7 @@ $(function(){
                                                         content:$('.compose-textbox').val(),
                                                         channel_id:$(this).val(),
                                                         title:$('#url-show').find('input').val(),
-                                                        link:$('#url-show').find('p').html(),
+                                                        short_url:$('.compose-insert-link-short-url-hidden').val(),
                                                         description:$('#url-show').find('textarea').val(),
                                                         image:$('#compose-preview-img').attr('src') == undefined ? '' :  $('#compose-preview-img').attr('src')
                                                        },
@@ -1038,8 +1039,13 @@ $(function(){
                                             channels:channels,
                                             content:$('.compose-textbox').val(),
                                             tags:$("#compose-tags").tagit("assignedTags"),
-                                            schedule:scheduleTime
-                                            },
+                                            schedule:scheduleTime,
+                                            title:$('#url-show').find('input').val(),
+                                            short_url:$('.compose-insert-link-short-url-hidden').val(),
+                                            description:$('#url-show').find('textarea').val(),
+                                            image:$('#compose-preview-img').attr('src') == undefined ? '' :  $('#compose-preview-img').attr('src'),
+                                            email_me:$('#email_me').val()
+                                           },
                                     success: function(){
                                        
                                     }

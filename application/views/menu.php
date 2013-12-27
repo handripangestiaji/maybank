@@ -52,10 +52,11 @@
         <!--li class="dropdown <?php echo $active[6]; ?>">
             <a href="#" id="interface"><i class="icon-bar-chart"></i> REPORTS</a>
         </li>
+	-->
 	<li class="divider-vertical"></li>
         <li class="dropdown <?php echo $active[7]; ?>">
-            <a href="#" id="interface"><i class="icon-calendar"></i> PUBLISHER</a>
-        </li-->
+            <a href="<?php echo base_url() ?>publisher" id="interface"><i class="icon-calendar"></i> PUBLISHER</a>
+        </li>
 	<li class="divider-vertical"></li>
         <li class="dropdown <?php echo $active[2]; ?>">
             <a href="<?php echo base_url('channels/channelmg')?>" id="interface"><i class="icon-building"></i> CHANNEL MANAGEMENT</a>

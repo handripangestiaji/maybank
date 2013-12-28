@@ -698,18 +698,16 @@ $(function(){
 
                     $(".compose-insert-link-btn").click(function(){
                         $.ajax({
-                                url : BASEURL + 'dashboard/media_stream/GenerateShortUrl',
+                                url : BASEURL + 'dashboard/media_stream/GenerateShortUrlWithoutCampaign',
                                 type: "POST",
                                 data: {
-                                        long_url:$('.compose-insert-link-text').val(),
-                                        campaign_id:$('.compose-select-campaign').val()
+                                        url:$('.compose-insert-link-text').val(),
                                         },
                                 success: function(data){
-                                    var new_data = JSON.parse(data);
-                                    if(new_data.is_success != false){
-                                        $('.compose-textbox').val($('.compose-textbox').val()+ 'http://maybk.co/' + new_data.short_code);            
+                                    if(data.shortcode){
+                                        $('.compose-textbox').val($('.compose-textbox').val()+ 'http://maybk.co/' + data.shortcode);  
                                         ComposeCharCheck();
-                                        $('.compose-insert-link-short-url-hidden').val(new_data.short_code);
+                                        $('.compose-insert-link-short-url-hidden').val(data.shortcode);
                                         $(".compose-insert-link-text").linkpreview({
                                             previewContainer: "#url-show > .compose-form > div",  //optional
                                             //previewContainerClass: ".compose-schedule",
@@ -1072,7 +1070,6 @@ $(function(){
                     });
                     
                     $('.select-shorten-url').on('change', function(){
-                        /*
                         $(".select-shorten-url option:selected").linkpreview({
                             url: BASEURL + 'dashboard/media_stream/GetUrlPreview?url=' + $(".select-shorten-url option:selected").val(),
                             previewContainer: "#url-show > .compose-form > div",  //optional
@@ -1089,8 +1086,10 @@ $(function(){
                             onComplete: function() {                 //optional
                             }
                        });
-                       */
+                        var str = $('.select-shorten-url option:selected').val();
+                        var res = str.replace('http://maybk.co/','');
                         $('.compose-textbox').val($('.compose-textbox').val() + $(".select-shorten-url option:selected").val());
+                        $('.compose-insert-link-short-url-hidden').val(res);
                         ComposeCharCheck();
                     });
                     

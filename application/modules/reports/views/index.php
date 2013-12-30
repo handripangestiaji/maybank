@@ -31,6 +31,9 @@
                     Filter via
                     <select>
                         <option>select channel</option>
+                        <?php foreach($channel->result() as $c){?>
+                            <option value='<?php echo $c->channel_id;?>'><?php echo $c->name;?></option>
+                        <?php }?>
                     </select>
                 </div>
                 <div style="float: left;margin-left: 75px;">
@@ -65,6 +68,62 @@
                     <li id="gaugeDemo3"></li>
                     <li style='float: left; margin-left: 18%;'><span style='font-weight: bold;'>COMPLAINT</span></li>
                 </ul>
+            </div>
+            <div style='clear: both;'></div>
+                    <?php
+                        function time_hour($secs){
+                            if($secs!=NULL){
+                            $bit = array(
+                                ' year'        => $secs / 31556926 % 12,
+                                ' week'        => $secs / 604800 % 52,
+                                ' day'        => $secs / 86400 % 7,
+                                ' hour'        => $secs / 3600 % 24,
+                                ' minute'    => $secs / 60 % 60,
+                                ' second'    => $secs % 60
+                                );
+                                
+                            foreach($bit as $k => $v){
+                                if($v > 1)$ret[] = $v . $k . 's';
+                                if($v == 1)$ret[] = $v . $k;
+                                }
+                            array_splice($ret, count($ret)-1, 0);
+                            
+                            return join(' ', $ret);
+                            }
+                        }
+                    ?>
+            <div>
+                <table style='float: left;' border='1' cellpadding='4'>
+                    <tr>
+                        <th>Products</th>
+                        <th>Total</th>
+                        <th>Resolved</th>
+                        <th>Avg Respond</th>
+                        <th>Total</th>
+                        <th>Resolved</th>
+                        <th>Avg Respond</th>
+                        <th>Total</th>
+                        <th>Resolved</th>
+                        <th>Avg Respond</th>
+                    </tr>
+                    <?php foreach($show as $row){?>
+                    <tr>
+                        <td><?php echo $row->product_name;?></td>
+                        
+                        <td><?php echo $row->Total_a;?></td>
+                        <td><?php echo $row->Resolved_a;?></td>
+                        <td><?php echo time_hour($row->total_time_a);?></td>
+                        
+                        <td><?php echo $row->Total_b;?></td>
+                        <td><?php echo $row->Resolved_b;?></td>
+                        <td><?php echo time_hour($row->total_time_b);?></td>
+                        
+                        <td><?php echo $row->Total_c;?></td>
+                        <td><?php echo $row->Resolved_c;?></td>
+                        <td><?php echo time_hour($row->total_time_c);?></td>
+                    </tr>
+                    <?php }?>
+                </table>
             </div>
         </div>
     </div>

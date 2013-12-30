@@ -69,6 +69,11 @@ class account_model extends CI_Model
 	}
     }
     
+    function YoutubeRefreshToken($token, $channel_id, $created_at){
+	$this->db->where('channel_id', $channel_id);
+	$this->db->update('channel', array('oauth_token' => $token, 'token_created_at'=> $created_at));
+    }
+    
     function DeleteChannel($channel_id){
 	$this->db->where('channel_id', $channel_id);
 	$this->db->delete('channel');

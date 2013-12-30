@@ -16,12 +16,10 @@ class Socialmedia extends MY_Controller {
 	  $this->load->helper('url');
 	  $this->load->helper('array');
 	  $this->load->helper('form');
-      $this->load->model('twitter_model');
-      $this->load->model('action_model');
-		
+	  $this->load->model('twitter_model');
+	  $this->load->model('action_model');
 	  $this->session->set_userdata('access_token', $this->config->item('twitter_access_token'));
-	  $this->session->set_userdata('access_token_secret', $this->config->item('twitter_access_secret'));
-  
+	  $this->session->set_userdata('access_token_secret', $this->config->item('twitter_access_secret'));  
 	  if($this->session->userdata('access_token') && $this->session->userdata('access_token_secret'))
 	  {
 		  // If user already logged in

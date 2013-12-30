@@ -318,4 +318,47 @@ class Cronjob extends CI_Controller {
         }
         echo json_encode($result);
     }
+    
+    
+     public function Test(){
+        $this->load->config('youtube');
+        $youtube = $this->config->item('youtube');
+        
+        $this->load->library('google_libs/Google_Client');
+        require_once './application/libraries/google_libs/contrib/Google_YouTubeService.php';
+        
+        $filter = array(
+            "connection_type" => "youtube"
+        );
+        if($this->input->get('channel_id')){
+            $filter['channel_id'] = $this->input->get('channel_id');
+        }
+        $youtube_channel= $this->account_model->GetChannel($filter);
+        $this->google_client->setClientId($youtube['client_id']);
+        $this->google_client->setClientSecret($youtube['client_secret']);
+       
+        foreach($youtube_channel as $each_channel){
+            
+            $token = json_decode($each_channel->oauth_token);
+            
+            if($token->created + 3600 < time()){
+                $this->google_client->refreshToken($token->refresh_token);
+                $current_access_token = json_decode($this->google_client->getAccessToken());
+                $current_access_token->refresh_token = $token->refresh_token;
+                $this->account_model->YoutubeRefreshToken(json_encode($current_access_token), $each_channel->channel_id, date("Y-m-d H:i:s", $current_access_token->created));    
+            }
+            else{
+                $this->google_client->setAccessToken(json_encode($token));
+            }
+            $youtube_object = new Google_YoutubeService($this->google_client);          
+            $playlistItemsResponse = $youtube_object->playlistItems->listPlaylistItems('snippet', array(
+                'playlistId' => $each_channel->social_id,
+                'maxResults' => 50
+            ));
+            
+        }
+        
+        
+    }
+
 }

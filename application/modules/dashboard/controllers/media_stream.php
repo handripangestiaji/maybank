@@ -660,7 +660,42 @@ class Media_stream extends CI_Controller {
 	    $compose_date_hour = null;
 	}
 	
-	$this->post_model->InsertPost($this->input->post('content'),$this->input->post('channels'),$this->input->post('tags'),$compose_date_hour);
+	$image_to_post = '';
+	if($this->input->post('image') != ''){
+            $this->load->helper('file');
+            $img = $this->input->post('image');
+            $img = str_replace('data:image/png;base64,', '', $img);
+            $img = str_replace('data:image/jpeg;base64,', '', $img);
+            $img = str_replace(' ', '+', $img);
+            $data = base64_decode($img);
+            $file_name = uniqid().'.png';
+            $pathToSave = $this->config->item('assets_folder').$file_name;
+            if ( ! write_file($pathToSave, $data)){
+                $image_to_post = '';
+            }
+	    else{
+		$image_to_post = $pathToSave;
+	    }
+	}
+	
+	if($this->input->post('short_url') != ''){
+	    $this->load->model('shorturl_model');
+	    $short_url = $this->shorturl_model->find(array('short_code' => $this->input->post('short_url')));
+	    $short_url_id = $short_url->id;
+	}
+	else{
+	    $short_url_id = NULL;
+	}
+	
+	$this->post_model->InsertPost($this->input->post('content'),
+				      $this->input->post('channels'),
+				      $this->input->post('tags'),
+				      $image_to_post,
+				      $short_url_id,
+				      $this->input->post('title'),
+				      $this->input->post('description'),
+				      $this->input->post('email_me'),
+				      $compose_date_hour);
     }
     
     public function load_facebook($type){

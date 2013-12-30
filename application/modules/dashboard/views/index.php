@@ -41,6 +41,7 @@
                         <div class="left">
                         <i class="icon-link icon-large"></i>
                         <input type="text" class="compose-insert-link-text" length="100" placeholder="Insert Link" />
+                        <input type="hidden" class="compose-insert-link-short-url-hidden" />
                         <button class="compose-insert-link-btn btn btn-primary" type="button">
                             <i class="icon-angle-right"></i> 
                             Insert
@@ -157,7 +158,7 @@
                                 </p>
                                 <br/>
                                 <p>
-                                    <input type="checkbox" checked style="margin-top: 0px;"/> Email me when message is sent
+                                    <input id="email_me" type="checkbox" checked style="margin-top: 0px;"/> Email me when message is sent
                                 </p> 
                             </div>
                         </div> 

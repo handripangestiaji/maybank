@@ -94,35 +94,45 @@
                     ?>
             <div>
                 <table style='float: left;' border='1' cellpadding='4'>
-                    <tr>
-                        <th>Products</th>
-                        <th>Total</th>
-                        <th>Resolved</th>
-                        <th>Avg Respond</th>
-                        <th>Total</th>
-                        <th>Resolved</th>
-                        <th>Avg Respond</th>
-                        <th>Total</th>
-                        <th>Resolved</th>
-                        <th>Avg Respond</th>
-                    </tr>
-                    <?php foreach($show as $row){?>
-                    <tr>
-                        <td><?php echo $row->product_name;?></td>
-                        
-                        <td><?php echo $row->Total_a;?></td>
-                        <td><?php echo $row->Resolved_a;?></td>
-                        <td><?php echo time_hour($row->total_time_a);?></td>
-                        
-                        <td><?php echo $row->Total_b;?></td>
-                        <td><?php echo $row->Resolved_b;?></td>
-                        <td><?php echo time_hour($row->total_time_b);?></td>
-                        
-                        <td><?php echo $row->Total_c;?></td>
-                        <td><?php echo $row->Resolved_c;?></td>
-                        <td><?php echo time_hour($row->total_time_c);?></td>
-                    </tr>
-                    <?php }?>
+                        <thead>
+                        <tr><td rowspan="2">Product</td>
+                        <?php
+                            $header = array();
+                            $i=0;
+                            foreach($show as $sh){
+                                if(!in_array($sh->case_type, $header)){
+                                    
+                                    $header [] = $sh->case_type;
+                                    
+                                    echo "<th colspan='3'>$sh->case_type</th>";
+                                    $i++;
+                                }
+                            }
+                        ?>
+                        </tr>
+                        <tr>
+                        <?php
+                            foreach($header as $h){
+                                echo "<td>Total</td><td>Average Solved Time</td><td>Resolved</td>";
+                            }
+                        ?>
+                        </tr>
+                        </thead>
+                    
+                        <?php
+                            $array = array();
+                            
+                            foreach($show as $sh){
+                                if(!in_array($sh->product_name,$array))
+                                {
+                                    echo "<tr>";
+                                    $array[] = $sh->product_name;
+                                    echo "<td>$sh->product_name</td>";
+                                    echo "</tr>";
+                                }
+                            }
+                        ?>
+
                 </table>
             </div>
         </div>

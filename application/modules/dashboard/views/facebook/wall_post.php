@@ -3,12 +3,23 @@
 $total_groups = ceil($count_fb_feed[0]->count_post_id/$this->config->item('item_perpage'));
 $timezone=new DateTimeZone($this->config->item('timezone'));
 
-for($i=0; $i<count($fb_feed);$i++):?>
+for($i=0; $i<count($fb_feed);$i++):
+$isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->post_id,'assign_to <>'=>$this->session->userdata('user_id'),'`status`'=>'pending'));
+                
+?>
 <li>
     <input type="hidden" class="postId" value="<?php echo $fb_feed[$i]->post_id; ?>" />
     <div class="circleAvatar"><img src="https://graph.facebook.com/<?php echo number_format($fb_feed[$i]->facebook_id, 0,'.','')?>/picture?small" alt=""></div>
     <div class="read-mark <?php if($fb_feed[$i]->is_read==0){echo 'redText';} else { echo 'greyText'; } ?>"><i class="icon-bookmark icon-large"></i></div>
     <br />
+    <?php   
+                // echo '<br>';
+//                 echo $fb_feed[$i]->post_id.'-<br>';
+//                print_r($fb_feed[$i]->post_stream_id);
+//
+        $caseAssign=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->post_id,'assign_to <>'=>$this->session->userdata('user_id')));    
+         //print_r($caseAssign); 
+    ?>
     <p class="headLine">
         <span class="author"><?php echo $fb_feed[$i]->name//."(".$fb_feed[$i][$i]->users->usename.")"?></span>
         <i class="icon-circle"></i>
@@ -46,10 +57,12 @@ for($i=0; $i<count($fb_feed);$i++):?>
     ?>
     </p>
 <p>
-<?php if($fb_feed[$i]->total_comments>0){ ?>
-        <button type="button" class="btn <?php echo $fb_feed[$i]->case_id != null ? "btn-purple" : "btn-inverse btn-mini" ?>"><?php echo $fb_feed[$i]->case_id != null ? 'CASE #'.$fb_feed[$i]->case_id : 'REPLIED'?></button>
-<?php }else{ ?>
-        <button type="button" class="btn <?php echo $fb_feed[$i]->case_id != null ? "btn-purple" : "btn-warning btn-mini" ?>"><?php echo $fb_feed[$i]->case_id != null ? 'CASE #'.$fb_feed[$i]->case_id : 'OPEN'?></button>
+<?php if($fb_feed[$i]->total_comments>0){ 
+//print_r($fb_feed[2]);
+    ?>
+        <button type="button" class="btn <?php echo $fb_feed[$i]->case_id != null ? "btn-purple" : "btn-inverse btn-mini" ?>"><?php echo $fb_feed[$i]->case_id != null ? 'CASE #'.$fb_feed[$i]->case_id.' Assign to: '.$fb_feed[$i]->assign_to : 'REPLIED'?></button>
+<?php }elseif($caseAssign){ ?>
+        <button type="button" class="btn <?php echo $fb_feed[$i]->case_id != null ? "btn-purple" : "btn-inverse btn-mini" ?>"><?php echo $fb_feed[$i]->case_id != null ? 'CASE #'.$fb_feed[$i]->case_id.' Assign to: '.$fb_feed[$i]->assign_to : 'CASE #'.$caseAssign[0]->case_id.'-'.'RESOLVE BY '.$caseAssign[0]->full_name?></button>
 <?php } ?>        
         <button class="fblike btn btn-primary btn-mini" style="margin-left: 5px;" value="<?php echo $fb_feed[$i]->post_stream_id;?>"><?php echo $fb_feed[$i]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button> </p>
     <p>
@@ -185,19 +198,42 @@ for($i=0; $i<count($fb_feed);$i++):?>
     </div>
     <!-- END ENGAGEMENT -->
 
+    <?php
+   
+    if(count($isMyCase)>0){
+    ?>
     <h4 class="filled">
         <a style="font-size: 20px;"><i class="icon-trash greyText"></i></a>
         <div class="pull-right">
+            <?php 
+            if(!$fb_feed[$i]->case_id):?>
             <button type="button" class="btn btn-primary btn-reply"><i class="icon-mail-reply"></i></button>
-            <?php if(!$fb_feed[$i]->case_id):?>
-                <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>
+                <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE2</button>
             <?php else:?>
-                <button type="button" class="btn btn-purple  btn-resolve" name="action" value="<?=$fb_feed[$i]->case_id?>"><i class="icon-check"></i> RESOLVE</button>
             <?php endif?>
         </div>
         <br clear="all" />
     </h4>
-    
+    <?php }else{ ?>
+        <h4 class="filled">
+        <a style="font-size: 20px;"><i class="icon-trash greyText"></i></a>
+        <div class="pull-right">
+            <?php if(!$fb_feed[$i]->case_id):
+                    if($caseAssign){ ?>
+                   
+                 <?php }else{ ?>
+                    <button type="button" class="btn btn-primary btn-reply"><i class="icon-mail-reply"></i></button>
+                    <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i>  CASE2 </button>
+            <?php      } 
+                  else:?>
+                <button type="button" class="btn btn-primary btn-reply"><i class="icon-mail-reply"></i></button>
+                <button type="button" class="btn btn-purple  btn-resolve" name="action" value="<?=$fb_feed[$i]->case_id?>"><i class="icon-check"></i> RESOLVE2</button>
+            <?php endif?>
+        </div>
+        <br clear="all" />
+    </h4>
+        
+    <?php } ?>
     <!-- REPLY -->  
     <div class="reply-field hide">
     <?php

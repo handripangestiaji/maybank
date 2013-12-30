@@ -564,10 +564,23 @@ class Media_stream extends CI_Controller {
             'link' => $url,
             'description' => $descr,
             'picture'=> $img,
-        );  
+        ); 
         
-        if($title != ''){
-            $return=$this->facebook->api('/'.$this->facebook->getUser().'/feed', 'POST', $attachment);
+        if($img != ''){
+            $this->load->helper('file');
+            $image = $img;
+            $image  = str_replace('data:image/png;base64,', '', $image);
+            $image  = str_replace('data:image/jpeg;base64,', '', $image);
+            $image  = str_replace(' ', '+', $image);
+            $data = base64_decode($image);
+            $file_name = uniqid().'.png';
+            $pathToSave = $this->config->item('assets_folder').$file_name;
+            if (write_file($pathToSave, $data)){    
+                $this->facebook->setFileUploadSupport(true);
+                $args = array('message' => $comment, 'attachment' => '@' . realpath($pathToSave));
+               // $args['attachment'] = '@' . realpath($pathToSave);
+                $result = $this->facebook->api('/'.$post_id.'/comments', 'POST', $args);
+            }
         }else{
             $return=$this->facebook->api('/'.$post_id.'/comments', 'POST', array('message'=>$comment,'attachment'=>$attachment));
         }

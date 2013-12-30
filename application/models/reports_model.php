@@ -21,10 +21,9 @@ class Reports_model extends CI_Model
     {
 	$case = 'maybank.case';
 	$cp = 'maybank.content_products';
-	$sql = 'select * from (((select content_products_id,case_type,count(content_products_id) as Total_a,count(status)
+	/*$sql = 'select * from (((select content_products_id,case_type,count(content_products_id) as Total_a,count(status)
 	as Resolved_a, avg(unix_timestamp(ca.solved_at)-unix_timestamp(ca.created_at)) as total_time_a
-	from '.$case.' as ca
-	where case_type=\'Feedback\'
+	from '.$case.' as ca where case_type=\'Feedback\'
 	group by content_products_id,case_type) as a
 	
 	left outer join (select content_products_id,count(content_products_id) as Total_a from '.$case.' where case_type=\'Feedback\' group by content_products_id) as d
@@ -50,6 +49,13 @@ class Reports_model extends CI_Model
 	on c.content_products_id=f.content_products_id) on a.content_products_id=c.content_products_id)
 	
 	right outer join (select product_name,id from maybank.content_products) as co on a.content_products_id=co.id';
+        */
+	$sql = 'SELECT co.product_name,count(*) as total, avg(unix_timestamp(ca.solved_at)-unix_timestamp(ca.created_at)) as average_response,
+		(select count(status) from `case` inca where inca.status=\'solved\' and inca.case_type = ca.case_type
+		and inca.content_products_id = ca.content_products_id) as solved_count, case_type, content_products_id
+		FROM maybank.case as ca
+		left join maybank.content_products as co on ca.content_products_id=co.id group by case_type, content_products_id';
+		
         $query = $this->db->query($sql);
         
         return $query->result();

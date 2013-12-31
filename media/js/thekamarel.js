@@ -409,6 +409,7 @@ $(function(){
                     $("#compose-preview-img").hide();
                     $("#remove-img").hide();
                     $("#filename").val('');
+                    $("#compose-preview-img").removeAttr('src');
                     upload_file.replaceWith(upload_file = upload_file.clone(true));
                 });
                 
@@ -932,8 +933,24 @@ $(function(){
                                                             $('.compose-channels').next().find('input').removeAttr('checked');
                                                             $('.compose-fb-char-count').html(2000);
                                                             $('.compose-tw-char-count').html(140);
-                                                            $('.youtube-character-count').html(500);
-                                                        });
+                                                            $('.compose-yt-char-count').html(500);
+                                                            
+                                                            $("#img-show").css({"display": "none"});
+                                                            $("#img-show").find('#filename').val('');
+                                                            $("#img-show").find("#remove-img").hide();
+                                                            $('#img-show').find('#compose-preview-img').removeAttr('src');
+                                                            
+                                                            $("#cal-show").css({"display": "none"});
+                                                            $("#cal-show").find('#datepickerField').val('');
+                                                            $("#cal-show").find('#compose-schedule-hours').find('option').removeAttr('selected');
+                                                            $("#cal-show").find('#compose-schedule-minutes').find('option').removeAttr('selected');
+                                                            
+                                                            $("#url-show").css({"display": "none"});
+                                                            $('#url-show').find('input').val('');
+                                                            $('.compose-insert-link-short-url-hidden').val('');
+                                                            $('#url-show').find('textarea').val('');
+                                                            $('#url-show').find('p').html('');
+                                                       });
                                                     }
                                                     else{
                                                         $('.compose-post-status').removeClass('grey');
@@ -983,7 +1000,23 @@ $(function(){
                                                                 $('.compose-channels').next().find('input').removeAttr('checked');
                                                                 $('.compose-fb-char-count').html(2000);
                                                                 $('.compose-tw-char-count').html(140);
-                                                                $('.compose-yt-count').html(500);
+                                                                $('.compose-yt-char-count').html(500);
+                                                                
+                                                                $("#img-show").css({"display": "none"});
+                                                                $("#img-show").find('#filename').val('');
+                                                                $("#img-show").find("#remove-img").hide();
+                                                                $('#img-show').find('#compose-preview-img').removeAttr('src');
+                                                                
+                                                                $("#cal-show").css({"display": "none"});
+                                                                $("#cal-show").find('#datepickerField').val('');
+                                                                $("#cal-show").find('#compose-schedule-hours').find('option').removeAttr('selected');
+                                                                $("#cal-show").find('#compose-schedule-minutes').find('option').removeAttr('selected');
+                                                                
+                                                                $("#url-show").css({"display": "none"});
+                                                                $('#url-show').find('input').val('');
+                                                                $('.compose-insert-link-short-url-hidden').val('');
+                                                                $('#url-show').find('textarea').val('');
+                                                                $('#url-show').find('p').html('');
                                                             });
                                                         }
                                                         else{
@@ -1026,7 +1059,23 @@ $(function(){
                                         $('.compose-channels').next().find('input').removeAttr('checked');
                                         $('.compose-fb-char-count').html(2000);
                                         $('.compose-tw-char-count').html(140);
-                                        $('.compose-yt-count').html(500);
+                                        $('.compose-yt-char-count').html(500);
+                                        
+                                        $("#img-show").css({"display": "none"});
+                                        $("#img-show").find('#filename').val('');
+                                        $("#img-show").find("#remove-img").hide();
+                                        $('#img-show').find('#compose-preview-img').removeAttr('src');
+                                        
+                                        $("#cal-show").css({"display": "none"});
+                                        $("#cal-show").find('#datepickerField').val('');
+                                        $("#cal-show").find('#compose-schedule-hours').find('option').removeAttr('selected');
+                                        $("#cal-show").find('#compose-schedule-minutes').find('option').removeAttr('selected');
+                                        
+                                        $("#url-show").css({"display": "none"});
+                                        $('#url-show').find('input').val('');
+                                        $('.compose-insert-link-short-url-hidden').val('');
+                                        $('#url-show').find('textarea').val('');
+                                        $('#url-show').find('p').html('');
                                     });
                                 }
                                 

@@ -533,7 +533,7 @@ $(function(){
                         
                         $(this).on('click','.btn-engagement-reply',
                             function() {
-                                $(this).parent().siblings('.reply-engagement-field').show();
+                                $(this).parent().siblings('.fb-reply-engagement-field').show();
                                 $(this).parent().siblings('.case-engagement-field').hide();
                             }
                         );
@@ -642,6 +642,13 @@ $(function(){
                         $(this).on('click','.reply-field-btn-close',
                             function() {
                                  $(this).parent().parent().hide();
+                            }
+                        );
+                        
+                        $(this).on('click','.fb-reply-field-btn-close',
+                            function() {
+                                $(this).closest('.fb-reply-engagement-field').hide();
+                                $(this).closest('.reply-field').hide();
                             }
                         );
                         
@@ -1312,7 +1319,10 @@ $(function(){
                                         '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
                                         '<strong>Success!</strong> '+response.message+' </div>');
                                         commentButton.parent().siblings(".replaycontent").val("");
-                                        commentButton.html("SEND");  
+                                        commentButton.html("SEND"); 
+                                        setTimeout(function(){
+                                                commentButton.closest('.reply-field').toggle('slow');
+                                            }, 3000); 
                                     }
                                     else{
                                         commentButton.parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
@@ -1326,6 +1336,62 @@ $(function(){
                         }
                                                 
                     }); 
+                    $(this).on('click','.delete',
+                        function(){
+                            var delButton = $(this);
+                            post_id=delButton.closest('li').find('.postId').val();
+                            $.ajax({
+                                "url" : BASEURL + "dashboard/media_stream/deleteFacebook",
+                                "type" : "POST",
+                                "data" : $(this).serialize() + "&channel_id=" + $(this).closest('.floatingBox').find('input.channel-id').val() +
+                                            "&filename=" + ($(this).find('.reply-preview-img').attr('src') == undefined ? '' :  $(this).find('.reply-preview-img').attr('src')),
+                                "success" : function(response){
+                                
+                                    try{
+                                        if(response.success == false){
+                                            var message = '';
+                                            if(response.result.errors){
+                                                for(x=0; x<response.result.errors.length; x++){
+                                                    message += response.result.errors[x].message + "<br />";
+                                                }
+                                            }
+                                            
+                                            me.find('.message').html('<div class="alert alert-warning">' +
+                                            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
+                                            '<strong>Error!</strong> ' + response.message + '<br />' + message + '</div>');
+                                            
+                                        }
+                                        else{
+                                            me.find('.message').html('<div class="alert alert-success">' +
+                                            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
+                                            '<h4>Reply Tweet</h4> ' + response.message + '!</div>');
+                                            me.find('input, textarea').val('');
+                                            me.find('.reply-preview-img').toggle('slow');
+                                            openButton.removeClass('btn-warning').addClass('btn-inverse').html('REPLIED').val('');
+                                            setTimeout(function(){
+                                                me.closest('.reply-field').toggle('slow');
+                                            }, 3000);
+                                            
+                                        }
+                                    }
+                                    catch(e){
+                                          me.find('.message').html('<div class="alert alert-danger">' +
+                                            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
+                                            '<strong>Error!</strong> Delete failed.</div>');
+                                    }
+                                    
+                                },
+                                "error" :  function( jqXHR, textStatus, errorThrown ){
+                                    buttonSubmit.removeAttr('disabled').html('SEND');
+                                     me.find('.message').html('<div class="alert alert-danger">' +
+                                            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
+                                            '<strong>Error!</strong> Delete failed.</div>');
+                                }
+                            });
+                            
+                        }
+                    );
+                        
                     
                       /*load more content*/  
                     looppage=2;

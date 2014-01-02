@@ -47,16 +47,16 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
     }
     ?>
     </p>
-    <p>
+    <p class="indicator">
     <?php 
     if(isset($isMyCase[0]->assign_to)){
         if($isMyCase[0]->assign_to==$this->session->userdata('user_id') or ($isMyCase[0]->solved_by)){ ?>
             <button type="button" class="btn <?php echo $fb_feed[$i]->case_id != null ? "btn-purple" : "btn-inverse btn-mini" ?>"><?php echo $fb_feed[$i]->case_id != null ? 'CASE #'.$fb_feed[$i]->case_id.' Assign to You ' : 'CASE #'.$isMyCase[0]->case_id.'-'.'RESOLVE BY '.$isMyCase[0]->full_name?></button>
         <?php }else{ ?>
-                <button type="button" class="btn <?php echo $fb_feed[$i]->case_id != null ? "btn-purple" : "btn-inverse btn-mini" ?>"><?php echo $fb_feed[$i]->case_id != null ? 'CASE #'.$fb_feed[$i]->case_id.' Assign to: '.$isMyCase[0]->full_name : 'REPLIED'?></button>  
+                <button type="button" class="btn <?php echo $fb_feed[$i]->case_id != null ? "btn-purple" : "btn-inverse btn-mini" ?>"><?php echo $fb_feed[$i]->case_id != null ? 'CASE #'.$fb_feed[$i]->case_id.' Assign to: '.$isMyCase[0]->full_name : 'REPLIED1'?></button>  
     <?php     }
     }else{ ?>
-        <button type="button" class="btn <?php echo $fb_feed[$i]->case_id != null ? "btn-purple" : "btn-inverse btn-mini" ?>"><?php echo $fb_feed[$i]->case_id != null ? 'CASE #'.$fb_feed[$i]->case_id.' Assign to: '.$isMyCase[0]->full_name : 'REPLIED'?></button>  
+        <button type="button" class="btn <?php echo $fb_feed[$i]->total_comments == 0 ? "btn-warning btn-mini no-cursor" : "btn-inverse btn-mini no-cursor" ?>"><?php echo $fb_feed[$i]->total_comments == 0 ? 'OPEN' :  'REPLIED'?></button>  
     <?php } ?>   
         <button class="fblike btn btn-primary btn-mini" style="margin-left: 5px;" value="<?php echo $fb_feed[$i]->post_stream_id;?>"><?php echo $fb_feed[$i]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button> </p>
     <p>
@@ -93,7 +93,7 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
                     <?php } ?>
                    <button type="button" class="btn btn-danger btn-engagement-case btn-mini"><i class="icon-plus"></i> CASE</button>
                 </p>
-                <div class="reply-engagement-field hide">
+                <div class="fb-reply-engagement-field reply-field hide">
                     <?php
                     $data['fb_feed'] = $comment;
                     $data['i'] = $j;
@@ -192,12 +192,13 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
     </div>
     <!-- END ENGAGEMENT -->
 
+    <h4 class="filled">
+        <a style="font-size: 20px; cursor: pointer;"><i class="icon-trash greyText delete"></i></a>
+        <div class="pull-right">
     <?php  
     if(isset($isMyCase[0]->assign_to)){
+        //echo $isMyCase[0]->assign_to."-".$this->session->userdata('user_id');
         if($isMyCase[0]->assign_to==$this->session->userdata('user_id')){ ?> 
-    <h4 class="filled">
-        <a style="font-size: 20px;"><i class="icon-trash greyText"></i></a>
-        <div class="pull-right">
                 <button type="button" class="btn btn-primary btn-reply"><i class="icon-mail-reply"></i></button>
            <?php if(isset($isMyCase[0]->solved_by)){ ?>
                 <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>
@@ -208,12 +209,11 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
         <br clear="all" />
     </h4>
     <?php } 
-    }else{ ?>
-        <h4 class="filled">
-        <a style="font-size: 20px;"><i class="icon-trash greyText"></i></a>
-        <div class="pull-right">
+    }else{ 
+        ?>
             <?php if(!$fb_feed[$i]->case_id):
                     if($isMyCase){ ?>                   
+                    
                  <?php }else{ ?>
                     <button type="button" class="btn btn-primary btn-reply"><i class="icon-mail-reply"></i></button>
                     <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>

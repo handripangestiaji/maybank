@@ -207,9 +207,9 @@
     $data['group'] = $group;
     $this->load->view('dashboard/box_stream',$data);
     $data['color'] = '#4099FF';
-    
     $this->load->view('dashboard/box_stream',$data);
-    //$this->load->view('dashboard/twitter/twitter_stream');
-    //echo $this->load->view('dashboard/youtube/youtube_stream');
+    $data['color'] = '#FF3333';
+    //$this->load->view('dashboard/box_stream',$data);
+    $this->load->view('dashboard/youtube/youtube_stream',$data);
 ?>
 </div>

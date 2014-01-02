@@ -1,5 +1,10 @@
 <?php
-    $span = 12/2;
+    if(count($channels) > 3){
+        $span = 4;
+    }
+    else{
+        $span = 12/3;
+    }
 ?>
 <!-- ==================== MIDDLE COL ==================== -->
 <div class="span<?php echo $span ?>">

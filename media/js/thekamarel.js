@@ -581,6 +581,18 @@ $(function(){
                             }
                         );
                         
+                        $(this).on('click','.btn-show-video',
+                            function() {
+                                $(this).parent().siblings('.show-video').toggle();
+                                if($(this).find('.desc').html() == 'VIEW VIDEO'){
+                                    $(this).find('.desc').html('HIDE VIDEO');        
+                                }
+                                else{
+                                    $(this).find('.desc').html('VIEW VIDEO');        
+                                }
+                            }
+                        );
+                        
                         $(this).on('click','.read-mark, .btn-case, .btn-reply, .retweet, .favorit .btn-send-reply, .fblike, .dm_send',
                             function(){
                             var me = $(this);

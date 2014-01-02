@@ -656,6 +656,78 @@ class Media_stream extends CI_Controller {
        }
     }
     
+    public function FbReplyMsg(){
+        header("Content-Type: application/x-json");
+	    $this->load->model('account_model');
+        $this->load->model('facebook_model');
+        $comment = $this->input->post('comment');
+        $post_id = $this->input->post('post_id');
+        $title = $this->input->post('title');
+        $url = $this->input->post('url');
+        $descr = $this->input->post('desc');
+        $img = $this->input->post('img');
+             
+        $filter = array(
+            "connection_type" => "facebook"
+        );
+        
+        if($this->input->get('channel_id')){
+            $filter['channel_id'] = $this->input->get('channel_id');
+        }
+        
+        $channel_loaded = $this->account_model->GetChannel($filter);
+        if(count($channel_loaded) == 0){
+    		echo json_encode(
+    		    array(
+    			'success' => false,
+    			'message' => "Invalid Channel Id"
+    		    )
+    		);
+		return;
+	    }
+	    else{
+		  $channel =  $channel_loaded[0]->channel_id;
+	    }
+        
+        $newStd = new stdClass();
+        $newStd->page_id =  $channel_loaded[0]->social_id;
+        $newStd->token = $this->facebook_model->GetPageAccessToken( $channel_loaded[0]->oauth_token, $channel_loaded[0]->social_id);
+        $config = array(
+	       'appId' => $this->config->item('fb_appid'),
+	       'secret' => $this->config->item('fb_secretkey')
+	    );
+    	$this->load->library('facebook',$config);
+    	$this->facebook->setaccesstoken($newStd->token);
+        $attachment = array(
+            'message' => $comment,
+            'name' => $title,
+            'link' => $url,
+            'description' => $descr,
+            'picture'=> $img,
+        ); 
+        
+        
+//        $return=$this->facebook->api('/'.$post_id.'/messages', 'POST', array('message'=>$comment));
+        $return = $this->facebook->api( "/$post_id/messages", "POST", array ( 'message' => $comment, ));
+        
+        $case=$this->account_model->isCaseIdExists($post_id);
+            if(count($case)>0){
+                $post_at=$case[0]->created_at;  
+                $caseid=$case[0]->case_id;
+            }else{
+                $caseid='';
+                $post_at='';       
+            }
+        
+        echo json_encode(
+    		    array(
+                'success' => true,
+    			'message' => "successfully done",
+    			'result' => $return
+    		    )
+    		);
+    }
+    
     public function SocmedPost(){
 	$this->load->model('post_model');
 	

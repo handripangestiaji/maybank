@@ -1,6 +1,6 @@
 <form action="" method="post" class="facebook-tweet">
 <div class="row-fluid">
-    <span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
+    <span class="fb-reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
     <div class="pull-left">
         <div class="message"></div>
         <select style="width: 130px;">

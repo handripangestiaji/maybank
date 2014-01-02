@@ -579,7 +579,7 @@ class Media_stream extends CI_Controller {
                 $this->facebook->setFileUploadSupport(true);
                 $args = array('message' => $comment, 'attachment' => '@' . realpath($pathToSave));
                // $args['attachment'] = '@' . realpath($pathToSave);
-                $result = $this->facebook->api('/'.$post_id.'/comments', 'POST', $args);
+                $return = $this->facebook->api('/'.$post_id.'/comments', 'POST', $args);
             }
         }else{
             $return=$this->facebook->api('/'.$post_id.'/comments', 'POST', array('message'=>$comment,'attachment'=>$attachment));
@@ -599,11 +599,10 @@ class Media_stream extends CI_Controller {
         		"action_type" => "reply_facebook",
         		"channel_id" =>$channel,
         		"created_at" => date("Y-m-d H:i:s"),
-        		//"stream_id" => $this->input->post('post_id'),
         		"created_by" => $this->session->userdata('user_id'),
         		"stream_id_response" => $return
     	    );
-            $this->account_model->CreateFbCommentAction($action, $this->input->post('like') === 'true' ? 1 : 0);
+             $this->account_model->CreateFbCommentAction($action,$return,$this->input->post('like') === 'true' ? 1 : 0);
             echo json_encode(
     		    array(
                 'success' => true,

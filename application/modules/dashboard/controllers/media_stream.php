@@ -748,7 +748,7 @@ class Media_stream extends CI_Controller {
         $channel_id=$channel_ids;
         $is_read=0;
         $filter = array(
-    	   'channel_id' => $channel_id,
+    	   'a.channel_id' => $channel_id,
     	);
     	
 	if($this->input->get('last_id')){

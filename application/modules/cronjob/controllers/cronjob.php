@@ -353,7 +353,8 @@ class Cronjob extends CI_Controller {
         
         $this->load->library('google_libs/Google_Client');
         require_once './application/libraries/google_libs/contrib/Google_YouTubeService.php';
-        
+        require_once './application/libraries/google_libs/contrib/Google_YouTubeAnalyticsService.php';
+        $this->load->library('youtube_libs');
         $filter = array(
             "connection_type" => "youtube"
         );
@@ -382,7 +383,20 @@ class Cronjob extends CI_Controller {
                 'playlistId' => $each_channel->social_id,
                 'maxResults' => 50
             ));
+            $this->load->model('youtube_model');
             
+            $video = array();
+            for($i=0; $i< count($playlistItemsResponse['items']); $i++){
+                $detail_video = $this->youtube_libs->ReadVideoRatings($playlistItemsResponse['items'][$i]['snippet']['resourceId']['videoId']);
+                $detail_video->data->etag = $playlistItemsResponse['items'][$i]['etag'];
+                $detail_video->data->stream_id = $playlistItemsResponse['items'][$i]['id'];
+                $this->youtube_model->SaveYouTubePost($detail_video, $each_channel->channel_id);
+                $video[] = $detail_video;
+            }
+            
+            echo "<pre>";
+            print_r($video);
+            echo "</pre>";
         }
         
         

@@ -136,6 +136,10 @@ class ChannelMg extends MY_Controller {
         $this->google_client->setClientSecret($youtube['client_secret']);
         $redirect = filter_var(base_url('channels/channelmg/AddYoutube'), FILTER_SANITIZE_URL);
         $this->google_client->setRedirectUri($redirect);
+        
+        $this->google_client->setScopes(array('https://www.googleapis.com/auth/yt-analytics.readonly', 'https://www.googleapis.com/auth/plus.me',
+                                              'https://www.googleapis.com/auth/youtube', 'https://www.googleapis.com/auth/youtube.readonly', 'https://www.googleapis.com/auth/youtube.upload',
+                                              'https://www.googleapis.com/auth/youtubepartner', 'https://www.googleapis.com/auth/youtube'));
         $this->google_client->setAccessType('offline');
         $youtube_object = new Google_YoutubeService($this->google_client);
         

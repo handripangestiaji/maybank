@@ -209,7 +209,8 @@
     $data['color'] = '#4099FF';
     $this->load->view('dashboard/box_stream',$data);
     $data['color'] = '#FF3333';
+    $this->load->view('dashboard/box_stream',$data);
     //$this->load->view('dashboard/box_stream',$data);
-    $this->load->view('dashboard/youtube/youtube_stream',$data);
+    //$this->load->view('dashboard/youtube/youtube_stream',$data);
 ?>
 </div>

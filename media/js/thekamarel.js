@@ -498,6 +498,12 @@ $(function(){
                             $(this).closest('.containerHeadline').css( "background-color", "#4099FF" );
                             $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');                                   
                         }
+                        else{
+                            urlToLoad += "youtube_stream/" + streamId
+                            $(this).closest('div').children('button').html('<i class="icon-youtube"></i><h2>Youtube&nbsp;</h2><i class="icon-caret-down"></i>');
+                            $(this).closest('.containerHeadline').css( "background-color", "#4099FF" );
+                            $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');  
+                        }
                         $(this).closest('.containerHeadline').next().load(urlToLoad);                      
                     });
                     $('.facebook_stream').on('click',function() {

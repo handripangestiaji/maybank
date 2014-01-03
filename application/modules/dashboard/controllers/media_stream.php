@@ -914,7 +914,8 @@ class Media_stream extends CI_Controller {
     
     public function GetScheduleData(){
 	$this->load->model('post_model');
-	$posts = $this->post_model->GetPosts();
+	$filter = 'is_posted is NULL or is_posted=1';
+	$posts = $this->post_model->GetPosts($filter);
 	
 	$encodeme = array();
 	foreach($posts as $post){
@@ -928,18 +929,24 @@ class Media_stream extends CI_Controller {
 		
 		$short_time = date('H:i A',strtotime($post_time));
 		
-		$encodeme[] = array('id' => $post->id,
+		$encodeme[] = array('post_to_id' => $post->post_to_id,
 				'title' => $post->name,
 				'start' => date('c',strtotime($post->time_to_post)),
 				'end' => date('c',strtotime($post->time_to_post)),
 				'description' => $post->messages,
 				'user_name' => $post->display_name,
 				'post_date' => $new_short_date,
-				'post_time' => $short_time
+				'post_time' => $short_time,
+				'is_posted' => $post->is_posted,
 			       );
 	    }
 	}
         echo json_encode($encodeme);
     }
 
+    public function DeleteSchedulePost(){
+	$this->load->model('post_model');
+	$value = array('is_posted' => 2);
+	$this->post_model->UpdatePostTo($this->input->post('post_to_id'),$value);
+    }
 }

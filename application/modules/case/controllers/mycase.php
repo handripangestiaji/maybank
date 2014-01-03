@@ -72,9 +72,14 @@ class mycase extends CI_Controller{
     }
     
     
-    function FacebookRelatedConversation($post_id){
+    function FacebookRelatedConversation($post_id,$type){
         $this->load->model('facebook_model');
-        echo json_encode($this->facebook_model->RetriveCommentPostFb($post_id));
+        if($type=='facebook'){
+            echo json_encode($this->facebook_model->RetriveCommentPostFb($post_id));
+        }else{
+            $filter["d.post_id"]=$post_id;            
+             echo json_encode($this->facebook_model->RetrievePmDetailFB($post_id));
+       }  
     }
     
     function ResolveCase(){

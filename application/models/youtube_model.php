@@ -5,6 +5,7 @@ class youtube_model extends CI_Model
     
     function __construct(){
         $this->load->model("facebook_model");
+        $this->load->model("case_model");
     }
     
     function SaveYouTubePost($post, $channel_id){
@@ -51,6 +52,25 @@ class youtube_model extends CI_Model
         }
     }
     
+    
+    function ReadYoutubePost($filter = array(), $page = 1){
+        $this->db->select("a.*, b.*, a.post_id as social_stream_post_id");
+        $this->db->from("social_stream_youtube b inner join social_stream a on a.post_id = b.post_id");
+        $this->db->where($filter);
+        $this->db->order_by('created_at', 'desc');
+        
+        $results = $this->db->get()->result();
+        
+        foreach($results as $result){
+            $result->case = $this->case_model->LoadCase(
+                array(
+                    "a.post_id" => $result->social_stream_post_id
+                )
+            );
+        }
+        
+        return $results;
+    }
     
     
 }

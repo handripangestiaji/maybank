@@ -1,5 +1,7 @@
 <div class="row-fluid">
-<?php if($posts){?>
+<?php if($posts){
+    //echo $posts[$i]->post_id."-".$posts[$i]->type;
+        ?>
            <span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
            
            <form method="post" class="assign-case" action="<?php echo base_url("case/mycase/CreateCase")?>">

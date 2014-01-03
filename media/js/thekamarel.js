@@ -473,8 +473,8 @@ $(function(){
                     var increment = 1;
                     setInterval(function(){
                         //$(document).RefreshAllStream();
-                        increment ++;
-                        console.log(increment);
+                        //increment ++;
+                        //console.log(increment);
                     }, 120000);
                     $('#refreshAllStream').click(function(){
                         $(this).RefreshAllStream();
@@ -501,7 +501,7 @@ $(function(){
                         else{
                             urlToLoad += "youtube_stream/" + streamId
                             $(this).closest('div').children('button').html('<i class="icon-youtube"></i><h2>Youtube&nbsp;</h2><i class="icon-caret-down"></i>');
-                            $(this).closest('.containerHeadline').css( "background-color", "#4099FF" );
+                            $(this).closest('.containerHeadline').css( "background-color", "#FF3333" );
                             $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');  
                         }
                         $(this).closest('.containerHeadline').next().load(urlToLoad);                      
@@ -522,12 +522,20 @@ $(function(){
                     });
                     
                     $('.youtube_stream').on('click',function() {
+                        
                         $(this).closest('div').children('button').html('<i class="icon-youtube"></i><h2>Youtube&nbsp;</h2><i class="icon-caret-down"></i>');
                         $(this).closest('.containerHeadline').css( "background-color", "#FF3333" );
-                        $(this).closest('.containerHeadline').next().html('youtube timeline here');
+                        $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');
+                        $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/youtube_stream/' + $(this).siblings('.channel-stream-id').val());
                     });
                 });
-                
+                $(this).on('click', 'p.video', function(){
+                    $(this).find('img').hide();
+                    $(this).find('iframe').show().attr({
+                        'width' : $(this).width() - 20,
+                        'height' : 240
+                    });
+                });
                 $(document).ready(function() {
                         $(this).on('click','.btn-reply',
                             function() {
@@ -1342,6 +1350,58 @@ $(function(){
                         }
                                                 
                     }); 
+                    
+                    $(this).on('click','.btn-send-msg',
+                        function() {
+                        var len=$(this).parent().siblings(".replaycontent").val().length
+                        if(len>2000){
+                            $(this).parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
+                            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
+                            '<strong>Error!</strong> Your message is more than 2000 characters. It will not post to Facebook. </div>');
+                            
+                        }else{
+                            var commentButton = $(this);
+                            isSend=commentButton.html()=="SEND";
+                            commentButton.html('SENDING...').attr("disabled", "disabled");
+
+                           $.ajax({
+                                url : BASEURL + 'dashboard/media_stream/FbReplyMsg',
+                                type: "POST",
+                                data: {
+                                    post_id: $(this).val(),
+                                    channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
+                                    comment :$(this).parent().siblings(".replaycontent").val(),
+                                    url:'',
+                                    title :$(this).parent().siblings('#reply-url-show').find(".title_link").val(),
+                                    desc :$(this).parent().siblings('#reply-url-show').find(".descr-link").val(),
+                                    img :$(this).parent().siblings('#reply-img-show').find("#reply-preview-img").attr('src'),
+                                },
+                                success: function(response)
+                                {
+                                    commentButton.removeAttr("disabled");
+                                    if(response.success === true){
+                                        commentButton.parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
+                                        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
+                                        '<strong>Success!</strong> '+response.message+' </div>');
+                                        commentButton.parent().siblings(".replaycontent").val("");
+                                        commentButton.html("SEND"); 
+                                        setTimeout(function(){
+                                                commentButton.closest('.reply-field').toggle('slow');
+                                            }, 3000); 
+                                    }
+                                    else{
+                                        commentButton.parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
+                                        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
+                                        '<strong>Error!</strong>'+response.message+'</div>');
+                                        commentButton.html("SEND");
+                                    }
+                                },
+                            });
+                            
+                        }
+                                                
+                    });
+                                        
                     $(this).on('click','.delete',
                         function(){
                             var delButton = $(this);

@@ -84,8 +84,8 @@
         <button class="btn btn-primary btn-small btn-send-reply" value="<?php echo $fb_feed[$i]->post_stream_id; ?>">SEND</button>    
       <?php }elseif($reply_type=='reply_nested'){ ?>
         <button class="btn btn-primary btn-small btn-send-reply" value="<?php echo $fb_feed[$i]->comment_stream_id; ?>">SEND</button> 
-      <?php }elseif($reply_type=='reply_dm'){  ?>
-          <button class="dm_send btn btn-primary btn-small" value="<?php //echo $fb_feed[$i]->comment_stream_id; ?>">SEND</button> 
+      <?php }elseif($reply_type=='reply_dm'){  ?> 
+          <button class="btn btn-primary btn-small btn-send-msg"  value="<?php echo $fb_feed[$i]->post_stream_id; ?>">SEND</button> 
       <?php } ?>           
     </div>
     <br clear="all" />

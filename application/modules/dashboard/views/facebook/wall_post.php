@@ -7,7 +7,7 @@ for($i=0; $i<count($fb_feed);$i++):
 $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->post_id));
 //print_r($isMyCase);
 ?>
-<li>
+<li class="pointer-<?php echo $fb_feed[$i]->post_id; ?>">
     <input type="hidden" class="postId" value="<?php echo $fb_feed[$i]->post_id; ?>" />
     <div class="circleAvatar"><img src="https://graph.facebook.com/<?php echo number_format($fb_feed[$i]->facebook_id, 0,'.','')?>/picture?small" alt=""></div>
     <div class="read-mark <?php if($fb_feed[$i]->is_read==0){echo 'redText';} else { echo 'greyText'; } ?>"><i class="icon-bookmark icon-large"></i></div>
@@ -19,9 +19,10 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
         <i class="icon-circle"></i>
         <span>
         <?php 
-            $date=new DateTime($fb_feed[$i]->created_at.' Europe/London');
+        
+            $date=new DateTime($fb_feed[$i]->post_date.' Europe/London');
             $date->setTimezone($timezone);
-            echo $date->format('l, M j, Y H:i:s');
+            echo $date->format('l, M j, Y h:i A');
         ?>        
     </p>
     <p><?php echo $fb_feed[$i]->post_content?></p>
@@ -193,6 +194,7 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
     <!-- END ENGAGEMENT -->
 
     <h4 class="filled">
+        <!--di nonaktifin dulu, karena belum di butuhkan-->
         <!--a style="font-size: 20px; cursor: pointer;"><i class="icon-trash greyText deleteFB"></i></a-->
         <div class="pull-right">
     <?php  

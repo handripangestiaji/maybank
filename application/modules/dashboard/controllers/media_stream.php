@@ -504,11 +504,11 @@ class Media_stream extends CI_Controller {
 		"action_type" => "like_facebook",
 		"channel_id" => $channel[0]->channel_id,
 		"created_at" => date("Y-m-d H:i:s"),
-		"stream_id" => $this->input->post('post_id'),
+		//"stream_id" => $this->input->post('post_id'),
 		"created_by" => $this->session->userdata('user_id'),
 		"stream_id_response" => $return
 	    );
-	    $this->account_model->CreateFbLikeAction($action, $this->input->post('like') === 'true' ? 1 : 0);
+	    $this->account_model->CreateFbLikeAction($action,$post_id, $this->input->post('like') === 'true' ? 1 : 0);
 	    echo json_encode($return);
 	}
 	else{

@@ -386,7 +386,7 @@ class facebook_model extends CI_Model
 	$this->db->where("comment_stream_id",$comment_id);
 	return $this->db->get()->row();
     }
-    
+        
     public function streamId($post_id){
         $this->db->select('*');
 	    $this->db->from('social_stream');
@@ -419,7 +419,7 @@ class facebook_model extends CI_Model
     }
     
     public function RetrieveFeedFB($filter,$limit = 20){
-        $this->db->select('*, c.type as social_stream_type, b.post_id as social_stream_post_id,b.post_id');
+        $this->db->select('*, c.type as social_stream_type, b.post_id as social_stream_post_id,b.post_id, c.created_at as post_date');
         $this->db->from("fb_user_engaged a INNER JOIN social_stream_fb_post b  
 			 ON b.author_id = a.facebook_id inner join social_stream c on c.post_id = b.post_id LEFT JOIN
                          `case` d on d.post_id = c.post_id and d.status='pending'");
@@ -467,7 +467,7 @@ class facebook_model extends CI_Model
     
       public function RetrievePmFB($filter,$limit){
         //WHERE detail_id_from_facebook LIKE '%_0'
-        $this->db->select('a.*,b.*,c.name,c.username, d.is_read, d.post_stream_id, d.type,d.type as social_stream_type,d.channel_id, d.post_id');
+        $this->db->select('a.*,b.*,c.name,c.username, d.is_read, d.post_stream_id, d.type,d.type as social_stream_type,d.channel_id, d.post_id,b.created_at AS post_date');
         $this->db->from("social_stream_facebook_conversation a LEFT OUTER JOIN 
                         social_stream_facebook_conversation_detail b ON b.conversation_id = a.conversation_id LEFT OUTER JOIN
                         fb_user_engaged c ON c.facebook_id=b.sender INNER JOIN
@@ -481,7 +481,7 @@ class facebook_model extends CI_Model
 	    $this->db->where("detail_id_from_facebook LIKE '%_0'");    
         }
         $this->db->limit($limit);
-        $this->db->order_by('created_at','desc');
+        $this->db->order_by('b.created_at','desc');
         return $this->db->get()->result();
     }
     

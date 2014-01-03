@@ -51,12 +51,12 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
     <?php 
     if(isset($isMyCase[0]->assign_to)){
         if($isMyCase[0]->assign_to==$this->session->userdata('user_id') or ($isMyCase[0]->solved_by)){ ?>
-            <button type="button" class="btn <?php echo $fb_feed[$i]->case_id != null ? "btn-purple" : "btn-inverse btn-mini" ?>"><?php echo $fb_feed[$i]->case_id != null ? 'CASE #'.$fb_feed[$i]->case_id.' Assign to You ' : 'CASE #'.$isMyCase[0]->case_id.'-'.'RESOLVE BY '.$isMyCase[0]->full_name?></button>
+            <button type="button" class="btn <?php echo $fb_feed[$i]->case_id != null ? "btn-purple btn-mini" : "btn-inverse btn-mini" ?>"><?php echo $fb_feed[$i]->case_id != null ? 'CASE #'.$fb_feed[$i]->case_id.' Assign to You ' : 'CASE #'.$isMyCase[0]->case_id.'-'.'RESOLVE BY '.$isMyCase[0]->full_name?></button>
         <?php }else{ ?>
-                <button type="button" class="btn <?php echo $fb_feed[$i]->case_id != null ? "btn-purple" : "btn-inverse btn-mini" ?>"><?php echo $fb_feed[$i]->case_id != null ? 'CASE #'.$fb_feed[$i]->case_id.' Assign to: '.$isMyCase[0]->full_name : 'REPLIED1'?></button>  
+                <button type="button" class="btn <?php echo $fb_feed[$i]->case_id != null ? "btn-purple btn-mini" : "btn-inverse btn-mini" ?>"><?php echo $fb_feed[$i]->case_id != null ? 'CASE #'.$fb_feed[$i]->case_id.' Assign to: '.$isMyCase[0]->full_name : 'REPLIED'?></button>  
     <?php     }
     }else{ ?>
-        <button type="button" class="btn <?php echo $fb_feed[$i]->total_comments == 0 ? "btn-warning btn-mini no-cursor" : "btn-inverse btn-mini no-cursor" ?>"><?php echo $fb_feed[$i]->total_comments == 0 ? 'OPEN' :  'REPLIED'?></button>  
+        <button type="button" class="btn <?php echo $fb_feed[$i]->total_comments == 0 ? "btn-warning btn-mini no-cursor indicator" : "btn-inverse btn-mini no-cursor indicator" ?>"><?php echo $fb_feed[$i]->total_comments == 0 ? 'OPEN' :  'REPLIED'?></button>  
     <?php } ?>   
         <button class="fblike btn btn-primary btn-mini" style="margin-left: 5px;" value="<?php echo $fb_feed[$i]->post_stream_id;?>"><?php echo $fb_feed[$i]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button> </p>
     <p>
@@ -193,7 +193,7 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
     <!-- END ENGAGEMENT -->
 
     <h4 class="filled">
-        <a style="font-size: 20px; cursor: pointer;"><i class="icon-trash greyText delete"></i></a>
+        <!--a style="font-size: 20px; cursor: pointer;"><i class="icon-trash greyText deleteFB"></i></a-->
         <div class="pull-right">
     <?php  
     if(isset($isMyCase[0]->assign_to)){

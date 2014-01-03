@@ -31,9 +31,9 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_pm[$i]->po
     <?php 
     if(isset($isMyCase[0]->assign_to)){
         if($isMyCase[0]->assign_to==$this->session->userdata('user_id') or ($isMyCase[0]->solved_by)){ ?>
-            <button type="button" class="btn <?php echo $isMyCase[$i]->case_id != null ? "btn-purple" : "btn-inverse btn-mini" ?>"><?php echo $isMyCase[$i]->case_id != null ? 'CASE #'.$isMyCase[$i]->case_id.' Assign to You ' : 'CASE #'.$isMyCase[0]->case_id.'-'.'RESOLVE BY '.$isMyCase[0]->full_name?></button>
+            <button type="button" class="btn <?php echo $isMyCase[$i]->case_id != null ? "btn-purple" : "btn-inverse btn-mini" ?>"><?php echo $isMyCase[0]->case_id != null ? 'CASE #'.$isMyCase[0]->case_id.' Assign to You ' : 'CASE #'.$isMyCase[0]->case_id.'-'.'RESOLVE BY '.$isMyCase[0]->full_name?></button>
         <?php }else{ ?>
-                <button type="button" class="btn <?php echo $isMyCase[$i]->case_id != null ? "btn-purple" : "btn-inverse btn-mini" ?>"><?php echo $isMyCase[$i]->case_id != null ? 'CASE #'.$isMyCase[$i]->case_id.' Assign to: '.$isMyCase[0]->full_name : 'REPLIED1'?></button>  
+                <button type="button" class="btn <?php echo $isMyCase[$i]->case_id != null ? "btn-purple" : "btn-inverse btn-mini" ?>"><?php echo $isMyCase[0]->case_id != null ? 'CASE #'.$isMyCase[0]->case_id.' Assign to: '.$isMyCase[0]->full_name : 'REPLIED'?></button>  
     <?php     }
     }
        ?>

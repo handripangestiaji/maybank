@@ -387,6 +387,13 @@ class facebook_model extends CI_Model
 	return $this->db->get()->row();
     }
     
+    public function streamId($post_id){
+        $this->db->select('*');
+	    $this->db->from('social_stream');
+	    $this->db->where('post_id',$post_id);
+        return $this->db->get()->row();
+    }
+    
     public function IsFbUserExists($fb_id){
 	$this->db->select('facebook_id');
 	$this->db->from('fb_user_engaged');
@@ -506,8 +513,6 @@ class facebook_model extends CI_Model
         $result  = json_decode($requestResult);
     }
 
- 
-    
     public function ReadUnread($post_id, $new_val = null){
 	if($new_val == null){
 	    $this->db->select('*');
@@ -529,4 +534,13 @@ class facebook_model extends CI_Model
 	$this->db->update('social_stream', $data);
 	return $new_val;
     }
+    
+    function DeletePostFb($post_stream_id){
+        
+        $this->db->where(array(
+            'post_stream_id' => $post_stream_id,
+        ));
+        return $this->db->delete('social_stream');
+    }
+    
 }

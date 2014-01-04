@@ -595,6 +595,18 @@ $(function(){
                             }
                         );
                         
+                        $(this).on('click','.btn-show-video',
+                            function() {
+                                $(this).parent().siblings('.show-video').toggle();
+                                if($(this).find('.desc').html() == 'VIEW VIDEO'){
+                                    $(this).find('.desc').html('HIDE VIDEO');        
+                                }
+                                else{
+                                    $(this).find('.desc').html('VIEW VIDEO');        
+                                }
+                            }
+                        );
+                        
                         $(this).on('click','.read-mark, .btn-case, .btn-reply, .retweet, .favorit .btn-send-reply, .fblike, .dm_send',
                             function(){
                             var me = $(this);
@@ -1674,11 +1686,20 @@ $(document).ready(function(){
         },
         eventRender: function(event, element){
             console.log($('#calendar').width());
-            //console.log(element.coord().left);
+            var deleteable;
+            if(event.is_posted != '1'){
+                deleteable = "<div class='pull-right'><button type='button' class='btn btn-danger btn-mini btn-delete-schedule-post'><i class='icon-remove'></i></a></div>";
+            }
+            else{
+                deleteable = '';
+            }
+            
             var tooltip =
             "<div class='tooltip-event hide'>" +
+                "<input type='hidden' class='schedule_post_to_id' value='" + event.post_to_id + "'>" +
                 "<div class='pull-left'>" + event.post_date + " | " + event.post_time + "</div>" +
-                "<br>" +
+                deleteable + 
+                "<br clear='all'>" +
                 "<div class='tooltip-content pull-left'>" +
                     "<div class='tooltip-content-head'>" + event.title + "</div>" +
                     "<div class='tooltip-content-body'>" +
@@ -1696,6 +1717,27 @@ $(document).ready(function(){
             if(($('#calendar').width() - element.coord().left) < 270){
                 element.find('.tooltip-event').css('left','-100px');
             }
+        }
+    });
+    
+    $(this).on('click', '.btn-delete-schedule-post', function(){
+        var r = confirm('Are you sure want to delete this post?');
+        if(r == true){
+            var me = $(this);
+            $.ajax({
+                url : BASEURL + 'dashboard/media_stream/DeleteSchedulePost',
+                type: "POST",
+                data: {
+                    post_to_id:me.parent().siblings('.schedule_post_to_id').val(),
+                },
+                success: function(result)
+                {
+                    me.closest('.fc-event').hide();
+                },
+            });
+        }
+        else{
+            
         }
     });
 });

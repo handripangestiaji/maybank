@@ -238,23 +238,25 @@ class Cronjob extends CI_Controller {
             }
         }
         else{
-            $this->load->helper('file');
-            $img = $this->input->post('image');
-            $img = str_replace('data:image/png;base64,', '', $img);
-            $img = str_replace('data:image/jpeg;base64,', '', $img);
-            $img = str_replace(' ', '+', $img);
-            $data = base64_decode($img);
-            $file_name = uniqid().'.png';
-            $pathToSave = $this->config->item('assets_folder').$file_name;
-            if ( ! write_file($pathToSave, $data)){
-                $result = $this->facebook->api('/me/feed','POST',array('message' => $messages));
+            if($image_to_post != ''){
+                $this->load->helper('file');
+                $img = $this->input->post('image');
+                $img = str_replace('data:image/png;base64,', '', $img);
+                $img = str_replace('data:image/jpeg;base64,', '', $img);
+                $img = str_replace(' ', '+', $img);
+                $data = base64_decode($img);
+                $file_name = uniqid().'.png';
+                $pathToSave = $this->config->item('assets_folder').$file_name;
+                if ( ! write_file($pathToSave, $data)){
+                    $result = $this->facebook->api('/me/feed','POST',array('message' => $messages));
+                }
+                else{
+                    $this->facebook->setFileUploadSupport(true);
+                    $args = array('message' => $messages);
+                    $args['image'] = '@' . realpath($pathToSave);
+                    $result = $this->facebook->api('/me/photos', 'post', $args);
+                }
             }
-	    else{
-                $this->facebook->setFileUploadSupport(true);
-                $args = array('message' => $messages);
-                $args['image'] = '@' . realpath($pathToSave);
-                $result = $this->facebook->api('/me/photos', 'post', $args);
-	    }
         }
         
         if($short_code != '')
@@ -321,27 +323,32 @@ class Cronjob extends CI_Controller {
             }
         }
         else{
-            $this->load->helper('file');
-            $img = $this->input->post('image');
-            $img = str_replace('data:image/png;base64,', '', $img);
-            $img = str_replace('data:image/jpeg;base64,', '', $img);
-            $img = str_replace(' ', '+', $img);
-            $data = base64_decode($img);
-            $file_name = uniqid().'.png';
-            $pathToSave = $this->config->item('assets_folder').$file_name;
-            if ( ! write_file($pathToSave, $data)){
+            if($image_to_post != ''){
+                $this->load->helper('file');
+                $img = $this->input->post('image');
+                $img = str_replace('data:image/png;base64,', '', $img);
+                $img = str_replace('data:image/jpeg;base64,', '', $img);
+                $img = str_replace(' ', '+', $img);
+                $data = base64_decode($img);
+                $file_name = uniqid().'.png';
+                $pathToSave = $this->config->item('assets_folder').$file_name;
+                if ( ! write_file($pathToSave, $data)){
+                    $result = $this->connection->post('statuses/update', $parameters);
+                }
+                else{
+                    require_once './application/libraries/codebird.php';
+                    $this->load->config('twitter');
+                    Codebird::setConsumerKey($this->config->item('twitter_consumer_token'), $this->config->item('twitter_consumer_secret'));
+                    $cb = Codebird::getInstance();
+                    $cb->setToken($channel_loaded[0]->oauth_token, $channel_loaded[0]->oauth_secret);
+                    $parameters['media[]'] = $pathToSave;
+                    $result = $cb->statuses_updateWithMedia($parameters);
+                    $result->params = $parameters;
+                }
+            }
+            else{
                 $result = $this->connection->post('statuses/update', $parameters);
             }
-	    else{
-                require_once './application/libraries/codebird.php';
-                $this->load->config('twitter');
-                Codebird::setConsumerKey($this->config->item('twitter_consumer_token'), $this->config->item('twitter_consumer_secret'));
-                $cb = Codebird::getInstance();
-                $cb->setToken($channel_loaded[0]->oauth_token, $channel_loaded[0]->oauth_secret);
-                $parameters['media[]'] = $pathToSave;
-                $result = $cb->statuses_updateWithMedia($parameters);
-                $result->params = $parameters;
-	    }
         }
         echo json_encode($result);
     }

@@ -202,6 +202,12 @@
 
 <div class="row-fluid">
 <?php
+    if(count($channels) > 3){
+        $span = 4;
+    }
+    else{
+        $span = 12/count($channels);
+    }
     //$data['channels'] = $channels;
     $data['color'] = '#3B5998';
     $data['group'] = $group;

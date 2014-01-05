@@ -205,11 +205,16 @@
     //$data['channels'] = $channels;
     $data['color'] = '#3B5998';
     $data['group'] = $group;
-    $this->load->view('dashboard/box_stream',$data);
+    if(count($group) >= 1){
+        $this->load->view('dashboard/box_stream',$data);
+    }
     $data['color'] = '#4099FF';
-    $this->load->view('dashboard/box_stream',$data);
+    if(count($group) >= 2){
+        $this->load->view('dashboard/box_stream',$data);
+    }
     $data['color'] = '#FF3333';
-    $this->load->view('dashboard/box_stream',$data);
+    if(count($group) >= 3)
+        $this->load->view('dashboard/box_stream',$data);
     //$this->load->view('dashboard/box_stream',$data);
     //$this->load->view('dashboard/youtube/youtube_stream',$data);
 ?>

@@ -17,7 +17,7 @@
                     <p class="headLine">
                         <span class="author">John Doe</span>
                         <i class="icon-circle"></i>
-                        <span>uploaded video</span>
+                        <span>Video</span>
                         <i class="icon-circle"></i>
                         <span><?php
                         $created_at = new DateTime($post->created_at, new DateTimeZone($this->config->item('timezone')));
@@ -27,7 +27,7 @@
                     </p>
                     <p class="video pointer"><img src="<?=$post->thumbnail_high?>" alt="" />
                     <iframe title="YouTube video player" class="youtube-player" style="display: none" type="text/html" 
-                        width="" height="" src="http://www.youtube.com/embed/<?=$post->video_id?>?autoplay=1"
+                        width="" height="" src="http://www.youtube.com/embed/<?=$post->video_id?>"
                         frameborder="0" allowFullScreen></iframe>
                     </p>
                     <h4><?=$post->title?></h2>

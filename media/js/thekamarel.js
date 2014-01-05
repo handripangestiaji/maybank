@@ -409,6 +409,7 @@ $(function(){
                     $("#compose-preview-img").hide();
                     $("#remove-img").hide();
                     $("#filename").val('');
+                    $("#compose-preview-img").removeAttr('src');
                     upload_file.replaceWith(upload_file = upload_file.clone(true));
                 });
                 
@@ -472,8 +473,8 @@ $(function(){
                     var increment = 1;
                     setInterval(function(){
                         //$(document).RefreshAllStream();
-                        increment ++;
-                        console.log(increment);
+                        //increment ++;
+                        //console.log(increment);
                     }, 120000);
                     $('#refreshAllStream').click(function(){
                         $(this).RefreshAllStream();
@@ -497,6 +498,12 @@ $(function(){
                             $(this).closest('.containerHeadline').css( "background-color", "#4099FF" );
                             $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');                                   
                         }
+                        else{
+                            urlToLoad += "youtube_stream/" + streamId
+                            $(this).closest('div').children('button').html('<i class="icon-youtube"></i><h2>Youtube&nbsp;</h2><i class="icon-caret-down"></i>');
+                            $(this).closest('.containerHeadline').css( "background-color", "#FF3333" );
+                            $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');  
+                        }
                         $(this).closest('.containerHeadline').next().load(urlToLoad);                      
                     });
                     $('.facebook_stream').on('click',function() {
@@ -515,12 +522,20 @@ $(function(){
                     });
                     
                     $('.youtube_stream').on('click',function() {
+                        
                         $(this).closest('div').children('button').html('<i class="icon-youtube"></i><h2>Youtube&nbsp;</h2><i class="icon-caret-down"></i>');
                         $(this).closest('.containerHeadline').css( "background-color", "#FF3333" );
-                        $(this).closest('.containerHeadline').next().html('youtube timeline here');
+                        $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');
+                        $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/youtube_stream/' + $(this).siblings('.channel-stream-id').val());
                     });
                 });
-                
+                $(this).on('click', 'p.video', function(){
+                    $(this).find('img').hide();
+                    $(this).find('iframe').show().attr({
+                        'width' : $(this).width() - 20,
+                        'height' : 240
+                    });
+                });
                 $(document).ready(function() {
                         $(this).on('click','.btn-reply',
                             function() {
@@ -577,6 +592,18 @@ $(function(){
                         $(this).on('click','.btn-engagement',
                             function() {
                                 $(this).parent().siblings('.engagement').toggle();
+                            }
+                        );
+                        
+                        $(this).on('click','.btn-show-video',
+                            function() {
+                                $(this).parent().siblings('.show-video').toggle();
+                                if($(this).find('.desc').html() == 'VIEW VIDEO'){
+                                    $(this).find('.desc').html('HIDE VIDEO');        
+                                }
+                                else{
+                                    $(this).find('.desc').html('VIEW VIDEO');        
+                                }
                             }
                         );
                         
@@ -705,17 +732,16 @@ $(function(){
 
                     $(".compose-insert-link-btn").click(function(){
                         $.ajax({
-                                url : BASEURL + 'dashboard/media_stream/GenerateShortUrl',
+                                url : BASEURL + 'dashboard/media_stream/GenerateShortUrlWithoutCampaign',
                                 type: "POST",
                                 data: {
-                                        long_url:$('.compose-insert-link-text').val(),
-                                        campaign_id:$('.compose-select-campaign').val()
+                                        url:$('.compose-insert-link-text').val(),
                                         },
                                 success: function(data){
-                                    var new_data = JSON.parse(data);
-                                    if(new_data.is_success != false){
-                                        $('.compose-textbox').val($('.compose-textbox').val()+ 'http://maybk.co/' + new_data.short_code);            
+                                    if(data.shortcode){
+                                        $('.compose-textbox').val($('.compose-textbox').val()+ 'http://maybk.co/' + data.shortcode);  
                                         ComposeCharCheck();
+                                        $('.compose-insert-link-short-url-hidden').val(data.shortcode);
                                         $(".compose-insert-link-text").linkpreview({
                                             previewContainer: "#url-show > .compose-form > div",  //optional
                                             //previewContainerClass: ".compose-schedule",
@@ -906,7 +932,7 @@ $(function(){
                                                         content:$('.compose-textbox').val(),
                                                         channel_id:$(this).val(),
                                                         title:$('#url-show').find('input').val(),
-                                                        link:$('#url-show').find('p').html(),
+                                                        short_url:$('.compose-insert-link-short-url-hidden').val(),
                                                         description:$('#url-show').find('textarea').val(),
                                                         image:$('#compose-preview-img').attr('src') == undefined ? '' :  $('#compose-preview-img').attr('src')
                                                        },
@@ -943,8 +969,24 @@ $(function(){
                                                             $('.compose-channels').next().find('input').removeAttr('checked');
                                                             $('.compose-fb-char-count').html(2000);
                                                             $('.compose-tw-char-count').html(140);
-                                                            $('.youtube-character-count').html(500);
-                                                        });
+                                                            $('.compose-yt-char-count').html(500);
+                                                            
+                                                            $("#img-show").css({"display": "none"});
+                                                            $("#img-show").find('#filename').val('');
+                                                            $("#img-show").find("#remove-img").hide();
+                                                            $('#img-show').find('#compose-preview-img').removeAttr('src');
+                                                            
+                                                            $("#cal-show").css({"display": "none"});
+                                                            $("#cal-show").find('#datepickerField').val('');
+                                                            $("#cal-show").find('#compose-schedule-hours').find('option').removeAttr('selected');
+                                                            $("#cal-show").find('#compose-schedule-minutes').find('option').removeAttr('selected');
+                                                            
+                                                            $("#url-show").css({"display": "none"});
+                                                            $('#url-show').find('input').val('');
+                                                            $('.compose-insert-link-short-url-hidden').val('');
+                                                            $('#url-show').find('textarea').val('');
+                                                            $('#url-show').find('p').html('');
+                                                       });
                                                     }
                                                     else{
                                                         $('.compose-post-status').removeClass('grey');
@@ -994,7 +1036,23 @@ $(function(){
                                                                 $('.compose-channels').next().find('input').removeAttr('checked');
                                                                 $('.compose-fb-char-count').html(2000);
                                                                 $('.compose-tw-char-count').html(140);
-                                                                $('.compose-yt-count').html(500);
+                                                                $('.compose-yt-char-count').html(500);
+                                                                
+                                                                $("#img-show").css({"display": "none"});
+                                                                $("#img-show").find('#filename').val('');
+                                                                $("#img-show").find("#remove-img").hide();
+                                                                $('#img-show').find('#compose-preview-img').removeAttr('src');
+                                                                
+                                                                $("#cal-show").css({"display": "none"});
+                                                                $("#cal-show").find('#datepickerField').val('');
+                                                                $("#cal-show").find('#compose-schedule-hours').find('option').removeAttr('selected');
+                                                                $("#cal-show").find('#compose-schedule-minutes').find('option').removeAttr('selected');
+                                                                
+                                                                $("#url-show").css({"display": "none"});
+                                                                $('#url-show').find('input').val('');
+                                                                $('.compose-insert-link-short-url-hidden').val('');
+                                                                $('#url-show').find('textarea').val('');
+                                                                $('#url-show').find('p').html('');
                                                             });
                                                         }
                                                         else{
@@ -1037,7 +1095,23 @@ $(function(){
                                         $('.compose-channels').next().find('input').removeAttr('checked');
                                         $('.compose-fb-char-count').html(2000);
                                         $('.compose-tw-char-count').html(140);
-                                        $('.compose-yt-count').html(500);
+                                        $('.compose-yt-char-count').html(500);
+                                        
+                                        $("#img-show").css({"display": "none"});
+                                        $("#img-show").find('#filename').val('');
+                                        $("#img-show").find("#remove-img").hide();
+                                        $('#img-show').find('#compose-preview-img').removeAttr('src');
+                                        
+                                        $("#cal-show").css({"display": "none"});
+                                        $("#cal-show").find('#datepickerField').val('');
+                                        $("#cal-show").find('#compose-schedule-hours').find('option').removeAttr('selected');
+                                        $("#cal-show").find('#compose-schedule-minutes').find('option').removeAttr('selected');
+                                        
+                                        $("#url-show").css({"display": "none"});
+                                        $('#url-show').find('input').val('');
+                                        $('.compose-insert-link-short-url-hidden').val('');
+                                        $('#url-show').find('textarea').val('');
+                                        $('#url-show').find('p').html('');
                                     });
                                 }
                                 
@@ -1048,8 +1122,13 @@ $(function(){
                                             channels:channels,
                                             content:$('.compose-textbox').val(),
                                             tags:$("#compose-tags").tagit("assignedTags"),
-                                            schedule:scheduleTime
-                                            },
+                                            schedule:scheduleTime,
+                                            title:$('#url-show').find('input').val(),
+                                            short_url:$('.compose-insert-link-short-url-hidden').val(),
+                                            description:$('#url-show').find('textarea').val(),
+                                            image:$('#compose-preview-img').attr('src') == undefined ? '' :  $('#compose-preview-img').attr('src'),
+                                            email_me:$('#email_me').val()
+                                           },
                                     success: function(){
                                        
                                     }
@@ -1076,7 +1155,6 @@ $(function(){
                     });
                     
                     $('.select-shorten-url').on('change', function(){
-                        /*
                         $(".select-shorten-url option:selected").linkpreview({
                             url: BASEURL + 'dashboard/media_stream/GetUrlPreview?url=' + $(".select-shorten-url option:selected").val(),
                             previewContainer: "#url-show > .compose-form > div",  //optional
@@ -1093,8 +1171,10 @@ $(function(){
                             onComplete: function() {                 //optional
                             }
                        });
-                       */
+                        var str = $('.select-shorten-url option:selected').val();
+                        var res = str.replace('http://maybk.co/','');
                         $('.compose-textbox').val($('.compose-textbox').val() + $(".select-shorten-url option:selected").val());
+                        $('.compose-insert-link-short-url-hidden').val(res);
                         ComposeCharCheck();
                     });
                     
@@ -1588,11 +1668,20 @@ $(document).ready(function(){
         },
         eventRender: function(event, element){
             console.log($('#calendar').width());
-            //console.log(element.coord().left);
+            var deleteable;
+            if(event.is_posted != '1'){
+                deleteable = "<div class='pull-right'><button type='button' class='btn btn-danger btn-mini btn-delete-schedule-post'><i class='icon-remove'></i></a></div>";
+            }
+            else{
+                deleteable = '';
+            }
+            
             var tooltip =
             "<div class='tooltip-event hide'>" +
+                "<input type='hidden' class='schedule_post_to_id' value='" + event.post_to_id + "'>" +
                 "<div class='pull-left'>" + event.post_date + " | " + event.post_time + "</div>" +
-                "<br>" +
+                deleteable + 
+                "<br clear='all'>" +
                 "<div class='tooltip-content pull-left'>" +
                     "<div class='tooltip-content-head'>" + event.title + "</div>" +
                     "<div class='tooltip-content-body'>" +
@@ -1610,6 +1699,27 @@ $(document).ready(function(){
             if(($('#calendar').width() - element.coord().left) < 270){
                 element.find('.tooltip-event').css('left','-100px');
             }
+        }
+    });
+    
+    $(this).on('click', '.btn-delete-schedule-post', function(){
+        var r = confirm('Are you sure want to delete this post?');
+        if(r == true){
+            var me = $(this);
+            $.ajax({
+                url : BASEURL + 'dashboard/media_stream/DeleteSchedulePost',
+                type: "POST",
+                data: {
+                    post_to_id:me.parent().siblings('.schedule_post_to_id').val(),
+                },
+                success: function(result)
+                {
+                    me.closest('.fc-event').hide();
+                },
+            });
+        }
+        else{
+            
         }
     });
 });

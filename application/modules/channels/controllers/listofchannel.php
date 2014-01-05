@@ -40,6 +40,18 @@ class listofchannel extends CI_Controller {
         
     }
     
+    function Youtube(){
+        $filter = array(
+            'connection_type' => 'youtube'
+        );
+        $data['title'] = "Youtube";
+        $data['channel_list'] = $this->account_model->GetChannel($filter);
+        $data['total_row'] = $this->account_model->GetTableTotalRow('channel', $filter);
+        $this->session->set_userdata('channel_token_delete', md5(time()));
+        $this->load->view("channels/channel_management_list", $data);
+        
+    }
+    
     public function FacebookPagePick(){
         $list = explode(",", $this->input->post('id'));
         $pageName = explode(",", $this->input->post('pageName'));

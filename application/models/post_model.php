@@ -7,11 +7,23 @@ class post_model extends CI_Model
         $this->load->helper('basic');
     }
     
-    public function InsertPost($message,$channels,$tags='',$scheduleTime=NULL){
-        $post = array('created_by' => $this->session->userdata('user_id'),
+    public function InsertPost($message,$channels,$tags='',$image='',$link='',$title='',$description='',$email_me='0',$scheduleTime=NULL){
+        if($email_me == 'on'){
+	    $email_me = 1;
+	}
+	else{
+	    $email_me = 0;
+	}
+	
+	$post = array('created_by' => $this->session->userdata('user_id'),
 			'messages' => $message,
 			'created_at' => date('Y-m-d H:i;s'),
-			'time_to_post' => $scheduleTime
+			'time_to_post' => $scheduleTime,
+			'image' => $image,
+			'short_urls_id' => $link,
+			'url_title' => $title,
+			'url_description' => $description,
+			'email_me_when_sent' => $email_me
 			);
 	$this->db->insert('post',$post);
         $post_id = $this->db->insert_id();
@@ -83,6 +95,7 @@ class post_model extends CI_Model
 	$this->db->join('post_to','post.id = post_to.post_id');
 	$this->db->join('channel','channel.channel_id = post_to.channel_id');
 	$this->db->join('user','post.created_by = user.user_id');
+	$this->db->join('short_urls','post.short_urls_id = short_urls.id','left');
 	if($filter != null){
 	    $this->db->where($filter);
 	}

@@ -179,13 +179,15 @@ class Cronjob extends CI_Controller {
             $this->post_model->UpdatePostTo($post->post_to_id,$value);
             
             //send email
-            $this->email->set_newline("\r\n");
-            $this->email->from('tes@gmail.com','maybank');
-            $this->email->to('benawv@gmail.com');    
-            $this->email->subject('Message Posted');
-            $template = curl_get_file_contents(base_url().'mail_template/PostSent/'.$post->post_to_id);
-            $this->email->message($template);
-            $this->email->send();
+            if($post->email_me_when_sent == 1){
+                $this->email->set_newline("\r\n");
+                $this->email->from('tes@gmail.com','maybank');
+                $this->email->to('benawv@gmail.com');    
+                $this->email->subject('Message Posted');
+                $template = curl_get_file_contents(base_url().'mail_template/PostSent/'.$post->post_to_id);
+                $this->email->message($template);
+                $this->email->send();
+            }
         }	    
     }
     
@@ -194,13 +196,17 @@ class Cronjob extends CI_Controller {
             $messages = $this->input->post('content');
             $channel_id = $this->input->post('channel_id');
             $title = $this->input->post('title');
-            $link = $this->input->post('link');
+            $short_code = $this->input->post('short_url');
             $description = $this->input->post('description');
             $image_to_post = $this->input->post('image');
         }
         else{
             $messages = $post->messages;
             $channel_id = $post->channel_id;
+            $title = $post->url_title;
+            $short_code = $post->short_code;
+            $description = $post->url_description;
+            $image_to_post = $post->image;
         }
         
         $this->load->model('account_model');
@@ -222,42 +228,49 @@ class Cronjob extends CI_Controller {
         );
         $this->load->library('facebook',$config);
         $this->facebook->setaccesstoken($newStd->token);
-        
-        if($image_to_post != ''){
+    
+        if($post != NULL){    
+            if($image_to_post != ''){
+                $this->facebook->setFileUploadSupport(true);
+                $args = array('message' => $messages);
+                $args['image'] = '@' . realpath($image_to_post);
+                $result = $this->facebook->api('/me/photos', 'post', $args);
+            }
+        }
+        else{
             $this->load->helper('file');
-            $img = $image_to_post;
+            $img = $this->input->post('image');
             $img = str_replace('data:image/png;base64,', '', $img);
             $img = str_replace('data:image/jpeg;base64,', '', $img);
             $img = str_replace(' ', '+', $img);
             $data = base64_decode($img);
             $file_name = uniqid().'.png';
             $pathToSave = $this->config->item('assets_folder').$file_name;
-            if (write_file($pathToSave, $data)){    
+            if ( ! write_file($pathToSave, $data)){
+                $result = $this->facebook->api('/me/feed','POST',array('message' => $messages));
+            }
+	    else{
                 $this->facebook->setFileUploadSupport(true);
                 $args = array('message' => $messages);
                 $args['image'] = '@' . realpath($pathToSave);
                 $result = $this->facebook->api('/me/photos', 'post', $args);
-            }
-            else{
-                $result = $this->facebook->api('/me/feed','POST',array('message'=>$messages));
-            }
+	    }
         }
         
-        if($link != '')
+        if($short_code != '')
         {
             $attachment = array(
                 'message' => $messages,
                 'name' => $title,
-                'link' => $link,
+                'link' => 'http://maybk.co/'.$short_code,
                 'description' => $description,
             );  
             $result = $this->facebook->api('/me/feed','POST',$attachment);
         }
         
-        if(($link == '') && ($image_to_post == '')){
+        if(($short_code == '') && ($image_to_post == '')){
             $result = $this->facebook->api('/me/feed','POST',array('message' => $messages));    
         }
-        
         echo json_encode($result);
     }
     
@@ -270,6 +283,10 @@ class Cronjob extends CI_Controller {
         else{
             $messages = $post->messages;
             $channel_id = $post->channel_id;
+            $title = $post->url_title;
+            //$link = $post,
+            $description = $post->url_description;
+            $image_to_post = $post->image;
         }
         
         $this->load->helper('basic');
@@ -288,21 +305,34 @@ class Cronjob extends CI_Controller {
         
         $parameters = array('status' => $messages);
         
-        if($image_to_post != ''){
+        if($post != NULL){
+            if($image_to_post != ''){
+                require_once './application/libraries/codebird.php';
+                $this->load->config('twitter');
+                Codebird::setConsumerKey($this->config->item('twitter_consumer_token'), $this->config->item('twitter_consumer_secret'));
+                $cb = Codebird::getInstance();
+                $cb->setToken($channel_loaded[0]->oauth_token, $channel_loaded[0]->oauth_secret);
+                $parameters['media[]'] = $image_to_post;
+                $result = $cb->statuses_updateWithMedia($parameters);
+                $result->params = $parameters;
+            }
+            else{
+                $result = $this->connection->post('statuses/update', $parameters);
+            }
+        }
+        else{
             $this->load->helper('file');
-            $img = $image_to_post;
+            $img = $this->input->post('image');
             $img = str_replace('data:image/png;base64,', '', $img);
             $img = str_replace('data:image/jpeg;base64,', '', $img);
             $img = str_replace(' ', '+', $img);
             $data = base64_decode($img);
             $file_name = uniqid().'.png';
             $pathToSave = $this->config->item('assets_folder').$file_name;
-            $image_to_post = $pathToSave;
             if ( ! write_file($pathToSave, $data)){
-                $validation = array('result' => FALSE,'name' => 'image '.$pathToSave,'error_code' => 112);
-                $result=$this->connection->post('statuses/update', $parameters);
+                $result = $this->connection->post('statuses/update', $parameters);
             }
-            else{
+	    else{
                 require_once './application/libraries/codebird.php';
                 $this->load->config('twitter');
                 Codebird::setConsumerKey($this->config->item('twitter_consumer_token'), $this->config->item('twitter_consumer_secret'));
@@ -311,11 +341,65 @@ class Cronjob extends CI_Controller {
                 $parameters['media[]'] = $pathToSave;
                 $result = $cb->statuses_updateWithMedia($parameters);
                 $result->params = $parameters;
-            }
-        }
-        else{
-            $result = $this->connection->post('statuses/update', $parameters);        
+	    }
         }
         echo json_encode($result);
     }
+    
+    
+     public function Test(){
+        $this->load->config('youtube');
+        $youtube = $this->config->item('youtube');
+        
+        $this->load->library('google_libs/Google_Client');
+        require_once './application/libraries/google_libs/contrib/Google_YouTubeService.php';
+        require_once './application/libraries/google_libs/contrib/Google_YouTubeAnalyticsService.php';
+        $this->load->library('youtube_libs');
+        $filter = array(
+            "connection_type" => "youtube"
+        );
+        if($this->input->get('channel_id')){
+            $filter['channel_id'] = $this->input->get('channel_id');
+        }
+        $youtube_channel= $this->account_model->GetChannel($filter);
+        $this->google_client->setClientId($youtube['client_id']);
+        $this->google_client->setClientSecret($youtube['client_secret']);
+       
+        foreach($youtube_channel as $each_channel){
+            
+            $token = json_decode($each_channel->oauth_token);
+            
+            if($token->created + 3600 < time()){
+                $this->google_client->refreshToken($token->refresh_token);
+                $current_access_token = json_decode($this->google_client->getAccessToken());
+                $current_access_token->refresh_token = $token->refresh_token;
+                $this->account_model->YoutubeRefreshToken(json_encode($current_access_token), $each_channel->channel_id, date("Y-m-d H:i:s", $current_access_token->created));    
+            }
+            else{
+                $this->google_client->setAccessToken(json_encode($token));
+            }
+            $youtube_object = new Google_YoutubeService($this->google_client);          
+            $playlistItemsResponse = $youtube_object->playlistItems->listPlaylistItems('snippet', array(
+                'playlistId' => $each_channel->social_id,
+                'maxResults' => 50
+            ));
+            $this->load->model('youtube_model');
+            
+            $video = array();
+            for($i=0; $i< count($playlistItemsResponse['items']); $i++){
+                $detail_video = $this->youtube_libs->ReadVideoRatings($playlistItemsResponse['items'][$i]['snippet']['resourceId']['videoId']);
+                $detail_video->data->etag = $playlistItemsResponse['items'][$i]['etag'];
+                $detail_video->data->stream_id = $playlistItemsResponse['items'][$i]['id'];
+                $this->youtube_model->SaveYouTubePost($detail_video, $each_channel->channel_id);
+                $video[] = $detail_video;
+            }
+            
+            echo "<pre>";
+            print_r($video);
+            echo "</pre>";
+        }
+        
+        
+    }
+
 }

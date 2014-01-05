@@ -18,6 +18,7 @@ class Media_stream extends CI_Controller {
 	$this->load->helper('form');
 	$this->load->model('facebook_model');
 	$this->load->model('twitter_model');
+	$this->load->model('youtube_model');
 	$this->load->model('account_model');
     }
     
@@ -44,6 +45,19 @@ class Media_stream extends CI_Controller {
 	$data['user_list'] = $this->case_model->ReadAllUser();
 	$this->load->view('dashboard/facebook/facebook_stream',$data);
     }
+    
+    public function youtube_stream($channel_id, $is_read = null){
+	$filter = array(
+	   'channel_id' => $channel_id,
+	);
+	if($is_read)
+	    $filter['is_read'] = $is_read;
+	$page = $this->input->get('page');
+	$page = $page ? $page : 1;
+	$data['youtube_post'] = $this->youtube_model->ReadYoutubePost($filter, $page);
+	$this->load->view('dashboard/youtube/youtube_stream', $data);
+    }
+    
     
     public function twitter_stream($channel_id,$is_read = null){
     	$limit = $this->config->item('item_perpage');
@@ -796,7 +810,42 @@ class Media_stream extends CI_Controller {
 	    $compose_date_hour = null;
 	}
 	
-	$this->post_model->InsertPost($this->input->post('content'),$this->input->post('channels'),$this->input->post('tags'),$compose_date_hour);
+	$image_to_post = '';
+	if($this->input->post('image') != ''){
+            $this->load->helper('file');
+            $img = $this->input->post('image');
+            $img = str_replace('data:image/png;base64,', '', $img);
+            $img = str_replace('data:image/jpeg;base64,', '', $img);
+            $img = str_replace(' ', '+', $img);
+            $data = base64_decode($img);
+            $file_name = uniqid().'.png';
+            $pathToSave = $this->config->item('assets_folder').$file_name;
+            if ( ! write_file($pathToSave, $data)){
+                $image_to_post = '';
+            }
+	    else{
+		$image_to_post = $pathToSave;
+	    }
+	}
+	
+	if($this->input->post('short_url') != ''){
+	    $this->load->model('shorturl_model');
+	    $short_url = $this->shorturl_model->find(array('short_code' => $this->input->post('short_url')));
+	    $short_url_id = $short_url->id;
+	}
+	else{
+	    $short_url_id = NULL;
+	}
+	
+	$this->post_model->InsertPost($this->input->post('content'),
+				      $this->input->post('channels'),
+				      $this->input->post('tags'),
+				      $image_to_post,
+				      $short_url_id,
+				      $this->input->post('title'),
+				      $this->input->post('description'),
+				      $this->input->post('email_me'),
+				      $compose_date_hour);
     }
     
     public function load_facebook($type){
@@ -836,7 +885,7 @@ class Media_stream extends CI_Controller {
         $channel_id=$channel_ids;
         $is_read=0;
         $filter = array(
-    	   'channel_id' => $channel_id,
+    	   'a.channel_id' => $channel_id,
     	);
     	
 	if($this->input->get('last_id')){
@@ -885,7 +934,6 @@ class Media_stream extends CI_Controller {
              $this->load->view('dashboard/twitter/twitter_senttweets.php',$data);
 
         }
-//        unset($filter['b.type']);
         if($action=='direct'){
             $filter['channel_id']=$channel_ids;
             $data['directmessage']=$this->twitter_model->ReadDMFromDb($filter,$limit);
@@ -894,9 +942,8 @@ class Media_stream extends CI_Controller {
             $this->load->view('dashboard/twitter/twitter_messages.php',$data);
 
         }
-        
-    //$data['own_post'] = $this->facebook_model->RetrievePostFB($filter);
         if($action=='wallPosts'){
+	    unset($filter['a.channel_id']);
 	    $filter['channel_id']=$channel_ids;
              $data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter,$limit);
              $data['count_fb_feed']=$this->facebook_model->CountFeedFB($filter);
@@ -904,7 +951,8 @@ class Media_stream extends CI_Controller {
         }
         
         if($action=='privateMessages'){
-            $filter['channel_id']=$channel_ids;
+	    unset($filter['a.channel_id']);
+            $filter['d.channel_id']=$channel_ids;
             $data['fb_pm'] = $this->facebook_model->RetrievePmFB($filter,$limit);
             $data['CountPmFB']=$this->facebook_model->CountPmFB($filter);
             $this->load->view('dashboard/facebook/private_message.php',$data);
@@ -1015,7 +1063,8 @@ class Media_stream extends CI_Controller {
     
     public function GetScheduleData(){
 	$this->load->model('post_model');
-	$posts = $this->post_model->GetPosts();
+	$filter = 'is_posted is NULL or is_posted=1';
+	$posts = $this->post_model->GetPosts($filter);
 	
 	$encodeme = array();
 	foreach($posts as $post){
@@ -1029,18 +1078,24 @@ class Media_stream extends CI_Controller {
 		
 		$short_time = date('H:i A',strtotime($post_time));
 		
-		$encodeme[] = array('id' => $post->id,
+		$encodeme[] = array('post_to_id' => $post->post_to_id,
 				'title' => $post->name,
 				'start' => date('c',strtotime($post->time_to_post)),
 				'end' => date('c',strtotime($post->time_to_post)),
 				'description' => $post->messages,
 				'user_name' => $post->display_name,
 				'post_date' => $new_short_date,
-				'post_time' => $short_time
+				'post_time' => $short_time,
+				'is_posted' => $post->is_posted,
 			       );
 	    }
 	}
         echo json_encode($encodeme);
     }
 
+    public function DeleteSchedulePost(){
+	$this->load->model('post_model');
+	$value = array('is_posted' => 2);
+	$this->post_model->UpdatePostTo($this->input->post('post_to_id'),$value);
+    }
 }

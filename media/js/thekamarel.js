@@ -1414,62 +1414,44 @@ $(function(){
                                                 
                     });
                                         
-                    $(this).on('click','.delete',
+                    $(this).on('click','.deleteFB',
                         function(){
+
                             var delButton = $(this);
+                            channel_id : $(this).closest('.floatingBox').find('input.channel-id').val()
                             post_id=delButton.closest('li').find('.postId').val();
+                            //type=delButton.closest('li').find('.type').val();
+                             delButton.attr('disabled', 'disabled').html('DELETING...');
                             $.ajax({
-                                "url" : BASEURL + "dashboard/media_stream/deleteFacebook",
-                                "type" : "POST",
-                                "data" : $(this).serialize() + "&channel_id=" + $(this).closest('.floatingBox').find('input.channel-id').val() +
-                                            "&filename=" + ($(this).find('.reply-preview-img').attr('src') == undefined ? '' :  $(this).find('.reply-preview-img').attr('src')),
-                                "success" : function(response){
-                                
-                                    try{
-                                        if(response.success == false){
-                                            var message = '';
-                                            if(response.result.errors){
-                                                for(x=0; x<response.result.errors.length; x++){
-                                                    message += response.result.errors[x].message + "<br />";
-                                                }
-                                            }
-                                            
-                                            me.find('.message').html('<div class="alert alert-warning">' +
-                                            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
-                                            '<strong>Error!</strong> ' + response.message + '<br />' + message + '</div>');
-                                            
-                                        }
-                                        else{
-                                            me.find('.message').html('<div class="alert alert-success">' +
-                                            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
-                                            '<h4>Reply Tweet</h4> ' + response.message + '!</div>');
-                                            me.find('input, textarea').val('');
-                                            me.find('.reply-preview-img').toggle('slow');
-                                            openButton.removeClass('btn-warning').addClass('btn-inverse').html('REPLIED').val('');
-                                            setTimeout(function(){
-                                                me.closest('.reply-field').toggle('slow');
-                                            }, 3000);
-                                            
-                                        }
-                                    }
-                                    catch(e){
-                                          me.find('.message').html('<div class="alert alert-danger">' +
-                                            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
-                                            '<strong>Error!</strong> Delete failed.</div>');
-                                    }
-                                    
+                                url : BASEURL + 'dashboard/media_stream/fbDeleteStatus',
+                                type: "POST",
+                                data: {
+                                    post_id: post_id,
+                                    channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
                                 },
-                                "error" :  function( jqXHR, textStatus, errorThrown ){
-                                    buttonSubmit.removeAttr('disabled').html('SEND');
-                                     me.find('.message').html('<div class="alert alert-danger">' +
-                                            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
-                                            '<strong>Error!</strong> Delete failed.</div>');
+                                success: function(response){
+                                    alert(response);
+                                    
+                                     delButton.removeAttr('disabled').html('SEND');
                                 }
+                                                                
                             });
                             
-                        }
-                    );
-                        
+                        });
+                         $(this).on('click','.pointerCase',
+                            function() {
+                                var pointer=$(this).closest('.pointerCase').find('.pointer-case').val();
+                                //alert(pointer);
+                                var tes=$('.content').find('.case_'+pointer).html();
+                                if(tes){
+                                  //  alert("ada:"+tes);   
+                                }else{
+                                    //alert("ga ada:"+tes);
+                                }
+                                $(document.body).animate({
+                                    'scrollTop':$('.case_'+pointer).offset().top
+                                }, 2000);
+                            });
                     
                       /*load more content*/  
                     looppage=2;
@@ -1817,4 +1799,5 @@ $.fn.RefreshAllStream = function(){
     });
 };
 
+   
 

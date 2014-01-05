@@ -34,7 +34,7 @@ class facebook_model extends CI_Model
     public function RetrieveFeed($page_id, $access_token, $type = 'feed', $isOwnPost = false){
 	
         $fql = '{"query1":"SELECT post_id, actor_id, share_count, attachment, share_count, updated_time, message,like_info, comment_info, message_tags FROM stream WHERE source_id = '.$page_id.
-	' AND actor_id  <> '.$page_id.' order by updated_time ASC LIMIT 50",'.
+	' AND actor_id  <> '.$page_id.' order by updated_time desc LIMIT 50",'.
         '"query2" : "SELECT id,post_id, comment_count, text, time, fromid FROM comment WHERE post_id in (Select post_id from #query1 where comment_info.comment_count > 0) ",'.
         '"query3" : "Select uid, name, username from user where uid in (select actor_id from #query1) or uid in (select fromid from #query2)",'.
         '"query4" : "Select page_id, name, username from page where page_id in (select actor_id from #query1) or page_id in (select fromid from #query2)"'.
@@ -76,7 +76,7 @@ class facebook_model extends CI_Model
     */
     public function RetrievePost($page_id, $access_token, $isOwnPost = true){
 	 $fql = '{"query1":"SELECT share_count, attachment, post_id, actor_id, share_count, updated_time, message,like_info, comment_info, message_tags FROM stream WHERE source_id = '.$page_id.
-	' AND actor_id '.($isOwnPost ? " = " : " <> " ).$page_id.' order by updated_time ASC LIMIT 50",
+	' AND actor_id '.($isOwnPost ? " = " : " <> " ).$page_id.' order by updated_time desc LIMIT 50",
         "query2" : "SELECT id,post_id, comment_count, parent_id, text, time, likes, fromid FROM comment WHERE post_id in (Select post_id from #query1 where comment_info.comment_count > 0) ",
         "query3" : "Select uid, name, username,sex from user where uid in (select actor_id from #query1) or uid in (select fromid from #query2)",
         "query4" : "Select page_id, name, username from page where page_id in (select actor_id from #query1) or page_id in (select fromid from #query2)"
@@ -386,6 +386,13 @@ class facebook_model extends CI_Model
 	$this->db->where("comment_stream_id",$comment_id);
 	return $this->db->get()->row();
     }
+        
+    public function streamId($post_id){
+        $this->db->select('*');
+	    $this->db->from('social_stream');
+	    $this->db->where('post_id',$post_id);
+        return $this->db->get()->row();
+    }
     
     public function IsFbUserExists($fb_id){
 	$this->db->select('facebook_id');
@@ -412,7 +419,7 @@ class facebook_model extends CI_Model
     }
     
     public function RetrieveFeedFB($filter,$limit = 20){
-        $this->db->select('*, c.type as social_stream_type, b.post_id as social_stream_post_id,b.post_id');
+        $this->db->select('*, c.type as social_stream_type, b.post_id as social_stream_post_id,b.post_id, c.created_at as post_date,d.case_id');
         $this->db->from("fb_user_engaged a INNER JOIN social_stream_fb_post b  
 			 ON b.author_id = a.facebook_id inner join social_stream c on c.post_id = b.post_id LEFT JOIN
                          `case` d on d.post_id = c.post_id and d.status='pending'");
@@ -460,12 +467,12 @@ class facebook_model extends CI_Model
     
       public function RetrievePmFB($filter,$limit){
         //WHERE detail_id_from_facebook LIKE '%_0'
-        $this->db->select('a.*,b.*,c.name,c.username, d.is_read, d.post_stream_id, d.type,d.type as social_stream_type,d.channel_id, d.post_id, d.post_id as social_stream_post_id');
+        $this->db->select('a.*,b.*,c.name,c.username, d.is_read, d.post_stream_id, d.type,d.type as social_stream_type,d.channel_id, d.post_id,b.created_at AS post_date,e.case_id');
         $this->db->from("social_stream_facebook_conversation a LEFT OUTER JOIN 
                         social_stream_facebook_conversation_detail b ON b.conversation_id = a.conversation_id LEFT OUTER JOIN
-                        fb_user_engaged c ON c.facebook_id=b.sender INNER JOIN
-                        social_stream d ON d.post_id=b.conversation_id ");
-	
+                        fb_user_engaged c ON c.facebook_id=b.sender INNER JOIN 
+                        social_stream d ON d.post_id=b.conversation_id LEFT OUTER JOIN
+                        `case` e ON e.post_id=d.post_id");	
         if(count($filter) > 0){
 	    $this->db->where("detail_id_from_facebook LIKE '%_0' ");
 	    $this->db->where($filter);
@@ -474,7 +481,7 @@ class facebook_model extends CI_Model
 	    $this->db->where("detail_id_from_facebook LIKE '%_0'");    
         }
         $this->db->limit($limit);
-        $this->db->order_by('created_at','desc');
+        $this->db->order_by('b.created_at','desc');
         return $this->db->get()->result();
     }
     
@@ -506,8 +513,6 @@ class facebook_model extends CI_Model
         $result  = json_decode($requestResult);
     }
 
- 
-    
     public function ReadUnread($post_id, $new_val = null){
 	if($new_val == null){
 	    $this->db->select('*');
@@ -529,4 +534,13 @@ class facebook_model extends CI_Model
 	$this->db->update('social_stream', $data);
 	return $new_val;
     }
+    
+    function DeletePostFb($post_stream_id){
+        
+        $this->db->where(array(
+            'post_stream_id' => $post_stream_id,
+        ));
+        return $this->db->delete('social_stream');
+    }
+    
 }

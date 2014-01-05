@@ -14,7 +14,7 @@ class Media_stream extends CI_Controller {
 	$this->load->library('Twitteroauth');
 	$this->load->library('session');
 	$this->load->helper('url');
-	$this->load->helper('array');
+	$this->load->helper('array');  
 	$this->load->helper('form');
 	$this->load->model('facebook_model');
 	$this->load->model('twitter_model');
@@ -30,6 +30,8 @@ class Media_stream extends CI_Controller {
 	if($is_read != NULL){
 	    if($is_read != 2){
 		$filter['is_read'] = $is_read;
+	    }else{
+		$filter['case_id is NOT NULL'] = null;
 	    }
 	}
 	$limit=10;
@@ -37,6 +39,7 @@ class Media_stream extends CI_Controller {
 	$data['count_fb_feed']=$this->facebook_model->CountFeedFB($filter);
 	//$data['own_post'] = $this->facebook_model->RetrievePostFB($filter);
 	$data['fb_pm'] = $this->facebook_model->RetrievePmFB($filter,$limit);
+    $filter=array();
 	$data['CountPmFB']=$this->facebook_model->CountPmFB($filter);
 	$this->load->model('campaign_model');
 	$data['product_list'] = $this->campaign_model->GetProduct();

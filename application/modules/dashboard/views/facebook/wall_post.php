@@ -7,7 +7,7 @@ for($i=0; $i<count($fb_feed);$i++):
 $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->post_id));
 //print_r($isMyCase);
 ?>
-<li class="pointer-<?php echo $fb_feed[$i]->post_id; ?>">
+<li class="<?php if(isset($isMyCase[0]->assign_to)){echo "case_".$isMyCase[0]->case_id;} ?>">
     <input type="hidden" class="postId" value="<?php echo $fb_feed[$i]->post_id; ?>" />
     <div class="circleAvatar"><img src="https://graph.facebook.com/<?php echo number_format($fb_feed[$i]->facebook_id, 0,'.','')?>/picture?small" alt=""></div>
     <div class="read-mark <?php if($fb_feed[$i]->is_read==0){echo 'redText';} else { echo 'greyText'; } ?>"><i class="icon-bookmark icon-large"></i></div>

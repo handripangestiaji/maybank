@@ -1358,7 +1358,20 @@ $(function(){
                             });
                             
                         });
-                        
+                         $(this).on('click','.pointerCase',
+                            function() {
+                                var pointer=$(this).closest('.pointerCase').find('.pointer-case').val();
+                                //alert(pointer);
+                                var tes=$('.content').find('.case_'+pointer).html();
+                                if(tes){
+                                  //  alert("ada:"+tes);   
+                                }else{
+                                    //alert("ga ada:"+tes);
+                                }
+                                $(document.body).animate({
+                                    'scrollTop':$('.case_'+pointer).offset().top
+                                }, 2000);
+                            });
                     
                       /*load more content*/  
                     looppage=2;
@@ -1676,4 +1689,5 @@ $.fn.RefreshAllStream = function(){
     });
 };
 
+   
 

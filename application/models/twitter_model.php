@@ -376,7 +376,7 @@ class twitter_model extends CI_Model
                 return null;
             }
         }
-        
+
         return null;
     }
     
@@ -492,4 +492,6 @@ class twitter_model extends CI_Model
         ));
         return $this->db->delete('social_stream');
     }
+    
+    
 }

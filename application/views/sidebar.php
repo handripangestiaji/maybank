@@ -20,7 +20,9 @@
     <div class="sidebarDivider"></div>
     <div class="sidebarContent" style="overflow-y: scroll;">
         <div class="sidebarHead pull-left">
-            <?php if(isset($case)):?>
+            <?php
+            /*print_r($case);*/ 
+            if(isset($case)):?>
             <p class="title pull-left">NOTIFICATION&nbsp;<span class="badge">Total <?php echo count($case)+count($reply_pending); ?></span></p>
             <?php endif;?>
         </div>
@@ -36,7 +38,8 @@
         <div class="sidebarLine"></div>
         <ul class="tasksList">
             <?php foreach($case as $each_case):?>
-            <li>
+            <li class="pointerCase" >
+                <input type="hidden" name="pointer" class="pointer-case" value="<?php echo $each_case->case_id?>" />
                 <div class="notifHead purple">
                     CASE ID: #<?php echo $each_case->case_id?>
                 </div>

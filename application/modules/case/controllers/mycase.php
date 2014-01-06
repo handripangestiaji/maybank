@@ -39,7 +39,8 @@ class mycase extends CI_Controller{
                 "case_type" => $this->input->post('case_type'),
                 "assign_to" => $this->input->post('assign_to') == '' ? NULL : $this->input->post('assign_to'),
                 "related_conversation" => $this->input->post('related_conversation'),
-                "post_id" => $this->input->post('post_id')
+                "post_id" => $this->input->post('post_id'),
+                "created_at" => date("Y-m-d H:i:s")
             );
             
             $case['case_id'] = $this->case_model->CreateCase($case);
@@ -51,12 +52,12 @@ class mycase extends CI_Controller{
                 );
         }
         else{
-             echo json_encode(array(
-                        "success" => false,
-                        "message" => "Assigning case was failed.",
-                        "errors" => $is_valid
-                    )
-                );
+            echo json_encode(array(
+                       "success" => false,
+                       "message" => "Assigning case was failed.",
+                       "errors" => $is_valid
+                   )
+               );
         }
         
     }
@@ -71,9 +72,14 @@ class mycase extends CI_Controller{
     }
     
     
-    function FacebookRelatedConversation($post_id){
+    function FacebookRelatedConversation($post_id,$type){
         $this->load->model('facebook_model');
-        echo json_encode($this->facebook_model->RetriveCommentPostFb($post_id));
+        if($type=='facebook'){
+            echo json_encode($this->facebook_model->RetriveCommentPostFb($post_id));
+        }else{
+            $filter["d.post_id"]=$post_id;            
+             echo json_encode($this->facebook_model->RetrievePmDetailFB($post_id));
+       }  
     }
     
     function ResolveCase(){

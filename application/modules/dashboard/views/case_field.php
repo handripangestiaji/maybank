@@ -1,5 +1,7 @@
 <div class="row-fluid">
-<?php if($posts){?>
+<?php if($posts){
+    //echo $posts[$i]->post_id."-".$posts[$i]->type;
+        ?>
            <span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
            
            <form method="post" class="assign-case" action="<?php echo base_url("case/mycase/CreateCase")?>">
@@ -18,7 +20,7 @@
                </select>
            </div>
            <br clear="all" />
-           <button href="#modalConfirm-<?php echo isset($posts[$i]->post_id) ? $posts[$i]->post_id : "" ?>" data-toggle="modal"
+           <button href="#modalConfirm-<?php echo isset($posts[$i]->social_stream_post_id) ? $posts[$i]->social_stream_post_id : "" ?>" data-toggle="modal"
             class="btn btn-small btn-purple btn-add-related <?php echo $posts[$i]->social_stream_type?>">Add Related Conversation</button>
             
            <input type="hidden" id="relatedCoversation-<?php echo $posts[$i]->post_id ?>" name="related_conversation" value="<?php echo $posts[$i]->post_id?>" />
@@ -53,7 +55,7 @@
     </div>
 
 <!-- ==================== MODALS FLOATING BOX ==================== -->
-<div id="modalConfirm-<?php echo $posts[$i]->post_id ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+<div id="modalConfirm-<?php echo isset($posts[$i]->social_stream_post_id) ? $posts[$i]->social_stream_post_id : "" ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
     <input type="hidden" value="<?php echo $posts[$i]->post_id?>" name="post_id" />
     
     <?php if($posts[$i]->social_stream_type=="twitter"):?>

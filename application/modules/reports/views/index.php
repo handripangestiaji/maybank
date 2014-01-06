@@ -31,6 +31,9 @@
                     Filter via
                     <select>
                         <option>select channel</option>
+                        <?php foreach($channel->result() as $c){?>
+                            <option value='<?php echo $c->channel_id;?>'><?php echo $c->name;?></option>
+                        <?php }?>
                     </select>
                 </div>
                 <div style="float: left;margin-left: 75px;">
@@ -65,6 +68,72 @@
                     <li id="gaugeDemo3"></li>
                     <li style='float: left; margin-left: 18%;'><span style='font-weight: bold;'>COMPLAINT</span></li>
                 </ul>
+            </div>
+            <div style='clear: both;'></div>
+                    <?php
+                        function time_hour($secs){
+                            if($secs!=NULL){
+                            $bit = array(
+                                ' year'        => $secs / 31556926 % 12,
+                                ' week'        => $secs / 604800 % 52,
+                                ' day'        => $secs / 86400 % 7,
+                                ' hour'        => $secs / 3600 % 24,
+                                ' minute'    => $secs / 60 % 60,
+                                ' second'    => $secs % 60
+                                );
+                                
+                            foreach($bit as $k => $v){
+                                if($v > 1)$ret[] = $v . $k . 's';
+                                if($v == 1)$ret[] = $v . $k;
+                                }
+                            array_splice($ret, count($ret)-1, 0);
+                            
+                            return join(' ', $ret);
+                            }
+                        }
+                    ?>
+            <div>
+                <table style='float: left;' border='1' cellpadding='4'>
+                        <thead>
+                        <tr><td rowspan="2">Product</td>
+                        <?php
+                            $header = array();
+                            $i=0;
+                            foreach($show as $sh){
+                                if(!in_array($sh->case_type, $header)){
+                                    
+                                    $header [] = $sh->case_type;
+                                    
+                                    echo "<th colspan='3'>$sh->case_type</th>";
+                                    $i++;
+                                }
+                            }
+                        ?>
+                        </tr>
+                        <tr>
+                        <?php
+                            foreach($header as $h){
+                                echo "<td>Total</td><td>Average Solved Time</td><td>Resolved</td>";
+                            }
+                        ?>
+                        </tr>
+                        </thead>
+                    
+                        <?php
+                            $array = array();
+                            
+                            foreach($show as $sh){
+                                if(!in_array($sh->product_name,$array))
+                                {
+                                    echo "<tr>";
+                                    $array[] = $sh->product_name;
+                                    echo "<td>$sh->product_name</td>";
+                                    echo "</tr>";
+                                }
+                            }
+                        ?>
+
+                </table>
             </div>
         </div>
     </div>

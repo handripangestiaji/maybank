@@ -5,9 +5,11 @@
         <ul class="collapsedSidebarMenu">
             <li><a href="#tasksContent" class="sidebar">Tasks <div class="notifyCircle cyan">3</div><i class="icon-chevron-sign-right"></i></a></li>
             <li><a href="#profileContent" class="sidebar"><?php echo $this->session->userdata('display_name'); ?><i class="icon-chevron-sign-right"></i></a></li>
+            <!--
             <li class="sublevel"><a href="#">edit profile<i class="icon-user"></i></a></li>
             <li class="sublevel"><a href="#">change password<i class="icon-lock"></i></a></li>
             <li class="sublevel"><a href="#">logout<i class="icon-off"></i></a></li>
+            !-->
         </ul>
     </div>   
 </div>

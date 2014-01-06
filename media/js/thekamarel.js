@@ -80,24 +80,6 @@ $(function(){
         }
 
     });
-
-    $('.collapseMenu').click(function() { 
-
-        if ($(this).hasClass('uncollapsed')) {
-            $('.mainmenu').animate({left: -120}, 200, function() {
-                $('.collapseMenu').removeClass('uncollapsed').animate({left: 40}, 200);
-                $('.deCollapse').css({display: 'inline-block'});
-            });  
-        }
-
-        else {
-            $('.collapseMenu').addClass('uncollapsed').animate({left: 0}, 200, function() {
-                $('.mainmenu').animate({left: 0}, 200);
-                $('.deCollapse').css({display: 'none'});
-            }); 
-        }  
-
-    });
     
     /*=============================================================================================
      =========================== FLOATING BOX MENU / TAB MENU ACTIONS =============================

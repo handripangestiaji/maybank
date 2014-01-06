@@ -148,16 +148,16 @@ class account_model extends CI_Model
     function CreateFbCommentAction($action,$stream_id,$replyAction, $like = 0){
     	$this->db->trans_start();
     	$post = $this->facebook_model->IsStreamIdExists($stream_id);
-    	if($post != null){
-    	    $action['post_id'] = $post->post_id;
+    	if($post != ''){
+    	   $action['post_id']=$post->post_id;
     	    $this->db->where("post_id", $post->post_id);
     	    $this->db->update("social_stream_fb_post", array("user_likes" => $like));
     	    $this->db->where("id", $post->post_id);
     	    $this->db->update("social_stream_fb_comments", array(
     		"user_likes" => $like
     	    ));
-    	}
-    	$result = $this->CreateChannelAction($action);
+        $result = $this->CreateChannelAction($action);
+        }
        // $this->CreateReplyAction($replyAction);
         
         $this->db->trans_complete();

@@ -464,6 +464,22 @@ created by Tatto @ - matodrlicka@gmail.com
 }
 
 @media (max-width: 620px) {
+	#refreshAllStream{
+		display: none;
+	}
+	
+	.dashboard-search, .compose-innercontainer{
+		display: none;
+	}
+	
+	.container-fluid{
+		padding-left: 1px;
+		padding-right: 1px;
+	}
+	
+	.containerHeadline{
+		padding: 5px 5px 5px 5px;	
+	}
 	
 	.titleLine {
 		height: 80px;
@@ -698,6 +714,5 @@ created by Tatto @ - matodrlicka@gmail.com
 	.navbar-form .input-append input, .navbar-form .input-prepend input {
     	width: 70px;
 	}
-
 }
 

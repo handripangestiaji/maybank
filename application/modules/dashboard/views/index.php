@@ -187,7 +187,7 @@
         </div>
     </form>
 
-    <div class="pull-right">
+    <div class="pull-right dashboard-search">
         <select style="width: 100px; float: left;">
             <option style="display:none">Type</option>
             <option value="user">User</option>

@@ -19,8 +19,24 @@
 }
 
 .mid-box{
-	margin-bottom: 50px;
+	margin: 60px auto 50px auto;
+	width: 100%;
 }
+
+.form-signin input[type="text"]{
+	min-width: 0px;
+	width: 180px;
+}
+
+.form-signin input[type="password"]{
+	width: 153px;
+	min-width: 0px;
+}
+
+.input-prepend .add-on{
+	width:auto;	
+}
+
 /*==============================================================================================
 ======================================== DASHBOARD =============================================
 ==============================================================================================*/

@@ -3,7 +3,7 @@
 class Socialmedia extends MY_Controller {
 
      private $connection;
-	   
+     public $user_role; 
      function __construct()
      {
 	  parent::__construct();
@@ -18,23 +18,10 @@ class Socialmedia extends MY_Controller {
 	  $this->load->helper('form');
 	  $this->load->model('twitter_model');
 	  $this->load->model('action_model');
-	  $this->session->set_userdata('access_token', $this->config->item('twitter_access_token'));
-	  $this->session->set_userdata('access_token_secret', $this->config->item('twitter_access_secret'));  
-	  if($this->session->userdata('access_token') && $this->session->userdata('access_token_secret'))
-	  {
-		  // If user already logged in
-		  $this->connection = $this->twitteroauth->create($this->config->item('twitter_consumer_token'), $this->config->item('twitter_consumer_secret'), $this->config->item('twitter_access_token'),  $this->config->item('twitter_access_secret'));
-	  }
-	  elseif($this->session->userdata('request_token') && $this->session->userdata('request_token_secret'))
-	  {
-		  // If user in process of authentication
-		  $this->connection = $this->twitteroauth->create($this->config->item('twitter_consumer_token'), $this->config->item('twitter_consumer_secret'), $this->session->userdata('request_token'), $this->session->userdata('request_token_secret'));
-	  }
-	  else
-	  {
-		  // Unknown user
-		  $this->connection = $this->twitteroauth->create($this->config->item('twitter_consumer_token'), $this->config->item('twitter_consumer_secret'));
-	  }
+	  if(!$this->session->userdata('user_id'))
+	    redirect("login");
+	  $this->user_role = $this->users_model->get_collection_detail(
+		array('role_collection_id'=>$this->session->userdata('role_id')));
     }
     
     

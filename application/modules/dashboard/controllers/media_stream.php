@@ -3,10 +3,13 @@
 class Media_stream extends CI_Controller {
 
     private $connection;
-	   
+    public $user_role;  
     function __construct()
     {
 	parent::__construct();
+	if(!$this->session->userdata('user_id'))
+	    redirect("login");
+	
 	// Loading TwitterOauth library. 
 	$this->config->load('twitter');
 	$this->config->load('facebook');
@@ -20,6 +23,8 @@ class Media_stream extends CI_Controller {
 	$this->load->model('twitter_model');
 	$this->load->model('youtube_model');
 	$this->load->model('account_model');
+	$this->user_role = $this->users_model->get_collection_detail(
+		array('role_collection_id'=>$this->session->userdata('role_id')));
     }
     
     

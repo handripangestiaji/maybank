@@ -621,6 +621,8 @@ class Media_stream extends CI_Controller {
                 $caseid='';
                 $post_at='';       
             }
+       	
+           
         
         if(!is_array($return)){//send comment          
             $action = array(
@@ -630,7 +632,17 @@ class Media_stream extends CI_Controller {
         		"created_by" => $this->session->userdata('user_id'),
         		"stream_id_response" => $return
     	    );
-             $this->account_model->CreateFbCommentAction($action,$return,$this->input->post('like') === 'true' ? 1 : 0);
+            
+            $social_stream = array(
+    	    "post_stream_id" => $return,
+    	    "channel_id" => $channel_loaded[0]->channel_id,
+    	    "type" => "facebook",
+    	    "retrieved_at" => date("Y-m-d H:i:s"),
+    	    "created_at" => date("Y-m-d H:i:s")
+	       );
+            
+            $this->db->insert("social_stream", $social_stream);
+            $this->account_model->CreateFbCommentAction($action,$post_id,$this->input->post('like') === 'true' ? 1 : 0);
             echo json_encode(
     		    array(
                 'success' => true,
@@ -650,20 +662,16 @@ class Media_stream extends CI_Controller {
         		"created_by" => $this->session->userdata('user_id'),
         		"stream_id_response" => $return['id']
         	);
-         
-            $replyAction = array(
-        		"case_id" => $caseid,
-        		"channel" => $channel_loaded[0]->channel_id,
-        		"url" => $url,
-        		"message" =>$comment,
-        		"stream_id" => $return['id'],
-        		"comment_id" => $post_id,
-        	    "conversation_detail_id" => '',
-                "type" => "reply_facebook",
-                "post_at" => $post_at,
-                "created_at" => date("Y-m-d H:i:s")
-            );
-            $this->account_model->CreateFbCommentAction($action,$return['id'],$this->input->post('like') === 'true' ? 1 : 0);
+            $social_stream = array(
+    	    "post_stream_id" => $return['id'],
+    	    "channel_id" => $channel_loaded[0]->channel_id,
+    	    "type" => "facebook",
+    	    "retrieved_at" => date("Y-m-d H:i:s"),
+    	    "created_at" => date("Y-m-d H:i:s")
+	       );
+            
+            $this->db->insert("social_stream", $social_stream);
+            $this->account_model->CreateFbCommentAction($action,$post_id,$this->input->post('like') === 'true' ? 1 : 0);
             echo json_encode(
     		    array(
                 'success' => true,

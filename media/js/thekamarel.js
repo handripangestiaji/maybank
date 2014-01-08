@@ -1330,15 +1330,15 @@ $(function(){
                             commentButton.html('SENDING...').attr("disabled", "disabled");
 
                            $.ajax({
-                                url : BASEURL + 'dashboard/media_stream/FbReplyPosts',
+                                url : BASEURL + 'dashboard/media_stream/FbReplyPost',
                                 type: "POST",
                                 data: {
                                     post_id: $(this).val(),
                                     channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
                                     comment :$(this).parent().siblings(".replaycontent").val(),
-                                    url:"",
-                                    replyType:$(this).parent().siblings(".replyType").val(),
-                                    productType:$(this).parent().siblings(".productType").val(),
+                                    url:''/*$(this).parent().siblings(".link_url").find('.source_link').val()*/,
+                                    reply_type:$(this).parent().siblings('.option-type').find(".replyType").val(),
+                                    product_type:$(this).parent().siblings('.option-type').find(".productType").val(),
                                     title :$(this).parent().siblings('#reply-url-show').find(".title_link").val(),
                                     desc :$(this).parent().siblings('#reply-url-show').find(".descr-link").val(),
                                     img :$(this).parent().siblings('#reply-img-show').find("#reply-preview-img").attr('src'),

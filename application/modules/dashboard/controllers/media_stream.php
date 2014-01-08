@@ -554,6 +554,8 @@ class Media_stream extends CI_Controller {
         $url = $this->input->post('url');
         $descr = $this->input->post('desc');
         $img = $this->input->post('img');
+        $reply_type=$this->input->post('reply_type');
+        $product_type=$this->input->post('product_type');
              
         $filter = array(
             "connection_type" => "facebook"
@@ -589,7 +591,7 @@ class Media_stream extends CI_Controller {
         $attachment = array(
             'message' => $comment,
             'name' => $title,
-            'link' => $url,
+            'link' => '',
             'description' => $descr,
             'picture'=> $img,
         ); 
@@ -606,23 +608,13 @@ class Media_stream extends CI_Controller {
             if (write_file($pathToSave, $data)){    
                 $this->facebook->setFileUploadSupport(true);
                 $args = array('message' => $comment, 'attachment' => '@' . realpath($pathToSave));
-               // $args['attachment'] = '@' . realpath($pathToSave);
                 $return = $this->facebook->api('/'.$post_id.'/comments', 'POST', $args);
             }
         }else{
             $return=$this->facebook->api('/'.$post_id.'/comments', 'POST', array('message'=>$comment,'attachment'=>$attachment));
         }
         
-        $case=$this->account_model->isCaseIdExists($post_id);
-            if(count($case)>0){
-                $post_at=$case[0]->created_at;  
-                $caseid=$case[0]->case_id;
-            }else{
-                $caseid='';
-                $post_at='';       
-            }
-       	
-           
+        $pull_ronjob=curl_get_file_contents(base_url('/cronjob/FacebookStreamOwnPost'));
         
         if(!is_array($return)){//send comment          
             $action = array(
@@ -633,17 +625,16 @@ class Media_stream extends CI_Controller {
         		"stream_id_response" => $return
     	    );
                         
-            $social_stream = array(
-    	    "post_stream_id" => $return,
-    	    "channel_id" => $channel_loaded[0]->channel_id,
-    	    "type" => "facebook",
-    	    "retrieved_at" => date("Y-m-d H:i:s"),
-    	    "created_at" => date("Y-m-d H:i:s")
-            );
+            //$social_stream = array(
+//    	    "post_stream_id" => $return,
+//    	    "channel_id" => $channel_loaded[0]->channel_id,
+//    	    "type" => "facebook",
+//    	    "retrieved_at" => date("Y-m-d H:i:s"),
+//    	    "created_at" => date("Y-m-d H:i:s")
+//            );
+//            
+//            $this->db->insert("social_stream", $social_stream);
             
-            $this->db->insert("social_stream", $social_stream);
-            $this->account_model->CreateFbCommentAction($action,$post_id,$this->input->post('like') === 'true' ? 1 : 0);
-            $this->account_model->CreateFbReplyAction($action,$return,$comment);
             echo json_encode(
     		    array(
                 'success' => true,
@@ -655,24 +646,24 @@ class Media_stream extends CI_Controller {
         }elseif(is_array($return)){//replay in reply
         
         if($return['id']){
+            $return=$return['id'];
             $action = array(
         		"action_type" => "reply_facebook",
         		"channel_id" => $channel_loaded[0]->channel_id,
         		"created_at" => date("Y-m-d H:i:s"),
-        		//"stream_id" => $this->input->post('post_id'),
         		"created_by" => $this->session->userdata('user_id'),
-        		"stream_id_response" => $return['id']
+        		"stream_id_response" => $return
         	);
-            $social_stream = array(
-    	    "post_stream_id" => $return['id'],
-    	    "channel_id" => $channel_loaded[0]->channel_id,
-    	    "type" => "facebook",
-    	    "retrieved_at" => date("Y-m-d H:i:s"),
-    	    "created_at" => date("Y-m-d H:i:s")
-	       );
+//          $social_stream = array(
+//    	    "post_stream_id" => $return,
+//    	    "channel_id" => $channel_loaded[0]->channel_id,
+//    	    "type" => "facebook",
+//    	    "retrieved_at" => date("Y-m-d H:i:s"),
+//    	    "created_at" => date("Y-m-d H:i:s")
+//	       );
+//            
+//          $this->db->insert("social_stream", $social_stream);
             
-            $this->db->insert("social_stream", $social_stream);
-            $this->account_model->CreateFbCommentAction($action,$post_id,$this->input->post('like') === 'true' ? 1 : 0);
             echo json_encode(
     		    array(
                 'success' => true,
@@ -691,6 +682,9 @@ class Media_stream extends CI_Controller {
     		    );
             }
        }
+            $this->account_model->CreateFbCommentAction($action,$post_id,$this->input->post('like') === 'true' ? 1 : 0);
+            $this->account_model->CreateFbReplyAction($return,$post_id,$comment,$reply_type,$product_type,$url);
+
     }
     
     public function FbReplyMsg(){

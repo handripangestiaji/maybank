@@ -1,12 +1,12 @@
 <form action="" method="post" class="facebook-tweet">
 <div class="row-fluid">
     <span class="fb-reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
-    <div class="pull-left">
+    <div class="option-type pull-left">
         <div class="message"></div>
         <select class="replyType" id="replyType" style="width: 130px;">
-            <option value="keyword">Feedback</option>
-            <option value="user">Enquiry</option>
-            <option value="keyword">Complaint</option>
+            <option value="Feedback">Feedback</option>
+            <option value="Enquiry">Enquiry</option>
+            <option value="Complaint">Complaint</option>
         </select>
         <select class="productType" id="productType" style="width: 130px;">
             <?php foreach($product_list as $product):?>
@@ -18,7 +18,7 @@
     <br clear="all" />
     <div class="link_url pull-left"  style="margin-bottom: 5px;">
         <i class="icon-link"></i>
-        <input type="text" class="reply-insert-link-text">
+        <input type="text" class="source_link reply-insert-link-text">
         <button class="reply-insert-link-btn btn btn-primary btn-mini" style="margin-left: 5px;">SHORTEN</button>
     </div>    
     <div class="pull-right">

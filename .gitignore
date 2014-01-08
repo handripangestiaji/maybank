@@ -14,3 +14,8 @@ application/cache/*
 application/logs/*
 media/dynamics/*
 media/dynamic
+*/config/development
+*/logs/log-*.php
+*/logs/!index.html
+*/cache/*
+*/cache/!index.html

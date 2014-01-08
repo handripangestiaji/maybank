@@ -343,6 +343,12 @@ class Media_stream extends CI_Controller {
 		}
 		else if($type == 'favorite'){
 		    $result = $this->connection->post('favorites/create', array('id' => $twitter_data->post_stream_id));
+		    $action['action_type'] = 'twitter_favourite';
+		    $this->account_model->CreateFavoriteAction($action, $result, $twitter_data, $channel);
+		}
+		else if($type == 'unfavorite'){
+		    $result = $this->connection->post('favorites/destroy', array('id' => $twitter_data->post_stream_id));
+		    $action['action_type'] = 'twitter_delete_favourite';
 		    $this->account_model->CreateFavoriteAction($action, $result, $twitter_data, $channel);
 		}
 		echo json_encode(array(
@@ -857,6 +863,8 @@ class Media_stream extends CI_Controller {
 				      $this->input->post('description'),
 				      $this->input->post('email_me'),
 				      $compose_date_hour);
+	curl_get_file_contents(base_url("cronjob/TwitterUserTimeline"));
+	curl_get_file_contents(base_url("cronjob/FacebookStreamFeed"));
     }
     
     public function load_facebook($type){

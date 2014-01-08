@@ -65,10 +65,10 @@ class mycase extends CI_Controller{
     function TwitterRelatedConversation($twitter_user_id, $type = "mentions"){
         $this->load->model('twitter_model');
         $filter["b.twitter_user_id"] = $twitter_user_id;
-        $filter["b.type"] = $type;
+        //$filter["b.type"] = $type;
         $filter["a.post_id !="] = $this->input->get('post_id');
         
-        echo json_encode($this->twitter_model->ReadTwitterData($filter, 3));
+        echo json_encode($this->twitter_model->ReadTwitterData($filter, 10));
     }
     
     

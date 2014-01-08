@@ -181,8 +181,8 @@ class Cronjob extends CI_Controller {
             //send email
             if($post->email_me_when_sent == 1){
                 $this->email->set_newline("\r\n");
-                $this->email->from('tes@gmail.com','maybank');
-                $this->email->to('benawv@gmail.com');    
+                $this->email->from('dcms@maybank.com','maybank');
+                $this->email->to($post->email);
                 $this->email->subject('Message Posted');
                 $template = curl_get_file_contents(base_url().'mail_template/PostSent/'.$post->post_to_id);
                 $this->email->message($template);

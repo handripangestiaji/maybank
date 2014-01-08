@@ -13,7 +13,7 @@
         <ul class="floatingBoxContainers" id="youtubevideo">
             <?php foreach($youtube_post as $post): ?>
             <li>
-                    <div class="circleAvatar"><img src="" alt=""></div>
+                    <div class="circleAvatar"><img src="https://plus.google.com/s2/photos/profile/<?=$post->channel_name?>?sz=100" alt=""></div>
                     <p class="headLine">
                         <span class="author">John Doe</span>
                         <i class="icon-circle"></i>
@@ -32,7 +32,7 @@
                     </p>
                     <p style="font-size:20px"><?=$post->title?></p>
                     <p><?=$post->description?></p>
-                    <p><button type="button" class="btn btn-primary btn-mini">LIKE</button></p>
+                    <!--p><button type="button" class="btn btn-primary btn-mini">LIKE</button></p-->
                     <p><a data-toggle="modal" role="button" href="#modalDialog"><i class="icon-eye-open"></i> <?=$post->comment_count?> Engagement</a> |
                     <a data-toggle="modal" role="button" href="#modalDialog"><?=$post->view_count?> views</a> |
                     <i class="icon-thumbs-up"></i> <?=$post->like_count?>&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-thumbs-down"></i> <?=$post->rating_count - $post->like_count?></p>
@@ -75,42 +75,6 @@
         <!-- ==================== RECENT COMMENTS CONTENT ==================== -->
         <ul class="floatingBoxContainers" id="youtubecomment" style="display:none">
             <li>
-                <div class="circleAvatar"><img src="img/homer-avatar.jpg" alt=""></div>
-                <p class="headLine">
-                    <span class="author">John Doe</span>
-                    <i class="icon-circle"></i>
-                    <span>posted a <span class="cyanText">comment</span></span>
-                    <i class="icon-circle"></i>
-                    <span>2 hours ago</span>
-                    <i class="icon-play-circle moreOptions pull-right"></i>
-                </p>
-                <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
-            </li>
-            <li>
-                <div class="circleAvatar"><img src="img/rimmer-avatar.jpg" alt=""></div>
-                <p class="headLine">
-                    <span class="author">Arnold Karlsberg</span>
-                    <i class="icon-circle"></i>
-                    <span>posted a <span class="cyanText">comment</span></span>
-                    <i class="icon-circle"></i>
-                    <span>3 days ago</span>
-                    <i class="icon-play-circle moreOptions pull-right"></i>
-                </p>
-                <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
-            </li>
-            <li>
-                <div class="circleAvatar"><img src="img/peter-avatar.jpg" alt=""></div>
-                <p class="headLine">
-                    <span class="author">Peter Kay</span>
-                    <i class="icon-circle"></i>
-                    <span>posted a <span class="cyanText">comment</span></span>
-                    <i class="icon-circle"></i>
-                    <span>3 days ago</span>
-                    <i class="icon-play-circle moreOptions pull-right"></i>
-                </p>
-                <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
-            </li>
-            <li>
                 <div class="circleAvatar"><img src="img/zoidberg-avatar.jpg" alt=""></div>
                 <p class="headLine">
                     <span class="author">George McCain</span>
@@ -137,134 +101,6 @@
         </ul>
         <!-- ==================== END OF RECENT COMMENTS CONTENT ==================== -->
 
-        <!-- ==================== RECENT ORDERS CONTENT ==================== -->
-        <ul class="floatingBoxContainers" id="recentOrders" style="display:none">
-            <li>
-                <div class="circleAvatar"><img src="img/peter-avatar.jpg" alt=""></div>
-                <p class="headLine">
-                    <span class="author">Peter Kay</span>
-                    <i class="icon-circle"></i>
-                    <span>created an <span class="greenText">order</span></span>
-                    <i class="icon-circle"></i>
-                    <span>5 hours ago</span>
-                    <i class="icon-play-circle moreOptions pull-right"></i>
-                </p>
-                <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
-            </li>
-            <li>
-                <div class="circleAvatar"><img src="img/zoidberg-avatar.jpg" alt=""></div>
-                <p class="headLine">
-                    <span class="author">George McCain</span>
-                    <i class="icon-circle"></i>
-                    <span>created an <span class="greenText">order</span></span>
-                    <i class="icon-circle"></i>
-                    <span>10 days ago</span>
-                    <i class="icon-play-circle moreOptions pull-right"></i>
-                </p>
-                <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
-            </li>
-            <li>
-                <div class="circleAvatar"><img src="img/homer-avatar.jpg" alt=""></div>
-                <p class="headLine">
-                    <span class="author">John Doe</span>
-                    <i class="icon-circle"></i>
-                    <span>created an <span class="greenText">order</span></span>
-                    <i class="icon-circle"></i>
-                    <span>11 days ago</span>
-                    <i class="icon-play-circle moreOptions pull-right"></i>
-                </p>
-                <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
-            </li>
-            <li>
-                <div class="circleAvatar"><img src="img/rimmer-avatar.jpg" alt=""></div>
-                <p class="headLine">
-                    <span class="author">Arnold Karlsberg</span>
-                    <i class="icon-circle"></i>
-                    <span>created an <span class="greenText">order</span></span>
-                    <i class="icon-circle"></i>
-                    <span>12 days ago</span>
-                    <i class="icon-play-circle moreOptions pull-right"></i>
-                </p>
-                <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
-            </li>
-            <li>
-                <div class="circleAvatar"><img src="img/rimmer-avatar.jpg" alt=""></div>
-                <p class="headLine">
-                    <span class="author">Arnold Karlsberg</span>
-                    <i class="icon-circle"></i>
-                    <span>created an <span class="greenText">order</span></span>
-                    <i class="icon-circle"></i>
-                    <span>15 days ago</span>
-                    <i class="icon-play-circle moreOptions pull-right"></i>
-                </p>
-                <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
-            </li>
-        </ul>
-        <!-- ==================== END OF RECENT ORDERS CONTENT ==================== -->
 
-        <!-- ==================== RECENT TASKS CONTENT ==================== -->
-        <ul class="floatingBoxContainers" id="recentTasks" style="display:none">
-            <li>
-                <div class="circleAvatar"><img src="img/zoidberg-avatar.jpg" alt=""></div>
-                <p class="headLine">
-                    <span class="author">George McCain</span>
-                    <i class="icon-circle"></i>
-                    <span>created a <span class="redText">new task</span></span>
-                    <i class="icon-circle"></i>
-                    <span>1 day ago</span>
-                    <i class="icon-play-circle moreOptions pull-right"></i>
-                </p>
-                <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
-            </li>
-            <li>
-                <div class="circleAvatar"><img src="img/rimmer-avatar.jpg" alt=""></div>
-                <p class="headLine">
-                    <span class="author">Arnold Karlsberg</span>
-                    <i class="icon-circle"></i>
-                    <span>created a <span class="redText">new task</span></span>
-                    <i class="icon-circle"></i>
-                    <span>3 days ago</span>
-                    <i class="icon-play-circle moreOptions pull-right"></i>
-                </p>
-                <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
-            </li>
-            <li>
-                <div class="circleAvatar"><img src="img/peter-avatar.jpg" alt=""></div>
-                <p class="headLine">
-                    <span class="author">Peter Kay</span>
-                    <i class="icon-circle"></i>
-                    <span>created a <span class="redText">new task</span></span>
-                    <i class="icon-circle"></i>
-                    <span>5 days ago</span>
-                    <i class="icon-play-circle moreOptions pull-right"></i>
-                </p>
-                <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
-            </li>
-            <li>
-                <div class="circleAvatar"><img src="img/homer-avatar.jpg" alt=""></div>
-                <p class="headLine">
-                    <span class="author">John Doe</span>
-                    <i class="icon-circle"></i>
-                    <span>created a <span class="redText">new task</span></span>
-                    <i class="icon-circle"></i>
-                    <span>5 days ago</span>
-                    <i class="icon-play-circle moreOptions pull-right"></i>
-                </p>
-                <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
-            </li>
-            <li>
-                <div class="circleAvatar"><img src="img/peter-avatar.jpg" alt=""></div>
-                <p class="headLine">
-                    <span class="author">Peter Kay</span>
-                    <i class="icon-circle"></i>
-                    <span>created a <span class="redText">new task</span></span>
-                    <i class="icon-circle"></i>
-                    <span>7 days ago</span>
-                    <i class="icon-play-circle moreOptions pull-right"></i>
-                </p>
-                <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
-            </li>
-        </ul>
-        <!-- ==================== END OF RECENT TASKS CONTENT ==================== -->
     </div>
 </div>

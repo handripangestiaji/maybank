@@ -190,11 +190,11 @@
 
 
     <div class="pull-right dashboard-search">
-            <select style="width: 100px; float: left;">
+            <!--select style="width: 100px; float: left;">
                 <option style="display:none">Type</option>
                 <option value="user">User</option>
                 <option value="keyword">Keyword</option>
-            </select>
+            </select-->
             <input type="text" placeholder="Search" style="width:200px; float: left; margin-left: 2px;">
             <a href="" style="float: left; height: 14px;">
                 <span class="add-on" style="background-color: black;color: white;margin-left: -1px; display: inline-block; white-space: nowrap; padding: 5px 6px; font-size: 14px;"><i class="icon-search"></i></span></a>

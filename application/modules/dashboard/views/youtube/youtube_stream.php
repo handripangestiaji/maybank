@@ -2,8 +2,8 @@
     <!-- ==================== ACTIVITIES MENU ==================== -->
     <div class="floatingBoxMenu">
         <ul class="nav stream_head">
-            <li class="active"><a href="#youtubevideo">Videos Uploaded</a></li>
-            <li><a href="#youtubecomment">Video Comments</a></li>
+            <li class="active"><a href="#" class="youtubevideo">Videos Uploaded</a></li>
+            <li><a href="#" class="youtubecomment">Video Comments</a></li>
         </ul>
     </div>
     <!-- ==================== END OF ACTIVITIES MENU ==================== -->
@@ -21,7 +21,7 @@
                         <i class="icon-circle"></i>
                         <span><?php
                         $created_at = new DateTime($post->created_at, new DateTimeZone($this->config->item('timezone')));
-                        echo $created_at->format("Y-m-d H:i:s");
+                        echo $created_at->format('l, M j, Y h:i A');
                         ?></span>
                         <i class="icon-play-circle moreOptions pull-right"></i>
                     </p>
@@ -67,9 +67,10 @@
                     </div>
                 </li>
             <?php endforeach?>
+             <div class="filled" style="text-align: center;"><button class="btn btn-info"><i class="icon-chevron-down"></i> LOAD MORE</button></div>
         </ul>
         
-        <div class="filled" style="text-align: center;"><button class="btn btn-info"><i class="icon-chevron-down"></i> LOAD MORE</button></div>
+       
         <!-- ==================== END OF ALL ACTIVITIES CONTENT ==================== -->
 
         <!-- ==================== RECENT COMMENTS CONTENT ==================== -->

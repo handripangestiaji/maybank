@@ -418,14 +418,14 @@ $(function(){
                 $(document).ready(function() {
                     
                     $(this).on('click', '.stream_head > li > a',
-                        function() {
+                        function(e) {
                             previous = $(this).closest('ul.stream_head').find('li.active');
                             previous.removeClass('active');
                             $(this).parent().addClass('active');
                             var id_tab_name = '#' + $(this).attr('class');
                             $(this).closest('.floatingBoxMenu').next().find('.floatingBoxContainers').hide(); 
                             $(this).closest('.floatingBoxMenu').next().find(id_tab_name).show();
-                            
+                            e.preventDefault();
                         /*
                         var href = $(this).attr('href'),
                         $previous = $(this).closest('ul.nav-tabs').find('li.active');

@@ -55,7 +55,7 @@
             }else{
                 echo $homefeed->errors[0]->message; 
             } 
-                ?> 
+        ?> 
     
     
     </ul>

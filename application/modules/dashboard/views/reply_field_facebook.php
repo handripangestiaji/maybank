@@ -19,6 +19,7 @@
     <div class="link_url pull-left"  style="margin-bottom: 5px;">
         <i class="icon-link"></i>
         <input type="text" class="source_link reply-insert-link-text">
+        <input type="hidden" class="short_code" />
         <button class="reply-insert-link-btn btn btn-primary btn-mini" style="margin-left: 5px;">SHORTEN</button>
     </div>    
     <div class="pull-right">

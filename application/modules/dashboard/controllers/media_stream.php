@@ -608,15 +608,36 @@ class Media_stream extends CI_Controller {
             if (write_file($pathToSave, $data)){    
                 $this->facebook->setFileUploadSupport(true);
                 $args = array('message' => $comment, 'attachment' => '@' . realpath($pathToSave));
-                $return = $this->facebook->api('/'.$post_id.'/comments', 'POST', $args);
+                
+                try{
+                    $return = $this->facebook->api('/'.$post_id.'/comments', 'POST', $args);
+                }catch(FacebookApiException $e){
+                    echo json_encode(
+            		    array(
+                        'success' => false,
+            			'message' => "reply was failed",
+            		    )
+                    );
+                    $return='error';
+                }
             }
         }else{
-            $return=$this->facebook->api('/'.$post_id.'/comments', 'POST', array('message'=>$comment,'attachment'=>$attachment));
+            try{
+                $return=$this->facebook->api('/'.$post_id.'/comments', 'POST', array('message'=>$comment,'attachment'=>$attachment));
+            }catch(FacebookApiException $e){
+                echo json_encode(
+        		    array(
+                    'success' => false,
+        			'message' => "reply was failed",
+        			)
+    		    );
+            $return='error';
+            }
         }
         
         $pull_ronjob=curl_get_file_contents(base_url('/cronjob/FacebookStreamOwnPost'));
         
-        if(!is_array($return)){//send comment          
+        if(!is_array($return) && $return!='error'){//send comment          
             $action = array(
         		"action_type" => "reply_facebook",
         		"channel_id" =>$channel,
@@ -624,7 +645,6 @@ class Media_stream extends CI_Controller {
         		"created_by" => $this->session->userdata('user_id'),
         		"stream_id_response" => $return
     	    );
-                        
             //$social_stream = array(
 //    	    "post_stream_id" => $return,
 //    	    "channel_id" => $channel_loaded[0]->channel_id,
@@ -641,11 +661,12 @@ class Media_stream extends CI_Controller {
     			'message' => "successfully done",
     			'result' => $return
     		    )
-    		);
-		                                        
-        }elseif(is_array($return)){//replay in reply
-        
-        if($return['id']){
+    		);		    
+            $this->account_model->CreateFbCommentAction($action,$post_id,$this->input->post('like') === 'true' ? 1 : 0);
+            $this->account_model->CreateFbReplyAction($return,$post_id,$comment,$reply_type,$product_type,$url);
+                                      
+        }elseif(is_array($return)){//replay in reply        
+            if($return['id']){
             $return=$return['id'];
             $action = array(
         		"action_type" => "reply_facebook",
@@ -654,6 +675,7 @@ class Media_stream extends CI_Controller {
         		"created_by" => $this->session->userdata('user_id'),
         		"stream_id_response" => $return
         	);
+            
 //          $social_stream = array(
 //    	    "post_stream_id" => $return,
 //    	    "channel_id" => $channel_loaded[0]->channel_id,
@@ -672,6 +694,9 @@ class Media_stream extends CI_Controller {
     		    )
     		);
             
+            $this->account_model->CreateFbCommentAction($action,$post_id,$this->input->post('like') === 'true' ? 1 : 0);
+            $this->account_model->CreateFbReplyAction($return,$post_id,$comment,$reply_type,$product_type,$url);
+
             }else{
                 echo json_encode(
         		    array(
@@ -681,10 +706,14 @@ class Media_stream extends CI_Controller {
         		    )
     		    );
             }
-       }
-            $this->account_model->CreateFbCommentAction($action,$post_id,$this->input->post('like') === 'true' ? 1 : 0);
-            $this->account_model->CreateFbReplyAction($return,$post_id,$comment,$reply_type,$product_type,$url);
-
+       }else{
+                echo json_encode(
+        		    array(
+                    'success' => false,
+        			'message' => "reply was failed"   			
+        		    )
+    		    );
+      }
     }
     
     public function FbReplyMsg(){

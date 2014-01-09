@@ -98,6 +98,13 @@ class account_model extends CI_Model
         return $this->db->get()->result();        
     }
     
+    function GetShorUrlId($filter){
+        $this->db->select("*");
+        $this->db->from('short_urls');
+        $this->db->where($filter);
+        return $this->db->get()->result();
+    }
+    
     
     function CreateRetweetAction($action, $result, $twitter_data, $channel){
 	$this->db->trans_start();
@@ -179,11 +186,17 @@ class account_model extends CI_Model
         }
         
         if($url!=''){
-            $actions['url']=$url;
+            $short_url_id=$this->GetShorUrlId(array("short_code"=>$url));
+            if(isset($short_url_id[0])){
+                $urls=$short_url_id[0]->id;
+                //print_r($short_url_id);
+                $actions['url']=$urls;
+            }            
         }
         
-        $post = $this->facebook_model->IsCommentExists($stream_id);
-        if(isset($post)!=''){
+        $post = $this->facebook_model->IsCommentExists($stream_id);        
+//        print_r($post);
+        if(isset($post->post_id)!=''){
             $actions['conversation_detail_id']=$post->post_id;
         }   
          

@@ -75,30 +75,23 @@
 
         <!-- ==================== RECENT COMMENTS CONTENT ==================== -->
         <ul class="floatingBoxContainers" id="youtubecomment" style="display:none">
+            <?php foreach($youtube_comment as $comment): ?>
             <li>
-                <div class="circleAvatar"><img src="img/zoidberg-avatar.jpg" alt=""></div>
+                <div class="circleAvatar"><img src="https://plus.google.com/s2/photos/profile/<?=$comment->google_user_id?>?sz=100" alt=""></div>
                 <p class="headLine">
-                    <span class="author">George McCain</span>
+                    <span class="author"><?=$comment->name?></span>
                     <i class="icon-circle"></i>
-                    <span>posted a <span class="cyanText">comment</span></span>
+                    <span>posted a <span class="cyanText"><?=$comment->title?></span></span>
                     <i class="icon-circle"></i>
-                    <span>5 days ago</span>
+                    <span><?php
+                    $created_at = new DateTime($comment->created_at, new DateTimeZone($this->config->item('timezone')));
+                    echo $created_at->format("l, M j, Y h:i A");
+                    ?></span>
                     <i class="icon-play-circle moreOptions pull-right"></i>
                 </p>
-                <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
+                <p>"<?=$comment->text?>"</p>
             </li>
-            <li>
-                <div class="circleAvatar"><img src="img/homer-avatar.jpg" alt=""></div>
-                <p class="headLine">
-                    <span class="author">John Doe</span>
-                    <i class="icon-circle"></i>
-                    <span>posted a <span class="cyanText">comment</span></span>
-                    <i class="icon-circle"></i>
-                    <span>10 days ago</span>
-                    <i class="icon-play-circle moreOptions pull-right"></i>
-                </p>
-                <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
-            </li>
+           <?php endforeach;?>
         </ul>
         <!-- ==================== END OF RECENT COMMENTS CONTENT ==================== -->
 

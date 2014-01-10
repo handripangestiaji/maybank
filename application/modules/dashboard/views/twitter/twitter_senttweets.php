@@ -86,5 +86,5 @@ for($i=0;$i<count($senttweets);$i++){
     <button class="loadmore btn btn-info" value="homefeed">
  
  
- <i class="icon-chevron-down"></i> LOAD MORE</button></div>
+ <i class="icon-chevron-down"></i> <span>LOAD MORE</span></button></div>
 <?php endif?>

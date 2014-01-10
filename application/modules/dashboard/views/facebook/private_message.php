@@ -131,5 +131,5 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_pm[$i]->po
 </li>
 <?php endfor;?>
 <?php if((count($fb_pm) > 0) && (!isset($is_search))): ?>
-<div class="filled" style="text-align: center;"><input type="hidden" class="total_groups" value="<?=$total_groups?>" /><input type="hidden"  class="channel_id" value="<?=$fb_pm[0]->channel_id?>"/><input type="hidden"  class="looppage" value=""/><button class="loadmore btn btn-info" value="privateMessages"><i class="icon-chevron-down"></i> LOAD MORE</button></div>
+<div class="filled" style="text-align: center;"><input type="hidden" class="total_groups" value="<?=$total_groups?>" /><input type="hidden"  class="channel_id" value="<?=$fb_pm[0]->channel_id?>"/><input type="hidden"  class="looppage" value=""/><button class="loadmore btn btn-info" value="privateMessages"><i class="icon-chevron-down"></i>   <div class="filled" style="text-align: center;"><button class="btn btn-info"><i class="icon-chevron-down"></i> <span>LOAD MORE</span></button></div></button></div>
 <?php endif?>

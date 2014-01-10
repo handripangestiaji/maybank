@@ -190,11 +190,11 @@
 
 
     <div class="pull-right dashboard-search">
-            <select style="width: 100px; float: left;">
+            <!--select style="width: 100px; float: left;">
                 <option style="display:none">Type</option>
                 <option value="user">User</option>
                 <option value="keyword">Keyword</option>
-            </select>
+            </select-->
         <input class="dashboard-search-field" type="text" placeholder="Search" style="width:200px; float: left; margin-left: 2px;">
         <button class="btn btn-inverse btn-dashboard-search">
             <i class="icon-search"></i>

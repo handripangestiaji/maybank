@@ -89,12 +89,17 @@ class case_model extends CI_Model{
     
     
     function ReadAllUser($filter = array()){
-        $filter['is_active'] = 1;
+        $filter['a.is_active'] = 1;
         if(count($filter) > 0){
+            if(isset($filter['user_id']))
+            {
+                $filter['a.user_id'] = $filter['user_id'];
+                unset($filter['user_id']);
+            }
             $this->db->where($filter);
         }
         $this->db->select("*");
-        $this->db->from("user");
+        $this->db->from("user a inner join user_group b on a.group_id = b.group_id");
         $query_result = $this->db->get();
         if($query_result->num_rows() > 1)
             return $query_result->result();

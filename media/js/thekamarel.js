@@ -418,14 +418,14 @@ $(function(){
                 $(document).ready(function() {
                     
                     $(this).on('click', '.stream_head > li > a',
-                        function() {
+                        function(e) {
                             previous = $(this).closest('ul.stream_head').find('li.active');
                             previous.removeClass('active');
                             $(this).parent().addClass('active');
                             var id_tab_name = '#' + $(this).attr('class');
                             $(this).closest('.floatingBoxMenu').next().find('.floatingBoxContainers').hide(); 
                             $(this).closest('.floatingBoxMenu').next().find(id_tab_name).show();
-                            
+                            e.preventDefault();
                         /*
                         var href = $(this).attr('href'),
                         $previous = $(this).closest('ul.nav-tabs').find('li.active');
@@ -1463,12 +1463,16 @@ $(function(){
                     looppage=2;
                     $(this).on('click','.loadmore',
                         function() {
+                            $(this).find('span').html("LOADING...");
+                            $(this).attr("disabled", "disabled");
+                            var loadMoreElement = $(this);
                             loading = true;
                             action=$(this).val();    
                             group_numbers=2;
                             channel_ids = $(this).siblings(".channel_id").val();
                             me = $(this);
                             $(this).closest('.floatingBoxContainers').load(BASEURL + 'dashboard/media_stream/loadmore/'+action+'/'+looppage+'/'+channel_ids, function(){
+                                loadMoreElement.removeAttr("disabled");
                                 var currentNumber = $(this).closest('.floatingBoxContainers').find('.unread-post').length;
                                 try{
                                     currentNumber += parseInt($(this).closest('.container-fluid').siblings('.floatingBoxMenu').find('li.active .notifyCircle').html());

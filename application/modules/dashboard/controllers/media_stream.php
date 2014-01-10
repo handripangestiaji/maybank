@@ -63,6 +63,7 @@ class Media_stream extends CI_Controller {
 	$page = $this->input->get('page');
 	$page = $page ? $page : 1;
 	$data['youtube_post'] = $this->youtube_model->ReadYoutubePost($filter, $page);
+	$data['youtube_comment'] = $this->youtube_model->ReadYoutubeComment($filter, $page);
 	$this->load->view('dashboard/youtube/youtube_stream', $data);
     }
     

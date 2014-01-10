@@ -169,5 +169,5 @@ for($i=0;$i<count($mentions);$i++){
     <div class="filled" style="text-align: center;"><input type="hidden" class="total_groups" value="<?php echo $total_groups?>" />
     <input type="hidden"  class="channel_id" value="<?php echo $mentions[0]->channel_id?>"/>
     <input type="hidden"  class="looppage" value=""/>
-    <button class="loadmore btn btn-info" value="mentions"><i class="icon-chevron-down"></i> LOAD MORE</button></div>
+    <button class="loadmore btn btn-info" value="mentions"><i class="icon-chevron-down"></i> <span>LOAD MORE</span></button></div>
 <?php endif;?>

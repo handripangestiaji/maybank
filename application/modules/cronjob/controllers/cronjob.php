@@ -408,5 +408,7 @@ class Cronjob extends CI_Controller {
         
         
     }
-
+    function phpinfo(){
+        phpinfo();
+    }
 }

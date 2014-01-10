@@ -82,7 +82,7 @@ class account_model extends CI_Model
     
     function CreateChannelAction($action){
     	$this->db->insert('channel_action',$action);
-	   return $this->db->insert_id();
+    return $this->db->insert_id();
     }
     
     function CreateReplyAction($action){
@@ -148,7 +148,7 @@ class account_model extends CI_Model
     	$this->db->trans_start();
     	$post = $this->facebook_model->IsStreamIdExists($stream_id);
     	if($post != ''){
-    	   $action['post_id']=$post->post_id;
+        $action['post_id']=$post->post_id;
     	    $this->db->where("post_id", $post->post_id);
     	    $this->db->update("social_stream_fb_post", array("user_likes" => $like));
     	    $this->db->where("id", $post->post_id);
@@ -157,8 +157,20 @@ class account_model extends CI_Model
     	    ));
         $result = $this->CreateChannelAction($action);
         }
-       // $this->CreateReplyAction($replyAction);
         
+        $this->db->trans_complete();
+    	return $result;
+    }
+
+    function CreateFbReplyAction($action, $stream_id, $message, $replyType, $case= 0,$url=null){
+    	$this->db->trans_start();
+    	$post = $this->facebook_model->IsStreamIdExists($stream_id);
+    	if($post != ''){
+            $action['post_id']=$post->post_id;
+            $action['message']=$message;
+    	    $action['url']=$url;
+            $result=$this->CreateReplyAction($action);
+         }
         $this->db->trans_complete();
     	return $result;
     }

@@ -14,7 +14,7 @@ class Media_stream extends CI_Controller {
 	$this->config->load('twitter');
 	$this->config->load('facebook');
 	$this->load->library('ion_auth');
-	$this->load->library('Twitteroauth');
+	$this->load->library('Twitteroauth');  
 	$this->load->library('session');
 	$this->load->helper('url');
 	$this->load->helper('array');  
@@ -632,17 +632,18 @@ class Media_stream extends CI_Controller {
         		"created_by" => $this->session->userdata('user_id'),
         		"stream_id_response" => $return
     	    );
-            
+                        
             $social_stream = array(
     	    "post_stream_id" => $return,
     	    "channel_id" => $channel_loaded[0]->channel_id,
     	    "type" => "facebook",
     	    "retrieved_at" => date("Y-m-d H:i:s"),
     	    "created_at" => date("Y-m-d H:i:s")
-	       );
+            );
             
             $this->db->insert("social_stream", $social_stream);
             $this->account_model->CreateFbCommentAction($action,$post_id,$this->input->post('like') === 'true' ? 1 : 0);
+            $this->account_model->CreateFbReplyAction($action,$return,$comment);
             echo json_encode(
     		    array(
                 'success' => true,

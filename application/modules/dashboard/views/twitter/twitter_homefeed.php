@@ -167,5 +167,5 @@ for($i=0;$i<count($homefeed);$i++){
     </li>
 <?php } ?>
 <?php if(count($homefeed) > 0):?>
-<div class="filled" style="text-align: center;"><input type="hidden" class="channel_id" value="<?php echo $homefeed[0]->channel_id?>" /><input type="hidden"  class="channel_id" value="<?php echo $homefeed[0]->channel_id?>"/><input type="hidden" class="total_groups" value="<?php echo $total_groups?>" /><input type="hidden"  class="looppage" value=""/><button class="loadmore btn btn-info" value="feed"><i class="icon-chevron-down"></i> LOAD MORE</button></div>
+<div class="filled" style="text-align: center;"><input type="hidden" class="channel_id" value="<?php echo $homefeed[0]->channel_id?>" /><input type="hidden"  class="channel_id" value="<?php echo $homefeed[0]->channel_id?>"/><input type="hidden" class="total_groups" value="<?php echo $total_groups?>" /><input type="hidden"  class="looppage" value=""/><button class="loadmore btn btn-info" value="feed"><i class="icon-chevron-down"></i> <span>LOAD MORE</span></button></div>
 <?php endif;?>

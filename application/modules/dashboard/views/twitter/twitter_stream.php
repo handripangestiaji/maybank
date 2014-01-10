@@ -1,26 +1,33 @@
 <?php
     $count_unread_mentions = 0;
-    foreach($mentions as $m){
-        if($m->is_read == 0){        
-            $count_unread_mentions++;
+    if($mentions){
+        foreach($mentions as $m){
+            if($m->is_read == 0){        
+                $count_unread_mentions++;
+            }
         }
     }
-    
+    //print_r($homefeed);
     $count_unread_homefeed = 0;
-    foreach($homefeed as $h){
-        if($h->is_read == 0){        
-            $count_unread_homefeed++;
+    if($homefeed){
+        foreach($homefeed as $h){
+            if($h->is_read == 0){        
+                $count_unread_homefeed++;
+            }
         }
     }
     
     $count_unread_dm = 0;
-    foreach($directmessage as $dm){
-        if($dm->is_read == 0){        
-            $count_unread_dm++;
+    if($directmessage){
+        foreach($directmessage as $dm){
+            if($dm->is_read == 0){        
+                $count_unread_dm++;
+            }
         }
     }
+    //print_r($directmessage);
 ?>
-<input type="hidden" class="channel-id" value="<?php if(count($mentions) > 0) echo $mentions[0]->channel_id; ?>">
+<input type="hidden" class="channel-id" value="<?php if(count($mentions) > 0) {echo $mentions[0]->channel_id;} else {echo $channel_id;} ?>">
 <div id='ctwitter' class="container-fluid">
 <!-- ==================== ACTIVITIES MENU ==================== -->
 <div class="floatingBoxMenu">
@@ -36,11 +43,16 @@
 <div class="container-fluid">
     <!-- ==================== ALL ACTIVITIES CONTENT ==================== -->
     <ul class="floatingBoxContainers" id="mentions">
-         <?php 
-         if(is_array($mentions)){
-            echo $this->load->view('dashboard/twitter/twitter_mentions', array('mentions' => $mentions));
-         }else{
-            echo $mentions->errors[0]->message;
+         <?php
+         if($mentions){
+            if(is_array($mentions)){
+               echo $this->load->view('dashboard/twitter/twitter_mentions', array('mentions' => $mentions));
+            }else{
+               echo $mentions->errors[0]->message;
+            }
+         }
+         else{
+            $this->load->view('dashboard/no_display');
          }
 
 //print_r($mentions);        
@@ -50,34 +62,49 @@
     <ul class="floatingBoxContainers" id="feed" style="display:none">
          <?php 
         // print_r($homefeed);
+        if($homefeed){
             if(is_array($homefeed)){
                 $this->load->view('dashboard/twitter/twitter_homefeed', array('homefeed' => $homefeed));
             }else{
                 echo $homefeed->errors[0]->message; 
-            } 
-                ?> 
+            }
+        }
+        else{
+            $this->load->view('dashboard/no_display');
+        }
+        ?> 
     
     
     </ul>
     <ul class="floatingBoxContainers" id="sendmessage" style="display:none">
          <?php 
             //print_r($senttweets);
-            if(is_array($senttweets)){
-                $this->load->view('dashboard/twitter/twitter_senttweets', array('senttweets' => $senttweets));
-            }else{
-                echo $senttweets->errors[0]->message;
+            if($senttweets){
+                if(is_array($senttweets)){
+                    $this->load->view('dashboard/twitter/twitter_senttweets', array('senttweets' => $senttweets));
+                }else{
+                    echo $senttweets->errors[0]->message;
+                }
+            }
+            else{
+                $this->load->view('dashboard/no_display');
             }
              ?> 
     </ul>
     <ul class="floatingBoxContainers" id="direct" style="display:none">
          <?php 
            // print_r($directmessage);
-             if(is_array($directmessage)){
+           if($directmessage){
+            if(is_array($directmessage)){
                 $this->load->view('dashboard/twitter/twitter_messages');
              }else{
                 //print_r($directmessage);
                 //echo $directmessage->errors[0]->message;
-             }   
+             }
+           }
+           else{
+            $this->load->view('dashboard/no_display');
+           }
          ?> 
     </ul>
 

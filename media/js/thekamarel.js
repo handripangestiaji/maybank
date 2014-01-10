@@ -418,14 +418,14 @@ $(function(){
                 $(document).ready(function() {
                     
                     $(this).on('click', '.stream_head > li > a',
-                        function() {
+                        function(e) {
                             previous = $(this).closest('ul.stream_head').find('li.active');
                             previous.removeClass('active');
                             $(this).parent().addClass('active');
                             var id_tab_name = '#' + $(this).attr('class');
                             $(this).closest('.floatingBoxMenu').next().find('.floatingBoxContainers').hide(); 
                             $(this).closest('.floatingBoxMenu').next().find(id_tab_name).show();
-                            
+                            e.preventDefault();
                         /*
                         var href = $(this).attr('href'),
                         $previous = $(this).closest('ul.nav-tabs').find('li.active');
@@ -1473,6 +1473,9 @@ $(function(){
                     looppage=2;
                     $(this).on('click','.loadmore',
                         function() {
+                            $(this).find('span').html("LOADING...");
+                            $(this).attr("disabled", "disabled");
+                            var loadMoreElement = $(this);
                             loading = true;
                             action=$(this).val();    
                             group_numbers=2;
@@ -1480,6 +1483,7 @@ $(function(){
                             me = $(this);
                             me.attr('disabled', 'disabled').html('Loading...');
                             $(this).closest('.floatingBoxContainers').load(BASEURL + 'dashboard/media_stream/loadmore/'+action+'/'+looppage+'/'+channel_ids, function(){
+                                loadMoreElement.removeAttr("disabled");
                                 var currentNumber = $(this).closest('.floatingBoxContainers').find('.unread-post').length;
                                 try{
                                     currentNumber += parseInt($(this).closest('.container-fluid').siblings('.floatingBoxMenu').find('li.active .notifyCircle').html());
@@ -1570,6 +1574,24 @@ $(function(){
                 });
             });
             
+    $(document).ready(function() {
+        $('.btn-dashboard-search').click(function(){
+            var channel_1 = $('#box-id-1').next().find('.channel-id').val();
+            var channel_2 = $('#box-id-2').next().find('.channel-id').val();
+            $(this).closest('.container-fluid').next().find('.floatingBox').html('Loading...');
+            $('#box-id-1').next().load(BASEURL + 'dashboard/search',
+                                       {
+                                        channel_id : channel_1,
+                                        q : $('.dashboard-search-field').val()
+                                        });
+            $('#box-id-2').next().load(BASEURL + 'dashboard/search',
+                                       {
+                                        channel_id : channel_2,
+                                        q : $('.dashboard-search-field').val()
+                                        });
+            //window.location.href = BASEURL + 'dashboard/search?q=' + $('.dashboard-search-field').val();
+        });
+    });
     /*=============================================================================================
      ===================================== CMS ACTIONS ============================================
      =============================================================================================*/    
@@ -1815,6 +1837,3 @@ $.fn.RefreshAllStream = function(){
         }
     });
 };
-
-   
-

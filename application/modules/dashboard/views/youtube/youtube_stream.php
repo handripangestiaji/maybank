@@ -2,8 +2,8 @@
     <!-- ==================== ACTIVITIES MENU ==================== -->
     <div class="floatingBoxMenu">
         <ul class="nav stream_head">
-            <li class="active"><a href="#youtubevideo">Videos Uploaded</a></li>
-            <li><a href="#youtubecomment">Video Comments</a></li>
+            <li class="active"><a href="#" class="youtubevideo">Videos Uploaded</a></li>
+            <li><a href="#" class="youtubecomment">Video Comments</a></li>
         </ul>
     </div>
     <!-- ==================== END OF ACTIVITIES MENU ==================== -->
@@ -21,7 +21,7 @@
                         <i class="icon-circle"></i>
                         <span><?php
                         $created_at = new DateTime($post->created_at, new DateTimeZone($this->config->item('timezone')));
-                        echo $created_at->format("Y-m-d H:i:s");
+                        echo $created_at->format('l, M j, Y h:i A');
                         ?></span>
                         <i class="icon-play-circle moreOptions pull-right"></i>
                     </p>
@@ -67,37 +67,32 @@
                     </div>
                 </li>
             <?php endforeach?>
+             <div class="filled" style="text-align: center;"><button class="btn btn-info"><i class="icon-chevron-down"></i> <span>LOAD MORE</span></button></div>
         </ul>
         
-        <div class="filled" style="text-align: center;"><button class="btn btn-info"><i class="icon-chevron-down"></i> LOAD MORE</button></div>
+       
         <!-- ==================== END OF ALL ACTIVITIES CONTENT ==================== -->
 
         <!-- ==================== RECENT COMMENTS CONTENT ==================== -->
         <ul class="floatingBoxContainers" id="youtubecomment" style="display:none">
+            <?php foreach($youtube_comment as $comment): ?>
             <li>
-                <div class="circleAvatar"><img src="img/zoidberg-avatar.jpg" alt=""></div>
+                <div class="circleAvatar"><img src="https://plus.google.com/s2/photos/profile/<?=$comment->google_user_id?>?sz=100" alt=""></div>
                 <p class="headLine">
-                    <span class="author">George McCain</span>
+                    <span class="author"><?=$comment->name?></span>
                     <i class="icon-circle"></i>
-                    <span>posted a <span class="cyanText">comment</span></span>
+                    <span>posted a <span class="cyanText"><?=$comment->title?></span></span>
                     <i class="icon-circle"></i>
-                    <span>5 days ago</span>
+                    <span><?php
+                    $created_at = new DateTime($comment->created_at, new DateTimeZone($this->config->item('timezone')));
+                    echo $created_at->format("l, M j, Y h:i A");
+                    ?></span>
                     <i class="icon-play-circle moreOptions pull-right"></i>
                 </p>
-                <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
+                <p>"<?=$comment->text?>"</p>
             </li>
-            <li>
-                <div class="circleAvatar"><img src="img/homer-avatar.jpg" alt=""></div>
-                <p class="headLine">
-                    <span class="author">John Doe</span>
-                    <i class="icon-circle"></i>
-                    <span>posted a <span class="cyanText">comment</span></span>
-                    <i class="icon-circle"></i>
-                    <span>10 days ago</span>
-                    <i class="icon-play-circle moreOptions pull-right"></i>
-                </p>
-                <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco..."</p>
-            </li>
+           <?php endforeach;?>
+          <div class="filled" style="text-align: center;"><button class="btn btn-info"><i class="icon-chevron-down"></i> <span>LOAD MORE</span></button></div>
         </ul>
         <!-- ==================== END OF RECENT COMMENTS CONTENT ==================== -->
 

@@ -82,5 +82,5 @@
 <?php if(count($directmessage) > 0):?>
   <div class="filled" style="text-align: center;">
      <input type="hidden"  class="channel_id" value="<?php echo $directmessage[0]->channel_id?>"/>
-    <button class="loadmore btn btn-info" value="direct"><i class="icon-chevron-down"></i> LOAD MORE</button></div>
+    <button class="loadmore btn btn-info" value="direct"><i class="icon-chevron-down"></i> <span>LOAD MORE</span></button></div>
 <?php endif;?>

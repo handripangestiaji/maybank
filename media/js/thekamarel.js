@@ -1478,6 +1478,7 @@ $(function(){
                             group_numbers=2;
                             channel_ids = $(this).siblings(".channel_id").val();
                             me = $(this);
+                            me.attr('disabled', 'disabled').html('Loading...');
                             $(this).closest('.floatingBoxContainers').load(BASEURL + 'dashboard/media_stream/loadmore/'+action+'/'+looppage+'/'+channel_ids, function(){
                                 var currentNumber = $(this).closest('.floatingBoxContainers').find('.unread-post').length;
                                 try{
@@ -1495,7 +1496,7 @@ $(function(){
                                 else
                                     me.closest('.container-fluid').siblings('.floatingBoxMenu').find('li.active .notifyCircle').show();
                             });
-                            
+                            me.removeAttr('disabled').html('Loading..');
                             
                             looppage++;
                             loading = false;

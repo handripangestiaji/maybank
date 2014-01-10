@@ -39,7 +39,7 @@ class Media_stream extends CI_Controller {
 		$filter['case_id is NOT NULL'] = null;
 	    }
 	}
-	$limit=10;
+	$limit=30;
 	$data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter,$limit);
 	$data['count_fb_feed']=$this->facebook_model->CountFeedFB($filter);
 	//$data['own_post'] = $this->facebook_model->RetrievePostFB($filter);

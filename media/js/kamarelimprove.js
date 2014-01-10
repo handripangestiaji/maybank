@@ -59,6 +59,8 @@ $(function(){
             callback : function(response){
                 //console.log(response);
                 $(modalID + " .loader-image").hide();
+                
+                var myDate = new Date();
                 for(i = 0; i<response.length;i++){
                     $(modalID + ' form').append(
                          '<div class="related-conversation-body">' + 
@@ -69,7 +71,7 @@ $(function(){
                             '<i class="icon-circle"></i>' + 
                             '<span>posted a <span class="cyanText">Tweet</span></span>' + 
                             '<i class="icon-circle"></i>' + 
-                            '<span>' + response[i].created_at + '</span>' + 
+                            '<span>' + myDate.getTimezoneOffset(response[i].created_at) + '</span>' + 
                             '<i class="icon-play-circle moreOptions pull-right"></i>' +
                         '</p>' + 
                         '<div>' +
@@ -102,26 +104,33 @@ $(function(){
             callback : function(response){
                 //console.log(response);
                 $(modalID + " .loader-image").hide();
-                for(i = 0; i<response.length;i++){
-                    $(modalID + ' form').append(
-                         '<div class="related-conversation-body">' + 
-                        '<span class="related-conversation-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>' + 
-                        '<p class="headLine">' + 
-                            '<input type="checkbox" class="related-conversation-check" value="' + response[i].post_id + '">' + 
-                            '<span class="author">' +  response[i].name + '</span>' + 
-                            '<i class="icon-circle"></i>' + 
-                            '<span>posted a <span class="cyanText">Wall post</span></span>' + 
-                            '<i class="icon-circle"></i>' + 
-                            '<span>' + response[i].created_at + '</span>' + 
-                            '<i class="icon-play-circle moreOptions pull-right"></i>' +
-                        '</p>' + 
-                        '<div>' +
-                            '<p>' + response[i].comment_content + '</p>' +
-                            '<!--p><button class="btn btn-primary btn-mini btn-reply" style="margin-left: 5px;">Reply</button></p-->' +
-                        '</div></div>'
-                    );
+                if(response.length>=1){
+                    for(i = 0; i<response.length;i++){
+                        $(modalID + ' form').append(
+                             '<div class="related-conversation-body">' + 
+                            '<span class="related-conversation-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>' + 
+                            '<p class="headLine">' + 
+                                '<input type="checkbox" class="related-conversation-check" value="' + response[i].post_id + '">' + 
+                                '<span class="author">' +  response[i].name + '</span>' + 
+                                '<i class="icon-circle"></i>' + 
+                                '<span>posted a <span class="cyanText">Wall post</span></span>' + 
+                                '<i class="icon-circle"></i>' + 
+                                '<span>' + response[i].created_at + '</span>' + 
+                                '<i class="icon-play-circle moreOptions pull-right"></i>' +
+                            '</p>' + 
+                            '<div>' +
+                                '<p>' + response[i].comment_content + '</p>' +
+                                '<!--p><button class="btn btn-primary btn-mini btn-reply" style="margin-left: 5px;">Reply</button></p-->' +
+                            '</div></div>'
+                        );
+                    }
+                }else{
+                     $(modalID + ' form').append(
+                             '<div class="related-conversation-body">' + 
+                            '<span class="related-conversation-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>' + 
+                            '<p class="headLine">Not Found Related Conversation</p>'
+                        );
                 }
-                
             }
         });
     });

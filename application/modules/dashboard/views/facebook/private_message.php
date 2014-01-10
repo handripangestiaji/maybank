@@ -29,9 +29,12 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_pm[$i]->po
     <p><?=$fb_pm[$i]->messages?></p>
     <p>
     <?php 
+//    print_r($fb_pm);
     if(isset($isMyCase[0]->assign_to)){
-        if($isMyCase[0]->assign_to==$this->session->userdata('user_id') or ($isMyCase[0]->solved_by)){ ?>
+        if($isMyCase[0]->assign_to==$this->session->userdata('user_id') and $isMyCase[0]->solved_by==''){ ?>
             <button type="button" class="btn <?php echo $isMyCase[0]->case_id != null ? "btn-purple" : "btn-inverse btn-mini" ?>"><?php echo $isMyCase[0]->case_id != null ? 'CASE #'.$isMyCase[0]->case_id.' Assign to You ' : 'CASE #'.$isMyCase[0]->case_id.'-'.'RESOLVE BY '.$isMyCase[0]->full_name?></button>
+        <?php }elseif( $isMyCase[0]->solved_by!=''){?>
+            <button type="button" class="btn <?php echo $isMyCase[0]->solved_by != null ? "btn-purple" : "btn-inverse btn-mini" ?>"><?php echo $isMyCase[0]->solved_by != null ? 'CASE #'.$isMyCase[0]->solved_by.' Resolved' : 'CASE #'.$isMyCase[0]->case_id.'-'.'RESOLVE BY '.$isMyCase[0]->full_name?></button>
         <?php }else{ ?>
                 <button type="button" class="btn <?php echo $isMyCase[0]->case_id != null ? "btn-purple" : "btn-inverse btn-mini" ?>"><?php echo $isMyCase[0]->case_id != null ? 'CASE #'.$isMyCase[0]->case_id.' Assign to: '.$isMyCase[0]->full_name : 'REPLIED'?></button>  
     <?php     }
@@ -75,34 +78,10 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_pm[$i]->po
         <!-- ==================== END OF CONDENSED TABLE HEADLINE ==================== -->
 
         <!-- ==================== CONDENSED TABLE FLOATING BOX ==================== -->
-        <div class="floatingBox table hide">
-            <div class="container-fluid">
-                <table class="table table-striped">
-                  <thead>
-                    <tr>
-                      <th>Time Stamp</th>
-                      <th>Username</th>
-                      <th>Action Taken</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>2013-09-30 19:52:46</td>
-                      <td>Teo Eu Gene</td>
-                      <td>Resolved</td>
-                      <td><button class="btn btn-primary icon-book"></button></td>
-                    </tr>
-                    <tr>
-                      <td>2013-09-30 19:52:46</td>
-                      <td>Teo Eu Gene</td>
-                      <td>Resolved</td>
-                      <td><button class="btn btn-primary icon-book"></button></td>
-                    </tr>
-                  </tbody>
-                </table>  
-            </div>
-        </div>
+           <?php
+            $data_loaded['post'] = $fb_pm[$i];
+            $this->load->view('dashboard/action_taken', $data_loaded);
+            ?>
         <!-- ==================== END OF CONDENSED TABLE FLOATING BOX ==================== --> 
     </div>
     <!-- END ENGAGEMENT -->
@@ -111,10 +90,15 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_pm[$i]->po
         <!--a style="font-size: 20px;"><i class="icon-trash greyText"></i></a-->
         <div class="pull-right">
             <?php
+          
+            
             if(isset($isMyCase[0]->assign_to)){
-                if($isMyCase[0]->assign_to==$this->session->userdata('user_id')){
-                echo "<button type='button' class='btn btn-primary btn-reply'><i class='icon-mail-reply'></i></button>";
-                echo " <button type='button' class='btn btn-purple  btn-resolve' name='action' value=".$fb_feed[$i]->case_id."><i class='icon-check'></i> RESOLVE</button>";
+                if($isMyCase[0]->assign_to==$this->session->userdata('user_id') and (!isset($isMyCase[0]->solved_by))){
+                    echo "<button type='button' class='btn btn-primary btn-reply'><i class='icon-mail-reply'></i></button>";
+                    echo " <button type='button' class='btn btn-purple  btn-resolve' name='action' value=".$isMyCase[0]->case_id."><i class='icon-check'></i> RESOLVE</button>";
+                }else{
+                    echo "<button type='button' class='btn btn-primary btn-reply'><i class='icon-mail-reply'></i></button>";
+                    echo " <button type='button' class='btn btn-danger btn-case' name='action' value='case'><i class='icon-plus'></i> CASE</button>";
                 }
             }else{
                 echo "<button type='button' class='btn btn-primary btn-reply'><i class='icon-mail-reply'></i></button>";

@@ -82,6 +82,7 @@ class ChannelMg extends MY_Controller {
                 $channel['name'] = $access_token['screen_name'];
                 $channel['token_created_at'] = date("Y-m-d H:i:s");
                 $this->account_model->SaveChannel($channel);
+		//comment
                 redirect('channels/channelmg');
             }
         }

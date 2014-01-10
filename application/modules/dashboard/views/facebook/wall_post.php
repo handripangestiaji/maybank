@@ -7,7 +7,7 @@ for($i=0; $i<count($fb_feed);$i++):
 $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->post_id));
 //print_r($isMyCase);
 ?>
-<li class="<?php if(isset($isMyCase[0]->assign_to)){echo "case_".$isMyCase[0]->case_id;} ?>">
+<li class="<?php if(isset($isMyCase[0]->assign_to)){echo "case_".$isMyCase[0]->case_id;} ?>" id="post<?=$fb_feed[$i]->social_stream_post_id?>">
     <input type="hidden" class="postId" value="<?php echo $fb_feed[$i]->post_id; ?>" />
     <div class="circleAvatar"><img src="https://graph.facebook.com/<?php echo number_format($fb_feed[$i]->facebook_id, 0,'.','')?>/picture?small" alt=""></div>
     <div class="read-mark <?php if($fb_feed[$i]->is_read==0){echo 'redText';} else { echo 'greyText'; } ?>"><i class="icon-bookmark icon-large"></i></div>
@@ -161,34 +161,11 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
         <!-- ==================== END OF CONDENSED TABLE HEADLINE ==================== -->
 
         <!-- ==================== CONDENSED TABLE FLOATING BOX ==================== -->
-        <div class="floatingBox table hide">
-            <div class="container-fluid">
-                <table class="table table-striped">
-                  <thead>
-                    <tr>
-                      <th>Time Stamp</th>
-                      <th>Username</th>
-                      <th>Action Taken</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>2013-09-30 19:52:46</td>
-                      <td>Teo Eu Gene</td>
-                      <td>Resolved</td>
-                      <td><button class="btn btn-primary icon-book"></button></td>
-                    </tr>
-                    <tr>
-                      <td>2013-09-30 19:52:46</td>
-                      <td>Teo Eu Gene</td>
-                      <td>Resolved</td>
-                      <td><button class="btn btn-primary icon-book"></button></td>
-                    </tr>
-                  </tbody>
-                </table>  
-            </div>
-        </div>
+        
+            <?php
+            $data_loaded['post'] = $fb_feed[$i];
+            $this->load->view('dashboard/action_taken', $data_loaded);
+            ?>
         <!-- ==================== END OF CONDENSED TABLE FLOATING BOX ==================== --> 
     </div>
     <!-- END ENGAGEMENT -->
@@ -200,7 +177,7 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
     <?php  
     if(isset($isMyCase[0]->assign_to)){
         //echo $isMyCase[0]->assign_to."-".$this->session->userdata('user_id');
-        if($isMyCase[0]->assign_to==$this->session->userdata('user_id')){ ?> 
+        if($isMyCase[0]->assign_to==$this->session->userdata('user_id') && IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action')){ ?> 
                 <button type="button" class="btn btn-primary btn-reply"><i class="icon-mail-reply"></i></button>
            <?php if(isset($isMyCase[0]->solved_by)){ ?>
                 <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>
@@ -214,12 +191,13 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
     }else{ 
         ?>
             <?php if(!$fb_feed[$i]->case_id):
-                    if($isMyCase){ ?>                   
-                    
+                if($isMyCase){ ?>                   
                  <?php }else{ ?>
-                    <button type="button" class="btn btn-primary btn-reply"><i class="icon-mail-reply"></i></button>
-                    <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>
-            <?php      } 
+                    <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action')):?>
+                        <button type="button" class="btn btn-primary btn-reply"><i class="icon-mail-reply"></i></button>
+                        <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>
+                    <?php endif;?>
+                <?php } 
                   else:?>
                 
             <?php endif?>

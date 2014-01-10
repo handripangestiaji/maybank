@@ -381,7 +381,7 @@ class facebook_model extends CI_Model
      * fb_id : facebook id of user comment or like to fanpage
     */
     public function IsCommentExists($comment_id){
-	$this->db->select("id");
+	$this->db->select("*");
 	$this->db->from("social_stream_fb_comments");
 	$this->db->where("comment_stream_id",$comment_id);
 	return $this->db->get()->row();
@@ -395,7 +395,7 @@ class facebook_model extends CI_Model
     }
     
     public function IsFbUserExists($fb_id){
-	$this->db->select('facebook_id');
+	$this->db->select('*');
 	$this->db->from('fb_user_engaged');
 	$this->db->where('facebook_id',number_format($fb_id,0,'.',''));
 	return $this->db->get()->row() != null;
@@ -418,16 +418,30 @@ class facebook_model extends CI_Model
 	return $this->db->get()->row();
     }
     
-    public function RetrieveFeedFB($filter,$limit = 20){
+    function GetChannelAction($filter){
+        $this->db->select("a.*, b.username, b.display_name");
+        $this->db->from('channel_action a inner join user b on b.user_id = a.created_by');
+        $this->db->where($filter);
+        return $this->db->get()->result();
+    }
+    
+    public function RetrieveFeedFB($filter,$limit = 20){//retrive yang digunakan untuk feed facebook
         $this->db->select('*, c.type as social_stream_type, b.post_id as social_stream_post_id,b.post_id, c.created_at as post_date,d.case_id');
         $this->db->from("fb_user_engaged a INNER JOIN social_stream_fb_post b  
-			 ON b.author_id = a.facebook_id inner join social_stream c on c.post_id = b.post_id LEFT JOIN
+			             ON b.author_id = a.facebook_id inner join social_stream c on c.post_id = b.post_id LEFT JOIN
                          `case` d on d.post_id = c.post_id and d.status='pending'");
         $this->db->limit($limit);
         $this->db->order_by('c.created_at','desc');
-        if(count($filter) >= 1)
+        if(count($filter) >= 1){
             $this->db->where($filter);
-        return $this->db->get()->result();
+        }
+        $result = $this->db->get()->result();
+        foreach($result as $row){
+            $row->reply_post = $this->IsCommentExists($row->social_stream_post_id);
+            $row->channel_action = $this->GetChannelAction(array('post_id'=>$row->social_stream_post_id));
+        }
+        
+        return $result;
     }
     
      public function CountFeedFB($filter){
@@ -482,7 +496,13 @@ class facebook_model extends CI_Model
         }
         $this->db->limit($limit);
         $this->db->order_by('b.created_at','desc');
-        return $this->db->get()->result();
+        $result= $this->db->get()->result();
+        
+        foreach($result as $row){
+            $row->reply_post = $this->IsCommentExists($row->post_stream_id);
+            $row->channel_action = $this->GetChannelAction(array('post_id'=>$row->post_stream_id));
+        }
+        return $result;
     }
     
     public function CountPmFB($filter){

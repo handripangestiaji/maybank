@@ -113,14 +113,13 @@ class account_model extends CI_Model
     
     function CreateFavoriteAction($action, $result, $twitter_data, $channel){
 	$this->db->trans_start();
-	$action['action_type'] = 'twitter_favourite';
 	$action['created_at'] = date("Y-m-d H:i:s");
 	$action['stream_id_response'] = isset($result->id_str) ? $result->id_str : '';
 	$this->load->model('twitter_model');
 	$this->db->insert('channel_action', $action);
 	$this->db->where('post_id', $twitter_data->social_stream_post_id);
 	$this->db->update('social_stream_twitter', array(
-		'favorited' => 1
+		'favorited' => $action['action_type'] == 'twitter_favourite' ? 1 : 0
 	    )
 	);
 	$this->db->trans_complete();
@@ -148,16 +147,16 @@ class account_model extends CI_Model
     function CreateFbCommentAction($action,$stream_id,$replyAction, $like = 0){
     	$this->db->trans_start();
     	$post = $this->facebook_model->IsStreamIdExists($stream_id);
-    	if($post != null){
-    	    $action['post_id'] = $post->post_id;
+    	if($post != ''){
+    	   $action['post_id']=$post->post_id;
     	    $this->db->where("post_id", $post->post_id);
     	    $this->db->update("social_stream_fb_post", array("user_likes" => $like));
     	    $this->db->where("id", $post->post_id);
     	    $this->db->update("social_stream_fb_comments", array(
     		"user_likes" => $like
     	    ));
-    	}
-    	$result = $this->CreateChannelAction($action);
+        $result = $this->CreateChannelAction($action);
+        }
        // $this->CreateReplyAction($replyAction);
         
         $this->db->trans_complete();

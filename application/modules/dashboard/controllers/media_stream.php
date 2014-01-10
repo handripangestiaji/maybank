@@ -3,10 +3,13 @@
 class Media_stream extends CI_Controller {
 
     private $connection;
-	   
+    public $user_role;  
     function __construct()
     {
 	parent::__construct();
+	if(!$this->session->userdata('user_id'))
+	    redirect("login");
+	
 	// Loading TwitterOauth library. 
 	$this->config->load('twitter');
 	$this->config->load('facebook');
@@ -20,6 +23,8 @@ class Media_stream extends CI_Controller {
 	$this->load->model('twitter_model');
 	$this->load->model('youtube_model');
 	$this->load->model('account_model');
+	$this->user_role = $this->users_model->get_collection_detail(
+		array('role_collection_id'=>$this->session->userdata('role_id')));
     }
     
     
@@ -343,6 +348,12 @@ class Media_stream extends CI_Controller {
 		}
 		else if($type == 'favorite'){
 		    $result = $this->connection->post('favorites/create', array('id' => $twitter_data->post_stream_id));
+		    $action['action_type'] = 'twitter_favourite';
+		    $this->account_model->CreateFavoriteAction($action, $result, $twitter_data, $channel);
+		}
+		else if($type == 'unfavorite'){
+		    $result = $this->connection->post('favorites/destroy', array('id' => $twitter_data->post_stream_id));
+		    $action['action_type'] = 'twitter_delete_favourite';
 		    $this->account_model->CreateFavoriteAction($action, $result, $twitter_data, $channel);
 		}
 		echo json_encode(array(
@@ -610,6 +621,8 @@ class Media_stream extends CI_Controller {
                 $caseid='';
                 $post_at='';       
             }
+       	
+           
         
         if(!is_array($return)){//send comment          
             $action = array(
@@ -619,7 +632,17 @@ class Media_stream extends CI_Controller {
         		"created_by" => $this->session->userdata('user_id'),
         		"stream_id_response" => $return
     	    );
-             $this->account_model->CreateFbCommentAction($action,$return,$this->input->post('like') === 'true' ? 1 : 0);
+            
+            $social_stream = array(
+    	    "post_stream_id" => $return,
+    	    "channel_id" => $channel_loaded[0]->channel_id,
+    	    "type" => "facebook",
+    	    "retrieved_at" => date("Y-m-d H:i:s"),
+    	    "created_at" => date("Y-m-d H:i:s")
+	       );
+            
+            $this->db->insert("social_stream", $social_stream);
+            $this->account_model->CreateFbCommentAction($action,$post_id,$this->input->post('like') === 'true' ? 1 : 0);
             echo json_encode(
     		    array(
                 'success' => true,
@@ -639,20 +662,16 @@ class Media_stream extends CI_Controller {
         		"created_by" => $this->session->userdata('user_id'),
         		"stream_id_response" => $return['id']
         	);
-         
-            $replyAction = array(
-        		"case_id" => $caseid,
-        		"channel" => $channel_loaded[0]->channel_id,
-        		"url" => $url,
-        		"message" =>$comment,
-        		"stream_id" => $return['id'],
-        		"comment_id" => $post_id,
-        	    "conversation_detail_id" => '',
-                "type" => "reply_facebook",
-                "post_at" => $post_at,
-                "created_at" => date("Y-m-d H:i:s")
-            );
-            $this->account_model->CreateFbCommentAction($action,$return['id'],$this->input->post('like') === 'true' ? 1 : 0);
+            $social_stream = array(
+    	    "post_stream_id" => $return['id'],
+    	    "channel_id" => $channel_loaded[0]->channel_id,
+    	    "type" => "facebook",
+    	    "retrieved_at" => date("Y-m-d H:i:s"),
+    	    "created_at" => date("Y-m-d H:i:s")
+	       );
+            
+            $this->db->insert("social_stream", $social_stream);
+            $this->account_model->CreateFbCommentAction($action,$post_id,$this->input->post('like') === 'true' ? 1 : 0);
             echo json_encode(
     		    array(
                 'success' => true,
@@ -849,6 +868,8 @@ class Media_stream extends CI_Controller {
 				      $this->input->post('description'),
 				      $this->input->post('email_me'),
 				      $compose_date_hour);
+	curl_get_file_contents(base_url("cronjob/TwitterUserTimeline"));
+	curl_get_file_contents(base_url("cronjob/FacebookStreamFeed"));
     }
     
     public function load_facebook($type){

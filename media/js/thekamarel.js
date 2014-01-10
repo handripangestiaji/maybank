@@ -1171,7 +1171,7 @@ $(function(){
                                 type: "POST",
                                 data: {
                                     post_id : btnDestroyStatus.closest('li').find('.postId').val(),
-                                    channel_id : $(this).closest('.floatingBox').find('input.channel-id').val()
+                                    //channel_id : $(this).closest('.floatingBox').find('input.channel-id').val()
                                 },
                                 success: function(response)
                                 {
@@ -1181,12 +1181,19 @@ $(function(){
                                     else
                                     {
                                         btnDestroyStatus.removeAttr('disabled');
-                                        alert(response.message);
+                                        btnDestroyStatus.closest('li').toggle( "bounce", { times: 3, complete:function(){
+                                            $(this).show();
+                                            alert(response.message);
+                                        }}, "slow");
+                                        
                                     }
                                 },
                                 failed : function(response){
                                     btnDestroyStatus.removeAttr('disabled');
-                                    alert(response.message);
+                                    btnDestroyStatus.closest('li').toggle( "bounce", { times: 3, complete:function(){
+                                            $(this).show();
+                                            alert(response.message);
+                                    }}, "slow");
                                 }
                             });    
                         }
@@ -1197,10 +1204,25 @@ $(function(){
                         function() {
                         var retweetBtn = $(this);
                         var action = $(this).hasClass('favorit') ? "favorite" : "retweet";
-                        if(action == "retweet")
-                            retweetBtn.attr('disabled', 'disabled').find('span').html('Retweeting...');
-                        else
-                            retweetBtn.attr('disabled', 'disabled').find('span').html('Favoriting...');
+                        if(action == "retweet"){
+                            if(retweetBtn.hasClass('btn-inverse')){
+                                action = "unretweet";
+                                retweetBtn.attr('disabled', 'disabled').find('span').html('Unretweeting...');
+                            }
+                            else{
+                                retweetBtn.attr('disabled', 'disabled').find('span').html('Retweeting...');
+                            }
+                        }
+                        else{
+                            if(retweetBtn.hasClass('btn-inverse')){
+                                action = "unfavorite";
+                                retweetBtn.attr('disabled', 'disabled').find('span').html('Unfavoriting...');
+                            }
+                            else{
+                                retweetBtn.attr('disabled', 'disabled').find('span').html('Favoriting...');
+                            }
+                            
+                        }
                         $.ajax({
                             url : BASEURL + 'dashboard/media_stream/ActionTwitter/' + action,
                             type: "POST",
@@ -1237,7 +1259,7 @@ $(function(){
                         var followButton = $(this);
                         
                         if(confirmResult){
-                            followButton.attr('disabled', 'disabled').find('span').html(($(this).hasClass('unfollow') ? 'Unfollowing...' : 'following...'));
+                            followButton.attr('disabled', 'disabled');
                             $.ajax({
                                 url : BASEURL + 'dashboard/media_stream/ActionFollow/' + ($(this).hasClass('unfollow') ? 'unfollow' : 'follow'),
                                 type: "POST",

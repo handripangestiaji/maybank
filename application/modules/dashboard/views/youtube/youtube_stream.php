@@ -30,7 +30,7 @@
                         width="" height="" src="http://www.youtube.com/embed/<?=$post->video_id?>"
                         frameborder="0" allowFullScreen></iframe>
                     </p>
-                    <h4><?=$post->title?></h2>
+                    <p style="font-size:20px"><?=$post->title?></p>
                     <p><?=$post->description?></p>
                     <p><button type="button" class="btn btn-primary btn-mini">LIKE</button></p>
                     <p><a data-toggle="modal" role="button" href="#modalDialog"><i class="icon-eye-open"></i> <?=$post->comment_count?> Engagement</a> |

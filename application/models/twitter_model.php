@@ -9,6 +9,7 @@ class twitter_model extends CI_Model
         $this->load->helper('basic');
         $this->load->library('Twitteroauth');
         $this->config->load('twitter');
+        $this->load->model('case_model');
                 
     }
     /*
@@ -326,6 +327,7 @@ class twitter_model extends CI_Model
 
             $row->reply_post = $this->GetReplyPost(array('reply_to_post_id'=> $row->social_stream_post_id));
             $row->channel_action = $this->GetChannelAction(array('post_id'=>$row->social_stream_post_id));
+            $row->case = $this->case_model->LoadCase(array('a.post_id'=>$row->social_stream_post_id));
         }
         
         return $result;
@@ -376,7 +378,7 @@ class twitter_model extends CI_Model
                 return null;
             }
         }
-        
+
         return null;
     }
     
@@ -492,4 +494,6 @@ class twitter_model extends CI_Model
         ));
         return $this->db->delete('social_stream');
     }
+    
+    
 }

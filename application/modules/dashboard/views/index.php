@@ -195,9 +195,10 @@
                 <option value="user">User</option>
                 <option value="keyword">Keyword</option>
             </select-->
-            <input type="text" placeholder="Search" style="width:200px; float: left; margin-left: 2px;">
-            <a href="" style="float: left; height: 14px;">
-                <span class="add-on" style="background-color: black;color: white;margin-left: -1px; display: inline-block; white-space: nowrap; padding: 5px 6px; font-size: 14px;"><i class="icon-search"></i></span></a>
+        <input class="dashboard-search-field" type="text" placeholder="Search" style="width:200px; float: left; margin-left: 2px;">
+        <button class="btn btn-inverse btn-dashboard-search">
+            <i class="icon-search"></i>
+        </button>
         </div>      
 </div>
 <!-- ==================== END COMPOSE MESSAGE ==================== -->
@@ -213,13 +214,16 @@
     //$data['channels'] = $channels;
     $data['color'] = '#3B5998';
     $data['group'] = $group;
+    $data['box_id'] = 1;
     if(count($group) >= 1){
         $this->load->view('dashboard/box_stream',$data);
     }
+    $data['box_id'] = 2;
     $data['color'] = '#4099FF';
     if(count($group) >= 2){
         $this->load->view('dashboard/box_stream',$data);
     }
+    $data['box_id'] = 3;
     $data['color'] = '#FF3333';
     if(count($group) >= 3)
         $this->load->view('dashboard/box_stream',$data);

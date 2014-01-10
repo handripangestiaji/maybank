@@ -1463,12 +1463,16 @@ $(function(){
                     looppage=2;
                     $(this).on('click','.loadmore',
                         function() {
+                            $(this).find('span').html("LOADING...");
+                            $(this).attr("disabled", "disabled");
+                            var loadMoreElement = $(this);
                             loading = true;
                             action=$(this).val();    
                             group_numbers=2;
                             channel_ids = $(this).siblings(".channel_id").val();
                             me = $(this);
                             $(this).closest('.floatingBoxContainers').load(BASEURL + 'dashboard/media_stream/loadmore/'+action+'/'+looppage+'/'+channel_ids, function(){
+                                loadMoreElement.removeAttr("disabled");
                                 var currentNumber = $(this).closest('.floatingBoxContainers').find('.unread-post').length;
                                 try{
                                     currentNumber += parseInt($(this).closest('.container-fluid').siblings('.floatingBoxMenu').find('li.active .notifyCircle').html());
@@ -1559,6 +1563,24 @@ $(function(){
                 });
             });
             
+    $(document).ready(function() {
+        $('.btn-dashboard-search').click(function(){
+            var channel_1 = $('#box-id-1').next().find('.channel-id').val();
+            var channel_2 = $('#box-id-2').next().find('.channel-id').val();
+            $(this).closest('.container-fluid').next().find('.floatingBox').html('Loading...');
+            $('#box-id-1').next().load(BASEURL + 'dashboard/search',
+                                       {
+                                        channel_id : channel_1,
+                                        q : $('.dashboard-search-field').val()
+                                        });
+            $('#box-id-2').next().load(BASEURL + 'dashboard/search',
+                                       {
+                                        channel_id : channel_2,
+                                        q : $('.dashboard-search-field').val()
+                                        });
+            //window.location.href = BASEURL + 'dashboard/search?q=' + $('.dashboard-search-field').val();
+        });
+    });
     /*=============================================================================================
      ===================================== CMS ACTIONS ============================================
      =============================================================================================*/    
@@ -1804,6 +1826,3 @@ $.fn.RefreshAllStream = function(){
         }
     });
 };
-
-   
-

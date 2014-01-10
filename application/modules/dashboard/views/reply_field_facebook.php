@@ -3,12 +3,12 @@
     <span class="fb-reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
     <div class="pull-left">
         <div class="message"></div>
-        <select class="replyType" id="replyType" style="width: 130px;">
+        <select class="replyType" id="replyType" style="width: 130px;"  name="reply_type">
             <option value="keyword">Feedback</option>
             <option value="user">Enquiry</option>
             <option value="keyword">Complaint</option>
         </select>
-        <select class="productType" id="productType" style="width: 130px;">
+        <select class="productType" id="productType" style="width: 130px;" name="product_type">
             <?php foreach($product_list as $product):?>
                 <option value="<?=$product->id?>"><?=$product->product_name?></option>
             <?php endforeach?>
@@ -21,7 +21,7 @@
         <input type="text" class="reply-insert-link-text">
         <button class="reply-insert-link-btn btn btn-primary btn-mini" style="margin-left: 5px;">SHORTEN</button>
     </div>    
-    <div class="pull-right">
+    <div class="btn-reply-open-img">
         <a href="javascript:void(0);" id="reply-open-img">
             <i class="icon-camera"></i> 
         </a>

@@ -8,12 +8,12 @@
            <input type="hidden" value="<?php echo ($posts[$i]->post_id ? $posts[$i]->post_id : $posts[$i]->social_stream_post_id)?>" name="post_id" />
            <div class="message"></div>
            <div class="pull-left">
-               <select style="width: 130px;" name="case_type">
+               <select name="case_type">
                    <option value="Feedback">Feedback</option>
                    <option value="Enquiry">Enquiry</option>
                    <option value="Complaint">Complaint</option>
                </select>
-               <select style="width: 130px;" name="product_type">
+               <select name="product_type">
                 <?php foreach($product_list as $product):?>
                     <option value="<?php echo $product->id?>"><?php echo $product->product_name?></option>
                 <?php endforeach?>

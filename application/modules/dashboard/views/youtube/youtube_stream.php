@@ -67,7 +67,7 @@
                     </div>
                 </li>
             <?php endforeach?>
-             <div class="filled" style="text-align: center;"><button class="btn btn-info"><i class="icon-chevron-down"></i> LOAD MORE</button></div>
+             <div class="filled" style="text-align: center;"><button class="btn btn-info"><i class="icon-chevron-down"></i> <span>LOAD MORE</span></button></div>
         </ul>
         
        
@@ -92,6 +92,7 @@
                 <p>"<?=$comment->text?>"</p>
             </li>
            <?php endforeach;?>
+          <div class="filled" style="text-align: center;"><button class="btn btn-info"><i class="icon-chevron-down"></i> <span>LOAD MORE</span></button></div>
         </ul>
         <!-- ==================== END OF RECENT COMMENTS CONTENT ==================== -->
 

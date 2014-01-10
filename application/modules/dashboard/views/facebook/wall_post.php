@@ -228,7 +228,7 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
     <!-- END CASE -->  
 </li>
 <?php endfor;?>
-<?php if(count($fb_feed) > 0):?>
+<?php if(count($fb_feed) > 0 && (!isset($is_search))):?>
 <div class="filled" style="text-align: center;"><input type="hidden" class="total_groups" value="<?php echo $total_groups?>" /><input type="hidden"  class="looppage" value=""/><input type="hidden"  class="channel_id" value="<?php echo $fb_feed[0]->channel_id?>"/><button class="loadmore btn btn-info" value="wallPosts"><i class="icon-chevron-down"></i>
  <span>LOAD MORE</span></button></div>
 <?php endif;?>

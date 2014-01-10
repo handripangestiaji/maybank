@@ -79,7 +79,7 @@
     <?php 
     }
  ?>
-<?php if(count($directmessage) > 0):?>
+<?php if((count($directmessage) > 0) && (!isset($is_search))): ?>
   <div class="filled" style="text-align: center;">
      <input type="hidden"  class="channel_id" value="<?php echo $directmessage[0]->channel_id?>"/>
     <button class="loadmore btn btn-info" value="direct"><i class="icon-chevron-down"></i> <span>LOAD MORE</span></button></div>

@@ -80,7 +80,7 @@ for($i=0;$i<count($senttweets);$i++){
         
     </li>
 <?php } ?>
-<?php if(count($senttweets) > 0):?>
+<?php if((count($senttweets) > 0) && (!isset($is_search))): ?>
  <div class="filled" style="text-align: center;">
     <input type="hidden"  class="channel_id" value="<?php echo $senttweets[0]->channel_id?>"/>
     <button class="loadmore btn btn-info" value="homefeed">

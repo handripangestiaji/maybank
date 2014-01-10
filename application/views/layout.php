@@ -9,6 +9,7 @@
     
     <head>
     	<?php echo $this->load->view('metadata') ?>
+	<link rel="shortcut icon" href="<?php echo base_url() ?>media/img/favicon.ico">
     </head>
 	
 	<body class="dashboard">

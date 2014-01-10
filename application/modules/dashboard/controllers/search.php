@@ -3,10 +3,14 @@
 class Search extends CI_Controller {
 
      private $connection;
+     public $user_role;
     
      function __construct()
      {
 	  parent::__construct();
+	  if(!$this->session->userdata('user_id'))
+	    redirect("login");
+	
 	  $this->load->model('elasticsearch_model');
 	  $this->load->library('ion_auth');
 	  $this->load->library('Twitteroauth');
@@ -18,6 +22,8 @@ class Search extends CI_Controller {
 	  $this->load->model('twitter_model');
 	  $this->load->model('youtube_model');
 	  $this->load->model('account_model');
+	  $this->user_role = $this->users_model->get_collection_detail(
+		array('role_collection_id'=>$this->session->userdata('role_id')));
      }
     
     
@@ -55,6 +61,11 @@ class Search extends CI_Controller {
 	       $data['count_fb_feed']=$this->facebook_model->CountFeedFB($filter);
 	       $data['CountPmFB']=$this->facebook_model->CountPmFB($filter);
 	       $data['channel_id'] = $channel_id;
+	       $this->load->model('campaign_model');
+	       $data['product_list'] = $this->campaign_model->GetProduct();
+	       $this->load->model('case_model');
+	       $data['user_list'] = $this->case_model->ReadAllUser();
+	       $data['is_search'] = TRUE;
 	       $this->load->view('dashboard/facebook/facebook_stream',$data);
 	  }
 	  elseif($the_channel[0]->connection_type == 'twitter'){
@@ -119,13 +130,15 @@ class Search extends CI_Controller {
 	       $this->load->model('campaign_model');
 	       $data['product_list'] = $this->campaign_model->GetProduct();
 	       $data['channel_id'] = $channel_id;
+	       $data['user_list'] = $this->case_model->ReadAllUser();
+	       $data['is_search'] = TRUE;
 	       $this->load->view('dashboard/twitter/twitter_stream',$data);
 	  }
      }
      
      public function indexing(){
 	  //delete first
-	  //$this->elasticsearch_model->DeleteIndex('media_stream');
+	  $this->elasticsearch_model->DeleteIndex('media_stream');
 	  
 	  //create index
 	  $this->elasticsearch_model->PutIndex('media_stream');
@@ -178,7 +191,9 @@ class Search extends CI_Controller {
 				   'solved_at' => array('type' => 'string'),
 				   'social_stream_type' => array('type' => 'string'),
 				   'social_stream_post_id' => array('type' => 'long'),
-				   'post_date' => array('type' => 'string')
+				   'post_date' => array('type' => 'string'),
+				   'reply_post' => array('type' => 'string'),
+				   'channel_action' => array('type' => 'string')
 			       );
 	  $ret = $this->elasticsearch_model->TypeMapping('media_stream','facebook_feed',$fb_feed_map);
 	  

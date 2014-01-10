@@ -402,6 +402,7 @@ class Cronjob extends CI_Controller {
                 $comment_list = $this->getAndPrintCommentFeed($playlistItemsResponse['items'][$i]['snippet']['resourceId']['videoId']);
                 $this->youtube_model->SaveYoutubeComment($comment_list, $each_channel->channel_id);
                 $video[] = $detail_video;
+                print_r($detail_video);
             }
             
             

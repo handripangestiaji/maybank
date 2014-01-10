@@ -14,7 +14,7 @@
     <div class="row-fluid">
         <div class="span12">
             <!-- ==================== ACTIVITIES HEADLINE ==================== -->
-            <div class="containerHeadline" style="background-color:<?php echo $color; ?>;color: white; height: 30px;">
+            <div class="containerHeadline" id="box-id-<?php echo $box_id ?>" style="background-color:<?php echo $color; ?>;color: white; height: 30px;">
                 <div class="pull-left" style="padding: 4px 0px; height: auto">
                     <div class="btn-group">
                         <button class="btn trans dropdown-toggle btn-dropdown-stream-channels" data-toggle="dropdown">

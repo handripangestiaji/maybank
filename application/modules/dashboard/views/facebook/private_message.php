@@ -36,7 +36,7 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_pm[$i]->po
                 <button type="button" class="btn <?php echo $isMyCase[0]->case_id != null ? "btn-purple" : "btn-inverse btn-mini" ?>"><?php echo $isMyCase[0]->case_id != null ? 'CASE #'.$isMyCase[0]->case_id.' Assign to: '.$isMyCase[0]->full_name : 'REPLIED'?></button>  
     <?php     }
     }else{ ?>
-                <button type="button" class="btn <?php echo $fb_feed[$i]->total_comments == 0 ? "btn-warning btn-mini no-cursor indicator" : "btn-inverse btn-mini no-cursor indicator" ?>"><?php echo $fb_feed[$i]->total_comments == 0 ? 'OPEN' :  'REPLIED'?></button>  
+                <button type="button" class="btn <?php echo $fb_pm[$i]->message_count == 0 ? "btn-warning btn-mini no-cursor indicator" : "btn-inverse btn-mini no-cursor indicator" ?>"><?php echo $fb_pm[$i]->message_count == 0 ? 'OPEN' :  'REPLIED'?></button>  
     <?php } ?>
         <!--button class="btn btn-primary btn-mini" style="margin-left: 5px;">LIKE</button--> </p>
     <p>

@@ -203,7 +203,7 @@
 </div>
 <!-- ==================== END COMPOSE MESSAGE ==================== -->
 
-<div class="row-fluid">
+<div class="row-fluid" style="margin-bottom: 0px;">
 <?php
     if(count($channels) > 3){
         $span = 4;

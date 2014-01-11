@@ -48,11 +48,11 @@ for($i=0;$i<count($mentions);$i++){
         <button type="button" class="btn btn-purple btn-mini" value="<?php echo $mentions[$i]->case_id?>">CASE ID #<?php echo $mentions[$i]->case_id?></button>
     <?php endif?>
     <?php if(count($mentions[$i]->reply_post) > 0):?>
-        <button type="button" class="btn btn-inverse btn-mini" value="<?php echo $mentions[$i]->reply_post[0]->response_post_id?>">Replied by
+        <button type="button" class="btn btn-inverse btn-mini" value="<?php echo $mentions[$i]->reply_post[0]->response_post_id?>">
         
         <?php
         $reply_date = new DateTime($mentions[$i]->reply_post[0]->created_at, new DateTimeZone($mentions[$i]->reply_post[0]->timezone));
-        echo $mentions[$i]->reply_post[0]->display_name." on ".$reply_date->format("d-M-y h:i A") ?>
+        echo "Replied by: ".$mentions[$i]->reply_post[0]->display_name." ".$reply_date->format("d-M-y h:i A") ?>
         </button>
     <?php endif?>
     <?php if(count($mentions[$i]->reply_post) == 0 && !$mentions[$i]->case_id):?>
@@ -168,7 +168,7 @@ for($i=0;$i<count($mentions);$i++){
     </li>
 <?php } 
 ?>
-<?php if((count($mentions) > 0) && (!isset($is_search))): ?>
+<?php if(count($mentions) > 0):?>
     <div class="filled" style="text-align: center;"><input type="hidden" class="total_groups" value="<?php echo $total_groups?>" />
     <input type="hidden"  class="channel_id" value="<?php echo $mentions[0]->channel_id?>"/>
     <input type="hidden"  class="looppage" value=""/>

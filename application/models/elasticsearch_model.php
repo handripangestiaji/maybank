@@ -3,13 +3,13 @@
 class elasticsearch_model extends CI_Model
 {
     public $port = 9200;
-    public $host = "http://localhost";
+    public $host;
     private $client;
 
     public function __construct(){
         parent::__construct();
         $this->client= new Elasticsearch\Client();
-    
+	$host = base_url();
     }
 	
     public function PutIndex($name)

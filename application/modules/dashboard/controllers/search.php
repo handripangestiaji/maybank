@@ -29,6 +29,7 @@ class Search extends CI_Controller {
     
      public function index()
      {
+	  $this->indexing();
 	  $q = $this->input->post('q');
 	  $channel_id = $this->input->post('channel_id');
 	  $the_channel = $this->account_model->GetChannel(array('channel_id' => $channel_id));

@@ -647,15 +647,6 @@ class Media_stream extends CI_Controller {
         		"created_by" => $this->session->userdata('user_id'),
         		"stream_id_response" => $return
     	    );
-            //$social_stream = array(
-//    	    "post_stream_id" => $return,
-//    	    "channel_id" => $channel_loaded[0]->channel_id,
-//    	    "type" => "facebook",
-//    	    "retrieved_at" => date("Y-m-d H:i:s"),
-//    	    "created_at" => date("Y-m-d H:i:s")
-//            );
-//            
-//            $this->db->insert("social_stream", $social_stream);
             
             echo json_encode(
     		    array(
@@ -677,16 +668,6 @@ class Media_stream extends CI_Controller {
         		"created_by" => $this->session->userdata('user_id'),
         		"stream_id_response" => $return
         	);
-            
-//          $social_stream = array(
-//    	    "post_stream_id" => $return,
-//    	    "channel_id" => $channel_loaded[0]->channel_id,
-//    	    "type" => "facebook",
-//    	    "retrieved_at" => date("Y-m-d H:i:s"),
-//    	    "created_at" => date("Y-m-d H:i:s")
-//	       );
-//            
-//          $this->db->insert("social_stream", $social_stream);
             
             echo json_encode(
     		    array(

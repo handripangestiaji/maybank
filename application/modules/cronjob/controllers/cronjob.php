@@ -159,9 +159,9 @@ class Cronjob extends CI_Controller {
         $this->load->model('post_model');
         
         $time_now = date('Y-m-d H:i:s');
-        $time_few_min_ago = date('Y-m-d H:i:s',strtotime('-10 min'));
+        $time_few_min_ago = date('Y-m-d H:i:s',strtotime('+7 hour'));
         
-        $where = "time_to_post Between '".$time_few_min_ago."' AND '".$time_now."' AND is_posted is NULL";
+        $where = "time_to_post Between '".$time_now."' AND '".$time_few_min_ago."' AND is_posted is NULL";
         $posts = $this->post_model->GetPosts($where);
         foreach($posts as $post){
             //handle if facebook

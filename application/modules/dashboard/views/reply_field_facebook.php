@@ -1,14 +1,14 @@
 <form action="" method="post" class="facebook-tweet">
 <div class="row-fluid">
     <span class="fb-reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
-    <div class="pull-left">
+    <div class="option-type pull-left">
         <div class="message"></div>
-        <select class="replyType" id="replyType" style="width: 130px;"  name="reply_type">
-            <option value="keyword">Feedback</option>
-            <option value="user">Enquiry</option>
-            <option value="keyword">Complaint</option>
+        <select class="replyType" id="replyType" style="width: 130px;">
+            <option value="Feedback">Feedback</option>
+            <option value="Enquiry">Enquiry</option>
+            <option value="Complaint">Complaint</option>
         </select>
-        <select class="productType" id="productType" style="width: 130px;" name="product_type">
+        <select class="productType" id="productType" style="width: 130px;">
             <?php foreach($product_list as $product):?>
                 <option value="<?=$product->id?>"><?=$product->product_name?></option>
             <?php endforeach?>
@@ -18,10 +18,11 @@
     <br clear="all" />
     <div class="link_url pull-left"  style="margin-bottom: 5px;">
         <i class="icon-link"></i>
-        <input type="text" class="reply-insert-link-text">
+        <input type="text" class="source_link reply-insert-link-text">
+        <input type="hidden" class="short_code" />
         <button class="reply-insert-link-btn btn btn-primary btn-mini" style="margin-left: 5px;">SHORTEN</button>
     </div>    
-    <div class="btn-reply-open-img">
+    <div class="pull-right">
         <a href="javascript:void(0);" id="reply-open-img">
             <i class="icon-camera"></i> 
         </a>

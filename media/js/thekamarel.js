@@ -779,7 +779,9 @@ $(function(){
                            "success" : function (response){
                                 me.removeAttr("disabled").html("SHORTEN");
                                 tweetsText = me.closest('form').find(".replaycontent");
+                                shortcode= me.closest('.link_url').find(".short_code");
                                 tweetsText.val(tweetsText.val() + " http://maybank.co/" + response.shortcode);
+                                shortcode.val(response.shortcode);
                                 me.closest('reply-shorturl-show-content').val()=" http://maybank.co/" + response.shortcode;
                                // alert("http://maybank.co/" + response.shortcode)
                            },
@@ -1330,15 +1332,15 @@ $(function(){
                             commentButton.html('SENDING...').attr("disabled", "disabled");
 
                            $.ajax({
-                                url : BASEURL + 'dashboard/media_stream/FbReplyPosts',
+                                url : BASEURL + 'dashboard/media_stream/FbReplyPost',
                                 type: "POST",
                                 data: {
                                     post_id: $(this).val(),
                                     channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
                                     comment :$(this).parent().siblings(".replaycontent").val(),
-                                    url:"",
-                                    replyType:$(this).parent().siblings(".replyType").val(),
-                                    productType:$(this).parent().siblings(".productType").val(),
+                                    url:$(this).parent().siblings(".link_url").find(".short_code").val(),
+                                    reply_type:$(this).parent().siblings('.option-type').find(".replyType").val(),
+                                    product_type:$(this).parent().siblings('.option-type').find(".productType").val(),
                                     title :$(this).parent().siblings('#reply-url-show').find(".title_link").val(),
                                     desc :$(this).parent().siblings('#reply-url-show').find(".descr-link").val(),
                                     img :$(this).parent().siblings('#reply-img-show').find("#reply-preview-img").attr('src'),
@@ -1346,7 +1348,7 @@ $(function(){
                                 success: function(response)
                                 {
                                     commentButton.removeAttr("disabled");
-                                    if(response.success === true){
+                                    if(response.success == true){
                                         commentButton.parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
                                         '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
                                         '<strong>Success!</strong> '+response.message+' </div>');
@@ -1362,6 +1364,14 @@ $(function(){
                                         '<strong>Error!</strong>'+response.message+'</div>');
                                         commentButton.html("SEND");
                                     }
+
+                                },
+                                error: function(response) {
+                                    commentButton.removeAttr("disabled");
+                                    commentButton.parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
+                                        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
+                                        '<strong>Error!</strong>: Facebook post not founds/'+response.message+'</div>');
+                                    commentButton.html("SEND");
                                 },
                             });
                             
@@ -1471,6 +1481,7 @@ $(function(){
                             group_numbers=2;
                             channel_ids = $(this).siblings(".channel_id").val();
                             me = $(this);
+                            me.attr('disabled', 'disabled').html('Loading...');
                             $(this).closest('.floatingBoxContainers').load(BASEURL + 'dashboard/media_stream/loadmore/'+action+'/'+looppage+'/'+channel_ids, function(){
                                 loadMoreElement.removeAttr("disabled");
                                 var currentNumber = $(this).closest('.floatingBoxContainers').find('.unread-post').length;
@@ -1489,7 +1500,7 @@ $(function(){
                                 else
                                     me.closest('.container-fluid').siblings('.floatingBoxMenu').find('li.active .notifyCircle').show();
                             });
-                            
+                            me.removeAttr('disabled').html('Loading..');
                             
                             looppage++;
                             loading = false;

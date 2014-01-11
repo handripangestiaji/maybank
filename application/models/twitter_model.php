@@ -483,8 +483,9 @@ class twitter_model extends CI_Model
     */
     function GetReplyPost($filter){
         $this->db->select('*');
-        $this->db->from('twitter_reply');
+        $this->db->from('twitter_reply a inner join user b on a.user_id = b.user_id');
         $this->db->where($filter);
+        $this->db->order_by('id', 'desc');
         return $this->db->get()->result();
     }
     

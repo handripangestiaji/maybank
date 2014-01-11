@@ -50,7 +50,8 @@ class Media_stream extends CI_Controller {
 	$data['product_list'] = $this->campaign_model->GetProduct();
 	$data['channel_id'] = $channel_id;
 	$this->load->model('case_model');
-	$data['user_list'] = $this->case_model->ReadAllUser();
+    $filter=array('role_id <>'=>'5');
+	$data['user_list'] = $this->case_model->ReadAllUser($filter);
 	$this->load->view('dashboard/facebook/facebook_stream',$data);
     }
     

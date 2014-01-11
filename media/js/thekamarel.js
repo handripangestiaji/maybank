@@ -1321,6 +1321,13 @@ $(function(){
                      $(this).on('click','.btn-send-reply',
                         function() {
                         var len=$(this).parent().siblings(".replaycontent").val().length
+                        var commnetbox;
+                        if(len<=0){
+                            commnetbox='-';
+                        }else{
+                             commnetbox=$(this).parent().siblings(".replaycontent").val();
+                        }
+                        
                         if(len>2000){
                             $(this).parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
                             '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
@@ -1337,7 +1344,7 @@ $(function(){
                                 data: {
                                     post_id: $(this).val(),
                                     channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
-                                    comment :$(this).parent().siblings(".replaycontent").val(),
+                                    comment :commnetbox,
                                     url:$(this).parent().siblings(".link_url").find(".short_code").val(),
                                     reply_type:$(this).parent().siblings('.option-type').find(".replyType").val(),
                                     product_type:$(this).parent().siblings('.option-type').find(".productType").val(),

@@ -29,6 +29,7 @@ class Search extends CI_Controller {
     
      public function index()
      {
+	  //$this->indexing();
 	  $q = $this->input->post('q');
 	  $channel_id = $this->input->post('channel_id');
 	  $the_channel = $this->account_model->GetChannel(array('channel_id' => $channel_id));
@@ -164,7 +165,7 @@ class Search extends CI_Controller {
      
      public function indexing(){
 	  //delete first
-	  $this->elasticsearch_model->DeleteIndex('media_stream');
+	  //$this->elasticsearch_model->DeleteIndex('media_stream');
 	  
 	  //create index
 	  $this->elasticsearch_model->PutIndex('media_stream');

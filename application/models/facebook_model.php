@@ -401,10 +401,11 @@ class facebook_model extends CI_Model
 	return $this->db->get()->row() != null;
     }
     
-    public function IsStreamIdExists($stream_id){
+    public function IsStreamIdExists($stream_id, $type = "facebook"){
 	$this->db->select("post_id");
 	$this->db->from("social_stream");
 	$this->db->where(array(
+	    "type" => $type,
 	    "post_stream_id" => $stream_id
 	));
 	return $this->db->get()->row();

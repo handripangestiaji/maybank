@@ -48,7 +48,12 @@ for($i=0;$i<count($mentions);$i++){
         <button type="button" class="btn btn-purple btn-mini" value="<?php echo $mentions[$i]->case_id?>">CASE ID #<?php echo $mentions[$i]->case_id?></button>
     <?php endif?>
     <?php if(count($mentions[$i]->reply_post) > 0):?>
-        <button type="button" class="btn btn-inverse btn-mini" value="<?php echo $mentions[$i]->reply_post[0]->response_post_id?>">REPLIED</button>
+        <button type="button" class="btn btn-inverse btn-mini" value="<?php echo $mentions[$i]->reply_post[0]->response_post_id?>">Replied by
+        
+        <?php
+        $reply_date = new DateTime($mentions[$i]->reply_post[0]->created_at, new DateTimeZone($mentions[$i]->reply_post[0]->timezone));
+        echo $mentions[$i]->reply_post[0]->display_name." on ".$reply_date->format("d-M-y h:i A") ?>
+        </button>
     <?php endif?>
     <?php if(count($mentions[$i]->reply_post) == 0 && !$mentions[$i]->case_id):?>
         <button type="button" class="btn btn-warning btn-mini no-cursor">OPEN</button>
@@ -60,10 +65,14 @@ for($i=0;$i<count($mentions);$i++){
     <?php } ?>    
     <?php if ($mentions[$i]->favorited=='1') { ?>
         <button type="button" class="btn btn-inverse btn-mini"><i class="icon-star">&nbsp;</i></button>
-    <?php } ?></p>
+    <?php }
+        $filterm["b.in_reply_to = "] = $mentions[$i]->social_stream_post_id.' ';
+        $filterm['b.type'] = "user_timeline";
+        $comment=$this->twitter_model->ReadTwitterData($filterm, 3);
+    ?></p>
     
     <p>
-        <a role="button" class="btn-engagement"><i class="icon-eye-open"></i> Engagement</a> 
+        <a role="button" class="btn-engagement"><i class="icon-eye-open"></i><?=count($comment)?> Engagement</a> 
         <?php if($mentions[$i]->retweet_count>0): ?>|
         <span><i class="icon-retweet greyText"></i><?php echo $mentions[$i]->retweet_count; ?> re-tweet(s)</span><?php endif;?>
     </p>
@@ -74,23 +83,17 @@ for($i=0;$i<count($mentions);$i++){
         </div>
         <br/>
         <?php 
-            // $filtera["b.twitter_user_id"] = $mentions[$i]->twitter_user_id;
-             $filterm["b.in_reply_to = "] = $mentions[$i]->social_stream_post_id.' ';
-             $comment=$this->twitter_model->ReadTwitterData($filterm, 3);
-             $currComment = '';
-             for($j=0;$j<count($comment);$j++):
-                
-                if($currComment != $comment[$j]->{'text'}):
-                $currComment = $comment[$j]->text;
+         $currComment = '';
+         for($j=0;$j<count($comment);$j++):
+            
+            if($currComment != $comment[$j]->{'text'}):
+            $currComment = $comment[$j]->text;
         ?>
                 <div class="engagement-body">
                     <span class="engagement-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>    
                     <p class="headLine">
                         <span class="author">
-                            <?php
-                            $users=json_decode($comment[$j]->twitter_entities);
-                            echo isset($users->user_mentions[0]->name) ? $users->user_mentions[0]->name : '';
-                            ?>
+                            <?php echo $comment[$j]->name?>
                         </span>
                         <i class="icon-circle"></i>
                         <span>posted a <span class="cyanText">tweet</span></span>
@@ -165,7 +168,7 @@ for($i=0;$i<count($mentions);$i++){
     </li>
 <?php } 
 ?>
-<?php if(count($mentions) > 0):?>
+<?php if((count($mentions) > 0) && (!isset($is_search))): ?>
     <div class="filled" style="text-align: center;"><input type="hidden" class="total_groups" value="<?php echo $total_groups?>" />
     <input type="hidden"  class="channel_id" value="<?php echo $mentions[0]->channel_id?>"/>
     <input type="hidden"  class="looppage" value=""/>

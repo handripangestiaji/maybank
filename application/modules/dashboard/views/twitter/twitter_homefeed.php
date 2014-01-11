@@ -166,6 +166,6 @@ for($i=0;$i<count($homefeed);$i++){
     
     </li>
 <?php } ?>
-<?php if(count($homefeed) > 0):?>
+<?php if((count($homefeed) > 0) && (!isset($is_search))): ?>
 <div class="filled" style="text-align: center;"><input type="hidden" class="channel_id" value="<?php echo $homefeed[0]->channel_id?>" /><input type="hidden"  class="channel_id" value="<?php echo $homefeed[0]->channel_id?>"/><input type="hidden" class="total_groups" value="<?php echo $total_groups?>" /><input type="hidden"  class="looppage" value=""/><button class="loadmore btn btn-info" value="feed"><i class="icon-chevron-down"></i> <span>LOAD MORE</span></button></div>
 <?php endif;?>

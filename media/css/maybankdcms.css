@@ -24,13 +24,13 @@
 }
 
 .form-signin input[type="text"]{
-	min-width: 0px;
+	/*min-width: 0px;*/
 	width: 180px;
 }
 
 .form-signin input[type="password"]{
 	width: 153px;
-	min-width: 0px;
+	/*min-width: 0px;*/
 }
 
 .input-prepend .add-on{

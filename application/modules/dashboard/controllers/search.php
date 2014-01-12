@@ -164,9 +164,6 @@ class Search extends CI_Controller {
      }
      
      public function indexing(){
-	  //delete first
-	  //$this->elasticsearch_model->DeleteIndex('media_stream');
-	  
 	  //create index
 	  $this->elasticsearch_model->PutIndex('media_stream');
 	  
@@ -507,5 +504,9 @@ class Search extends CI_Controller {
 	  //$ret = $this->elasticsearch_model->DeleteType('media_stream','twitter_dm');
 	  print_r($ret);
 	  die();
+     }
+     
+     public function DeleteIndex($name){
+	  $this->elasticsearch_model->DeleteIndex('media_stream');
      }
 }

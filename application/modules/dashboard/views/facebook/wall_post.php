@@ -90,6 +90,10 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
             </p>
             <div class="engagement-comment">
                 <p>"<?php echo $comment[$j]->comment_content; ?>"</p>
+                
+                <?php if(isset($isMyCase[0]->assign_to)){
+                        if($isMyCase[0]->assign_to==$this->session->userdata('user_id') or ($isMyCase[0]->solved_by)){
+                    ?>
                 <p>
                     <button type="button" class="btn btn-warning btn-mini">OPEN</button>
                     <button class="fblike btn btn-primary btn-mini" value="<?php echo $comment[$j]->post_stream_id?>"><?php echo $comment[$j]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button>
@@ -98,6 +102,8 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
                     <?php } ?>
                    <button type="button" class="btn btn-danger btn-engagement-case btn-mini"><i class="icon-plus"></i> CASE</button>
                 </p>
+                <?php } 
+                } ?>
                 <div class="fb-reply-engagement-field reply-field hide">
                     <?php
                     $data['fb_feed'] = $comment;

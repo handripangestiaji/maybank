@@ -50,7 +50,8 @@ class Media_stream extends CI_Controller {
 	$data['product_list'] = $this->campaign_model->GetProduct();
 	$data['channel_id'] = $channel_id;
 	$this->load->model('case_model');
-	$data['user_list'] = $this->case_model->ReadAllUser();
+    $filter=array('role_id <>'=>'5');
+	$data['user_list'] = $this->case_model->ReadAllUser($filter);
 	$this->load->view('dashboard/facebook/facebook_stream',$data);
     }
     
@@ -647,15 +648,6 @@ class Media_stream extends CI_Controller {
         		"created_by" => $this->session->userdata('user_id'),
         		"stream_id_response" => $return
     	    );
-            //$social_stream = array(
-//    	    "post_stream_id" => $return,
-//    	    "channel_id" => $channel_loaded[0]->channel_id,
-//    	    "type" => "facebook",
-//    	    "retrieved_at" => date("Y-m-d H:i:s"),
-//    	    "created_at" => date("Y-m-d H:i:s")
-//            );
-//            
-//            $this->db->insert("social_stream", $social_stream);
             
             echo json_encode(
     		    array(
@@ -677,16 +669,6 @@ class Media_stream extends CI_Controller {
         		"created_by" => $this->session->userdata('user_id'),
         		"stream_id_response" => $return
         	);
-            
-//          $social_stream = array(
-//    	    "post_stream_id" => $return,
-//    	    "channel_id" => $channel_loaded[0]->channel_id,
-//    	    "type" => "facebook",
-//    	    "retrieved_at" => date("Y-m-d H:i:s"),
-//    	    "created_at" => date("Y-m-d H:i:s")
-//	       );
-//            
-//          $this->db->insert("social_stream", $social_stream);
             
             echo json_encode(
     		    array(

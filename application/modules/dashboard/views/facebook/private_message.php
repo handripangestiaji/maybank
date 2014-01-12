@@ -10,7 +10,7 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_pm[$i]->po
 ?>
 <li class="<?php if(isset($isMyCase[0]->assign_to)){echo "case_".$isMyCase[0]->case_id;} ?>">
     <input type="hidden" class="postId" value="<?php echo $fb_pm[$i]->post_id; ?>" />
-    <div class="circleAvatar"><img src="https://graph.facebook.com/<?=number_format($fb_pm[$i]->sender, 0,'.','')?>/picture?small" alt=""></div>
+    <div class="circleAvatar"><img src="<?=base_url('dashboard/media_stream/SafePhoto?photo=')."https://graph.facebook.com/".number_format($fb_pm[$i]->sender, 0,'.','')?>/picture?small" alt=""></div>
     <div class="read-mark <?php if($fb_pm[$i]->is_read==0){echo 'redText';} else { echo 'greyText'; } ?>"><i class="icon-bookmark icon-large"></i></div>
     <br />
     <p class="headLine">

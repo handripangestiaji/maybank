@@ -9,7 +9,7 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
 ?>
 <li class="<?php if(isset($isMyCase[0]->assign_to)){echo "case_".$isMyCase[0]->case_id;} ?>" id="post<?=$fb_feed[$i]->social_stream_post_id?>">
     <input type="hidden" class="postId" value="<?php echo $fb_feed[$i]->post_id; ?>" />
-    <div class="circleAvatar"><img src="https://graph.facebook.com/<?php echo number_format($fb_feed[$i]->facebook_id, 0,'.','')?>/picture?small" alt=""></div>
+    <div class="circleAvatar"><img src="<?php echo base_url('dashboard/media_stream/SafePhoto?photo=')."https://graph.facebook.com/".number_format($fb_feed[$i]->facebook_id, 0,'.','')?>/picture?small" alt=""></div>
     <div class="read-mark <?php if($fb_feed[$i]->is_read==0){echo 'redText';} else { echo 'greyText'; } ?>"><i class="icon-bookmark icon-large"></i></div>
     <br />
     <p class="headLine">
@@ -30,12 +30,16 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
     <?php
     if($fb_feed[$i]->attachment){ 
         $attachment=json_decode($fb_feed[$i]->attachment);
+        $attachment = isset($attachment->media) ? $attachment->media: null;
+        
         for($att=0;$att<count($attachment);$att++){
            if($attachment[$att]->type=='photo'){
-                echo    "<a href='#modal-".$fb_feed[$i]->post_id."-".$attachment[$att]->type."' data-toggle='modal' ><img src='".$attachment[$att]->src."' /></a>";
+            
+                $src = substr($attachment[$att]->src, 0, strlen($attachment[$att]->src) - 5)."n.jpg";
+                echo    "<a href='#modal-".$fb_feed[$i]->post_id."-".$attachment[$att]->type."' data-toggle='modal' ><img src='".base_url('dashboard/media_stream/SafePhoto?photo=').$src."' /></a>";
                 echo    '<div id="modal-'.$fb_feed[$i]->post_id.'-'.$attachment[$att]->type.'" class="attachment-modal modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
                             <button type="button" class="close " data-dismiss="modal"><i class="icon-remove"></i></button>
-                            <img src="'.$attachment[$att]->src.'" />
+                            <img src="'.base_url('dashboard/media_stream/SafePhoto?photo=').$src.'" />
                         </div>';
            }elseif($attachment[$att]->type=='link'){
                 echo    "<a href='".$attachment[$att]->href."'>".$attachment[0]->href."</a>";
@@ -73,7 +77,9 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
         <br />
         <?php 
             $comment=$this->facebook_model->RetriveCommentPostFb($fb_feed[$i]->social_stream_post_id);
+            //print_r($comment);
             for($j=0;$j<count($comment);$j++):
+            
         ?>
         <div class="engagement-body">
             <span class="engagement-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>    
@@ -82,10 +88,19 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
                 <i class="icon-circle"></i>
                 <span>posted a <span class="cyanText">comment</span></span>
                 <i class="icon-circle"></i>
-                <span><?php echo $comment[$j]->created_at; ?></span>
+                <span><?php 
+                $date=new DateTime($comment[$j]->created_at.' Europe/London');
+                $date->setTimezone($timezone);
+                echo $date->format('l, M j, Y h:i A');
+                
+              ?></span>
             </p>
             <div class="engagement-comment">
                 <p>"<?php echo $comment[$j]->comment_content; ?>"</p>
+                
+                <?php if(isset($isMyCase[0]->assign_to)){
+                        if($isMyCase[0]->assign_to==$this->session->userdata('user_id') or ($isMyCase[0]->solved_by)){
+                ?>
                 <p>
                     <button type="button" class="btn btn-warning btn-mini">OPEN</button>
                     <button class="fblike btn btn-primary btn-mini" value="<?php echo $comment[$j]->post_stream_id?>"><?php echo $comment[$j]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button>
@@ -94,6 +109,17 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
                     <?php } ?>
                    <button type="button" class="btn btn-danger btn-engagement-case btn-mini"><i class="icon-plus"></i> CASE</button>
                 </p>
+                <?php } 
+                }elseif(!isset($isMyCase[0])){?>
+                    <p>
+                    <button type="button" class="btn btn-warning btn-mini">OPEN</button>
+                    <button class="fblike btn btn-primary btn-mini" value="<?php echo $comment[$j]->post_stream_id?>"><?php echo $comment[$j]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button>
+                    <?php if(($comment[$j]->comment_id)=='0'){?>
+                    <button type="button" class="btn btn-primary btn-engagement-reply btn-mini" ><i class="icon-mail-reply"></i></button>
+                    <?php } ?>
+                   <button type="button" class="btn btn-danger btn-engagement-case btn-mini"><i class="icon-plus"></i> CASE</button>
+                </p>
+                <?php } ?>
                 <div class="fb-reply-engagement-field reply-field hide">
                     <?php
                     $data['fb_feed'] = $comment;

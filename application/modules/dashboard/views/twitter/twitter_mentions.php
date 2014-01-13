@@ -6,7 +6,7 @@ for($i=0;$i<count($mentions);$i++){
     <li <?php if($mentions[$i]->is_read==0){echo 'class="unread-post"';} ?>>
         <div class="message"></div>
         <input type="hidden" class="postId" value="<?php echo $mentions[$i]->social_stream_post_id; ?>" />
-        <div class="circleAvatar"><img src="<?php echo $mentions[$i]->profile_image_url;?>" alt=""></div>
+        <div class="circleAvatar"><img src="<?php echo base_url('dashboard/media_stream/SafePhoto?photo=').$mentions[$i]->profile_image_url;?>" alt=""></div>
         <div class="read-mark <?php if($mentions[$i]->is_read==0){echo 'redText';} else { echo 'greyText'; } ?>"><i class="icon-bookmark icon-large"></i></div>
         <br />
         <p class="headLine">
@@ -35,10 +35,10 @@ for($i=0;$i<count($mentions);$i++){
     ?></p>
     <p>
     <?php if(isset($entities->media[0])){
-            echo "<a href='#modal-".$mentions[$i]->social_stream_post_id."' data-toggle='modal' ><img src='".$entities->media[0]->media_url_https."' /></a>";
+            echo "<a href='#modal-".$mentions[$i]->social_stream_post_id."' data-toggle='modal' ><img src='".base_url('dashboard/media_stream/SafePhoto?photo=').$entities->media[0]->media_url_https."' /></a>";
             echo '<div id="modal-'.$mentions[$i]->social_stream_post_id.'" class="attachment-modal modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
                             <button type="button" class="close " data-dismiss="modal"><i class="icon-remove"></i></button>
-                            <img src="'.$entities->media[0]->media_url_https.'" />
+                            <img src="'.base_url('dashboard/media_stream/SafePhoto?photo=').$entities->media[0]->media_url_https.'" />
                 </div>';
             }
     ?>

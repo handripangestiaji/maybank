@@ -50,7 +50,8 @@ class Media_stream extends CI_Controller {
 	$data['product_list'] = $this->campaign_model->GetProduct();
 	$data['channel_id'] = $channel_id;
 	$this->load->model('case_model');
-	$data['user_list'] = $this->case_model->ReadAllUser();
+    $filter=array('role_id <>'=>'5');
+	$data['user_list'] = $this->case_model->ReadAllUser($filter);
 	$this->load->view('dashboard/facebook/facebook_stream',$data);
     }
     
@@ -647,15 +648,6 @@ class Media_stream extends CI_Controller {
         		"created_by" => $this->session->userdata('user_id'),
         		"stream_id_response" => $return
     	    );
-            //$social_stream = array(
-//    	    "post_stream_id" => $return,
-//    	    "channel_id" => $channel_loaded[0]->channel_id,
-//    	    "type" => "facebook",
-//    	    "retrieved_at" => date("Y-m-d H:i:s"),
-//    	    "created_at" => date("Y-m-d H:i:s")
-//            );
-//            
-//            $this->db->insert("social_stream", $social_stream);
             
             echo json_encode(
     		    array(
@@ -677,16 +669,6 @@ class Media_stream extends CI_Controller {
         		"created_by" => $this->session->userdata('user_id'),
         		"stream_id_response" => $return
         	);
-            
-//          $social_stream = array(
-//    	    "post_stream_id" => $return,
-//    	    "channel_id" => $channel_loaded[0]->channel_id,
-//    	    "type" => "facebook",
-//    	    "retrieved_at" => date("Y-m-d H:i:s"),
-//    	    "created_at" => date("Y-m-d H:i:s")
-//	       );
-//            
-//          $this->db->insert("social_stream", $social_stream);
             
             echo json_encode(
     		    array(
@@ -1147,5 +1129,33 @@ class Media_stream extends CI_Controller {
 	$this->load->model('post_model');
 	$value = array('is_posted' => 2);
 	$this->post_model->UpdatePostTo($this->input->post('post_to_id'),$value);
+    }
+    
+    public function SafePhoto(){
+	$safe_photo = $this->input->cookie("safe_photo");
+	if(!$safe_photo){
+	    $cookie = array(
+		'name'   => 'safe_photo',
+		'value'  => time(),
+		'expire' => '3600',
+		//'domain' => $_SERVER['HTTP_HOST'],
+		'path'   => '/',
+		'secure' => FALSE
+	    );
+	    $this->input->set_cookie($cookie);
+	}
+	
+	$md5_photo = md5($this->input->get('photo')).".jpg";
+	
+	if(!is_dir("./media/dynamic/tmp_photo/"))
+	    mkdir(getcwd()."/media/dynamic/tmp_photo/");
+	    
+	if(file_exists("./media/dynamic/tmp_photo/".$md5_photo) && $safe_photo)
+	    redirect("/media/dynamic/tmp_photo/".$md5_photo);
+	else{
+	    file_put_contents("./media/dynamic/tmp_photo/".$md5_photo, file_get_contents($this->input->get('photo')));
+	    redirect("/media/dynamic/tmp_photo/".$md5_photo);    
+	}
+	
     }
 }

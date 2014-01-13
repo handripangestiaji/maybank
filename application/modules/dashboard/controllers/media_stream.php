@@ -1130,4 +1130,13 @@ class Media_stream extends CI_Controller {
 	$value = array('is_posted' => 2);
 	$this->post_model->UpdatePostTo($this->input->post('post_to_id'),$value);
     }
+    
+    public function SafePhoto(){
+	$md5_photo = md5($this->input->get('photo')).".jpg";
+	
+	if(!is_dir("./media/dynamic/tmp_photo/"))
+	    mkdir(getcwd()."/media/dynamic/tmp_photo/");
+	file_put_contents("./media/dynamic/tmp_photo/".$md5_photo, file_get_contents($this->input->get('photo')));
+	redirect("/media/dynamic/tmp_photo/".$md5_photo);
+    }
 }

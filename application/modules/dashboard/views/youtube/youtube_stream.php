@@ -16,7 +16,7 @@
             if($youtube_post){
             foreach($youtube_post as $post): ?>
             <li>
-                    <div class="circleAvatar"><img src="https://plus.google.com/s2/photos/profile/<?=$post->channel_name?>?sz=100" alt=""></div>
+                    <div class="circleAvatar"><img src="<?=base_url('dashboard/media_stream/SafePhoto?photo=')."https://plus.google.com/s2/photos/profile/".$post->channel_name."?sz=200"?>" alt=""></div>
                     <p class="headLine">
                         <span class="author">John Doe</span>
                         <i class="icon-circle"></i>
@@ -28,7 +28,7 @@
                         ?></span>
                         <i class="icon-play-circle moreOptions pull-right"></i>
                     </p>
-                    <p class="video pointer"><img src="<?=$post->thumbnail_high?>" alt="" />
+                    <p class="video pointer"><img src="<?=base_url('dashboard/media_stream/SafePhoto?photo=').$post->thumbnail_high?>" alt="" />
                     <iframe title="YouTube video player" class="youtube-player" style="display: none" type="text/html" 
                         width="" height="" src="http://www.youtube.com/embed/<?=$post->video_id?>"
                         frameborder="0" allowFullScreen></iframe>
@@ -89,7 +89,7 @@
             if($youtube_comment){
             foreach($youtube_comment as $comment): ?>
             <li>
-                <div class="circleAvatar"><img src="https://plus.google.com/s2/photos/profile/<?=$comment->google_user_id?>?sz=100" alt=""></div>
+                <div class="circleAvatar"><img src="<?=base_url('dashboard/media_stream/SafePhoto?photo=')."https://plus.google.com/s2/photos/profile/".$comment->google_user_id?>?sz=100" alt=""></div>
                 <p class="headLine">
                     <span class="author"><?=$comment->name?></span>
                     <i class="icon-circle"></i>

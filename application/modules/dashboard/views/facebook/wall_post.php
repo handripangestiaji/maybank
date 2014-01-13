@@ -10,7 +10,9 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
 <li class="<?php if(isset($isMyCase[0]->assign_to)){echo "case_".$isMyCase[0]->case_id;} ?>" id="post<?=$fb_feed[$i]->social_stream_post_id?>">
     <input type="hidden" class="postId" value="<?php echo $fb_feed[$i]->post_id; ?>" />
     <div class="circleAvatar"><img src="https://graph.facebook.com/<?php echo number_format($fb_feed[$i]->facebook_id, 0,'.','')?>/picture?small" alt=""></div>
+    <?php        if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action')){ ?> 
     <div class="read-mark <?php if($fb_feed[$i]->is_read==0){echo 'redText';} else { echo 'greyText'; } ?>"><i class="icon-bookmark icon-large"></i></div>
+    <?php } ?>
     <br />
     <p class="headLine">
         <span class="author"><?php echo $fb_feed[$i]->name//."(".$fb_feed[$i][$i]->users->usename.")"?></span>
@@ -35,7 +37,7 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
                 echo    "<a href='#modal-".$fb_feed[$i]->post_id."-".$attachment[$att]->type."' data-toggle='modal' ><img src='".$attachment[$att]->src."' /></a>";
                 echo    '<div id="modal-'.$fb_feed[$i]->post_id.'-'.$attachment[$att]->type.'" class="attachment-modal modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
                             <button type="button" class="close " data-dismiss="modal"><i class="icon-remove"></i></button>
-                            <img src="'.$attachment[$att]->src.'" />
+                            <img src="'.$attachment[$att]->src.'" style="width:612px; height:auto;" />
                         </div>';
            }elseif($attachment[$att]->type=='link'){
                 echo    "<a href='".$attachment[$att]->href."'>".$attachment[0]->href."</a>";
@@ -58,8 +60,10 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
     <?php    }
     }else{ ?>
         <button type="button" class="btn <?php echo $fb_feed[$i]->total_comments == 0 ? "btn-warning btn-mini no-cursor indicator" : "btn-inverse btn-mini no-cursor indicator" ?>"><?php echo $fb_feed[$i]->total_comments == 0 ? 'OPEN' :  'REPLIED'?></button>  
-    <?php } ?>   
-        <button class="fblike btn btn-primary btn-mini" style="margin-left: 5px;" value="<?php echo $fb_feed[$i]->post_stream_id;?>"><?php echo $fb_feed[$i]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button> </p>
+    <?php } 
+         if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action')){ ?>
+            <button class="fblike btn btn-primary btn-mini" style="margin-left: 5px;" value="<?php echo $fb_feed[$i]->post_stream_id;?>"><?php echo $fb_feed[$i]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button> </p>
+    <?php } ?>
     <p>
         <span class="btn-engagement"><i class="icon-eye-open"></i> <?php echo $fb_feed[$i]->total_comments;?> Engagements</span> |
         <span class="cyanText"><i class="icon-thumbs-up-alt"></i></i> <?php echo $fb_feed[$i]->total_likes; ?> likes</span> 
@@ -168,10 +172,11 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
 
         <!-- ==================== CONDENSED TABLE FLOATING BOX ==================== -->
         
-            <?php
+           <?php        if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action')){ 
             $data_loaded['post'] = $fb_feed[$i];
             $this->load->view('dashboard/action_taken', $data_loaded);
-            ?>
+           } 
+           ?>
         <!-- ==================== END OF CONDENSED TABLE FLOATING BOX ==================== --> 
     </div>
     <!-- END ENGAGEMENT -->

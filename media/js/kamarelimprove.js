@@ -72,7 +72,7 @@ $(function(){
                             '<input type="checkbox" class="related-conversation-check" value="' + response[i].post_id + '">' + 
                             '<span class="author">' +  response[i].name + '(@' + response[i].screen_name + ')</span>' + 
                             '<i class="icon-circle"></i>' + 
-                            '<span>' + myDate.toString() + '</span>' + 
+                            '<span class="UTCTimestamp">' + myDate.toString() + '</span>' + 
                             '<i class="icon-play-circle moreOptions pull-right"></i>' +
                         '</p></div>' + 
                         '<div>' +
@@ -115,7 +115,7 @@ $(function(){
                                 '<i class="icon-circle"></i>' + 
                                 '<span>posted a <span class="cyanText">Wall post</span></span>' + 
                                 '<i class="icon-circle"></i>' + 
-                                '<span>' + response[i].created_at + '</span>' + 
+                                '<span class="UTCTimestamp">' + response[i].created_at + '</span>' + 
                                 '<i class="icon-play-circle moreOptions pull-right"></i>' +
                             '</p>' + 
                             '<div>' +
@@ -161,9 +161,9 @@ $(function(){
                             '<input type="checkbox" class="related-conversation-check" value="' + response[i].post_id + '">' + 
                             '<span class="author">' +  response[i].name + '</span>' + 
                             '<i class="icon-circle"></i>' + 
-                            '<span>posted a <span class="cyanText">Wall post</span></span>' + 
+                            '<span>posted a <span class="cyanText">Wall post</span></span>' +
                             '<i class="icon-circle"></i>' + 
-                            '<span>' + response[i].created_at + '</span>' + 
+                            '<span class="UTCTimestamp">' + response[i].created_at + '</span>' + 
                             '<i class="icon-play-circle moreOptions pull-right"></i>' +
                         '</p>' + 
                         '<div>' +
@@ -344,3 +344,33 @@ $(function(){
         }
     });
 });
+
+
+    var Timezone = $.format.date(new Date(), "tz");
+	(function ($) {
+    $.fn.localTimeFromUTC = function (format) {
+        return this.each(function () {
+
+            // get time offset from browser
+            var currentDate = new Date();
+            var offset = -(currentDate.getTimezoneOffset() / 60);
+
+            // get provided date
+            var tagText = $(this).html();            
+            var givenDate = new Date($.format.date(tagText, format));
+                        
+            // apply offset
+            var hours = givenDate.getHours();
+            hours += offset;
+            givenDate.setHours(hours);
+
+            // format the date
+            var localDateString = $.format.date(givenDate, format);
+            $(this).html(localDateString);
+        });
+    };
+})(jQuery);
+
+function StartUp() {
+    $('.UTCTimestamp').localTimeFromUTC('MM/dd/yyyy hh:mm:ss a');
+}

@@ -12,7 +12,7 @@
 	<link rel="shortcut icon" href="<?php echo base_url() ?>media/img/favicon.ico">
     </head>
 	
-	<body class="dashboard">
+	<body class="dashboard" onload="javascript:StartUp();">
 		<!--[if lt IE 7]>
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
         <![endif]-->
@@ -116,6 +116,7 @@
 	<script src="<?php echo base_url('media/js/vendor/fullcalendar.min.js')?>"></script>        		<!-- fullcalendar plugin -->
         <script src="<?php echo base_url('media/js/vendor/bootstrap.min.js')?>"></script>
         <script src="<?php echo base_url('media/js/vendor/bootstrap-editable.min.js')?>"></script>             <!-- editable fields plugin -->
+        <script type="text/javascript" charset="utf-8" src="<?php echo base_url(); ?>media/js/jquery.dateFormat-1.0.dc.js"></script>
 	
 	<!-- <script src="<?php //echo base_url('media/js/vendor/jquery-ui-1.10.2.custom.min.js')?>"</script>        	<!-- jquery ui dragging -->    
 		

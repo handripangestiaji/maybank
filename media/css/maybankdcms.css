@@ -667,6 +667,10 @@ border-radius: 3px;
 	margin-bottom: 10px;
 }
 
+.modal .related-conversation-body .author{
+	margin-left: 10px;
+}
+
 #reply-img-show{
 	background-color: #f2f2f2;
 	margin: 10px 0px;

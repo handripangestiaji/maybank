@@ -1543,7 +1543,7 @@ $(function(){
                   
                 $('#compose-tags').tagit({
                     availableTags: sampleTags,
-                    allowSpaces: true
+                    allowSpaces: true,
                 });
                 
                 $(this).on('click','.btn-reply',function(){

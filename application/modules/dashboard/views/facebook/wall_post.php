@@ -77,7 +77,9 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
         <br />
         <?php 
             $comment=$this->facebook_model->RetriveCommentPostFb($fb_feed[$i]->social_stream_post_id);
+            //print_r($comment);
             for($j=0;$j<count($comment);$j++):
+            
         ?>
         <div class="engagement-body">
             <span class="engagement-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>    
@@ -86,14 +88,19 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
                 <i class="icon-circle"></i>
                 <span>posted a <span class="cyanText">comment</span></span>
                 <i class="icon-circle"></i>
-                <span><?php echo $comment[$j]->created_at; ?></span>
+                <span><?php 
+                $date=new DateTime($comment[$j]->created_at.' Europe/London');
+                $date->setTimezone($timezone);
+                echo $date->format('l, M j, Y h:i A');
+                
+              ?></span>
             </p>
             <div class="engagement-comment">
                 <p>"<?php echo $comment[$j]->comment_content; ?>"</p>
                 
                 <?php if(isset($isMyCase[0]->assign_to)){
                         if($isMyCase[0]->assign_to==$this->session->userdata('user_id') or ($isMyCase[0]->solved_by)){
-                    ?>
+                ?>
                 <p>
                     <button type="button" class="btn btn-warning btn-mini">OPEN</button>
                     <button class="fblike btn btn-primary btn-mini" value="<?php echo $comment[$j]->post_stream_id?>"><?php echo $comment[$j]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button>
@@ -103,7 +110,16 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
                    <button type="button" class="btn btn-danger btn-engagement-case btn-mini"><i class="icon-plus"></i> CASE</button>
                 </p>
                 <?php } 
-                } ?>
+                }elseif(!isset($isMyCase[0])){?>
+                    <p>
+                    <button type="button" class="btn btn-warning btn-mini">OPEN</button>
+                    <button class="fblike btn btn-primary btn-mini" value="<?php echo $comment[$j]->post_stream_id?>"><?php echo $comment[$j]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button>
+                    <?php if(($comment[$j]->comment_id)=='0'){?>
+                    <button type="button" class="btn btn-primary btn-engagement-reply btn-mini" ><i class="icon-mail-reply"></i></button>
+                    <?php } ?>
+                   <button type="button" class="btn btn-danger btn-engagement-case btn-mini"><i class="icon-plus"></i> CASE</button>
+                </p>
+                <?php } ?>
                 <div class="fb-reply-engagement-field reply-field hide">
                     <?php
                     $data['fb_feed'] = $comment;

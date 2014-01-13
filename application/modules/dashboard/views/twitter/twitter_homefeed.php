@@ -40,8 +40,8 @@ for($i=0;$i<count($homefeed);$i++){
     ?></p>
     <p>
     <?php if(isset($entities->media[0])){
-            echo "<a href='#modal-".$homefeed[$i]->post_id."' data-toggle='modal' ><img src='".base_url('dashboard/media_stream/SafePhoto?photo=').$entities->media[0]->media_url_https."' /></a>";
-            echo '<div id="modal-'.$homefeed[$i]->post_id.'" class="attachment-modal modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+            echo "<a href='#modal-".$homefeed[$i]->social_stream_post_id."' data-toggle='modal' ><img src='".base_url('dashboard/media_stream/SafePhoto?photo=').$entities->media[0]->media_url_https."' /></a>";
+            echo '<div id="modal-'.$homefeed[$i]->social_stream_post_id.'" class="attachment-modal modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
                             <button type="button" class="close " data-dismiss="modal"><i class="icon-remove"></i></button>
                             <img src="'.base_url('dashboard/media_stream/SafePhoto?photo=').$entities->media[0]->media_url_https.'" />
                 </div>';

@@ -83,8 +83,10 @@
     <div class="pull-right">
       <?php if($reply_type=='replaycontent'){?>
         <button class="btn btn-primary btn-small btn-send-reply" value="<?php echo $fb_feed[$i]->post_id; ?>">SEND</button>    
-      <?php }elseif($reply_type=='reply_nested'){ ?>
-        <button class="btn btn-primary btn-small btn-send-reply" value="<?php echo $fb_feed[$i]->post_id; ?>">SEND</button> 
+      <?php }elseif($reply_type=='reply_nested'){
+       // print_r($fb_feed[$i]);
+        ?>
+        <button class="btn btn-primary btn-small btn-send-reply" value="<?php echo $fb_feed[$i]->comment_post_id; ?>">SEND</button> 
       <?php }elseif($reply_type=='reply_dm'){  ?> 
           <button class="btn btn-primary btn-small btn-send-msg"  value="<?php echo $fb_feed[$i]->post_id; ?>">SEND</button> 
       <?php } ?>           

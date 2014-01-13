@@ -1857,6 +1857,12 @@ $.fn.RefreshAllStream = function(){
                     $(this).find('.channel-id').val(channelId);
                 });
             }
+            else if($(this).closest('div').prev().find('i').attr('class') == 'icon-youtube'){
+                $(this).html('&nbsp;&nbsp;Loading...');        
+                $(this).load(BASEURL + 'dashboard/media_stream/youtube_stream/' + channelId + '/'+ is_read, function(){
+                    $(this).find('.channel-id').val(channelId);
+                });
+            }
         }
     });
 };

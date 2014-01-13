@@ -1135,11 +1135,30 @@ class Media_stream extends CI_Controller {
     }
     
     public function SafePhoto(){
+	$safe_photo = $this->input->cookie("safe_photo");
+	if(!$safe_photo){
+	    $cookie = array(
+		'name'   => 'safe_photo',
+		'value'  => time(),
+		'expire' => '3600',
+		//'domain' => $_SERVER['HTTP_HOST'],
+		'path'   => '/',
+		'secure' => FALSE
+	    );
+	    $this->input->set_cookie($cookie);
+	}
+	
 	$md5_photo = md5($this->input->get('photo')).".jpg";
 	
 	if(!is_dir("./media/dynamic/tmp_photo/"))
 	    mkdir(getcwd()."/media/dynamic/tmp_photo/");
-	file_put_contents("./media/dynamic/tmp_photo/".$md5_photo, file_get_contents($this->input->get('photo')));
-	redirect("/media/dynamic/tmp_photo/".$md5_photo);
+	    
+	if(file_exists("./media/dynamic/tmp_photo/".$md5_photo) && $safe_photo)
+	    redirect("/media/dynamic/tmp_photo/".$md5_photo);
+	else{
+	    file_put_contents("./media/dynamic/tmp_photo/".$md5_photo, file_get_contents($this->input->get('photo')));
+	    redirect("/media/dynamic/tmp_photo/".$md5_photo);    
+	}
+	
     }
 }

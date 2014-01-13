@@ -157,38 +157,42 @@ class Cronjob extends CI_Controller {
     
     function SendScheduledPost(){
         $this->load->model('post_model');
-        
         $time_now = date('Y-m-d H:i:s');
-        $time_few_min_ago = date('Y-m-d H:i:s',strtotime('+7 hour'));
-        
-        $where = "time_to_post Between '".$time_now."' AND '".$time_few_min_ago."' AND is_posted is NULL";
+        $time_yesterday = date('Y-m-d H:i:s',strtotime('-1 day'));
+        $where = "time_to_post Between '".$time_yesterday."' AND '".$time_now."' AND is_posted is NULL";
         $posts = $this->post_model->GetPosts($where);
         foreach($posts as $post){
-            //handle if facebook
-            if($post->connection_type == 'facebook'){
-                $post_to = json_decode($this->FbStatusUpdate($post));
+            $dtz = new DateTimeZone($post->timezone);
+            $local_time = new DateTime('now', $dtz);
+            $offset = $dtz->getOffset( $local_time ) / 3600;
+            $local_time = date('Y-m-d H:i:s',strtotime(($offset < 0 ? $offset : "+".$offset).' hour'));
+            if($local_time == $post->time_to_post){
+                //handle if facebook
+                if($post->connection_type == 'facebook'){
+                    $post_to = json_decode($this->FbStatusUpdate($post));
+                }
+                //handle if twitter
+                elseif($post->connection_type == 'twitter'){
+                    $post_to = json_decode($this->TwitterStatusUpdate($post));
+                }
+                
+                //write to database is_posted = true;
+                $value = array('post_created_at' => date('Y-m-d H:i:s'),
+                                'is_posted' => 1);
+                $this->post_model->UpdatePostTo($post->post_to_id,$value);
+                
+                //send email
+                if($post->email_me_when_sent == 1){
+                    $this->email->set_newline("\r\n");
+                    $this->email->from('dcms@maybank.com','maybank');
+                    $this->email->to($post->email);
+                    $this->email->subject('Message Posted');
+                    $template = curl_get_file_contents(base_url().'mail_template/PostSent/'.$post->post_to_id);
+                    $this->email->message($template);
+                    $this->email->send();
+                }
             }
-            //handle if twitter
-            elseif($post->connection_type == 'twitter'){
-                $post_to = json_decode($this->TwitterStatusUpdate($post));
-            }
-            
-            //write to database is_posted = true;
-            $value = array('post_created_at' => date('Y-m-d H:i:s'),
-                            'is_posted' => 1);
-            $this->post_model->UpdatePostTo($post->post_to_id,$value);
-            
-            //send email
-            if($post->email_me_when_sent == 1){
-                $this->email->set_newline("\r\n");
-                $this->email->from('dcms@maybank.com','maybank');
-                $this->email->to($post->email);
-                $this->email->subject('Message Posted');
-                $template = curl_get_file_contents(base_url().'mail_template/PostSent/'.$post->post_to_id);
-                $this->email->message($template);
-                $this->email->send();
-            }
-        }	    
+        }
     }
     
     public function FbStatusUpdate($post = NULL){

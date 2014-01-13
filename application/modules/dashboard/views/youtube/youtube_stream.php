@@ -18,20 +18,17 @@
             <li>
                     <div class="circleAvatar"><img src="<?=base_url('dashboard/media_stream/SafePhoto?photo=')."https://plus.google.com/s2/photos/profile/".$post->channel_name."?sz=200"?>" alt=""></div>
                     <p class="headLine">
-                        <span class="author">John Doe</span>
-                        <i class="icon-circle"></i>
-                        <span>Video</span>
-                        <i class="icon-circle"></i>
+                        <span class="author">Maybank</span>
                         <span><?php
                         $created_at = new DateTime($post->created_at, new DateTimeZone($this->config->item('timezone')));
                         echo $created_at->format('l, M j, Y h:i A');
                         ?></span>
                         <i class="icon-play-circle moreOptions pull-right"></i>
                     </p>
-                    <p class="video pointer"><img src="<?=base_url('dashboard/media_stream/SafePhoto?photo=').$post->thumbnail_high?>" alt="" />
-                    <iframe title="YouTube video player" class="youtube-player" style="display: none" type="text/html" 
+                    <p class="video pointer"><a href="http://www.youtube.com/watch?v=<?=$post->video_id?>" target="_blank"><img src="<?=base_url('dashboard/media_stream/SafePhoto?photo=').$post->thumbnail_high?>" alt="" /></a>
+                    <!--iframe title="YouTube video player" class="youtube-player" style="display: none" type="text/html" 
                         width="" height="" src="http://www.youtube.com/embed/<?=$post->video_id?>"
-                        frameborder="0" allowFullScreen></iframe>
+                        frameborder="0" allowFullScreen></iframe-->
                     </p>
                     <p style="font-size:20px"><?=$post->title?></p>
                     <p><?=$post->description?></p>
@@ -46,29 +43,7 @@
                             <button style="clear: both;" type="submit" class="btn btn-primary">Send</button>
                         </form>
                     </div>
-                    <div class="assign filled hide">
-                        <form class="contentForm">
-                             <div class="controlButton pull-right"><i class="icon-remove-sign hide-form"></i></div>
-                             <div class="control-group">
-                                <label class="control-label">Assign To</label>
-                                <div class="controls">
-                                    <select id="uniqueSelect">
-                                        <option id="opt1" value="opt1">John Doe</option>
-                                        <option id="opt2" value="opt2">May Bankette</option>
-                                        <option id="opt3" value="opt3">Jane Doyen</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="control-group last">
-                                <label class="control-label">Remarks <span class="label label-important">Not Public</span></label>
-                                <div class="controls">
-                                  <textarea class="span10"></textarea>
-                                </div>
-                            </div>
-                            <button style="clear: both;" type="submit" class="btn btn-primary">Send</button>
-                        </form>
-                    </div>
-                </li>
+                 </li>
             <?php endforeach;
             }
             else{

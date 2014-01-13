@@ -582,6 +582,9 @@ class Media_stream extends CI_Controller {
 		  $channel =  $channel_loaded[0]->channel_id;
 	    }
         
+        $stream_id=$this->facebook_model->streamId($post_id);
+        //print_r($stream_id);
+        
         $newStd = new stdClass();
         $newStd->page_id =  $channel_loaded[0]->social_id;
         $newStd->token = $this->facebook_model->GetPageAccessToken( $channel_loaded[0]->oauth_token, $channel_loaded[0]->social_id);
@@ -613,7 +616,7 @@ class Media_stream extends CI_Controller {
                 $args = array('message' => $comment, 'attachment' => '@' . realpath($pathToSave));
                 
                 try{
-                    $return = $this->facebook->api('/'.$post_id.'/comments', 'POST', $args);
+                    $return = $this->facebook->api('/'.$stream_id->post_stream_id.'/comments', 'POST', $args);
                 }catch(FacebookApiException $e){
                     echo json_encode(
             		    array(
@@ -626,7 +629,7 @@ class Media_stream extends CI_Controller {
             }
         }else{
             try{
-                $return=$this->facebook->api('/'.$post_id.'/comments', 'POST', array('message'=>$comment,'attachment'=>$attachment));
+                $return=$this->facebook->api('/'.$stream_id->post_stream_id.'/comments', 'POST', array('message'=>$comment,'attachment'=>$attachment));
             }catch(FacebookApiException $e){
                 echo json_encode(
         		    array(
@@ -657,7 +660,7 @@ class Media_stream extends CI_Controller {
     		    )
     		);		    
             $this->account_model->CreateFbCommentAction($action,$post_id,$this->input->post('like') === 'true' ? 1 : 0);
-            $this->account_model->CreateFbReplyAction($return,$post_id,$comment,$reply_type,$product_type,$url);
+            $this->account_model->CreateFbReplyAction($post_id,$stream_id->post_stream_id,$comment,$reply_type,$product_type,$url);
                                       
         }elseif(is_array($return)){//replay in reply        
             if($return['id']){
@@ -679,7 +682,7 @@ class Media_stream extends CI_Controller {
     		);
             
             $this->account_model->CreateFbCommentAction($action,$post_id,$this->input->post('like') === 'true' ? 1 : 0);
-            $this->account_model->CreateFbReplyAction($return,$post_id,$comment,$reply_type,$product_type,$url);
+            $this->account_model->CreateFbReplyAction($post_id,'',$comment,$reply_type,$product_type,$url);
 
             }else{
                 echo json_encode(

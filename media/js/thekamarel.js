@@ -1727,9 +1727,13 @@ $(document).ready(function(){
             //alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
             //alert('View: ' + view.name);
             $(this).find('.tooltip-event').toggle();
+            
+            console.log($('#calendar').height() - $(this).find('.tooltip-event').coord().top);
+            if(($('#calendar').height() - $(this).find('.tooltip-event').coord().top) < 100){
+                $(this).find('.tooltip-event').css('top','-155px');
+            }
         },
         eventRender: function(event, element){
-            console.log($('#calendar').width());
             var deleteable;
             if(event.is_posted != '1'){
                 deleteable = "<div class='pull-right'><button type='button' class='btn btn-danger btn-mini btn-delete-schedule-post'><i class='icon-remove'></i></a></div>";

@@ -1110,15 +1110,18 @@ class Media_stream extends CI_Controller {
 		
 		$short_time = date('H:i A',strtotime($post_time));
 		
+		$time_tommorow = date('Y-m-d H:i:s',strtotime('+30 minute', strtotime($post->time_to_post)));
 		$encodeme[] = array('post_to_id' => $post->post_to_id,
+				'real_time' => $post->time_to_post,
 				'title' => $post->name,
 				'start' => date('c',strtotime($post->time_to_post)),
-				'end' => date('c',strtotime($post->time_to_post)),
+				'end' => date('c',strtotime($time_tommorow)),
 				'description' => $post->messages,
 				'user_name' => $post->display_name,
 				'post_date' => $new_short_date,
 				'post_time' => $short_time,
 				'is_posted' => $post->is_posted,
+				'allDay' => false
 			       );
 	    }
 	}

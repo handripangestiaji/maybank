@@ -429,14 +429,6 @@ $(function(){
                             $(this).closest('.floatingBoxMenu').next().find('.floatingBoxContainers').hide(); 
                             $(this).closest('.floatingBoxMenu').next().find(id_tab_name).show();
                             e.preventDefault();
-                        /*
-                        var href = $(this).attr('href'),
-                        $previous = $(this).closest('ul.nav-tabs').find('li.active');
-                
-                        //show one particular menu
-                        $(href).parent().children().hide();
-                        $(href).fadeIn();
-                        */
                     });
                     
                     $('.change-read-unread-stream').on('change', function(){
@@ -475,13 +467,15 @@ $(function(){
                             urlToLoad += "facebook_stream/" + streamId
                             $(this).closest('div').children('button').html('<i class="icon-facebook"></i><h2>Facebook&nbsp;</h2><i class="icon-caret-down"></i>');
                             $(this).closest('.containerHeadline').css( "background-color", "#3B5998" );
-                            $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...'); 
+                            $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');
+                            
                         }
                         else if($(this).find('li:nth-child(' + i + ') a').hasClass('twitter_stream')){
                             urlToLoad += "twitter_stream/" + streamId
                             $(this).closest('div').children('button').html('<i class="icon-twitter"></i><h2>Twitter&nbsp;</h2><i class="icon-caret-down"></i>');
                             $(this).closest('.containerHeadline').css( "background-color", "#4099FF" );
-                            $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');                                   
+                            $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');
+                            
                         }
                         else{
                             urlToLoad += "youtube_stream/" + streamId
@@ -489,7 +483,10 @@ $(function(){
                             $(this).closest('.containerHeadline').css( "background-color", "#FF3333" );
                             $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');  
                         }
-                        $(this).closest('.containerHeadline').next().load(urlToLoad);                      
+                        $(this).closest('.containerHeadline').next().load(urlToLoad, function(){
+                            $(this).ToCase();
+                        });
+                       
                     });
                     $('.facebook_stream').on('click',function() {
                         $(this).closest('div').children('button').html('<i class="icon-facebook"></i><h2>Facebook&nbsp;</h2><i class="icon-caret-down"></i>');
@@ -720,7 +717,9 @@ $(function(){
                                 url : BASEURL + 'dashboard/media_stream/GenerateShortUrlWithoutCampaign',
                                 type: "POST",
                                 data: {
-                                        url:$('.compose-insert-link-text').val(),
+                                        url: validateURL($('.compose-insert-link-text').val()) ?
+                                            $('.compose-insert-link-text').val() :
+                                                "http://" + $('.compose-insert-link-text').val(),
                                         },
                                 success: function(data){
                                     if(data.shortcode){
@@ -776,7 +775,8 @@ $(function(){
                         $.ajax({
                            "url" : BASEURL + "dashboard/media_stream/GenerateShortUrlWithoutCampaign",
                            "data" : {
-                                "url" : me.siblings(".reply-insert-link-text").val()
+                                "url" : validateURL(me.siblings(".reply-insert-link-text").val()) ? me.siblings(".reply-insert-link-text").val() :
+                                    "http://" + me.siblings(".reply-insert-link-text").val()
                            },
                            "type" : "POST",
                            "success" : function (response){
@@ -785,7 +785,7 @@ $(function(){
                                 shortcode= me.closest('.link_url').find(".short_code");
                                 tweetsText.val(tweetsText.val() + " http://maybank.co/" + response.shortcode);
                                 shortcode.val(response.shortcode);
-                                me.closest('reply-shorturl-show-content').val()=" http://maybank.co/" + response.shortcode;
+                                me.closest('reply-shorturl-show-content').val(" http://maybank.co/" + response.shortcode);
                                // alert("http://maybank.co/" + response.shortcode)
                            },
                            failed : function(response){
@@ -1866,3 +1866,34 @@ $.fn.RefreshAllStream = function(){
         }
     });
 };
+
+$.fn.ToCase = function(type){
+    var hashUrl = window.location.hash;
+    var splitUrl = hashUrl.split('/');
+    if(splitUrl.length > 0 ){
+        var id = $('#post' + splitUrl[2]).closest('.floatingBoxContainers').attr('id');
+        
+        $('#' + id).parent().find('ul').hide();
+        $('#' + id).show();
+        $('#' + id).closest('.floatingBox').find('.stream_head li').removeClass('active');
+        $('#' + id).closest('.floatingBox').find('.' + id).parent().addClass('active');
+        if($('#post' + splitUrl[2]).length > 0){
+            $('#post' + splitUrl[2]).closest('.floatingBox').animate({
+                scrollTop: $('#post' + splitUrl[2]).offset().top -  ($('#post' + splitUrl[2]).height() + 20)
+            }, 2000, function(){
+                $('#post' + splitUrl[2]).toggle('bounce', { times: 3, complete:function(){
+                                        $(this).removeAttr('style');
+                                }}, 'slow');
+            });
+        }
+    }    
+};
+
+
+function validateURL(textval) {
+    var urlregex = new RegExp(
+    "^(http|https|ftp)\://[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(:[a-zA-Z0-9]*)?/?([a-zA-Z0-9\-\._\?\,\'/\\\+&amp;%\$#\=~])*$");
+    role = urlregex.test(textval);
+    console.log(role);
+    return role;
+}

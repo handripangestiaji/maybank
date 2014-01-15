@@ -19,3 +19,4 @@ media/dynamic
 */logs/!index.html
 */cache/*
 */cache/!index.html
+*.sql

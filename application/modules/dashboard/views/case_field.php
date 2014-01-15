@@ -57,7 +57,6 @@
 <!-- ==================== MODALS FLOATING BOX ==================== -->
 <div id="modalConfirm-<?php echo isset($posts[$i]->social_stream_post_id) ? $posts[$i]->social_stream_post_id : "" ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
     <input type="hidden" value="<?php echo $posts[$i]->post_id?>" name="post_id" />
-    
     <?php if($posts[$i]->social_stream_type=="twitter"):?>
         <input type="hidden" value="<?php echo $posts[$i]->twitter_user_id?>" name="twitter_user_id" />
         <input type="hidden" value="<?php echo $posts[$i]->type?>" name="type" />

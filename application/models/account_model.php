@@ -159,15 +159,15 @@ class account_model extends CI_Model
     	return $result;
     }
     
-    function CreateFbCommentAction($action,$stream_id,$replyAction, $like = 0){
+    function CreateFbCommentAction($action,$post_id,$replyAction, $like = 0){
     	$this->db->trans_start();
-    	$post = $this->facebook_model->IsStreamIdExists($stream_id);
+    	//$post = $this->facebook_model->IsStreamIdExists($stream_id);
     	//print_r($post);
-        if(isset($post->post_id) != ''){
-            $action['post_id']=$post->post_id;
-    	    $this->db->where("post_id", $post->post_id);
+        if(isset($post_id) != ''){
+            $action['post_id']=$post_id;
+    	    $this->db->where("post_id", $post_id);
     	    $this->db->update("social_stream_fb_post", array("user_likes" => $like));
-    	    $this->db->where("id", $post->post_id);
+    	    $this->db->where("id", $post_id);
     	    $this->db->update("social_stream_fb_comments", array(
     		"user_likes" => $like
     	    ));
@@ -178,7 +178,7 @@ class account_model extends CI_Model
     	return $result;
     }
 
-    function CreateFbReplyAction($action, $stream_id, $message, $reply_type,$product_type,$url){
+    function CreateFbReplyAction($post_id, $stream_id, $message, $reply_type,$product_type,$url){
     	$this->db->trans_start();
     
         $case=$this->isCaseIdExists($stream_id);
@@ -202,7 +202,7 @@ class account_model extends CI_Model
         }   
          
         $actions['message']=$message;
-        $actions['stream_id']=$action;
+        $actions['social_stream_post_id']=$post_id;
         $actions['type']=$reply_type;
         $actions['product_id']=$product_type;
         $actions['created_at']=date("Y-m-d H:i:s");    

@@ -6,12 +6,12 @@
         <input type="hidden" value="<?php echo $mentions[$i]->twitter_user_id?>" name="twitter_user_id" />
         <input type="hidden" value="<?php echo $type?>" name="type" />
         <div class="message"></div>
-        <select style="width: 130px;" name="reply_type">
+        <select name="reply_type">
             <option value="Feedback">Feedback</option>
             <option value="Enquiry">Enquiry</option>
             <option value="Complaint">Complaint</option>
         </select>
-        <select style="width: 130px;" name="product_type">
+        <select name="product_type">
          <?php foreach($product_list as $product):?>
              <option value="<?php echo $product->id?>"><?php echo $product->product_name?></option>
          <?php endforeach?>
@@ -25,7 +25,7 @@
         <input type="text" class="reply-insert-link-text">
         <a class="reply-insert-link-btn btn btn-primary btn-mini" style="margin-left: 5px;" href="#">SHORTEN</a>
     </div>
-    <div class="pull-right">
+    <div class="btn-reply-open-img">
         <a href="javascript:void(0);" id="reply-open-img">
             <i class="icon-camera"></i> 
         </a>

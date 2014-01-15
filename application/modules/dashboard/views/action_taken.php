@@ -13,9 +13,12 @@
             <?php
             foreach($post->channel_action as $action):?>
             <tr>
-              <td><?php $timezone = new DateTimeZone($this->config->item('timezone'));
-              $timestamp = new DateTime($action->created_at.' Europe/London', $timezone);
-              echo $timestamp->format('M j, Y h:i A');
+              <td><?php
+                $timezone = new DateTimeZone($this->config->item('timezone'));
+                $date=new DateTime($action->created_at.' Europe/London');
+                $date->setTimezone($timezone);
+                echo $date->format('l, M j, Y h:i A');
+                
               ?></td>
               <td><?=$action->username?></td>
               <td><?=ucfirst(str_replace('_', ' ', $action->action_type))?></td>

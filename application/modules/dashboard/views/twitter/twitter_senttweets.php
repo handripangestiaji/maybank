@@ -5,7 +5,7 @@ for($i=0;$i<count($senttweets);$i++){
 ?>
     <li>
         <input type="hidden" class="postId" value="<?php echo $senttweets[$i]->social_stream_post_id; ?>" />
-        <div class="circleAvatar"><img src="<?php echo $senttweets[$i]->profile_image_url;?>" alt=""></div>
+        <div class="circleAvatar"><img src="<?php echo base_url('dashboard/media_stream/SafePhoto?photo=').$senttweets[$i]->profile_image_url;?>" alt=""></div>
         <div class="read-mark <?php if($senttweets[$i]->is_read==0){echo 'redText';} else { echo 'greyText'; } ?>"><i class="icon-bookmark icon-large"></i></div>
         <br />
         <p class="headLine">
@@ -33,10 +33,10 @@ for($i=0;$i<count($senttweets);$i++){
         </p>
         <p>
             <?php if(isset($entities->media[0])){
-                    echo "<a href='#modal-".$senttweets[$i]->post_id."' data-toggle='modal' ><img src='".$entities->media[0]->media_url_https."' /></a>";
+                    echo "<a href='#modal-".$senttweets[$i]->post_id."' data-toggle='modal' ><img src='".base_url('dashboard/media_stream/SafePhoto?photo=').$entities->media[0]->media_url_https."' /></a>";
                     echo '<div id="modal-'.$senttweets[$i]->post_id.'" class="attachment-modal modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
                                     <button type="button" class="close " data-dismiss="modal"><i class="icon-remove"></i></button>
-                                    <img src="'.$entities->media[0]->media_url_https.'" />
+                                    <img src="'.base_url('dashboard/media_stream/SafePhoto?photo=').$entities->media[0]->media_url_https.'" />
                         </div>';
                     }
             ?>
@@ -80,11 +80,11 @@ for($i=0;$i<count($senttweets);$i++){
         
     </li>
 <?php } ?>
-<?php if(count($senttweets) > 0):?>
+<?php if((count($senttweets) > 0) && (!isset($is_search))): ?>
  <div class="filled" style="text-align: center;">
     <input type="hidden"  class="channel_id" value="<?php echo $senttweets[0]->channel_id?>"/>
     <button class="loadmore btn btn-info" value="homefeed">
  
  
- <i class="icon-chevron-down"></i> LOAD MORE</button></div>
+ <i class="icon-chevron-down"></i> <span>LOAD MORE</span></button></div>
 <?php endif?>

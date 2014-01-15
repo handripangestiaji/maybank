@@ -6,6 +6,7 @@
     <head>
 		<?php $this->load->view('metadata') ?>
 		<script>window.jQuery || document.write('<script src="<?php echo base_url('media/js/vendor/jquery-1.9.1.min.js')?>"><\/script>')</script>
+	    <link rel="shortcut icon" href="<?php echo base_url() ?>media/img/favicon.ico">
     </head>
     <body>
         <!--[if lt IE 7]>

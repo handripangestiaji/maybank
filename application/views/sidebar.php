@@ -45,7 +45,7 @@
                 </div>
                 <div class="notifBody">
                     <?php
-                        $timezone = new DateTimeZone($this->config->item('timezone'));
+                        $timezone = new DateTimeZone($this->session->userdata('timezone'));
                         $date = new DateTime($each_case->created_at, $timezone);
                         echo $date->format("M d, Y, h:i A");
                     ?>
@@ -59,7 +59,7 @@
                 </div>
                 <div class="notifBody">
                     <?php
-                        $timezone = new DateTimeZone($this->config->item('timezone'));
+                        $timezone = new DateTimeZone($this->session->userdata('timezone'));
                         $date = new DateTime($each_case->created_at, $timezone);
                         echo $date->format("M d, Y, h:i A");
                     ?>
@@ -88,9 +88,11 @@
             <?php }?>
         </div>
         <div class="profileInfo">
+            
             <p>User Id : <?php echo $this->session->userdata('username'); ?></p>
             <p>Full Name : <?php echo $this->session->userdata('full_name'); ?></p>
             <p>Display Name : <?php echo $this->session->userdata('display_name'); ?></p>
+            <p>Timezone : <?php echo $this->session->userdata('timezone');?></p>
             <p>Role : <?php echo $this->session->userdata('role_name'); ?></p>
             <p>Email : <span class="cyanText"><?php echo $this->session->userdata('web_address'); ?></span></p>
             <br/>

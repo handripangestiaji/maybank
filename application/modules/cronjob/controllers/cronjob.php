@@ -157,38 +157,42 @@ class Cronjob extends CI_Controller {
     
     function SendScheduledPost(){
         $this->load->model('post_model');
-        
         $time_now = date('Y-m-d H:i:s');
-        $time_few_min_ago = date('Y-m-d H:i:s',strtotime('-10 min'));
-        
-        $where = "time_to_post Between '".$time_few_min_ago."' AND '".$time_now."' AND is_posted is NULL";
+        $time_yesterday = date('Y-m-d H:i:s',strtotime('-1 day'));
+        $where = "time_to_post Between '".$time_yesterday."' AND '".$time_now."' AND is_posted is NULL";
         $posts = $this->post_model->GetPosts($where);
         foreach($posts as $post){
-            //handle if facebook
-            if($post->connection_type == 'facebook'){
-                $post_to = json_decode($this->FbStatusUpdate($post));
+            $dtz = new DateTimeZone($post->timezone);
+            $local_time = new DateTime('now', $dtz);
+            $offset = $dtz->getOffset( $local_time ) / 3600;
+            $local_time = date('Y-m-d H:i:s',strtotime(($offset < 0 ? $offset : "+".$offset).' hour'));
+            if($local_time == $post->time_to_post){
+                //handle if facebook
+                if($post->connection_type == 'facebook'){
+                    $post_to = json_decode($this->FbStatusUpdate($post));
+                }
+                //handle if twitter
+                elseif($post->connection_type == 'twitter'){
+                    $post_to = json_decode($this->TwitterStatusUpdate($post));
+                }
+                
+                //write to database is_posted = true;
+                $value = array('post_created_at' => date('Y-m-d H:i:s'),
+                                'is_posted' => 1);
+                $this->post_model->UpdatePostTo($post->post_to_id,$value);
+                
+                //send email
+                if($post->email_me_when_sent == 1){
+                    $this->email->set_newline("\r\n");
+                    $this->email->from('dcms@maybank.com','maybank');
+                    $this->email->to($post->email);
+                    $this->email->subject('Message Posted');
+                    $template = curl_get_file_contents(base_url().'mail_template/PostSent/'.$post->post_to_id);
+                    $this->email->message($template);
+                    $this->email->send();
+                }
             }
-            //handle if twitter
-            elseif($post->connection_type == 'twitter'){
-                $post_to = json_decode($this->TwitterStatusUpdate($post));
-            }
-            
-            //write to database is_posted = true;
-            $value = array('post_created_at' => date('Y-m-d H:i:s'),
-                            'is_posted' => 1);
-            $this->post_model->UpdatePostTo($post->post_to_id,$value);
-            
-            //send email
-            if($post->email_me_when_sent == 1){
-                $this->email->set_newline("\r\n");
-                $this->email->from('dcms@maybank.com','maybank');
-                $this->email->to($post->email);
-                $this->email->subject('Message Posted');
-                $template = curl_get_file_contents(base_url().'mail_template/PostSent/'.$post->post_to_id);
-                $this->email->message($template);
-                $this->email->send();
-            }
-        }	    
+        }
     }
     
     public function FbStatusUpdate($post = NULL){
@@ -354,7 +358,7 @@ class Cronjob extends CI_Controller {
     }
     
     
-     public function Test(){
+     public function YoutubeVideo(){
         $this->load->config('youtube');
         $youtube = $this->config->item('youtube');
         
@@ -380,7 +384,8 @@ class Cronjob extends CI_Controller {
                 $this->google_client->refreshToken($token->refresh_token);
                 $current_access_token = json_decode($this->google_client->getAccessToken());
                 $current_access_token->refresh_token = $token->refresh_token;
-                $this->account_model->YoutubeRefreshToken(json_encode($current_access_token), $each_channel->channel_id, date("Y-m-d H:i:s", $current_access_token->created));    
+                $this->account_model->YoutubeRefreshToken(json_encode($current_access_token), $each_channel->channel_id, date("Y-m-d H:i:s", $current_access_token->created));
+                $token = $current_access_token;
             }
             else{
                 $this->google_client->setAccessToken(json_encode($token));
@@ -398,15 +403,47 @@ class Cronjob extends CI_Controller {
                 $detail_video->data->etag = $playlistItemsResponse['items'][$i]['etag'];
                 $detail_video->data->stream_id = $playlistItemsResponse['items'][$i]['id'];
                 $this->youtube_model->SaveYouTubePost($detail_video, $each_channel->channel_id);
+                $comment_list = $this->getAndPrintCommentFeed($playlistItemsResponse['items'][$i]['snippet']['resourceId']['videoId']);
+                $this->youtube_model->SaveYoutubeComment($comment_list, $each_channel->channel_id);
                 $video[] = $detail_video;
+                print_r($detail_video);
             }
             
-            echo "<pre>";
-            print_r($video);
-            echo "</pre>";
+            
         }
         
         
     }
-
+    
+    function getAndPrintCommentFeed($video_id){
+        
+        $video_comment_feed = curl_get_file_contents("http://gdata.youtube.com/feeds/api/videos/$video_id/comments?v=2&alt=json");
+        $video_comment_feed = json_decode($video_comment_feed);
+        
+        $comments = array();
+        if(isset($video_comment_feed->feed->entry)){
+            foreach($video_comment_feed->feed->entry as $entry){
+                $comment_feed = new stdClass();
+                $comment_feed->id = $entry->id->{'$t'};
+                $comment_feed->created_at = $entry->published->{'$t'};
+                $comment_feed->title = $entry->title->{'$t'};
+                $comment_feed->content = $entry->content->{'$t'};
+                $comment_feed->channel_id = $entry->{'yt$channelId'}->{'$t'};
+                $comment_feed->google_plus_user_id = $entry->{'yt$googlePlusUserId'}->{'$t'};
+                $comment_feed->reply_count = $entry->{'yt$replyCount'}->{'$t'};
+                $comment_feed->author_name = $entry->author[0]->name->{'$t'};
+                $comment_feed->author_uri = $entry->author[0]->uri->{'$t'};
+                $comment_feed->user_id = $entry->author[0]->{'yt$userId'}->{'$t'};
+                $comment_feed->video_id = $entry->{'yt$videoid'}->{'$t'};
+                $comments[] = $comment_feed;
+            }
+            return $comments;
+        }
+        else{
+            return null;
+        }
+        
+        
+    }
+   
 }

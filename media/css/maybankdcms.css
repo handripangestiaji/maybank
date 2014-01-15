@@ -24,13 +24,13 @@
 }
 
 .form-signin input[type="text"]{
-	min-width: 0px;
+	/*min-width: 0px;*/
 	width: 180px;
 }
 
 .form-signin input[type="password"]{
 	width: 153px;
-	min-width: 0px;
+	/*min-width: 0px;*/
 }
 
 .input-prepend .add-on{
@@ -667,6 +667,10 @@ border-radius: 3px;
 	margin-bottom: 10px;
 }
 
+.modal .related-conversation-body .author{
+	margin-left: 10px;
+}
+
 #reply-img-show{
 	background-color: #f2f2f2;
 	margin: 10px 0px;
@@ -747,6 +751,10 @@ input.related-conversation-check{
 	cursor: pointer;
 }
 
+.btn-reply-open-img{
+	float: right;
+}
+.
 /*==============================================================================================
 ======================================== C M S =================================================
 ==============================================================================================*/

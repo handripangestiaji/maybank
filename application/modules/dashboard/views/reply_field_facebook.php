@@ -1,14 +1,14 @@
 <form action="" method="post" class="facebook-tweet">
 <div class="row-fluid">
     <span class="fb-reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
-    <div class="pull-left">
+    <div class="option-type pull-left">
         <div class="message"></div>
-        <select style="width: 130px;">
-            <option value="keyword">Feedback</option>
-            <option value="user">Enquiry</option>
-            <option value="keyword">Complaint</option>
+        <select class="replyType" id="replyType" style="width: 130px;">
+            <option value="Feedback">Feedback</option>
+            <option value="Enquiry">Enquiry</option>
+            <option value="Complaint">Complaint</option>
         </select>
-        <select style="width: 130px;">
+        <select class="productType" id="productType" style="width: 130px;">
             <?php foreach($product_list as $product):?>
                 <option value="<?=$product->id?>"><?=$product->product_name?></option>
             <?php endforeach?>
@@ -18,7 +18,8 @@
     <br clear="all" />
     <div class="link_url pull-left"  style="margin-bottom: 5px;">
         <i class="icon-link"></i>
-        <input type="text" class="reply-insert-link-text">
+        <input type="text" class="source_link reply-insert-link-text">
+        <input type="hidden" class="short_code" />
         <button class="reply-insert-link-btn btn btn-primary btn-mini" style="margin-left: 5px;">SHORTEN</button>
     </div>    
     <div class="pull-right">
@@ -81,11 +82,13 @@
     </div>
     <div class="pull-right">
       <?php if($reply_type=='replaycontent'){?>
-        <button class="btn btn-primary btn-small btn-send-reply" value="<?php echo $fb_feed[$i]->post_stream_id; ?>">SEND</button>    
-      <?php }elseif($reply_type=='reply_nested'){ ?>
-        <button class="btn btn-primary btn-small btn-send-reply" value="<?php echo $fb_feed[$i]->comment_stream_id; ?>">SEND</button> 
+        <button class="btn btn-primary btn-small btn-send-reply" value="<?php echo $fb_feed[$i]->post_id; ?>">SEND</button>    
+      <?php }elseif($reply_type=='reply_nested'){
+       // print_r($fb_feed[$i]);
+        ?>
+        <button class="btn btn-primary btn-small btn-send-reply" value="<?php echo $fb_feed[$i]->comment_post_id; ?>">SEND</button> 
       <?php }elseif($reply_type=='reply_dm'){  ?> 
-          <button class="btn btn-primary btn-small btn-send-msg"  value="<?php echo $fb_feed[$i]->post_stream_id; ?>">SEND</button> 
+          <button class="btn btn-primary btn-small btn-send-msg"  value="<?php echo $fb_feed[$i]->post_id; ?>">SEND</button> 
       <?php } ?>           
     </div>
     <br clear="all" />

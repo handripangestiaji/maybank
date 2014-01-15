@@ -11,10 +11,10 @@
 <!-- ==================== MIDDLE COL ==================== -->
 <div class="span<?php echo $span ?>">
     <!-- ==================== ACTIVITIES CONTAINER ==================== -->
-    <div class="row-fluid">
+    <div class="row-fluid" style="margin-bottom: 0px;">
         <div class="span12">
             <!-- ==================== ACTIVITIES HEADLINE ==================== -->
-            <div class="containerHeadline" style="background-color:<?php echo $color; ?>;color: white; height: 30px;">
+            <div class="containerHeadline" id="box-id-<?php echo $box_id ?>" style="background-color:<?php echo $color; ?>;color: white; height: 30px;">
                 <div class="pull-left" style="padding: 4px 0px; height: auto">
                     <div class="btn-group">
                         <button class="btn trans dropdown-toggle btn-dropdown-stream-channels" data-toggle="dropdown">
@@ -46,7 +46,7 @@
             <!-- ==================== END OF ACTIVITIES HEADLINE ==================== -->
 
             <!-- ==================== ACTIVITIES FLOATING BOX ==================== -->
-            <div class="floatingBox">
+            <div class="floatingBox center" style="height: 400px; overflow: auto; margin-bottom: 0px; min-height: 400px; background-color: #FFFFFF;">
                 Loading...
             </div>
             <!-- ==================== END OF ACTIVITIES FLOATING BOX ==================== -->

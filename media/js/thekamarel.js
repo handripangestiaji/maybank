@@ -26,7 +26,10 @@ $.extend($.expr[":"],
     });
 
 $(function(){
-
+    $(this).on("error", ".circleAvatar img", function() {
+        //$( this ).attr( "src", "missing.png" );
+        console.log("error");
+    });
     /*=============================================================================================
      ==================================== GET ACTUAL DATETIME =====================================
      =============================================================================================*/
@@ -418,14 +421,14 @@ $(function(){
                 $(document).ready(function() {
                     
                     $(this).on('click', '.stream_head > li > a',
-                        function() {
+                        function(e) {
                             previous = $(this).closest('ul.stream_head').find('li.active');
                             previous.removeClass('active');
                             $(this).parent().addClass('active');
                             var id_tab_name = '#' + $(this).attr('class');
                             $(this).closest('.floatingBoxMenu').next().find('.floatingBoxContainers').hide(); 
                             $(this).closest('.floatingBoxMenu').next().find(id_tab_name).show();
-                            
+                            e.preventDefault();
                         /*
                         var href = $(this).attr('href'),
                         $previous = $(this).closest('ul.nav-tabs').find('li.active');
@@ -779,7 +782,9 @@ $(function(){
                            "success" : function (response){
                                 me.removeAttr("disabled").html("SHORTEN");
                                 tweetsText = me.closest('form').find(".replaycontent");
+                                shortcode= me.closest('.link_url').find(".short_code");
                                 tweetsText.val(tweetsText.val() + " http://maybank.co/" + response.shortcode);
+                                shortcode.val(response.shortcode);
                                 me.closest('reply-shorturl-show-content').val()=" http://maybank.co/" + response.shortcode;
                                // alert("http://maybank.co/" + response.shortcode)
                            },
@@ -1319,6 +1324,13 @@ $(function(){
                      $(this).on('click','.btn-send-reply',
                         function() {
                         var len=$(this).parent().siblings(".replaycontent").val().length
+                        var commnetbox;
+                        if(len<=0){
+                            commnetbox='-';
+                        }else{
+                             commnetbox=$(this).parent().siblings(".replaycontent").val();
+                        }
+                        
                         if(len>2000){
                             $(this).parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
                             '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
@@ -1335,8 +1347,10 @@ $(function(){
                                 data: {
                                     post_id: $(this).val(),
                                     channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
-                                    comment :$(this).parent().siblings(".replaycontent").val(),
-                                    url:'',
+                                    comment :commnetbox,
+                                    url:$(this).parent().siblings(".link_url").find(".short_code").val(),
+                                    reply_type:$(this).parent().siblings('.option-type').find(".replyType").val(),
+                                    product_type:$(this).parent().siblings('.option-type').find(".productType").val(),
                                     title :$(this).parent().siblings('#reply-url-show').find(".title_link").val(),
                                     desc :$(this).parent().siblings('#reply-url-show').find(".descr-link").val(),
                                     img :$(this).parent().siblings('#reply-img-show').find("#reply-preview-img").attr('src'),
@@ -1344,7 +1358,7 @@ $(function(){
                                 success: function(response)
                                 {
                                     commentButton.removeAttr("disabled");
-                                    if(response.success === true){
+                                    if(response.success == true){
                                         commentButton.parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
                                         '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
                                         '<strong>Success!</strong> '+response.message+' </div>');
@@ -1360,6 +1374,14 @@ $(function(){
                                         '<strong>Error!</strong>'+response.message+'</div>');
                                         commentButton.html("SEND");
                                     }
+
+                                },
+                                error: function(response) {
+                                    commentButton.removeAttr("disabled");
+                                    commentButton.parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
+                                        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
+                                        '<strong>Error!</strong>: Facebook post not founds/'+response.message+'</div>');
+                                    commentButton.html("SEND");
                                 },
                             });
                             
@@ -1461,12 +1483,17 @@ $(function(){
                     looppage=2;
                     $(this).on('click','.loadmore',
                         function() {
+                            $(this).find('span').html("LOADING...");
+                            $(this).attr("disabled", "disabled");
+                            var loadMoreElement = $(this);
                             loading = true;
                             action=$(this).val();    
                             group_numbers=2;
                             channel_ids = $(this).siblings(".channel_id").val();
                             me = $(this);
+                            me.attr('disabled', 'disabled').html('Loading...');
                             $(this).closest('.floatingBoxContainers').load(BASEURL + 'dashboard/media_stream/loadmore/'+action+'/'+looppage+'/'+channel_ids, function(){
+                                loadMoreElement.removeAttr("disabled");
                                 var currentNumber = $(this).closest('.floatingBoxContainers').find('.unread-post').length;
                                 try{
                                     currentNumber += parseInt($(this).closest('.container-fluid').siblings('.floatingBoxMenu').find('li.active .notifyCircle').html());
@@ -1483,7 +1510,7 @@ $(function(){
                                 else
                                     me.closest('.container-fluid').siblings('.floatingBoxMenu').find('li.active .notifyCircle').show();
                             });
-                            
+                            me.removeAttr('disabled').html('Loading..');
                             
                             looppage++;
                             loading = false;
@@ -1516,7 +1543,7 @@ $(function(){
                   
                 $('#compose-tags').tagit({
                     availableTags: sampleTags,
-                    allowSpaces: true
+                    allowSpaces: true,
                 });
                 
                 $(this).on('click','.btn-reply',function(){
@@ -1557,6 +1584,37 @@ $(function(){
                 });
             });
             
+    $(document).ready(function() {
+        $('.btn-dashboard-search').click(function(){
+            var channel_1 = $('#box-id-1').next().find('.channel-id').val();
+            var channel_2 = $('#box-id-2').next().find('.channel-id').val();
+            var channel_3 = $('#box-id-3').next().find('.channel-id').val();
+            $(this).closest('.container-fluid').next().find('.floatingBox').html('Loading...');
+            $('#box-id-1').next().load(BASEURL + 'dashboard/search',
+                                       {
+                                        channel_id : channel_1,
+                                        q : $('.dashboard-search-field').val()
+                                        });
+            $('#box-id-2').next().load(BASEURL + 'dashboard/search',
+                                       {
+                                        channel_id : channel_2,
+                                        q : $('.dashboard-search-field').val()
+                                        });
+            
+            $('#box-id-3').next().load(BASEURL + 'dashboard/search',
+                                       {
+                                        channel_id : channel_3,
+                                        q : $('.dashboard-search-field').val()
+                                        });
+            //window.location.href = BASEURL + 'dashboard/search?q=' + $('.dashboard-search-field').val();
+        });
+    });
+    
+    $(document).ready(function() {
+        var new_height = $( window ).height() - 225;
+        $('.center').height(new_height);
+    });
+    
     /*=============================================================================================
      ===================================== CMS ACTIONS ============================================
      =============================================================================================*/    
@@ -1799,9 +1857,12 @@ $.fn.RefreshAllStream = function(){
                     $(this).find('.channel-id').val(channelId);
                 });
             }
+            else if($(this).closest('div').prev().find('i').attr('class') == 'icon-youtube'){
+                $(this).html('&nbsp;&nbsp;Loading...');        
+                $(this).load(BASEURL + 'dashboard/media_stream/youtube_stream/' + channelId + '/'+ is_read, function(){
+                    $(this).find('.channel-id').val(channelId);
+                });
+            }
         }
     });
 };
-
-   
-

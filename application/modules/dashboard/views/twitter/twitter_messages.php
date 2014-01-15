@@ -5,7 +5,7 @@
     ?>
     <li>
         <input type="hidden" class="postId" value="<?php echo $directmessage[$i]->social_stream_post_id; ?>" />
-        <div class="circleAvatar"><img src="<?php echo $directmessage[$i]->sender->profile_image_url; ?>" alt=""></div>
+        <div class="circleAvatar"><img src="<?php echo base_url('dashboard/media_stream/SafePhoto?photo=').$directmessage[$i]->sender->profile_image_url; ?>" alt=""></div>
         <div class="read-mark <?php if($directmessage[$i]->is_read==0){echo 'redText';} else { echo 'greyText'; } ?>"><i class="icon-bookmark icon-large"></i></div>
         <br />
         <p class="headLine">
@@ -79,8 +79,8 @@
     <?php 
     }
  ?>
-<?php if(count($directmessage) > 0):?>
+<?php if((count($directmessage) > 0) && (!isset($is_search))): ?>
   <div class="filled" style="text-align: center;">
      <input type="hidden"  class="channel_id" value="<?php echo $directmessage[0]->channel_id?>"/>
-    <button class="loadmore btn btn-info" value="direct"><i class="icon-chevron-down"></i> LOAD MORE</button></div>
+    <button class="loadmore btn btn-info" value="direct"><i class="icon-chevron-down"></i> <span>LOAD MORE</span></button></div>
 <?php endif;?>

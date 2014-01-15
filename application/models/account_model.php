@@ -82,14 +82,29 @@ class account_model extends CI_Model
     
     function CreateChannelAction($action){
     	$this->db->insert('channel_action',$action);
-	   return $this->db->insert_id();
+    return $this->db->insert_id();
     }
     
     function CreateReplyAction($action){
     	$this->db->insert('page_reply',$action);
 	   return $this->db->insert_id();
     }
-
+    
+    function isCaseIdExists($post_id){
+        $this->db->select('*');
+        $this->db->from("`case` a INNER JOIN social_stream b ON b.post_id=a.post_id");
+        $this->db->where("post_stream_id",$post_id);
+        $this->db->order_by('a.created_at','desc');
+        return $this->db->get()->result();        
+    }
+    
+    function GetShorUrlId($filter){
+        $this->db->select("*");
+        $this->db->from('short_urls');
+        $this->db->where($filter);
+        return $this->db->get()->result();
+    }
+    
     
     function CreateRetweetAction($action, $result, $twitter_data, $channel){
 	$this->db->trans_start();
@@ -144,30 +159,57 @@ class account_model extends CI_Model
     	return $result;
     }
     
-    function CreateFbCommentAction($action,$stream_id,$replyAction, $like = 0){
+    function CreateFbCommentAction($action,$post_id,$replyAction, $like = 0){
     	$this->db->trans_start();
-    	$post = $this->facebook_model->IsStreamIdExists($stream_id);
-    	if($post != null){
-    	    $action['post_id'] = $post->post_id;
-    	    $this->db->where("post_id", $post->post_id);
+    	//$post = $this->facebook_model->IsStreamIdExists($stream_id);
+    	//print_r($post);
+        if(isset($post_id) != ''){
+            $action['post_id']=$post_id;
+    	    $this->db->where("post_id", $post_id);
     	    $this->db->update("social_stream_fb_post", array("user_likes" => $like));
-    	    $this->db->where("id", $post->post_id);
+    	    $this->db->where("id", $post_id);
     	    $this->db->update("social_stream_fb_comments", array(
     		"user_likes" => $like
     	    ));
-    	}
-    	$result = $this->CreateChannelAction($action);
-       // $this->CreateReplyAction($replyAction);
+            $result = $this->CreateChannelAction($action);
+        }
         
         $this->db->trans_complete();
     	return $result;
     }
+
+    function CreateFbReplyAction($post_id, $stream_id, $message, $reply_type,$product_type,$url){
+    	$this->db->trans_start();
     
-    function isCaseIdExists($post_id){
-        $this->db->select('*');
-        $this->db->from("`case` a INNER JOIN social_stream b ON b.post_id=a.post_id");
-        $this->db->where("post_stream_id",$post_id);
-        $this->db->order_by('a.created_at','desc');
-        return $this->db->get()->result();        
+        $case=$this->isCaseIdExists($stream_id);
+        if(count($case)>0){
+            $actions['case_id']=$case[0]->case_id;
+        }
+        
+        if($url!=''){
+            $short_url_id=$this->GetShorUrlId(array("short_code"=>$url));
+            if(isset($short_url_id[0])){
+                $urls=$short_url_id[0]->id;
+                //print_r($short_url_id);
+                $actions['url']=$urls;
+            }            
+        }
+        
+        $post = $this->facebook_model->IsCommentExists($stream_id);        
+//        print_r($post);
+        if(isset($post->post_id)!=''){
+            $actions['conversation_detail_id']=$post->post_id;
+        }   
+         
+        $actions['message']=$message;
+        $actions['social_stream_post_id']=$post_id;
+        $actions['type']=$reply_type;
+        $actions['product_id']=$product_type;
+        $actions['created_at']=date("Y-m-d H:i:s");    
+        $result=$this->CreateReplyAction($actions);
+        $this->db->trans_complete();
+    	
+        return $result;
     }
+    
 }

@@ -63,7 +63,6 @@ class Login extends Login_Controller {
         function auth()
         {
             $username = $this->input->post('username');
-            
             $salt = $this->users_model->get_byname($username);
             if($salt->num_rows()==1)
             {
@@ -86,16 +85,19 @@ class Login extends Login_Controller {
 				'image_url' => $user_login->row()->image_url,
 				'description' => $user_login->row()->description,
 				'group_id' => $user_login->row()->group_id,
+				'timezone' => $this->input->post('timezone'),
                                 'is_login' => TRUE
                             );
                     $timezone = new DateTimeZone("Europe/London");
                     $time = new DateTime(date("Y-m-d H:i:s e"), $timezone);
                     $this->session->set_userdata($data);
+		    
 		    $login_activity = array(
 						'user_id' => $valid->row()->user_id,
 						'login_time' => $time->format("Y-m-d H:i:s")
 					    );
-                        $this->users_model->insert_activity($login_activity);
+		    $this->users_model->update_user($data['user_id'], array('timezone' => $this->input->post('timezone')));
+                    $this->users_model->insert_activity($login_activity);
                     redirect('dashboard');
                 }
                 else

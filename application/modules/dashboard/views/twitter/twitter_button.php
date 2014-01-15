@@ -16,13 +16,15 @@
                     : "",
         "favorite" => $post->favorited == 1 ? '<button type="button" class="favorit unfavorit btn btn-inverse"><i class="icon-star">&nbsp;</i></button> ' :
                     '<button type="button" class="btn btn-primary favorit"><i class="icon-star">&nbsp;</i><span></span></button>     ',
-        "case" => !$post->case_id ? '<button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> <span>CASE</span></button> ' :
-                '<button type="button" class="btn btn-purple btn-resolve" name="action" value="'.$post->case_id.'"><i class="icon-check"></i> <span>RESOLVE</span></button> '
+        "case" => !$post->case_id ? (IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Assign_Case') ? '<button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> <span>CASE</span></button> ' : '') :
+                (IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Resolve_Case') ? '<button type="button" class="btn btn-purple btn-resolve" name="action" value="'.$post->case_id.'"><i class="icon-check"></i> <span>RESOLVE</span></button>' : '' )
     );
-    
-    foreach($allowed[$come_from] as $state)
-    {
-        echo $buttonItems[$state];
+    if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Take Action')){
+        foreach($allowed[$come_from] as $state)
+        {
+            echo $buttonItems[$state];
+        }
     }
+    
     
 ?>

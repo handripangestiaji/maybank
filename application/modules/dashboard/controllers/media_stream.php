@@ -3,15 +3,18 @@
 class Media_stream extends CI_Controller {
 
     private $connection;
-	   
+    public $user_role;  
     function __construct()
     {
 	parent::__construct();
+	if(!$this->session->userdata('user_id'))
+	    redirect("login");
+	
 	// Loading TwitterOauth library. 
 	$this->config->load('twitter');
 	$this->config->load('facebook');
 	$this->load->library('ion_auth');
-	$this->load->library('Twitteroauth');
+	$this->load->library('Twitteroauth');  
 	$this->load->library('session');
 	$this->load->helper('url');
 	$this->load->helper('array');  
@@ -20,6 +23,8 @@ class Media_stream extends CI_Controller {
 	$this->load->model('twitter_model');
 	$this->load->model('youtube_model');
 	$this->load->model('account_model');
+	$this->user_role = $this->users_model->get_collection_detail(
+		array('role_collection_id'=>$this->session->userdata('role_id')));
     }
     
     
@@ -34,7 +39,7 @@ class Media_stream extends CI_Controller {
 		$filter['case_id is NOT NULL'] = null;
 	    }
 	}
-	$limit=10;
+	$limit=30;
 	$data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter,$limit);
 	$data['count_fb_feed']=$this->facebook_model->CountFeedFB($filter);
 	//$data['own_post'] = $this->facebook_model->RetrievePostFB($filter);
@@ -45,7 +50,8 @@ class Media_stream extends CI_Controller {
 	$data['product_list'] = $this->campaign_model->GetProduct();
 	$data['channel_id'] = $channel_id;
 	$this->load->model('case_model');
-	$data['user_list'] = $this->case_model->ReadAllUser();
+    $filter=array('role_id <>'=>'5');
+	$data['user_list'] = $this->case_model->ReadAllUser($filter);
 	$this->load->view('dashboard/facebook/facebook_stream',$data);
     }
     
@@ -57,7 +63,9 @@ class Media_stream extends CI_Controller {
 	    $filter['is_read'] = $is_read;
 	$page = $this->input->get('page');
 	$page = $page ? $page : 1;
+	$data['channel_id'] = $channel_id;
 	$data['youtube_post'] = $this->youtube_model->ReadYoutubePost($filter, $page);
+	$data['youtube_comment'] = $this->youtube_model->ReadYoutubeComment($filter, $page);
 	$this->load->view('dashboard/youtube/youtube_stream', $data);
     }
     
@@ -549,6 +557,8 @@ class Media_stream extends CI_Controller {
         $url = $this->input->post('url');
         $descr = $this->input->post('desc');
         $img = $this->input->post('img');
+        $reply_type=$this->input->post('reply_type');
+        $product_type=$this->input->post('product_type');
              
         $filter = array(
             "connection_type" => "facebook"
@@ -572,6 +582,9 @@ class Media_stream extends CI_Controller {
 		  $channel =  $channel_loaded[0]->channel_id;
 	    }
         
+        $stream_id=$this->facebook_model->streamId($post_id);
+        //print_r($stream_id);
+        
         $newStd = new stdClass();
         $newStd->page_id =  $channel_loaded[0]->social_id;
         $newStd->token = $this->facebook_model->GetPageAccessToken( $channel_loaded[0]->oauth_token, $channel_loaded[0]->social_id);
@@ -584,7 +597,7 @@ class Media_stream extends CI_Controller {
         $attachment = array(
             'message' => $comment,
             'name' => $title,
-            'link' => $url,
+            'link' => '',
             'description' => $descr,
             'picture'=> $img,
         ); 
@@ -601,23 +614,36 @@ class Media_stream extends CI_Controller {
             if (write_file($pathToSave, $data)){    
                 $this->facebook->setFileUploadSupport(true);
                 $args = array('message' => $comment, 'attachment' => '@' . realpath($pathToSave));
-               // $args['attachment'] = '@' . realpath($pathToSave);
-                $return = $this->facebook->api('/'.$post_id.'/comments', 'POST', $args);
+                
+                try{
+                    $return = $this->facebook->api('/'.$stream_id->post_stream_id.'/comments', 'POST', $args);
+                }catch(FacebookApiException $e){
+                    echo json_encode(
+            		    array(
+                        'success' => false,
+            			'message' => "reply was failed",
+            		    )
+                    );
+                    $return='error';
+                }
             }
         }else{
-            $return=$this->facebook->api('/'.$post_id.'/comments', 'POST', array('message'=>$comment,'attachment'=>$attachment));
+            try{
+                $return=$this->facebook->api('/'.$stream_id->post_stream_id.'/comments', 'POST', array('message'=>$comment,'attachment'=>$attachment));
+            }catch(FacebookApiException $e){
+                echo json_encode(
+        		    array(
+                    'success' => false,
+        			'message' => "reply was failed",
+        			)
+    		    );
+            $return='error';
+            }
         }
         
-        $case=$this->account_model->isCaseIdExists($post_id);
-            if(count($case)>0){
-                $post_at=$case[0]->created_at;  
-                $caseid=$case[0]->case_id;
-            }else{
-                $caseid='';
-                $post_at='';       
-            }
+        $pull_ronjob=curl_get_file_contents(base_url('/cronjob/FacebookStreamOwnPost'));
         
-        if(!is_array($return)){//send comment          
+        if(!is_array($return) && $return!='error'){//send comment          
             $action = array(
         		"action_type" => "reply_facebook",
         		"channel_id" =>$channel,
@@ -625,40 +651,28 @@ class Media_stream extends CI_Controller {
         		"created_by" => $this->session->userdata('user_id'),
         		"stream_id_response" => $return
     	    );
-             $this->account_model->CreateFbCommentAction($action,$return,$this->input->post('like') === 'true' ? 1 : 0);
+            
             echo json_encode(
     		    array(
                 'success' => true,
     			'message' => "successfully done",
     			'result' => $return
     		    )
-    		);
-		                                        
-        }elseif(is_array($return)){//replay in reply
-        
-        if($return['id']){
+    		);		    
+            $this->account_model->CreateFbCommentAction($action,$post_id,$this->input->post('like') === 'true' ? 1 : 0);
+            $this->account_model->CreateFbReplyAction($post_id,$stream_id->post_stream_id,$comment,$reply_type,$product_type,$url);
+                                      
+        }elseif(is_array($return)){//replay in reply        
+            if($return['id']){
+            $return=$return['id'];
             $action = array(
         		"action_type" => "reply_facebook",
         		"channel_id" => $channel_loaded[0]->channel_id,
         		"created_at" => date("Y-m-d H:i:s"),
-        		//"stream_id" => $this->input->post('post_id'),
         		"created_by" => $this->session->userdata('user_id'),
-        		"stream_id_response" => $return['id']
+        		"stream_id_response" => $return
         	);
-         
-            $replyAction = array(
-        		"case_id" => $caseid,
-        		"channel" => $channel_loaded[0]->channel_id,
-        		"url" => $url,
-        		"message" =>$comment,
-        		"stream_id" => $return['id'],
-        		"comment_id" => $post_id,
-        	    "conversation_detail_id" => '',
-                "type" => "reply_facebook",
-                "post_at" => $post_at,
-                "created_at" => date("Y-m-d H:i:s")
-            );
-            $this->account_model->CreateFbCommentAction($action,$return['id'],$this->input->post('like') === 'true' ? 1 : 0);
+            
             echo json_encode(
     		    array(
                 'success' => true,
@@ -667,6 +681,9 @@ class Media_stream extends CI_Controller {
     		    )
     		);
             
+            $this->account_model->CreateFbCommentAction($action,$post_id,$this->input->post('like') === 'true' ? 1 : 0);
+            $this->account_model->CreateFbReplyAction($post_id,'',$comment,$reply_type,$product_type,$url);
+
             }else{
                 echo json_encode(
         		    array(
@@ -676,7 +693,14 @@ class Media_stream extends CI_Controller {
         		    )
     		    );
             }
-       }
+       }else{
+                echo json_encode(
+        		    array(
+                    'success' => false,
+        			'message' => "reply was failed"   			
+        		    )
+    		    );
+      }
     }
     
     public function FbReplyMsg(){
@@ -1108,5 +1132,33 @@ class Media_stream extends CI_Controller {
 	$this->load->model('post_model');
 	$value = array('is_posted' => 2);
 	$this->post_model->UpdatePostTo($this->input->post('post_to_id'),$value);
+    }
+    
+    public function SafePhoto(){
+	$safe_photo = $this->input->cookie("safe_photo");
+	if(!$safe_photo){
+	    $cookie = array(
+		'name'   => 'safe_photo',
+		'value'  => time(),
+		'expire' => '3600',
+		//'domain' => $_SERVER['HTTP_HOST'],
+		'path'   => '/',
+		'secure' => FALSE
+	    );
+	    $this->input->set_cookie($cookie);
+	}
+	
+	$md5_photo = md5($this->input->get('photo')).".jpg";
+	
+	if(!is_dir("./media/dynamic/tmp_photo/"))
+	    mkdir(getcwd()."/media/dynamic/tmp_photo/");
+	    
+	if(file_exists("./media/dynamic/tmp_photo/".$md5_photo) && $safe_photo)
+	    redirect("/media/dynamic/tmp_photo/".$md5_photo);
+	else{
+	    file_put_contents("./media/dynamic/tmp_photo/".$md5_photo, file_get_contents($this->input->get('photo')));
+	    redirect("/media/dynamic/tmp_photo/".$md5_photo);    
+	}
+	
     }
 }

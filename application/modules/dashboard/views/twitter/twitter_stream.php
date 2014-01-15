@@ -7,7 +7,7 @@
             }
         }
     }
-    //print_r($homefeed);
+    
     $count_unread_homefeed = 0;
     if($homefeed){
         foreach($homefeed as $h){
@@ -16,7 +16,7 @@
             }
         }
     }
-    
+    //print_r($mentions);
     $count_unread_dm = 0;
     if($directmessage){
         foreach($directmessage as $dm){
@@ -32,7 +32,7 @@
 <!-- ==================== ACTIVITIES MENU ==================== -->
 <div class="floatingBoxMenu">
     <ul class="nav stream_head">
-        <li class="active"><a class='mentions'>Mentions <span class="notifyCircle red <?php if($count_unread_mentions==0) echo 'hide';?>"><?php echo $count_unread_mentions?></span></a></li>
+        <li><a class='mentions'>Mentions <span class="notifyCircle red <?php if($count_unread_mentions==0) echo 'hide';?>"><?php echo $count_unread_mentions?></span></a></li>
         <li><a class='feed'>Homefeed<span class="notifyCircle red <?php if($count_unread_homefeed==0) echo 'hide';?>"><?php echo $count_unread_homefeed?></span></a></li>
         <li><a class='sendmessage'>Send Twitter</a></li>
         <li><a class='direct'>Direct Message <span class="notifyCircle red <?php if($count_unread_dm==0) echo 'hide';?>"><?php echo $count_unread_dm?></span></a></li>

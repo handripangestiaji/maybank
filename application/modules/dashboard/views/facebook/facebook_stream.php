@@ -7,7 +7,6 @@
             }
         }
     }
-    
     $count_unread_pm = 0;
     if($fb_pm != null){
         foreach($fb_pm as $pm){

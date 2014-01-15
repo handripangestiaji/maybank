@@ -36,11 +36,14 @@
             <?php endif;?>
         </div>
         <div class="sidebarLine"></div>
-        <ul class="tasksList">
+        <ul class="tasksList" style="height: 100%">
             <?php foreach($case as $each_case):?>
             <li class="pointerCase" >
                 <input type="hidden" name="pointer" class="pointer-case" value="<?php echo $each_case->case_id?>" />
-                <div class="notifHead purple">
+                <pre>
+                <?=print_r($each_case)?>
+                </pre>
+                <div class="notifHead purple" onclick="windows.location='<?=base_url('dashboard/socialmedia')?>'">
                     CASE ID: #<?php echo $each_case->case_id?>
                 </div>
                 <div class="notifBody">

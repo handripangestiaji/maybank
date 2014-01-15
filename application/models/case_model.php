@@ -9,7 +9,7 @@ class case_model extends CI_Model{
         
         
     function LoadCase($filter = array()){
-        $this->db->select("a.*, b.channel_id, b.post_stream_id");
+        $this->db->select("a.*, b.channel_id, b.post_stream_id, b.type");
         $this->db->from("`case` a inner join social_stream b on a.post_id = b.post_id");
         $this->db->where($filter);
         $result = $this->db->get()->result();

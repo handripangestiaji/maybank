@@ -51,7 +51,8 @@
             }
             ?>
             <?php if((count($youtube_post) > 0) && (!isset($is_search))): ?>
-                <div class="filled" style="text-align: center;"><button class="btn btn-info"><i class="icon-chevron-down"></i> <span>LOAD MORE</span></button></div>
+                <div class="filled" style="text-align: center;">
+                    <button class="btn btn-info"><i class="icon-chevron-down"></i> <span>LOAD MORE</span></button></div>
             <?php endif;?>
         </ul>
         

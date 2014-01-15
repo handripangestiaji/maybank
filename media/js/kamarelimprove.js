@@ -79,6 +79,7 @@ $(function(){
                             '<p>' + response[i].text + '</p>' +
                         '</div></div>'
                     );
+                    $('.UTCTimestamp').localTimeFromUTC('MM/dd/yyyy hh:mm:ss a');
                 }
                 
             }
@@ -123,6 +124,7 @@ $(function(){
                                 '<!--p><button class="btn btn-primary btn-mini btn-reply" style="margin-left: 5px;">Reply</button></p-->' +
                             '</div></div>'
                         );
+                        $('.UTCTimestamp').localTimeFromUTC('MM/dd/yyyy hh:mm:ss a');
                     }
                 }else{
                      $(modalID + ' form').append(
@@ -171,6 +173,7 @@ $(function(){
                             '<!--p><button class="btn btn-primary btn-mini btn-reply" style="margin-left: 5px;">Reply</button></p-->' +
                         '</div></div>'
                     );
+                    $('.UTCTimestamp').localTimeFromUTC('MM/dd/yyyy hh:mm:ss a');
                 }
                 
             }
@@ -370,7 +373,3 @@ $(function(){
         });
     };
 })(jQuery);
-
-function StartUp() {
-    $('.UTCTimestamp').localTimeFromUTC('MM/dd/yyyy hh:mm:ss a');
-}

@@ -59,22 +59,24 @@ $(function(){
             callback : function(response){
                 //console.log(response);
                 $(modalID + " .loader-image").hide();
+                
+                
+                if(response.length == 0)
+                    $(modalId).append("<h2>No related conversation found.</h2>");
                 for(i = 0; i<response.length;i++){
+                    var myDate = new Date(response[i].social_stream_created_at + " UTC");
                     $(modalID + ' form').append(
-                         '<div class="related-conversation-body">' + 
-                        '<span class="related-conversation-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>' + 
+                        '<div class="related-conversation-body">' + 
+                        '<div><span class="related-conversation-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>' + 
                         '<p class="headLine">' + 
                             '<input type="checkbox" class="related-conversation-check" value="' + response[i].post_id + '">' + 
                             '<span class="author">' +  response[i].name + '(@' + response[i].screen_name + ')</span>' + 
                             '<i class="icon-circle"></i>' + 
-                            '<span>posted a <span class="cyanText">Tweet</span></span>' + 
-                            '<i class="icon-circle"></i>' + 
-                            '<span>' + response[i].created_at + '</span>' + 
+                            '<span>' + myDate.toString() + '</span>' + 
                             '<i class="icon-play-circle moreOptions pull-right"></i>' +
-                        '</p>' + 
+                        '</p></div>' + 
                         '<div>' +
                             '<p>' + response[i].text + '</p>' +
-                            '<p><button class="btn btn-primary btn-mini btn-retweet" style="margin-left: 5px;">RETWEET</button></p>' +
                         '</div></div>'
                     );
                 }
@@ -102,26 +104,33 @@ $(function(){
             callback : function(response){
                 //console.log(response);
                 $(modalID + " .loader-image").hide();
-                for(i = 0; i<response.length;i++){
-                    $(modalID + ' form').append(
-                         '<div class="related-conversation-body">' + 
-                        '<span class="related-conversation-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>' + 
-                        '<p class="headLine">' + 
-                            '<input type="checkbox" class="related-conversation-check" value="' + response[i].post_id + '">' + 
-                            '<span class="author">' +  response[i].name + '</span>' + 
-                            '<i class="icon-circle"></i>' + 
-                            '<span>posted a <span class="cyanText">Wall post</span></span>' + 
-                            '<i class="icon-circle"></i>' + 
-                            '<span>' + response[i].created_at + '</span>' + 
-                            '<i class="icon-play-circle moreOptions pull-right"></i>' +
-                        '</p>' + 
-                        '<div>' +
-                            '<p>' + response[i].comment_content + '</p>' +
-                            '<!--p><button class="btn btn-primary btn-mini btn-reply" style="margin-left: 5px;">Reply</button></p-->' +
-                        '</div></div>'
-                    );
+                if(response.length>=1){
+                    for(i = 0; i<response.length;i++){
+                        $(modalID + ' form').append(
+                             '<div class="related-conversation-body">' + 
+                            '<span class="related-conversation-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>' + 
+                            '<p class="headLine">' + 
+                                '<input type="checkbox" class="related-conversation-check" value="' + response[i].post_id + '">' + 
+                                '<span class="author">' +  response[i].name + '</span>' + 
+                                '<i class="icon-circle"></i>' + 
+                                '<span>posted a <span class="cyanText">Wall post</span></span>' + 
+                                '<i class="icon-circle"></i>' + 
+                                '<span>' + response[i].created_at + '</span>' + 
+                                '<i class="icon-play-circle moreOptions pull-right"></i>' +
+                            '</p>' + 
+                            '<div>' +
+                                '<p>' + response[i].comment_content + '</p>' +
+                                '<!--p><button class="btn btn-primary btn-mini btn-reply" style="margin-left: 5px;">Reply</button></p-->' +
+                            '</div></div>'
+                        );
+                    }
+                }else{
+                     $(modalID + ' form').append(
+                             '<div class="related-conversation-body">' + 
+                            '<span class="related-conversation-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>' + 
+                            '<h2>No related conversation exists.</h2>'
+                        );
                 }
-                
             }
         });
     });
@@ -142,6 +151,8 @@ $(function(){
             callback : function(response){
                 //console.log(response);
                 $(modalID + " .loader-image").hide();
+                if(response.length == 0)
+                    $(modalId).append("<h2>No related conversation found.</h2>");
                 for(i = 0; i<response.length;i++){
                     $(modalID + ' form').append(
                          '<div class="related-conversation-body">' + 
@@ -204,15 +215,15 @@ $(function(){
                             pass: pass },
                 "type" : "POST",
                 "success" : function(response){
-                                if(response == false){
-                                    me.find('.error-exist').html('Password is incorrect.');
-                                }
-                                else{
-                                    me.find('.message').html('<div class="alert alert-success">' +
-                                    '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
-                                    '<h4>Update</h4> Password updated sucessfully!</div>');
-                                }
-                            },
+                    if(response == false){
+                        me.find('.error-exist').html('Password is incorrect.');
+                    }
+                    else{
+                        me.find('.message').html('<div class="alert alert-success">' +
+                        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
+                        '<h4>Update</h4> Password updated sucessfully!</div>');
+                    }
+                },
                 "failed" : function(){
                     
                 }

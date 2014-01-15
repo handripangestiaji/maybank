@@ -307,3 +307,13 @@ function IsRoleFriendlyNameExist($user_role, $currentPermission){
     
     return false;
 }
+
+
+ function convert_date($dateFormat){
+    $date = substr($dateFormat,3,2);
+    $month = substr($dateFormat,0,2);
+    $year = substr($dateFormat,6,4);
+    
+    $dt = $year.'-'.$month.'-'.$date;
+    return $dt;
+}

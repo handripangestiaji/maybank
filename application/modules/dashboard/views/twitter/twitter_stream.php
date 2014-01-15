@@ -7,7 +7,7 @@
             }
         }
     }
-    //print_r($homefeed);
+    
     $count_unread_homefeed = 0;
     if($homefeed){
         foreach($homefeed as $h){
@@ -16,7 +16,7 @@
             }
         }
     }
-    
+    //print_r($mentions);
     $count_unread_dm = 0;
     if($directmessage){
         foreach($directmessage as $dm){

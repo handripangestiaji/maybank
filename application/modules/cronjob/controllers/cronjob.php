@@ -157,16 +157,17 @@ class Cronjob extends CI_Controller {
     
     function SendScheduledPost(){
         $this->load->model('post_model');
-        $time_now = date('Y-m-d H:i:s');
+        $time_tomorrow = date('Y-m-d H:i:s',strtotime('+1 day'));
         $time_yesterday = date('Y-m-d H:i:s',strtotime('-1 day'));
-        $where = "time_to_post Between '".$time_yesterday."' AND '".$time_now."' AND is_posted is NULL";
+        $where = "time_to_post Between '".$time_yesterday."' AND '".$time_tomorrow."' AND is_posted is NULL";
         $posts = $this->post_model->GetPosts($where);
         foreach($posts as $post){
             $dtz = new DateTimeZone($post->timezone);
             $local_time = new DateTime('now', $dtz);
             $offset = $dtz->getOffset( $local_time ) / 3600;
-            $local_time = date('Y-m-d H:i:s',strtotime(($offset < 0 ? $offset : "+".$offset).' hour'));
-            if($local_time == $post->time_to_post){
+            $local_time = date('Y-m-d H:i',strtotime(($offset < 0 ? $offset : "+".$offset).' hour'));
+            $post_time = date('Y-m-d H:i',strtotime($post->time_to_post));
+            if($local_time == $post_time){
                 //handle if facebook
                 if($post->connection_type == 'facebook'){
                     $post_to = json_decode($this->FbStatusUpdate($post));

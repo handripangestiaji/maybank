@@ -107,7 +107,6 @@
         <script src="<?php echo base_url('media/js/vendor/raphael.2.1.0.min.js')?>"></script>                  <!-- vector graphic plugin / for justgage.js -->
         <script src="<?php echo base_url('media/js/vendor/justgage.js')?>"></script>                           <!-- justgage plugin -->
         <script src="<?php echo base_url('media/js/vendor/bootstrap-multiselect.js')?>"></script>              <!-- multiselect plugin -->
-        <script src="<?php echo base_url('media/js/vendor/bootstrap-datepicker.js')?>"></script>               <!-- datepicker plugin -->
         <script src="<?php echo base_url('media/js/vendor/bootstrap-colorpicker.js')?>"></script>              <!-- colorpicker plugin -->
         <script src="<?php echo base_url('media/js/vendor/parsley.min.js')?>"></script>                        <!-- parsley validator plugin -->
         <script src="<?php echo base_url('media/js/vendor/formToWizard.js')?>"></script>                       <!-- form wizard plugin -->
@@ -127,6 +126,7 @@
 	<script src="<?php echo base_url(); ?>media/js/vendor/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script> <!-- jquery tag-it -->
 	<script src="<?php echo base_url(); ?>media/js/vendor/tag-it.js"></script> <!-- jquery tag-it -->
         
+        <script src="<?php echo base_url('media/js/vendor/bootstrap-datepicker.js')?>"></script>               <!-- datepicker plugin -->
         <script src="<?php echo base_url('media/js/thekamarel.min.js')?>"></script>                            <!-- main project js file -->
         <script src="<?php echo base_url('media/js/thekamarel.js')?>"></script>                            <!-- main project js file -->
 	

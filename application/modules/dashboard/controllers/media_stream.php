@@ -79,10 +79,9 @@ class Media_stream extends CI_Controller {
     	if($is_read != NULL){
     	    if($is_read != 2){
     		$filter['is_read'] = $is_read;
-    	    }
-	    else{
-		$filter['case_id is NOT NULL'] = null;
-	    }
+    	    }else{
+		      $filter['case_id is NOT NULL'] = null;
+	        }
     	}
     
     	$this->load->model('case_model');

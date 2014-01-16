@@ -486,7 +486,7 @@ class facebook_model extends CI_Model
                         social_stream_facebook_conversation_detail b ON b.conversation_id = a.conversation_id LEFT OUTER JOIN
                         fb_user_engaged c ON c.facebook_id=b.sender INNER JOIN 
                         social_stream d ON d.post_id=b.conversation_id LEFT OUTER JOIN
-                        `case` e ON e.post_id=d.post_id");	
+                        `case` e ON e.post_id=d.post_id and e.status='pending'");	
         if(count($filter) > 0){
 	    $this->db->where("detail_id_from_facebook LIKE '%_0' ");
 	    $this->db->where($filter);

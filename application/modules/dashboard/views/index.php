@@ -140,8 +140,8 @@
                                 </select>
                                 <select class="time-sel" id="compose-schedule-minutes">
                                     <option value="">Minutes</option>
-                                    <option value="0">0</option>
-                                    <option value="5">5</option>
+                                    <option value="00">0</option>
+                                    <option value="05">5</option>
                                     <option value="10">10</option>
                                     <option value="15">15</option>
                                     <option value="20">20</option>

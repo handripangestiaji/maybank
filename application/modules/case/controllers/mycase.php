@@ -20,6 +20,12 @@ class mycase extends CI_Controller{
         $user_id = $this->session->userdata('user_id');
         $allPost = $this->input->post();
         
+        $chackCase=$this->case_model->chackCase(array('post_id' => $this->input->post('post_id')));
+        //print_r($chackCase);
+        if(isset($chackCase[0]->status)=='pending'){
+             $reassign=$this->case_model->reassign($this->input->post('post_id'));
+        }
+        
         $validation[] = array('type' => 'required','name' => 'user_id','value' => $user_id, 'fine_name' => "User ID");
         $validation[] = array('type' => 'required','name' => 'product_type','value' => $this->input->post('product_type'), 'fine_name' => "Product Type");
         $validation[] = array('type' => 'required','name' => 'message','value' => $this->input->post('message'), 'fine_name' => "Messages");
@@ -59,6 +65,7 @@ class mycase extends CI_Controller{
                    )
                );
         }
+        
         
     }
     

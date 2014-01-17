@@ -167,4 +167,21 @@ class case_model extends CI_Model{
         return $this->db->update('case',
                         array('read' => $status));
     }
+    
+    function chackCase($filter = array()){
+        
+        $this->db->select("*");
+        $this->db->from("case");
+        $this->db->where($filter);
+        $result = $this->db->get()->result();
+        return $result;
+        
+    }
+    
+    function reassign($post_id){
+          $this->db->where('post_id', $post_id);
+          $this->db->where('status', 'pending');
+	      $this->db->update('case', array('status' => 'reassign',  'solved_at' => date("Y-m-d H:i:s")));   
+    }
+    
 }

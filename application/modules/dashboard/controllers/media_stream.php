@@ -79,10 +79,9 @@ class Media_stream extends CI_Controller {
     	if($is_read != NULL){
     	    if($is_read != 2){
     		$filter['is_read'] = $is_read;
-    	    }
-	    else{
-		$filter['case_id is NOT NULL'] = null;
-	    }
+    	    }else{
+		      $filter['case_id is NOT NULL'] = null;
+	        }
     	}
     
     	$this->load->model('case_model');
@@ -549,7 +548,7 @@ class Media_stream extends CI_Controller {
     
     public function FbReplyPost(){
         header("Content-Type: application/x-json");
-	    $this->load->model('account_model');
+	$this->load->model('account_model');
         $this->load->model('facebook_model');
         $comment = $this->input->post('comment');
         $post_id = $this->input->post('post_id');
@@ -882,13 +881,7 @@ class Media_stream extends CI_Controller {
 	curl_get_file_contents(base_url("cronjob/TwitterUserTimeline"));
 	curl_get_file_contents(base_url("cronjob/FacebookStreamFeed"));
     }
-    
-    public function load_facebook($type){
-	    $access_token = "CAACEdEose0cBAFGdZB2IH8VzRiPuoLAZC0vQ3u7Tc0PuZAyycV0cs5CCng8Xw3qnni9V6YxgeaQ0p9VCdGzfGGHTeUUsLL6exlGXBTAbWl6T7573l4DnKm3kTPh7dQrqqJNpcvMMWZA9K92p7NtS5eLwjmZCKxZCCEQ4jWk5DtccZBMZAEKS2Meqe1yzhetcUKMZD";
-	    
-	    print_r($this->facebook_model->RetrieveFeedFacebook('gizikudotcom', $access_token, $type));
-    }
-    
+
     public function ReadUnread(){
 	  $this->load->model('facebook_model');
 	  if($this->input->post('post_id')){
@@ -902,12 +895,6 @@ class Media_stream extends CI_Controller {
     }
     //=========================================END facebook function=============================================    
 
-
-    //=========================================GENERAL function=============================================    
-    public function publish(){
-	    echo $this->input->post('compose_message');
-    }
-    
     /**
     * Get more content data for auto load paging
     * $group_no = jumlah item terakhir yg di load
@@ -995,23 +982,12 @@ class Media_stream extends CI_Controller {
         //print_r($data);
     }
     
-
-
-    //=========================================END GENERAL function=============================================    
-    
     public function GetUrlPreview(){
 	if (!isset($_GET['url'])) die();
 	$url = urldecode($_GET['url']);
 	$url = 'http://' . str_replace('http://', '', $url); // Avoid accessing the file system
 	echo file_get_contents($url);
-     }
-     
-     
-    function tester(){
-	$this->load->model('case_model');
-	print_r($this->case_model->GetReplyNotification($this->session->userdata('user_id')));
     }
-    
      
     public function GetShortenUrlByCampaignId(){
 	$this->load->model('campaign_url_model');
@@ -1085,10 +1061,6 @@ class Media_stream extends CI_Controller {
 				    'short_code' => $short_code,
 				    "description" => "quick_reply",
 				    'increment' => 0)));
-    }
-    
-    public function CreateImage(){
-	
     }
     
     public function GetAllTags(){

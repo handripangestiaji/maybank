@@ -9,7 +9,7 @@ class case_model extends CI_Model{
         
         
     function LoadCase($filter = array()){
-        $this->db->select("a.*, b.channel_id, b.post_stream_id");
+        $this->db->select("a.*, b.channel_id, b.post_stream_id, b.type");
         $this->db->from("`case` a inner join social_stream b on a.post_id = b.post_id");
         $this->db->where($filter);
         $result = $this->db->get()->result();
@@ -155,13 +155,33 @@ class case_model extends CI_Model{
     }
     
     function chackAssignCase($filter = array()){
-        
         $this->db->select("`a`.*, `b`.`channel_id`, `b`.`post_stream_id`,c.full_name ");
         $this->db->from("`case` a INNER JOIN social_stream b ON a.post_id = b.post_id LEFT OUTER JOIN `user` c ON c.user_id=a.assign_to");
         $this->db->where($filter);
         $result = $this->db->get()->result();
+        return $result;
+    }
+    
+    function UpdateReadStatus($case_id, $status = 1){
+        $this->db->where('case_id', $case_id);
+        return $this->db->update('case',
+                        array('read' => $status));
+    }
+    
+    function chackCase($filter = array()){
         
+        $this->db->select("*");
+        $this->db->from("case");
+        $this->db->where($filter);
+        $result = $this->db->get()->result();
         return $result;
         
     }
+    
+    function reassign($post_id){
+          $this->db->where('post_id', $post_id);
+          $this->db->where('status', 'pending');
+	      $this->db->update('case', array('status' => 'reassign',  'solved_at' => date("Y-m-d H:i:s")));   
+    }
+    
 }

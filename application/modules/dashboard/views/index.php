@@ -8,6 +8,7 @@
                     <?php $group =  $this->users_model->get_group_detail(array('user_group_id'=> $this->session->userdata('group_id')))->result();
                     
                     ?>
+                    <br clear="all" />
                 </div>
             </div>
             <!-- button-refresh end -->
@@ -140,8 +141,8 @@
                                 </select>
                                 <select class="time-sel" id="compose-schedule-minutes">
                                     <option value="">Minutes</option>
-                                    <option value="0">0</option>
-                                    <option value="5">5</option>
+                                    <option value="00">0</option>
+                                    <option value="05">5</option>
                                     <option value="10">10</option>
                                     <option value="15">15</option>
                                     <option value="20">20</option>
@@ -177,12 +178,12 @@
                 </div>
             </div>
             <!-- ==================== END URL SHORTERNER AJAX  ==================== -->
-          <div class="compose-send">
-            <p class="facebook-character-count"><i class="icon-facebook-sign"></i>&nbsp;<span class="compose-fb-char-count">2000</span</p>
-            <p class="twitter-character-count">&nbsp;&nbsp;<i class="icon-twitter-sign"></i>&nbsp;<span class="compose-tw-char-count">140</span></p>
-            <p class="youtube-character-count">&nbsp;&nbsp;<i class="icon-youtube-sign"></i>&nbsp;<span class="compose-yt-char-count">500</span></p>
-            <button class="btn-compose-post btn btn-primary" type="button"><i class="icon-bolt"></i> POST</button>
-          </div>
+            <div class="compose-send">
+                <p class="facebook-character-count"><i class="icon-facebook-sign"></i>&nbsp;<span class="compose-fb-char-count">2000</span</p>
+                <p class="twitter-character-count">&nbsp;&nbsp;<i class="icon-twitter-sign"></i>&nbsp;<span class="compose-tw-char-count">140</span></p>
+                <p class="youtube-character-count">&nbsp;&nbsp;<i class="icon-youtube-sign"></i>&nbsp;<span class="compose-yt-char-count">500</span></p>
+                <button class="btn-compose-post btn btn-primary" type="button"><i class="icon-bolt"></i> POST</button>
+            </div>
           <br clear="all" />
           <div class="compose-post-status green hide">Message Post</div>
         </div>
@@ -190,17 +191,16 @@
         </div>
 
 
-    <div class="pull-right dashboard-search">
-            <!--select style="width: 100px; float: left;">
-                <option style="display:none">Type</option>
-                <option value="user">User</option>
-                <option value="keyword">Keyword</option>
-            </select-->
-        <input class="dashboard-search-field" type="text" placeholder="Search" style="width:200px; float: left; margin-left: 2px;">
-        <button class="btn btn-inverse btn-dashboard-search">
-            <i class="icon-search"></i>
-        </button>
-        </div>      
+    
+    <?php if(IsRoleFriendlyNameExist($this->user_role, "Social Stream_All_Take Action")):?>
+        <div class="pull-right dashboard-search">
+            <input class="dashboard-search-field" type="text" placeholder="Search" style="width:200px; float: left; margin-left: 2px;">
+            <button class="btn btn-inverse btn-dashboard-search">
+                <i class="icon-search"></i>
+            </button>
+        </div>
+    <?php endif;?>
+    
 </div>
 <!-- ==================== END COMPOSE MESSAGE ==================== -->
 

@@ -386,7 +386,7 @@ class Users_model extends CI_Model
     }
     
     function get_collection_detail($filter = array()){
-        $this->db->select('b.role_friendly_name, role_name');
+        $this->db->select('b.role_friendly_name, role_name, b.role_group');
         $this->db->from('role_collection_detail a inner join application_role b on a.app_role_id = b.app_role_id');
         if(count($filter) > 0)
             $this->db->where($filter);

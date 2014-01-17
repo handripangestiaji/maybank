@@ -1,24 +1,38 @@
 <?php
     $value = array(1 => 'dashboard',8 => 'channels',3 => 'cms',4 => 'manage_users', 5 => 'users', 6 => 'reports', 7 => 'publisher', 2 => 'channelmg');
+    $value_permission = array(
+	1 => '',
+	8 => 'Social Channel Management',
+	6 => 'Reporting',
+	7 => 'Publisher',
+	3 => 'Content Management',
+	4 => 'User Management',
+	2 => 'Social Channel Management',
+	5 => 'User Management'
+    );
     for($i=0; $i< count($value); $i++){
 	$active[$i+1] = "";
     }
     for($i=1;$i<9;$i++){
-	if($this->uri->segment(2) === $value[$i]){
-	    $active[$i] = 'active';
-	    break;
-	}
+	if(!IsRoleFriendlyNameExist($this->user_role, $value_permission[$i], 'role_group'))
+	    $active[$i] = 'hide';
 	else{
-	    if($this->uri->segment(1) === $value[$i]){
+	    if($this->uri->segment(2) === $value[$i]){
 		$active[$i] = 'active';
+		break;
 	    }
-	    else
-		$active[$i] = '';
+	    else{
+		if($this->uri->segment(1) === $value[$i]){
+		    $active[$i] = 'active';
+		}
+		else
+		    $active[$i] = '';
+	    }   
 	}
 	
     }
 ?>
-
+<style type="text/css">.hide{display: none!important;}</style>
 <div class="container-fluid">
     <ul class="nav">
         <li class="collapseMenu"><a href="#"><i class="icon-double-angle-left"></i>hide menu<i class="icon-double-angle-right deCollapse"></i></a></li>

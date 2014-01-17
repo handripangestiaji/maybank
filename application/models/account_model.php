@@ -212,4 +212,20 @@ class account_model extends CI_Model
         return $result;
     }
     
+    function ReadSinglePost($post_id, $type){
+	$social_stream_type = array(
+	    "facebook_conversation" => "social_stream_fb_conversation",
+	    "facebook" => "social_stream_facebook",
+	    "twitter" => "social_stream_twitter",
+	    "twitter_dm" => "twitter_direct_message",
+	    "facebook_comment" => "social_stream_fb_comments",
+	    "youtube_post" => "social_stream_youtube",
+	    "youtube_comment" => "social_stream_youtube_comment"
+	);
+	
+	$this->db->select('*');
+	$this->db->from("social_stream a inner join ". $social_stream_type[$type]." b on a.post_id = b.post_id");
+	$this->db->where();
+    }
+    
 }

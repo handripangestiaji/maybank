@@ -15,8 +15,8 @@ class Dashboard extends MY_Controller {
 		$this->load->library('session');
 		$this->load->helper('url');
 		$this->load->helper('array');
-	  $this->load->helper('form');
-	  $this->load->helper('date');
+		$this->load->helper('form');
+		$this->load->helper('date');
 		
 		$this->session->set_userdata('access_token', $this->config->item('twitter_access_token'));
 		$this->session->set_userdata('access_token_secret', $this->config->item('twitter_access_secret'));
@@ -129,26 +129,5 @@ class Dashboard extends MY_Controller {
 		}
 
 	}
-	
-	public function load_facebook($type){
-		$access_token = "CAACEdEose0cBAFGdZB2IH8VzRiPuoLAZC0vQ3u7Tc0PuZAyycV0cs5CCng8Xw3qnni9V6YxgeaQ0p9VCdGzfGGHTeUUsLL6exlGXBTAbWl6T7573l4DnKm3kTPh7dQrqqJNpcvMMWZA9K92p7NtS5eLwjmZCKxZCCEQ4jWk5DtccZBMZAEKS2Meqe1yzhetcUKMZD";
-		
-		print_r($this->facebook_model->RetrieveFeedFacebook('gizikudotcom', $access_token, $type));
-	}
-    
-	/**
-	 * Reset session data
-	 * @access	private
-	 * @return	void
-	 */
-     
-	public function reset_session()
-	{
-		$this->session->unset_userdata('access_token');
-		$this->session->unset_userdata('access_token_secret');
-		$this->session->unset_userdata('request_token');
-		$this->session->unset_userdata('request_token_secret');
-		$this->session->unset_userdata('twitter_user_id');
-		$this->session->unset_userdata('twitter_screen_name');
-	}
+
 }

@@ -464,6 +464,7 @@ $(function(){
                         streamId = $(this).find('li:nth-child(' + i + ') input').val();
                         
                         if($(this).find('li:nth-child(' + i + ') a').hasClass('facebook_stream')){
+                            streamType = "facebook";
                             urlToLoad += "facebook_stream/" + streamId
                             $(this).closest('div').children('button').html('<i class="icon-facebook"></i><h2>Facebook&nbsp;</h2><i class="icon-caret-down"></i>');
                             $(this).closest('.containerHeadline').css( "background-color", "#3B5998" );
@@ -471,20 +472,24 @@ $(function(){
                             
                         }
                         else if($(this).find('li:nth-child(' + i + ') a').hasClass('twitter_stream')){
+                            streamType = "twitter";
                             urlToLoad += "twitter_stream/" + streamId
                             $(this).closest('div').children('button').html('<i class="icon-twitter"></i><h2>Twitter&nbsp;</h2><i class="icon-caret-down"></i>');
                             $(this).closest('.containerHeadline').css( "background-color", "#4099FF" );
                             $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');
-                            
                         }
                         else{
+                            streamType = "youtube";
                             urlToLoad += "youtube_stream/" + streamId
                             $(this).closest('div').children('button').html('<i class="icon-youtube"></i><h2>Youtube&nbsp;</h2><i class="icon-caret-down"></i>');
                             $(this).closest('.containerHeadline').css( "background-color", "#FF3333" );
                             $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');  
                         }
                         $(this).closest('.containerHeadline').next().load(urlToLoad, function(){
-                            $(this).ToCase();
+                            var hashUrl = window.location.hash;
+                            var splitUrl = hashUrl.split('/');
+                            if(splitUrl[1] == streamType)
+                                $(this).ToCase();
                         });
                        
                     });
@@ -899,6 +904,9 @@ $(function(){
                             }
                             
                             if(confirmed == true){
+                                $(".btn-compose-post").html('POSTING...');
+                                $(".btn-compose-post").prop('disabled',true);
+                                
                                 if(scheduleTime == ''){
                                     $('.compose-post-status').show();
                                     $('.compose-post-status').removeClass('green');
@@ -973,6 +981,9 @@ $(function(){
                                                             $('.compose-insert-link-short-url-hidden').val('');
                                                             $('#url-show').find('textarea').val('');
                                                             $('#url-show').find('p').html('');
+                                                            
+                                                            $(".btn-compose-post").html('<i class="icon-bolt"></i> POST');
+                                                            $(".btn-compose-post").prop('disabled',false);
                                                        });
                                                     }
                                                     else{
@@ -981,7 +992,10 @@ $(function(){
                                                         $('.compose-post-status').addClass('red');
                                                         $('.compose-post-status').show();
                                                         $('.compose-post-status').html('Post to Facebook Failed');    
-                                                        $('.compose-post-status').fadeOut(7500)  
+                                                        $('.compose-post-status').fadeOut(7500);
+                                                        
+                                                        $(".btn-compose-post").html('<i class="icon-bolt"></i> POST');
+                                                        $(".btn-compose-post").prop('disabled',false);
                                                     }
                                                 },
                                             });
@@ -1040,6 +1054,9 @@ $(function(){
                                                                 $('.compose-insert-link-short-url-hidden').val('');
                                                                 $('#url-show').find('textarea').val('');
                                                                 $('#url-show').find('p').html('');
+                                                                
+                                                                $(".btn-compose-post").html('<i class="icon-bolt"></i> POST');
+                                                                $(".btn-compose-post").prop('disabled',false);
                                                             });
                                                         }
                                                         else{
@@ -1049,6 +1066,9 @@ $(function(){
                                                             $('.compose-post-status').show();
                                                             $('.compose-post-status').html('Post to Twitter Failed');    
                                                             $('.compose-post-status').fadeOut(7500);
+                                                            
+                                                            $(".btn-compose-post").html('<i class="icon-bolt"></i> POST');
+                                                            $(".btn-compose-post").prop('disabled',false);
                                                         }
                                                     },
                                                 });
@@ -1099,6 +1119,9 @@ $(function(){
                                         $('.compose-insert-link-short-url-hidden').val('');
                                         $('#url-show').find('textarea').val('');
                                         $('#url-show').find('p').html('');
+                                        
+                                        $(".btn-compose-post").html('<i class="icon-bolt"></i> POST');
+                                        $(".btn-compose-post").prop('disabled',false);
                                     });
                                 }
                                 
@@ -1456,27 +1479,26 @@ $(function(){
                                     channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
                                 },
                                 success: function(response){
-                                    alert(response);
-                                    
-                                     delButton.removeAttr('disabled').html('SEND');
+                                    delButton.removeAttr('disabled').html('SEND');
                                 }
-                                                                
                             });
                             
                         });
                          $(this).on('click','.pointerCase',
                             function() {
-                                var pointer=$(this).closest('.pointerCase').find('.pointer-case').val();
-                                //alert(pointer);
-                                var tes=$('.content').find('.case_'+pointer).html();
-                                if(tes){
-                                  //  alert("ada:"+tes);   
-                                }else{
-                                    //alert("ga ada:"+tes);
-                                }
-                                $(document.body).animate({
-                                    'scrollTop':$('.case_'+pointer).offset().top
-                                }, 2000);
+                               $(this).ToCase();
+                               var thisElement = $(this);
+                               $.ajax({
+                                    url : BASEURL + "case/mycase/UpdateReadStatus",
+                                    data : {
+                                        case_id : $(this).find("input.pointer-case").val()
+                                    },
+                                    success : function(response){
+                                        if(response.success){
+                                            thisElement.find(".notifHead").toggleClass('');
+                                        }
+                                    }
+                               });
                             });
                     
                       /*load more content*/  
@@ -1875,7 +1897,7 @@ $.fn.RefreshAllStream = function(){
 $.fn.ToCase = function(type){
     var hashUrl = window.location.hash;
     var splitUrl = hashUrl.split('/');
-    if(splitUrl.length > 0 ){
+    if(splitUrl.length == 3 ){
         var id = $('#post' + splitUrl[2]).closest('.floatingBoxContainers').attr('id');
         
         $('#' + id).parent().find('ul').hide();
@@ -1889,6 +1911,12 @@ $.fn.ToCase = function(type){
                 $('#post' + splitUrl[2]).toggle('bounce', { times: 3, complete:function(){
                                         $(this).removeAttr('style');
                                 }}, 'slow');
+            });
+        }
+        else{
+            $.ajax({
+                "url" : "",
+                "data" : "post_id="
             });
         }
     }    

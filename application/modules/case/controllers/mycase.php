@@ -99,6 +99,33 @@ class mycase extends CI_Controller{
                         "result" => $solved_case
                     )
                 );
+            else
+                echo json_encode(array(
+                        "success" => false,
+                        "message" => "Resolving case failed.",
+                        "result" => $solved_case
+                    )
+                );
+        }
+    }
+    
+    
+    function UpdateReadStatus(){
+        if($this->input->is_ajax_request()){
+            $case_id = $this->input->get('case_id');
+            $read_case = $this->case_model->UpdateReadStatus($case_id,1);
+            
+            if($read_case)
+                echo json_encode(array(
+                        "success" => true,
+                        "message" => "Case $case_id read."
+                    )
+                );
+            else
+                echo json_encode(array(
+                   "success" => false,
+                   "message" => "Case update failed."
+                ));
         }
     }
     

@@ -1896,7 +1896,10 @@ $.fn.ToCase = function(type){
             });
         }
         else{
-            
+            $.ajax({
+                "url" : "",
+                "data" : "post_id="
+            });
         }
     }    
 };

@@ -893,6 +893,22 @@ class Media_stream extends CI_Controller {
 	    echo 0;
 	  
     }
+    
+    
+    public function ReadSinglePost(){
+	$post_id = $this->input->get('post_id');
+	$type = $this->input->get('type');
+	
+	if($type == "facebook"){
+	    
+	}
+	else if($type == "twitter"){
+	    
+	}
+	else{
+	    
+	}
+    }
     //=========================================END facebook function=============================================    
 
     /**

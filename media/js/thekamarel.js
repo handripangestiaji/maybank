@@ -904,6 +904,9 @@ $(function(){
                             }
                             
                             if(confirmed == true){
+                                $(".btn-compose-post").html('POSTING...');
+                                $(".btn-compose-post").prop('disabled',true);
+                                
                                 if(scheduleTime == ''){
                                     $('.compose-post-status').show();
                                     $('.compose-post-status').removeClass('green');
@@ -978,6 +981,9 @@ $(function(){
                                                             $('.compose-insert-link-short-url-hidden').val('');
                                                             $('#url-show').find('textarea').val('');
                                                             $('#url-show').find('p').html('');
+                                                            
+                                                            $(".btn-compose-post").html('<i class="icon-bolt"></i> POST');
+                                                            $(".btn-compose-post").prop('disabled',false);
                                                        });
                                                     }
                                                     else{
@@ -986,7 +992,10 @@ $(function(){
                                                         $('.compose-post-status').addClass('red');
                                                         $('.compose-post-status').show();
                                                         $('.compose-post-status').html('Post to Facebook Failed');    
-                                                        $('.compose-post-status').fadeOut(7500)  
+                                                        $('.compose-post-status').fadeOut(7500);
+                                                        
+                                                        $(".btn-compose-post").html('<i class="icon-bolt"></i> POST');
+                                                        $(".btn-compose-post").prop('disabled',false);
                                                     }
                                                 },
                                             });
@@ -1045,6 +1054,9 @@ $(function(){
                                                                 $('.compose-insert-link-short-url-hidden').val('');
                                                                 $('#url-show').find('textarea').val('');
                                                                 $('#url-show').find('p').html('');
+                                                                
+                                                                $(".btn-compose-post").html('<i class="icon-bolt"></i> POST');
+                                                                $(".btn-compose-post").prop('disabled',false);
                                                             });
                                                         }
                                                         else{
@@ -1054,6 +1066,9 @@ $(function(){
                                                             $('.compose-post-status').show();
                                                             $('.compose-post-status').html('Post to Twitter Failed');    
                                                             $('.compose-post-status').fadeOut(7500);
+                                                            
+                                                            $(".btn-compose-post").html('<i class="icon-bolt"></i> POST');
+                                                            $(".btn-compose-post").prop('disabled',false);
                                                         }
                                                     },
                                                 });
@@ -1104,6 +1119,9 @@ $(function(){
                                         $('.compose-insert-link-short-url-hidden').val('');
                                         $('#url-show').find('textarea').val('');
                                         $('#url-show').find('p').html('');
+                                        
+                                        $(".btn-compose-post").html('<i class="icon-bolt"></i> POST');
+                                        $(".btn-compose-post").prop('disabled',false);
                                     });
                                 }
                                 

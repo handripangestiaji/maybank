@@ -25,7 +25,7 @@ class case_model extends CI_Model{
         return $result;
     }
     
-    function CreateCase($case){
+    function CreateCase($case, $created_by){
         $related_conversation = $case['related_conversation'];
         $conv = explode(',', $related_conversation);
         unset($case['related_conversation']);
@@ -58,12 +58,37 @@ class case_model extends CI_Model{
         
         $user = is_array($user) && count($user) > 0 ? $user[0] : $user;
         if($case['email'])
-            $this->email->cc($case['email']);
+            $this->email->to($case['email']);
         
-        $this->email->to($user->email);
-       
+        if($user)
+            $this->email->to($user->email);
         
+        $email_separated = explode(',', $case['email']);
         
+        foreach($email_separated as $email){
+            $user_assign_detail = $this->ReadAllUser(
+                array(
+                    "email" => $email
+                )
+            );
+            if($user_assign_detail != null && is_array($user_assign_detail))
+                $user_assign_detail = count($user_assign_detail) > 0 ? $user_assign_detail[0] : null;
+            $assign_detail_case = array(
+                'case_id' => $insert_id,
+                'type' => 'user',
+                'email' => $email,
+                'user_id' => isset($user_assign_detail->user_id) ? $user_assign_detail->user_id : null,
+                'is_group_assign' => false
+            );
+            $email_store = array(
+                'email' => $email,
+                'created_at' => date("Y-m-d H:i:s")
+            );
+            
+            $this->db->insert('case_assign_detail', $assign_detail_case);
+            $this->db->insert('email_store', $email_store);
+            
+        }
         
         $solved_case = $this->LoadCase(array('case_id' => $insert_id));
         if(count($solved_case) > 0){
@@ -74,7 +99,7 @@ class case_model extends CI_Model{
                 'channel_id' => $solved_case->channel_id,
                 'created_at' => date("Y-m-d H:i:s"),
                 'post_id' => $solved_case->post_id,
-                'created_by' => $user->user_id
+                'created_by' => $created_by
             );
             $solved_case->action_id = $this->account_model->CreateChannelAction($channel_action);
         }
@@ -184,4 +209,12 @@ class case_model extends CI_Model{
 	      $this->db->update('case', array('status' => 'reassign',  'solved_at' => date("Y-m-d H:i:s")));   
     }
     
+    
+    function SearchUserByEmail($email){
+        $this->db->select('email, username');
+        $this->db->from('user');
+        $this->db->like('email', $email);
+        $this->db->or_like('username', $email);
+        return $this->db->get()->result();
+    }
 }

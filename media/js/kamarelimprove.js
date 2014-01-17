@@ -9,11 +9,11 @@ $(function(){
         $(this).find('button[type=submit]').html('<i class="icon-stop icon-large"></i> Assigning case...');
         var openButton = $(this).closest('li').find('button:first');
         
-        $(this).AsyncPost({
+        $.ajax({
             "url" : BASEURL + "case/mycase/CreateCase",
-            "urlParameter" : $(this).serialize(),
-            "reload" : false,
-            "callback" : function(response){
+            "data" : $(this).serialize(),
+            "type" : "POST",
+            "success" : function(response){
                 if(response.success){
                     thisElement.find('input[type=text], textarea, select').each(function(){
                         $(this).val(''); 
@@ -36,8 +36,13 @@ $(function(){
                     '<h4>Something Wrong!</h4>' + response.message + ' See detail below:' + errorMessages +'</div>');
                 }
                 thisElement.find('button[type=submit]').removeAttr('disabled').html('<i class="icon-ok-circle icon-large"></i> Assign');
-                
-                
+                thisElement.find(".email").tagit("removeAll");
+            },
+            "error" : function(response){
+                thisElement.find('.message').html('<div class="alert alert-error">' +
+                    '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
+                    '<h4>Something Wrong! </h4><p>System failed when creating new case. </p>');
+                thisElement.find('button[type=submit]').removeAttr('disabled').html('<i class="icon-ok-circle icon-large"></i> Assign');
             }
         });
         e.preventDefault();
@@ -346,30 +351,9 @@ $(function(){
             });
         }
     });
+    
+    
 });
 
 
-    var Timezone = $.format.date(new Date(), "tz");
-	(function ($) {
-    $.fn.localTimeFromUTC = function (format) {
-        return this.each(function () {
-
-            // get time offset from browser
-            var currentDate = new Date();
-            var offset = -(currentDate.getTimezoneOffset() / 60);
-
-            // get provided date
-            var tagText = $(this).html();            
-            var givenDate = new Date($.format.date(tagText, format));
-                        
-            // apply offset
-            var hours = givenDate.getHours();
-            hours += offset;
-            givenDate.setHours(hours);
-
-            // format the date
-            var localDateString = $.format.date(givenDate, format);
-            $(this).html(localDateString);
-        });
-    };
-})(jQuery);
+    

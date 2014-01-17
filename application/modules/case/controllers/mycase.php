@@ -49,7 +49,7 @@ class mycase extends CI_Controller{
                 "created_at" => date("Y-m-d H:i:s")
             );
             
-            $case['case_id'] = $this->case_model->CreateCase($case);
+            $case['case_id'] = $this->case_model->CreateCase($case, $this->session->userdata('user_id'));
             echo json_encode(array(
                         "success" => true,
                         "message" => "Assigning case successfully done.",
@@ -129,5 +129,8 @@ class mycase extends CI_Controller{
         }
     }
     
- 
+    function SearchEmail(){
+        $search_value = $this->input->get('term');
+        echo json_encode($this->case_model->SearchUserByEmail($search_value));
+    }
 }

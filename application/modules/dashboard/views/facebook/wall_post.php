@@ -33,7 +33,7 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
     if($fb_feed[$i]->attachment){ 
         $attachment=json_decode($fb_feed[$i]->attachment);
         $attachment = isset($attachment->media) ? $attachment->media: null;
-        
+        //print_r($attachment);
         for($att=0;$att<count($attachment);$att++){
            if($attachment[$att]->type=='photo'){
             
@@ -44,8 +44,25 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
                             <img src="'.base_url('dashboard/media_stream/SafePhoto?photo=').$src.'" />
                         </div>';
            }elseif($attachment[$att]->type=='link'){
-                echo    "<a href='".$attachment[$att]->href."'>".$attachment[0]->href."</a>";
-           }elseif($attachment[$att]->type=='video'){?>
+
+              
+//                print_r($attachment);?>
+            <center>
+            <div class="compose-schedule" style="width: 85%;" >
+                <div class="compose-form img-attached">
+                    <!-- close button for image attached -->
+                    <div>
+                        <div style="float: left;min-height:30px; border-right: 1px solid  #616161; padding: 5px;" >
+                            <?php echo '<img id="compose-preview-img" src="'.$attachment[$att]->src.'" style="widht:auto;"/>';?>
+                        </div>
+                        <!-- img-place end -->
+                        <div style="float: left;min-height:30px;  position:relative; padding: 5px;"><?php echo "<a href='".$attachment[$att]->href."'>".$attachment[0]->href."</a>"; ?></div>
+                    </div>
+                    <!-- img-list-upload end -->  
+                </div>
+            </div>  <br clear="all" />
+           </center>
+           <?php }elseif($attachment[$att]->type=='video'){?>
                 <iframe width="90%" height="240" src="<?php echo $attachment[$att]->video->source_url."?version=3&autohide=1&autoplay=0"?>"></iframe>
                 <a href="<?php echo $attachment[$att]->video->display_url?>" ><?php echo $attachment[0]->alt?></a>
        <?php 
@@ -79,7 +96,9 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
         <br />
         <?php 
             $comment=$this->facebook_model->RetriveCommentPostFb($fb_feed[$i]->social_stream_post_id);
-            //print_r($comment);
+            echo "<pre>";
+            print_r($comment);
+            echo "</pre>";
             for($j=0;$j<count($comment);$j++):
             
         ?>
@@ -100,7 +119,8 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
             <div class="engagement-comment">
                 <p>"<?php echo $comment[$j]->comment_content; ?>"</p>
                 
-                <?php if(isset($isMyCase[0]->assign_to)){
+                <?php 
+                    if(isset($isMyCase[0]->assign_to)){
                         if($isMyCase[0]->assign_to==$this->session->userdata('user_id') or ($isMyCase[0]->solved_by)){
                 ?>
                 <p>

@@ -1758,7 +1758,7 @@ $(document).ready(function(){
         },
         eventRender: function(event, element){
             var deleteable;
-            if(event.is_posted != '1'){
+            if(event.is_posted != '1' && event.user_role == 'Admin'){
                 deleteable = "<div class='pull-right'><button type='button' class='btn btn-danger btn-mini btn-delete-schedule-post'><i class='icon-remove'></i></a></div>";
             }
             else{

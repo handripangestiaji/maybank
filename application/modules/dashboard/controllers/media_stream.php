@@ -1096,7 +1096,8 @@ class Media_stream extends CI_Controller {
 				'post_date' => $new_short_date,
 				'post_time' => $short_time,
 				'is_posted' => $post->is_posted,
-				'allDay' => false
+				'allDay' => false,
+				'user_role' =>  $this->session->userdata('role_name')
 			       );
 	    }
 	}

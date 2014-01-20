@@ -29,6 +29,46 @@
         <span class="btn-close pull-right">Close <i class="icon-remove-sign"></i></span>
         <br clear="all" />
         <div class="sidebarLine"></div>
+        
+        <div class="sidebarInfo">
+            <?php if(isset($case)):?>
+            <!--div class="replies"><span class="badge cyan"><?php echo count($reply_pending); ?></span> Replies</div-->
+            <div class="newCases"><span class="badge purple"><?php echo count($case); ?></span> New Cases</div>
+            <?php endif;?>
+        </div>
+        <div class="sidebarLine"></div>
+        <ul class="tasksList">
+            <?php foreach($case as $each_case):?>
+            <li class="pointerCase" >
+                <input type="hidden" name="pointer" class="pointer-case" value="<?php echo $each_case->case_id?>" />
+                <div class="notifHead purple">
+                    CASE ID: #<?php echo $each_case->case_id?>
+                </div>
+                <div class="notifBody">
+                    <?php
+                        $timezone = new DateTimeZone($this->config->item('timezone'));
+                        $date = new DateTime($each_case->created_at, $timezone);
+                        echo $date->format("M d, Y, h:i A");
+                    ?>
+                </div>
+            </li>
+            <?php endforeach?>
+            <?php foreach($reply_pending as $pending):?>
+            <!--li>
+                <div class="notifHead purple">
+                    New Reply POST ID : #<?php echo $pending->id?>
+                </div>
+                <div class="notifBody">
+                    <?php
+                        $timezone = new DateTimeZone($this->config->item('timezone'));
+                        $date = new DateTime($each_case->created_at, $timezone);
+                        echo $date->format("M d, Y, h:i A");
+                    ?>
+                </div>
+            </li-->
+            <?php endforeach;?>
+        </ul>
+        
         <div class="sidebarInfo">
             <?php if(isset($case)):?>
             <!--div class="replies"><span class="badge cyan"><?php echo count($reply_pending); ?></span> Replies</div-->

@@ -155,10 +155,18 @@ class ChannelMg extends MY_Controller {
                 'mine' => 'true',
             ));
             foreach ($channelsResponse['items'] as $channel) {
-                $channel = array(
-                    "name"  => $channel['contentDetails']['googlePlusUserId'],
+                
+                $data_youtube = json_decode(curl_get_file_contents("http://gdata.youtube.com/feeds/api/users/".$channel['id']."?alt=json"));
+                $json_youtube = array(
+                        'g_plus_id' => $data_youtube->entry->{'yt$googlePlusUserId'},
+                        'youtube_id' => $channel['id'],
+                        'youtube_username' => $data_youtube->entry->{'yt$username'}->{'$t'},
+                        'youtube_image' => $data_youtube->entry->{'media$thumbnail'}->url
+                );
+                $channel_saved = array(
+                    "name"  => $data_youtube->entry->title->{'$t'},
                     "oauth_token" => $access_token,
-                    "oauth_secret" => '',
+                    "oauth_secret" => json_encode($json_youtube),
                     "token_created_at" => date("Y-m-d H:i:s", $access_token_decode->created),
                     "social_id" => $channel['contentDetails']['relatedPlaylists']['uploads'],
                     "is_fb_page" => 0,
@@ -166,7 +174,8 @@ class ChannelMg extends MY_Controller {
                     "connection_type" => "youtube",
                     "created_by" => $this->session->userdata('user_id')
                 );
-                $this->account_model->SaveChannel($channel);
+                $this->account_model->SaveChannel($channel_saved);
+                //print_r($channel_saved);
             }
             redirect('channels/channelmg');
         }else{

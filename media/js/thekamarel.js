@@ -486,6 +486,7 @@ $(function(){
                             $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');  
                         }
                         $(this).closest('.containerHeadline').next().load(urlToLoad, function(){
+                            
                             $('.email').tagit({
                                 autocomplete : {
                                     source:  function( request, response ) {
@@ -775,7 +776,7 @@ $(function(){
                                        });
                                     }
                                     else{
-                                        alert(new_data.message);
+                                        console.log(data);
                                     }
                                 }
                             });
@@ -1652,7 +1653,7 @@ $(function(){
     
     $(document).ready(function() {
         var new_height = $( window ).height() - 225;
-        $('.center').height(new_height);
+        $('.boxStream').height(new_height);
     });
     
     /*=============================================================================================
@@ -1776,7 +1777,7 @@ $(document).ready(function(){
         },
         eventRender: function(event, element){
             var deleteable;
-            if(event.is_posted != '1'){
+            if(event.is_posted != '1' && event.user_role == 'Admin'){
                 deleteable = "<div class='pull-right'><button type='button' class='btn btn-danger btn-mini btn-delete-schedule-post'><i class='icon-remove'></i></a></div>";
             }
             else{

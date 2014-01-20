@@ -28,6 +28,7 @@
 <script type="text/javascript">
     $(document).ready(function(){
 	var tz = jstz.determine(); // Determines the time zone of the browser client
+	
 	$('#timezone').val(tz.name());
 	$('#submit').click(function(){
 	    $('#login_form').submit();

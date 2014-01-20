@@ -1,9 +1,9 @@
 <?php
 $total_groups = ceil($countFeed[0]->count_post_id/$this->config->item('item_perpage'));
-$timezone=new DateTimeZone($this->config->item('timezone'));
+$timezone=new DateTimeZone($this->session->userdata('timezone'));
 for($i=0;$i<count($homefeed);$i++){
 ?>
-    <li <?php if($homefeed[$i]->is_read==0){echo 'class="unread-post"';} ?>>
+    <li <?php if($homefeed[$i]->is_read==0){echo 'class="unread-post"';} ?> id="post<?=$homefeed[$i]->social_stream_post_id?>">
         <div class="message"></div>
         <input type="hidden" class="postId" value="<?php echo $homefeed[$i]->social_stream_post_id; ?>" />
         <div class="circleAvatar"><img src="<?php echo base_url('dashboard/media_stream/SafePhoto?photo=').$homefeed[$i]->profile_image_url;?>" alt=""></div>
@@ -42,15 +42,16 @@ for($i=0;$i<count($homefeed);$i++){
     <?php if(isset($entities->media[0])){
             echo "<a href='#modal-".$homefeed[$i]->social_stream_post_id."' data-toggle='modal' ><img src='".base_url('dashboard/media_stream/SafePhoto?photo=').$entities->media[0]->media_url_https."' /></a>";
             echo '<div id="modal-'.$homefeed[$i]->social_stream_post_id.'" class="attachment-modal modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
-                            <button type="button" class="close " data-dismiss="modal"><i class="icon-remove"></i></button>
                             <img src="'.base_url('dashboard/media_stream/SafePhoto?photo=').$entities->media[0]->media_url_https.'" />
+                            <button type="button" class="close " data-dismiss="modal"><i class="icon-remove"></i></button>
                 </div>';
             }
     ?>
     </p>
     <p>
     <?php if($homefeed[$i]->case_id):?>
-        <button type="button" class="btn btn-purple btn-mini" value="<?php echo $homefeed[$i]->case_id?>">CASE ID #<?php echo $homefeed[$i]->case_id?></button>
+        <button type="button" class="btn btn-purple btn-mini" value="<?php echo $homefeed[$i]->case_id?>">CASE ID #<?php echo $homefeed[$i]->case_id.' Assign to '.$homefeed[$i]->case->assign_to?></button>
+        
     <?php endif?>
     <?php if(count($homefeed[$i]->reply_post) > 0):?>
         <button type="button" class="btn btn-inverse btn-mini" value="<?php echo $homefeed[$i]->reply_post[0]->response_post_id?>">REPLIED</button>
@@ -100,9 +101,9 @@ for($i=0;$i<count($homefeed);$i++){
                         <span>2 hours ago</span>
                     </p>
                     <div>
-                        <p>"<?php echo $comment[$j]->text?>"</p>
-                        <p><input type="hidden" class="str_id" value="<?php echo $comment[$j]->post_stream_id; ?>" /><button type="button" class="btn btn-warning btn-mini">OPEN</button>
-                        <button class="retweet btn btn-primary btn-mini" style="margin-left: 5px;">RE-TWEET</button></p>
+                        <p><?php echo $comment[$j]->text?></p>
+                        <!--p><input type="hidden" class="str_id" value="<?php echo $comment[$j]->post_stream_id; ?>" /><button type="button" class="btn btn-warning btn-mini">OPEN</button>
+                        <button class="retweet btn btn-primary btn-mini" style="margin-left: 5px;">RE-TWEET</button></p-->
                     </div>
                 </div>
         <?php } ?>

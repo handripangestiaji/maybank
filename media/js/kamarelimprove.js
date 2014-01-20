@@ -307,7 +307,14 @@ $(function(){
                         openButton.removeClass('btn-warning').addClass('btn-inverse').html('REPLIED').val('');
                         setTimeout(function(){
                             me.closest('.reply-field').toggle('slow');
-                        }, 3000);
+                            var currentHtml = me.closest('li');
+                            currentHtml.find('.reply-preview-img').toggle('slow');
+                            me.closest('ul').prepend(currentHtml);
+                            me.closest('.subStream').animate({
+                                scrollTop: 0
+                            });
+                            
+                        }, 1500);
                         
                     }
                 }
@@ -320,7 +327,7 @@ $(function(){
             },
             "error" :  function( jqXHR, textStatus, errorThrown ){
                 buttonSubmit.removeAttr('disabled').html('SEND');
-                 me.find('.message').html('<div class="alert alert-danger">' +
+                me.find('.message').html('<div class="alert alert-danger">' +
                         '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
                         '<strong>Error!</strong> Replying tweet failed.</div>');
             }

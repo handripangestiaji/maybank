@@ -284,10 +284,10 @@ class twitter_model extends CI_Model
     
     public function ReadDMFromDb($filter,$limit){
         $filter['b.type'] = 'inbox';
-         $this->db->select("a.post_id as social_stream_post_id, a.channel_id, a.is_read, a.post_stream_id, a.retrieved_at, a.created_at as social_stream_created_at, b.text as dm_text, b.*,c.*, d.*, e.*, a.type as social_stream_type");
+         $this->db->select("f.social_id, a.post_id as social_stream_post_id, a.channel_id, a.is_read, a.post_stream_id, a.retrieved_at, a.created_at as social_stream_created_at, b.text as dm_text, b.*,c.*, d.*, e.*, a.type as social_stream_type");
          $this->db->from("social_stream a inner join twitter_direct_messages b on a.post_id = b.post_id
             LEFT OUTER JOIN twitter_user_engaged c ON c.twitter_user_id=b.sender left join `case` d on d.post_id = a.post_id and d.status='pending'
-            LEFT JOIN twitter_reply e on a.post_id = e.reply_to_post_id 
+            LEFT JOIN twitter_reply e on a.post_id = e.reply_to_post_id  inner join channel f on f.channel_id = a.channel_id
             "); 
          if(count($filter) > 0)
 	     $this->db->where($filter);
@@ -311,7 +311,7 @@ class twitter_model extends CI_Model
     
     
     public function ReadTwitterData($filter,$limit){
-        $this->db->select("e.social_id, a.channel_id, a.post_stream_id, a.retrieved_at, a.created_at as social_stream_created_at, a.type as social_stream_type, 
+        $this->db->select("e.social_id, a.channel_id, a.post_stream_id, a.retrieved_at, a.created_at as social_stream_created_at, a.type as social_stream_type, a.replied_count,
                             b.*, c.screen_name, c.profile_image_url, c.name, c.description, c.following, a.is_read, d.*,a.post_id as social_stream_post_id");
         $this->db->from("social_stream a INNER JOIN social_stream_twitter b ON a.post_id = b.post_id 
                         INNER JOIN twitter_user_engaged c ON
@@ -320,7 +320,9 @@ class twitter_model extends CI_Model
         if(count($filter) > 0)
 	    $this->db->where($filter);
         $this->db->limit($limit);
-        $this->db->order_by('a.post_stream_id','desc ');           
+        $this->db->order_by('a.replied_count', 'desc');
+        $this->db->order_by('a.post_stream_id','desc ');
+        
         $result = $this->db->get()->result();
         
         foreach($result as $row){
@@ -356,6 +358,7 @@ class twitter_model extends CI_Model
     
     public function CreateReply($reply, $tweet_replied, $channel, $type = "reply"){
         if(isset($tweet_replied->id_str)){
+            $this->db->trans_start();
             if($type == 'reply')
                 $saved_tweet = $this->SaveTweets($tweet_replied, $channel, "user_timeline");
             else
@@ -372,9 +375,15 @@ class twitter_model extends CI_Model
                 );
                 $this->db->insert('channel_action', $channel_action);
                 $this->db->insert('twitter_reply',$reply);
-                return $this->db->insert_id();    
+                $insert_id = $this->db->insert_id();
+                $this->db->where($saved_tweet[0]['post_id']);
+                $this->db->query('call sp_SocialStreamUpdate(?)',$reply['reply_to_post_id']);
+                
+                $this->db->trans_complete();
+                return $insert_id;    
             }
             else{
+                $this->db->trans_complete();
                 return null;
             }
         }
@@ -482,7 +491,7 @@ class twitter_model extends CI_Model
      *Get Reply Post
     */
     function GetReplyPost($filter){
-        $this->db->select('*');
+        $this->db->select('b.*, a.*');
         $this->db->from('twitter_reply a inner join user b on a.user_id = b.user_id');
         $this->db->where($filter);
         $this->db->order_by('id', 'desc');

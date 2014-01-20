@@ -1,5 +1,5 @@
 <input type="hidden" class="channel-id" value="<?php if(count($youtube_post) > 0) {echo $youtube_post[0]->channel_id;} else {echo $channel_id;} ?>">
-<div class="container-fluid">
+<div class="container-fluid" style="height: 95%">
     <!-- ==================== ACTIVITIES MENU ==================== -->
     <div class="floatingBoxMenu">
         <ul class="nav stream_head">
@@ -9,23 +9,25 @@
     </div>
     <!-- ==================== END OF ACTIVITIES MENU ==================== -->
 
-    <div class="container-fluid">
+    <div class="container-fluid center subStream">
         <!-- ==================== ALL ACTIVITIES CONTENT ==================== -->
         <ul class="floatingBoxContainers" id="youtubevideo">
             <?php
             if($youtube_post){
-            foreach($youtube_post as $post): ?>
+            foreach($youtube_post as $post):
+            $youtube_detail = json_decode($post->oauth_secret);
+            ?>
             <li>
-                    <div class="circleAvatar"><img src="<?=base_url('dashboard/media_stream/SafePhoto?photo=')."https://plus.google.com/s2/photos/profile/".$post->channel_name."?sz=200"?>" alt=""></div>
+                    <div class="circleAvatar"><img src="<?=base_url('dashboard/media_stream/SafePhoto?photo=').$youtube_detail->youtube_image?>" alt=""></div>
                     <p class="headLine">
-                        <span class="author">Maybank</span>
+                        <span class="author"><?=$post->channel_name."($youtube_detail->youtube_username)"?></span>
                         <span><?php
-                        $created_at = new DateTime($post->created_at, new DateTimeZone($this->config->item('timezone')));
+                        $created_at = new DateTime($post->created_at, new DateTimeZone($this->session->userdata('timezone')));
                         echo $created_at->format('l, M j, Y h:i A');
                         ?></span>
                         <i class="icon-play-circle moreOptions pull-right"></i>
                     </p>
-                    <p class="video pointer"><a href="http://www.youtube.com/watch?v=<?=$post->video_id?>" target="_blank"><img src="<?=base_url('dashboard/media_stream/SafePhoto?photo=').$post->thumbnail_high?>" alt="" /></a>
+                    <p class="videos pointer"><a href="http://www.youtube.com/watch?v=<?=$post->video_id?>" target="_blank"><img src="<?=base_url('dashboard/media_stream/SafePhoto?photo=').$post->thumbnail_high?>" alt="" /></a>
                     <!--iframe title="YouTube video player" class="youtube-player" style="display: none" type="text/html" 
                         width="" height="" src="http://www.youtube.com/embed/<?=$post->video_id?>"
                         frameborder="0" allowFullScreen></iframe-->

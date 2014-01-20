@@ -101,7 +101,7 @@ class youtube_model extends CI_Model
     }
     
     function ReadYoutubePost($filter = array(), $page = 1){
-        $this->db->select("a.*, b.*, a.post_id as social_stream_post_id, c.name as channel_name");
+        $this->db->select("a.*, b.*, a.post_id as social_stream_post_id, c.name as channel_name, c.oauth_secret");
         $this->db->from("social_stream_youtube b inner join social_stream a on a.post_id = b.post_id inner join channel c on c.channel_id = a.channel_id");
         if(isset($filter['channel_id'])){
             $filter['a.channel_id'] = $filter['channel_id'];

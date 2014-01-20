@@ -43,9 +43,7 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
                             <button type="button" class="close " data-dismiss="modal"><i class="icon-remove"></i></button>
                             <img src="'.base_url('dashboard/media_stream/SafePhoto?photo=').$src.'" />
                         </div>';
-           }elseif($attachment[$att]->type=='link'){
-
-              
+           }elseif($attachment[$att]->type=='link'){              
 //                print_r($attachment);?>
             <center>
             <div class="compose-schedule" style="width: 85%;" >
@@ -98,9 +96,9 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
         <br />
         <?php 
             $comment=$this->facebook_model->RetriveCommentPostFb($fb_feed[$i]->social_stream_post_id);
-            echo "<pre>";
-            print_r($comment);
-            echo "</pre>";
+           // echo "<pre>";
+//            print_r($comment[$j]);
+//            echo "</pre>";
             for($j=0;$j<count($comment);$j++):
             
         ?>
@@ -142,7 +140,7 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
                     <?php if(($comment[$j]->comment_id)=='0'){?>
                     <button type="button" class="btn btn-primary btn-engagement-reply btn-mini btn-reply" ><i class="icon-mail-reply"></i></button>
                     <?php } ?>
-                   <button type="button" class="btn btn-danger btn-engagement-case btn-mini"><i class="icon-plus"></i> CASE</button>
+                   <button type="button" class="btn btn-danger btn-engagement-case btn-mini btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>
                 </p>
                 </h4>
                 <?php } ?>
@@ -152,6 +150,14 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
                     $data['i'] = $j;
                     $data['reply_type']='reply_nested';
                     $this->load->view('dashboard/reply_field_facebook', $data)?>  
+                </div>
+                 <div class="case-field hide">
+                <?php
+                    //$data['posts'] = $comment;
+                    $data['posts'] = $fb_feed;
+                    $data['i'] = $j;
+                    $this->load->view('dashboard/case_field',$data);
+                ?>
                 </div>
                 <div class="case-engagement-field hide">
                     <div class="row-fluid">

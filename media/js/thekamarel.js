@@ -486,6 +486,33 @@ $(function(){
                             $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');  
                         }
                         $(this).closest('.containerHeadline').next().load(urlToLoad, function(){
+                            $('.email').tagit({
+                                autocomplete : {
+                                    source:  function( request, response ) {
+                                        $.ajax({
+                                            "url" : BASEURL + "case/mycase/SearchEmail",
+                                            data : {
+                                                term : request.term
+                                            },
+                                            success : function(data){
+                                                response( $.map( data, function( item ) {
+                                                    return {
+                                                      label: item.username + "(" + item.email + ")",
+                                                      value: item.email
+                                                    }
+                                                }));
+                                            }
+                                        });
+                                    }
+                                },
+                                beforeTagAdded : function(event, ui){
+                                    if(validateEmail(ui.tagLabel))
+                                        return true;
+                                    else
+                                        return false;
+
+                                }
+                            });
                             var hashUrl = window.location.hash;
                             var splitUrl = hashUrl.split('/');
                             if(splitUrl[1] == streamType)
@@ -759,24 +786,13 @@ $(function(){
                         var isComment=me.closest('form').html();
                                                 e.preventDefault();
                         me.attr("disabled", "disabled").html("SHORTENING...");
-                        me.siblings(".reply-insert-link-text").linkpreview({
-                            previewContainer: me.closest('.pull-left').siblings('#reply-url-show').find('div.reply-url-show-content'),  //optional
-                            //previewContainerClass: ".compose-schedule",
-                            refreshButton: ".reply-insert-link-btn",        //optional
-                            preProcess: function() {                //optional
-                                if(isComment==''){
-                                    me.closest('.pull-left').siblings("#reply-url-show").show();
-                                    me.closest('.pull-left').siblings("#reply-url-show").find('div.reply-url-show-content').html('Loading...');
-                                }
-                            },
-                            onSuccess: function(data) {                  //optional
-                            },
-                            onError: function() {                    //optional
-                            },
-                            onComplete: function() {                 //optional
+                        if(!validateURL(me.siblings(".reply-insert-link-text").val())){
+                            if(!validateURL("http://" + me.siblings(".reply-insert-link-text").val())){
+                                alert("Invalid Link");
+                                me.removeAttr("disabled").html("SHORTEN");
+                                return;
                             }
-                       });
-                        
+                        }
                         $.ajax({
                            "url" : BASEURL + "dashboard/media_stream/GenerateShortUrlWithoutCampaign",
                            "data" : {
@@ -1630,6 +1646,8 @@ $(function(){
                                         });
             //window.location.href = BASEURL + 'dashboard/search?q=' + $('.dashboard-search-field').val();
         });
+        
+        
     });
     
     $(document).ready(function() {
@@ -1930,3 +1948,9 @@ function validateURL(textval) {
     console.log(role);
     return role;
 }
+
+
+function validateEmail(email) { 
+    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+} 

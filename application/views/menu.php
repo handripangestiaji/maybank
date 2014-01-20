@@ -15,7 +15,7 @@
     }
     for($i=1;$i<9;$i++){
 	if(!IsRoleFriendlyNameExist($this->user_role, $value_permission[$i], 'role_group'))
-	    $active[$i] = 'hide';
+	    $active[$i] = 'hidden';
 	else{
 	    if($this->uri->segment(2) === $value[$i]){
 		$active[$i] = 'active';
@@ -32,7 +32,7 @@
 	
     }
 ?>
-<style type="text/css">.hide{display: none!important;}</style>
+<style type="text/css">.hidden{display: none!important;}</style>
 <div class="container-fluid">
     <ul class="nav">
         <li class="collapseMenu"><a href="#"><i class="icon-double-angle-left"></i>hide menu<i class="icon-double-angle-right deCollapse"></i></a></li>

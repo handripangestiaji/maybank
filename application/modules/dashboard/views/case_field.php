@@ -1,5 +1,7 @@
 <div class="row-fluid">
-<?php if($posts){
+<?php 
+//print_r($posts1[$i])
+if($posts){
     //echo $posts[$i]->post_id."-".$posts[$i]->type;
         ?>
            <span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>

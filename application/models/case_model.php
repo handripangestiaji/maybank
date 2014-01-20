@@ -25,6 +25,12 @@ class case_model extends CI_Model{
         return $result;
     }
     
+    function LoadAssign()
+    {
+        $this->db->where('created_by',$this->session->userdata('user_id'));
+        return $this->db->get('case');
+    }
+    
     function CreateCase($case, $created_by){
         $related_conversation = $case['related_conversation'];
         $conv = explode(',', $related_conversation);

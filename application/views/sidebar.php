@@ -16,7 +16,6 @@
 <!-- ==================== END OF SIDEBAR COLLAPSED ==================== -->
 
 <!-- ==================== SIDEBAR TASKS ==================== -->
-<?php if(IsRoleFriendlyNameExist($this->user_role, "Publisher")):?>
 <div id="tasksContent">
     <div class="sidebarDivider"></div>
     <div class="sidebarContent" style="overflow-y: scroll;">
@@ -24,7 +23,7 @@
             <?php
             /*print_r($case);*/ 
             if(isset($case)):?>
-            <p class="title pull-left">NOTIFICATION&nbsp;<span class="badge">Total <?php echo count($case)+count($reply_pending); ?></span></p>
+            <p class="title pull-left">NOTIFICATION&nbsp;<span class="badge">Total <?php echo count($case)+count($reply_pending)+count($assign); ?></span></p>
             <?php endif;?>
         </div>
         <span class="btn-close pull-right">Close <i class="icon-remove-sign"></i></span>
@@ -32,9 +31,9 @@
         <div class="sidebarLine"></div>
         
         <div class="sidebarInfo">
-            <?php if(isset($case)):?>
+            <?php if(isset($assign)):?>
             <!--div class="replies"><span class="badge cyan"><?php echo count($reply_pending); ?></span> Replies</div-->
-            <div class="newCases"><span class="badge purple"><?php echo count($case); ?></span> New Cases</div>
+            <div class="newCases"><span class="badge cyan"><?php echo count($case); ?></span> Assign Cases</div>
             <?php endif;?>
         </div>
         <div class="sidebarLine"></div>
@@ -77,16 +76,16 @@
             <?php endif;?>
         </div>
         <div class="sidebarLine"></div>
-        <ul class="tasksList" style="height: 100%">
+        <ul class="tasksList">
             <?php foreach($case as $each_case):?>
             <li class="pointerCase" >
                 <input type="hidden" name="pointer" class="pointer-case" value="<?php echo $each_case->case_id?>" />
-                <div class="notifHead <?=$each_case->read == 1 ? "purple" : "red"?>" onclick="window.location='<?=base_url('dashboard/socialmedia').'#case/'.$each_case->type.'/'.$each_case->post_id?>'">
+                <div class="notifHead purple">
                     CASE ID: #<?php echo $each_case->case_id?>
                 </div>
                 <div class="notifBody">
                     <?php
-                        $timezone = new DateTimeZone($this->session->userdata('timezone'));
+                        $timezone = new DateTimeZone($this->config->item('timezone'));
                         $date = new DateTime($each_case->created_at, $timezone);
                         echo $date->format("M d, Y, h:i A");
                     ?>
@@ -100,7 +99,7 @@
                 </div>
                 <div class="notifBody">
                     <?php
-                        $timezone = new DateTimeZone($this->session->userdata('timezone'));
+                        $timezone = new DateTimeZone($this->config->item('timezone'));
                         $date = new DateTime($each_case->created_at, $timezone);
                         echo $date->format("M d, Y, h:i A");
                     ?>
@@ -111,8 +110,6 @@
         
     </div>   
 </div>
-<?php endif?>
-
 <!-- ==================== END OF SIDEBAR TASKS ==================== -->
 
 <!-- ==================== SIDEBAR PROFILE ==================== -->
@@ -131,11 +128,9 @@
             <?php }?>
         </div>
         <div class="profileInfo">
-            
             <p>User Id : <?php echo $this->session->userdata('username'); ?></p>
             <p>Full Name : <?php echo $this->session->userdata('full_name'); ?></p>
             <p>Display Name : <?php echo $this->session->userdata('display_name'); ?></p>
-            <p>Timezone : <?php echo $this->session->userdata('timezone');?></p>
             <p>Role : <?php echo $this->session->userdata('role_name'); ?></p>
             <p>Email : <span class="cyanText"><?php echo $this->session->userdata('web_address'); ?></span></p>
             <br/>

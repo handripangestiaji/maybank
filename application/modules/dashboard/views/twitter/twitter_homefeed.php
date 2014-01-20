@@ -3,7 +3,7 @@ $total_groups = ceil($countFeed[0]->count_post_id/$this->config->item('item_perp
 $timezone=new DateTimeZone($this->session->userdata('timezone'));
 for($i=0;$i<count($homefeed);$i++){
 ?>
-    <li <?php if($homefeed[$i]->is_read==0){echo 'class="unread-post"';} ?>>
+    <li <?php if($homefeed[$i]->is_read==0){echo 'class="unread-post"';} ?> id="post<?=$homefeed[$i]->social_stream_post_id?>">
         <div class="message"></div>
         <input type="hidden" class="postId" value="<?php echo $homefeed[$i]->social_stream_post_id; ?>" />
         <div class="circleAvatar"><img src="<?php echo base_url('dashboard/media_stream/SafePhoto?photo=').$homefeed[$i]->profile_image_url;?>" alt=""></div>
@@ -50,7 +50,8 @@ for($i=0;$i<count($homefeed);$i++){
     </p>
     <p>
     <?php if($homefeed[$i]->case_id):?>
-        <button type="button" class="btn btn-purple btn-mini" value="<?php echo $homefeed[$i]->case_id?>">CASE ID #<?php echo $homefeed[$i]->case_id?></button>
+        <button type="button" class="btn btn-purple btn-mini" value="<?php echo $homefeed[$i]->case_id?>">CASE ID #<?php echo $homefeed[$i]->case_id.' Assign to '.$homefeed[$i]->case->assign_to?></button>
+        
     <?php endif?>
     <?php if(count($homefeed[$i]->reply_post) > 0):?>
         <button type="button" class="btn btn-inverse btn-mini" value="<?php echo $homefeed[$i]->reply_post[0]->response_post_id?>">REPLIED</button>

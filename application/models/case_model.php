@@ -18,6 +18,9 @@ class case_model extends CI_Model{
                 array("user_id" => $eachrow->created_by)
             );
             $eachrow->created_by = $user;
+            $eachrow->assign_to = $this->ReadAllUser(
+                array('user_id' => $eachrow->assign_to)  
+            );
             $eachrow->content_products_id = $this->ReadAllProducts(
                 array("id" => $eachrow->content_products_id)  
             );

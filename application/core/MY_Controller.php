@@ -7,6 +7,7 @@ class MY_Controller extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->model('case_model');
+		
 	}
 	
 	function _output($content)
@@ -17,7 +18,8 @@ class MY_Controller extends CI_Controller {
 			'assign_to' => $this->session->userdata('user_id'),
 			'status' => 'pending'
 		));
-		$data['assign'] = $this->case_model->LoadAssign();
+		$data['timezones'] = get_timezone_list();
+
 		$data['reply_pending'] = $this->case_model->GetReplyNotification($this->session->userdata('user_id'));
 		$data['groups'] = $this->users_model->select_group(array('group_id'=> $this->session->userdata('group_id')));
 		echo($this->load->view('layout', $data, true));

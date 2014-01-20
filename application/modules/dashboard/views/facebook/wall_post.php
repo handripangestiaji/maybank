@@ -96,11 +96,7 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
         <br />
         <?php 
             $comment=$this->facebook_model->RetriveCommentPostFb($fb_feed[$i]->social_stream_post_id);
-           // echo "<pre>";
-//            print_r($comment[$j]);
-//            echo "</pre>";
             for($j=0;$j<count($comment);$j++):
-            
         ?>
         <div class="engagement-body">
             <span class="engagement-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>    
@@ -113,8 +109,26 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
                 $date=new DateTime($comment[$j]->created_at.' Europe/London');
                 $date->setTimezone($timezone);
                 echo $date->format('l, M j, Y h:i A');
-                
               ?></span>
+              <?php
+                   
+              
+            if(isset($comment[$j]->attachment)){
+                $attachments=json_decode($comment[$j]->attachment);
+                if(isset($attachments->media->image->src)){  
+        //            echo "</pre>";
+        //            print_r($attachments->media->image->src); 
+        //            echo "</pre>";
+                    
+                    echo    "<a href='#modal-".$comment[$j]->comment_post_id."-".$comment[$j]->comment_post_id."-foto' data-toggle='modal' ><img src='".base_url('dashboard/media_stream/SafePhoto?photo=').$attachments->media->image->src."' /></a>";
+                    echo    '<div id="modal-'.$comment[$j]->comment_post_id.'-'.$comment[$j]->comment_post_id.'-foto" class="attachment-modal modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+                                <img src="'.base_url('dashboard/media_stream/SafePhoto?photo=').$attachments->media->image->src.'" />
+                                <button type="button" class="close " data-dismiss="modal"><i class="icon-remove"></i></button>
+                        </div>';
+        }
+            }
+
+              ?>
             </p>
             <div class="engagement-comment">
                 <p>"<?php echo $comment[$j]->comment_content; ?>"</p>
@@ -154,6 +168,9 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
                  <div class="case-field hide">
                 <?php
                     //$data['posts'] = $comment;
+                    echo "</pre>";
+                    print_r($comment[$j]); 
+                    echo "</pre>";
                     $data['posts'] = $fb_feed;
                     $data['i'] = $j;
                     $this->load->view('dashboard/case_field',$data);

@@ -195,7 +195,7 @@ class account_model extends CI_Model
             }            
         }
         
-        $post = $this->facebook_model->IsCommentExists($stream_id);        
+        $post = $this->facebook_model->IsPmExists($stream_id);        
 //        print_r($post);
         if(isset($post->post_id)!=''){
             $actions['conversation_detail_id']=$post->post_id;

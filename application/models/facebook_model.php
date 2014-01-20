@@ -387,6 +387,13 @@ class facebook_model extends CI_Model
 	$this->db->where("comment_stream_id",$comment_id);
 	return $this->db->get()->row();
     }
+    
+    public function IsPmExists($pm_id){
+	$this->db->select("*");
+	$this->db->from("social_stream_facebook_conversation");
+	$this->db->where("conversation_id",$pm_id);
+	return $this->db->get()->row();
+    }
         
     public function streamId($post_id){
         $this->db->select('*');
@@ -432,6 +439,7 @@ class facebook_model extends CI_Model
                          `case` d on d.post_id = c.post_id and d.status='pending'");
         $this->db->limit($limit);
         $this->db->order_by('c.created_at','desc');
+        $this->db->order_by('c.post_stream_id','desc');
         if(count($filter) >= 1){
             $this->db->where($filter);
         }

@@ -310,7 +310,7 @@ $(function(){
                             var currentHtml = me.closest('li');
                             currentHtml.find('.reply-preview-img').toggle('slow');
                             me.closest('ul').prepend(currentHtml);
-                            me.closest('.floatingBox').animate({
+                            me.closest('.subStream').animate({
                                 scrollTop: 0
                             });
                             

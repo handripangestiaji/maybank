@@ -24,10 +24,11 @@
                                 <?php
                                     for($i=0;$i<count($channels);$i++){
                                             for($x = 0; $x < count($group); $x++){
+                                                if($channels[$i]->connection_type != 'youtube'){
                                                     if($group[$x]->allowed_channel === $channels[$i]->channel_id)
                                                             echo '<option id="opt'.$channels[$i]->connection_type.'" value="'.$channels[$i]->channel_id.'">'.$channels[$i]->name.'</option>';
+                                                }
                                             }
-                                        
                                     }
                                 ?>
                             </select>

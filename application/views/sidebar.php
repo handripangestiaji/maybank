@@ -38,45 +38,6 @@
             <?php endif;?>
         </div>
         <div class="sidebarLine"></div>
-        <ul class="tasksList">
-            <?php foreach($case as $each_case):?>
-            <li class="pointerCase" >
-                <input type="hidden" name="pointer" class="pointer-case" value="<?php echo $each_case->case_id?>" />
-                <div class="notifHead purple">
-                    CASE ID: #<?php echo $each_case->case_id?>
-                </div>
-                <div class="notifBody">
-                    <?php
-                        $timezone = new DateTimeZone($this->config->item('timezone'));
-                        $date = new DateTime($each_case->created_at, $timezone);
-                        echo $date->format("M d, Y, h:i A");
-                    ?>
-                </div>
-            </li>
-            <?php endforeach?>
-            <?php foreach($reply_pending as $pending):?>
-            <!--li>
-                <div class="notifHead purple">
-                    New Reply POST ID : #<?php echo $pending->id?>
-                </div>
-                <div class="notifBody">
-                    <?php
-                        $timezone = new DateTimeZone($this->config->item('timezone'));
-                        $date = new DateTime($each_case->created_at, $timezone);
-                        echo $date->format("M d, Y, h:i A");
-                    ?>
-                </div>
-            </li-->
-            <?php endforeach;?>
-        </ul>
-        
-        <div class="sidebarInfo">
-            <?php if(isset($case)):?>
-            <!--div class="replies"><span class="badge cyan"><?php echo count($reply_pending); ?></span> Replies</div-->
-            <div class="newCases"><span class="badge purple"><?php echo count($case); ?></span> New Cases</div>
-            <?php endif;?>
-        </div>
-        <div class="sidebarLine"></div>
         <ul class="tasksList" style="height: 100%">
             <?php foreach($case as $each_case):?>
             <li class="pointerCase" >
@@ -211,6 +172,16 @@
             <input type='hidden' value='<?php echo $this->session->userdata('user_id'); ?>' name='user_id' />
             <p><strong>Display Name</strong></p>
             <input type="text" name="display-name" value='<?php echo $this->session->userdata('display_name'); ?>'/>
+            <p><strong>Timezone</strong></p>
+            <select name="timezone">
+                <?php
+                    $timezoneList  = get_timezone_list();
+                    $keys = array_keys($timezoneList );
+                    foreach($keys as $key):
+                ?>
+                    <option value="<?=$key?>"><?=$timezoneList[$key]?></option>
+                <?php endforeach?>
+            </select>
             <p><strong>About Me</strong></p>
             <textarea class="about-me" name="about-me" placeholder="Compose Message"><?php echo $this->session->userdata('description'); ?></textarea>
 

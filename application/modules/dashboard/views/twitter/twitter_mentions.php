@@ -108,7 +108,6 @@ for($i=0;$i<count($mentions);$i++){
                     </p>
                     <div>
                         <p><?php echo $comment[$j]->text?></p>
-                        <p><input type="hidden" class="str_id" value="<?php echo $comment[$j]->post_stream_id; ?>" /><button type="button" class="btn btn-warning btn-mini">OPEN</button><button class="retweet btn btn-primary btn-mini" style="margin-left: 5px;">RE-TWEET</button></p>
                     </div>
                 </div>
                 <?php endif;?>

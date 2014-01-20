@@ -10,7 +10,7 @@ class Search extends CI_Controller {
 	  parent::__construct();
 	  if(!$this->session->userdata('user_id'))
 	    redirect("login");
-	
+	  
 	  $this->load->model('elasticsearch_model');
 	  $this->load->library('ion_auth');
 	  $this->load->library('Twitteroauth');

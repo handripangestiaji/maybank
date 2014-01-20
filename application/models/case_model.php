@@ -18,11 +18,20 @@ class case_model extends CI_Model{
                 array("user_id" => $eachrow->created_by)
             );
             $eachrow->created_by = $user;
+            $eachrow->assign_to = $this->ReadAllUser(
+                array('user_id' => $eachrow->assign_to)  
+            );
             $eachrow->content_products_id = $this->ReadAllProducts(
                 array("id" => $eachrow->content_products_id)  
             );
         }
         return $result;
+    }
+    
+    function LoadAssign()
+    {
+        $this->db->where('created_by',$this->session->userdata('user_id'));
+        return $this->db->get('case');
     }
     
     function CreateCase($case, $created_by){
@@ -124,10 +133,18 @@ class case_model extends CI_Model{
             $this->db->where($filter);
         }
         $this->db->select("*");
-        $this->db->from("user a inner join user_group b on a.group_id = b.group_id");
+        $this->db->from("user a inner join user_group b on a.group_id = b.group_id inner join role_collection c on a.role_id = c.role_collection_id");
         $query_result = $this->db->get();
-        if($query_result->num_rows() > 1)
-            return $query_result->result();
+        if($query_result->num_rows() > 1){
+            $result = $query_result->result();
+            foreach($result as $row){
+                $this->db->select("b.app_role_id, b.role_friendly_name, b.role_group");
+                $this->db->from("role_collection_detail a inner join application_role b on a.app_role_id = b.app_role_id");
+                $this->db->where("a.role_collection_id", $row->role_id);
+                $row->role_detail = $this->db->get()->result();
+            }
+            return $result;
+        }
         else
             return $query_result->row();
     }

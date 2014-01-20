@@ -1,9 +1,9 @@
 <?php
 $total_groups = ceil($countMentions[0]->count_post_id/$this->config->item('item_perpage'));
-$timezone=new DateTimeZone($this->config->item('timezone'));
+$timezone=new DateTimeZone($this->session->userdata('timezone'));
 for($i=0;$i<count($mentions);$i++){
 ?>
-    <li <?php if($mentions[$i]->is_read==0){echo 'class="unread-post"';} ?>>
+    <li <?php if($mentions[$i]->is_read==0){echo 'class="unread-post"';} ?> id="post<?=$mentions[$i]->social_stream_post_id?>">
         <div class="message"></div>
         <input type="hidden" class="postId" value="<?php echo $mentions[$i]->social_stream_post_id; ?>" />
         <div class="circleAvatar"><img src="<?php echo base_url('dashboard/media_stream/SafePhoto?photo=').$mentions[$i]->profile_image_url;?>" alt=""></div>
@@ -37,22 +37,27 @@ for($i=0;$i<count($mentions);$i++){
     <?php if(isset($entities->media[0])){
             echo "<a href='#modal-".$mentions[$i]->social_stream_post_id."' data-toggle='modal' ><img src='".base_url('dashboard/media_stream/SafePhoto?photo=').$entities->media[0]->media_url_https."' /></a>";
             echo '<div id="modal-'.$mentions[$i]->social_stream_post_id.'" class="attachment-modal modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
-                            <button type="button" class="close " data-dismiss="modal"><i class="icon-remove"></i></button>
                             <img src="'.base_url('dashboard/media_stream/SafePhoto?photo=').$entities->media[0]->media_url_https.'" />
+                            <button type="button" class="close " data-dismiss="modal"><i class="icon-remove"></i></button>
                 </div>';
             }
     ?>
     </p>
     <p class="indicator">
     <?php if($mentions[$i]->case_id):?>
-        <button type="button" class="btn btn-purple btn-mini" value="<?php echo $mentions[$i]->case_id?>">CASE ID #<?php echo $mentions[$i]->case_id?></button>
+        <button type="button" class="btn btn-purple btn-mini" value="<?php echo $mentions[$i]->case_id?>">CASE ID #<?php echo $mentions[$i]->case_id?>
+        <?=isset($mentions[$i]->case[0]->assign_to->full_name) ? ' Assign to '.$mentions[$i]->case[0]->assign_to->full_name : '' ?>
+        </button>
+        
     <?php endif?>
     <?php if(count($mentions[$i]->reply_post) > 0):?>
         <button type="button" class="btn btn-inverse btn-mini" value="<?php echo $mentions[$i]->reply_post[0]->response_post_id?>">
         
         <?php
-        $reply_date = new DateTime($mentions[$i]->reply_post[0]->created_at, new DateTimeZone($mentions[$i]->reply_post[0]->timezone));
-        echo "Replied by: ".$mentions[$i]->reply_post[0]->display_name." ".$reply_date->format("d-M-y h:i A") ?>
+        
+        $reply_date = new DateTime($mentions[$i]->reply_post[count($mentions[$i]->reply_post) - 1]->created_at);
+        $reply_date->setTimezone($timezone);
+        echo "Replied by: ".$mentions[$i]->reply_post[count($mentions[$i]->reply_post) - 1]->display_name." ".$reply_date->format("d-M-y h:i A") ?>
         </button>
     <?php endif?>
     <?php if(count($mentions[$i]->reply_post) == 0 && !$mentions[$i]->case_id):?>
@@ -105,7 +110,6 @@ for($i=0;$i<count($mentions);$i++){
                     </p>
                     <div>
                         <p><?php echo $comment[$j]->text?></p>
-                        <p><input type="hidden" class="str_id" value="<?php echo $comment[$j]->post_stream_id; ?>" /><button type="button" class="btn btn-warning btn-mini">OPEN</button><button class="retweet btn btn-primary btn-mini" style="margin-left: 5px;">RE-TWEET</button></p>
                     </div>
                 </div>
                 <?php endif;?>

@@ -735,16 +735,23 @@ input.related-conversation-check{
 	margin: 0px;
 }
 
+.attachment-modal img{
+	max-height: 100%;
+	max-width: none;
+}
+
 .attachment-modal{
-	width: auto;
-	margin-top: 30px;
-	margin-left: -220px
+	height: 500px;
+	text-align: center;
+	background-color: transparent;
+	box-shadow: none;
 }
 
 .attachment-modal button.close{
 	background-color: #fff;
 	margin-left: -24px;
 	padding: 4px;
+	position: absolute;
 }
 
 .specialToggleTable{
@@ -754,7 +761,18 @@ input.related-conversation-check{
 .btn-reply-open-img{
 	float: right;
 }
-.
+
+.subStream{
+	overflow: auto;
+	height: 87%;
+	background-color: #FFFFFF;
+	padding-top: 20px;
+}
+
+.boxStream div.floatingBoxMenu, .boxStream div.floatingBoxMenu .nav{
+	margin-bottom: 10px;
+}
+
 /*==============================================================================================
 ======================================== C M S =================================================
 ==============================================================================================*/

@@ -1,5 +1,7 @@
 <div class="row-fluid">
-<?php if($posts){
+<?php 
+//print_r($posts1[$i])
+if($posts){
     //echo $posts[$i]->post_id."-".$posts[$i]->type;
         ?>
            <span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
@@ -32,7 +34,9 @@
                <select name="assign_to">
                 <option value=""></option>
                    <?php foreach($user_list as $user):?>
-                   <option value="<?php echo $user->user_id?>"><?php echo $user->full_name."($user->email)"?></option>
+                    <?php if(IsRoleFriendlyNameExist($user->role_detail, 'Social Stream_Current_Resolve_Case')):?>
+                        <option value="<?php echo $user->user_id?>"><?php echo $user->full_name."($user->email)"?></option>
+                    <?php endif?>
                    <?php endforeach;?>
                </select>
            </div>
@@ -41,7 +45,7 @@
                Email:
            </div>
            <div class="pull-right">
-               <input type="text" class="autocomplete email" name="email" id="emailAssign">
+               <input type="text" class="email" name="email" />
            </div>
            <br clear="all" />
            Message :

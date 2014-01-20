@@ -245,12 +245,16 @@ $(function(){
     $('form.update_profil').submit(function(e){
         var display = $(this).find('input[name=display-name]').val();
         var about = $(this).find('.about-me').val();
+        var time = $(this).find('.timezone').val();
+        console.log(display);
+        console.log(time);
         var me = $(this);
         
         $.ajax({
                 "url" : BASEURL + "users/users_json/update_profil",
                 "data" : {display : display,
-                          about: about  },
+                          about: about,
+                          time: time},
                 "type" : "POST",
                 "success" : function(response){
                                 if(response == false){
@@ -307,7 +311,13 @@ $(function(){
                         openButton.removeClass('btn-warning').addClass('btn-inverse').html('REPLIED').val('');
                         setTimeout(function(){
                             me.closest('.reply-field').toggle('slow');
-                        }, 3000);
+                            var currentHtml = me.closest('li');
+                            currentHtml.find('.reply-preview-img').toggle('slow');
+                            me.closest('ul').prepend(currentHtml);
+                            me.closest('.subStream').animate({
+                                scrollTop: 0
+                            });
+                        }, 1500);
                         
                     }
                 }
@@ -320,7 +330,7 @@ $(function(){
             },
             "error" :  function( jqXHR, textStatus, errorThrown ){
                 buttonSubmit.removeAttr('disabled').html('SEND');
-                 me.find('.message').html('<div class="alert alert-danger">' +
+                me.find('.message').html('<div class="alert alert-danger">' +
                         '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
                         '<strong>Error!</strong> Replying tweet failed.</div>');
             }

@@ -180,9 +180,7 @@ class facebook_model extends CI_Model
 	    "updated_at" => $updated_time->format("Y-m-d H:i:s"),
 	    "is_customer_post" => $channel->social_id == $each_post->actor_id ? 0 : 1
 	);
-	print "<pre>";
 	
-	print_r($social_stream_fb_post);print "</pre>";
 	if($each_post->message != '' && $each_post->message != null){
 	    if($stream == null){
 		$this->db->insert("social_stream", $social_stream);
@@ -194,6 +192,7 @@ class facebook_model extends CI_Model
 		$insert_id = $stream->post_id;
 		$this->db->where("post_id", $stream->post_id);
 		$this->db->update("social_stream_fb_post", $social_stream_fb_post);
+		
 	    }
 	}
 	else
@@ -223,10 +222,17 @@ class facebook_model extends CI_Model
 		);
 		
 		if($this->IsCommentExists($each_post->comments[$x]->id) == null){
+		    
 		    $this->db->insert('social_stream', $social_stream_comment);
 		    $insert_id_comment = $this->db->insert_id();
 		    $social_stream_fb_comments['id'] = $insert_id_comment;
-		    $this->db->insert("social_stream_fb_comments", $social_stream_fb_comments);    
+		    $this->db->insert("social_stream_fb_comments", $social_stream_fb_comments);
+		    if($stream != null){
+			$this->db->query('call sp_SocialStreamUpdate(?)',$stream->post_id);
+			print "<pre>";
+	
+			print_r($stream);print "</pre>";
+		    }
 		}
 		else{
 		    $this->db->where('post_stream_id', $each_post->comments[$x]->id);
@@ -425,10 +431,14 @@ class facebook_model extends CI_Model
 	return $this->db->get()->row();
     }
     
-    function GetChannelAction($filter){
+    function GetChannelAction($filter, $is_where_in = false){
         $this->db->select("a.*, b.username, b.display_name");
         $this->db->from('channel_action a inner join user b on b.user_id = a.created_by');
-        $this->db->where($filter);
+	if(!$is_where_in)
+	    $this->db->where($filter);
+	else
+	    $this->db->where_in('a.post_id',$filter);
+	
         return $this->db->get()->result();
     }
     
@@ -438,6 +448,7 @@ class facebook_model extends CI_Model
 			             ON b.author_id = a.facebook_id inner join social_stream c on c.post_id = b.post_id LEFT JOIN
                          `case` d on d.post_id = c.post_id and d.status='pending'");
         $this->db->limit($limit);
+	$this->db->order_by('c.replied_count','desc');
         $this->db->order_by('c.created_at','desc');
         if(count($filter) >= 1){
             $this->db->where($filter);
@@ -447,8 +458,11 @@ class facebook_model extends CI_Model
 //        print_r($result);
 //        echo "</pre>";
         foreach($result as $row){
-            $row->reply_post = $this->IsCommentExists($row->social_stream_post_id);
-            $row->channel_action = $this->GetChannelAction(array('post_id'=>$row->social_stream_post_id));
+            $row->reply_post = $this->RetriveCommentPostFb($row->social_stream_post_id);
+	    $comment_list = array();
+	    foreach($row->reply_post as $comment)
+		$comment_list[] = $comment->id;
+            $row->channel_action = $this->GetChannelAction(array_merge($comment_list, array($row->social_stream_post_id)), true);
         }
         
         return $result;
@@ -473,12 +487,13 @@ class facebook_model extends CI_Model
         if(count($filter) > 0)
 	    $this->db->where($filter);
         $this->db->limit(20);
+	$this->db->order_by('c.replied_count','desc');
         $this->db->order_by('c.created_at','desc');
         return $this->db->get()->result();
     }
     
     public function RetriveCommentPostFb($post_id){
-        $sql = "SELECT a.post_id,a.post_content,a.total_comments,b.comment_stream_id,b.attachment,b.from,c.name,b.comment_content,b.created_at, b.user_likes, d.post_stream_id,b.comment_id,e.post_id AS comment_post_id
+        $sql = "SELECT a.post_id,a.post_content,a.total_comments,b.comment_stream_id,b.attachment,b.from,c.name,b.comment_content,b.created_at, b.user_likes, d.post_stream_id,b.comment_id,e.post_id AS comment_post_id, b.id
                 FROM social_stream_fb_post a INNER JOIN
                 social_stream_fb_comments b ON b.post_id=a.post_id INNER JOIN
                 fb_user_engaged  c ON c.facebook_id=b.from INNER JOIN social_stream d on d.post_id = b.id LEFT OUTER JOIN
@@ -507,6 +522,7 @@ class facebook_model extends CI_Model
         }
         $this->db->limit($limit);
         $this->db->order_by('b.created_at','desc');
+	$this->db->order_by('d.replied_count','desc');
         $result= $this->db->get()->result();
         
         foreach($result as $row){
@@ -566,6 +582,13 @@ class facebook_model extends CI_Model
 	return $new_val;
     }
     
+    public function ReadSocialStream($filter){
+	$this->db->select("*");
+	$this->db->from('social_stream');
+	$this->db->where($filter);
+	return $this->db->get()->result();
+    }
+    
     function DeletePostFb($post_stream_id){
         
         $this->db->where(array(
@@ -573,5 +596,5 @@ class facebook_model extends CI_Model
         ));
         return $this->db->delete('social_stream');
     }
-    
+   
 }

@@ -181,7 +181,7 @@ class account_model extends CI_Model
     function CreateFbReplyAction($post_id, $stream_id, $message, $reply_type,$product_type,$url){
     	$this->db->trans_start();
     
-        $case=$this->isCaseIdExists($stream_id);
+        $case = $this->isCaseIdExists($stream_id);
         if(count($case)>0){
             $actions['case_id']=$case[0]->case_id;
         }
@@ -195,8 +195,7 @@ class account_model extends CI_Model
             }            
         }
         
-        $post = $this->facebook_model->IsPmExists($stream_id);        
-//        print_r($post);
+        $post = $this->facebook_model->IsConversationDetailExists($stream_id);        
         if(isset($post->post_id)!=''){
             $actions['conversation_detail_id']=$post->post_id;
         }   
@@ -205,7 +204,8 @@ class account_model extends CI_Model
         $actions['social_stream_post_id']=$post_id;
         $actions['type']=$reply_type;
         $actions['product_id']=$product_type;
-        $actions['created_at']=date("Y-m-d H:i:s");    
+        $actions['created_at']=date("Y-m-d H:i:s");
+	
         $result=$this->CreateReplyAction($actions);
         $this->db->trans_complete();
     	

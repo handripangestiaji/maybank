@@ -54,7 +54,9 @@ for($i=0;$i<count($mentions);$i++){
         <button type="button" class="btn btn-inverse btn-mini" value="<?php echo $mentions[$i]->reply_post[0]->response_post_id?>">
         
         <?php
-        $reply_date = new DateTime($mentions[$i]->reply_post[count($mentions[$i]->reply_post) - 1]->created_at, new DateTimeZone($this->session->userdata('timezone')));
+        
+        $reply_date = new DateTime($mentions[$i]->reply_post[count($mentions[$i]->reply_post) - 1]->created_at);
+        $reply_date->setTimezone($timezone);
         echo "Replied by: ".$mentions[$i]->reply_post[count($mentions[$i]->reply_post) - 1]->display_name." ".$reply_date->format("d-M-y h:i A") ?>
         </button>
     <?php endif?>
@@ -108,7 +110,6 @@ for($i=0;$i<count($mentions);$i++){
                     </p>
                     <div>
                         <p><?php echo $comment[$j]->text?></p>
-                        <p><input type="hidden" class="str_id" value="<?php echo $comment[$j]->post_stream_id; ?>" /><button type="button" class="btn btn-warning btn-mini">OPEN</button><button class="retweet btn btn-primary btn-mini" style="margin-left: 5px;">RE-TWEET</button></p>
                     </div>
                 </div>
                 <?php endif;?>

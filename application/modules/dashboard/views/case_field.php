@@ -34,7 +34,9 @@ if($posts){
                <select name="assign_to">
                 <option value=""></option>
                    <?php foreach($user_list as $user):?>
-                   <option value="<?php echo $user->user_id?>"><?php echo $user->full_name."($user->email)"?></option>
+                    <?php if(IsRoleFriendlyNameExist($user->role_detail, 'Social Stream_Current_Resolve_Case')):?>
+                        <option value="<?php echo $user->user_id?>"><?php echo $user->full_name."($user->email)"?></option>
+                    <?php endif?>
                    <?php endforeach;?>
                </select>
            </div>

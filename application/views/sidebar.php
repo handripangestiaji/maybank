@@ -92,13 +92,12 @@
             <?php }?>
         </div>
         <div class="profileInfo">
-            
             <p>User Id : <?php echo $this->session->userdata('username'); ?></p>
             <p>Full Name : <?php echo $this->session->userdata('full_name'); ?></p>
             <p>Display Name : <?php echo $this->session->userdata('display_name'); ?></p>
-            <p>Timezone : <?php echo $this->session->userdata('timezone');?></p>
             <p>Role : <?php echo $this->session->userdata('role_name'); ?></p>
             <p>Email : <span class="cyanText"><?php echo $this->session->userdata('web_address'); ?></span></p>
+            <p>Timezone : <?php echo $this->session->userdata('timezone')?></p>
             <br/>
             <p><strong>About Me</strong></p>
             <p>
@@ -173,14 +172,23 @@
             <p><strong>Display Name</strong></p>
             <input type="text" name="display-name" value='<?php echo $this->session->userdata('display_name'); ?>'/>
             <p><strong>Timezone</strong></p>
-            <select name="timezone">
+            <select name='timezone' class='timezone'>
                 <?php
-                    $timezoneList  = get_timezone_list();
-                    $keys = array_keys($timezoneList );
-                    foreach($keys as $key):
+                    $timezone = get_timezone_list();
+                    $value = array_keys($timezone);
+                    foreach($value as $x)
+                    {
+                        if($x==$this->session->userdata('timezone')){
                 ?>
-                    <option value="<?=$key?>"><?=$timezoneList[$key]?></option>
-                <?php endforeach?>
+                    <option selected='selected' value='<?php echo $x;?>'><?php echo $timezone[$x];?></option>
+                <?php }
+                    else
+                    {
+                ?>
+                    <option value='<?php echo $x;?>'><?php echo $timezone[$x];?></option>
+                <?php
+                    }
+                }?>
             </select>
             <p><strong>About Me</strong></p>
             <textarea class="about-me" name="about-me" placeholder="Compose Message"><?php echo $this->session->userdata('description'); ?></textarea>

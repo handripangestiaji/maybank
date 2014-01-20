@@ -54,7 +54,13 @@ for($i=0;$i<count($homefeed);$i++){
         
     <?php endif?>
     <?php if(count($homefeed[$i]->reply_post) > 0):?>
-        <button type="button" class="btn btn-inverse btn-mini" value="<?php echo $homefeed[$i]->reply_post[0]->response_post_id?>">REPLIED</button>
+    
+        <button type="button" class="btn btn-inverse btn-mini" value="<?php echo $homefeed[$i]->reply_post[0]->response_post_id?>">
+            <?php
+                 $reply_date = new DateTime($homefeed[$i]->reply_post[count($homefeed[$i]->reply_post) - 1]->created_at);
+                $reply_date->setTimezone($timezone);
+                echo "Replied by: ".$homefeed[$i]->reply_post[count($homefeed[$i]->reply_post) - 1]->display_name." ".$reply_date->format("d-M-y h:i A") ?>
+        </button>
     <?php endif?>
     <?php if(count($homefeed[$i]->reply_post) == 0 && !$homefeed[$i]->case_id):?>
         <button type="button" class="btn btn-warning btn-mini">OPEN</button>

@@ -41,7 +41,7 @@ for($i=0;$i<count($senttweets);$i++){
                     }
             ?>
         </p>
-        <p><button type="button" class="btn btn-warning btn-mini">OPEN</button>
+        <!--p><button type="button" class="btn btn-warning btn-mini">OPEN</button-->
         <?php if ($senttweets[$i]->retweeted==1) { ?>
             <button type="button" class="btn btn-inverse btn-mini"><i class="icon-retweet">&nbsp;</i></button>
         <?php } ?>    
@@ -63,7 +63,9 @@ for($i=0;$i<count($senttweets);$i++){
         <!-- END ENGAGEMENT -->
         
         <h4 class="filled">
-            <a role="button" class='destroy_status'><i class="icon-trash greyText"></i></a>
+            <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Take Action')):?>
+                <a role="button" class='destroy_status'><i class="icon-trash greyText"></i></a>
+            <?php endif;?>
             <div class="pull-right">
                 <?php
                     $data = array(

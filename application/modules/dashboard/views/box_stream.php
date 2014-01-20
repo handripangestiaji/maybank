@@ -46,7 +46,7 @@
             <!-- ==================== END OF ACTIVITIES HEADLINE ==================== -->
 
             <!-- ==================== ACTIVITIES FLOATING BOX ==================== -->
-            <div class="floatingBox center" style="height: 400px; overflow: auto; margin-bottom: 0px; min-height: 400px; background-color: #FFFFFF;">
+            <div class="floatingBox boxStream" style="margin-bottom: 0px; min-height: 400px;">
                 Loading...
             </div>
             <!-- ==================== END OF ACTIVITIES FLOATING BOX ==================== -->

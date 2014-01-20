@@ -37,8 +37,8 @@ for($i=0;$i<count($mentions);$i++){
     <?php if(isset($entities->media[0])){
             echo "<a href='#modal-".$mentions[$i]->social_stream_post_id."' data-toggle='modal' ><img src='".base_url('dashboard/media_stream/SafePhoto?photo=').$entities->media[0]->media_url_https."' /></a>";
             echo '<div id="modal-'.$mentions[$i]->social_stream_post_id.'" class="attachment-modal modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
-                            <button type="button" class="close " data-dismiss="modal"><i class="icon-remove"></i></button>
                             <img src="'.base_url('dashboard/media_stream/SafePhoto?photo=').$entities->media[0]->media_url_https.'" />
+                            <button type="button" class="close " data-dismiss="modal"><i class="icon-remove"></i></button>
                 </div>';
             }
     ?>

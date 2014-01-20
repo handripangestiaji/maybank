@@ -748,7 +748,7 @@ $(function(){
                                        });
                                     }
                                     else{
-                                        alert(new_data.message);
+                                        console.log(data);
                                     }
                                 }
                             });
@@ -1634,7 +1634,7 @@ $(function(){
     
     $(document).ready(function() {
         var new_height = $( window ).height() - 225;
-        $('.center').height(new_height);
+        $('.boxStream').height(new_height);
     });
     
     /*=============================================================================================

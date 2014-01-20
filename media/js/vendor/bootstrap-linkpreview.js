@@ -162,13 +162,13 @@
                 image = that.findImageInDom($dom);
 
             // build dom elements
-            var $text_input = '<input class="title_link" type="text" placeholder="" value="' + title + '"/> <input type="text" class="short_code" value="' + url + '" />',
+            var $text_input = '<input class="title_link" type="text" placeholder="" value="' + title + '"/> <input type="hidden" class="short_code" value="' + url + '" />',
                 $url = '<p>' + url.replace(BASEURL + 'dashboard/media_stream/GetUrlPreview?url=','') + '</p>',
                 $textarea = '<textarea class="descr-link">' + description + '</textarea>';
                 
-                
             var $spanLeft = $("<div></div>").addClass("img-url"),
                 $spanRight = $("<div></div>").addClass("content-url");
+            
             if (image) {
                 var $image = $("<img class='img-link'></img>").attr("src", image);
                 $spanLeft
@@ -176,7 +176,7 @@
                 that.$previewContainer
                     .append($spanLeft);
             }
-                
+            
             $spanRight
                 .append($text_input)
                 .append($url)
@@ -207,29 +207,34 @@
         },
 
         findTitleInDom: function($dom) {
-            return $dom.find("title").text() ||
-                $dom.find("meta[name=title]").attr("content");
+            return $dom.find("meta[property='og:title']").attr("content") ||
+                   $dom.find("title").text() ||
+                   $dom.find("meta[name=title]").attr("content");
         },
 
         findDescriptionInDom: function($dom) {
-            return $dom.find("meta[name=description]").attr("content");
+            return  $dom.find("meta[property='og:description']").attr("content") ||
+                    $dom.find("meta[name=description]").attr("content") ||
+                    $dom.find("div .description").text();
         },
 
         findImageInDom: function($dom) {
-            var imageSrc = $dom.find("meta[itemprop=image]").attr("content") ||
-                $dom.find("link[rel=image_src]").attr("content") ||
+            var imageSrc = $dom.find("meta[property='og:image'").attr("content") ||
                 $dom.find("meta[itemprop=image]").attr("content") ||
+                $dom.find("link[rel=image_src]").attr("content") ||
                 this.findFirstImageInBody($dom.find("body"));
 
             // maybe the returned url is relative
             if (imageSrc && !this.validateUrl(imageSrc)) {
 
                 var a = document.createElement("a");
+                
                 a.href = this.url;
-
-                imageSrc = a.protocol + "//" + a.hostname + imageSrc;
+                var localHostname;
+                
+                localHostname = a.search.replace("?url=http://","");
+                imageSrc = a.protocol + "//" + localHostname + imageSrc;
             }
-
             return imageSrc;
         },
 
@@ -241,11 +246,11 @@
             var $img;
             $images.each(function() {
                 $img = $(this);
-                //if ($img.attr("height") && $img.attr("height") > 40 &&
-//                    $img.attr("width") && $img.attr("width") > 40) {
-                   result = $img.src;
-                    //return false;
-                //}
+                if ($img.attr("height") && $img.attr("height") > 40 &&
+                    $img.attr("width") && $img.attr("width") > 40) {
+                    result = this.src;
+                    return false;
+                }
             });
 
             return result;

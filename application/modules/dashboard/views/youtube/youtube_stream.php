@@ -1,5 +1,5 @@
 <input type="hidden" class="channel-id" value="<?php if(count($youtube_post) > 0) {echo $youtube_post[0]->channel_id;} else {echo $channel_id;} ?>">
-<div class="container-fluid">
+<div class="container-fluid" style="height: 95%">
     <!-- ==================== ACTIVITIES MENU ==================== -->
     <div class="floatingBoxMenu">
         <ul class="nav stream_head">
@@ -9,7 +9,7 @@
     </div>
     <!-- ==================== END OF ACTIVITIES MENU ==================== -->
 
-    <div class="container-fluid">
+    <div class="container-fluid center subStream">
         <!-- ==================== ALL ACTIVITIES CONTENT ==================== -->
         <ul class="floatingBoxContainers" id="youtubevideo">
             <?php

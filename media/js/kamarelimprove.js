@@ -245,12 +245,16 @@ $(function(){
     $('form.update_profil').submit(function(e){
         var display = $(this).find('input[name=display-name]').val();
         var about = $(this).find('.about-me').val();
+        var time = $(this).find('.timezone').val();
+        console.log(display);
+        console.log(time);
         var me = $(this);
         
         $.ajax({
                 "url" : BASEURL + "users/users_json/update_profil",
                 "data" : {display : display,
-                          about: about  },
+                          about: about,
+                          time: time},
                 "type" : "POST",
                 "success" : function(response){
                                 if(response == false){

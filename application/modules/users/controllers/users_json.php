@@ -41,12 +41,14 @@ class Users_Json extends CI_Controller {
     {
 	$display = $this->input->post('display');
 	$about = $this->input->post('about');
+	$time = $this->input->post('time');
 	
 	$id = $this->session->userdata('user_id');
 	  
 	$data = array(
 		       'description' => $about,
-		       'display_name' => $display
+		       'display_name' => $display,
+		       'timezone' => $time
 		      );
 	header("Content-type: application/x-json");
 	$this->users_model->update_user($id,$data);
@@ -57,6 +59,7 @@ class Users_Json extends CI_Controller {
 		    'username' => $user_login->row()->username,
 		    'display_name' => $user_login->row()->display_name,
 		    'description' => $user_login->row()->description,
+		    'timezone' => $user_login->row()->timezone,
 		    'is_login' => TRUE
 		);
 	$this->session->set_userdata($data1);

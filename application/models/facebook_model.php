@@ -439,11 +439,13 @@ class facebook_model extends CI_Model
                          `case` d on d.post_id = c.post_id and d.status='pending'");
         $this->db->limit($limit);
         $this->db->order_by('c.created_at','desc');
-        $this->db->order_by('c.post_stream_id','desc');
         if(count($filter) >= 1){
             $this->db->where($filter);
         }
         $result = $this->db->get()->result();
+       // echo "<pre>";
+//        print_r($result);
+//        echo "</pre>";
         foreach($result as $row){
             $row->reply_post = $this->IsCommentExists($row->social_stream_post_id);
             $row->channel_action = $this->GetChannelAction(array('post_id'=>$row->social_stream_post_id));

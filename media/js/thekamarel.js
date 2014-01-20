@@ -486,6 +486,7 @@ $(function(){
                             $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');  
                         }
                         $(this).closest('.containerHeadline').next().load(urlToLoad, function(){
+                            
                             $('.email').tagit({
                                 autocomplete : {
                                     source:  function( request, response ) {

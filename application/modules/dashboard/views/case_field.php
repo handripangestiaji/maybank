@@ -41,7 +41,7 @@
                Email:
            </div>
            <div class="pull-right">
-               <input type="text" class="autocomplete email" name="email" id="emailAssign">
+               <input type="text" class="email" name="email" />
            </div>
            <br clear="all" />
            Message :

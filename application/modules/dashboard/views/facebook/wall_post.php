@@ -64,8 +64,10 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
     <?php    }
     }else{ ?>
         <button type="button" class="btn <?php echo $fb_feed[$i]->total_comments == 0 ? "btn-warning btn-mini no-cursor indicator" : "btn-inverse btn-mini no-cursor indicator" ?>"><?php echo $fb_feed[$i]->total_comments == 0 ? 'OPEN' :  'REPLIED'?></button>  
-    <?php } ?>   
+    <?php } ?>
+    <?php if(IsRoleFriendlyNameExist($this->user_role,'Social Stream_Current_Social Functions Like, Retweet')):?>
         <button class="fblike btn btn-primary btn-mini" style="margin-left: 5px;" value="<?php echo $fb_feed[$i]->post_stream_id;?>"><?php echo $fb_feed[$i]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button> </p>
+    <?php endif ?>
     <p>
         <span class="btn-engagement"><i class="icon-eye-open"></i> <?php echo $fb_feed[$i]->total_comments;?> Engagements</span> |
         <span class="cyanText"><i class="icon-thumbs-up-alt"></i></i> <?php echo $fb_feed[$i]->total_likes; ?> likes</span> 

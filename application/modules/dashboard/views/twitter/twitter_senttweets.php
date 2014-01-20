@@ -1,9 +1,9 @@
 <?php
 $total_groups = ceil($countTweets[0]->count_post_id/$this->config->item('item_perpage'));
-$timezone=new DateTimeZone($this->config->item('timezone'));
+$timezone=new DateTimeZone($this->session->userdata('timezone'));
 for($i=0;$i<count($senttweets);$i++){
 ?>
-    <li>
+    <li id="post<?=$mentions[$i]->social_stream_post_id?>">
         <input type="hidden" class="postId" value="<?php echo $senttweets[$i]->social_stream_post_id; ?>" />
         <div class="circleAvatar"><img src="<?php echo base_url('dashboard/media_stream/SafePhoto?photo=').$senttweets[$i]->profile_image_url;?>" alt=""></div>
         <div class="read-mark <?php if($senttweets[$i]->is_read==0){echo 'redText';} else { echo 'greyText'; } ?>"><i class="icon-bookmark icon-large"></i></div>

@@ -171,7 +171,7 @@ class facebook_model extends CI_Model
 	$social_stream_fb_post = array(
 	    "post_content" => str_replace("\n", "<br />", $each_post->message),
 	    "author_id" => number_format($each_post->actor_id,0,'.',''),
-	    "attachment" => isset($each_post->attachment->media) ? json_encode($each_post->attachment->media) : "",
+	    "attachment" => isset($each_post->attachment) ? json_encode($each_post->attachment) : "",
 	    "enggagement_count" => 0,
 	    "total_likes" => $each_post->like_info->like_count,
 	    "user_likes" => $each_post->like_info->user_likes,
@@ -401,11 +401,10 @@ class facebook_model extends CI_Model
 	return $this->db->get()->row() != null;
     }
     
-    public function IsStreamIdExists($stream_id, $type = "facebook"){
+    public function IsStreamIdExists($stream_id){
 	$this->db->select("post_id");
 	$this->db->from("social_stream");
 	$this->db->where(array(
-	    "type" => $type,
 	    "post_stream_id" => $stream_id
 	));
 	return $this->db->get()->row();
@@ -468,10 +467,11 @@ class facebook_model extends CI_Model
     }
     
     public function RetriveCommentPostFb($post_id){
-        $sql = "SELECT a.post_id,a.post_content,a.total_comments,b.comment_stream_id,b.from,c.name,b.comment_content,b.created_at, b.user_likes, d.post_stream_id,b.comment_id
+        $sql = "SELECT a.post_id,a.post_content,a.total_comments,b.comment_stream_id,b.attachment,b.from,c.name,b.comment_content,b.created_at, b.user_likes, d.post_stream_id,b.comment_id,e.post_id AS comment_post_id
                 FROM social_stream_fb_post a INNER JOIN
                 social_stream_fb_comments b ON b.post_id=a.post_id INNER JOIN
-                fb_user_engaged  c ON c.facebook_id=b.from INNER JOIN social_stream d on d.post_id = b.id 
+                fb_user_engaged  c ON c.facebook_id=b.from INNER JOIN social_stream d on d.post_id = b.id LEFT OUTER JOIN
+                social_stream e ON e.post_stream_id=b.comment_stream_id
                 where a.post_id='".$post_id."'
                 ORDER BY post_id desc";
         $query = $this->db->query($sql);
@@ -481,12 +481,12 @@ class facebook_model extends CI_Model
     
       public function RetrievePmFB($filter,$limit){
         //WHERE detail_id_from_facebook LIKE '%_0'
-        $this->db->select('a.*,b.*,c.name,c.username, d.is_read, d.post_stream_id, d.type,d.type as social_stream_type,d.channel_id, d.post_id,b.created_at AS post_date,e.case_id');
+        $this->db->select('a.*,b.*,c.name,c.username, d.is_read, d.post_stream_id, d.type,d.type as social_stream_type,d.channel_id, d.post_id,b.created_at AS post_date,e.case_id, e.post_id as social_stream_post_id');
         $this->db->from("social_stream_facebook_conversation a LEFT OUTER JOIN 
                         social_stream_facebook_conversation_detail b ON b.conversation_id = a.conversation_id LEFT OUTER JOIN
                         fb_user_engaged c ON c.facebook_id=b.sender INNER JOIN 
                         social_stream d ON d.post_id=b.conversation_id LEFT OUTER JOIN
-                        `case` e ON e.post_id=d.post_id");	
+                        `case` e ON e.post_id=d.post_id and e.status='pending'");	
         if(count($filter) > 0){
 	    $this->db->where("detail_id_from_facebook LIKE '%_0' ");
 	    $this->db->where($filter);

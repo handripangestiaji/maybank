@@ -1,7 +1,12 @@
 
 /* Optional scoped theme for tag-it which mimics the zendesk widget. */
 
-
+.case-field ul.tagit{
+    border:  none
+}
+.case-field ul.tagit input[type="text"]{
+    width: 200px;
+}
 ul.tagit {
     border-style: solid;
     border-width: 1px;

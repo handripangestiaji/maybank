@@ -20,6 +20,12 @@ class mycase extends CI_Controller{
         $user_id = $this->session->userdata('user_id');
         $allPost = $this->input->post();
         
+        $chackCase=$this->case_model->chackCase(array('post_id' => $this->input->post('post_id')));
+        //print_r($chackCase);
+        if(isset($chackCase[0]->status)=='pending'){
+             $reassign=$this->case_model->reassign($this->input->post('post_id'));
+        }
+        
         $validation[] = array('type' => 'required','name' => 'user_id','value' => $user_id, 'fine_name' => "User ID");
         $validation[] = array('type' => 'required','name' => 'product_type','value' => $this->input->post('product_type'), 'fine_name' => "Product Type");
         $validation[] = array('type' => 'required','name' => 'message','value' => $this->input->post('message'), 'fine_name' => "Messages");
@@ -43,7 +49,7 @@ class mycase extends CI_Controller{
                 "created_at" => date("Y-m-d H:i:s")
             );
             
-            $case['case_id'] = $this->case_model->CreateCase($case);
+            $case['case_id'] = $this->case_model->CreateCase($case, $this->session->userdata('user_id'));
             echo json_encode(array(
                         "success" => true,
                         "message" => "Assigning case successfully done.",
@@ -59,6 +65,7 @@ class mycase extends CI_Controller{
                    )
                );
         }
+        
         
     }
     
@@ -92,8 +99,38 @@ class mycase extends CI_Controller{
                         "result" => $solved_case
                     )
                 );
+            else
+                echo json_encode(array(
+                        "success" => false,
+                        "message" => "Resolving case failed.",
+                        "result" => $solved_case
+                    )
+                );
         }
     }
     
- 
+    
+    function UpdateReadStatus(){
+        if($this->input->is_ajax_request()){
+            $case_id = $this->input->get('case_id');
+            $read_case = $this->case_model->UpdateReadStatus($case_id,1);
+            
+            if($read_case)
+                echo json_encode(array(
+                        "success" => true,
+                        "message" => "Case $case_id read."
+                    )
+                );
+            else
+                echo json_encode(array(
+                   "success" => false,
+                   "message" => "Case update failed."
+                ));
+        }
+    }
+    
+    function SearchEmail(){
+        $search_value = $this->input->get('term');
+        echo json_encode($this->case_model->SearchUserByEmail($search_value));
+    }
 }

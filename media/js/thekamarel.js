@@ -26,7 +26,10 @@ $.extend($.expr[":"],
     });
 
 $(function(){
-
+    $(this).on("error", ".circleAvatar img", function() {
+        //$( this ).attr( "src", "missing.png" );
+        console.log("error");
+    });
     /*=============================================================================================
      ==================================== GET ACTUAL DATETIME =====================================
      =============================================================================================*/
@@ -418,22 +421,14 @@ $(function(){
                 $(document).ready(function() {
                     
                     $(this).on('click', '.stream_head > li > a',
-                        function() {
+                        function(e) {
                             previous = $(this).closest('ul.stream_head').find('li.active');
                             previous.removeClass('active');
                             $(this).parent().addClass('active');
                             var id_tab_name = '#' + $(this).attr('class');
                             $(this).closest('.floatingBoxMenu').next().find('.floatingBoxContainers').hide(); 
                             $(this).closest('.floatingBoxMenu').next().find(id_tab_name).show();
-                            
-                        /*
-                        var href = $(this).attr('href'),
-                        $previous = $(this).closest('ul.nav-tabs').find('li.active');
-                
-                        //show one particular menu
-                        $(href).parent().children().hide();
-                        $(href).fadeIn();
-                        */
+                            e.preventDefault();
                     });
                     
                     $('.change-read-unread-stream').on('change', function(){
@@ -469,24 +464,61 @@ $(function(){
                         streamId = $(this).find('li:nth-child(' + i + ') input').val();
                         
                         if($(this).find('li:nth-child(' + i + ') a').hasClass('facebook_stream')){
+                            streamType = "facebook";
                             urlToLoad += "facebook_stream/" + streamId
                             $(this).closest('div').children('button').html('<i class="icon-facebook"></i><h2>Facebook&nbsp;</h2><i class="icon-caret-down"></i>');
                             $(this).closest('.containerHeadline').css( "background-color", "#3B5998" );
-                            $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...'); 
+                            $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');
+                            
                         }
                         else if($(this).find('li:nth-child(' + i + ') a').hasClass('twitter_stream')){
+                            streamType = "twitter";
                             urlToLoad += "twitter_stream/" + streamId
                             $(this).closest('div').children('button').html('<i class="icon-twitter"></i><h2>Twitter&nbsp;</h2><i class="icon-caret-down"></i>');
                             $(this).closest('.containerHeadline').css( "background-color", "#4099FF" );
-                            $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');                                   
+                            $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');
                         }
                         else{
+                            streamType = "youtube";
                             urlToLoad += "youtube_stream/" + streamId
                             $(this).closest('div').children('button').html('<i class="icon-youtube"></i><h2>Youtube&nbsp;</h2><i class="icon-caret-down"></i>');
                             $(this).closest('.containerHeadline').css( "background-color", "#FF3333" );
                             $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');  
                         }
-                        $(this).closest('.containerHeadline').next().load(urlToLoad);                      
+                        $(this).closest('.containerHeadline').next().load(urlToLoad, function(){
+                            $('.email').tagit({
+                                autocomplete : {
+                                    source:  function( request, response ) {
+                                        $.ajax({
+                                            "url" : BASEURL + "case/mycase/SearchEmail",
+                                            data : {
+                                                term : request.term
+                                            },
+                                            success : function(data){
+                                                response( $.map( data, function( item ) {
+                                                    return {
+                                                      label: item.username + "(" + item.email + ")",
+                                                      value: item.email
+                                                    }
+                                                }));
+                                            }
+                                        });
+                                    }
+                                },
+                                beforeTagAdded : function(event, ui){
+                                    if(validateEmail(ui.tagLabel))
+                                        return true;
+                                    else
+                                        return false;
+
+                                }
+                            });
+                            var hashUrl = window.location.hash;
+                            var splitUrl = hashUrl.split('/');
+                            if(splitUrl[1] == streamType)
+                                $(this).ToCase();
+                        });
+                       
                     });
                     $('.facebook_stream').on('click',function() {
                         $(this).closest('div').children('button').html('<i class="icon-facebook"></i><h2>Facebook&nbsp;</h2><i class="icon-caret-down"></i>');
@@ -717,7 +749,9 @@ $(function(){
                                 url : BASEURL + 'dashboard/media_stream/GenerateShortUrlWithoutCampaign',
                                 type: "POST",
                                 data: {
-                                        url:$('.compose-insert-link-text').val(),
+                                        url: validateURL($('.compose-insert-link-text').val()) ?
+                                            $('.compose-insert-link-text').val() :
+                                                "http://" + $('.compose-insert-link-text').val(),
                                         },
                                 success: function(data){
                                     if(data.shortcode){
@@ -752,35 +786,27 @@ $(function(){
                         var isComment=me.closest('form').html();
                                                 e.preventDefault();
                         me.attr("disabled", "disabled").html("SHORTENING...");
-                        me.siblings(".reply-insert-link-text").linkpreview({
-                            previewContainer: me.closest('.pull-left').siblings('#reply-url-show').find('div.reply-url-show-content'),  //optional
-                            //previewContainerClass: ".compose-schedule",
-                            refreshButton: ".reply-insert-link-btn",        //optional
-                            preProcess: function() {                //optional
-                                if(isComment==''){
-                                    me.closest('.pull-left').siblings("#reply-url-show").show();
-                                    me.closest('.pull-left').siblings("#reply-url-show").find('div.reply-url-show-content').html('Loading...');
-                                }
-                            },
-                            onSuccess: function(data) {                  //optional
-                            },
-                            onError: function() {                    //optional
-                            },
-                            onComplete: function() {                 //optional
+                        if(!validateURL(me.siblings(".reply-insert-link-text").val())){
+                            if(!validateURL("http://" + me.siblings(".reply-insert-link-text").val())){
+                                alert("Invalid Link");
+                                me.removeAttr("disabled").html("SHORTEN");
+                                return;
                             }
-                       });
-                        
+                        }
                         $.ajax({
                            "url" : BASEURL + "dashboard/media_stream/GenerateShortUrlWithoutCampaign",
                            "data" : {
-                                "url" : me.siblings(".reply-insert-link-text").val()
+                                "url" : validateURL(me.siblings(".reply-insert-link-text").val()) ? me.siblings(".reply-insert-link-text").val() :
+                                    "http://" + me.siblings(".reply-insert-link-text").val()
                            },
                            "type" : "POST",
                            "success" : function (response){
                                 me.removeAttr("disabled").html("SHORTEN");
                                 tweetsText = me.closest('form').find(".replaycontent");
+                                shortcode= me.closest('.link_url').find(".short_code");
                                 tweetsText.val(tweetsText.val() + " http://maybank.co/" + response.shortcode);
-                                me.closest('reply-shorturl-show-content').val()=" http://maybank.co/" + response.shortcode;
+                                shortcode.val(response.shortcode);
+                                me.closest('reply-shorturl-show-content').val(" http://maybank.co/" + response.shortcode);
                                // alert("http://maybank.co/" + response.shortcode)
                            },
                            failed : function(response){
@@ -894,6 +920,9 @@ $(function(){
                             }
                             
                             if(confirmed == true){
+                                $(".btn-compose-post").html('POSTING...');
+                                $(".btn-compose-post").prop('disabled',true);
+                                
                                 if(scheduleTime == ''){
                                     $('.compose-post-status').show();
                                     $('.compose-post-status').removeClass('green');
@@ -968,6 +997,9 @@ $(function(){
                                                             $('.compose-insert-link-short-url-hidden').val('');
                                                             $('#url-show').find('textarea').val('');
                                                             $('#url-show').find('p').html('');
+                                                            
+                                                            $(".btn-compose-post").html('<i class="icon-bolt"></i> POST');
+                                                            $(".btn-compose-post").prop('disabled',false);
                                                        });
                                                     }
                                                     else{
@@ -976,7 +1008,10 @@ $(function(){
                                                         $('.compose-post-status').addClass('red');
                                                         $('.compose-post-status').show();
                                                         $('.compose-post-status').html('Post to Facebook Failed');    
-                                                        $('.compose-post-status').fadeOut(7500)  
+                                                        $('.compose-post-status').fadeOut(7500);
+                                                        
+                                                        $(".btn-compose-post").html('<i class="icon-bolt"></i> POST');
+                                                        $(".btn-compose-post").prop('disabled',false);
                                                     }
                                                 },
                                             });
@@ -1035,6 +1070,9 @@ $(function(){
                                                                 $('.compose-insert-link-short-url-hidden').val('');
                                                                 $('#url-show').find('textarea').val('');
                                                                 $('#url-show').find('p').html('');
+                                                                
+                                                                $(".btn-compose-post").html('<i class="icon-bolt"></i> POST');
+                                                                $(".btn-compose-post").prop('disabled',false);
                                                             });
                                                         }
                                                         else{
@@ -1044,6 +1082,9 @@ $(function(){
                                                             $('.compose-post-status').show();
                                                             $('.compose-post-status').html('Post to Twitter Failed');    
                                                             $('.compose-post-status').fadeOut(7500);
+                                                            
+                                                            $(".btn-compose-post").html('<i class="icon-bolt"></i> POST');
+                                                            $(".btn-compose-post").prop('disabled',false);
                                                         }
                                                     },
                                                 });
@@ -1094,6 +1135,9 @@ $(function(){
                                         $('.compose-insert-link-short-url-hidden').val('');
                                         $('#url-show').find('textarea').val('');
                                         $('#url-show').find('p').html('');
+                                        
+                                        $(".btn-compose-post").html('<i class="icon-bolt"></i> POST');
+                                        $(".btn-compose-post").prop('disabled',false);
                                     });
                                 }
                                 
@@ -1319,6 +1363,13 @@ $(function(){
                      $(this).on('click','.btn-send-reply',
                         function() {
                         var len=$(this).parent().siblings(".replaycontent").val().length
+                        var commnetbox;
+                        if(len<=0){
+                            commnetbox='-';
+                        }else{
+                             commnetbox=$(this).parent().siblings(".replaycontent").val();
+                        }
+                        
                         if(len>2000){
                             $(this).parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
                             '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
@@ -1335,8 +1386,10 @@ $(function(){
                                 data: {
                                     post_id: $(this).val(),
                                     channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
-                                    comment :$(this).parent().siblings(".replaycontent").val(),
-                                    url:'',
+                                    comment :commnetbox,
+                                    url:$(this).parent().siblings(".link_url").find(".short_code").val(),
+                                    reply_type:$(this).parent().siblings('.option-type').find(".replyType").val(),
+                                    product_type:$(this).parent().siblings('.option-type').find(".productType").val(),
                                     title :$(this).parent().siblings('#reply-url-show').find(".title_link").val(),
                                     desc :$(this).parent().siblings('#reply-url-show').find(".descr-link").val(),
                                     img :$(this).parent().siblings('#reply-img-show').find("#reply-preview-img").attr('src'),
@@ -1344,7 +1397,7 @@ $(function(){
                                 success: function(response)
                                 {
                                     commentButton.removeAttr("disabled");
-                                    if(response.success === true){
+                                    if(response.success == true){
                                         commentButton.parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
                                         '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
                                         '<strong>Success!</strong> '+response.message+' </div>');
@@ -1360,6 +1413,14 @@ $(function(){
                                         '<strong>Error!</strong>'+response.message+'</div>');
                                         commentButton.html("SEND");
                                     }
+
+                                },
+                                error: function(response) {
+                                    commentButton.removeAttr("disabled");
+                                    commentButton.parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
+                                        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
+                                        '<strong>Error!</strong>: Facebook post not founds/'+response.message+'</div>');
+                                    commentButton.html("SEND");
                                 },
                             });
                             
@@ -1434,39 +1495,43 @@ $(function(){
                                     channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
                                 },
                                 success: function(response){
-                                    alert(response);
-                                    
-                                     delButton.removeAttr('disabled').html('SEND');
+                                    delButton.removeAttr('disabled').html('SEND');
                                 }
-                                                                
                             });
                             
                         });
                          $(this).on('click','.pointerCase',
                             function() {
-                                var pointer=$(this).closest('.pointerCase').find('.pointer-case').val();
-                                //alert(pointer);
-                                var tes=$('.content').find('.case_'+pointer).html();
-                                if(tes){
-                                  //  alert("ada:"+tes);   
-                                }else{
-                                    //alert("ga ada:"+tes);
-                                }
-                                $(document.body).animate({
-                                    'scrollTop':$('.case_'+pointer).offset().top
-                                }, 2000);
+                               $(this).ToCase();
+                               var thisElement = $(this);
+                               $.ajax({
+                                    url : BASEURL + "case/mycase/UpdateReadStatus",
+                                    data : {
+                                        case_id : $(this).find("input.pointer-case").val()
+                                    },
+                                    success : function(response){
+                                        if(response.success){
+                                            thisElement.find(".notifHead").toggleClass('');
+                                        }
+                                    }
+                               });
                             });
                     
                       /*load more content*/  
                     looppage=2;
                     $(this).on('click','.loadmore',
                         function() {
+                            $(this).find('span').html("LOADING...");
+                            $(this).attr("disabled", "disabled");
+                            var loadMoreElement = $(this);
                             loading = true;
                             action=$(this).val();    
                             group_numbers=2;
                             channel_ids = $(this).siblings(".channel_id").val();
                             me = $(this);
+                            me.attr('disabled', 'disabled').html('Loading...');
                             $(this).closest('.floatingBoxContainers').load(BASEURL + 'dashboard/media_stream/loadmore/'+action+'/'+looppage+'/'+channel_ids, function(){
+                                loadMoreElement.removeAttr("disabled");
                                 var currentNumber = $(this).closest('.floatingBoxContainers').find('.unread-post').length;
                                 try{
                                     currentNumber += parseInt($(this).closest('.container-fluid').siblings('.floatingBoxMenu').find('li.active .notifyCircle').html());
@@ -1483,7 +1548,7 @@ $(function(){
                                 else
                                     me.closest('.container-fluid').siblings('.floatingBoxMenu').find('li.active .notifyCircle').show();
                             });
-                            
+                            me.removeAttr('disabled').html('Loading..');
                             
                             looppage++;
                             loading = false;
@@ -1516,7 +1581,7 @@ $(function(){
                   
                 $('#compose-tags').tagit({
                     availableTags: sampleTags,
-                    allowSpaces: true
+                    allowSpaces: true,
                 });
                 
                 $(this).on('click','.btn-reply',function(){
@@ -1557,6 +1622,39 @@ $(function(){
                 });
             });
             
+    $(document).ready(function() {
+        $('.btn-dashboard-search').click(function(){
+            var channel_1 = $('#box-id-1').next().find('.channel-id').val();
+            var channel_2 = $('#box-id-2').next().find('.channel-id').val();
+            var channel_3 = $('#box-id-3').next().find('.channel-id').val();
+            $(this).closest('.container-fluid').next().find('.floatingBox').html('Loading...');
+            $('#box-id-1').next().load(BASEURL + 'dashboard/search',
+                                       {
+                                        channel_id : channel_1,
+                                        q : $('.dashboard-search-field').val()
+                                        });
+            $('#box-id-2').next().load(BASEURL + 'dashboard/search',
+                                       {
+                                        channel_id : channel_2,
+                                        q : $('.dashboard-search-field').val()
+                                        });
+            
+            $('#box-id-3').next().load(BASEURL + 'dashboard/search',
+                                       {
+                                        channel_id : channel_3,
+                                        q : $('.dashboard-search-field').val()
+                                        });
+            //window.location.href = BASEURL + 'dashboard/search?q=' + $('.dashboard-search-field').val();
+        });
+        
+        
+    });
+    
+    $(document).ready(function() {
+        var new_height = $( window ).height() - 225;
+        $('.center').height(new_height);
+    });
+    
     /*=============================================================================================
      ===================================== CMS ACTIONS ============================================
      =============================================================================================*/    
@@ -1656,7 +1754,8 @@ $(document).ready(function(){
         header: {
             left: 'prev,next,today',
             center: 'title',
-            right: 'month,agendaWeek,agendaDay'
+            right: 'month,agendaWeek'
+            //right: 'month,agendaWeek,agendaDay'
         },
         eventSources:[
             {
@@ -1669,11 +1768,15 @@ $(document).ready(function(){
             //alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
             //alert('View: ' + view.name);
             $(this).find('.tooltip-event').toggle();
+            
+            console.log($('#calendar').height() - $(this).find('.tooltip-event').coord().top);
+            if(($('#calendar').height() - $(this).find('.tooltip-event').coord().top) < 100){
+                $(this).find('.tooltip-event').css('top','-155px');
+            }
         },
         eventRender: function(event, element){
-            console.log($('#calendar').width());
             var deleteable;
-            if(event.is_posted != '1'){
+            if(event.is_posted != '1' && event.user_role == 'Admin'){
                 deleteable = "<div class='pull-right'><button type='button' class='btn btn-danger btn-mini btn-delete-schedule-post'><i class='icon-remove'></i></a></div>";
             }
             else{
@@ -1799,9 +1902,55 @@ $.fn.RefreshAllStream = function(){
                     $(this).find('.channel-id').val(channelId);
                 });
             }
+            else if($(this).closest('div').prev().find('i').attr('class') == 'icon-youtube'){
+                $(this).html('&nbsp;&nbsp;Loading...');        
+                $(this).load(BASEURL + 'dashboard/media_stream/youtube_stream/' + channelId + '/'+ is_read, function(){
+                    $(this).find('.channel-id').val(channelId);
+                });
+            }
         }
     });
 };
 
-   
+$.fn.ToCase = function(type){
+    var hashUrl = window.location.hash;
+    var splitUrl = hashUrl.split('/');
+    if(splitUrl.length == 3 ){
+        var id = $('#post' + splitUrl[2]).closest('.floatingBoxContainers').attr('id');
+        
+        $('#' + id).parent().find('ul').hide();
+        $('#' + id).show();
+        $('#' + id).closest('.floatingBox').find('.stream_head li').removeClass('active');
+        $('#' + id).closest('.floatingBox').find('.' + id).parent().addClass('active');
+        if($('#post' + splitUrl[2]).length > 0){
+            $('#post' + splitUrl[2]).closest('.floatingBox').animate({
+                scrollTop: $('#post' + splitUrl[2]).offset().top -  ($('#post' + splitUrl[2]).height() + 20)
+            }, 2000, function(){
+                $('#post' + splitUrl[2]).toggle('bounce', { times: 3, complete:function(){
+                                        $(this).removeAttr('style');
+                                }}, 'slow');
+            });
+        }
+        else{
+            $.ajax({
+                "url" : "",
+                "data" : "post_id="
+            });
+        }
+    }    
+};
 
+
+function validateURL(textval) {
+    var urlregex = new RegExp(
+    "^(http|https|ftp)\://[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(:[a-zA-Z0-9]*)?/?([a-zA-Z0-9\-\._\?\,\'/\\\+&amp;%\$#\=~])*$");
+    role = urlregex.test(textval);
+    console.log(role);
+    return role;
+}
+
+
+function validateEmail(email) { 
+    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+} 

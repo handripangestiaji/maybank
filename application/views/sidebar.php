@@ -16,6 +16,7 @@
 <!-- ==================== END OF SIDEBAR COLLAPSED ==================== -->
 
 <!-- ==================== SIDEBAR TASKS ==================== -->
+<?php if(IsRoleFriendlyNameExist($this->user_role, "Publisher")):?>
 <div id="tasksContent">
     <div class="sidebarDivider"></div>
     <div class="sidebarContent" style="overflow-y: scroll;">
@@ -76,16 +77,16 @@
             <?php endif;?>
         </div>
         <div class="sidebarLine"></div>
-        <ul class="tasksList">
+        <ul class="tasksList" style="height: 100%">
             <?php foreach($case as $each_case):?>
             <li class="pointerCase" >
                 <input type="hidden" name="pointer" class="pointer-case" value="<?php echo $each_case->case_id?>" />
-                <div class="notifHead purple">
+                <div class="notifHead <?=$each_case->read == 1 ? "purple" : "red"?>" onclick="window.location='<?=base_url('dashboard/socialmedia').'#case/'.$each_case->type.'/'.$each_case->post_id?>'">
                     CASE ID: #<?php echo $each_case->case_id?>
                 </div>
                 <div class="notifBody">
                     <?php
-                        $timezone = new DateTimeZone($this->config->item('timezone'));
+                        $timezone = new DateTimeZone($this->session->userdata('timezone'));
                         $date = new DateTime($each_case->created_at, $timezone);
                         echo $date->format("M d, Y, h:i A");
                     ?>
@@ -99,7 +100,7 @@
                 </div>
                 <div class="notifBody">
                     <?php
-                        $timezone = new DateTimeZone($this->config->item('timezone'));
+                        $timezone = new DateTimeZone($this->session->userdata('timezone'));
                         $date = new DateTime($each_case->created_at, $timezone);
                         echo $date->format("M d, Y, h:i A");
                     ?>
@@ -110,6 +111,8 @@
         
     </div>   
 </div>
+<?php endif?>
+
 <!-- ==================== END OF SIDEBAR TASKS ==================== -->
 
 <!-- ==================== SIDEBAR PROFILE ==================== -->
@@ -128,9 +131,11 @@
             <?php }?>
         </div>
         <div class="profileInfo">
+            
             <p>User Id : <?php echo $this->session->userdata('username'); ?></p>
             <p>Full Name : <?php echo $this->session->userdata('full_name'); ?></p>
             <p>Display Name : <?php echo $this->session->userdata('display_name'); ?></p>
+            <p>Timezone : <?php echo $this->session->userdata('timezone');?></p>
             <p>Role : <?php echo $this->session->userdata('role_name'); ?></p>
             <p>Email : <span class="cyanText"><?php echo $this->session->userdata('web_address'); ?></span></p>
             <br/>

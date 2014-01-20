@@ -9,9 +9,10 @@
     
     <head>
     	<?php echo $this->load->view('metadata') ?>
+	<link rel="shortcut icon" href="<?php echo base_url() ?>media/img/favicon.ico">
     </head>
 	
-	<body class="dashboard">
+	<body class="dashboard" onload="">
 		<!--[if lt IE 7]>
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
         <![endif]-->
@@ -90,10 +91,9 @@
         <!-- ==================== END OF PAGE CONTENT ==================== -->
         
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src="<?php echo base_url('media/js/jstz.min.js')?>"></script> 
         <script>window.jQuery || document.write('<script src="<?php echo base_url('media/js/vendor/jquery-1.9.1.min.js')?>"><\/script>')</script>
-        <script src="<?php echo base_url(); ?>media/js/vendor/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script> <!-- jquery tag-it -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script> <!-- jquery tag-it -->
-	<script src="<?php echo base_url('media/js/vendor/bootstrap-slider.js')?>"></script>                   <!-- bootstrap slider plugin -->
+        <script src="<?php echo base_url('media/js/vendor/bootstrap-slider.js')?>"></script>                   <!-- bootstrap slider plugin -->
         <script src="<?php echo base_url('media/js/vendor/jquery.sparkline.min.js')?>"></script>               <!-- small charts plugin -->
         <script src="<?php echo base_url('media/js/vendor/jquery.flot.min.js')?>"></script>                    <!-- charts plugin -->
         <script src="<?php echo base_url('media/js/vendor/jquery.flot.resize.min.js')?>"></script>             <!-- charts plugin / resizing extension -->
@@ -107,25 +107,27 @@
         <script src="<?php echo base_url('media/js/vendor/raphael.2.1.0.min.js')?>"></script>                  <!-- vector graphic plugin / for justgage.js -->
         <script src="<?php echo base_url('media/js/vendor/justgage.js')?>"></script>                           <!-- justgage plugin -->
         <script src="<?php echo base_url('media/js/vendor/bootstrap-multiselect.js')?>"></script>              <!-- multiselect plugin -->
-        <script src="<?php echo base_url('media/js/vendor/bootstrap-datepicker.js')?>"></script>               <!-- datepicker plugin -->
         <script src="<?php echo base_url('media/js/vendor/bootstrap-colorpicker.js')?>"></script>              <!-- colorpicker plugin -->
         <script src="<?php echo base_url('media/js/vendor/parsley.min.js')?>"></script>                        <!-- parsley validator plugin -->
         <script src="<?php echo base_url('media/js/vendor/formToWizard.js')?>"></script>                       <!-- form wizard plugin -->
 	<script src="<?php echo base_url('media/js/vendor/fullcalendar.min.js')?>"></script>        		<!-- fullcalendar plugin -->
         <script src="<?php echo base_url('media/js/vendor/bootstrap.min.js')?>"></script>
         <script src="<?php echo base_url('media/js/vendor/bootstrap-editable.min.js')?>"></script>             <!-- editable fields plugin -->
+        <script type="text/javascript" charset="utf-8" src="<?php echo base_url(); ?>media/js/jquery.dateFormat-1.0.dc.js"></script>
 	
 	<!-- <script src="<?php //echo base_url('media/js/vendor/jquery-ui-1.10.2.custom.min.js')?>"</script>        	<!-- jquery ui dragging -->    
-		
 	<!-- <script type="text/javascript" src="<?php //echo base_url(); ?>media/js/jquery-1.7.2.min.js"></script> --> <!-- jquery widget tree -->
+		
 	<script src="<?php echo base_url(); ?>media/js/vendor/jqwidgets/jqxcore.js"></script> <!-- jquery widget tree -->
 	<script src="<?php echo base_url(); ?>media/js/vendor/jqwidgets/jqxtree.js"></script> <!-- jquery widget tree -->
 	<script src="<?php echo base_url(); ?>media/js/vendor/jqwidgets/jqxcheckbox.js"></script> <!-- jquery widget tree -->
 
         <script src="<?php echo base_url(); ?>media/js/vendor/bootstrap-linkpreview.js"></script> <!-- jquery linkpreview -->
         
-    <script src="<?php echo base_url(); ?>media/js/vendor/tag-it.js"></script> <!-- jquery tag-it -->
+	<script src="<?php echo base_url(); ?>media/js/vendor/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script> <!-- jquery tag-it -->
+	<script src="<?php echo base_url(); ?>media/js/vendor/tag-it.js"></script> <!-- jquery tag-it -->
         
+        <script src="<?php echo base_url('media/js/vendor/bootstrap-datepicker.js')?>"></script>               <!-- datepicker plugin -->
         <script src="<?php echo base_url('media/js/thekamarel.min.js')?>"></script>                            <!-- main project js file -->
         <script src="<?php echo base_url('media/js/thekamarel.js')?>"></script>                            <!-- main project js file -->
 	

@@ -7,6 +7,7 @@
     <div class="input-prepend">
       <span class="add-on"><i class="icon-lock"></i></span>
       <input type="password" name="password" placeholder="Password">
+	<input type="hidden" name="timezone" id="timezone" />
       <a id="submit" href="javascript:void(0);"><span class="add-on" id="login"><i class="icon-arrow-right"></i></span></a>
     </div>
     <?php
@@ -23,22 +24,25 @@
     <div class="term"><a href="<?php echo site_url('login/terms');?>">Terms of Use</a></div>
     <div><a href="<?php echo site_url('login/forgot');?>">Lost your password?</a></div>
 </div>
-     
+<script src="<?php echo base_url('media/js/jstz.min.js')?>" type="text/javascript"></script> 
 <script type="text/javascript">
-	$(document).ready(function(){
-		$('#submit').click(function(){
-			$('#login_form').submit();
-		});
-		
-		$('#login_form').bind('keypress', function(e){
-			if(e.which == 13)
-			{
-				$('#login_form').submit();
-			}
-		})
-                                
-                $(this).on('click', '.alert > .close', function() {
-                    $(this).parent().hide();
-                });
+    $(document).ready(function(){
+	var tz = jstz.determine(); // Determines the time zone of the browser client
+	
+	$('#timezone').val(tz.name());
+	$('#submit').click(function(){
+	    $('#login_form').submit();
 	});
+	    
+	$('#login_form').bind('keypress', function(e){
+		if(e.which == 13)
+		{
+			$('#login_form').submit();
+		}
+	})
+			
+	$(this).on('click', '.alert > .close', function() {
+	    $(this).parent().hide();
+	});
+    });
 </script>

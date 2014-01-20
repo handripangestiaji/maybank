@@ -8,6 +8,7 @@
                     <?php $group =  $this->users_model->get_group_detail(array('user_group_id'=> $this->session->userdata('group_id')))->result();
                     
                     ?>
+                    <br clear="all" />
                 </div>
             </div>
             <!-- button-refresh end -->
@@ -23,10 +24,11 @@
                                 <?php
                                     for($i=0;$i<count($channels);$i++){
                                             for($x = 0; $x < count($group); $x++){
+                                                if($channels[$i]->connection_type != 'youtube'){
                                                     if($group[$x]->allowed_channel === $channels[$i]->channel_id)
                                                             echo '<option id="opt'.$channels[$i]->connection_type.'" value="'.$channels[$i]->channel_id.'">'.$channels[$i]->name.'</option>';
+                                                }
                                             }
-                                        
                                     }
                                 ?>
                             </select>
@@ -140,7 +142,8 @@
                                 </select>
                                 <select class="time-sel" id="compose-schedule-minutes">
                                     <option value="">Minutes</option>
-                                    <option value="5">5</option>
+                                    <option value="00">0</option>
+                                    <option value="05">5</option>
                                     <option value="10">10</option>
                                     <option value="15">15</option>
                                     <option value="20">20</option>
@@ -176,12 +179,12 @@
                 </div>
             </div>
             <!-- ==================== END URL SHORTERNER AJAX  ==================== -->
-          <div class="compose-send">
-            <p class="facebook-character-count"><i class="icon-facebook-sign"></i>&nbsp;<span class="compose-fb-char-count">2000</span</p>
-            <p class="twitter-character-count">&nbsp;&nbsp;<i class="icon-twitter-sign"></i>&nbsp;<span class="compose-tw-char-count">140</span></p>
-            <p class="youtube-character-count">&nbsp;&nbsp;<i class="icon-youtube-sign"></i>&nbsp;<span class="compose-yt-char-count">500</span></p>
-            <button class="btn-compose-post btn btn-primary" type="button"><i class="icon-bolt"></i> POST</button>
-          </div>
+            <div class="compose-send">
+                <p class="facebook-character-count"><i class="icon-facebook-sign"></i>&nbsp;<span class="compose-fb-char-count">2000</span</p>
+                <p class="twitter-character-count">&nbsp;&nbsp;<i class="icon-twitter-sign"></i>&nbsp;<span class="compose-tw-char-count">140</span></p>
+                <p class="youtube-character-count">&nbsp;&nbsp;<i class="icon-youtube-sign"></i>&nbsp;<span class="compose-yt-char-count">500</span></p>
+                <button class="btn-compose-post btn btn-primary" type="button"><i class="icon-bolt"></i> POST</button>
+            </div>
           <br clear="all" />
           <div class="compose-post-status green hide">Message Post</div>
         </div>
@@ -189,20 +192,20 @@
         </div>
 
 
-    <div class="pull-right dashboard-search">
-            <select style="width: 100px; float: left;">
-                <option style="display:none">Type</option>
-                <option value="user">User</option>
-                <option value="keyword">Keyword</option>
-            </select>
-            <input type="text" placeholder="Search" style="width:200px; float: left; margin-left: 2px;">
-            <a href="" style="float: left; height: 14px;">
-                <span class="add-on" style="background-color: black;color: white;margin-left: -1px; display: inline-block; white-space: nowrap; padding: 5px 6px; font-size: 14px;"><i class="icon-search"></i></span></a>
-        </div>      
+    
+    <?php if(IsRoleFriendlyNameExist($this->user_role, "Social Stream_All_Take Action")):?>
+        <div class="pull-right dashboard-search">
+            <input class="dashboard-search-field" type="text" placeholder="Search" style="width:200px; float: left; margin-left: 2px;">
+            <button class="btn btn-inverse btn-dashboard-search">
+                <i class="icon-search"></i>
+            </button>
+        </div>
+    <?php endif;?>
+    
 </div>
 <!-- ==================== END COMPOSE MESSAGE ==================== -->
 
-<div class="row-fluid">
+<div class="row-fluid" style="margin-bottom: 0px;">
 <?php
     if(count($channels) > 3){
         $span = 4;
@@ -213,13 +216,16 @@
     //$data['channels'] = $channels;
     $data['color'] = '#3B5998';
     $data['group'] = $group;
+    $data['box_id'] = 1;
     if(count($group) >= 1){
         $this->load->view('dashboard/box_stream',$data);
     }
+    $data['box_id'] = 2;
     $data['color'] = '#4099FF';
     if(count($group) >= 2){
         $this->load->view('dashboard/box_stream',$data);
     }
+    $data['box_id'] = 3;
     $data['color'] = '#FF3333';
     if(count($group) >= 3)
         $this->load->view('dashboard/box_stream',$data);

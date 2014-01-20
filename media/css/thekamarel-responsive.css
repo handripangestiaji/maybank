@@ -481,6 +481,14 @@ created by Tatto @ - matodrlicka@gmail.com
 		padding: 5px 5px 5px 5px;	
 	}
 	
+	select[name="reply_type"], select[name="product_type"], select[name="case_type"]{
+		width: 100%;
+	}
+	
+	.btn-reply-open-img{
+		float: left;	
+	}
+	
 	.titleLine {
 		height: 80px;
 	}

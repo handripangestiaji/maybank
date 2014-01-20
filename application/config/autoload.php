@@ -64,7 +64,7 @@ $autoload['libraries'] = array('database', 'session', 'pagination');
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array('url', 'array', 'basic', 'form');
+$autoload['helper'] = array('url', 'array', 'basic', 'form','elasticsearch/autoload');
 
 
 /*

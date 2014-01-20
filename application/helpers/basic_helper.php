@@ -299,11 +299,21 @@ function convert_image($image, $path){
 }
 
 
-function IsRoleFriendlyNameExist($user_role, $currentPermission){
+function IsRoleFriendlyNameExist($user_role, $currentPermission, $property='role_friendly_name'){
+    if($currentPermission == '') return true;
     foreach($user_role as $role){
-        if($role->role_friendly_name == $currentPermission)
+        if($role->$property == $currentPermission)
             return true;
-    }
-    
+    }    
     return false;
+}
+
+
+ function convert_date($dateFormat){
+    $date = substr($dateFormat,3,2);
+    $month = substr($dateFormat,0,2);
+    $year = substr($dateFormat,6,4);
+    
+    $dt = $year.'-'.$month.'-'.$date;
+    return $dt;
 }

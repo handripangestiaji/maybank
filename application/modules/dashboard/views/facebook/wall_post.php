@@ -77,8 +77,17 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
         <?php }else{ ?>
             <button type="button" class="btn <?php echo $fb_feed[$i]->case_id != null ? "btn-purple btn-mini" : "btn-inverse btn-mini" ?>"><?php echo $fb_feed[$i]->case_id != null ? 'CASE #'.$fb_feed[$i]->case_id.' Assign to: '.$isMyCase[0]->full_name : 'REPLIED'?></button>  
     <?php    }
-    }else{ ?>
-        <button type="button" class="btn <?php echo $fb_feed[$i]->total_comments == 0 ? "btn-warning btn-mini no-cursor indicator" : "btn-inverse btn-mini no-cursor indicator" ?>"><?php echo $fb_feed[$i]->total_comments == 0 ? 'OPEN' :  'REPLIED'?></button>  
+    }else{ 
+//        print_r($fb_feed[$i]);
+//        ?>
+        <!--button type="button" class="btn <?php echo $fb_feed[$i]->total_comments == 0 ? "btn-warning btn-mini no-cursor indicator" : "btn-inverse btn-mini no-cursor indicator" ?>"><?php echo $fb_feed[$i]->total_comments == 0 ? 'OPEN' :  'REPLIED'?></button--> 
+         <!--button type="button" class="btn btn-inverse btn-mini" value="<?php echo $fb_feed[$i]->reply_post[0]->response_post_id?>">
+        
+        <?php
+        $reply_date = new DateTime($fb_feed[$i]->reply_post[count($fb_feed[$i]->reply_post) - 1]->created_at, new DateTimeZone($this->session->userdata('timezone')));
+        echo "Replied by: ".$fb_feed[$i]->reply_post[count($fb_feed[$i]->reply_post) - 1]->display_name." ".$reply_date->format("d-M-y h:i A") ?>
+        </button-->
+ 
     <?php } ?>
     <?php if(IsRoleFriendlyNameExist($this->user_role,'Social Stream_Current_Social Functions Like, Retweet')):?>
         <button class="fblike btn btn-primary btn-mini" style="margin-left: 5px;" value="<?php echo $fb_feed[$i]->post_stream_id;?>"><?php echo $fb_feed[$i]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button> </p>

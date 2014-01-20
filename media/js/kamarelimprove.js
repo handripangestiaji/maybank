@@ -317,7 +317,6 @@ $(function(){
                             me.closest('.subStream').animate({
                                 scrollTop: 0
                             });
-                            
                         }, 1500);
                         
                     }

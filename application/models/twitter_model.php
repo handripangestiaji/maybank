@@ -320,7 +320,7 @@ class twitter_model extends CI_Model
         if(count($filter) > 0)
 	    $this->db->where($filter);
         $this->db->limit($limit);
-        $this->db->order_by('a.replied_count', 'desc');
+        
         $this->db->order_by('a.post_stream_id','desc ');
         
         $result = $this->db->get()->result();

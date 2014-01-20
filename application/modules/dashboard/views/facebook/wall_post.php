@@ -133,6 +133,24 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
                 echo $date->format('l, M j, Y h:i A');
                 
               ?></span>
+              <?php
+//              echo "<pre>";
+//              print_r($comment[$j]);
+//              echo "</pre>";
+                $attachment=json_decode($comment[$j]->attachment);
+                if(isset($attachment->media->image->src)){
+                $attachment=json_decode($comment[$j]->attachment);
+             // echo "<pre>";
+//              print_r($attachment);
+//                echo "</pre>";
+             echo    "<a href='#modal-".$comment[$j]->post_id."-photo1' data-toggle='modal' ><img src='".base_url('dashboard/media_stream/SafePhoto?photo=').$attachment->media->image->src."' /></a>";
+                echo    '<div id="modal-'.$comment[$j]->post_id.'-photo1" class="attachment-modal modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+                            <img src="'.base_url('dashboard/media_stream/SafePhoto?photo=').$attachment->media->image->src.'" />
+                            <button type="button" class="close " data-dismiss="modal"><i class="icon-remove"></i></button>
+                        </div>';
+             }           
+              ?>
+              
             </p>
             <div class="engagement-comment">
                 <p>"<?php echo $comment[$j]->comment_content; ?>"</p>

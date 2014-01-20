@@ -40,8 +40,8 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
                 $src = substr($attachment[$att]->src, 0, strlen($attachment[$att]->src) - 5)."n.jpg";
                 echo    "<a href='#modal-".$fb_feed[$i]->post_id."-".$attachment[$att]->type."' data-toggle='modal' ><img src='".base_url('dashboard/media_stream/SafePhoto?photo=').$src."' /></a>";
                 echo    '<div id="modal-'.$fb_feed[$i]->post_id.'-'.$attachment[$att]->type.'" class="attachment-modal modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
-                            <button type="button" class="close " data-dismiss="modal"><i class="icon-remove"></i></button>
                             <img src="'.base_url('dashboard/media_stream/SafePhoto?photo=').$src.'" />
+                            <button type="button" class="close " data-dismiss="modal"><i class="icon-remove"></i></button>
                         </div>';
            }elseif($attachment[$att]->type=='link'){
                 echo    "<a href='".$attachment[$att]->href."'>".$attachment[0]->href."</a>";

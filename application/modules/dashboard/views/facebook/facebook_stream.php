@@ -17,7 +17,7 @@
     }
 ?>
 <input type="hidden" class="channel-id" value="<?php if(count($fb_feed) > 0){echo $fb_feed[0]->channel_id;} else {echo $channel_id;}  ?>">
-<div class="container-fluid">
+<div class="container-fluid" style="height: 95%">
 <!-- ==================== ACTIVITIES MENU ==================== -->
 <div class="floatingBoxMenu">
     <ul class="nav stream_head">
@@ -28,7 +28,7 @@
 </div>
 <!-- ==================== END OF ACTIVITIES MENU ==================== -->
 
-<div id='cfacebook'  class="container-fluid">
+<div id='cfacebook'  class="container-fluid center subStream">
     <!-- ==================== ALL ACTIVITIES CONTENT ==================== -->
     <ul class="floatingBoxContainers" id="wallPosts">
         <input type="hidden" value="" name="channel_id" class="channel-id" />

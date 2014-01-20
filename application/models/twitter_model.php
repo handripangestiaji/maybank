@@ -284,10 +284,10 @@ class twitter_model extends CI_Model
     
     public function ReadDMFromDb($filter,$limit){
         $filter['b.type'] = 'inbox';
-         $this->db->select("a.post_id as social_stream_post_id, a.channel_id, a.is_read, a.post_stream_id, a.retrieved_at, a.created_at as social_stream_created_at, b.text as dm_text, b.*,c.*, d.*, e.*, a.type as social_stream_type");
+         $this->db->select("f.social_id, a.post_id as social_stream_post_id, a.channel_id, a.is_read, a.post_stream_id, a.retrieved_at, a.created_at as social_stream_created_at, b.text as dm_text, b.*,c.*, d.*, e.*, a.type as social_stream_type");
          $this->db->from("social_stream a inner join twitter_direct_messages b on a.post_id = b.post_id
             LEFT OUTER JOIN twitter_user_engaged c ON c.twitter_user_id=b.sender left join `case` d on d.post_id = a.post_id and d.status='pending'
-            LEFT JOIN twitter_reply e on a.post_id = e.reply_to_post_id 
+            LEFT JOIN twitter_reply e on a.post_id = e.reply_to_post_id  inner join channel f on f.channel_id = a.channel_id
             "); 
          if(count($filter) > 0)
 	     $this->db->where($filter);

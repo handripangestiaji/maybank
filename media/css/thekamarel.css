@@ -3323,6 +3323,8 @@ div.collapseIconContainer {
     color: #616161;
     outline: 0;
     border: 1px solid rgba(0,0,0,.08);
+    font-size: 12px;
+    padding: 3px 8px;  
 }
 .btn:hover {
     background: #e8e8e8;

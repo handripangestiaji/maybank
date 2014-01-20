@@ -1,6 +1,6 @@
 <?php
 $total_groups = ceil($countMentions[0]->count_post_id/$this->config->item('item_perpage'));
-$timezone=new DateTimeZone($this->config->item('timezone'));
+$timezone=new DateTimeZone($this->session->userdata('timezone'));
 for($i=0;$i<count($mentions);$i++){
 ?>
     <li <?php if($mentions[$i]->is_read==0){echo 'class="unread-post"';} ?>>

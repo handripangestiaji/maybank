@@ -1,6 +1,6 @@
 <?php
 $total_groups = ceil($countFeed[0]->count_post_id/$this->config->item('item_perpage'));
-$timezone=new DateTimeZone($this->config->item('timezone'));
+$timezone=new DateTimeZone($this->session->userdata('timezone'));
 for($i=0;$i<count($homefeed);$i++){
 ?>
     <li <?php if($homefeed[$i]->is_read==0){echo 'class="unread-post"';} ?>>
@@ -100,9 +100,9 @@ for($i=0;$i<count($homefeed);$i++){
                         <span>2 hours ago</span>
                     </p>
                     <div>
-                        <p>"<?php echo $comment[$j]->text?>"</p>
-                        <p><input type="hidden" class="str_id" value="<?php echo $comment[$j]->post_stream_id; ?>" /><button type="button" class="btn btn-warning btn-mini">OPEN</button>
-                        <button class="retweet btn btn-primary btn-mini" style="margin-left: 5px;">RE-TWEET</button></p>
+                        <p><?php echo $comment[$j]->text?></p>
+                        <!--p><input type="hidden" class="str_id" value="<?php echo $comment[$j]->post_stream_id; ?>" /><button type="button" class="btn btn-warning btn-mini">OPEN</button>
+                        <button class="retweet btn btn-primary btn-mini" style="margin-left: 5px;">RE-TWEET</button></p-->
                     </div>
                 </div>
         <?php } ?>

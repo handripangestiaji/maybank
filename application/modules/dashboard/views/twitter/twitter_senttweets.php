@@ -1,6 +1,6 @@
 <?php
 $total_groups = ceil($countTweets[0]->count_post_id/$this->config->item('item_perpage'));
-$timezone=new DateTimeZone($this->config->item('timezone'));
+$timezone=new DateTimeZone($this->session->userdata('timezone'));
 for($i=0;$i<count($senttweets);$i++){
 ?>
     <li>

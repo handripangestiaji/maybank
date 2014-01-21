@@ -84,6 +84,22 @@
                             </select>
                         </td>
                     </tr>
+		    
+		    <tr>
+			<td>Timezone</td>
+			<td>
+				<select name='timezone'>
+					<?php
+						$timezone = get_timezone_list();
+						$keys = array_keys($timezone);
+						foreach($keys as $k)
+						{
+					?>
+						<option value='<?php echo $k;?>'><?php echo $timezone[$k];?></option>
+					<?php }?>
+				</select>
+			</td>
+		    </tr>
                     
                     <tr>
                         <td>Image <span style='color: red;'></span></td>

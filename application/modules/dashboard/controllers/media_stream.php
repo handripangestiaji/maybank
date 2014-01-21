@@ -644,6 +644,7 @@ class Media_stream extends CI_Controller {
         
         if(!is_array($return) && $return!='error'){//send comment          
             $action = array(
+                "action_type" => "reply_facebook",
         		"action_type" => "reply_facebook",
         		"channel_id" =>$channel,
         		"created_at" => date("Y-m-d H:i:s"),
@@ -665,6 +666,7 @@ class Media_stream extends CI_Controller {
             if($return['id']){
             $return=$return['id'];
             $action = array(
+                "post_id"=>$post_id,
         		"action_type" => "reply_facebook",
         		"channel_id" => $channel_loaded[0]->channel_id,
         		"created_at" => date("Y-m-d H:i:s"),

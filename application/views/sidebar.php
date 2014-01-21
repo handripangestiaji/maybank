@@ -24,7 +24,7 @@
             <?php
             /*print_r($case);*/ 
             if(isset($case)):?>
-            <p class="title pull-left">NOTIFICATION&nbsp;<span class="badge">Total <?php echo count($case)+count($reply_pending); ?></span></p>
+            <p class="title pull-left">NOTIFICATION&nbsp;<span class="badge">Total <?php echo count($case)+count($reply_pending)+$count_assign; ?></span></p>
             <?php endif;?>
         </div>
         <span class="btn-close pull-right">Close <i class="icon-remove-sign"></i></span>
@@ -34,9 +34,20 @@
         <div class="sidebarInfo">
             <?php if(isset($case)):?>
             <!--div class="replies"><span class="badge cyan"><?php echo count($reply_pending); ?></span> Replies</div-->
-            <div class="newCases"><span class="badge purple"><?php echo count($case); ?></span> New Cases</div>
+            <div class="newCases"><span class="badge purple"><?php echo count($case)+$count_assign; ?></span> New Cases</div>
             <?php endif;?>
         </div>
+        <!--<div class="sidebarInfo">
+            <?php
+            if($count_assign!=0):?>
+            <!--div class="replies"><span class="badge cyan"><?php echo count($reply_pending); ?></span> Replies</div
+            <?php if($assign->row()->created_by==$this->session->userdata('user_id'))
+                {
+            ?>
+                <div class="newCases"><span class="badge cyan"><?php echo $count_assign; ?></span> Assign</div>
+            <?php }?>
+            <?php endif;?>
+        </div>-->
         <div class="sidebarLine"></div>
         <ul class="tasksList" style="height: 100%">
             <?php foreach($case as $each_case):?>
@@ -69,6 +80,39 @@
             </li-->
             <?php endforeach;?>
         </ul>
+        <?php if($count_assign!=0){?>
+        <ul class="tasksList" style="height: 100%">
+            <?php foreach($assign1 as $each_case):?>
+            <li class="pointerCase" >
+                <input type="hidden" name="pointer" class="pointer-case" value="<?php echo $each_case->case_id?>" />
+                <div class="notifHead <?=$each_case->read == 1 ? "purple" : "red"?>" onclick="window.location='<?=base_url('dashboard/socialmedia').'#case/'.$each_case->type.'/'.$each_case->post_id?>'">
+                    CASE ID: #<?php echo $each_case->case_id?>
+                </div>
+                <div class="notifBody">
+                    <?php
+                        $timezone = new DateTimeZone($this->session->userdata('timezone'));
+                        $date = new DateTime($each_case->created_at, $timezone);
+                        echo $date->format("M d, Y, h:i A");
+                    ?>
+                </div>
+            </li>
+            <?php endforeach?>
+            <?php foreach($reply_pending as $pending):?>
+            <!--li>
+                <div class="notifHead purple">
+                    New Reply POST ID : #<?php echo $pending->id?>
+                </div>
+                <div class="notifBody">
+                    <?php
+                        $timezone = new DateTimeZone($this->session->userdata('timezone'));
+                        $date = new DateTime($each_case->created_at, $timezone);
+                        echo $date->format("M d, Y, h:i A");
+                    ?>
+                </div>
+            </li-->
+            <?php endforeach;?>
+        </ul>
+        <?php }?>
         
     </div>   
 </div>
@@ -194,14 +238,19 @@
             <textarea class="about-me" name="about-me" placeholder="Compose Message"><?php echo $this->session->userdata('description'); ?></textarea>
 
             <div class="sidebarLine"></div>
-            <button class="btn btn-primary" type="submit">Save</button>
-            <button class="btn sidebar-btn-cancel" type="button">Cancel</button>
+            <button id='btn_update' class="btn btn-primary" type="submit">Save</button>
+            <button id='btn_update' class="btn sidebar-btn-cancel" type="button">Cancel</button>
             </form>
         </div>
     </div>
 </div>
 <!-- ==================== END OF SIDEBAR UPDATE PROFILE ==================== -->
-
+<style type='text/css'>
+    #btn_update
+    {
+        margin-top: 0px;
+    }
+</style>
 <script type="text/javascript">
     function logout()
     {

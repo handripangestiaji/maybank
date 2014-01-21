@@ -93,6 +93,33 @@
         </tr>
         
         <tr>
+            <td>Timezone</td>
+            <td>
+                <select name='timezone'>
+                    <?php
+                        $timezone = get_timezone_list();
+                        $keys = array_keys($timezone);
+                        foreach($keys as $k)
+                        {
+                            if($row->timezone==$k)
+                            {
+                    ?>
+                                <option selected='selected' value='<?php echo $k?>'><?php echo $timezone[$k];?></option>
+                    <?php
+                            }
+                            else
+                            {
+                    ?>
+                                <option value='<?php echo $k?>'><?php echo $timezone[$k];?></option>
+                    <?php            
+                            }
+                        }
+                    ?>
+                </select>
+            </td>
+        </tr>
+        
+        <tr>
             <td>Image</td>
             <td>
                 <?php if($row->image_url!=NULL){?>

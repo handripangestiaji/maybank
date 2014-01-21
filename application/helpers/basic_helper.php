@@ -317,3 +317,13 @@ function IsRoleFriendlyNameExist($user_role, $currentPermission, $property='role
     $dt = $year.'-'.$month.'-'.$date;
     return $dt;
 }
+
+
+function RemoveUrlWithin($text){
+    return preg_replace("
+        #((http|https|ftp)://(\S*?\.\S*?))(\s|\;|\)|\]|\[|\{|\}|,|\"|'|:|\<|$|\.\s)#ie",
+        "'<a href=\"$1\" target=\"_blank\">$3</a>$4'",
+        $text
+    );
+    
+}

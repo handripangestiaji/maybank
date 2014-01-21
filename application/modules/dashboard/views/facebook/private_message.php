@@ -1,7 +1,7 @@
 <?php 
 //print_r($fb_pm);    
 $total_groups = ceil($CountPmFB[0]->count_post_id/$this->config->item('item_perpage'));
-$timezone=new DateTimeZone($this->config->item('timezone'));
+$timezone=new DateTimeZone($this->session->userdata('timezone'));
 for($i=0; $i<count($fb_pm);$i++):
 
 $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_pm[$i]->post_id, 'a.status <>'=>'reassign'));

@@ -737,7 +737,7 @@ input.related-conversation-check{
 
 .attachment-modal img{
 	max-height: 100%;
-	max-width: none;
+	max-width: 550px;
 }
 
 .attachment-modal{

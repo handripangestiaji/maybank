@@ -182,7 +182,7 @@
             <div class="compose-send">
                 <p class="facebook-character-count"><i class="icon-facebook-sign"></i>&nbsp;<span class="compose-fb-char-count">2000</span</p>
                 <p class="twitter-character-count">&nbsp;&nbsp;<i class="icon-twitter-sign"></i>&nbsp;<span class="compose-tw-char-count">140</span></p>
-                <p class="youtube-character-count">&nbsp;&nbsp;<i class="icon-youtube-sign"></i>&nbsp;<span class="compose-yt-char-count">500</span></p>
+                <!--p class="youtube-character-count">&nbsp;&nbsp;<i class="icon-youtube-sign"></i>&nbsp;<span class="compose-yt-char-count">500</span></p-->
                 <button class="btn-compose-post btn btn-primary" type="button"><i class="icon-bolt"></i> POST</button>
             </div>
           <br clear="all" />

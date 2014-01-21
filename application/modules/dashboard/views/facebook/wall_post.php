@@ -27,7 +27,7 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
             echo $date->format('l, M j, Y h:i A');
         ?>        
     </p>
-    <p><?php echo $fb_feed[$i]->post_content?></p>
+    <p class="post-content"><?php echo RemoveUrlWithin($fb_feed[$i]->post_content)?></p>
     <p>
     <?php
     if($fb_feed[$i]->attachment){ 

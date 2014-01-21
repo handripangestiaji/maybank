@@ -42,12 +42,6 @@ for($i=0;$i<count($senttweets);$i++){
             ?>
         </p>
         <!--p><button type="button" class="btn btn-warning btn-mini">OPEN</button-->
-        <?php if ($senttweets[$i]->retweeted==1) { ?>
-            <button type="button" class="btn btn-inverse btn-mini"><i class="icon-retweet">&nbsp;</i></button>
-        <?php } ?>    
-        <?php if ($senttweets[$i]->favorited=='1') { ?>
-            <button type="button" class="btn btn-inverse btn-mini"><i class="icon-star">&nbsp;</i></button>
-        <?php } ?></p>
         
         <p>
             <a role="button" class="btn-engagement"><i class="icon-eye-open"></i> Engagement</a> 

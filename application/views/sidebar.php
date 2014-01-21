@@ -3,7 +3,7 @@
     <div class="sidebarDivider"></div>
     <div class="sidebarContent">
         <ul class="collapsedSidebarMenu">
-            <li><a href="#tasksContent" class="sidebar">Tasks <div class="notifyCircle cyan">3</div><i class="icon-chevron-sign-right"></i></a></li>
+            <li><a href="#tasksContent" class="sidebar">Tasks <div class="notifyCircle cyan"></div><i class="icon-chevron-sign-right"></i></a></li>
             <li><a href="#profileContent" class="sidebar"><?php echo $this->session->userdata('display_name'); ?><i class="icon-chevron-sign-right"></i></a></li>
             <!--
             <li class="sublevel"><a href="#">edit profile<i class="icon-user"></i></a></li>
@@ -24,7 +24,7 @@
             <?php
             /*print_r($case);*/ 
             if(isset($case)):?>
-            <p class="title pull-left">NOTIFICATION&nbsp;<span class="badge">Total <?php echo count($case)+count($reply_pending); ?></span></p>
+            <p class="title pull-left total-case">NOTIFICATION&nbsp;<span class="badge">Total </span></p>
             <?php endif;?>
         </div>
         <span class="btn-close pull-right">Close <i class="icon-remove-sign"></i></span>
@@ -39,10 +39,12 @@
         </div>
         <div class="sidebarLine"></div>
         <ul class="tasksList" style="height: 100%">
-            <?php foreach($case as $each_case):?>
-            <li class="pointerCase" >
+            <?php foreach($case as $each_case):
+              $type = explode("_", $each_case->type);?>
+            <li class="pointerCase" onclick="window.location='<?=base_url('dashboard/socialmedia').'#case/'.$type[0].'/'.$each_case->post_id?>'" >
                 <input type="hidden" name="pointer" class="pointer-case" value="<?php echo $each_case->case_id?>" />
-                <div class="notifHead <?=$each_case->read == 1 ? "purple" : "red"?>" onclick="window.location='<?=base_url('dashboard/socialmedia').'#case/'.$each_case->type.'/'.$each_case->post_id?>'">
+                
+                <div class="notifHead <?=$each_case->read == 1 ? "purple" : "red"?>" >
                     CASE ID: #<?php echo $each_case->case_id?>
                 </div>
                 <div class="notifBody">

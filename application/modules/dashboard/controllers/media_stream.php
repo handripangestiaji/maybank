@@ -109,102 +109,6 @@ class Media_stream extends CI_Controller {
     }
 
   
-     public function twitterAction(){
-        
-        if(isset($_POST['action'])){
-            $action=$_POST['action'];   
-        }
-        
-        if(isset($_POST['content'])){
-            $content=$_POST['content'];
-        }
-        
-        if(isset($_POST['str_id'])){
-            $str_id=$_POST['str_id'];
-        }
-        
-        if(isset($_GET['friendid'])){
-            $friendid=$_GET['friendid'];
-        }
-
-        if(isset($_POST['friendid'])){
-            $friendid=$_POST['friendid'];
-        }
-        
-        if(isset($_POST['followid'])){
-            $followid=$_POST['followid'];
-        }
-        
-        if(isset($_POST['id'])){//id user
-            $id=$_POST['id'];
-        }
-        
-        if(isset($_POST['screen_name'])){//id user
-            $screen_name=$_POST['screen_name'];
-        }
-        
-        if($this->input->post('action')=='sendTweet'){ //ok
-
-            /* statuses/update */
-            $parameters = array('status' => $content);
-            $this->connection->post('statuses/update', $parameters);
-    
-        }elseif($action=='destroy_status'){
-    
-            /* statuses/destroy */
-            $method = "statuses/destroy".$str_id;
-            $this->connection->delete($method);    
-    
-        }elseif($action=='replayTweet'){//replay tweet,Direct message        
-            /* statuses/update */
-            $parameters = array('status' => $content,'in_reply_to_status_id'=>$str_id);
-                
-            $result=$this->connection->post('statuses/update', $parameters);
-            echo json_encode($result);
-               
-        }elseif($action=='retweet'){ //ok
-
-            /* statuses/retweet */
-            $method = 'statuses/retweet/'.$str_id;
-            $this->connection->post($method);
-    
-        }elseif($action=='dm_send'){//ok
-            
-            /* direct_messages/new */
-            $parameters = array('user_id' => $friendid, 'text' => $content);
-            $method = 'direct_messages/new';
-            $this->connection->post($method, $parameters);
-            
-        }elseif($action=='favorit'){
-            
-            /* direct_messages/new */
-            $parameters = array('id' => $str_id);
-            $method = 'favorites/create';
-            $this->connection->post($method, $parameters);
-            
-        }elseif($action=='follow'){
-            
-            /* friendships/create */
-            $method = 'friendships/create';
-            $result=$this->connection->post($method,array('follow'=>true,'user_id'=>$followid));
-       
-        }elseif($action=='unfollow'){
-            //echo "<br><br><br><br><br><br>";
-            $method = 'friendships/destroy';
-//            echo $method." ".$followid;
-            $result=$this->connection->post($method,array('user_id'=>$followid));
-            //print_r($result);
-       
-        }elseif($action=='unfriend'){
-            
-            /* friendships/destroy */
-            $method = 'friendships/destroy/'.$followid;
-            $this->connection->post($method);
-       
-        }
-        //redirect(base_url('/index.php/dashboard'));    	
-    }
-    
     public function ReplyTwitter($type = 'tweet'){
 	header("Content-Type: application/x-json");
 	$twitter_reply['image_to_post'] = $this->input->post('filename');
@@ -922,7 +826,7 @@ class Media_stream extends CI_Controller {
         $items_per_group = 10;
         $group_number=$group_numbers;
         $action=$actions;
-        $channel_id=$channel_ids;
+        $channel_id=$channel_ids;	
         $is_read=0;
         $filter = array(
     	   'a.channel_id' => $channel_id,
@@ -952,7 +856,7 @@ class Media_stream extends CI_Controller {
         $this->load->model('campaign_model');
         $data['product_list'] = $this->campaign_model->GetProduct();
 
-    
+	
         if($action=='mentions'){
             $filter['b.type'] = 'mentions';
             $data['mentions']=$this->twitter_model->ReadTwitterData($filter,$limit);
@@ -978,7 +882,7 @@ class Media_stream extends CI_Controller {
             $filter['channel_id']=$channel_ids;
             $data['directmessage']=$this->twitter_model->ReadDMFromDb($filter,$limit);
             $data['countDirect']=$this->twitter_model->CountTwitterData($filter);
-        	$data['channel_id'] = $channel_id;
+            $data['channel_id'] = $channel_id;
             $this->load->view('dashboard/twitter/twitter_messages.php',$data);
 
         }
@@ -998,6 +902,29 @@ class Media_stream extends CI_Controller {
             $this->load->view('dashboard/facebook/private_message.php',$data);
         }
         //print_r($data);
+    }
+    
+    public function SinglePost($post_id){
+	$post = $this->facebook_model->streamId($post_id);
+	$this->load->model('case_model');
+    	$data['user_list'] = $this->case_model->ReadAllUser();
+        
+        $this->load->model('campaign_model');
+        $data['product_list'] = $this->campaign_model->GetProduct();
+	if($post->type == "twitter"){
+	    $filter['a.post_id'] = $post->post_id;
+            $data['mentions']=$this->twitter_model->ReadTwitterData($filter,1);
+            $data['countMentions']=$this->twitter_model->CountTwitterData($filter);
+	    $this->load->view('dashboard/twitter/twitter_mentions.php',$data);
+	    
+	}
+	else if($post->type == "facebook"){
+	    $filter['c.post_id'] = $post->post_id;
+            $data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter,1);
+            $data['count_fb_feed']=$this->facebook_model->CountFeedFB($filter);
+            $this->load->view('dashboard/facebook/wall_post.php',$data);
+	}
+	
     }
     
     public function GetUrlPreview(){

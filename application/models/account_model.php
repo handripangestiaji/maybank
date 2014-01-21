@@ -207,6 +207,9 @@ class account_model extends CI_Model
         $actions['created_at']=date("Y-m-d H:i:s");
 	
         $result=$this->CreateReplyAction($actions);
+	
+	$this->db->where("post_id", $post_id );
+	$this->db->update("social_stream", array("replied_count" => 0));
         $this->db->trans_complete();
     	
         return $result;

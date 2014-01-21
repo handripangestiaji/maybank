@@ -649,7 +649,7 @@ $(function(){
                                         }
                                         else{
                                             currentNumber += 1;
-                                            me.closest('li').find('.read-mark').addClass('redText');
+                                            me.closest('li').find('.read-mark').removeClass('greyText').addClass('redText');
                                         }
                                         
                                         me.closest('.container-fluid').siblings('.floatingBoxMenu').find('li.active .notifyCircle').html(currentNumber);

@@ -561,7 +561,7 @@ class facebook_model extends CI_Model
     }
 
     public function ReadUnread($post_id, $new_val = null){
-	if($new_val == null){
+	if($new_val == null || $new_val == 0){
 	    $this->db->select('*');
 	    $this->db->from('social_stream');
 	    $this->db->where('post_id',$post_id);

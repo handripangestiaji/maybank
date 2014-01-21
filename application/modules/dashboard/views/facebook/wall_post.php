@@ -176,7 +176,7 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
                     <?php if(($comment[$j]->comment_id)=='0'){?>
                     <button type="button" class="btn btn-primary btn-engagement-reply btn-mini btn-reply" ><i class="icon-mail-reply"></i></button>
                     <?php } ?>
-                   <button type="button" class="btn btn-danger btn-engagement-case btn-mini btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>
+                   <!--button type="button" class="btn btn-danger btn-engagement-case btn-mini btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button-->
                 </p>
                 </h4>
                 <?php } ?>
@@ -188,11 +188,12 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
                     $this->load->view('dashboard/reply_field_facebook', $data)?>  
                 </div>
                  <div class="case-field hide">
-                <?php
+                <?php /*
                     //$data['posts'] = $comment;
                     $data['posts'] = $fb_feed;
                     $data['i'] = $j;
                     $this->load->view('dashboard/case_field',$data);
+                */
                 ?>
                 </div>
                 <div class="case-engagement-field hide">
@@ -270,23 +271,25 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
         <!--a style="font-size: 20px; cursor: pointer;"><i class="icon-trash greyText deleteFB"></i></a-->
         <div class="pull-right">
     <?php  
-//    print_r($isMyCase);
+    //print_r($isMyCase[0]);
     if(isset($isMyCase[0]->assign_to)){
         if(($isMyCase[0]->assign_to==$this->session->userdata('user_id') && IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action'))){ ?> 
                 <button type="button" class="btn btn-primary btn-reply"><i class="icon-mail-reply"></i></button>
-           <?php if(isset($isMyCase[0]->solved_by)){ ?>
-                <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>
-           <?php }else{?>
+           <?php if(($isMyCase[0]->status)!='solved'){?>
                 <button type="button" class="btn btn-purple  btn-resolve" name="action" value="<?=$fb_feed[$i]->case_id?>"><i class="icon-check"></i> RESOLVE</button>
-           <?php } ?> 
+           <?php } 
+           if(isset($isMyCase[0]->case_id)){ ?>
+                <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>
+           <?php }?>
+                 
         </div>
         <br clear="all" />
     </h4>
     <?php }elseif((IsRoleFriendlyNameExist($this->user_role,'Social Stream_All_Resolve_Case'))){ ?>
         <button type="button" class="btn btn-primary btn-reply"><i class="icon-mail-reply"></i></button>
-        <?php if(!isset($isMyCase['STATUS']) or isset($isMyCase['STATUS'])!='SOLVED'):?>
+        <?php if(($isMyCase[0]->status)!='solved'):?>
         <button type="button" class="btn btn-purple  btn-resolve" name="action" value="<?=$fb_feed[$i]->case_id?>"><i class="icon-check"></i> RESOLVE</button>
-        <?php endif?>
+        <?php endif?>        
         <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>   
         </div>
         <br clear="all" />

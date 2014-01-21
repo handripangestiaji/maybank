@@ -30,6 +30,7 @@ $(function(){
         //$( this ).attr( "src", "missing.png" );
         console.log("error");
     });
+    
     /*=============================================================================================
      ==================================== GET ACTUAL DATETIME =====================================
      =============================================================================================*/
@@ -486,7 +487,7 @@ $(function(){
                             $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');  
                         }
                         $(this).closest('.containerHeadline').next().load(urlToLoad, function(){
-                            
+                            $('.post-content a').remove();
                             $('.email').tagit({
                                 autocomplete : {
                                     source:  function( request, response ) {

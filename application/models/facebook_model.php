@@ -393,6 +393,13 @@ class facebook_model extends CI_Model
 	$this->db->where("comment_stream_id",$comment_id);
 	return $this->db->get()->row();
     }
+    
+    public function IsPmExists($pm_id){
+	$this->db->select("*");
+	$this->db->from("social_stream_facebook_conversation");
+	$this->db->where("conversation_id",$pm_id);
+	return $this->db->get()->row();
+    }
         
     public function streamId($post_id){
         $this->db->select('*');
@@ -447,6 +454,9 @@ class facebook_model extends CI_Model
             $this->db->where($filter);
         }
         $result = $this->db->get()->result();
+       // echo "<pre>";
+//        print_r($result);
+//        echo "</pre>";
         foreach($result as $row){
             $row->reply_post = $this->RetriveCommentPostFb($row->social_stream_post_id);
 	    $comment_list = array();
@@ -551,7 +561,7 @@ class facebook_model extends CI_Model
     }
 
     public function ReadUnread($post_id, $new_val = null){
-	if($new_val == null){
+	if($new_val == null || $new_val == 0){
 	    $this->db->select('*');
 	    $this->db->from('social_stream');
 	    $this->db->where('post_id',$post_id);

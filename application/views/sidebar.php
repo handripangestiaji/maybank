@@ -194,14 +194,19 @@
             <textarea class="about-me" name="about-me" placeholder="Compose Message"><?php echo $this->session->userdata('description'); ?></textarea>
 
             <div class="sidebarLine"></div>
-            <button class="btn btn-primary" type="submit">Save</button>
-            <button class="btn sidebar-btn-cancel" type="button">Cancel</button>
+            <button id='btn_update' class="btn btn-primary" type="submit">Save</button>
+            <button id='btn_update' class="btn sidebar-btn-cancel" type="button">Cancel</button>
             </form>
         </div>
     </div>
 </div>
 <!-- ==================== END OF SIDEBAR UPDATE PROFILE ==================== -->
-
+<style type='text/css'>
+    #btn_update
+    {
+        margin-top: 0px;
+    }
+</style>
 <script type="text/javascript">
     function logout()
     {

@@ -239,6 +239,7 @@ class Users extends MY_Controller {
 				'salt' => time(),
 				'role_id' => $this->input->post('optRole'),
 				'group_id' => $this->input->post('optGroup'),
+				'timezone' => $this->input->post('timezone'),
 				'is_active' => 1,
 				'image_url' => $dir,
 				'description' => $this->input->post('description'),
@@ -363,6 +364,7 @@ class Users extends MY_Controller {
 					  'image_url' => $dir,
 					  'description' => $this->input->post('description'),
 					  'location' => $this->input->post('location'),
+					  'timezone' => $this->input->post('timezone'),
 					  'web_address' =>$this->input->post('web_address'),
 					  'is_active' => $this->input->post('is_active')
 					    );
@@ -380,6 +382,7 @@ class Users extends MY_Controller {
 					  'role_name' => $user_login->row()->role_name,
 					  'web_address' => $user_login->row()->web_address,
 					  'image_url' => $user_login->row()->image_url,
+					  'timezone' => $user_login->row()->timezone,
 					  'description' => $user_login->row()->description,
 					  'is_login' => TRUE
 				      );
@@ -401,6 +404,7 @@ class Users extends MY_Controller {
 					  'group_id' => $this->input->post('optGroup'),
 					  'description' => $this->input->post('description'),
 					  'location' => $this->input->post('location'),
+					  'timezone' => $this->input->post('timezone'),
 					  'web_address' =>$this->input->post('web_address'),
 					  'is_active' => $this->input->post('is_active')
 					    );
@@ -417,6 +421,7 @@ class Users extends MY_Controller {
 					  'display_name' => $user_login->row()->display_name,
 					  'role_name' => $user_login->row()->role_name,
 					  'web_address' => $user_login->row()->web_address,
+					  'timezone' => $user_login->row()->timezone,
 					  'description' => $user_login->row()->description,
 					  'is_login' => TRUE
 				      );
@@ -453,6 +458,7 @@ class Users extends MY_Controller {
 				     'image_url' => $dir,
 				     'description' => $this->input->post('description'),
 				     'location' => $this->input->post('location'),
+				     'timezone' => $this->input->post('timezone'),
 				     'web_address' =>$this->input->post('web_address'),
 				     'is_active' => $this->input->post('is_active')
 				       );
@@ -470,6 +476,7 @@ class Users extends MY_Controller {
 				     'role_name' => $user_login->row()->role_name,
 				     'web_address' => $user_login->row()->web_address,
 				     'image_url' => $user_login->row()->image_url,
+				     'timezone' => $user_login->row()->timezone,
 				     'description' => $user_login->row()->description,
 				     'is_login' => TRUE
 				 );
@@ -491,6 +498,7 @@ class Users extends MY_Controller {
 				     'group_id' => $this->input->post('optGroup'),
 				     'description' => $this->input->post('description'),
 				     'location' => $this->input->post('location'),
+				     'timezone' => $this->input->post('timezone'),
 				     'web_address' =>$this->input->post('web_address'),
 				     'is_active' => $this->input->post('is_active')
 				       );
@@ -507,6 +515,7 @@ class Users extends MY_Controller {
 				     'display_name' => $user_login->row()->display_name,
 				     'role_name' => $user_login->row()->role_name,
 				     'web_address' => $user_login->row()->web_address,
+				     'timezone' => $user_login->row()->timezone,
 				     'description' => $user_login->row()->description,
 				     'is_login' => TRUE
 				 );

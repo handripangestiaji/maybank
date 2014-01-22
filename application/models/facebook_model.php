@@ -187,6 +187,10 @@ class facebook_model extends CI_Model
 		$insert_id = $this->db->insert_id();
 		$social_stream_fb_post['post_id'] = $insert_id;
 		$this->db->insert("social_stream_fb_post", $social_stream_fb_post);
+		$this->SocialStreamCountUpdate($insert_id);
+		
+		print_r($insert_id);
+		
 	    }
 	    else{
 		$insert_id = $stream->post_id;
@@ -228,7 +232,7 @@ class facebook_model extends CI_Model
 		    $social_stream_fb_comments['id'] = $insert_id_comment;
 		    $this->db->insert("social_stream_fb_comments", $social_stream_fb_comments);
 		    if($stream != null){
-			$this->db->query('call sp_SocialStreamUpdate(?)',$stream->post_id);
+			$this->SocialStreamCountUpdate($stream->post_id);
 			print "<pre>";
 	
 			print_r($stream);print "</pre>";
@@ -239,6 +243,7 @@ class facebook_model extends CI_Model
 		    $this->db->update("social_stream", $social_stream_comment);
 		    $this->db->where('comment_stream_id', $each_post->comments[$x]->id);
 		    $this->db->update("social_stream_fb_comments", $social_stream_fb_comments);
+
 		}
 	    }
 	}
@@ -588,6 +593,13 @@ class facebook_model extends CI_Model
 	$this->db->where($filter);
 	return $this->db->get()->result();
     }
+    
+    public function SocialStreamCountUpdate($post_id){
+	$max_reply = $this->db->query("Select max(replied_count) as replied_count from social_stream");
+	$max_reply = $max_reply->row();
+	$this->db->query("update social_stream set replied_count = ".$max_reply->replied_count." + 1 where post_id = $post_id");
+    }
+    
     
     function DeletePostFb($post_stream_id){
         

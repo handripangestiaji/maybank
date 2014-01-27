@@ -774,6 +774,19 @@ input.related-conversation-check{
 	margin-bottom: 10px;
 }
 
+input[type="text"].compose-new-message{
+	display: none;
+	width: 60%;
+	margin-bottom: 0px;
+}
+
+.new-compose-message-fields input{
+	margin-bottom: 0px;
+}
+
+.btn-search-mini{
+	display: none;
+}
 /*==============================================================================================
 ======================================== C M S =================================================
 ==============================================================================================*/

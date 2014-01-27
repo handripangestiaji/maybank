@@ -453,8 +453,8 @@ class facebook_model extends CI_Model
 			             ON b.author_id = a.facebook_id inner join social_stream c on c.post_id = b.post_id LEFT JOIN
                          `case` d on d.post_id = c.post_id and d.status='pending'");
         $this->db->limit($limit);
-	$this->db->order_by('c.replied_count','desc');
         $this->db->order_by('c.created_at','desc');
+        $this->db->order_by('c.replied_count','desc');
         if(count($filter) >= 1){
             $this->db->where($filter);
         }
@@ -504,7 +504,7 @@ class facebook_model extends CI_Model
                 fb_user_engaged  c ON c.facebook_id=b.from INNER JOIN social_stream d on d.post_id = b.id LEFT OUTER JOIN
                 social_stream e ON e.post_stream_id=b.comment_stream_id
                 where a.post_id='".$post_id."'
-                ORDER BY post_id desc";
+                ORDER BY created_at asc";
         $query = $this->db->query($sql);
         $result = $query->result();
         return $result;  

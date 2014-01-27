@@ -84,7 +84,6 @@ $(function(){
                             '<p>' + response[i].text + '</p>' +
                         '</div></div>'
                     );
-                    $('.UTCTimestamp').localTimeFromUTC('MM/dd/yyyy hh:mm:ss a');
                 }
                 
             }

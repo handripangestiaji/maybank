@@ -43,8 +43,22 @@ function convertDate($dateSrc, $timeZone){
     return $dateTime;
 }
 
-
 function get_timezone_list(){
+     $timezones = array(
+        'Asia/Bangkok'      => "(GMT+07:00) Bangkok",
+        'Asia/Jakarta'      => "(GMT+07:00) Jakarta",
+        'Asia/Hong_Kong'    => "(GMT+08:00) Hong Kong",
+        'Asia/Kuala_Lumpur' => "(GMT+08:00) Kuala Lumpur",
+        'Asia/Manila'       => "(GMT+08:00) Manila",
+        'Australia/Perth'   => "(GMT+08:00) Perth",
+        'Asia/Singapore'    => "(GMT+08:00) Singapore",
+        'Asia/Seoul'        => "(GMT+09:00) Seoul",
+        'Asia/Tokyo'        => "(GMT+09:00) Tokyo",        
+    );
+    return $timezones;
+}
+
+function get_huge_timezone_list(){
     $timezones = array(
         'Pacific/Midway'    => "(GMT-11:00) Midway Island",
         'US/Samoa'          => "(GMT-11:00) Samoa",

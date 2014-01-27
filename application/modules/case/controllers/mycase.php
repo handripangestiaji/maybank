@@ -79,10 +79,11 @@ class mycase extends CI_Controller{
     }
     
     
-    function FacebookRelatedConversation($post_id,$type){
+    function FacebookRelatedConversation($user,$type){
         $this->load->model('facebook_model');
+        
         if($type=='facebook'){
-            echo json_encode($this->facebook_model->RetriveCommentPostFb($post_id));
+            echo json_encode($this->facebook_model->RetrieveFeedFB(array('author_id' => $user)));
         }else{
             $filter["d.post_id"]=$post_id;            
              echo json_encode($this->facebook_model->RetrievePmDetailFB($post_id));

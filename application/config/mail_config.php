@@ -12,3 +12,8 @@ $config['mail_provider'] = array(
     'mailtype' => 'html',
     'smtp_port' => 587 
 );
+
+$config['mail_from'] = array(
+    'email' => 'do-not-reply@maybk.co',
+    'email_from' => 'Web Media Team'
+);

@@ -1660,6 +1660,11 @@ $(function(){
         $('.boxStream').height(new_height);
     });
     
+    $(document).ready(function(){
+        $('.compose-new-message').click(function(){
+            window.location.href = BASEURL + 'dashboard/socialmedia/ComposeMessage';
+        })
+    })
     /*=============================================================================================
      ===================================== CMS ACTIONS ============================================
      =============================================================================================*/    

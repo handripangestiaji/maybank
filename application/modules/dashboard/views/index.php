@@ -13,6 +13,8 @@
             </div>
             <!-- button-refresh end -->
         <?php if(IsRoleFriendlyNameExist($this->user_role, "Publishing Box_Assigned_Channel")):?>
+        <input type="text" class="row-fluid compose-new-message" placeholder="Compose Message" id="compose-message" style="margin-bottom: 0px;">
+        <button class="btn btn-inverse btn-search-mini"><i class="icon-search"></i></button>
         <div class="compose-innercontainer compose-collapsed left">
             <textarea class="span8 compose-textbox" placeholder="Compose Message" id="compose-message"></textarea>
             <!-- ==================== URL SHORTERNER AJAX THIS WILL BE HIDDEN BY DEFAULT ==================== -->

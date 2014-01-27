@@ -30,6 +30,7 @@ $(function(){
         //$( this ).attr( "src", "missing.png" );
         console.log("error");
     });
+    
     /*=============================================================================================
      ==================================== GET ACTUAL DATETIME =====================================
      =============================================================================================*/
@@ -41,6 +42,8 @@ $(function(){
         console.log('error');
         $(this).hide();
     });
+    
+    $('.total-case span, .sidebar .notifyCircle, .newCases .badge').html($('.pointer-case .red').length);
     // Create a newDate() object
     var newDate = new Date();
     // Extract the current date from Date object
@@ -486,7 +489,7 @@ $(function(){
                             $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');  
                         }
                         $(this).closest('.containerHeadline').next().load(urlToLoad, function(){
-                            
+                            $('.post-content a').html('[LINK]');
                             $('.email').tagit({
                                 autocomplete : {
                                     source:  function( request, response ) {
@@ -1503,7 +1506,7 @@ $(function(){
                         });
                          $(this).on('click','.pointerCase',
                             function() {
-                               $(this).ToCase();
+                               
                                var thisElement = $(this);
                                $.ajax({
                                     url : BASEURL + "case/mycase/UpdateReadStatus",
@@ -1512,7 +1515,8 @@ $(function(){
                                     },
                                     success : function(response){
                                         if(response.success){
-                                            thisElement.find(".notifHead").toggleClass('');
+                                            thisElement.find(".notifHead").removeClass('red').addClass('purple');
+                                            $(this).ToCase();
                                         }
                                     }
                                });
@@ -1916,26 +1920,39 @@ $.fn.RefreshAllStream = function(){
 $.fn.ToCase = function(type){
     var hashUrl = window.location.hash;
     var splitUrl = hashUrl.split('/');
+    
     if(splitUrl.length == 3 ){
-        var id = $('#post' + splitUrl[2]).closest('.floatingBoxContainers').attr('id');
+        var id = $('#post' + splitUrl[2]).closest('ul.floatingBoxContainers').attr('id');
         
         $('#' + id).parent().find('ul').hide();
         $('#' + id).show();
-        $('#' + id).closest('.floatingBox').find('.stream_head li').removeClass('active');
-        $('#' + id).closest('.floatingBox').find('.' + id).parent().addClass('active');
+        $('#' + id).closest('.boxStream').find('.stream_head li').removeClass('active');
+        $('#' + id).closest('.subStream').find('.' + id).parent().addClass('active');
+        var location = $('#' + id).closest('ul.floatingBoxContainers').attr('id');
+        $('#' + id).closest('.boxStream').find('.stream_head .'+location).parent().addClass('active');
         if($('#post' + splitUrl[2]).length > 0){
-            $('#post' + splitUrl[2]).closest('.floatingBox').animate({
-                scrollTop: $('#post' + splitUrl[2]).offset().top -  ($('#post' + splitUrl[2]).height() + 20)
-            }, 2000, function(){
+            $('#post' + splitUrl[2]).closest('ul.floatingBoxContainers').prepend($('#post' + splitUrl[2]));
+            $('#post' + splitUrl[2]).closest('.subStream').animate({
+                scrollTop: 0
+            }, 100, function(){
                 $('#post' + splitUrl[2]).toggle('bounce', { times: 3, complete:function(){
-                                        $(this).removeAttr('style');
-                                }}, 'slow');
+                    $(this).removeAttr('style');
+		}}, 'slow');
             });
         }
         else{
             $.ajax({
-                "url" : "",
-                "data" : "post_id="
+                "url" : BASEURL + "dashboard/media_stream/SinglePost/"+splitUrl[2],
+                "success" : function(response){
+                    $('#c'+splitUrl[1] + " .subStream ul:nth-child(1)").prepend(response);
+                    $('#post' + splitUrl[2]).closest('.subStream').animate({
+                        scrollTop: 0
+                    }, 100, function(){
+                        $('#post' + splitUrl[2]).toggle('bounce', { times: 3, complete:function(){
+                            $(this).removeAttr('style');
+                        }}, 'slow');
+                    });
+                }
             });
         }
     }    

@@ -11,7 +11,7 @@
 					<a href="#tasksContent" class="sidebar">
 					    <span class="add-on add-on-middle add-on-mini add-on-dark" id="tasks">
 						<i class="icon-tasks"></i>
-						<?php if(isset($case)){echo '<span class="notifyCircle cyan">'.(count($case) + count($reply_pending)).'</span>';}?>
+						<?php if(isset($case)){echo '<span class="notifyCircle cyan">'.(count($case) + count($reply_pending) + $count_assign).'</span>';}?>
 					    </span>
 					</a>
 				    <?php endif?>

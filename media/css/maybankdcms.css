@@ -764,6 +764,7 @@ input.related-conversation-check{
 
 .subStream{
 	overflow: auto;
+	display: block;
 	height: 87%;
 	background-color: #FFFFFF;
 	padding-top: 20px;

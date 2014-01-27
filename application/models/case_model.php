@@ -31,7 +31,30 @@ class case_model extends CI_Model{
     function LoadAssign()
     {
         $this->db->where('created_by',$this->session->userdata('user_id'));
+        $this->db->where('status','pending');
         return $this->db->get('case');
+    }
+    
+    function LoadAssign1($filter = array())
+    {
+        //$this->db->where('created_by',$this->session->userdata('user_id'));
+        //return $this->db->get('case');
+        $this->db->from("`case` a inner join social_stream b on a.post_id = b.post_id");
+        $this->db->where($filter);
+        $result = $this->db->get()->result();
+        foreach($result as $eachrow){
+            $user = $this->ReadAllUser(
+                array("user_id" => $eachrow->created_by)
+            );
+            $eachrow->created_by = $user;
+            $eachrow->assign_to = $this->ReadAllUser(
+                array('user_id' => $eachrow->assign_to)  
+            );
+            $eachrow->content_products_id = $this->ReadAllProducts(
+                array("id" => $eachrow->content_products_id)  
+            );
+        }
+        return $result;
     }
     
     function CreateCase($case, $created_by){

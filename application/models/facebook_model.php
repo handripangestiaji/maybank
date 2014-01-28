@@ -168,6 +168,10 @@ class facebook_model extends CI_Model
 	    foreach($breakLine as $line)
 		$each_post->message .= $line.'<br />';
 	}
+	else{
+	    $each_post->message = $each_post->message;
+	}
+	
 	$social_stream_fb_post = array(
 	    "post_content" => str_replace("\n", "<br />", $each_post->message),
 	    "author_id" => number_format($each_post->actor_id,0,'.',''),

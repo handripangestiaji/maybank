@@ -747,4 +747,21 @@ created by Tatto @ - matodrlicka@gmail.com
 	.btn-search-mini{
 		display: inline-block;
 	}
+	
+	.url-show{
+		margin: 5px 5px;
+	}
+	
+	#url-show .img-url{
+		float: none;
+		width: 90%;
+		margin-top: 5px;
+		margin-left: 5px;
+	}
+	
+	#url-show .content-url{
+		margin: 5px;
+		float: none;
+		width: 100%;
+	}
 }

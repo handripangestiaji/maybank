@@ -953,9 +953,9 @@ $(function(){
                                                 data: {
                                                         content:$('.compose-textbox').val(),
                                                         channel_id:$(this).val(),
-                                                        title:$('#url-show').find('input').val(),
+                                                        title:$('.url-show').find('input').val(),
                                                         short_url:$('.compose-insert-link-short-url-hidden').val(),
-                                                        description:$('#url-show').find('textarea').val(),
+                                                        description:$('.url-show').find('textarea').val(),
                                                         image:$('#compose-preview-img').attr('src') == undefined ? '' :  $('#compose-preview-img').attr('src')
                                                        },
                                                 success: function(data)
@@ -994,23 +994,26 @@ $(function(){
                                                             $('.compose-yt-char-count').html(500);
                                                             
                                                             $("#img-show").css({"display": "none"});
-                                                            $("#img-show").find('#filename').val('');
-                                                            $("#img-show").find("#remove-img").hide();
-                                                            $('#img-show').find('#compose-preview-img').removeAttr('src');
+                                                            $(".img-show").find('#filename').val('');
+                                                            $(".img-show").find("#remove-img").hide();
+                                                            $('.img-show').find('#compose-preview-img').removeAttr('src');
                                                             
                                                             $("#cal-show").css({"display": "none"});
-                                                            $("#cal-show").find('#datepickerField').val('');
-                                                            $("#cal-show").find('#compose-schedule-hours').find('option').removeAttr('selected');
-                                                            $("#cal-show").find('#compose-schedule-minutes').find('option').removeAttr('selected');
+                                                            $(".cal-show").find('#datepickerField').val('');
+                                                            $(".cal-show").find('#compose-schedule-hours').find('option').removeAttr('selected');
+                                                            $(".cal-show").find('#compose-schedule-minutes').find('option').removeAttr('selected');
                                                             
                                                             $("#url-show").css({"display": "none"});
-                                                            $('#url-show').find('input').val('');
+                                                            $('.url-show').find('input').val('');
                                                             $('.compose-insert-link-short-url-hidden').val('');
-                                                            $('#url-show').find('textarea').val('');
-                                                            $('#url-show').find('p').html('');
+                                                            $('.url-show').find('textarea').val('');
+                                                            $('.url-show').find('p').html('');
                                                             
                                                             $(".btn-compose-post").html('<i class="icon-bolt"></i> POST');
                                                             $(".btn-compose-post").prop('disabled',false);
+                                                            if(document.URL == (BASEURL + 'dashboard/socialmedia/ComposeMessage')){
+                                                                window.location.href = BASEURL + 'dashboard/socialmedia';
+                                                            }
                                                        });
                                                     }
                                                     else{
@@ -1067,23 +1070,27 @@ $(function(){
                                                                 $('.compose-yt-char-count').html(500);
                                                                 
                                                                 $("#img-show").css({"display": "none"});
-                                                                $("#img-show").find('#filename').val('');
-                                                                $("#img-show").find("#remove-img").hide();
-                                                                $('#img-show').find('#compose-preview-img').removeAttr('src');
+                                                                $(".img-show").find('#filename').val('');
+                                                                $(".img-show").find("#remove-img").hide();
+                                                                $('.img-show').find('#compose-preview-img').removeAttr('src');
                                                                 
                                                                 $("#cal-show").css({"display": "none"});
-                                                                $("#cal-show").find('#datepickerField').val('');
-                                                                $("#cal-show").find('#compose-schedule-hours').find('option').removeAttr('selected');
-                                                                $("#cal-show").find('#compose-schedule-minutes').find('option').removeAttr('selected');
+                                                                $(".cal-show").find('#datepickerField').val('');
+                                                                $(".cal-show").find('#compose-schedule-hours').find('option').removeAttr('selected');
+                                                                $(".cal-show").find('#compose-schedule-minutes').find('option').removeAttr('selected');
                                                                 
                                                                 $("#url-show").css({"display": "none"});
-                                                                $('#url-show').find('input').val('');
+                                                                $('.url-show').find('input').val('');
                                                                 $('.compose-insert-link-short-url-hidden').val('');
-                                                                $('#url-show').find('textarea').val('');
-                                                                $('#url-show').find('p').html('');
+                                                                $('.url-show').find('textarea').val('');
+                                                                $('.url-show').find('p').html('');
                                                                 
                                                                 $(".btn-compose-post").html('<i class="icon-bolt"></i> POST');
                                                                 $(".btn-compose-post").prop('disabled',false);
+                                                            
+                                                                if(document.URL == (BASEURL + 'dashboard/socialmedia/ComposeMessage')){
+                                                                    window.location.href = BASEURL + 'dashboard/socialmedia';
+                                                                }
                                                             });
                                                         }
                                                         else{
@@ -1132,23 +1139,27 @@ $(function(){
                                         $('.compose-yt-char-count').html(500);
                                         
                                         $("#img-show").css({"display": "none"});
-                                        $("#img-show").find('#filename').val('');
-                                        $("#img-show").find("#remove-img").hide();
-                                        $('#img-show').find('#compose-preview-img').removeAttr('src');
+                                        $(".img-show").find('#filename').val('');
+                                        $(".img-show").find("#remove-img").hide();
+                                        $('.img-show').find('#compose-preview-img').removeAttr('src');
                                         
                                         $("#cal-show").css({"display": "none"});
-                                        $("#cal-show").find('#datepickerField').val('');
-                                        $("#cal-show").find('#compose-schedule-hours').find('option').removeAttr('selected');
-                                        $("#cal-show").find('#compose-schedule-minutes').find('option').removeAttr('selected');
+                                        $(".cal-show").find('#datepickerField').val('');
+                                        $(".cal-show").find('#compose-schedule-hours').find('option').removeAttr('selected');
+                                        $(".cal-show").find('#compose-schedule-minutes').find('option').removeAttr('selected');
                                         
                                         $("#url-show").css({"display": "none"});
-                                        $('#url-show').find('input').val('');
+                                        $('.url-show').find('input').val('');
                                         $('.compose-insert-link-short-url-hidden').val('');
-                                        $('#url-show').find('textarea').val('');
-                                        $('#url-show').find('p').html('');
+                                        $('.url-show').find('textarea').val('');
+                                        $('.url-show').find('p').html('');
                                         
                                         $(".btn-compose-post").html('<i class="icon-bolt"></i> POST');
                                         $(".btn-compose-post").prop('disabled',false);
+                                        
+                                        if(document.URL == (BASEURL + 'dashboard/socialmedia/ComposeMessage')){
+                                            window.location.href = BASEURL + 'dashboard/socialmedia';
+                                        }
                                     });
                                 }
                                 
@@ -1167,7 +1178,7 @@ $(function(){
                                             email_me:$('#email_me').val()
                                            },
                                     success: function(){
-                                       
+                                        
                                     }
                                 });
                             }

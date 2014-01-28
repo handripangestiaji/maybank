@@ -33,7 +33,7 @@
                         frameborder="0" allowFullScreen></iframe-->
                     </p>
                     <p style="font-size:20px"><?=$post->title?></p>
-                    <p><?=$post->description?></p>
+                    <p><?php echo RemoveUrlWithin($post->description) ?></p>
                     <!--p><button type="button" class="btn btn-primary btn-mini">LIKE</button></p-->
                     <p><a data-toggle="modal" role="button" href="#modalDialog"><i class="icon-eye-open"></i> <?=$post->comment_count?> Engagement</a> |
                     <a data-toggle="modal" role="button" href="#modalDialog"><?=$post->view_count?> views</a> |
@@ -79,7 +79,7 @@
                     ?></span>
                     <i class="icon-play-circle moreOptions pull-right"></i>
                 </p>
-                <p>"<?=$comment->text?>"</p>
+                <p>"<?php echo RemoveUrlWithin($comment->text); ?>"</p>
             </li>
            <?php endforeach;
             }

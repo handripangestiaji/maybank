@@ -453,10 +453,9 @@ class facebook_model extends CI_Model
         $this->db->from("   fb_user_engaged a INNER JOIN 
                             social_stream_fb_post b  ON b.author_id = a.facebook_id inner join 
                             social_stream c on c.post_id = b.post_id LEFT JOIN
-                            `case` d on d.post_id = c.post_id and d.status='pending' LEFT OUTER JOIN
-                            social_stream_fb_comments e ON e.`POST_id`=c.`post_id`");
+                            `case` d on d.post_id = c.post_id and d.status='pending'");
         $this->db->limit($limit);
-        $this->db->order_by('e.created_at','desc');
+        $this->db->order_by('b.updated_at','desc');
         $this->db->order_by('c.created_at','desc');
         $this->db->order_by('c.replied_count','desc');
 
@@ -469,10 +468,16 @@ class facebook_model extends CI_Model
 //        echo "</pre>";
         foreach($result as $row){
             $row->reply_post = $this->RetriveCommentPostFb($row->social_stream_post_id);
-	    $comment_list = array();
-	    foreach($row->reply_post as $comment)
-		$comment_list[] = $comment->id;
-            $row->channel_action = $this->GetChannelAction(array_merge($comment_list, array($row->social_stream_post_id)), true);
+    	    $comment_list = array();
+    	    foreach($row->reply_post as $comment){
+                $comment_list[] = $comment->id;
+                $row->channel_action = $this->GetChannelAction(array_merge($comment_list, array($row->social_stream_post_id)), true);
+            }
+            foreach($row->reply_post as $comment){
+                $comment_list[] = $comment->id;
+                $my_user_id=$this->session->userdata('user_id');                                
+                $row->is_my_reply= $this->GetChannelAction(array('a.created_by'=>$my_user_id,'post_id'=>$row->post_id), false);
+            }                
         }
         
         return $result;

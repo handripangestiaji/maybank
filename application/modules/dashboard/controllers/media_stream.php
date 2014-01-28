@@ -544,7 +544,7 @@ class Media_stream extends CI_Controller {
             }
         }
         
-        $pull_ronjob=curl_get_file_contents(base_url('/cronjob/FacebookStreamOwnPost'));
+        $pull_ronjob=curl_get_file_contents(base_url('/cronjob/FacebookStreamFeed'));
         
         if(!is_array($return) && $return!='error'){//send comment          
             $action = array(

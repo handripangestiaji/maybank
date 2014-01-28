@@ -150,7 +150,7 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
             </p> 
             
             <div class="engagement-comment">
-                <p>"<?php echo $comment[$j]->comment_content; ?>"</p>
+                <p>"<?php echo RemoveUrlWithin($comment[$j]->comment_content); ?>"</p>
                 
                 <?php 
                     if(isset($isMyCase[0]->assign_to)){

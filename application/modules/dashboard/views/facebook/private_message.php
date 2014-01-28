@@ -68,7 +68,7 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_pm[$i]->po
                
             </p>
             <div>
-                <p>"<?php echo $comment[$j]->messages; ?>"</p>
+                <p>"<?php echo RemoveUrlWithin($comment[$j]->messages); ?>"</p>
             </div>
         </div>
        <?php } ?>

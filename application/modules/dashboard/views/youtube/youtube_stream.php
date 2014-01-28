@@ -79,7 +79,7 @@
                     ?></span>
                     <i class="icon-play-circle moreOptions pull-right"></i>
                 </p>
-                <p>"<?=$comment->text?>"</p>
+                <p>"<?php echo RemoveUrlWithin($comment->text); ?>"</p>
             </li>
            <?php endforeach;
             }

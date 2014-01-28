@@ -86,7 +86,7 @@
                         </a>
                     </div>
             </div>
-            <div class="compose-schedule" id="img-show">
+            <div class="compose-schedule img-show" id="img-show">
                 <div class="compose-form img-attached">
                     <!-- close button for image attached -->
                     <a id="close-img" href="javascript:void(0);">
@@ -113,7 +113,7 @@
                     </div>  
                 </div>
             </div>
-            <div class="compose-schedule" id="cal-show">
+            <div class="compose-schedule cal-show" id="cal-show">
                 <div class="compose-form img-attached">
                     <a id="close-cal" href="javascript:void(0);">
                      <i class="icon-remove-sign icon-large"></i>
@@ -170,7 +170,7 @@
                     </div> 
                 </div>
             </div>
-            <div class="compose-schedule" id="url-show">
+            <div class="compose-schedule url-show" id="url-show">
                 <div class="compose-form img-attached">
                     <!-- close button for image attached -->
                     <a id="close-url" href="javascript:void(0);">

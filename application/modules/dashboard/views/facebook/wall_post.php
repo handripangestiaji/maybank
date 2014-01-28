@@ -44,18 +44,22 @@ if($fb_feed[$i]->post_content != '<br />'):
                             <button type="button" class="close " data-dismiss="modal"><i class="icon-remove"></i></button>
                         </div>';
            }elseif($attachment[$att]->type=='link'){              
-//                print_r($attachment);?>
+                $attachment = json_decode($fb_feed[$i]->attachment)?>
             <center>
             <div class="compose-schedule" style="width: 85%;" >
-                <div class="compose-form img-attached">
+                <div class="compose-form img-attached link" onclick="window.open('<?=$attachment->media[$att]->href?>')">
                     <!-- close button for image attached -->
                     <div style="">
-                        <div style="float: left;min-height:100px; border-right: 1px solid  #ccc; padding: 5px;vertical-align: middle" >
+                        <div style="float: left;min-height:120px; border-right: 1px solid  #ccc; width:30%;" >
                             
-                            <?php echo '<img id="compose-preview-img" src="'.$attachment[$att]->src.'" style="display:block;width:auto;"/>';?>
+                            <?php echo '<img class="link-preview-image" src="'.$attachment->media[$att]->src.'" style="display:block;width:auto;"/>';?>
                         </div>
                         <!-- img-place end -->
-                        <div style="float: left;min-height:100px;  position:relative; padding: 5px;"><?php echo "<a href='".$attachment[$att]->href."'>".$attachment[0]->href."</a>"; ?></div>
+                        <div class="link-description">
+                        <p style="text-transform: capitalize;font-size:14px;margin: 5px 0"><?=$attachment->name?></p>
+                        <p class="description"><?php echo "<a href='".$attachment->media[$att]->href."'>".$attachment->media[$att]->href."</a>"; ?></p>
+                        <p><?php echo $attachment->description?></p>
+                        </div>
                     </div>
                     <!-- img-list-upload end -->  
                 </div>

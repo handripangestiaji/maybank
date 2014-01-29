@@ -978,3 +978,8 @@ input[type="text"].compose-new-message{
 .no-pointer {cursor: default !important}
 .pointer{cursor: pointer !important}
 .indicator button, .indicator .btn{cursor: default !important}
+
+.floatingBoxContainers li .link p{margin: 0;width: auto;}
+.link{cursor: pointer}
+.link-description{float: left; position:relative; padding: 5px;width:65%;}
+.link-description p{text-align: left !important;}

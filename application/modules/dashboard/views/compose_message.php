@@ -25,6 +25,16 @@
             <button class="compose-insert-link-btn btn btn-primary" type="button">
                 <i class="icon-plus"></i> 
             </button>
+        <div class="url-show" id="url-show">
+            <div class="compose-form img-attached">
+                <!-- close button for image attached -->
+                <a id="close-url" href="javascript:void(0);">
+                    <i class="icon-remove-sign icon-large"></i>
+                </a>
+                <div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="row-fluid">
         <div class="left">
@@ -47,7 +57,7 @@
             ?>
         </select>
     </div-->
-    <div class="row-fluid">
+    <div class="row-fluid img-show">
         <input type="file" id="composeInputImageFile" style="display: none">
         <i class="icon-camera icon-large"></i>
         <input id="filename" type="text" class="input disabled" name="filename" lenght="100" style="margin-left: 5px" readonly>
@@ -62,7 +72,7 @@
             <!-- img-place end -->
         </div>
     </div>
-    <div class="row-fluid">
+    <div class="row-fluid cal-show">
         <i class="icon-calendar icon-large"></i>
         Post at (leave date & time blank, if you want to post now)
         <div style="margin-top: 5px;">
@@ -125,6 +135,7 @@
         </div>
     </div>
     <div class="row-fluid">
-        <button class="btn btn-primary span12"><i class="icon-bolt icon-2x"></i> POST</button>
+        <button class="btn btn-primary btn-compose-post span12"><i class="icon-bolt icon-2x"></i> POST</button>
     </div>
+    <div class="compose-post-status green hide">Message Post</div>
 </div>

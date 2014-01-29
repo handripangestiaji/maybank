@@ -24,7 +24,7 @@
             </span>
             
         </p>
-        <p><?php echo $directmessage[$i]->dm_text;?>
+        <p><?php echo RemoveUrlWithin($directmessage[$i]->dm_text);?>
         </p>
         <p class="indicator">
         <?php if($directmessage[$i]->case_id):?>

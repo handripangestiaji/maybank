@@ -5,7 +5,7 @@ $timezone=new DateTimeZone($this->session->userdata('timezone'));
 
 for($i=0; $i<count($fb_feed);$i++):
 $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->post_id, 'a.status <>'=>'reassign'));
-//print_r($isMyCase);
+if($fb_feed[$i]->post_content != '<br />'):
 ?>
 <li class="<?php if(isset($isMyCase[0]->assign_to)){echo "case_".$isMyCase[0]->case_id;} ?>" id="post<?=$fb_feed[$i]->social_stream_post_id?>">
     <input type="hidden" class="postId" value="<?php echo $fb_feed[$i]->post_id; ?>" />
@@ -44,17 +44,22 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
                             <button type="button" class="close " data-dismiss="modal"><i class="icon-remove"></i></button>
                         </div>';
            }elseif($attachment[$att]->type=='link'){              
-//                print_r($attachment);?>
+                $attachment = json_decode($fb_feed[$i]->attachment)?>
             <center>
             <div class="compose-schedule" style="width: 85%;" >
-                <div class="compose-form img-attached">
+                <div class="compose-form img-attached link" onclick="window.open('<?=$attachment->media[$att]->href?>')">
                     <!-- close button for image attached -->
-                    <div>
-                        <div style="float: left;min-height:30px; border-right: 1px solid  #616161; padding: 5px;" >
-                            <?php echo '<img id="compose-preview-img" src="'.$attachment[$att]->src.'" style="widht:auto;"/>';?>
+                    <div style="">
+                        <div style="float: left;min-height:120px; border-right: 1px solid  #ccc; width:30%;" >
+                            
+                            <?php echo '<img class="link-preview-image" src="'.$attachment->media[$att]->src.'" style="display:block;width:auto;"/>';?>
                         </div>
                         <!-- img-place end -->
-                        <div style="float: left;min-height:30px;  position:relative; padding: 5px;"><?php echo "<a href='".$attachment[$att]->href."'>".$attachment[0]->href."</a>"; ?></div>
+                        <div class="link-description">
+                        <p style="text-transform: capitalize;font-size:14px;margin: 5px 0"><?=$attachment->name?></p>
+                        <p class="description"><?php echo "<a href='".$attachment->media[$att]->href."'>".$attachment->media[$att]->href."</a>"; ?></p>
+                        <p><?php echo $attachment->description?></p>
+                        </div>
                     </div>
                     <!-- img-list-upload end -->  
                 </div>
@@ -149,7 +154,7 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
             </p> 
             
             <div class="engagement-comment">
-                <p>"<?php echo $comment[$j]->comment_content; ?>"</p>
+                <p>"<?php echo RemoveUrlWithin($comment[$j]->comment_content); ?>"</p>
                 
                 <?php 
                     if(isset($isMyCase[0]->assign_to)){
@@ -279,7 +284,8 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
     </div>
     <!-- END CASE -->  
 </li>
-<?php endfor;?>
+<?php endif;
+endfor;?>
 <?php if(count($fb_feed) > 0 && (!isset($is_search))):?>
 <div class="filled" style="text-align: center;"><input type="hidden" class="total_groups" value="<?php echo $total_groups?>" /><input type="hidden"  class="looppage" value=""/><input type="hidden"  class="channel_id" value="<?php echo $fb_feed[0]->channel_id?>"/><button class="loadmore btn btn-info" value="wallPosts"><i class="icon-chevron-down"></i>
  <span>LOAD MORE</span></button></div>

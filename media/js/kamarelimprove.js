@@ -95,7 +95,7 @@ $(function(){
     
     $(this).on('click', '.assign-case .facebook', function(e){
         var modalID = $(this).attr("href");
-        var facebook_id = $(modalID + " input[name=post_id]").val();
+        var facebook_id = $(" input[name=user_id]").val();
         var type = $(modalID + " input[name=type]").val();
         $(modalID + " .loader-image").show();
         $(modalID + " .related-conversation-body").remove();
@@ -104,7 +104,8 @@ $(function(){
         $(this).LoadContentAsync({
             url : BASEURL + "case/mycase/FacebookRelatedConversation/" + facebook_id + "/"+type,
             urlParameter : {
-                post_id : $(modalID + " input[name=post_id]").val()
+                post_id : $(modalID + " input[name=post_id]").val(),
+                channel_id : $(this).closest('.floatingBox').find('input.channel-id').val()
             },
             callback : function(response){
                 //console.log(response);

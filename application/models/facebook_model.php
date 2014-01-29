@@ -471,7 +471,7 @@ class facebook_model extends CI_Model
 //        print_r($result);
 //        echo "</pre>";
         foreach($result as $row){
-            $row->reply_post = $this->RetriveCommentPostFb($row->social_stream_post_id);
+            $row->reply_post = $this->RetriveCommentPostFb(array('a.post_id'=>$row->social_stream_post_id));
     	    $comment_list = array();
     	    foreach($row->reply_post as $comment){
                 $comment_list[] = $comment->id;
@@ -495,6 +495,7 @@ class facebook_model extends CI_Model
         $this->db->order_by('c.created_at','desc');
         if(count($filter) >= 1)
             $this->db->where($filter);
+            
         return $this->db->get()->result();
     }
     
@@ -504,24 +505,26 @@ class facebook_model extends CI_Model
 			inner join social_stream c on c.post_id = b.post_id LEFT JOIN
                         `case` d on d.post_id = c.post_id AND d.status='pending'");
         if(count($filter) > 0)
-	    $this->db->where($filter);
+	       $this->db->where($filter);
+           
         $this->db->limit(20);
-	$this->db->order_by('c.replied_count','desc');
+        $this->db->order_by('c.replied_count','desc');
         $this->db->order_by('c.created_at','desc');
         return $this->db->get()->result();
     }
     
-    public function RetriveCommentPostFb($post_id){
-        $sql = "SELECT a.post_id,a.post_content,a.total_comments,b.comment_stream_id,b.attachment,b.from,c.name,b.comment_content,b.created_at, b.user_likes, d.post_stream_id,b.comment_id,e.post_id AS comment_post_id, b.id
-                FROM social_stream_fb_post a INNER JOIN
+    public function RetriveCommentPostFb($filter){
+        $this->db->select("a.post_id,a.post_content,a.total_comments,b.comment_stream_id,b.attachment,b.from,c.name,b.comment_content,b.created_at, b.user_likes, d.post_stream_id,b.comment_id,e.post_id AS comment_post_id, b.id");
+        $this->db->from("social_stream_fb_post a INNER JOIN
                 social_stream_fb_comments b ON b.post_id=a.post_id INNER JOIN
                 fb_user_engaged  c ON c.facebook_id=b.from INNER JOIN social_stream d on d.post_id = b.id LEFT OUTER JOIN
-                social_stream e ON e.post_stream_id=b.comment_stream_id
-                where a.post_id='".$post_id."'
-                ORDER BY post_id desc";
-        $query = $this->db->query($sql);
-        $result = $query->result();
-        return $result;  
+                social_stream e ON e.post_stream_id=b.comment_stream_id");               
+        if(count($filter) > 0)
+	       $this->db->where($filter);
+           
+        $this->db->limit(20);
+        $this->db->order_by('a.post_id','desc');
+        return $this->db->get()->result();        
     }
     
       public function RetrievePmFB($filter,$limit){

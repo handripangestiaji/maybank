@@ -536,6 +536,7 @@ class facebook_model extends CI_Model
 	    $this->db->where("detail_id_from_facebook LIKE '%_0'");    
         }
         $this->db->limit($limit);
+        $this->db->order_by('a.updated_time','desc');
         $this->db->order_by('b.created_at','desc');
 	$this->db->order_by('d.replied_count','desc');
         $result= $this->db->get()->result();

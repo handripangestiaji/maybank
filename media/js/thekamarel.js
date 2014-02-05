@@ -1640,27 +1640,29 @@ $(function(){
             
     $(document).ready(function() {
         $('.btn-dashboard-search').click(function(){
-            var channel_1 = $('#box-id-1').next().find('.channel-id').val();
-            var channel_2 = $('#box-id-2').next().find('.channel-id').val();
-            var channel_3 = $('#box-id-3').next().find('.channel-id').val();
-            $(this).closest('.container-fluid').next().find('.floatingBox').html('Loading...');
-            $('#box-id-1').next().load(BASEURL + 'dashboard/search',
-                                       {
-                                        channel_id : channel_1,
-                                        q : $('.dashboard-search-field').val()
-                                        });
-            $('#box-id-2').next().load(BASEURL + 'dashboard/search',
-                                       {
-                                        channel_id : channel_2,
-                                        q : $('.dashboard-search-field').val()
-                                        });
-            
-            $('#box-id-3').next().load(BASEURL + 'dashboard/search',
-                                       {
-                                        channel_id : channel_3,
-                                        q : $('.dashboard-search-field').val()
-                                        });
-            //window.location.href = BASEURL + 'dashboard/search?q=' + $('.dashboard-search-field').val();
+            if($('.dashboard-search-field').val() != ''){
+                var channel_1 = $('#box-id-1').next().find('.channel-id').val();
+                var channel_2 = $('#box-id-2').next().find('.channel-id').val();
+                var channel_3 = $('#box-id-3').next().find('.channel-id').val();
+                $(this).closest('.container-fluid').next().find('.floatingBox').html('Loading...');
+                $('#box-id-1').next().load(BASEURL + 'dashboard/search',
+                                           {
+                                            channel_id : channel_1,
+                                            q : $('.dashboard-search-field').val()
+                                            });
+                $('#box-id-2').next().load(BASEURL + 'dashboard/search',
+                                           {
+                                            channel_id : channel_2,
+                                            q : $('.dashboard-search-field').val()
+                                            });
+                
+                $('#box-id-3').next().load(BASEURL + 'dashboard/search',
+                                           {
+                                            channel_id : channel_3,
+                                            q : $('.dashboard-search-field').val()
+                                            });
+                //window.location.href = BASEURL + 'dashboard/search?q=' + $('.dashboard-search-field').val();
+            }
         });
         
         
@@ -1674,6 +1676,10 @@ $(function(){
     $(document).ready(function(){
         $('.compose-new-message').click(function(){
             window.location.href = BASEURL + 'dashboard/socialmedia/ComposeMessage';
+        })
+        
+        $('.btn-cancel-post').click(function(){
+            window.location.href = BASEURL + 'dashboard/socialmedia';
         })
     })
     /*=============================================================================================

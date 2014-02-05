@@ -134,8 +134,11 @@
             </p> 
         </div>
     </div>
-    <div class="row-fluid">
+    <div class="row-fluid" style="margin-bottom: 10px;">
         <button class="btn btn-primary btn-compose-post span12"><i class="icon-bolt icon-2x"></i> POST</button>
+    </div>
+    <div class="row-fluid">
+        <button class="btn btn-cancel-post span12">CANCEL</button>
     </div>
     <div class="compose-post-status green hide">Message Post</div>
 </div>

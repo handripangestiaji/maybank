@@ -145,11 +145,15 @@ if($fb_feed[$i]->post_content != '<br />'):
 //              echo "</pre>";
                 $attachment=json_decode($comment[$j]->attachment);
                 if(isset($attachment->media->image->src)){
-                $attachment=json_decode($comment[$j]->attachment);
-             // echo "<pre>";
-//              print_r($attachment);
-//                echo "</pre>";
-             echo    "<img src='".base_url('dashboard/media_stream/SafePhoto?photo=').$attachment->media->image->src."' />";
+                for($att=0;$att<count($attachment);$att++){
+                    echo    "<a href='#modal_comments-".$comment[$j]->comment_post_id."' data-toggle='modal' ><img src='".base_url('dashboard/media_stream/SafePhoto?photo=').$attachment->media->image->src."' /></a>";
+                    echo    '<div id="modal_comments-'.$comment[$j]->comment_post_id.'" class="attachment-modal modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+                            <img src="'.base_url('dashboard/media_stream/SafePhoto?photo=').$attachment->media->image->src.'" />
+                            <button type="button" class="close " data-dismiss="modal"><i class="icon-remove"></i></button>
+                        </div>';
+                    //print_r($comment[$j]);
+                    //echo    "<img src='".base_url('dashboard/media_stream/SafePhoto?photo=').$attachment->media->image->src."' />";
+                }
              }           
               ?>
             </p> 

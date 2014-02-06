@@ -282,7 +282,7 @@ class twitter_model extends CI_Model
         return $query->result();
     }
     
-    public function ReadDMFromDb($filter,$limit){
+    public function ReadDMFromDb($filter,$limit = false){
         $filter['b.type'] = 'inbox';
          $this->db->select("f.social_id, a.post_id as social_stream_post_id, a.channel_id, a.is_read, a.post_stream_id, a.retrieved_at, a.created_at as social_stream_created_at, b.text as dm_text, b.*,c.*, d.*, e.*, a.type as social_stream_type");
          $this->db->from("social_stream a inner join twitter_direct_messages b on a.post_id = b.post_id
@@ -291,7 +291,10 @@ class twitter_model extends CI_Model
             "); 
          if(count($filter) > 0)
 	     $this->db->where($filter);
-         $this->db->limit($limit);           
+        if($limit){
+             $this->db->limit($limit);
+        }
+        
          $this->db->order_by('a.created_at','desc');
          $result = $this->db->get()->result();
         
@@ -310,7 +313,7 @@ class twitter_model extends CI_Model
     }
     
     
-    public function ReadTwitterData($filter,$limit){
+    public function ReadTwitterData($filter,$limit = false){
         $this->db->select("e.social_id, a.channel_id, a.post_stream_id, a.retrieved_at, a.created_at as social_stream_created_at, a.type as social_stream_type, a.replied_count,
                             b.*, c.screen_name, c.profile_image_url, c.name, c.description, c.following, a.is_read, d.*,a.post_id as social_stream_post_id");
         $this->db->from("social_stream a INNER JOIN social_stream_twitter b ON a.post_id = b.post_id 
@@ -319,7 +322,11 @@ class twitter_model extends CI_Model
                          `case` d on d.post_id = a.post_id and d.status='pending' INNER JOIN channel e on e.channel_id = a.channel_id");
         if(count($filter) > 0)
 	    $this->db->where($filter);
-        $this->db->limit($limit);
+            
+        if($limit){
+            $this->db->limit($limit);
+        }
+        
         $this->db->order_by('a.post_stream_id','desc ');
         
         $result = $this->db->get()->result();

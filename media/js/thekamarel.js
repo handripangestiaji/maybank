@@ -42,6 +42,7 @@ $(function(){
         console.log('error');
         $(this).hide();
     });
+   
     
     $('.total-case span, .sidebar .notifyCircle, .newCases .badge').html($('.pointer-case').siblings('.red').length);
     // Create a newDate() object
@@ -521,8 +522,14 @@ $(function(){
                             var splitUrl = hashUrl.split('/');
                             if(splitUrl[1] == streamType)
                                 $(this).ToCase();
+                                
+                            $('.link-preview-image').load(function(){
+                                if($(this).height() < 100){
+                                    $(this).css('margin-top', (100 - $(this).height()) / 2)
+                                };
+                            });
                         });
-                       
+                        
                     });
                     $('.facebook_stream').on('click',function() {
                         $(this).closest('div').children('button').html('<i class="icon-facebook"></i><h2>Facebook&nbsp;</h2><i class="icon-caret-down"></i>');
@@ -1311,7 +1318,6 @@ $(function(){
                         });
                     });
                     
-
                     $(this).on('click','.follow',
                         function() {
                         var confirmResult = confirm('Are you sure want to ' + ($(this).hasClass('unfollow') ? 'unfollow' : 'follow') + " this account");

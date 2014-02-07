@@ -21,7 +21,7 @@ class MY_Controller extends CI_Controller {
 		$data['timezones'] = get_timezone_list();
 		$data['assign'] = $this->case_model->LoadAssign();
 		$data['count_assign'] = $this->case_model->LoadAssign()->num_rows();
-		$data['assign1'] = $this->case_model->LoadAssign1(array(
+		$data['assign1'] = $this->case_model->LoadCase(array(
 			'created_by' => $this->session->userdata('user_id'),
 			'status' => 'pending'
 		));

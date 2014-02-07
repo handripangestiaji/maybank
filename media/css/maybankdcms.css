@@ -983,3 +983,4 @@ input[type="text"].compose-new-message{
 .link{cursor: pointer}
 .link-description{float: left; position:relative; padding: 5px;width:65%;}
 .link-description p{text-align: left !important;}
+.sidebarContent{height: 600px;overflow-y: scroll}

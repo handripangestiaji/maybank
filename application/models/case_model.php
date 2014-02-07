@@ -12,6 +12,7 @@ class case_model extends CI_Model{
         $this->db->select("a.*, b.channel_id, b.post_stream_id, b.type");
         $this->db->from("`case` a inner join social_stream b on a.post_id = b.post_id");
         $this->db->where($filter);
+        $this->db->order_by("created_at", "desc");
         $result = $this->db->get()->result();
         foreach($result as $eachrow){
             $user = $this->ReadAllUser(
@@ -25,6 +26,7 @@ class case_model extends CI_Model{
                 array("id" => $eachrow->content_products_id)  
             );
         }
+        
         return $result;
     }
     
@@ -37,8 +39,6 @@ class case_model extends CI_Model{
     
     function LoadAssign1($filter = array())
     {
-        //$this->db->where('created_by',$this->session->userdata('user_id'));
-        //return $this->db->get('case');
         $this->db->from("`case` a inner join social_stream b on a.post_id = b.post_id");
         $this->db->where($filter);
         $result = $this->db->get()->result();

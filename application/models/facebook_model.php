@@ -451,14 +451,18 @@ class facebook_model extends CI_Model
         return $this->db->get()->result();
     }
     
-    public function RetrieveFeedFB($filter,$limit = 20){//retrive yang digunakan untuk feed facebook
+    public function RetrieveFeedFB($filter,$limit = 20,$is_limit = true){//retrive yang digunakan untuk feed facebook
         $this->db->distinct();
         $this->db->select('a.*, `b`.*, `c`.*, `d`.*, c.type as social_stream_type, b.post_id as social_stream_post_id,b.post_id, c.created_at as post_date,d.case_id');
         $this->db->from("   fb_user_engaged a INNER JOIN 
                             social_stream_fb_post b  ON b.author_id = a.facebook_id inner join 
                             social_stream c on c.post_id = b.post_id LEFT JOIN
                             `case` d on d.post_id = c.post_id and d.status='pending'");
-        $this->db->limit($limit);
+	
+	if($is_limit){
+	    $this->db->limit($limit);
+	}
+
         $this->db->order_by('b.updated_at','desc');
         $this->db->order_by('c.created_at','desc');
         $this->db->order_by('c.replied_count','desc');
@@ -524,7 +528,7 @@ class facebook_model extends CI_Model
         return $result;  
     }
     
-      public function RetrievePmFB($filter,$limit){
+      public function RetrievePmFB($filter,$limit = false){
         //WHERE detail_id_from_facebook LIKE '%_0'
         $this->db->select('a.*,b.*,c.name,c.username, d.is_read, d.post_stream_id, d.type,d.type as social_stream_type,d.channel_id, d.post_id,b.created_at AS post_date,e.case_id, e.post_id as social_stream_post_id');
         $this->db->from("social_stream_facebook_conversation a LEFT OUTER JOIN 
@@ -539,8 +543,12 @@ class facebook_model extends CI_Model
 	else{
 	    $this->db->where("detail_id_from_facebook LIKE '%_0'");    
         }
-        $this->db->limit($limit);
-        $this->db->order_by('b.created_at','desc');
+	
+	if($limit){
+	    $this->db->limit($limit);
+	}
+	
+	$this->db->order_by('b.created_at','desc');
 	$this->db->order_by('d.replied_count','desc');
         $result= $this->db->get()->result();
         

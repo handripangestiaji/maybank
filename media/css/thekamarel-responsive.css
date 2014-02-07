@@ -764,4 +764,41 @@ created by Tatto @ - matodrlicka@gmail.com
 		float: none;
 		width: 100%;
 	}
+	
+	.attachment-modal img{
+		max-width: 290px;
+	}
+	
+	.form-signin input[type="text"]{
+		min-width: 210px;
+	}
+	
+	.form-signin input[type="password"]{
+		min-width: 185px;
+	}
+	
+	.reply-open-img{
+		float: left;
+		margin-bottom: 15px;
+	}
+	
+	#reply-url-show{
+		margin-top: 5px;
+	}
+	
+	.reply-open-img #reply-open-img{
+		float: left;	
+	}
+	
+	.reply-insert-link-text{
+		margin-left: 5px;
+	}
+	
+	#compose-tags-reply{
+		border-style: none;
+	}
+	
+	.reply-img-show{
+		display: block;
+	}
 }

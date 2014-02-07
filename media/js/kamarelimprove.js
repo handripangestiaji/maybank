@@ -96,7 +96,7 @@ $(function(){
     
     $(this).on('click', '.assign-case .facebook', function(e){
         var modalID = $(this).attr("href");
-        var facebook_id = $(modalID + " input[name=post_id]").val();
+        var facebook_id = $(" input[name=user_id]").val();
         var type = $(modalID + " input[name=type]").val();
         $(modalID + " .loader-image").show();
         $(modalID + " .related-conversation-body").remove();
@@ -105,13 +105,15 @@ $(function(){
         $(this).LoadContentAsync({
             url : BASEURL + "case/mycase/FacebookRelatedConversation/" + facebook_id + "/"+type,
             urlParameter : {
-                post_id : $(modalID + " input[name=post_id]").val()
+                post_id : $(modalID + " input[name=post_id]").val(),
+                channel_id : $(this).closest('.floatingBox').find('input.channel-id').val()
             },
             callback : function(response){
                 //console.log(response);
                 $(modalID + " .loader-image").hide();
                 if(response.length>=1){
                     for(i = 0; i<response.length;i++){
+                        var myDate = new Date(response[i].created_at + " UTC");                        
                         $(modalID + ' form').append(
                              '<div class="related-conversation-body">' + 
                             '<span class="related-conversation-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>' + 
@@ -121,7 +123,7 @@ $(function(){
                                 '<i class="icon-circle"></i>' + 
                                 '<span>posted a <span class="cyanText">Wall post</span></span>' + 
                                 '<i class="icon-circle"></i>' + 
-                                '<span class="UTCTimestamp">' + response[i].created_at + '</span>' + 
+                                '<span class="UTCTimestamp">' + myDate.toString() + '</span>' + 
                                 '<i class="icon-play-circle moreOptions pull-right"></i>' +
                             '</p>' + 
                             '<div>' +
@@ -153,7 +155,8 @@ $(function(){
         $(this).LoadContentAsync({
             url : BASEURL + "case/mycase/FacebookRelatedConversation/" + facebook_id + "/"+type,
             urlParameter : {
-                post_id : $(modalID + " input[name=post_id]").val()
+                post_id : $(modalID + " input[name=post_id]").val(),
+                 channel_id : $(this).closest('.floatingBox').find('input.channel-id').val()                
             },
             callback : function(response){
                 //console.log(response);
@@ -161,6 +164,7 @@ $(function(){
                 if(response.length == 0)
                     $(modalId).append("<h2>No related conversation found.</h2>");
                 for(i = 0; i<response.length;i++){
+                      var myDate = new Date(response[i].created_at + " UTC");
                     $(modalID + ' form').append(
                          '<div class="related-conversation-body">' + 
                         '<span class="related-conversation-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>' + 
@@ -170,7 +174,7 @@ $(function(){
                             '<i class="icon-circle"></i>' + 
                             '<span>posted a <span class="cyanText">Wall post</span></span>' +
                             '<i class="icon-circle"></i>' + 
-                            '<span class="UTCTimestamp">' + response[i].created_at + '</span>' + 
+                            '<span class="UTCTimestamp">' + myDate.toString() + '</span>' + 
                             '<i class="icon-play-circle moreOptions pull-right"></i>' +
                         '</p>' + 
                         '<div>' +
@@ -178,7 +182,7 @@ $(function(){
                             '<!--p><button class="btn btn-primary btn-mini btn-reply" style="margin-left: 5px;">Reply</button></p-->' +
                         '</div></div>'
                     );
-                    $('.UTCTimestamp').localTimeFromUTC('MM/dd/yyyy hh:mm:ss a');
+                   
                 }
                 
             }

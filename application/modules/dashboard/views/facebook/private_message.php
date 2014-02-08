@@ -18,7 +18,7 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_pm[$i]->po
     <p class="headLine">
         <span class="author"><?php echo $fb_pm[$i]->name; ?></span>
         <i class="icon-circle"></i>
-        <span>posted a <span class="cyanText">message</span></span>
+        <span>posted a <span class="cyanText">message</span><?php  echo $fb_pm[$i]->post_id;?></span>
         <i class="icon-circle"></i>
         <span>
         <?php 
@@ -54,7 +54,7 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_pm[$i]->po
         </div>
         <br>
         <?php 
-            $comment=$this->facebook_model->RetrievePmDetailFB($fb_pm[$i]->conversation_id);
+            $comment=$this->facebook_model->RetrievePmDetailFB($fb_pm[$i]->conversation_id,$filter=null);
             for($j=0;$j<count($comment);$j++){
         ?>
         <div class="engagement-body">
@@ -68,7 +68,7 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_pm[$i]->po
                
             </p>
             <div>
-                <p>"<?php echo $comment[$j]->messages; ?>"</p>
+                <p>"<?php echo RemoveUrlWithin($comment[$j]->messages); ?>"</p>
             </div>
         </div>
        <?php } ?>
@@ -95,17 +95,18 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_pm[$i]->po
     if(isset($isMyCase[0]->assign_to)){
         if(($isMyCase[0]->assign_to==$this->session->userdata('user_id') && IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action'))){ ?> 
                 <button type="button" class="btn btn-primary btn-reply"><i class="icon-mail-reply"></i></button>
-           <?php if(isset($isMyCase[0]->solved_by)){ ?>
-                <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>
-           <?php }else{?>
+           <?php if($isMyCase[0]->status=='pending'){ ?>
                 <button type="button" class="btn btn-purple  btn-resolve" name="action" value="<?=$fb_pm[$i]->case_id?>"><i class="icon-check"></i> RESOLVE</button>
-           <?php } ?> 
+                <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>  
+           <?php }else{ ?> 
+              <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>
+           <?php   } ?>
         </div>
         <br clear="all" />
     </h4>
-    <?php }elseif((IsRoleFriendlyNameExist($this->user_role,'Social Stream_All_Resolve_Case')) && $isMyCase[0]->assign_to != $this->session->userdata('user_id')){ ?>
+    <?php }elseif((IsRoleFriendlyNameExist($this->user_role,'Social Stream_All_Resolve_Case'))){ ?>
         <button type="button" class="btn btn-primary btn-reply"><i class="icon-mail-reply"></i></button>
-        <?php if(!isset($isMyCase['STATUS']) or isset($isMyCase['STATUS'])!='SOLVED'):?>
+        <?php if($isMyCase[0]->status=='pending'):?>
         <button type="button" class="btn btn-purple  btn-resolve" name="action" value="<?=$fb_pm[$i]->case_id?>"><i class="icon-check"></i> RESOLVE</button>
         <?php endif?>
         <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>   
@@ -115,7 +116,7 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_pm[$i]->po
     <?php } 
     }else{ 
         ?>
-            <?php if(!$fb_pm[$i]->case_id):
+            <?php if(!$fb_feed[$i]->case_id):
                 if($isMyCase){ ?>                   
                  <?php }else{ ?>
                     <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action')):?>

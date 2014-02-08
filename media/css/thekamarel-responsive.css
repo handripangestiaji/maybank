@@ -9,7 +9,6 @@ created by Tatto @ - matodrlicka@gmail.com
 ----------------------------------------------*/
 
 @media (max-width: 1170px) {
-
 	div.mainmenu {
 		margin: 0;
 	    padding: 0;
@@ -32,7 +31,7 @@ created by Tatto @ - matodrlicka@gmail.com
 	    float: left;
 	    margin-bottom: 0;
 	    padding: 0;
-	    width: 110px;
+	    width: 120px;
 	    height: 100%;
 	}
 
@@ -459,13 +458,15 @@ created by Tatto @ - matodrlicka@gmail.com
 
 @media (max-width: 700px) {
 	.btn {
-		margin-top: 5px;
+		margin-top: 0px;
+		margin-bottom: 0px;
 	}
 }
 
 @media (max-width: 620px) {
-	#refreshAllStream{
-		display: none;
+	input[type="text"].compose-new-message{
+		height: 20px;	
+		display: inline-block;
 	}
 	
 	.dashboard-search, .compose-innercontainer{
@@ -722,5 +723,82 @@ created by Tatto @ - matodrlicka@gmail.com
 	.navbar-form .input-append input, .navbar-form .input-prepend input {
     	width: 70px;
 	}
+	
+	.cms-table{
+		float: left;
+		width: 95%;
+	}
+	
+	.cms-filter{
+		width: 100%;
+	}
+	
+	.img-place{
+		width: 100%;
+		height: auto;
+		margin: 0px;
+	}
+	
+	.img-place img{
+		max-width: 92%;
+		height: auto;
+	}
+	
+	.btn-search-mini{
+		display: inline-block;
+	}
+	
+	.url-show{
+		margin: 5px 5px;
+	}
+	
+	#url-show .img-url{
+		float: none;
+		width: 90%;
+		margin-top: 5px;
+		margin-left: 5px;
+	}
+	
+	#url-show .content-url{
+		margin: 5px;
+		float: none;
+		width: 100%;
+	}
+	
+	.attachment-modal img{
+		max-width: 290px;
+	}
+	
+	.form-signin input[type="text"]{
+		min-width: 210px;
+	}
+	
+	.form-signin input[type="password"]{
+		min-width: 185px;
+	}
+	
+	.reply-open-img{
+		float: left;
+		margin-bottom: 15px;
+	}
+	
+	#reply-url-show{
+		margin-top: 5px;
+	}
+	
+	.reply-open-img #reply-open-img{
+		float: left;	
+	}
+	
+	.reply-insert-link-text{
+		margin-left: 5px;
+	}
+	
+	#compose-tags-reply{
+		border-style: none;
+	}
+	
+	.reply-img-show{
+		display: block;
+	}
 }
-

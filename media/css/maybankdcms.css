@@ -774,6 +774,24 @@ input.related-conversation-check{
 	margin-bottom: 10px;
 }
 
+input[type="text"].compose-new-message{
+	display: none;
+	width: 60%;
+	margin-bottom: 0px;
+}
+
+.new-compose-message-fields input{
+	margin-bottom: 0px;
+}
+
+.btn-search-mini{
+	display: none;
+}
+
+#compose-tags-reply{
+	border-style: none;
+}
+
 /*==============================================================================================
 ======================================== C M S =================================================
 ==============================================================================================*/
@@ -965,3 +983,9 @@ input.related-conversation-check{
 .no-pointer {cursor: default !important}
 .pointer{cursor: pointer !important}
 .indicator button, .indicator .btn{cursor: default !important}
+
+.floatingBoxContainers li .link p{margin: 0;width: auto;}
+.link{cursor: pointer}
+.link-description{float: left; position:relative; padding: 5px;width:65%;}
+.link-description p{text-align: left !important;}
+.sidebarContent{height: 600px;overflow-y: scroll}

@@ -3,7 +3,7 @@
     <div class="sidebarDivider"></div>
     <div class="sidebarContent">
         <ul class="collapsedSidebarMenu">
-            <li><a href="#tasksContent" class="sidebar">Tasks <div class="notifyCircle cyan"></div><i class="icon-chevron-sign-right"></i></a></li>
+            <li><a href="#tasksContent" class="sidebar">Notification <div class="notifyCircle cyan"></div><i class="icon-chevron-sign-right"></i></a></li>
             <li><a href="#profileContent" class="sidebar"><?php echo $this->session->userdata('display_name'); ?><i class="icon-chevron-sign-right"></i></a></li>
             <!--
             <li class="sublevel"><a href="#">edit profile<i class="icon-user"></i></a></li>
@@ -38,6 +38,7 @@
             <?php endif;?>
         </div>
         <div class="sidebarLine"></div>
+        <div class="task">
         <ul class="tasksList" style="height: 100%">
             <?php foreach($case as $each_case):
               $type = explode("_", $each_case->type);?>
@@ -104,8 +105,8 @@
             <?php endforeach;?>
         </ul>
         <?php }?>
-        
-    </div>   
+        </div>
+    </div>  
 </div>
 <?php endif?>
 

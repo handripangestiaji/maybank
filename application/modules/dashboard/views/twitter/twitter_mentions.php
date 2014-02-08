@@ -109,7 +109,7 @@ for($i=0;$i<count($mentions);$i++){
                         ?></span>
                     </p>
                     <div>
-                        <p><?php echo $comment[$j]->text?></p>
+                        <p><?php echo RemoveUrlWithin($comment[$j]->text) ?></p>
                     </div>
                 </div>
                 <?php endif;?>

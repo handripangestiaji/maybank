@@ -5,10 +5,11 @@ $timezone=new DateTimeZone($this->session->userdata('timezone'));
 
 for($i=0; $i<count($fb_feed);$i++):
 $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->post_id, 'a.status <>'=>'reassign'));
-//print_r($isMyCase);
+if($fb_feed[$i]->post_content != '<br />'):
 ?>
 <li class="<?php if(isset($isMyCase[0]->assign_to)){echo "case_".$isMyCase[0]->case_id;} ?>" id="post<?=$fb_feed[$i]->social_stream_post_id?>">
     <input type="hidden" class="postId" value="<?php echo $fb_feed[$i]->post_id; ?>" />
+    <input type="hidden" name="user_id" value="<?php echo $this->session->userdata('user_id'); ?>" />
     <div class="circleAvatar"><img src="<?php echo base_url('dashboard/media_stream/SafePhoto?photo=')."https://graph.facebook.com/".number_format($fb_feed[$i]->facebook_id, 0,'.','')?>/picture?small" alt=""></div>
     <?php if (IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action')):?>
     <div class="read-mark <?php if($fb_feed[$i]->is_read==0){echo 'redText';} else { echo 'greyText'; } ?>"><i class="icon-bookmark icon-large"></i></div>
@@ -44,17 +45,22 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
                             <button type="button" class="close " data-dismiss="modal"><i class="icon-remove"></i></button>
                         </div>';
            }elseif($attachment[$att]->type=='link'){              
-//                print_r($attachment);?>
+                $attachment = json_decode($fb_feed[$i]->attachment)?>
             <center>
             <div class="compose-schedule" style="width: 85%;" >
-                <div class="compose-form img-attached">
+                <div class="compose-form img-attached link" onclick="window.open('<?=$attachment->media[$att]->href?>')">
                     <!-- close button for image attached -->
-                    <div>
-                        <div style="float: left;min-height:30px; border-right: 1px solid  #616161; padding: 5px;" >
-                            <?php echo '<img id="compose-preview-img" src="'.$attachment[$att]->src.'" style="widht:auto;"/>';?>
+                    <div style="">
+                        <div style="float: left;min-height:120px; border-right: 1px solid  #ccc; width:30%;" >
+                            
+                            <?php echo '<img class="link-preview-image" src="'.$attachment->media[$att]->src.'" style="display:block;width:auto;"/>';?>
                         </div>
                         <!-- img-place end -->
-                        <div style="float: left;min-height:30px;  position:relative; padding: 5px;"><?php echo "<a href='".$attachment[$att]->href."'>".$attachment[0]->href."</a>"; ?></div>
+                        <div class="link-description">
+                        <p style="text-transform: capitalize;font-size:14px;margin: 5px 0"><?=$attachment->name?></p>
+                        <p class="description"><?php echo "<a href='".$attachment->media[$att]->href."'>".$attachment->media[$att]->href."</a>"; ?></p>
+                        <p><?php echo $attachment->description?></p>
+                        </div>
                     </div>
                     <!-- img-list-upload end -->  
                 </div>
@@ -79,28 +85,27 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
                 <?php echo $fb_feed[$i]->case_id != null ? 'CASE #'.$fb_feed[$i]->case_id.' Assign to: '.$isMyCase[0]->full_name : 'REPLIED'?>
             </button>  
     <?php    }
-    }else{ 
+    }
+    
        // print_r($fb_feed[$i]->reply_post[0]);
         if(isset($fb_feed[$i]->reply_post[0])){
-        ?>
-    
-        <!--button type="button" class="btn <?php echo count($fb_feed[$i]->reply_post) == 0 ? "btn-warning btn-mini no-cursor indicator" : "btn-inverse btn-mini no-cursor indicator" ?>"><?php echo count($fb_feed[$i]->reply_post) == 0 ? 'OPEN' :  'Replied '?></button-->
+         if(isset($fb_feed[$i]->is_my_reply[0])){?>
         <button type="button" class="btn btn-inverse btn-mini" value="<?php echo $fb_feed[$i]->reply_post[0]->post_id?>">
         
         <?php
-        
-        $reply_date = new DateTime($fb_feed[$i]->reply_post[count($fb_feed[$i]->reply_post) - 1]->created_at);
+        $reply_date = new DateTime($fb_feed[$i]->channel_action[count($fb_feed[$i]->channel_action) - 1]->created_at);
         $reply_date->setTimezone($timezone);
-        echo "Replied by: ".$fb_feed[$i]->reply_post[count($fb_feed[$i]->reply_post) - 1]->name." ".$reply_date->format("d-M-y h:i A") ?>
-        </button>  
-    <?php }else{?>
-  <button type="button" class="btn <?php echo count($fb_feed[$i]->reply_post) == 0 ? "btn-warning btn-mini no-cursor indicator" : "btn-inverse btn-mini no-cursor indicator" ?>"><?php echo count($fb_feed[$i]->reply_post) == 0 ? 'OPEN' :  'Replied '?></button>        
-    <?php }
-    
-    } ?>
-    <?php if(IsRoleFriendlyNameExist($this->user_role,'Social Stream_Current_Social Functions Like, Retweet')):?>
+        echo "Replied by: ".$fb_feed[$i]->channel_action[count($fb_feed[$i]->channel_action) - 1]->username." ".$reply_date->format("d-M-y h:i A") ?>
+        </button> <?php            
+        }else{?>
+        <button type="button" class="btn btn-warning btn-mini no-cursor indicator" >OPEN</button>       
+         <?php }         
+        }else{?>
+        <button type="button" class="btn btn-warning btn-mini no-cursor indicator" >OPEN</button>       
+        <?php }    
+        if(IsRoleFriendlyNameExist($this->user_role,'Social Stream_Current_Social Functions Like, Retweet')):?>
         <button class="fblike btn btn-primary btn-mini" style="margin-left: 5px;" value="<?php echo $fb_feed[$i]->post_stream_id;?>"><?php echo $fb_feed[$i]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button> </p>
-    <?php endif ?>
+        <?php endif ?>
     <p>
         <span class="btn-engagement"><i class="icon-eye-open"></i> <?php echo $fb_feed[$i]->total_comments;?> Engagements</span> |
         <span class="cyanText"><i class="icon-thumbs-up-alt"></i></i> <?php echo $fb_feed[$i]->total_likes; ?> likes</span> 
@@ -140,17 +145,21 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
 //              echo "</pre>";
                 $attachment=json_decode($comment[$j]->attachment);
                 if(isset($attachment->media->image->src)){
-                $attachment=json_decode($comment[$j]->attachment);
-             // echo "<pre>";
-//              print_r($attachment);
-//                echo "</pre>";
-             echo    "<img src='".base_url('dashboard/media_stream/SafePhoto?photo=').$attachment->media->image->src."' />";
+                for($att=0;$att<count($attachment);$att++){
+                    echo    "<a href='#modal_comments-".$comment[$j]->comment_post_id."' data-toggle='modal' ><img src='".base_url('dashboard/media_stream/SafePhoto?photo=').$attachment->media->image->src."' /></a>";
+                    echo    '<div id="modal_comments-'.$comment[$j]->comment_post_id.'" class="attachment-modal modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+                            <img src="'.base_url('dashboard/media_stream/SafePhoto?photo=').$attachment->media->image->src.'" />
+                            <button type="button" class="close " data-dismiss="modal"><i class="icon-remove"></i></button>
+                        </div>';
+                    //print_r($comment[$j]);
+                    //echo    "<img src='".base_url('dashboard/media_stream/SafePhoto?photo=').$attachment->media->image->src."' />";
+                }
              }           
               ?>
             </p> 
             
             <div class="engagement-comment">
-                <p>"<?php echo $comment[$j]->comment_content; ?>"</p>
+                <p>"<?php echo RemoveUrlWithin($comment[$j]->comment_content); ?>"</p>
                 
                 <?php 
                     if(isset($isMyCase[0]->assign_to)){
@@ -218,21 +227,22 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
         <!--a style="font-size: 20px; cursor: pointer;"><i class="icon-trash greyText deleteFB"></i></a-->
         <div class="pull-right">
     <?php  
-//    print_r($isMyCase);
+    //print_r($isMyCase);
     if(isset($isMyCase[0]->assign_to)){
         if(($isMyCase[0]->assign_to==$this->session->userdata('user_id') && IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action'))){ ?> 
                 <button type="button" class="btn btn-primary btn-reply"><i class="icon-mail-reply"></i></button>
-           <?php if(isset($isMyCase[0]->solved_by)){ ?>
-                <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>
-           <?php }else{?>
+           <?php if($isMyCase[0]->status=='pending'){ ?>
                 <button type="button" class="btn btn-purple  btn-resolve" name="action" value="<?=$fb_feed[$i]->case_id?>"><i class="icon-check"></i> RESOLVE</button>
-           <?php } ?> 
+                <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>  
+           <?php }else{ ?> 
+              <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>
+           <?php   } ?>
         </div>
         <br clear="all" />
     </h4>
     <?php }elseif((IsRoleFriendlyNameExist($this->user_role,'Social Stream_All_Resolve_Case'))){ ?>
         <button type="button" class="btn btn-primary btn-reply"><i class="icon-mail-reply"></i></button>
-        <?php if(!isset($isMyCase['STATUS']) or isset($isMyCase['STATUS'])!='SOLVED'):?>
+        <?php if($isMyCase[0]->status=='pending'):?>
         <button type="button" class="btn btn-purple  btn-resolve" name="action" value="<?=$fb_feed[$i]->case_id?>"><i class="icon-check"></i> RESOLVE</button>
         <?php endif?>
         <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>   
@@ -279,7 +289,8 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->
     </div>
     <!-- END CASE -->  
 </li>
-<?php endfor;?>
+<?php endif;
+endfor;?>
 <?php if(count($fb_feed) > 0 && (!isset($is_search))):?>
 <div class="filled" style="text-align: center;"><input type="hidden" class="total_groups" value="<?php echo $total_groups?>" /><input type="hidden"  class="looppage" value=""/><input type="hidden"  class="channel_id" value="<?php echo $fb_feed[0]->channel_id?>"/><button class="loadmore btn btn-info" value="wallPosts"><i class="icon-chevron-down"></i>
  <span>LOAD MORE</span></button></div>

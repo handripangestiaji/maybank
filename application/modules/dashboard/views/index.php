@@ -13,6 +13,8 @@
             </div>
             <!-- button-refresh end -->
         <?php if(IsRoleFriendlyNameExist($this->user_role, "Publishing Box_Assigned_Channel")):?>
+        <input type="text" class="row-fluid compose-new-message" placeholder="Compose Message" id="compose-message" style="margin-bottom: 0px;">
+        <button class="btn btn-inverse btn-search-mini"><i class="icon-search"></i></button>
         <div class="compose-innercontainer compose-collapsed left">
             <textarea class="span8 compose-textbox" placeholder="Compose Message" id="compose-message"></textarea>
             <!-- ==================== URL SHORTERNER AJAX THIS WILL BE HIDDEN BY DEFAULT ==================== -->
@@ -84,7 +86,7 @@
                         </a>
                     </div>
             </div>
-            <div class="compose-schedule" id="img-show">
+            <div class="compose-schedule img-show" id="img-show">
                 <div class="compose-form img-attached">
                     <!-- close button for image attached -->
                     <a id="close-img" href="javascript:void(0);">
@@ -111,7 +113,7 @@
                     </div>  
                 </div>
             </div>
-            <div class="compose-schedule" id="cal-show">
+            <div class="compose-schedule cal-show" id="cal-show">
                 <div class="compose-form img-attached">
                     <a id="close-cal" href="javascript:void(0);">
                      <i class="icon-remove-sign icon-large"></i>
@@ -168,7 +170,7 @@
                     </div> 
                 </div>
             </div>
-            <div class="compose-schedule" id="url-show">
+            <div class="compose-schedule url-show" id="url-show">
                 <div class="compose-form img-attached">
                     <!-- close button for image attached -->
                     <a id="close-url" href="javascript:void(0);">

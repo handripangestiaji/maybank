@@ -42,8 +42,9 @@ $(function(){
         console.log('error');
         $(this).hide();
     });
+   
     
-    $('.total-case span, .sidebar .notifyCircle, .newCases .badge').html($('.pointer-case .red').length);
+    $('.total-case span, .sidebar .notifyCircle, .newCases .badge').html($('.pointer-case').siblings('.red').length);
     // Create a newDate() object
     var newDate = new Date();
     // Extract the current date from Date object
@@ -521,8 +522,14 @@ $(function(){
                             var splitUrl = hashUrl.split('/');
                             if(splitUrl[1] == streamType)
                                 $(this).ToCase();
+                                
+                            $('.link-preview-image').load(function(){
+                                if($(this).height() < 100){
+                                    $(this).css('margin-top', (100 - $(this).height()) / 2)
+                                };
+                            });
                         });
-                       
+                        
                     });
                     $('.facebook_stream').on('click',function() {
                         $(this).closest('div').children('button').html('<i class="icon-facebook"></i><h2>Facebook&nbsp;</h2><i class="icon-caret-down"></i>');
@@ -946,9 +953,9 @@ $(function(){
                                                 data: {
                                                         content:$('.compose-textbox').val(),
                                                         channel_id:$(this).val(),
-                                                        title:$('#url-show').find('input').val(),
+                                                        title:$('.url-show').find('input').val(),
                                                         short_url:$('.compose-insert-link-short-url-hidden').val(),
-                                                        description:$('#url-show').find('textarea').val(),
+                                                        description:$('.url-show').find('textarea').val(),
                                                         image:$('#compose-preview-img').attr('src') == undefined ? '' :  $('#compose-preview-img').attr('src')
                                                        },
                                                 success: function(data)
@@ -987,23 +994,26 @@ $(function(){
                                                             $('.compose-yt-char-count').html(500);
                                                             
                                                             $("#img-show").css({"display": "none"});
-                                                            $("#img-show").find('#filename').val('');
-                                                            $("#img-show").find("#remove-img").hide();
-                                                            $('#img-show').find('#compose-preview-img').removeAttr('src');
+                                                            $(".img-show").find('#filename').val('');
+                                                            $(".img-show").find("#remove-img").hide();
+                                                            $('.img-show').find('#compose-preview-img').removeAttr('src');
                                                             
                                                             $("#cal-show").css({"display": "none"});
-                                                            $("#cal-show").find('#datepickerField').val('');
-                                                            $("#cal-show").find('#compose-schedule-hours').find('option').removeAttr('selected');
-                                                            $("#cal-show").find('#compose-schedule-minutes').find('option').removeAttr('selected');
+                                                            $(".cal-show").find('#datepickerField').val('');
+                                                            $(".cal-show").find('#compose-schedule-hours').find('option').removeAttr('selected');
+                                                            $(".cal-show").find('#compose-schedule-minutes').find('option').removeAttr('selected');
                                                             
                                                             $("#url-show").css({"display": "none"});
-                                                            $('#url-show').find('input').val('');
+                                                            $('.url-show').find('input').val('');
                                                             $('.compose-insert-link-short-url-hidden').val('');
-                                                            $('#url-show').find('textarea').val('');
-                                                            $('#url-show').find('p').html('');
+                                                            $('.url-show').find('textarea').val('');
+                                                            $('.url-show').find('p').html('');
                                                             
                                                             $(".btn-compose-post").html('<i class="icon-bolt"></i> POST');
                                                             $(".btn-compose-post").prop('disabled',false);
+                                                            if(document.URL == (BASEURL + 'dashboard/socialmedia/ComposeMessage')){
+                                                                window.location.href = BASEURL + 'dashboard/socialmedia';
+                                                            }
                                                        });
                                                     }
                                                     else{
@@ -1060,23 +1070,27 @@ $(function(){
                                                                 $('.compose-yt-char-count').html(500);
                                                                 
                                                                 $("#img-show").css({"display": "none"});
-                                                                $("#img-show").find('#filename').val('');
-                                                                $("#img-show").find("#remove-img").hide();
-                                                                $('#img-show').find('#compose-preview-img').removeAttr('src');
+                                                                $(".img-show").find('#filename').val('');
+                                                                $(".img-show").find("#remove-img").hide();
+                                                                $('.img-show').find('#compose-preview-img').removeAttr('src');
                                                                 
                                                                 $("#cal-show").css({"display": "none"});
-                                                                $("#cal-show").find('#datepickerField').val('');
-                                                                $("#cal-show").find('#compose-schedule-hours').find('option').removeAttr('selected');
-                                                                $("#cal-show").find('#compose-schedule-minutes').find('option').removeAttr('selected');
+                                                                $(".cal-show").find('#datepickerField').val('');
+                                                                $(".cal-show").find('#compose-schedule-hours').find('option').removeAttr('selected');
+                                                                $(".cal-show").find('#compose-schedule-minutes').find('option').removeAttr('selected');
                                                                 
                                                                 $("#url-show").css({"display": "none"});
-                                                                $('#url-show').find('input').val('');
+                                                                $('.url-show').find('input').val('');
                                                                 $('.compose-insert-link-short-url-hidden').val('');
-                                                                $('#url-show').find('textarea').val('');
-                                                                $('#url-show').find('p').html('');
+                                                                $('.url-show').find('textarea').val('');
+                                                                $('.url-show').find('p').html('');
                                                                 
                                                                 $(".btn-compose-post").html('<i class="icon-bolt"></i> POST');
                                                                 $(".btn-compose-post").prop('disabled',false);
+                                                            
+                                                                if(document.URL == (BASEURL + 'dashboard/socialmedia/ComposeMessage')){
+                                                                    window.location.href = BASEURL + 'dashboard/socialmedia';
+                                                                }
                                                             });
                                                         }
                                                         else{
@@ -1125,23 +1139,27 @@ $(function(){
                                         $('.compose-yt-char-count').html(500);
                                         
                                         $("#img-show").css({"display": "none"});
-                                        $("#img-show").find('#filename').val('');
-                                        $("#img-show").find("#remove-img").hide();
-                                        $('#img-show').find('#compose-preview-img').removeAttr('src');
+                                        $(".img-show").find('#filename').val('');
+                                        $(".img-show").find("#remove-img").hide();
+                                        $('.img-show').find('#compose-preview-img').removeAttr('src');
                                         
                                         $("#cal-show").css({"display": "none"});
-                                        $("#cal-show").find('#datepickerField').val('');
-                                        $("#cal-show").find('#compose-schedule-hours').find('option').removeAttr('selected');
-                                        $("#cal-show").find('#compose-schedule-minutes').find('option').removeAttr('selected');
+                                        $(".cal-show").find('#datepickerField').val('');
+                                        $(".cal-show").find('#compose-schedule-hours').find('option').removeAttr('selected');
+                                        $(".cal-show").find('#compose-schedule-minutes').find('option').removeAttr('selected');
                                         
                                         $("#url-show").css({"display": "none"});
-                                        $('#url-show').find('input').val('');
+                                        $('.url-show').find('input').val('');
                                         $('.compose-insert-link-short-url-hidden').val('');
-                                        $('#url-show').find('textarea').val('');
-                                        $('#url-show').find('p').html('');
+                                        $('.url-show').find('textarea').val('');
+                                        $('.url-show').find('p').html('');
                                         
                                         $(".btn-compose-post").html('<i class="icon-bolt"></i> POST');
                                         $(".btn-compose-post").prop('disabled',false);
+                                        
+                                        if(document.URL == (BASEURL + 'dashboard/socialmedia/ComposeMessage')){
+                                            window.location.href = BASEURL + 'dashboard/socialmedia';
+                                        }
                                     });
                                 }
                                 
@@ -1160,7 +1178,7 @@ $(function(){
                                             email_me:$('#email_me').val()
                                            },
                                     success: function(){
-                                       
+                                        
                                     }
                                 });
                             }
@@ -1300,7 +1318,6 @@ $(function(){
                         });
                     });
                     
-
                     $(this).on('click','.follow',
                         function() {
                         var confirmResult = confirm('Are you sure want to ' + ($(this).hasClass('unfollow') ? 'unfollow' : 'follow') + " this account");
@@ -1629,27 +1646,29 @@ $(function(){
             
     $(document).ready(function() {
         $('.btn-dashboard-search').click(function(){
-            var channel_1 = $('#box-id-1').next().find('.channel-id').val();
-            var channel_2 = $('#box-id-2').next().find('.channel-id').val();
-            var channel_3 = $('#box-id-3').next().find('.channel-id').val();
-            $(this).closest('.container-fluid').next().find('.floatingBox').html('Loading...');
-            $('#box-id-1').next().load(BASEURL + 'dashboard/search',
-                                       {
-                                        channel_id : channel_1,
-                                        q : $('.dashboard-search-field').val()
-                                        });
-            $('#box-id-2').next().load(BASEURL + 'dashboard/search',
-                                       {
-                                        channel_id : channel_2,
-                                        q : $('.dashboard-search-field').val()
-                                        });
-            
-            $('#box-id-3').next().load(BASEURL + 'dashboard/search',
-                                       {
-                                        channel_id : channel_3,
-                                        q : $('.dashboard-search-field').val()
-                                        });
-            //window.location.href = BASEURL + 'dashboard/search?q=' + $('.dashboard-search-field').val();
+            if($('.dashboard-search-field').val() != ''){
+                var channel_1 = $('#box-id-1').next().find('.channel-id').val();
+                var channel_2 = $('#box-id-2').next().find('.channel-id').val();
+                var channel_3 = $('#box-id-3').next().find('.channel-id').val();
+                $(this).closest('.container-fluid').next().find('.floatingBox').html('Loading...');
+                $('#box-id-1').next().load(BASEURL + 'dashboard/search',
+                                           {
+                                            channel_id : channel_1,
+                                            q : $('.dashboard-search-field').val()
+                                            });
+                $('#box-id-2').next().load(BASEURL + 'dashboard/search',
+                                           {
+                                            channel_id : channel_2,
+                                            q : $('.dashboard-search-field').val()
+                                            });
+                
+                $('#box-id-3').next().load(BASEURL + 'dashboard/search',
+                                           {
+                                            channel_id : channel_3,
+                                            q : $('.dashboard-search-field').val()
+                                            });
+                //window.location.href = BASEURL + 'dashboard/search?q=' + $('.dashboard-search-field').val();
+            }
         });
         
         
@@ -1660,6 +1679,15 @@ $(function(){
         $('.boxStream').height(new_height);
     });
     
+    $(document).ready(function(){
+        $('.compose-new-message').click(function(){
+            window.location.href = BASEURL + 'dashboard/socialmedia/ComposeMessage';
+        })
+        
+        $('.btn-cancel-post').click(function(){
+            window.location.href = BASEURL + 'dashboard/socialmedia';
+        })
+    })
     /*=============================================================================================
      ===================================== CMS ACTIONS ============================================
      =============================================================================================*/    

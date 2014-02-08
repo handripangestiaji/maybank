@@ -79,13 +79,37 @@ class mycase extends CI_Controller{
     }
     
     
-    function FacebookRelatedConversation($post_id,$type){
+    function FacebookRelatedConversation($user,$type){
         $this->load->model('facebook_model');
-        if($type=='facebook'){
-            echo json_encode($this->facebook_model->RetriveCommentPostFb($post_id));
-        }else{
-            $filter["d.post_id"]=$post_id;            
-             echo json_encode($this->facebook_model->RetrievePmDetailFB($post_id));
+        $post_id=$this->input->get('post_id');
+        $channel_id=$this->input->get('channel_id');
+        $this->load->model('account_model');
+        
+        if($channel_id){
+            $filter['channel_id'] = $channel_id;
+        }
+        
+        $channel_loaded = $this->account_model->GetChannel($filter);
+        if(count($channel_loaded) == 0){
+    		echo json_encode(
+    		    array(
+    			'success' => false,
+    			'message' => "Invalid Channel Id"
+    		    )
+    		);
+		  return;
+	    }
+	    else{
+	       
+            $facebook_id=$channel_loaded[0]->social_id;
+            //print_r($facebook_id);
+            if($type=='facebook'){
+                echo json_encode($this->facebook_model->RetriveCommentPostFb(array('b.from <>'=>$facebook_id,'a.post_id'=>$post_id)));
+            }else{
+                $filter["d.post_id"]=$post_id;   
+                         
+                 echo json_encode($this->facebook_model->RetrievePmDetailFB($post_id,array("b.sender <>"=>$facebook_id)));
+           }
        }  
     }
     

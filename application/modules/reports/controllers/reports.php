@@ -6,6 +6,8 @@ class Reports extends MY_Controller {
     {
         parent::__construct();
         $this->load->model('reports_model');
+        $this->user_role = $this->users_model->get_collection_detail(
+		array('role_collection_id'=>$this->session->userdata('role_id')));
     }
     
     function index()

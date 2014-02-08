@@ -79,7 +79,7 @@ class case_model extends CI_Model{
         $this->load->config('mail_config');
         $mail_provider = $this->config->item('mail_provider');
         $this->load->library('email', $mail_provider);        
-        $this->email->from('noreply@giziku.com','Maybank');
+        $this->email->from('do-not-reply@maybank.co','Web Media Team');
         $user = $this->ReadAllUser(
             array(
                 "user_id" => $case['assign_to']

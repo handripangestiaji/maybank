@@ -252,7 +252,7 @@ class Users extends MY_Controller {
 		    $this->users_model->insert_user($data);
 		  
 				  $this->email->set_newline("\r\n");
-				  $this->email->from('tes@gmail.com','maybank');
+				  $this->email->from('do-not-reply@maybk.co','Web Media Team');
 				  $this->email->to($this->input->post('email'));
 				  $this->email->cc('monitoring@kalajeda.com'); 
 				  

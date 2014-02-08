@@ -188,7 +188,7 @@ class Login extends Login_Controller {
 		    $this->users_model->update_pass($id,$data);
 		    
 		    $this->email->set_newline("\r\n");
-		    $this->email->from('tes@gmail.com','maybank');
+		    $this->email->from('do-not-reply@maybk.co','Web Media Team');
 		    $this->email->to($email);
 		    $this->email->cc('monitoring@kalajeda.com');
 		    

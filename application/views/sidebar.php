@@ -16,7 +16,7 @@
 <!-- ==================== END OF SIDEBAR COLLAPSED ==================== -->
 
 <!-- ==================== SIDEBAR TASKS ==================== -->
-<?php if(IsRoleFriendlyNameExist($this->user_role, "Publisher")):?>
+<?php if(IsRoleFriendlyNameExist($this->user_role, "Social Stream_Current_Resolve_Case")):?>
 <div id="tasksContent">
     <div class="sidebarDivider"></div>
     <div class="sidebarContent" style="overflow-y: scroll;">

@@ -80,7 +80,7 @@ class case_model extends CI_Model{
         $mail_provider = $this->config->item('mail_provider');
         $this->load->library('email', $mail_provider);
 	$mail_from = $this->config->item('mail_from');
-        $this->email->from($mail_from['email'],$mail_from['email_from']);
+        $this->email->from($mail_from['name'],$mail_from['address']);
         $user = $this->ReadAllUser(
             array(
                 "user_id" => $case['assign_to']

@@ -9,6 +9,7 @@ if($fb_feed[$i]->post_content != '<br />'):
 ?>
 <li class="<?php if(isset($isMyCase[0]->assign_to)){echo "case_".$isMyCase[0]->case_id;} ?>" id="post<?=$fb_feed[$i]->social_stream_post_id?>">
     <input type="hidden" class="postId" value="<?php echo $fb_feed[$i]->post_id; ?>" />
+    <input type="hidden" name="user_id" value="<?php echo $this->session->userdata('user_id'); ?>" />
     <div class="circleAvatar"><img src="<?php echo base_url('dashboard/media_stream/SafePhoto?photo=')."https://graph.facebook.com/".number_format($fb_feed[$i]->facebook_id, 0,'.','')?>/picture?small" alt=""></div>
     <?php if (IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action')):?>
     <div class="read-mark <?php if($fb_feed[$i]->is_read==0){echo 'redText';} else { echo 'greyText'; } ?>"><i class="icon-bookmark icon-large"></i></div>
@@ -144,11 +145,15 @@ if($fb_feed[$i]->post_content != '<br />'):
 //              echo "</pre>";
                 $attachment=json_decode($comment[$j]->attachment);
                 if(isset($attachment->media->image->src)){
-                $attachment=json_decode($comment[$j]->attachment);
-             // echo "<pre>";
-//              print_r($attachment);
-//                echo "</pre>";
-             echo    "<img src='".base_url('dashboard/media_stream/SafePhoto?photo=').$attachment->media->image->src."' />";
+                for($att=0;$att<count($attachment);$att++){
+                    echo    "<a href='#modal_comments-".$comment[$j]->comment_post_id."' data-toggle='modal' ><img src='".base_url('dashboard/media_stream/SafePhoto?photo=').$attachment->media->image->src."' /></a>";
+                    echo    '<div id="modal_comments-'.$comment[$j]->comment_post_id.'" class="attachment-modal modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+                            <img src="'.base_url('dashboard/media_stream/SafePhoto?photo=').$attachment->media->image->src.'" />
+                            <button type="button" class="close " data-dismiss="modal"><i class="icon-remove"></i></button>
+                        </div>';
+                    //print_r($comment[$j]);
+                    //echo    "<img src='".base_url('dashboard/media_stream/SafePhoto?photo=').$attachment->media->image->src."' />";
+                }
              }           
               ?>
             </p> 

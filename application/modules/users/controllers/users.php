@@ -250,12 +250,25 @@ class Users extends MY_Controller {
 			 );
 		    
 		    $this->users_model->insert_user($data);
+<<<<<<< HEAD
+		  
+				  $this->email->set_newline("\r\n");
+				  $this->email->from('do-not-reply@maybk.co','Web Media Team');
+				  $this->email->to($this->input->post('email'));
+				  $this->email->cc('monitoring@kalajeda.com'); 
+				  
+				  $this->email->subject('New Registration');
+				  $template = curl_get_file_contents(base_url('mail_template/NewUser/'.$this->input->post('username').'/'.urlencode($pass)));
+				  $this->email->message($template);
+				  $this->email->send();
+=======
 		    $this->load->config('mail_config');
 		    $mail_from = $this->config->item('mail_from');
 		    $this->email->set_newline("\r\n");
 		    $this->email->from($mail_from['email'], $mail_from['email_from']);
 		    $this->email->to($this->input->post('email'));
 		    $this->email->cc('monitoring@kalajeda.com'); 
+>>>>>>> c39caa4504fdd86cfc3b2dbe49674d9cf7f37999
 		    
 		    $this->email->subject('New Registration');
 		    $template = curl_get_file_contents(base_url('mail_template/NewUser/'.$this->input->post('username').'/'.urlencode($pass)));

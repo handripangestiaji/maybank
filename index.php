@@ -1,6 +1,5 @@
 <?php
 date_default_timezone_set("Europe/London");
-ini_set("display_errors", 0);
 /*
  *---------------------------------------------------------------
  * APPLICATION ENVIRONMENT
@@ -19,7 +18,7 @@ ini_set("display_errors", 0);
  * NOTE: If you change these, also change the error_reporting() code below
  *
  */
-	define('ENVIRONMENT', 'testing');
+	define('ENVIRONMENT', 'production');
 /*
  *---------------------------------------------------------------
  * ERROR REPORTING

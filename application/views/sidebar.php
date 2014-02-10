@@ -1,3 +1,4 @@
+
 <!-- ==================== SIDEBAR COLLAPSED ==================== -->
 <div id="collapsedSidebarContent">
     <div class="sidebarDivider"></div>
@@ -16,7 +17,9 @@
 <!-- ==================== END OF SIDEBAR COLLAPSED ==================== -->
 
 <!-- ==================== SIDEBAR TASKS ==================== -->
-<?php if(IsRoleFriendlyNameExist($this->user_role, "Publisher")):?>
+<?php
+
+if(IsRoleFriendlyNameExist($this->user_role, "Publisher", "role_group")):?>
 <div id="tasksContent">
     <div class="sidebarDivider"></div>
     <div class="sidebarContent" style="overflow-y: scroll;">
@@ -118,6 +121,7 @@
     <div class="sidebarContent">
         <div class="sidebarHead pull-left">
             <p class="title pull-left">MY ACCOUNT</p>
+            
         </div>
         <span class="btn-close pull-right">Close <i class="icon-remove-sign"></i></span>
         <br clear="all" />

@@ -22,7 +22,7 @@
         <input type="hidden" class="short_code" />
         <button class="reply-insert-link-btn btn btn-primary btn-mini" style="margin-left: 5px;">SHORTEN</button>
     </div>    
-    <div class="pull-right">
+    <div class="pull-right reply-open-img">
         <a href="javascript:void(0);" id="reply-open-img">
             <i class="icon-camera"></i> 
         </a>

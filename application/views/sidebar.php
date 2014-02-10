@@ -38,6 +38,7 @@
             <?php endif;?>
         </div>
         <div class="sidebarLine"></div>
+        <div class="task">
         <ul class="tasksList" style="height: 100%">
             <?php foreach($case as $each_case):
               $type = explode("_", $each_case->type);?>
@@ -104,8 +105,8 @@
             <?php endforeach;?>
         </ul>
         <?php }?>
-        
-    </div>   
+        </div>
+    </div>  
 </div>
 <?php endif?>
 

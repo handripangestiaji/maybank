@@ -189,7 +189,11 @@ class Login extends Login_Controller {
 		    $this->load->config('mail_config');
 		    $mail_from = $this->config->item('mail_from');
 		    $this->email->set_newline("\r\n");
-		    $this->email->from($mail_from['email'], $mail_from['email_from']);
+
+		    $mail_from = $this->config->item('mail_from');
+		    
+		    $this->email->from($mail_from['address'],$mail_from['name']);
+
 		    $this->email->to($email);
 		    $this->email->cc('monitoring@kalajeda.com');
 		    

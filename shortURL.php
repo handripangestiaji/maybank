@@ -1,3 +1,4 @@
+
 <?php
     $expectedURL = trim($_SERVER['REQUEST_URI']);
     $expectedURL = substr(str_replace($_SERVER['SCRIPT_NAME'], '', $expectedURL), 1);

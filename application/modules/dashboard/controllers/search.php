@@ -10,7 +10,7 @@ class Search extends CI_Controller {
 	  parent::__construct();
 	  if(!$this->session->userdata('user_id'))
 	    redirect("login");
-	
+	  
 	  $this->load->model('elasticsearch_model');
 	  $this->load->library('ion_auth');
 	  $this->load->library('Twitteroauth');
@@ -25,8 +25,7 @@ class Search extends CI_Controller {
 	  $this->user_role = $this->users_model->get_collection_detail(
 		array('role_collection_id'=>$this->session->userdata('role_id')));
      }
-    
-    
+     
      public function index()
      {
 	  //$this->indexing();
@@ -43,8 +42,20 @@ class Search extends CI_Controller {
 	       else{
 		    $new_fb_feed = null;
 	       }
-	       $data['fb_feed'] = $new_fb_feed;
 	       
+	       if($new_fb_feed){
+		    $data_fb_feed = array();
+		    foreach($new_fb_feed as $nff){
+			 $filter_fb = array('b.post_id' => $nff->post_id);
+			 $result = $this->facebook_model->RetrieveFeedFB($filter_fb);
+			 $data_fb_feed = array_merge($data_fb_feed,$result);
+		    }
+		}
+		else{
+		    $data_fb_feed = $new_fb_feed;
+		}
+		$data['fb_feed'] = $data_fb_feed;
+		
 	       $fb_pm = (object)$this->elasticsearch_model->GlobalSearch('media_stream','facebook_pm',$q);
 	       if($fb_pm->hits['hits']){
 		    foreach($fb_pm->hits['hits'] as $pm){
@@ -54,11 +65,24 @@ class Search extends CI_Controller {
 	       else{
 		    $new_fb_pm = null;
 	       }
-	       $data['fb_pm'] = $new_fb_pm;
+	       
+	       if($new_fb_pm){
+		    $data_fb_pm = array();
+		    foreach($new_fb_pm as $nfp){
+			 $filter_fb = array('d.post_id' => $nfp->post_id);
+			 $result = $this->facebook_model->RetrievePmFB($filter_fb);
+			 $data_fb_pm = array_merge($data_fb_pm,$result);
+		    }
+	       }
+	       else{
+		   $data_fb_pm = $new_fb_pm;
+	       }
+	       $data['fb_pm'] = $data_fb_pm;
 	       
 		$filter = array(
 		    'channel_id' => $channel_id,
 		 );
+		
 	       $data['count_fb_feed']=$this->facebook_model->CountFeedFB($filter);
 	       $data['CountPmFB']=$this->facebook_model->CountPmFB($filter);
 	       $data['channel_id'] = $channel_id;
@@ -70,7 +94,7 @@ class Search extends CI_Controller {
 	       $this->load->view('dashboard/facebook/facebook_stream',$data);
 	  }
 	  elseif($the_channel[0]->connection_type == 'twitter'){
-	       $filter = array('a.channel_id' => $channel_id,);
+	       $filter = array('a.channel_id' => $channel_id);
 	 
 	       $tw_mentions = (object)$this->elasticsearch_model->GlobalSearch('media_stream','twitter_mentions',$q);
 	       if($tw_mentions->hits['hits']){
@@ -81,7 +105,20 @@ class Search extends CI_Controller {
 	       else{
 		    $new_tw_mentions = null;
 	       }
-	       $data['mentions'] = $new_tw_mentions;
+	       if($new_tw_mentions){
+		    $data_tw_mentions = array();
+		    foreach($new_tw_mentions as $ntm){
+			 $filter_tw = array('a.post_stream_id' => $ntm->post_stream_id,
+					    'b.type' => 'mentions'
+					    );
+			 $result = $this->twitter_model->ReadTwitterData($filter_tw);
+			 $data_tw_mentions = array_merge($data_tw_mentions,$result);
+		    }
+		}
+		else{
+		    $data_tw_mentions = $new_tw_mentions;
+		}
+	       $data['mentions'] = $data_tw_mentions;
 	       $filter['b.type'] = 'mentions';
 	       $data['countMentions']=$this->twitter_model->CountTwitterData($filter);
 	       
@@ -94,7 +131,20 @@ class Search extends CI_Controller {
 	       else{
 		    $new_tw_homefeed = null;
 	       }
-	       $data['homefeed'] = $new_tw_homefeed;
+	       if($new_tw_homefeed){
+		    $data_tw_homefeed = array();
+		    foreach($new_tw_homefeed as $nth){
+			 $filter_tw = array('a.post_stream_id' => $nth->post_stream_id,
+					    'b.type' => 'home_feed'
+					    );
+			 $result = $this->twitter_model->ReadTwitterData($filter_tw);
+			 $data_tw_homefeed = array_merge($data_tw_homefeed,$result);
+		    }
+		}
+		else{
+		    $data_tw_homefeed = $new_tw_homefeed;
+		}
+	       $data['homefeed'] = $data_tw_homefeed;
 	       $filter['b.type'] = 'home_feed';     
 	       $data['countFeed']=$this->twitter_model->CountTwitterData($filter);
 	       
@@ -107,7 +157,20 @@ class Search extends CI_Controller {
 	       else{
 		    $new_tw_senttweets = null;
 	       }
-	       $data['senttweets'] = $new_tw_senttweets;
+	       if($new_tw_senttweets){
+		    $data_tw_senttweets = array();
+		    foreach($new_tw_senttweets as $nts){
+			 $filter_tw = array('a.post_stream_id' => $nts->post_stream_id,
+					    'b.type' => 'user_timeline'
+					    );
+			 $result = $this->twitter_model->ReadTwitterData($filter_tw);
+			 $data_tw_senttweets = array_merge($data_tw_senttweets,$result);
+		    }
+		}
+		else{
+		    $data_tw_senttweets = $new_tw_senttweets;
+		}
+	       $data['senttweets'] = $data_tw_senttweets;
 	       $filter['b.type'] = 'user_timeline';     
 	       $data['countTweets']=$this->twitter_model->CountTwitterData($filter);
 	       
@@ -116,15 +179,26 @@ class Search extends CI_Controller {
 		    $i = 0;
 		    foreach($tw_dms->hits['hits'] as $tw){
 			 $new_tw_dms[$i] = (object)$tw['_source'];
-			 $new_tw_dms[$i]->sender = (object)$tw['_source']['sender'];
 			 $i++;
 		    }
 	       }
 	       else{
 		    $new_tw_dms = null;
 	       }
+	       if($new_tw_dms){
+		    $data_tw_dms = array();
+		    foreach($new_tw_dms as $ntd){
+			 $filter_tw = array('a.post_stream_id' => $ntd->post_stream_id,
+					    );
+			 $result = $this->twitter_model->ReadDMFromDb($filter_tw);
+			 $data_tw_dms = array_merge($data_tw_dms,$result);
+		    }
+		}
+		else{
+		    $data_tw_dms = $new_tw_dms;
+		}
 	       unset($filter['b.type']);
-	       $data['directmessage']=$new_tw_dms;
+	       $data['directmessage']=$data_tw_dms;
 	       $data['countDirect']=$this->twitter_model->CountTwitterData($filter);
 	
 	       $data['channel_id'] = $channel_id;
@@ -145,7 +219,18 @@ class Search extends CI_Controller {
 	       else{
 		    $new_youtube_post = null;
 	       }
-	       $data['youtube_post'] = $new_youtube_post;
+	       if($new_youtube_post){
+	       $data_youtube_post = array();
+		    foreach($new_youtube_post as $nyp){
+			 $filter_yt = array('a.post_stream_id' => $nyp->post_stream_id);
+			 $result = $this->youtube_model->ReadYoutubePost($filter_yt);
+			 $data_youtube_post = array_merge($data_youtube_post,$result);
+		    }
+		}
+		else{
+		    $data_youtube_post = $new_youtube_post;
+		}
+	       $data['youtube_post'] = $data_youtube_post;
 	       
 	       $youtube_comment = (object)$this->elasticsearch_model->GlobalSearch('media_stream','youtube_comment',$q);
 	       if($youtube_comment->hits['hits']){
@@ -156,7 +241,19 @@ class Search extends CI_Controller {
 	       else{
 		    $new_youtube_comment = null;
 	       }
-	       $data['youtube_comment'] = $new_youtube_comment;
+	       if($new_youtube_comment){
+	       $data_youtube_comment = array();
+		    foreach($new_youtube_comment as $nyc){
+			 $filter_yt = array('a.post_stream_id' => $nyc->post_stream_id);
+			 $result = $this->youtube_model->ReadYoutubeComment($filter_yt);
+			 $data_youtube_comment = array_merge($data_youtube_comment,$result);
+		    }
+		}
+		else{
+		    $data_youtube_comment = $new_youtube_comment;
+		}
+	       $data['youtube_comment'] = $data_youtube_comment;
+	       
 	       $data['channel_id'] = $channel_id;
 	       $data['is_search'] = TRUE;
 	       $this->load->view('dashboard/youtube/youtube_stream', $data);
@@ -172,6 +269,7 @@ class Search extends CI_Controller {
 	       if($channel->connection_type == 'facebook'){
 		    $this->facebook_indexing($channel->channel_id);
 	       }
+	       
 	       elseif($channel->connection_type == 'twitter'){
 		    $this->twitter_indexing($channel->channel_id);
 	       }
@@ -183,228 +281,112 @@ class Search extends CI_Controller {
      
      public function facebook_indexing($channel_id){
 	  //create fb feed type
-	  $fb_feed_map = array('facebook_id' => array('type' => 'long'),
-				   'name' => array('type' => 'string'),
-				   'username' => array('type' => 'string'),
-				   'created_at' => array('type' => 'string'),
-				   'retrieved_at' => array('type' => 'string'),
-				   'sex' => array('type' => 'string'),
-				   'post_id' => array('type' => 'long'),
+	  $fb_feed_map = array('name' => array('type' => 'string'),
+				   'post_id' => array('type' => 'string'),
 				   'post_content' => array('type' => 'string'),
-				   'author_id' => array('type' => 'long'),
-				   'attachment' => array('type' => 'string'),
-				   'enggagement_count' => array('type' => 'long'),
-				   'total_like' => array('type' => 'long'),
-				   'user_likes' => array('type' => 'long'),
-				   'total_comments' => array('type' => 'long'),
-				   'total_shares' => array('type' => 'long'),
-				   'updated_at' => array('type' => 'string'),
-				   'is_customer_post' => array('type' => 'long'),
-				   'post_status' => array('type' => 'long'),
 				   'post_stream_id' => array('type' => 'string'),
-				   'channel_id' => array('type' => 'long'),
-				   'type' => array('type' => 'string'),
-				   'is_read' => array('type' => 'long'),
-				   'case_id' => array('type' => 'long'),
-				   'content_products_id' => array('type' => 'long'),
-				   'created_by' => array('type' => 'string'),
-				   'assign_to' => array('type' => 'string'),
-				   'email' => array('type' => 'string'),
-				   'messages' => array('type' => 'string'),
-				   'status' => array('type' => 'string'),
-				   'related_conversation_count' => array('type' => 'string'),
-				   'case_type' => array('type' => 'string'),
-				   'solved_by' => array('type' => 'long'),
-				   'solved_at' => array('type' => 'string'),
-				   'social_stream_type' => array('type' => 'string'),
-				   'social_stream_post_id' => array('type' => 'long'),
-				   'post_date' => array('type' => 'string'),
-				   'reply_post' => array('type' => 'string'),
-				   'channel_action' => array('type' => 'string')
-			       );
+				);
 	  $ret = $this->elasticsearch_model->TypeMapping('media_stream','facebook_feed',$fb_feed_map);
 	  
 	  $filter = array(
 	       'channel_id' => $channel_id,
 	    );
-	  $fb_feed = $this->facebook_model->RetrieveFeedFB($filter);
+	  $fb_feed = $this->facebook_model->RetrieveFeedFB($filter,0,false);
+	  
+	  $i=0;
+	  echo count($fb_feed);
 	  foreach($fb_feed as $wp){
-	       $fbs = (array)$wp;
-	       //echo $wp->retrieved_at;
-	       // Document will be indexed to my_index/my_type/my_id
-	       $ret = $this->elasticsearch_model->InsertDoc('media_stream','facebook_feed',$fbs);
+	       $new_wp = array('name' => $wp->name,
+			       'post_id' => $wp->post_id,
+			       'post_content' => $wp->post_content,
+			       'post_stream_id' => $wp->post_stream_id
+			       );
+	       $ret = $this->elasticsearch_model->InsertDoc('media_stream','facebook_feed',$wp->post_id,$new_wp);
 	  }
 	  
 	  //indexing for fb private message
-	  $fb_pm_map = array('conversation_id' => array('type' => 'long'),
-				   'snippet' => array('type' => 'string'),
-				   'updated_time' => array('type' => 'string'),
-				   'message_count' => array('type' => 'long'),
-				   'unread_count' => array('type' => 'long'),
-				   'status' => array('type' => 'long'),
-				   'detail_id' => array('type' => 'long'),
-				   'detail_id_from_facebook' => array('type' => 'string'),
-				   'attachment' => array('type' => 'string'),
-				   'messages' => array('type' => 'string'),
-				   'sender' => array('type' => 'string'),
-				   'to' => array('type' => 'string'),
-				   'created_at' => array('type' => 'string'),
+	  $fb_pm_map = array('messages' => array('type' => 'string'),
 				   'name' => array('type' => 'string'),
-				   'username' => array('type' => 'string'),
-				   'is_read' => array('type' => 'long'),
 				   'post_stream_id' => array('type' => 'string'),
-				   'type' => array('type' => 'string'),
-				   'social_stream_type' => array('type' => 'string'),
-				   'channel_id' => array('type' => 'long'),
 				   'post_id' => array('type' => 'long'),
-				   'post_date' => array('type' => 'string'),
-				   'case_id' => array('type' => 'long'),
 				);
 	  $ret = $this->elasticsearch_model->TypeMapping('media_stream','facebook_pm',$fb_pm_map);
 	  $filter = array(
 	       'channel_id' => $channel_id,
 	    );
-	  $fb_pm = $this->facebook_model->RetrievePmFB($filter,1000);
+	  $fb_pm = $this->facebook_model->RetrievePmFB($filter);
 	  foreach($fb_pm as $pm){
-	       $fbs = (array)$pm;
-	       //echo $wp->retrieved_at;
-	       // Document will be indexed to my_index/my_type/my_id
-	       $ret = $this->elasticsearch_model->InsertDoc('media_stream','facebook_pm',$fbs);
+	       $new_pm = array('messages' => $pm->messages,
+			       'name' => $pm->name,
+			       'post_stream_id' => $pm->post_stream_id,
+			       'post_id' => $pm->post_id);
+	       $ret = $this->elasticsearch_model->InsertDoc('media_stream','facebook_pm',$pm->post_id,$new_pm);
 	  }
      }
      
      public function twitter_indexing($channel_id){
 	  //create twitter mention type
-	  $tw_mention_map = array('social_id' => array('type' => 'string'),
-				   'channel_id' => array('type' => 'long'),
-				   'post_stream_id' => array('type' => 'string'),
-				   'retrieved_at' => array('type' => 'string'),
-				   'social_stream_created_at' => array('type' => 'string'),
-				   'social_stream_type' => array('type' => 'string'),
-				   'post_id' => array('type' => 'long'),
-				   'type' => array('type' => 'string'),
-				   'retweeted' => array('type' => 'long'),
-				   'favorited' => array('type' => 'long'),
-				   'in_reply_to' => array('type' => 'string'),
-				   'twitter_entities' => array('type' => 'string'),
+	  $tw_mention_map = array('post_stream_id' => array('type' => 'string'),
 				   'text' => array('type' => 'string'),
-				   'retweet_count' => array('type' => 'long'),
-				   'geolocation' => array('type' => 'string'),
-				   'is_following' => array('type' => 'long'),
-				   'source' => array('type' => 'string'),
-				   'twitter_user_id' => array('type' => 'string'),
-				   'created_at' => array('type' => 'string'),
 				   'screen_name' => array('type' => 'string'),
-				   'profile_image_url' => array('type' => 'string'),
-				   'name' => array('type' => 'string'),
-				   'description' => array('type' => 'string'),
-				   'following' => array('type' => 'long'),
-				   'is_read' => array('type' => 'long'),
-				   'case_id' => array('type' => 'long'),
-				   'content_products_id' => array('type' => 'long'),
-				   'created_by' => array('type' => 'string'),
-				   'assign_to' => array('type' => 'string'),
-				   'email' => array('type' => 'string'),
-				   'messages' => array('type' => 'string'),
-				   'status' => array('type' => 'string'),
-				   'related_conversation_count' => array('type' => 'long'),
-				   'case_type' => array('type' => 'string'),
-				   'solved_by' => array('type' => 'string'),
-				   'solved_at' => array('type' => 'string'),
-				   'social_stream_post_id' => array('type' => 'long'),
-				   'reply_post' => array('type' => 'string'),
-				   'channel_action' => array('type' => 'string')
-			       );
+				   'post_id' => array('type' => 'string'),
+				   'name' => array('type' => 'string')
+				);
 	  
 	  $ret = $this->elasticsearch_model->TypeMapping('media_stream','twitter_mentions',$tw_mention_map);
 	  $filter = array('a.channel_id' => $channel_id);
 	  $filter['b.type'] = 'mentions';
-	  $mentions = $this->twitter_model->ReadTwitterData($filter,1000);
+	  $mentions = $this->twitter_model->ReadTwitterData($filter);
 	  foreach($mentions as $m){
-	       $tws = (array)$m;
-	       //echo $wp->retrieved_at;
-	       // Document will be indexed to my_index/my_type/my_id
-	       $ret = $this->elasticsearch_model->InsertDoc('media_stream','twitter_mentions',$tws);
+	       $tws = array('text' => $m->text,
+				'post_stream_id' => $m->post_stream_id,
+				'screen_name' => $m->screen_name,
+				'post_id' => $m->post_id,
+				'name' => $m->name
+				);
+	       $ret = $this->elasticsearch_model->InsertDoc('media_stream','twitter_mentions',$m->post_stream_id,$tws);
 	  }
 
 	  //create twitter homefeed type
 	  $ret = $this->elasticsearch_model->TypeMapping('media_stream','twitter_homefeed',$tw_mention_map);
 	  $filter['b.type'] = 'home_feed';
-	  $homefeeds = $this->twitter_model->ReadTwitterData($filter,1000);
+	  $homefeeds = $this->twitter_model->ReadTwitterData($filter);
 	  foreach($homefeeds as $hf){
-	       $tws = (array)$hf;
-	       //echo $wp->retrieved_at;
-	       // Document will be indexed to my_index/my_type/my_id
-	       $ret = $this->elasticsearch_model->InsertDoc('media_stream','twitter_homefeed',$tws);
+	       $tws = array('text' => $hf->text,
+				'post_stream_id' => $hf->post_stream_id,
+				'screen_name' => $hf->screen_name,
+				'post_id' => $hf->post_id,
+				'name' => $hf->name
+				); 
+	       $ret = $this->elasticsearch_model->InsertDoc('media_stream','twitter_homefeed',$hf->post_stream_id,$tws);
 	  }
 	  
 	  //create twitter senttweets type
 	  $ret = $this->elasticsearch_model->TypeMapping('media_stream','twitter_senttweets',$tw_mention_map);
 	  $filter['b.type'] = 'user_timeline';
-	  $timeines = $this->twitter_model->ReadTwitterData($filter,1000);
-	  foreach($timeines as $tl){
-	       $tws = (array)$tl;
-	       //echo $wp->retrieved_at;
-	       // Document will be indexed to my_index/my_type/my_id
-	       $ret = $this->elasticsearch_model->InsertDoc('media_stream','twitter_senttweets',$tws);
+	  $timelines = $this->twitter_model->ReadTwitterData($filter);
+	  foreach($timelines as $tl){
+	       $tws = array('text' => $tl->text,
+				'post_stream_id' => $tl->post_stream_id,
+				'screen_name' => $tl->screen_name,
+				'post_id' => $tl->post_id,
+				'name' => $tl->name
+				); 
+	       $ret = $this->elasticsearch_model->InsertDoc('media_stream','twitter_senttweets',$tl->post_stream_id,$tws);
 	  }
-	  
-	  $tw_dm_map = array('social_stream_post_id' => array('type' => 'string'),
-			      'channel_id' => array('type' => 'long'),
-			      'is_read' => array('type' => 'long'),
-			      'post_stream_id' => array('type' => 'string'),
-			      'retrieved_at' => array('type' => 'string'),
-			      'social_stream_created_at' => array('type' => 'string'),
-			      'dm_text' => array('type' => 'string'),
-			      'post_id' => array('type' => 'long'),
-			      'entities' => array('type' => 'string'),
-			      'text' => array('type' => 'string'),
-			      'sender' => array('type' => 'string'),
-			      'recipient' => array('type' => 'string'),
-			      'type' => array('type' => 'string'),
-			      'twitter_user_id' => array('type' => 'string'),
-			      'profile_image_url' => array('type' => 'string'),
-			      'name' => array('type' => 'string'),
-			      'description' => array('type' => 'string'),
-			      'url' => array('type' => 'string'),
-			      'location' => array('type' => 'string'),
-			      'statuses_count' => array('type' => 'long'),
-			      'friends_count' => array('type' => 'long'),
-			      'followers_count' => array('type' => 'long'),
-			      'verified_account' => array('type' => 'long'),
-			      'timezone' => array('type' => 'string'),
-			      'following' => array('type' => 'long'),
-			      'created_at' => array('type' => 'date'),
-			      'case_id' => array('type' => 'long'),
-			      'content_products_id' => array('type' => 'long'),
-			      'created_by' => array('type' => 'string'),
-			      'assign_to' => array('type' => 'string'),
-			      'email' => array('type' => 'string'),
-			      'messages' => array('type' => 'string'),
-			      'status' => array('type' => 'string'),
-			      'related_conversation_count' => array('type' => 'long'),
-			      'case_type' => array('type' => 'string'),
-			      'solved_by' => array('type' => 'string'),
-			      'solved_at' => array('type' => 'string'),
-			      'id' => array('type' => 'long'),
-			      'reply_to_post_id' => array('type' => 'string'),
-			      'image_to_post' => array('type' => 'string'),
-			      'reply_type' => array('type' => 'string'),
-			      'response_post_id' => array('type' => 'long'),
-			      'user_id' => array('type' => 'long'),
-			      'social_stream_type' => array('type' => 'string'),
-			      'channel_action' => array('type' => 'string')
-			  );
-	  
+	   
 	  //create twitter direct_messages type
-	  $ret = $this->elasticsearch_model->TypeMapping('media_stream','twitter_dms',$tw_dm_map);
+	  $ret = $this->elasticsearch_model->TypeMapping('media_stream','twitter_dms',$tw_mention_map);
 	  unset($filter['b.type']);
-	  $dms = $this->twitter_model->ReadDMFromDb($filter,1000);
+	  $dms = $this->twitter_model->ReadDMFromDb($filter);
 	  foreach($dms as $dm){
-	       $tws = (array)$dm;
-	       //echo $wp->retrieved_at;
-	       // Document will be indexed to my_index/my_type/my_id
-	       $ret = $this->elasticsearch_model->InsertDoc('media_stream','twitter_dms',$tws);
+	       $tws = array('text' => $dm->dm_text,
+				'post_stream_id' => $dm->post_stream_id,
+				'screen_name' => $dm->screen_name,
+				'post_id' => $dm->post_id,
+				'name' => $dm->name
+				); 
+	       $ret = $this->elasticsearch_model->InsertDoc('media_stream','twitter_dms',$dm->post_stream_id,$tws);
 	  }
      }
      
@@ -412,73 +394,46 @@ class Search extends CI_Controller {
 	  //create youtube post type
 	  $yt_post_map = array('post_id' => array('type' => 'string'),
 				   'post_stream_id' => array('type' => 'string'),
-				   'channel_id' => array('type' => 'long'),
-				   'type' => array('type' => 'string'),
-				   'retrieved_at' => array('type' => 'string'),
-				   'created_at' => array('type' => 'string'),
-				   'is_read' => array('type' => 'long'),
 				   'title' => array('type' => 'string'),
 				   'description' => array('type' => 'string'),
-				   'thumbnail_default' => array('type' => 'string'),
-				   'thumbnail_high' => array('type' => 'string'),
-				   'video_id' => array('type' => 'string'),
-				   'player_web' => array('type' => 'string'),
-				   'player_mobile' => array('type' => 'string'),
-				   'rating' => array('type' => 'long'),
-				   'like_count' => array('type' => 'long'),
-				   'rating_count' => array('type' => 'long'),
-				   'favorite_count' => array('type' => 'long'),
-				   'comment_count' => array('type' => 'long'),
-				   'view_count' => array('type' => 'long'),
-				   'etag' => array('type' => 'string'),
-				   'category' => array('type' => 'string'),
-				   'uploaded' => array('type' => 'string'),
-				   'update_date' => array('type' => 'string'),
-				   'social_stream_post_id' => array('type' => 'string'),
 				   'channel_name' => array('type' => 'string'),
-				   'case' => array('type' => 'string')
-			       );
+				);
 	  $ret = $this->elasticsearch_model->TypeMapping('media_stream','youtube_post',$yt_post_map);
 	  
 	  $filter = array(
 	   'channel_id' => $channel_id,
 	  );
-	  $posts = $this->youtube_model->ReadYoutubePost($filter, 1);
+	  $posts = $this->youtube_model->ReadYoutubePost($filter);
 	  foreach($posts as $post){
-	       $yts = (array)$post;
-	       //echo $wp->retrieved_at;
-	       // Document will be indexed to my_index/my_type/my_id
-	       $ret = $this->elasticsearch_model->InsertDoc('media_stream','youtube_post',$yts);
+	       $yts = array('post_id' => $post->post_id,
+			    'post_stream_id' => $post->post_stream_id,
+			    'title' => $post->title,
+			    'description' => $post->description,
+			    'channel_name' => $post->channel_name
+			    );
+	       $ret = $this->elasticsearch_model->InsertDoc('media_stream','youtube_post',$post->post_stream_id,$yts);
 	  }
 	  
 	  $yt_comment_map = array('post_id' => array('type' => 'string'),
 				   'post_stream_id' => array('type' => 'string'),
-				   'channel_id' => array('type' => 'long'),
-				   'type' => array('type' => 'string'),
-				   'retrieved_at' => array('type' => 'string'),
-				   'created_at' => array('type' => 'string'),
-				   'is_read' => array('type' => 'long'),
-				   'google_user_id' => array('type' => 'string'),
 				   'name' => array('type' => 'string'),
 				   'title' => array('type' => 'string'),
 				   'text' => array('type' => 'string'),
-				   'user_id' => array('type' => 'string'),
-				   'video_id' => array('type' => 'string'),
-				   'youtube_post_id' => array('type' => 'string'),
-				   'social_stream_post_id' => array('type' => 'string'),
-				   'case' => array('type' => 'string')
 			       );
 	  $ret = $this->elasticsearch_model->TypeMapping('media_stream','youtube_comment',$yt_comment_map);
 	  
 	  $filter = array(
 	   'channel_id' => $channel_id,
 	  );
-	  $comments = $this->youtube_model->ReadYoutubeComment($filter, 1);
+	  $comments = $this->youtube_model->ReadYoutubeComment($filter);
 	  foreach($comments as $comment){
-	       $yts = (array)$comment;
-	       //echo $wp->retrieved_at;
-	       // Document will be indexed to my_index/my_type/my_id
-	       $ret = $this->elasticsearch_model->InsertDoc('media_stream','youtube_comment',$yts);
+	       $yts = array('post_id' => $comment->post_id,
+			    'post_stream_id' => $comment->post_stream_id,
+			    'name' => $comment->name,
+			    'title' => $comment->title,
+			    'text' => $comment->text
+			    );
+	       $ret = $this->elasticsearch_model->InsertDoc('media_stream','youtube_comment',$comment->post_stream_id,$yts);
 	  }
       }
       

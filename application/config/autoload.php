@@ -81,7 +81,7 @@ $autoload['helper'] = array('url', 'array', 'basic', 'form','elasticsearch/autol
 */
 
 //$autoload['config'] = array('ion_oauth');
-$autoload['config'] = array('twitter');
+$autoload['config'] = array('twitter', 'mail_config');
 
 
 /*

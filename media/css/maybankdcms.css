@@ -946,6 +946,7 @@ input[type="text"].compose-new-message{
 
 #updateProfile .sidebarContent .profileInfo textarea.about-me{
 	height: 150px;
+	width: 175px;
 }
 /*==============================================================================================
 ======================================== USERS =================================================

@@ -125,7 +125,7 @@ if($fb_feed[$i]->post_content != '<br />'):
             for($j=0;$j<count($comment);$j++):
             
         ?>
-        <div class="engagement-body">
+        <div class="engagement-body" <?php if($comment[$j]->comment_id!='0'){ ?> style="padding-left: 45px;" <?php } ?>>
             <span class="engagement-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>    
             <p class="headLine">
                 <span class="author"><?php echo $comment[$j]->name; ?></span>
@@ -146,7 +146,7 @@ if($fb_feed[$i]->post_content != '<br />'):
                 $attachment=json_decode($comment[$j]->attachment);
                 if(isset($attachment->media->image->src)){
                 for($att=0;$att<count($attachment);$att++){
-                    echo    "<a href='#modal_comments-".$comment[$j]->comment_post_id."' data-toggle='modal' ><img src='".base_url('dashboard/media_stream/SafePhoto?photo=').$attachment->media->image->src."' /></a>";
+                    echo    "<a href='#modal_comments-".$comment[$j]->comment_post_id."' data-toggle='modal' ><img class='img_attachment' src='".base_url('dashboard/media_stream/SafePhoto?photo=').$attachment->media->image->src."' /></a>";
                     echo    '<div id="modal_comments-'.$comment[$j]->comment_post_id.'" class="attachment-modal modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
                             <img src="'.base_url('dashboard/media_stream/SafePhoto?photo=').$attachment->media->image->src.'" />
                             <button type="button" class="close " data-dismiss="modal"><i class="icon-remove"></i></button>

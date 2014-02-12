@@ -17,7 +17,7 @@
     }
 ?>
 <input type="hidden" class="channel-id" value="<?php if(count($fb_feed) > 0){echo $fb_feed[0]->channel_id;} else {echo $channel_id;}  ?>">
-<div class="container-fluid" style="height: 95%">
+<div id="cfacebook" class="container-fluid" style="height: 95%">
 <!-- ==================== ACTIVITIES MENU ==================== -->
 <div class="floatingBoxMenu">
     <ul class="nav stream_head">

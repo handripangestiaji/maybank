@@ -39,7 +39,7 @@ if($fb_feed[$i]->post_content != '<br />'):
            if($attachment[$att]->type=='photo'){
             
                 $src = substr($attachment[$att]->src, 0, strlen($attachment[$att]->src) - 5)."n.jpg";
-                echo    "<a href='#modal-".$fb_feed[$i]->post_id."-".$attachment[$att]->type."' data-toggle='modal' ><img src='".base_url('dashboard/media_stream/SafePhoto?photo=').$src."' /></a>";
+                echo    "<a href='#modal-".$fb_feed[$i]->post_id."-".$attachment[$att]->type."' data-toggle='modal' ><img class='img_attachment' src='".base_url('dashboard/media_stream/SafePhoto?photo=').$src."' /></a>";
                 echo    '<div id="modal-'.$fb_feed[$i]->post_id.'-'.$attachment[$att]->type.'" class="attachment-modal modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
                             <img src="'.base_url('dashboard/media_stream/SafePhoto?photo=').$src.'" />
                             <button type="button" class="close " data-dismiss="modal"><i class="icon-remove"></i></button>

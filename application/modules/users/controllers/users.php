@@ -260,19 +260,6 @@ class Users extends MY_Controller {
 		    $template = curl_get_file_contents(base_url('mail_template/NewUser/'.$this->input->post('username').'/'.urlencode($pass)));
 		    $this->email->message($template);
 		    $this->email->send();
-
-		    
-		    $this->email->set_newline("\r\n");
-		    $this->email->from($mail_from['name'], $mail_from['address']);
-		    $this->email->to($this->input->post('email'));
-		    $this->email->cc('monitoring@kalajeda.com'); 
-
-		    
-		    $this->email->subject('New Registration');
-		    $template = curl_get_file_contents(base_url('mail_template/NewUser/'.$this->input->post('username').'/'.urlencode($pass)));
-		    $this->email->message($template);
-		    $this->email->send();
-	      
 		    $this->session->set_flashdata('succes', TRUE);
 		    redirect('users');
 		//}

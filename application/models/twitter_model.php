@@ -504,11 +504,17 @@ class twitter_model extends CI_Model
         return $this->db->get()->result();
     }
     
-    function DeletePost($post_stream_id, $channel_id, $user_id){
+    function DeletePost($post_stream_id, $channel_id, $user_id, $status = 1){
         $this->db->trans_start();
-        $data = $this->ReadTwitterData(
-            array('post_stream_id' => $post_stream_id)
-        );
+        if($status == 1)
+            $data = $this->ReadTwitterData(
+                array('post_stream_id' => $post_stream_id)
+            );
+        else
+            $data = $this->ReadDMFromDb(
+                array('post_stream_id' => $post_stream_id)
+            );
+        
         $channel_action = array(
             'action_type' => "twitter_delete",
             'channel_id' => $channel_id,

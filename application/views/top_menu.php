@@ -7,7 +7,7 @@
 		<form class="navbar-form">
 			<div class="input-append">
 				<div class="collapsibleContent">
-				    <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Resolve_Case')):?>
+				    <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_View')):?>
 					<a href="#tasksContent" class="sidebar">
 					    <span class="add-on add-on-middle add-on-mini add-on-dark" id="tasks">
 						<i class="icon-tasks"></i>

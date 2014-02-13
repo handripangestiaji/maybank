@@ -194,15 +194,16 @@
         </div>
 
 
+    <!--
+        ISSUE #71 All User Role to have search function
+    -->
+    <div class="pull-right dashboard-search">
+        <input class="dashboard-search-field" type="text" placeholder="Search" style="width:200px; float: left; margin-left: 2px;">
+        <button class="btn btn-inverse btn-dashboard-search">
+            <i class="icon-search"></i>
+        </button>
+    </div>
     
-    <?php if(IsRoleFriendlyNameExist($this->user_role, "Social Stream_All_Take Action")):?>
-        <div class="pull-right dashboard-search">
-            <input class="dashboard-search-field" type="text" placeholder="Search" style="width:200px; float: left; margin-left: 2px;">
-            <button class="btn btn-inverse btn-dashboard-search">
-                <i class="icon-search"></i>
-            </button>
-        </div>
-    <?php endif;?>
     
 </div>
 <!-- ==================== END COMPOSE MESSAGE ==================== -->

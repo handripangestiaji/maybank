@@ -1,3 +1,4 @@
+
 <!-- ==================== SIDEBAR COLLAPSED ==================== -->
 <div id="collapsedSidebarContent">
     <div class="sidebarDivider"></div>
@@ -16,7 +17,9 @@
 <!-- ==================== END OF SIDEBAR COLLAPSED ==================== -->
 
 <!-- ==================== SIDEBAR TASKS ==================== -->
-<?php if(IsRoleFriendlyNameExist($this->user_role, "Social Stream_Current_Resolve_Case")):?>
+<?php
+
+if(IsRoleFriendlyNameExist($this->user_role, "Publisher", "role_group")):?>
 <div id="tasksContent">
     <div class="sidebarDivider"></div>
     <div class="sidebarContent" style="overflow-y: scroll;">
@@ -118,6 +121,7 @@
     <div class="sidebarContent">
         <div class="sidebarHead pull-left">
             <p class="title pull-left">MY ACCOUNT</p>
+            
         </div>
         <span class="btn-close pull-right">Close <i class="icon-remove-sign"></i></span>
         <br clear="all" />
@@ -150,7 +154,7 @@
 <!-- ==================== END OF SIDEBAR PROFILE ==================== -->
 
 <!-- ==================== SIDEBAR UPDATE PASSWORD ==================== -->
-<div id="updatePassword" class="hide">
+<div id="updatePassword">
     <div class="sidebarDivider"></div>
     <div class="sidebarContent">
          <div class="sidebarHead pull-left">
@@ -175,8 +179,8 @@
             <span style="color:red" class="error-cpass"><?php echo form_error('cpass'); ?></span>
             
             <div class="sidebarLine"></div>
-            <button class="btn btn-primary" type="submit">Save</button>
-            <button class="btn sidebar-btn-cancel" type="button">Cancel</button>
+            <button id='btn_update' class="btn btn-primary" type="submit">Save</button>
+            <button id='btn_update' class="btn sidebar-btn-cancel" type="button">Cancel</button>
             </form>
         </div>
     </div>
@@ -184,7 +188,7 @@
 <!-- ==================== END OF SIDEBAR UPDATE PASSWORD ==================== -->
 
 <!-- ==================== SIDEBAR UPDATE PROFILE ==================== -->
-<div id="updateProfile" class="hide">
+<div id="updateProfile">
     <div class="sidebarDivider"></div>
     <div class="sidebarContent">
         <div class="sidebarHead pull-left">
@@ -200,15 +204,15 @@
             <p>Role : <?php echo $this->session->userdata('role_name'); ?></p>
             <p>Email : <span class="cyanText"><?php echo $this->session->userdata('web_address'); ?></span></p>
             <br/>
-            <form method='post' action='<?php echo site_url("users/update_user_login");?>' class='update_profil'>
+            <form method='post' action='<?php echo site_url("users/update_user_login");?>' class='update_profile'>
             
             <div class="yes_update"></div>
             
-            <input type='hidden' value='<?php echo $this->session->userdata('user_id'); ?>' name='user_id' />
+            <input type='hidden' value='<?php echo $this->session->userdata('user_id'); ?>' name='user_id'/>
             <p><strong>Display Name</strong></p>
-            <input type="text" name="display-name" value='<?php echo $this->session->userdata('display_name'); ?>'/>
+            <input type="text" name="display-name" value='<?php echo $this->session->userdata('display_name'); ?>' style="width: 175px;" />
             <p><strong>Timezone</strong></p>
-            <select name='timezone' class='timezone'>
+            <select name='timezone' class='timezone' style="width: 175px;">
                 <?php
                     $timezone = get_timezone_list();
                     $value = array_keys($timezone);

@@ -11,13 +11,14 @@
           </thead>
           <tbody>
             <?php
+            if(isset($post->channel_action)):
             foreach($post->channel_action as $action):?>
             <tr>
               <td><?php
                 $timezone = new DateTimeZone($this->session->userdata('timezone'));
                 $date=new DateTime($action->created_at.' Europe/London');
                 $date->setTimezone($timezone);
-                echo $date->format('l, M j, Y h:i A');
+                echo $date->format('M j, Y h:i A');
                 
               ?></td>
               <td><?=$action->username?></td>
@@ -25,7 +26,7 @@
               <!--td><button class="btn btn-primary icon-book"></button></td-->
             </tr>
            
-            <?php endforeach;?>
+            <?php endforeach;endif;?>
           </tbody>
         </table>  
     </div>

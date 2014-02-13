@@ -1237,7 +1237,7 @@ $(function(){
                                 type: "POST",
                                 data: {
                                     post_id : btnDestroyStatus.closest('li').find('.postId').val(),
-                                    //channel_id : $(this).closest('.floatingBox').find('input.channel-id').val()
+                                    channel_id : $(this).closest('.floatingBox').find('input.channel-id').val()
                                 },
                                 success: function(response)
                                 {

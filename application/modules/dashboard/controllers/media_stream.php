@@ -312,7 +312,8 @@ class Media_stream extends CI_Controller {
     							    $channel->oauth_secret);
     		$result = $this->connection->post('statuses/destroy/'.$twitter_data->post_stream_id);
     		if(!isset($result->error)){
-    		    $row_affected = $this->twitter_model->DeletePost($twitter_data->post_stream_id);
+    		    $row_affected = $this->twitter_model->DeletePost($twitter_data->post_stream_id, $channel->channel_id,
+								     $this->session->userdata('user_id') == 0 ? NULL : $this->session->userdata('user_id'));
     		    echo json_encode(
     			array(
     			    'success' => true,
@@ -580,7 +581,7 @@ class Media_stream extends CI_Controller {
             
             echo json_encode(
     		    array(
-                'success' => true,
+			'success' => true,
     			'message' => "successfully done",
     			'result' => $return
     		    )

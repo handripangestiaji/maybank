@@ -32,10 +32,14 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_pm[$i]->po
     <p>
     <?php 
     if(isset($isMyCase[0]->assign_to)){
+        //print_r($isMyCase[0]);
+            $case   =new DateTime($isMyCase[0]->solved_at.' Europe/London');
+            $case->setTimezone($timezone);
+            
         if($isMyCase[0]->assign_to==$this->session->userdata('user_id') and $isMyCase[0]->solved_by==''){ ?>
-            <button type="button" class="btn <?php echo $isMyCase[0]->case_id != null ? "btn-purple" : "btn-inverse btn-mini" ?>"><?php echo $isMyCase[0]->case_id != null ? 'CASE #'.$isMyCase[0]->case_id.' Assign to You ' : 'CASE #'.$isMyCase[0]->case_id.'-'.'RESOLVE BY '.$isMyCase[0]->full_name?></button>
+            <button type="button" class="btn <?php echo $isMyCase[0]->case_id != null ? "btn-purple" : "btn-inverse btn-mini" ?>"><?php echo $isMyCase[0]->case_id != null ? 'CASE #'.$isMyCase[0]->case_id.' Assign to You ' : 'CASE #'.$isMyCase[0]->case_id.'-'.'RESOLVE BY :'.$isMyCase[0]->full_name?></button>
         <?php }elseif( $isMyCase[0]->solved_by!=''){?>
-            <button type="button" class="btn <?php echo $isMyCase[0]->solved_by != null ? "btn-purple" : "btn-inverse btn-mini" ?>"><?php echo $isMyCase[0]->solved_by != null ? 'CASE #'.$isMyCase[0]->solved_by.' Resolved' : 'CASE #'.$isMyCase[0]->case_id.'-'.'RESOLVE BY '.$isMyCase[0]->full_name?></button>
+            <button type="button" class="btn <?php echo $isMyCase[0]->solved_by != null ? "btn-inverse btn-mini":"btn-purple" ?>"><?php echo $isMyCase[0]->solved_by != null ? 'CASE #'.$isMyCase[0]->solved_by.' | RESOLVE BY :'.$isMyCase[0]->full_name.' | '.$case->format('j-M-Y h:i A') : 'CASE #'.$isMyCase[0]->case_id.'-'.'RESOLVE BY :'.$isMyCase[0]->full_name?></button>
         <?php }else{ ?>
                 <button type="button" class="btn <?php echo $isMyCase[0]->case_id != null ? "btn-purple" : "btn-inverse btn-mini" ?>"><?php echo $isMyCase[0]->case_id != null ? 'CASE #'.$isMyCase[0]->case_id.' Assign to: '.$isMyCase[0]->full_name : 'REPLIED'?></button>  
     <?php     }
@@ -96,7 +100,7 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_pm[$i]->po
         if(($isMyCase[0]->assign_to==$this->session->userdata('user_id') && IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action'))){ ?> 
                 <button type="button" class="btn btn-primary btn-reply"><i class="icon-mail-reply"></i></button>
            <?php if($isMyCase[0]->status=='pending'){ ?>
-                <button type="button" class="btn btn-purple  btn-resolve" name="action" value="<?=$fb_pm[$i]->case_id?>"><i class="icon-check"></i> RESOLVE</button>
+                <button type="button" class="btn btn-purple  btn-resolve_fb" name="action" value="<?=$fb_pm[$i]->case_id?>"><i class="icon-check"></i> RESOLVE</button>
                 <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>  
            <?php }else{ ?> 
               <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>
@@ -107,7 +111,7 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_pm[$i]->po
     <?php }elseif((IsRoleFriendlyNameExist($this->user_role,'Social Stream_All_Resolve_Case'))){ ?>
         <button type="button" class="btn btn-primary btn-reply"><i class="icon-mail-reply"></i></button>
         <?php if($isMyCase[0]->status=='pending'):?>
-        <button type="button" class="btn btn-purple  btn-resolve" name="action" value="<?=$fb_pm[$i]->case_id?>"><i class="icon-check"></i> RESOLVE</button>
+        <button type="button" class="btn btn-purple  btn-resolve_fb" name="action" value="<?=$fb_pm[$i]->case_id?>"><i class="icon-check"></i> RESOLVE</button>
         <?php endif?>
         <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>   
         </div>

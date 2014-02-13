@@ -366,6 +366,34 @@ $(function(){
         }
     });
     
+    $(this).on('click', '.btn-resolve_fb', function(e){
+        var btnResolve = $(this);
+        var user_id= $(" input[name=user_id]").val();
+        
+        confirmed = confirm('Are you sure to solve this case?');
+        e.preventDefault();
+        if(confirmed){
+            btnResolve.attr("disabled", "disabled");
+            $.ajax({
+               "url" : BASEURL + "case/mycase/ResolveCase",
+               "type" : "POST",
+               "data" : "case_id=" + btnResolve.val()+"&user_id="+user_id,
+               
+               "success" : function(response){
+                    if(response.success){
+                        btnResolve.addClass('hide') //removeAttr("disabled").html('<i class="icon-plus"></i> <span>CASE</span>').removeClass('btn-resolve btn-purple').addClass('btn-case btn-danger');
+                        btnResolve.closest('li').find('.btn-purple:first').addClass('hide');
+                    }
+               },
+               "error" : function(){
+                    alert("There is something error when resolve this case.")
+               }
+        
+            });
+        }
+    });
+
+    
     
 });
 

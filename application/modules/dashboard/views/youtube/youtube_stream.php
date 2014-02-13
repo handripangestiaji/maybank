@@ -28,7 +28,7 @@
                         ?></span>
                         <i class="icon-play-circle moreOptions pull-right"></i>
                     </p>
-                    <p class="videos pointer"><a href="http://www.youtube.com/watch?v=<?=$post->video_id?>" target="_blank"><img src="<?=base_url('dashboard/media_stream/SafePhoto?photo=').$post->thumbnail_high?>" alt="" /></a>
+                    <p class="videos pointer"><a href="http://www.youtube.com/watch?v=<?=$post->video_id?>" target="_blank"><img class='img_attachment' src="<?=base_url('dashboard/media_stream/SafePhoto?photo=').$post->thumbnail_high?>" alt="" /></a>
                     <!--iframe title="YouTube video player" class="youtube-player" style="display: none" type="text/html" 
                         width="" height="" src="http://www.youtube.com/embed/<?=$post->video_id?>"
                         frameborder="0" allowFullScreen></iframe-->

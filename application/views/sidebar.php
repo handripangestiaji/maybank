@@ -154,7 +154,7 @@ if(IsRoleFriendlyNameExist($this->user_role, "Publisher", "role_group")):?>
 <!-- ==================== END OF SIDEBAR PROFILE ==================== -->
 
 <!-- ==================== SIDEBAR UPDATE PASSWORD ==================== -->
-<div id="updatePassword" class="hide">
+<div id="updatePassword">
     <div class="sidebarDivider"></div>
     <div class="sidebarContent">
          <div class="sidebarHead pull-left">
@@ -179,8 +179,8 @@ if(IsRoleFriendlyNameExist($this->user_role, "Publisher", "role_group")):?>
             <span style="color:red" class="error-cpass"><?php echo form_error('cpass'); ?></span>
             
             <div class="sidebarLine"></div>
-            <button class="btn btn-primary" type="submit">Save</button>
-            <button class="btn sidebar-btn-cancel" type="button">Cancel</button>
+            <button id='btn_update' class="btn btn-primary" type="submit">Save</button>
+            <button id='btn_update' class="btn sidebar-btn-cancel" type="button">Cancel</button>
             </form>
         </div>
     </div>
@@ -188,7 +188,7 @@ if(IsRoleFriendlyNameExist($this->user_role, "Publisher", "role_group")):?>
 <!-- ==================== END OF SIDEBAR UPDATE PASSWORD ==================== -->
 
 <!-- ==================== SIDEBAR UPDATE PROFILE ==================== -->
-<div id="updateProfile" class="hide">
+<div id="updateProfile">
     <div class="sidebarDivider"></div>
     <div class="sidebarContent">
         <div class="sidebarHead pull-left">
@@ -204,15 +204,15 @@ if(IsRoleFriendlyNameExist($this->user_role, "Publisher", "role_group")):?>
             <p>Role : <?php echo $this->session->userdata('role_name'); ?></p>
             <p>Email : <span class="cyanText"><?php echo $this->session->userdata('web_address'); ?></span></p>
             <br/>
-            <form method='post' action='<?php echo site_url("users/update_user_login");?>' class='update_profil'>
+            <form method='post' action='<?php echo site_url("users/update_user_login");?>' class='update_profile'>
             
             <div class="yes_update"></div>
             
-            <input type='hidden' value='<?php echo $this->session->userdata('user_id'); ?>' name='user_id' />
+            <input type='hidden' value='<?php echo $this->session->userdata('user_id'); ?>' name='user_id'/>
             <p><strong>Display Name</strong></p>
-            <input type="text" name="display-name" value='<?php echo $this->session->userdata('display_name'); ?>'/>
+            <input type="text" name="display-name" value='<?php echo $this->session->userdata('display_name'); ?>' style="width: 175px;" />
             <p><strong>Timezone</strong></p>
-            <select name='timezone' class='timezone'>
+            <select name='timezone' class='timezone' style="width: 175px;">
                 <?php
                     $timezone = get_timezone_list();
                     $value = array_keys($timezone);

@@ -88,7 +88,9 @@ if(IsRoleFriendlyNameExist($this->user_role, "Publisher", "role_group")):?>
                         $timezone = new DateTimeZone($this->session->userdata('timezone'));
                         $date = new DateTime($each_case->created_at, $timezone);
                         echo $date->format("M d, Y, h:i A");
+                        
                     ?>
+                    <p><?=$each_case->messages?></p>
                 </div>
             </li>
             <?php endforeach?>

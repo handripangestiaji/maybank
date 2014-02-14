@@ -280,17 +280,25 @@ class Media_stream extends CI_Controller {
 	}
 	
     }
-    function ActionTwitterDelete(){
+    function ActionTwitterDelete($status = 1){
     	header("Content-Type: application/x-json");
     	$action['channel_id'] = $this->input->post('channel_id');
     	$action['post_id'] = $this->input->post('post_id');
     	$action['created_by'] = $this->session->userdata('user_id');
-    	$twitter_data = $this->twitter_model->ReadTwitterData(
-    	    array(
-    		'a.post_id' => $this->input->post('post_id')
-    	    ),
-    	    1
-    	);
+	if($status == 1)
+	    $twitter_data = $this->twitter_model->ReadTwitterData(
+		array(
+		    'a.post_id' => $this->input->post('post_id')
+		),
+		1
+	    );
+	else
+	    $twitter_data = $this->twitter_model->ReadDMFromDb(
+		array(
+		    'a.post_id' => $this->input->post('post_id')
+		),
+		1
+	    );
     	if(count($twitter_data) > 0){
     	    $twitter_data = $twitter_data[0];
     	    $channel = $this->account_model->GetChannel(array(
@@ -310,9 +318,21 @@ class Media_stream extends CI_Controller {
     		$channel = $channel[0];
     		$this->connection = $this->twitteroauth->create($this->config->item('twitter_consumer_token'),$this->config->item('twitter_consumer_secret'), $channel->oauth_token,
     							    $channel->oauth_secret);
-    		$result = $this->connection->post('statuses/destroy/'.$twitter_data->post_stream_id);
+		$result = NULL;
+		if($status == 1)
+		    $result = $this->connection->post('statuses/destroy/'.$twitter_data->post_stream_id);
+		else
+		    $result = $this->connection->post('direct_messages/destroy',
+						      array(
+							     'id' => $twitter_data->post_stream_id
+							   ));
     		if(!isset($result->error)){
-    		    $row_affected = $this->twitter_model->DeletePost($twitter_data->post_stream_id);
+		    if($status == 1)
+			$row_affected = $this->twitter_model->DeletePost($twitter_data->post_stream_id, $channel->channel_id,
+								    $this->session->userdata('user_id') == 0 ? NULL : $this->session->userdata('user_id'));
+		    else
+			$row_affected = $this->twitter_model->DeletePost($twitter_data->post_stream_id, $channel->channel_id,
+								    $this->session->userdata('user_id') == 0 ? NULL : $this->session->userdata('user_id'), $status);
     		    echo json_encode(
     			array(
     			    'success' => true,
@@ -580,7 +600,7 @@ class Media_stream extends CI_Controller {
             
             echo json_encode(
     		    array(
-                'success' => true,
+			'success' => true,
     			'message' => "successfully done",
     			'result' => $return
     		    )
@@ -879,7 +899,7 @@ class Media_stream extends CI_Controller {
 
         }
         if($action=='direct'){
-            $filter['channel_id']=$channel_ids;
+            $filter['a.channel_id']=$channel_ids;
             $data['directmessage']=$this->twitter_model->ReadDMFromDb($filter,$limit);
             $data['countDirect']=$this->twitter_model->CountTwitterData($filter);
             $data['channel_id'] = $channel_id;

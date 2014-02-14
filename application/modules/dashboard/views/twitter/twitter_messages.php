@@ -38,7 +38,7 @@
         <?php endif?>
         </p>
         <h4 class="filled">
-        <a role="button" href="#"><i class="icon-trash greyText"></i></a>
+        <a role="button" href="#" class="destroy_status direct_message"><i class="icon-trash greyText"></i></a>
         <div class="pull-right">
             <?php
                 $data = array(

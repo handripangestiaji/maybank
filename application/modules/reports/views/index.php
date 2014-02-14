@@ -1,23 +1,28 @@
+<style type="text/css">
+    input.datepicker{width: 120px;}
+    .cms-table.pull-right{width:80%;}
+    .cms-filter.pull-left{width:15%;}
+</style>
 <div class="row-fluid" style="width: 100%; margin: 0px auto;" >
     <div class="cms-content row-fluid">
         <div class="cms-filter pull-left">
 	    <h4>SUMMARY</h4>
             <table>
                 <tr>
-                    <td><input type="button" style='width: 101px;' value="Case" /><br /></td>
+                    <td><input type="button" class="btn-primary" style='width: 101px;' value="Case" /><br /></td>
                 </tr>
                 <tr>
-                    <td><input type="button" style='width: 101px;' value="Engagement" /></td>
+                    <td><input type="button" class="btn" style='width: 101px;' value="Engagement" /></td>
                 </tr>
             </table>
             
             <h5>User</h5>
             <table>
                 <tr>
-                    <td><input type="button" style='width: 101px;' value="Performance" /></td>
+                    <td><input type="button" class="btn" style='width: 101px;' value="Performance" /></td>
                 </tr>
                 <tr>
-                    <td><input type="button" style='width: 101px;' value="Activity" /></td>
+                    <td><input type="button" class="btn" style='width: 101px;' value="Activity" /></td>
                 </tr>
             </table>
         </div>
@@ -35,10 +40,9 @@
                             <option value='<?php echo $c->channel_id;?>'><?php echo $c->name;?></option>
                         <?php }?>
                     </select>
-                </div>
-                <div style="float: left;margin-left: 75px;">
-                    <input id="datepickerField" type="text" placeholder="Data From" />
-                    <input id="datepickerField1" type="text" placeholder="Data To" />
+              
+                    <input id="datepickerField" type="text" placeholder="Data From" class="datepicker" />
+                    <input id="datepickerField1" type="text" placeholder="Data To" class="datepicker" />
 		    <input type="button" value="Filter" name="filt" id="filt" class="btn btn-min" style="margin-top: -11px;"/>
                 </div>
                 <div style='clear: both;'></div>
@@ -71,10 +75,8 @@
                             <option value='<?php echo $p->id;?>'><?php echo $p->product_name;?></option>
                         <?php }?>
                     </select>
-                </div>
-                <div style="float: left;margin-left: 75px;">
-                    <input id="datepickerFieldResponse" type="text" placeholder="Data From" />
-                    <input id="datepickerFieldResponse1" type="text" placeholder="Data To" />
+                    <input id="datepickerFieldResponse" type="text" placeholder="Data From" class="datepicker" />
+                    <input id="datepickerFieldResponse1" type="text" placeholder="Data To" class="datepicker" />
 		    <input type="button" value="Filter" name="filtResponse" id="filtResponse" class="btn btn-min" style="margin-top: -11px;" />
                 </div>
                 <div style='clear: both;'></div>
@@ -94,10 +96,8 @@
                             <option value='<?php echo $p->id;?>'><?php echo $p->product_name;?></option>
                         <?php }?>
                     </select>
-                </div>
-                <div style="float: left;margin-left: 75px;">
-                    <input id="datepickerFieldResolution" type="text" placeholder="Data From" />
-                    <input id="datepickerFieldResolution1" type="text" placeholder="Data To" />
+                    <input id="datepickerFieldResolution" type="text" placeholder="Data From" class="datepicker" />
+                    <input id="datepickerFieldResolution1" type="text" placeholder="Data To"class="datepicker" />
 		    <input type="button" value="Filter" name="filtResolution" id="filtResolution" class="btn btn-min" style="margin-top: -11px;" />
                 </div>
                 <div style='clear: both;'></div>

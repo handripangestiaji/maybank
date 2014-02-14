@@ -1233,11 +1233,11 @@ $(function(){
                         if(confirmStatus == true){
                             $(this).attr('disabled', 'disabled');
                             $.ajax({
-                                url : BASEURL + 'dashboard/media_stream/ActionTwitterDelete',
+                                url : BASEURL + 'dashboard/media_stream/ActionTwitterDelete/' + ($(this).hasClass('direct_message') == true ? '0' : '1'),
                                 type: "POST",
                                 data: {
                                     post_id : btnDestroyStatus.closest('li').find('.postId').val(),
-                                    //channel_id : $(this).closest('.floatingBox').find('input.channel-id').val()
+                                    channel_id : $(this).closest('.floatingBox').find('input.channel-id').val()
                                 },
                                 success: function(response)
                                 {

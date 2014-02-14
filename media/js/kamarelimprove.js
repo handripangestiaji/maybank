@@ -24,6 +24,7 @@ $(function(){
                     '<strong>Well done!</strong> CASE #' + response.result.case_id + " was made. " +  response.message + '</div>');
                     openButton.removeClass('btn-warning').addClass('btn-purple').html('CASE #' + response.result.case_id ).val(response.result.case_id);
                     thisElement.closest('li').find('.btn-case').removeClass('btn-danger btn-case').addClass('btn-purple btn-resolve').html('<i class="icon-check"></i><span>RESOLVE</span>');
+                    thisElement.parent().toggle('slow');
                 }
                 else{
                     var errorMessages = "<ul class='error-list'>";
@@ -215,6 +216,7 @@ $(function(){
     
     
     $('form.update_password').submit(function(e){
+        
         var pass = $(this).find('input[name=pass]').val();
         var exist = $(this).find('input[name=exist]').val();
         var cPas = $(this).find('input[name=cpass]').val();
@@ -249,7 +251,7 @@ $(function(){
         e.preventDefault();
     });
     
-    $('form.update_profil').submit(function(e){
+    $('form.update_profile').submit(function(e){
         var display = $(this).find('input[name=display-name]').val();
         var about = $(this).find('.about-me').val();
         var time = $(this).find('.timezone').val();

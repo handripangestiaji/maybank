@@ -138,7 +138,7 @@ class case_model extends CI_Model{
         }
         $this->db->trans_complete();
         $content_email = curl_get_file_contents(site_url('mail_template/AssignCase/newcase/'.$insert_id));
-        $this->email->subject('One case has been Assigned to you');
+        $this->email->subject('Maybank DCMS Case #'.$insert_id);
         $this->email->message($content_email);
         $this->email->send();
         //print_r($this->email->print_debugger());

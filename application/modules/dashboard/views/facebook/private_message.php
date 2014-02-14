@@ -58,7 +58,7 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_pm[$i]->po
         </div>
         <br>
         <?php 
-            $comment=$this->facebook_model->RetrievePmDetailFB($fb_pm[$i]->conversation_id,$filter=null);
+            $comment=$this->facebook_model->RetrievePmDetailFB(array('a.conversation_id'=>$fb_pm[$i]->conversation_id));
             for($j=0;$j<count($comment);$j++){
         ?>
         <div class="engagement-body">

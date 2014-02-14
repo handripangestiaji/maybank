@@ -147,16 +147,19 @@ $(function(){
     $(this).on('click', '.assign-case .facebook_conversation', function(e){
         var modalID = $(this).attr("href");
         var facebook_id = $(modalID + " input[name=post_id]").val();
+        var author_id = $(modalID).closest('.sender_id');
+        console.log(author_id);
         var type = $(modalID + " input[name=type]").val();
         $(modalID + " .loader-image").show();
         $(modalID + " .related-conversation-body").remove();
         var textToAppend = "" ;
         
         $(this).LoadContentAsync({
-            url : BASEURL + "case/mycase/FacebookRelatedConversation/" + facebook_id + "/"+type,
+            url : BASEURL + "case/mycase/FacebookRelatedConversation/" + facebook_id + "/" + type,
             urlParameter : {
                 post_id : $(modalID + " input[name=post_id]").val(),
-                 channel_id : $(this).closest('.floatingBox').find('input.channel-id').val()                
+                channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),                
+                //author_id:author_id
             },
             callback : function(response){
                 //console.log(response);

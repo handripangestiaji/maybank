@@ -573,14 +573,14 @@ class facebook_model extends CI_Model
         return $this->db->get()->result();
     }
     
-    public function RetrievePmDetailFB($conversation_id,$filter){
+    public function RetrievePmDetailFB($filter){
         //WHERE detail_id_from_facebook LIKE '%_0'
         $this->db->select("a.*,b.messages AS comment_content,b.*,c.name,c.username,d.channel_id,d.type,d.is_read, d.type as social_stream_type, d.post_id");
         $this->db->from("social_stream_facebook_conversation a LEFT OUTER JOIN 
                         social_stream_facebook_conversation_detail b ON b.conversation_id = a.conversation_id LEFT OUTER JOIN
                         fb_user_engaged c ON c.facebook_id=b.sender LEFT OUTER JOIN
                         social_stream d ON d.post_id=b.conversation_id");
-          $this->db->where("detail_id_from_facebook NOT LIKE '%_0' and b.conversation_id='".$conversation_id."'");  
+          $this->db->where("detail_id_from_facebook NOT LIKE '%_0'");  
          if(count($filter) > 0){
 	       $this->db->where($filter);
         }

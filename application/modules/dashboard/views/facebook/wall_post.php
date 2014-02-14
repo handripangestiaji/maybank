@@ -78,11 +78,15 @@ if($fb_feed[$i]->post_content != '<br />'):
     <p class="indicator">
     <?php 
     if(isset($isMyCase[0]->assign_to)){
-        if($isMyCase[0]->assign_to==$this->session->userdata('user_id') or ($isMyCase[0]->solved_by)){ ?>
-            <button type="button" class="btn <?php echo $fb_feed[$i]->case_id != null ? "btn-purple btn-mini" : "btn-inverse btn-mini" ?>"><?php echo $fb_feed[$i]->case_id != null ? 'CASE #'.$fb_feed[$i]->case_id.' Assign to You ' : 'CASE #'.$isMyCase[0]->case_id.'-'.'RESOLVE BY '.$isMyCase[0]->full_name?></button>
+          // print_r($isMyCase[count($isMyCase)-1]);
+          $case=new DateTime($isMyCase[count($isMyCase)-1]->solved_at.' Europe/London');
+          $case->setTimezone($timezone);
+            
+        if($isMyCase[count($isMyCase)-1]->assign_to==$this->session->userdata('user_id') or ($isMyCase[count($isMyCase)-1]->solved_by)){ ?>
+            <button type="button" class="btn <?php echo $fb_feed[$i]->case_id != null ? "btn-purple btn-mini" : "btn-inverse btn-mini" ?>"><?php echo $fb_feed[$i]->case_id != null ? 'CASE #'.$fb_feed[$i]->case_id.' Assign to You ' : 'CASE #'.$isMyCase[count($isMyCase)-1]->case_id.' | '.'RESOLVE BY:'.$isMyCase[count($isMyCase)-1]->resolve_by.' | '.$case->format('j-M-Y h:i A')?></button>
         <?php }else{ ?>
             <button type="button" class="btn <?php echo $fb_feed[$i]->case_id != null ? "btn-purple btn-mini" : "btn-inverse btn-mini" ?>">
-                <?php echo $fb_feed[$i]->case_id != null ? 'CASE #'.$fb_feed[$i]->case_id.' Assign to: '.$isMyCase[0]->full_name : 'REPLIED'?>
+                <?php echo $fb_feed[$i]->case_id != null ? 'CASE #'.$fb_feed[$i]->case_id.' Assign to: '.$isMyCase[count($isMyCase)-1]->full_name : 'REPLIED'?>
             </button>  
     <?php    }
     }
@@ -162,8 +166,8 @@ if($fb_feed[$i]->post_content != '<br />'):
                 <p>"<?php echo RemoveUrlWithin($comment[$j]->comment_content); ?>"</p>
                 
                 <?php 
-                    if(isset($isMyCase[0]->assign_to)){
-                        if($isMyCase[0]->assign_to==$this->session->userdata('user_id') or ($isMyCase[0]->solved_by)){
+                    if(isset($isMyCase[count($isMyCase)-1]->assign_to)){
+                        if($isMyCase[count($isMyCase)-1]->assign_to==$this->session->userdata('user_id') or ($isMyCase[count($isMyCase)-1]->solved_by)){
                 ?>
                 <p>
                     <button type="button" class="btn btn-warning btn-mini">OPEN</button>
@@ -214,8 +218,11 @@ if($fb_feed[$i]->post_content != '<br />'):
         <!-- ==================== CONDENSED TABLE FLOATING BOX ==================== -->
         
             <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action')):
-            $data_loaded['post'] = $fb_feed[$i];
-            $this->load->view('dashboard/action_taken', $data_loaded);
+            //print_r($fb_feed[$i]->channel_action);
+                if(isset($fb_feed[$i]->channel_action)){
+                    $data_loaded['post'] = $fb_feed[$i];
+                    $this->load->view('dashboard/action_taken', $data_loaded);
+                }
             endif
             ?>
         <!-- ==================== END OF CONDENSED TABLE FLOATING BOX ==================== --> 
@@ -227,12 +234,14 @@ if($fb_feed[$i]->post_content != '<br />'):
         <!--a style="font-size: 20px; cursor: pointer;"><i class="icon-trash greyText deleteFB"></i></a-->
         <div class="pull-right">
     <?php  
-    //print_r($isMyCase);
-    if(isset($isMyCase[0]->assign_to)){
-        if(($isMyCase[0]->assign_to==$this->session->userdata('user_id') && IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action'))){ ?> 
+    //echo(count($isMyCase));
+    //print_r($isMyCase[0]);
+    if(isset($isMyCase[count($isMyCase)-1]->assign_to)){
+       // print_r($isMyCase[count($isMyCase)-1]);
+        if(($isMyCase[count($isMyCase)-1]->assign_to==$this->session->userdata('user_id') && IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action'))){ ?> 
                 <button type="button" class="btn btn-primary btn-reply"><i class="icon-mail-reply"></i></button>
-           <?php if($isMyCase[0]->status=='pending'){ ?>
-                <button type="button" class="btn btn-purple  btn-resolve" name="action" value="<?=$fb_feed[$i]->case_id?>"><i class="icon-check"></i> RESOLVE</button>
+           <?php if($isMyCase[count($isMyCase)-1]->status=='pending'){ ?>
+                <button type="button" class="btn btn-purple  btn-resolve_fb" name="action" value="<?=$fb_feed[$i]->case_id?>"><i class="icon-check"></i> RESOLVE</button>
                 <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>  
            <?php }else{ ?> 
               <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>
@@ -242,8 +251,8 @@ if($fb_feed[$i]->post_content != '<br />'):
     </h4>
     <?php }elseif((IsRoleFriendlyNameExist($this->user_role,'Social Stream_All_Resolve_Case'))){ ?>
         <button type="button" class="btn btn-primary btn-reply"><i class="icon-mail-reply"></i></button>
-        <?php if($isMyCase[0]->status=='pending'):?>
-        <button type="button" class="btn btn-purple  btn-resolve" name="action" value="<?=$fb_feed[$i]->case_id?>"><i class="icon-check"></i> RESOLVE</button>
+        <?php if($isMyCase[count($isMyCase)-1]->status=='pending'):?>
+        <button type="button" class="btn btn-purple  btn-resolve_fb" name="action" value="<?=$fb_feed[$i]->case_id?>"><i class="icon-check"></i> RESOLVE</button>
         <?php endif?>
         <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>   
         </div>

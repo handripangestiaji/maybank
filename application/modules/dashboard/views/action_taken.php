@@ -18,6 +18,7 @@
                   </thead>
                   <tbody>
                     <?php
+            if(isset($post->channel_action)):
                     foreach($post->channel_action as $action):?>
                     <tr>
                       <td><?php
@@ -34,7 +35,7 @@
                       <td></td>
                     </tr>
                    
-                    <?php endforeach;?>
+            <?php endforeach;endif;?>
                   </tbody>
                 </table>  
             </div>

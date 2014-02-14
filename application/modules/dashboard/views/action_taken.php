@@ -11,9 +11,9 @@
                     <tr>
                       <th>Time</th>
                       <th>User</th>
-                      <th>Action Taken</th>
-                      <th>Channels</th>
-                      <th>Details</th>
+                      <th>Action</th>
+                      <th>Description</th>
+                      <th>Notes</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -32,7 +32,7 @@
                       <td><?=ucfirst(str_replace('_', ' ', $action->action_type))?></td>
                       <!--td><button class="btn btn-primary icon-book"></button></td-->
                       <td></td>
-                      <td></td>
+                      <td><?=$action->log_text?></td>
                     </tr>
                    
             <?php endforeach;endif;?>

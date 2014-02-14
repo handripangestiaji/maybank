@@ -34,7 +34,7 @@
                       <td>
                         <?php
                             if($action->action_type == 'reply_facebook' || $action->action_type == 'twitter_reply'){
-                                echo $action->comment_content;
+                                echo '"'.$action->comment_content.'"';
                             }
                             elseif($action->action_type == 'case_created' || $action->action_type == 'case_solved'){
                                 echo 'Assign to '.$action->assign_name;

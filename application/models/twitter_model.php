@@ -300,7 +300,7 @@ class twitter_model extends CI_Model
         
         for($i=0;$i<count($result);$i++){
             $result[$i]->sender = $this->ReadTwitterUserFromDb($result[$i]->sender);
-            $result[$i]->channel_action = $this->GetChannelAction(array('post_id'=>$result[$i]->social_stream_post_id));
+            $result[$i]->channel_action = $this->GetChannelAction(array('a.post_id'=>$result[$i]->social_stream_post_id));
         }
         return $result;
     }
@@ -334,7 +334,7 @@ class twitter_model extends CI_Model
         foreach($result as $row){
 
             $row->reply_post = $this->GetReplyPost(array('reply_to_post_id'=> $row->social_stream_post_id));
-            $row->channel_action = $this->GetChannelAction(array('post_id'=>$row->social_stream_post_id));
+            $row->channel_action = $this->GetChannelAction(array('a.post_id'=>$row->social_stream_post_id));
             $row->case = $this->case_model->LoadCase(array('a.post_id'=>$row->social_stream_post_id));
         }
         
@@ -487,8 +487,12 @@ class twitter_model extends CI_Model
      * Get Action from database
     */
     function GetChannelAction($filter){
-        $this->db->select("a.*, b.username, b.display_name");
-        $this->db->from('channel_action a inner join user b on b.user_id = a.created_by');
+        $this->db->select("a.*, b.username, b.display_name, c.comment_content, d.messages, d.assign_to, e.display_name as assign_name");
+        $this->db->from("channel_action a INNER JOIN
+			user b on b.user_id = a.created_by LEFT JOIN
+			social_stream_fb_comments c on c.comment_stream_id = a.stream_id_response LEFT JOIN
+			`case` d on d.post_id = a.post_id LEFT JOIN
+			user e on e.user_id = d.assign_to");
         $this->db->where($filter);
         return $this->db->get()->result();
     }

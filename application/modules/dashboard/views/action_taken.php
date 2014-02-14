@@ -31,8 +31,17 @@
                       <td><?=$action->username?></td>
                       <td><?=ucfirst(str_replace('_', ' ', $action->action_type))?></td>
                       <!--td><button class="btn btn-primary icon-book"></button></td-->
-                      <td></td>
-                      <td><?=$action->log_text?></td>
+                      <td>
+                        <?php
+                            if($action->action_type == 'reply_facebook' || $action->action_type == 'twitter_reply'){
+                                echo $action->comment_content;
+                            }
+                            elseif($action->action_type == 'case_created' || $action->action_type == 'case_resolved'){
+                                echo 'Assign to '.$action->assign_name;
+                            }
+                        ?>
+                      </td>
+                      <td><?=$action->messages?></td>
                     </tr>
                    
             <?php endforeach;endif;?>

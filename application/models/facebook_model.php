@@ -441,12 +441,13 @@ class facebook_model extends CI_Model
     }
     
     function GetChannelAction($filter, $is_where_in = false){
-        $this->db->select("a.*, b.username, b.display_name, c.comment_content, d.messages, d.assign_to, e.display_name as assign_name");
+        $this->db->select("a.*, b.username, b.display_name, c.comment_content, d.messages, d.assign_to, e.display_name as assign_name, f.display_name as solved_name");
         $this->db->from("channel_action a INNER JOIN
 			user b on b.user_id = a.created_by LEFT JOIN
 			social_stream_fb_comments c on c.comment_stream_id = a.stream_id_response LEFT JOIN
 			`case` d on d.post_id = a.post_id LEFT JOIN
-			user e on e.user_id = d.assign_to");
+			user e on e.user_id = d.assign_to LEFT JOIN
+			user f on f.user_id = d.solved_by");
 	if(!$is_where_in)
 	    $this->db->where($filter);
 	else

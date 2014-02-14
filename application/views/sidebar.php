@@ -182,7 +182,7 @@ if(IsRoleFriendlyNameExist($this->user_role, "Publisher", "role_group")):?>
             
             <div class="sidebarLine"></div>
             <button id='btn_update' class="btn btn-primary" type="submit">Save</button>
-            <button id='btn_update' class="btn sidebar-btn-cancel" type="button">Cancel</button>
+            <button id='' class="btn sidebar-btn-cancel" type="button">Cancel</button>
             </form>
         </div>
     </div>
@@ -206,7 +206,7 @@ if(IsRoleFriendlyNameExist($this->user_role, "Publisher", "role_group")):?>
             <p>Role : <?php echo $this->session->userdata('role_name'); ?></p>
             <p>Email : <span class="cyanText"><?php echo $this->session->userdata('web_address'); ?></span></p>
             <br/>
-            <form method='post' action='<?php echo site_url("users/update_user_login");?>' class='update_profile'>
+            <form method='post' action='<?php echo base_url("users/update_user_login");?>' class='update_profile'>
             
             <div class="yes_update"></div>
             
@@ -236,8 +236,8 @@ if(IsRoleFriendlyNameExist($this->user_role, "Publisher", "role_group")):?>
             <textarea class="about-me" name="about-me" placeholder="Compose Message"><?php echo $this->session->userdata('description'); ?></textarea>
 
             <div class="sidebarLine"></div>
-            <button id='btn_update' class="btn btn-primary" type="submit">Save</button>
-            <button id='btn_update' class="btn sidebar-btn-cancel" type="button">Cancel</button>
+            <input  class="btn btn-primary" type="submit" value="Save">
+            <input class="btn sidebar-btn-cancel" type="button" value="Cancel">
             </form>
         </div>
     </div>

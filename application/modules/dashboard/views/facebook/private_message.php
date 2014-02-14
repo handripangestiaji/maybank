@@ -73,7 +73,7 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_pm[$i]->po
         </div>
        <?php } ?>
        <!-- ==================== CONDENSED TABLE HEADLINE ==================== -->
-        <div class="containerHeadline specialToggleTable">
+        <div href='#modal-action-log-<?php echo $fb_pm[$i]->post_stream_id ?>' data-toggle='modal' class="containerHeadline specialToggleTable">
             <i class="icon-table"></i><h2>Action Log</h2>
         </div>
         <!-- ==================== END OF CONDENSED TABLE HEADLINE ==================== -->

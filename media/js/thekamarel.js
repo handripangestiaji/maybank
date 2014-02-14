@@ -1574,12 +1574,7 @@ $(function(){
                             
                             looppage++;
                             loading = false;
-                    });                  
-                    
-                    $(this).on('click','.specialToggleTable',
-                        function() {
-                        $(this).next().toggle();
-                    });                                                         
+                    });                                                   
                 });
                 
 

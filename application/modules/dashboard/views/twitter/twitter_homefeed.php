@@ -115,7 +115,7 @@ for($i=0;$i<count($homefeed);$i++){
                 </div>
         <?php } ?>
         <!-- ==================== CONDENSED TABLE HEADLINE ==================== -->
-        <div class="containerHeadline specialToggleTable">
+        <div href='#modal-action-log-<?php echo $homefeed[$i]->post_stream_id ?>' data-toggle='modal' class="containerHeadline specialToggleTable">
             <i class="icon-table"></i><h2>Action Log</h2>
         </div>
         <!-- ==================== END OF CONDENSED TABLE HEADLINE ==================== -->

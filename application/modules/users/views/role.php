@@ -1,6 +1,6 @@
 <script src="<?php echo base_url();?>media/js/jquery-1.7.2.min.js" type="text/javascript" > </script>
 
-<div class="row-fluid" style="width: 80%; margin: 0px auto;">
+<div class="row-fluid" style="width: 100%; margin: 0px auto;">
     <?php
 		//$msge = $this->session->flashdata('double');
 		if($role_check!=NULL){ ?>

@@ -81,7 +81,7 @@ class mycase extends CI_Controller{
     
     function FacebookRelatedConversation($user,$type){
         $this->load->model('facebook_model');
-       // $post_id=$this->input->get('post_id');
+        $post_id=$this->input->get('post_id');
         $channel_id=$this->input->get('channel_id');
         $author_id=$this->input->get('author_id');
         $this->load->model('account_model');
@@ -105,9 +105,9 @@ class mycase extends CI_Controller{
             $facebook_id=$channel_loaded[0]->social_id;
             //print_r($facebook_id);
             if($type=='facebook'){
-                echo json_encode($this->facebook_model->RetriveCommentPostFb(array('a.author_id'=>$author_id)));
+                echo json_encode($this->facebook_model->RetriveCommentPostFb(array('b.from'=>$post_id)));
             }else{
-                 echo json_encode($this->facebook_model->RetrievePmDetailFB(array("c.facebook_id"=>$author_id)));
+                 echo json_encode($this->facebook_model->RetrievePmDetailFB(array("c.facebook_id <>"=>$user)));
            }
        }  
     }

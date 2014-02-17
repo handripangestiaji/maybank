@@ -120,7 +120,7 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_pm[$i]->po
     <?php } 
     }else{ 
         ?>
-            <?php if(!$fb_feed[$i]->case_id):
+            <?php if(!$fb_pm[$i]->case_id):
                 if($isMyCase){ ?>                   
                  <?php }else{ ?>
                     <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action')):?>

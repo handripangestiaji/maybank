@@ -24,7 +24,7 @@ $(function(){
                     '<strong>Well done!</strong> CASE #' + response.result.case_id + " was made. " +  response.message + '</div>');
                     openButton.removeClass('btn-warning').addClass('btn-purple').html('CASE #' + response.result.case_id ).val(response.result.case_id);
                     thisElement.closest('li').find('.btn-case').removeClass('btn-danger btn-case').addClass('btn-purple btn-resolve').html('<i class="icon-check"></i><span>RESOLVE</span>');
-                    thisElement.parent().toggle('slow');
+                    thisElement.parent().parent().toggle('slow');
                 }
                 else{
                     var errorMessages = "<ul class='error-list'>";
@@ -102,12 +102,14 @@ $(function(){
         $(modalID + " .loader-image").show();
         $(modalID + " .related-conversation-body").remove();
         var textToAppend = "" ;
+        var author_id = $(modalID).closest('.sender_id');
         
         $(this).LoadContentAsync({
             url : BASEURL + "case/mycase/FacebookRelatedConversation/" + facebook_id + "/"+type,
             urlParameter : {
                 post_id : $(modalID + " input[name=post_id]").val(),
-                channel_id : $(this).closest('.floatingBox').find('input.channel-id').val()
+                channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
+                //author_id:author_id
             },
             callback : function(response){
                 //console.log(response);
@@ -132,7 +134,7 @@ $(function(){
                                 '<!--p><button class="btn btn-primary btn-mini btn-reply" style="margin-left: 5px;">Reply</button></p-->' +
                             '</div></div>'
                         );
-                        $('.UTCTimestamp').localTimeFromUTC('MM/dd/yyyy hh:mm:ss a');
+                       // $('.UTCTimestamp').localTimeFromUTC('MM/dd/yyyy hh:mm:ss a');
                     }
                 }else{
                      $(modalID + ' form').append(
@@ -148,8 +150,8 @@ $(function(){
     $(this).on('click', '.assign-case .facebook_conversation', function(e){
         var modalID = $(this).attr("href");
         var facebook_id = $(modalID + " input[name=post_id]").val();
-        var author_id = $(modalID).closest('.sender_id');
-        console.log(author_id);
+       // var author_id = $(modalID).closest('.sender_id');
+       // console.log(author_id);
         var type = $(modalID + " input[name=type]").val();
         $(modalID + " .loader-image").show();
         $(modalID + " .related-conversation-body").remove();
@@ -160,7 +162,6 @@ $(function(){
             urlParameter : {
                 post_id : $(modalID + " input[name=post_id]").val(),
                 channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),                
-                //author_id:author_id
             },
             callback : function(response){
                 //console.log(response);

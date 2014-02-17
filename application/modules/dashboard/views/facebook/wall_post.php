@@ -52,7 +52,6 @@ if($fb_feed[$i]->post_content != '<br />'):
                     <!-- close button for image attached -->
                     <div style="">
                         <div style="float: left;min-height:120px; border-right: 1px solid  #ccc; width:30%;" >
-                            
                             <?php echo '<img class="link-preview-image" src="'.$attachment->media[$att]->src.'" style="display:block;width:auto;"/>';?>
                         </div>
                         <!-- img-place end -->
@@ -115,6 +114,7 @@ if($fb_feed[$i]->post_content != '<br />'):
         <span class="cyanText"><i class="icon-thumbs-up-alt"></i></i> <?php echo $fb_feed[$i]->total_likes; ?> likes</span> 
     </p>
 
+
     <!-- ENGAGEMENT -->    
     <div class="engagement hide">
         <div class="engagement-header">
@@ -170,24 +170,44 @@ if($fb_feed[$i]->post_content != '<br />'):
                         if($isMyCase[count($isMyCase)-1]->assign_to==$this->session->userdata('user_id') or ($isMyCase[count($isMyCase)-1]->solved_by)){
                 ?>
                 <p>
+                    <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Take Action')):?>
+                        <button type="button" role="button" class="btn btn-mini delete_post comments"  value="<?php echo $comment[$j]->comment_post_id?>" style="border: none; background-color: transparent;"><i class="icon-trash greyText"></i></button>
+                    <?php endif;?>
+            
                     <button type="button" class="btn btn-warning btn-mini">OPEN</button>
                     <button class="fblike btn btn-primary btn-mini" value="<?php echo $comment[$j]->post_stream_id?>"><?php echo $comment[$j]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button>
                     <?php if(($comment[$j]->comment_id)=='0'){?>
                     <button type="button" class="btn btn-primary btn-engagement-reply btn-mini" ><i class="icon-mail-reply"></i></button>
                     <?php } ?>
                    <!--button type="button" class="btn btn-danger btn-engagement-case btn-mini"><i class="icon-plus"></i> CASE</button-->
-                </p>
+                </p><!--222-->
+                <?php }else{ ?>
+                <p>
+                    <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Take Action')):?>
+                        <button type="button" role="button" class="btn btn-mini delete_post comments"  value="<?php echo $comment[$j]->comment_post_id?>" style="border: none; background-color: transparent;"><i class="icon-trash greyText"></i></button>
+                    <?php endif;?>
+            
+                    <button type="button" class="btn btn-warning btn-mini">OPEN</button>
+                    <button class="fblike btn btn-primary btn-mini" value="<?php echo $comment[$j]->post_stream_id?>"><?php echo $comment[$j]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button>
+                    <?php if(($comment[$j]->comment_id)=='0'){?>
+                    <button type="button" class="btn btn-primary btn-engagement-reply btn-mini" ><i class="icon-mail-reply"></i></button>
+                    <?php } ?>
+                   <!--button type="button" class="btn btn-danger btn-engagement-case btn-mini"><i class="icon-plus"></i> CASE</button-->
+                </p> <!--sads3333sad;-->
                 <?php } 
-                }elseif(!isset($isMyCase[0])){?>
+                }elseif(!isset($isMyCase[count($isMyCase)-1])){ ?>
                 <h4>
                     <p>
+                    <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Take Action')):?>
+                        <button type="button" role="button" class="btn btn-mini delete_post comments"  value="<?php echo $comment[$j]->comment_post_id?>" style="border: none; background-color: transparent;"><i class="icon-trash greyText"></i></button>
+                    <?php endif;?>
                     <button type="button" class="btn btn-warning btn-mini">OPEN</button>
                     <button class="fblike btn btn-primary btn-mini" value="<?php echo $comment[$j]->post_stream_id?>"><?php echo $comment[$j]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button>
                     <?php if(($comment[$j]->comment_id)=='0'){?>
                     <button type="button" class="btn btn-primary btn-engagement-reply btn-mini btn-reply" ><i class="icon-mail-reply"></i></button>
                     <?php } ?>
                    <!--button type="button" class="btn btn-danger btn-engagement-case btn-mini btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button-->
-                </p>
+                </p><!--44-->
                 </h4>
                 <?php } ?>
                 <div class="fb-reply-engagement-field reply-field hide">
@@ -204,8 +224,7 @@ if($fb_feed[$i]->post_content != '<br />'):
                     $data['i'] = $j;
                     $this->load->view('dashboard/case_field',$data);*/
                 ?>
-                </div>
-                
+                </div>                
             </div>
         </div>
        <?php endfor; ?>
@@ -231,7 +250,10 @@ if($fb_feed[$i]->post_content != '<br />'):
 
     <h4 class="filled">
         <!--di nonaktifin dulu, karena belum di butuhkan-->
-        <!--a style="font-size: 20px; cursor: pointer;"><i class="icon-trash greyText deleteFB"></i></a-->
+            <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Take Action')):?>
+                <a role="button" class='delete_post wall'><i class="icon-trash greyText"></i></a>
+                <!--a style="font-size: 20px; cursor: pointer;"><i class="icon-trash greyText deleteFB"></i></a-->
+            <?php endif;?>
         <div class="pull-right">
     <?php  
     //echo(count($isMyCase));
@@ -255,7 +277,7 @@ if($fb_feed[$i]->post_content != '<br />'):
         <button type="button" class="btn btn-purple  btn-resolve_fb" name="action" value="<?=$fb_feed[$i]->case_id?>"><i class="icon-check"></i> RESOLVE</button>
         <?php endif?>
         <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>   
-        </div>
+        </div><!--ASDAS-->
         <br clear="all" />
     </h4>
     <?php } 

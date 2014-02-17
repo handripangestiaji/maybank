@@ -471,9 +471,9 @@ class facebook_model extends CI_Model
             $this->db->where($filter);
         }
         $result = $this->db->get()->result();
-       // echo "<pre>";
-//        print_r($result);
-//        echo "</pre>";
+        //echo "<pre>";
+        //print_r($result);
+        //echo "</pre>";
         foreach($result as $row){
             $row->reply_post = $this->RetriveCommentPostFb(array('a.post_id'=>$row->social_stream_post_id));
     	    $comment_list = array();
@@ -503,6 +503,12 @@ class facebook_model extends CI_Model
         return $this->db->get()->result();
     }
     
+//    public function userComment(){
+//        $this->db->distinct('`from`'); 
+//        $this->db->from('social_stream_fb_comments')
+//                
+//    }
+//    
     public function RetrievePostFB($filter){
         $this->db->select('*, c.type as social_stream_type, a.post_id as social_stream_post_id');
         $this->db->from("fb_user_engaged a INNER JOIN social_stream_fb_post b ON b.author_id=a.facebook_id
@@ -517,7 +523,7 @@ class facebook_model extends CI_Model
         return $this->db->get()->result();
     }
     
-    public function RetriveCommentPostFb($filter){
+    public function RetriveCommentPostFb($filter,$in){
         $this->db->select("a.post_id,a.post_content,a.total_comments,b.comment_stream_id,b.attachment,b.from,c.name,b.comment_content,b.created_at, b.user_likes, d.post_stream_id,b.comment_id,e.post_id AS comment_post_id, b.id");
         $this->db->from("social_stream_fb_post a INNER JOIN
                 social_stream_fb_comments b ON b.post_id=a.post_id INNER JOIN
@@ -525,6 +531,9 @@ class facebook_model extends CI_Model
                 social_stream e ON e.post_stream_id=b.comment_stream_id");               
         if(count($filter) > 0)
 	       $this->db->where($filter);
+           
+        if(count($in) > 0)
+	       $this->db->where_in('b.from',$in);
            
         $this->db->limit(20);
         $this->db->order_by('a.post_id','desc');
@@ -629,12 +638,38 @@ class facebook_model extends CI_Model
     }
     
     
-    function DeletePostFb($post_stream_id){
-        
+    function DeletePostFb($post_stream_id, $channel_id, $user_id, $status = 0){
+        $this->db->trans_start();
+        if($status == 0){
+            $data = $this->RetrieveFeedFB(
+                array('post_stream_id' => $post_stream_id)
+            );
+        }elseif($status==1){
+            $data = $this->RetrievePmFB(
+                array('post_stream_id' => $post_stream_id)
+            );
+        }else{
+            $data = $this->RetriveCommentPostFb(
+                array('d.post_stream_id' => $post_stream_id)
+            );   
+        }
+
+        $channel_action = array(
+            'action_type' => "facebook_delete",
+            'channel_id' => $channel_id,
+            'created_at' => date("Y-m-d H:i:s"),
+            'post_id' => NULL,
+            'created_by' => $user_id,
+            'log_text' => json_encode($data)
+        );
+      //  print_r($data);
+        $this->db->insert('channel_action', $channel_action);
         $this->db->where(array(
             'post_stream_id' => $post_stream_id,
-        ));
-        return $this->db->delete('social_stream');
-    }
-   
+        ));        
+        $return = $this->db->delete('social_stream');
+        print_r($return);
+        $this->db->trans_complete();
+        return $return;
+    }   
 }

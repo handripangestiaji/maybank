@@ -34,14 +34,23 @@
                       <td>
                         <?php
                             if($action->action_type == 'reply_facebook' || $action->action_type == 'twitter_reply'){
-                                echo $action->comment_content;
+                                echo '"'.$action->comment_content.'"';
                             }
-                            elseif($action->action_type == 'case_created' || $action->action_type == 'case_resolved'){
+                            elseif($action->action_type == 'case_created'){
                                 echo 'Assign to '.$action->assign_name;
+                            }
+                            elseif($action->action_type == 'case_solved'){
+                                echo 'Solved by '.$action->solved_name;
                             }
                         ?>
                       </td>
-                      <td><?=$action->messages?></td>
+                      <td>
+                        <?php
+                            if($action->action_type == 'case_created' || $action->action_type == 'case_solved'){
+                                echo $action->messages;
+                            }
+                            ?>
+                        </td>
                     </tr>
                    
             <?php endforeach;endif;?>

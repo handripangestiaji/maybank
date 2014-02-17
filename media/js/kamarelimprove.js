@@ -24,7 +24,7 @@ $(function(){
                     '<strong>Well done!</strong> CASE #' + response.result.case_id + " was made. " +  response.message + '</div>');
                     openButton.removeClass('btn-warning').addClass('btn-purple').html('CASE #' + response.result.case_id ).val(response.result.case_id);
                     thisElement.closest('li').find('.btn-case').removeClass('btn-danger btn-case').addClass('btn-purple btn-resolve').html('<i class="icon-check"></i><span>RESOLVE</span>');
-                    thisElement.parent().toggle('slow');
+                    thisElement.parent().parent().toggle('slow');
                 }
                 else{
                     var errorMessages = "<ul class='error-list'>";

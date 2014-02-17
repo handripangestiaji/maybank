@@ -105,7 +105,7 @@ class mycase extends CI_Controller{
             $facebook_id=$channel_loaded[0]->social_id;
             //print_r($facebook_id);
             if($type=='facebook'){
-                echo json_encode($this->facebook_model->RetriveCommentPostFb(array('b.from'=>$post_id)));
+                echo json_encode($this->facebook_model->RetriveCommentPostFb(array('b.from'=>$post_id),array()));
             }else{
                  echo json_encode($this->facebook_model->RetrievePmDetailFB(array("c.facebook_id <>"=>$user)));
            }

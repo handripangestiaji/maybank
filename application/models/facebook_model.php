@@ -480,7 +480,7 @@ class facebook_model extends CI_Model
         //print_r($result);
         //echo "</pre>";
         foreach($result as $row){
-            $row->reply_post = $this->RetriveCommentPostFb(array('a.post_id'=>$row->social_stream_post_id));
+            $row->reply_post = $this->RetriveCommentPostFb(array('a.post_id'=>$row->social_stream_post_id),array());
     	    $comment_list = array();
     	    foreach($row->reply_post as $comment){
                 $comment_list[] = $comment->id;

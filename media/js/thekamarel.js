@@ -815,9 +815,9 @@ $(function(){
                                 me.removeAttr("disabled").html("SHORTEN");
                                 tweetsText = me.closest('form').find(".replaycontent");
                                 shortcode= me.closest('.link_url').find(".short_code");
-                                tweetsText.val(tweetsText.val() + " http://maybank.co/" + response.shortcode);
+                                tweetsText.val(tweetsText.val() + " http://maybk.co/" + response.shortcode);
                                 shortcode.val(response.shortcode);
-                                me.closest('reply-shorturl-show-content').val(" http://maybank.co/" + response.shortcode);
+                                me.closest('reply-shorturl-show-content').val(" http://maybk.co/" + response.shortcode);
                                // alert("http://maybank.co/" + response.shortcode)
                            },
                            failed : function(response){

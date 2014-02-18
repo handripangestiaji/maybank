@@ -103,6 +103,7 @@ $(function(){
         $(modalID + " .related-conversation-body").remove();
         var textToAppend = "" ;
         var author_id = $(modalID).closest('.sender_id');
+        var post_type;
         
         $(this).LoadContentAsync({
             url : BASEURL + "case/mycase/FacebookRelatedConversation/" + facebook_id + "/"+type,
@@ -116,7 +117,13 @@ $(function(){
                 $(modalID + " .loader-image").hide();
                 if(response.length>=1){
                     for(i = 0; i<response.length;i++){
-                        var myDate = new Date(response[i].created_at + " UTC");                        
+                        var myDate = new Date(response[i].created_at + " UTC");
+                        if(response[i].type=="facebook_comment"){
+                            post_type="Wall Post";
+                        }else{
+                            post_type="Private Messages";
+                        }   
+                                             
                         $(modalID + ' form').append(
                              '<div class="related-conversation-body">' + 
                             '<span class="related-conversation-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>' + 
@@ -124,7 +131,7 @@ $(function(){
                                 '<input type="checkbox" class="related-conversation-check" value="' + response[i].post_id + '">' + 
                                 '<span class="author">' +  response[i].name + '</span>' + 
                                 '<i class="icon-circle"></i>' + 
-                                '<span>posted a <span class="cyanText">Wall post</span></span>' + 
+                                '<span>posted a <span class="cyanText">'+ post_type +'</span></span>' + 
                                 '<i class="icon-circle"></i>' + 
                                 '<span class="UTCTimestamp">' + myDate.toString() + '</span>' + 
                                 '<i class="icon-play-circle moreOptions pull-right"></i>' +
@@ -170,6 +177,11 @@ $(function(){
                     $(modalId).append("<h2>No related conversation found.</h2>");
                 for(i = 0; i<response.length;i++){
                       var myDate = new Date(response[i].created_at + " UTC");
+                       if(response[i].type=="facebook_comment"){
+                            post_type="Wall Post";
+                        }else{
+                            post_type="Private Messages";
+                        }  
                     $(modalID + ' form').append(
                          '<div class="related-conversation-body">' + 
                         '<span class="related-conversation-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>' + 
@@ -177,7 +189,7 @@ $(function(){
                             '<input type="checkbox" class="related-conversation-check" value="' + response[i].post_id + '">' + 
                             '<span class="author">' +  response[i].name + '</span>' + 
                             '<i class="icon-circle"></i>' + 
-                            '<span>posted a <span class="cyanText">Wall post</span></span>' +
+                            '<span>posted a <span class="cyanText">'+post_type+'</span></span>' +
                             '<i class="icon-circle"></i>' + 
                             '<span class="UTCTimestamp">' + myDate.toString() + '</span>' + 
                             '<i class="icon-play-circle moreOptions pull-right"></i>' +

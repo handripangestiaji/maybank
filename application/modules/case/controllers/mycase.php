@@ -83,8 +83,10 @@ class mycase extends CI_Controller{
         $this->load->model('facebook_model');
         $post_id=$this->input->get('post_id');
         $channel_id=$this->input->get('channel_id');
-        $author_id=$this->input->get('author_id');
+       
         $this->load->model('account_model');
+        $this->load->model('facebook_model');
+        
         
         if($channel_id){
             $filter['channel_id'] = $channel_id;
@@ -105,9 +107,21 @@ class mycase extends CI_Controller{
             $facebook_id=$channel_loaded[0]->social_id;
             //print_r($facebook_id);
             if($type=='facebook'){
-                echo json_encode($this->facebook_model->RetriveCommentPostFb(array('b.from'=>$post_id),array()));
+                    $author_id=$this->facebook_model->RetrieveFeedFB(array('b.post_id'=>$post_id),1);
+                    //print_r($author_id);
+                    if(isset($author_id[0]->facebook_id)){
+                        $filter="a.post_id=$post_id and b.from <> $facebook_id";
+                        echo json_encode($this->facebook_model->FbRelatedConversation($filter,$author_id[0]->facebook_id));
+    //                  echo json_encode($this->facebook_model->RetriveCommentPostFb(array('a.post_id'=>$post_id,'b.from <>'=>$facebook_id),array()));
+                    }
             }else{
-                 echo json_encode($this->facebook_model->RetrievePmDetailFB(array("c.facebook_id <>"=>$user)));
+                    $author_id=$this->facebook_model->RetrievePmFB(array('b.conversation_id'=>$post_id),1);
+                    $filter="b.from = ".$author_id[0]->sender;
+                    if(!isset($author_id[0]->facebook_id)){
+                        $author_id[0]->facebook_id=0;
+                        }
+                    echo json_encode($this->facebook_model->FbRelatedConversation($filter,$author_id[0]->sender));
+
            }
        }  
     }

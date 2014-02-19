@@ -128,7 +128,7 @@ $(function(){
                              '<div class="related-conversation-body">' + 
                             '<span class="related-conversation-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>' + 
                             '<p class="headLine">' + 
-                                '<input type="checkbox" class="related-conversation-check" value="' + response[i].post_id + '">' + 
+                                '<input type="checkbox" class="related-conversation-check" value="' + response[i].comment_post_id + '">' + 
                                 '<span class="author">' +  response[i].name + '</span>' + 
                                 '<i class="icon-circle"></i>' + 
                                 '<span>posted a <span class="cyanText">'+ post_type +'</span></span>' + 
@@ -161,7 +161,7 @@ $(function(){
        // console.log(author_id);
         var type = $(modalID + " input[name=type]").val();
         $(modalID + " .loader-image").show();
-        $(modalID + " .related-conversation-body").remove();
+        //$(modalID + " .related-conversation-body").remove();
         var textToAppend = "" ;
         
         $(this).LoadContentAsync({
@@ -186,7 +186,7 @@ $(function(){
                          '<div class="related-conversation-body">' + 
                         '<span class="related-conversation-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>' + 
                         '<p class="headLine">' + 
-                            '<input type="checkbox" class="related-conversation-check" value="' + response[i].post_id + '">' + 
+                            '<input type="checkbox" class="related-conversation-check" value="' + response[i].comment_post_id + '">' + 
                             '<span class="author">' +  response[i].name + '</span>' + 
                             '<i class="icon-circle"></i>' + 
                             '<span>posted a <span class="cyanText">'+post_type+'</span></span>' +
@@ -202,6 +202,50 @@ $(function(){
                    
                 }
                 
+            }
+        });
+    });
+    
+    $(this).on('click', '.indicator .case_related', function(e){
+        
+        var modalID = $(this).attr("href");
+        var case_id=$(this).val();
+        $(modalID + " .loader-image").show();
+        $(modalID + " .related-conversation-body").remove();
+        var textToAppend = "" ;
+
+        $(this).LoadContentAsync({
+            url : BASEURL + "case/mycase/GetCaseRelatedConversationItems/",
+            urlParameter : {
+                post_id : case_id,
+                channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),                
+            },
+            callback : function(response){
+                
+              //  alert(modalID );
+                console.log(response);
+                $(modalID + " .loader-image").hide();
+                if(response[0].case.length == 0)
+                    $(modalId).append("<h2>No related conversation found.</h2>");
+                for(i = 0; i<response[0].case.length; i++){
+                   // var myDate = new Date(response[i].created_at + " UTC");
+                    $(modalID + ' form').append(
+                         '<div class="related-conversation-body">' + 
+                        '<span class="related-conversation-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>' + 
+                        '<p class="headLine">' +
+                            '<span class="author">' +  response[0].case[i].name + '</span>' + 
+                            '<i class="icon-circle"></i>' + 
+                            '<span>posted a <span class="cyanText"></span></span>' +
+                            '<i class="icon-circle"></i>' + 
+                            '<span class="UTCTimestamp">' +response[0].case[i].created_at + '</span>' + 
+                            '<i class="icon-play-circle moreOptions pull-right"></i>' +
+                        '</p>' + 
+                        '<div>' +
+                            '<p>' + response[0].case[i].comment_content + '</p>' +
+                            '<!--p><button class="btn btn-primary btn-mini btn-reply" style="margin-left: 5px;">Reply</button></p-->' +
+                        '</div></div>'
+                    );                   
+                }
             }
         });
     });

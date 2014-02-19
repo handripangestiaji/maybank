@@ -82,14 +82,21 @@ if($fb_feed[$i]->post_content != '<br />'):
           $case->setTimezone($timezone);
             
         if($isMyCase[count($isMyCase)-1]->assign_to==$this->session->userdata('user_id') or ($isMyCase[count($isMyCase)-1]->solved_by)){ ?>
-            <button type="button" class="btn <?php echo $fb_feed[$i]->case_id != null ? "btn-purple btn-mini" : "btn-inverse btn-mini" ?>"><?php echo $fb_feed[$i]->case_id != null ? 'CASE #'.$fb_feed[$i]->case_id.' Assign to You ' : 'CASE #'.$isMyCase[count($isMyCase)-1]->case_id.' | '.'RESOLVE BY:'.$isMyCase[count($isMyCase)-1]->resolve_by.' | '.$case->format('j-M-Y h:i A')?></button>
-        <?php }else{ ?>
+            <button  href="#caseItem-<?php echo isset($isMyCase[count($isMyCase)-1]->case_id) ? $isMyCase[count($isMyCase)-1]->case_id : "" ?>" data-toggle="modal" type="button" value="<?php echo $isMyCase[count($isMyCase)-1]->case_id?>" class="btn <?php echo $fb_feed[$i]->case_id != null ? "btn-purple btn-mini case_related ".$fb_feed[$i]->social_stream_type : "btn-inverse btn-mini" ?>"><?php echo $fb_feed[$i]->case_id != null ? 'CASE #'.$fb_feed[$i]->case_id.' Assign to You ' : 'CASE #'.$isMyCase[count($isMyCase)-1]->case_id.' | '.'RESOLVE BY:'.$isMyCase[count($isMyCase)-1]->resolve_by.' | '.$case->format('j-M-Y h:i A')?></button><?php
+        
+            $assignCase=$this->case_model->CaseRelatedConversationItems(array('case_id'=>$isMyCase[count($isMyCase)-1]->case_id));
+           // print_r($assignCase);
+            $data['isMyCase'] = $assignCase;
+            $data['assign_case_type']='facebook';
+            $this->load->view('dashboard/case_item', $data);
+         }else{ ?>
             <button type="button" class="btn <?php echo $fb_feed[$i]->case_id != null ? "btn-purple btn-mini" : "btn-inverse btn-mini" ?>">
                 <?php echo $fb_feed[$i]->case_id != null ? 'CASE #'.$fb_feed[$i]->case_id.' Assign to: '.$isMyCase[count($isMyCase)-1]->full_name : 'REPLIED'?>
             </button>  
-    <?php    }
+        <?php }
     }
-    
+        ?>
+        <?php
        // print_r($fb_feed[$i]->reply_post[0]);
         if(isset($fb_feed[$i]->reply_post[0])){
          if(isset($fb_feed[$i]->is_my_reply[0])){?>
@@ -232,7 +239,7 @@ if($fb_feed[$i]->post_content != '<br />'):
         <div href='#modal-action-log-<?php echo $fb_feed[$i]->post_stream_id ?>' data-toggle='modal' class="containerHeadline specialToggleTable">
             <i class="icon-table"></i><h2>Action Log</h2>
         </div>
-        <!-- ==================== END OF CONDENSED TABLE HEADLINE ==================== -->
+       <!-- ==================== END OF CONDENSED TABLE HEADLINE ==================== -->
 
         <!-- ==================== CONDENSED TABLE FLOATING BOX ==================== -->
         

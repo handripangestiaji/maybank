@@ -194,6 +194,23 @@ class case_model extends CI_Model{
         return $this->db->get()->result();
     }
     
+    function CaseRelatedConversationItems($filter){
+        $this->load->model('facebook_model');
+        $this->db->select('*');
+        $this->db->from("case_related_conversation");	
+        if(count($filter) > 0){
+            $this->db->where($filter);
+        }
+        $this->db->order_by('id','desc');
+        $this->db->limit('1');
+    	$result= $this->db->get()->result();
+        
+        foreach($result as $row){
+            $row->case = $this->facebook_model->RetriveCommentPostFb(array('a.post_id'=>$row->social_stream_id),array());
+        }
+        return $result;
+    }
+
     
     function ResolveCase($case_id, $solved_by){
         $this->db->where('case_id', $case_id);

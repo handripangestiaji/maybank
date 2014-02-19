@@ -110,9 +110,8 @@ class mycase extends CI_Controller{
                     $author_id=$this->facebook_model->RetrieveFeedFB(array('b.post_id'=>$post_id),1);
                     //print_r($author_id);
                     if(isset($author_id[0]->facebook_id)){
-                        $filter="a.post_id=$post_id and b.from <> $facebook_id";
+                        $filter="b.from =".$author_id[0]->facebook_id;
                         echo json_encode($this->facebook_model->FbRelatedConversation($filter,$author_id[0]->facebook_id));
-    //                  echo json_encode($this->facebook_model->RetriveCommentPostFb(array('a.post_id'=>$post_id,'b.from <>'=>$facebook_id),array()));
                     }
             }else{
                     $author_id=$this->facebook_model->RetrievePmFB(array('b.conversation_id'=>$post_id),1);
@@ -144,6 +143,10 @@ class mycase extends CI_Controller{
                     )
                 );
         }
+    }
+    function GetCaseRelatedConversationItems(){
+        $case_id=$this->input->get('post_id');
+        echo json_encode($this->case_model->CaseRelatedConversationItems(array('case_id'=>$case_id)));
     }
     
     

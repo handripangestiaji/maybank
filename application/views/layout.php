@@ -132,5 +132,6 @@
         <script src="<?php echo base_url('media/js/thekamarel.js')?>"></script>                            <!-- main project js file -->
 	
 	<script src="<?php echo base_url('media/js/kamarelimprove.js')?>"></script>                            <!-- main project js file -->
+	<script src="<?php echo base_url('media/js/date.format.js')?>"></script>     
     </body>
 </html>

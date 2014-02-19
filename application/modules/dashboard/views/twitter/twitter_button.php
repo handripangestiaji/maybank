@@ -10,9 +10,19 @@
         "retweet" => isset($post->retweeted) ? ($post->retweeted == 1 ? '<button type="button" class="retweet unretweet btn btn-inverse" value="'.$post->social_stream_post_id.'"><i class="icon-retweet"><span></span></i></button> ' :
                     '<button type="button" class="retweet btn btn-primary" value="'.$post->social_stream_post_id.'"><i class="icon-retweet"><span></span></i></button> ') : '',
         "direct_message" => '<button class="btn btn-dm btn-primary" data-toggle="modal"><i class="icon-envelope"></i></button> ',
-        "case" => !$post->case_id ? (IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Assign_Case') ? '<button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> <span>CASE</span></button> ' : '') :
-                (IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Resolve_Case') ? '<button type="button" class="btn btn-purple btn-resolve" name="action" value="'.$post->case_id.'"><i class="icon-check"></i> <span>RESOLVE</span></button>' : '' )
     );
+    
+    if(!$post->case_id){
+        $buttonItems['case'] = (IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Assign_Case') ? '<button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> <span>CASE</span></button> ' : '');
+    }
+    else{
+        if($post->case[0]->status == 'pending'){
+            $buttonItems['case'] = (IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Resolve_Case') ? '<button type="button" class="btn btn-purple btn-resolve" name="action" value="'.$post->case_id.'"><i class="icon-check"></i> <span>RESOLVE</span></button>' : '' );
+        }
+        else{
+            $buttonItems['case'] = (IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Assign_Case') ? '<button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> <span>ReAssign</span></button> ' : '');
+        }
+    }
     
     if($come_from != 'direct_messages'){
         $buttonItems['follow'] = $post->social_id != $post->twitter_user_id ?

@@ -1,0 +1,1 @@
+INSERT INTO `maybank`.`application_role` (`app_role_id`, `role_friendly_name`, `role_name`, `role_group`, `created_at`, `active`, `parent_id`) VALUES (NULL, 'Social Stream_Notification', 'Notification', 'Social Stream', '2014-02-20', '1', '1');

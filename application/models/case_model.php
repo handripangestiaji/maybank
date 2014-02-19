@@ -25,6 +25,10 @@ class case_model extends CI_Model{
             $eachrow->content_products_id = $this->ReadAllProducts(
                 array("id" => $eachrow->content_products_id)  
             );
+            if($eachrow->solved_by)
+                $eachrow->solved_by = $this->ReadAllUser(
+                    array('user_id' => $eachrow->solved_by)  
+                );
         }
         
         return $result;

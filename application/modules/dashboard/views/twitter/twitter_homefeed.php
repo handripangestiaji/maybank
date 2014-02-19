@@ -50,8 +50,14 @@ for($i=0;$i<count($homefeed);$i++){
     </p>
     <p>
     <?php if($homefeed[$i]->case_id):?>
-        <button type="button" class="btn btn-purple btn-mini" value="<?php echo $homefeed[$i]->case_id?>">CASE ID #<?php echo $homefeed[$i]->case_id.' Assign to '.$homefeed[$i]->case[0]->assign_to->username?></button>
-        
+        <button type="button" class="btn <?=$homefeed[$i]->case[0]->status == "pending" ? "btn-purple" : "btn-inverse"?> btn-mini" value="<?php echo $homefeed[$i]->case_id?>">CASE ID #<?php echo $homefeed[$i]->case_id?>
+            <?php
+            if($homefeed[$i]->case[0]->status == "pending")
+                echo isset($homefeed[$i]->case[0]->assign_to->full_name) ? ' Assign to '.$homefeed[$i]->case[0]->assign_to->full_name : '';
+            else
+                echo isset($homefeed[$i]->case[0]->solved_by->full_name) ? ' Solved By '.$homefeed[$i]->case[0]->solved_by->full_name : '';
+            ?>
+        </button>
         
     <?php endif?>
     <?php if(count($homefeed[$i]->reply_post) > 0):?>

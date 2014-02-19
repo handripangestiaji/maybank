@@ -133,6 +133,11 @@ class mycase extends CI_Controller{
         }  
     }
     
+    function GetCaseRelatedConversationItems(){
+        $case_id=$this->input->get('post_id');
+        echo json_encode($this->case_model->CaseRelatedConversationItems(array('case_id'=>$case_id)));
+    }
+    
     function ResolveCase(){
         if($this->input->is_ajax_request()){
             $solved_case = $this->case_model->ResolveCase($this->input->post('case_id'), $this->session->userdata('user_id'));

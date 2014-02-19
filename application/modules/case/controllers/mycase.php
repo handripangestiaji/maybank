@@ -115,10 +115,21 @@ class mycase extends CI_Controller{
             $facebook_id=$channel_loaded[0]->social_id;
             //print_r($facebook_id);
             if($type=='facebook'){
-                echo json_encode($this->facebook_model->RetriveCommentPostFb(array('b.from'=>$post_id),array()));
+                    $author_id=$this->facebook_model->RetrieveFeedFB(array('b.post_id'=>$post_id),1);
+                    //print_r($author_id);
+                    if(isset($author_id[0]->facebook_id)){
+                        $filter="b.from =".$author_id[0]->facebook_id;
+                        echo json_encode($this->facebook_model->FbRelatedConversation($filter,$author_id[0]->facebook_id));
+                    }
             }else{
-                 echo json_encode($this->facebook_model->RetrievePmDetailFB(array("c.facebook_id <>"=>$user)));
-            }
+                    $author_id=$this->facebook_model->RetrievePmFB(array('b.conversation_id'=>$post_id),1);
+                    $filter="b.from = ".$author_id[0]->sender;
+                    if(!isset($author_id[0]->facebook_id)){
+                        $author_id[0]->facebook_id=0;
+                        }
+                    echo json_encode($this->facebook_model->FbRelatedConversation($filter,$author_id[0]->sender));
+
+           }
         }  
     }
     

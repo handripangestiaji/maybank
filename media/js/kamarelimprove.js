@@ -66,27 +66,31 @@ $(function(){
             callback : function(response){
                 //console.log(response);
                 $(modalID + " .loader-image").hide();
-                
-                
+                var post_stream_id = [];
+                console.log(response);
                 if(response.length == 0)
                     $(modalId).append("<h2>No related conversation found.</h2>");
-                for(i = 0; i<response.length;i++){
-                    var myDate = new Date(response[i].social_stream_created_at + " UTC");
-                    $(modalID + ' form').append(
-                        '<div class="related-conversation-body">' + 
-                        '<div><span class="related-conversation-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>' + 
-                        '<p class="headLine">' + 
-                            '<input type="checkbox" class="related-conversation-check" value="' + response[i].post_id + '">' + 
-                            '<span class="author">' +  response[i].name + '(@' + response[i].screen_name + ')</span>' + 
-                            '<i class="icon-circle"></i>' + 
-                            '<span class="UTCTimestamp">' + myDate.toString() + '</span>' + 
-                            '<i class="icon-play-circle moreOptions pull-right"></i>' +
-                        '</p></div>' + 
-                        '<div>' +
-                            '<p>' + response[i].text + '</p>' +
-                        '</div></div>'
-                    );
-                }
+                else
+                    for(i = 0; i<response.length;i++){
+                        var myDate = new Date(response[i].social_stream_created_at + " UTC");
+                        $(modalID + ' form').append(
+                            '<div class="related-conversation-body">' + 
+                            '<div><span class="related-conversation-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>' + 
+                            '<p class="headLine">' + 
+                                '<input type="checkbox" class="related-conversation-check" value="' + response[i].post_id + '">' + 
+                                '<span class="author">' +  response[i].name + '(@' + response[i].screen_name + ')</span>' + 
+                                '<i class="icon-circle"></i>' + 
+                                '<span class="UTCTimestamp">' + dateFormat(myDate, "mmmm dS, yyyy h:MM:ss TT") + '</span>' + 
+                                '<i class="icon-play-circle moreOptions pull-right"></i>' +
+                            '</p></div>' + 
+                            '<div>' +
+                                '<p>' + response[i].text + '</p>' +
+                            '</div></div>'
+                        );
+                        
+                    
+                    }
+                    
                 
             }
         });
@@ -404,4 +408,12 @@ $(function(){
 });
 
 
-    
+function contains(a, obj) {
+    var i = a.length;
+    while (i--) {
+       if (a[i] === obj) {
+           return true;
+       }
+    }
+    return false;
+}

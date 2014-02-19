@@ -74,8 +74,18 @@ class mycase extends CI_Controller{
         $filter["b.twitter_user_id"] = $twitter_user_id;
         //$filter["b.type"] = $type;
         $filter["a.post_id !="] = $this->input->get('post_id');
-        
-        echo json_encode($this->twitter_model->ReadTwitterData($filter, 10));
+        $result = $this->twitter_model->ReadTwitterData($filter, 10);
+        $post_stream_id = array();
+        for($i = 0 ; $i< count($result) ; $i++){
+            if(!in_array($result[$i]->post_stream_id, $post_stream_id)){
+                $post_stream_id[] = $result[$i]->post_stream_id;    
+            }
+            else{
+                unset($result[$i]);
+            }
+            
+        }
+        echo json_encode(array_values($result));
     }
     
     
@@ -98,9 +108,9 @@ class mycase extends CI_Controller{
     			'message' => "Invalid Channel Id"
     		    )
     		);
-		  return;
+		return;
 	    }
-	    else{
+	else{
 	       
             $facebook_id=$channel_loaded[0]->social_id;
             //print_r($facebook_id);
@@ -108,8 +118,8 @@ class mycase extends CI_Controller{
                 echo json_encode($this->facebook_model->RetriveCommentPostFb(array('b.from'=>$post_id),array()));
             }else{
                  echo json_encode($this->facebook_model->RetrievePmDetailFB(array("c.facebook_id <>"=>$user)));
-           }
-       }  
+            }
+        }  
     }
     
     function ResolveCase(){

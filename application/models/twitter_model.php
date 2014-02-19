@@ -286,7 +286,7 @@ class twitter_model extends CI_Model
         $filter['b.type'] = 'inbox';
          $this->db->select("f.social_id, a.post_id as social_stream_post_id, a.channel_id, a.is_read, a.post_stream_id, a.retrieved_at, a.created_at as social_stream_created_at, b.text as dm_text, b.*,c.*, d.*, e.*, a.type as social_stream_type");
          $this->db->from("social_stream a inner join twitter_direct_messages b on a.post_id = b.post_id
-            LEFT OUTER JOIN twitter_user_engaged c ON c.twitter_user_id=b.sender left join `case` d on d.post_id = a.post_id and d.status='pending'
+            LEFT OUTER JOIN twitter_user_engaged c ON c.twitter_user_id=b.sender left join `case` d on d.post_id = a.post_id 
             LEFT JOIN twitter_reply e on a.post_id = e.reply_to_post_id  inner join channel f on f.channel_id = a.channel_id
             "); 
          if(count($filter) > 0)
@@ -301,6 +301,7 @@ class twitter_model extends CI_Model
         for($i=0;$i<count($result);$i++){
             $result[$i]->sender = $this->ReadTwitterUserFromDb($result[$i]->sender);
             $result[$i]->channel_action = $this->GetChannelAction(array('a.post_id'=>$result[$i]->social_stream_post_id));
+            $result[$i]->case = $this->case_model->LoadCase(array('a.post_id'=>$result[$i]->social_stream_post_id));
         }
         return $result;
     }
@@ -319,7 +320,7 @@ class twitter_model extends CI_Model
         $this->db->from("social_stream a INNER JOIN social_stream_twitter b ON a.post_id = b.post_id 
                         INNER JOIN twitter_user_engaged c ON
                         c.twitter_user_id = b.twitter_user_id LEFT JOIN
-                         `case` d on d.post_id = a.post_id and d.status='pending' INNER JOIN channel e on e.channel_id = a.channel_id");
+                         `case` d on d.post_id = a.post_id  INNER JOIN channel e on e.channel_id = a.channel_id");
         if(count($filter) > 0)
 	    $this->db->where($filter);
             

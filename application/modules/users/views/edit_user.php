@@ -47,7 +47,7 @@
             <span style='color:red;'><?php echo form_error('email'); ?></span></td></td>
             <input name='email1' type="hidden" value="<?php echo $row->email;?>" />
         </tr>
-        
+        <?php if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User SuperUser')):?>
         <tr>
             <td>Role</td>
             <td>
@@ -69,7 +69,7 @@
                 </select>
             </td>
         </tr>
-        
+        <?php endif;?>
         <tr>
             <td>Group</td>
             <td>

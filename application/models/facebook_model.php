@@ -476,9 +476,7 @@ class facebook_model extends CI_Model
             $this->db->where($filter);
         }
         $result = $this->db->get()->result();
-        //echo "<pre>";
-        //print_r($result);
-        //echo "</pre>";
+
         foreach($result as $row){
             $row->reply_post = $this->RetriveCommentPostFb(array('a.post_id'=>$row->social_stream_post_id),array());
     	    $comment_list = array();

@@ -117,7 +117,7 @@ $(function(){
                 //author_id:author_id
             },
             callback : function(response){
-                //console.log(response);
+//                console.log(response.length);
                 $(modalID + " .loader-image").hide();
                 if(response.length>=1){
                     for(i = 0; i<response.length;i++){
@@ -226,26 +226,26 @@ $(function(){
             },
             callback : function(response){
                 
-              //  alert(modalID );
+                //alert(response.length);
                 console.log(response);
                 $(modalID + " .loader-image").hide();
-                if(response[0].case.length == 0)
+                if(response.length == 0)
                     $(modalId).append("<h2>No related conversation found.</h2>");
-                for(i = 0; i<response[0].case.length; i++){
+                for(i = 0; i<response.length; i++){
                    // var myDate = new Date(response[i].created_at + " UTC");
                     $(modalID + ' form').append(
                          '<div class="related-conversation-body">' + 
                         '<span class="related-conversation-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>' + 
                         '<p class="headLine">' +
-                            '<span class="author">' +  response[0].case[i].name + '</span>' + 
+                            '<span class="author">' +  response[i].name + '</span>' + 
                             '<i class="icon-circle"></i>' + 
                             '<span>posted a <span class="cyanText"></span></span>' +
                             '<i class="icon-circle"></i>' + 
-                            '<span class="UTCTimestamp">' +response[0].case[i].created_at + '</span>' + 
+                            '<span class="UTCTimestamp">' +response[i].created_at + '</span>' + 
                             '<i class="icon-play-circle moreOptions pull-right"></i>' +
                         '</p>' + 
                         '<div>' +
-                            '<p>' + response[0].case[i].comment_content + '</p>' +
+                            '<p>' + response[i].comment_content + '</p>' +
                             '<!--p><button class="btn btn-primary btn-mini btn-reply" style="margin-left: 5px;">Reply</button></p-->' +
                         '</div></div>'
                     );                   

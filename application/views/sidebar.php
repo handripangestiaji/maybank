@@ -19,7 +19,7 @@
 <!-- ==================== SIDEBAR TASKS ==================== -->
 <?php
 
-if(IsRoleFriendlyNameExist($this->user_role, "Publisher", "role_group")):?>
+if(IsRoleFriendlyNameExist($this->user_role, "Social Stream_Notification")):?>
 <div id="tasksContent">
     <div class="sidebarDivider"></div>
     <div class="sidebarContent" style="overflow-y: scroll;">

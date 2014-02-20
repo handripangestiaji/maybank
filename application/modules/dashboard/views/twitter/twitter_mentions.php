@@ -128,7 +128,8 @@ for($i=0;$i<count($mentions);$i++){
         <!-- ==================== CONDENSED TABLE FLOATING BOX ==================== -->
         <?php
             $data_loaded['post'] = $mentions[$i];
-            $this->load->view('dashboard/action_taken', $data_loaded);?>
+            $this->load->view('dashboard/action_taken', $data_loaded);
+            ?>
         <!-- ==================== END OF CONDENSED TABLE FLOATING BOX ==================== --> 
     </div>
     <!-- END ENGAGEMENT -->

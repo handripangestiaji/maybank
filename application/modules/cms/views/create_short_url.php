@@ -124,8 +124,8 @@ for($i=0;$i<count($this->user_role);$i++){
                                 <?php foreach($urls as $v): ?>
                                         <tr>
                                                 <td><?php echo $v->campaign_name ?></td>
-                                                <td><?php echo $v->long_url ?></td>
-                                                <td><a href="<?php echo site_url('cms/url/'.$v->short_code) ?>" target="_blank" ><?php echo $v->short_code ?></a></td>
+                                                <td><?php echo '<p>'.$v->description.'</p><p>'.$v->long_url.'</p>' ?></td>
+                                                <td><a href="<?php echo site_url('cms/url/'.$v->short_code) ?>" target="_blank" >http://admin.maybk.co/<?php echo $v->short_code ?></a></td>
                                                 <td><?php echo $v->increment ?></td>
                                                 <td><?php echo date('M d, Y', strtotime($v->created_at)) ?></td>
                                                 <td><?php echo $v->display_name ?></td>

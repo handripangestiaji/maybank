@@ -1120,7 +1120,7 @@ class Media_stream extends CI_Controller {
 				    'long_url' => $this->input->post('url'),
 				    "user_id" => $this->session->userdata('user_id'),
 				    'short_code' => $short_code,
-				    "description" => "quick_reply",
+				    "description" => $this->input->post('description'),
 				    'increment' => 0)));
     }
     

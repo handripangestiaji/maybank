@@ -55,9 +55,9 @@
 	                                <tbody>
 	                                <?php if(isset($v['short_urls'])): ?>
 	                                	<?php foreach($v['short_urls'] as $x): ?>
-	                                		<tr>
-		                                		<td><a href="<?php echo site_url('cms/url/'.$x['short_code'])?>" target="_blank"><?php echo $x['short_code']?></a></td>
-		                                		<td><?php echo $x['long_url']?></td>
+                                                        <tr>
+		                                		<td><a href="<?php echo site_url('cms/url/'.$x['short_code'])?>" target="_blank">http://admin.maybk.co/<?php echo $x['short_code']?></a></td>
+		                                		<td><?php echo '<p>'.$x['description'].'</p><p>'.$x['long_url'].'</p>'?></td>
 		                                		<td><?php echo $x['created_at']?></td>
 		                                		<td><?php echo $x['increment']?></td>
 		                                		<td><?php echo $x['display_name']?></td>

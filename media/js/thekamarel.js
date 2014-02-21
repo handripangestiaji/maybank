@@ -756,40 +756,54 @@ $(function(){
                     });
 
                     $(".compose-insert-link-btn").click(function(){
-                        $.ajax({
-                                url : BASEURL + 'dashboard/media_stream/GenerateShortUrlWithoutCampaign',
-                                type: "POST",
-                                data: {
-                                        url: validateURL($('.compose-insert-link-text').val()) ?
-                                            $('.compose-insert-link-text').val() :
-                                                "http://" + $('.compose-insert-link-text').val(),
-                                        },
-                                success: function(data){
-                                    if(data.shortcode){
-                                        $('.compose-textbox').val($('.compose-textbox').val()+ 'http://maybk.co/' + data.shortcode);  
-                                        ComposeCharCheck();
-                                        $('.compose-insert-link-short-url-hidden').val(data.shortcode);
-                                        $(".compose-insert-link-text").linkpreview({
-                                            previewContainer: "#url-show > .compose-form > div",  //optional
-                                            //previewContainerClass: ".compose-schedule",
-                                            refreshButton: ".compose-insert-link-btn",        //optional
-                                            preProcess: function() {                //optional
-                                                $('#url-show').css({"display": "block"});
-                                                $('#url-show > .compose-form > div').html('Loading...');
+                        $(".compose-insert-link-text").linkpreview({
+                            previewContainer: "#url-show > .compose-form > div",  //optional
+                            //previewContainerClass: ".compose-schedule",
+                            refreshButton: ".compose-insert-link-btn",        //optional
+                            preProcess: function() {                //optional
+                                $('#url-show').css({"display": "block"});
+                                $('#url-show > .compose-form > div').html('Loading...');
+                            },
+                            onSuccess: function(data) { //optional
+                                var dom = document.implementation.createHTMLDocument('');
+                                dom.body.innerHTML = data;
+                                var $dom = $(dom);
+
+                                var url_desc = $dom.find("meta[property='og:description']").attr("content") ||
+                                                $dom.find("meta[name=description]").attr("content") ||
+                                                $dom.find("div .description").text();
+                                
+                                var url_title = $dom.find("meta[property='og:title']").attr("content") ||
+                                                $dom.find("title").text() ||
+                                                $dom.find("meta[name=title]").attr("content");
+                                
+                                $.ajax({
+                                    url : BASEURL + 'dashboard/media_stream/GenerateShortUrlWithoutCampaign',
+                                    type: "POST",
+                                    data: {
+                                            url: validateURL($('.compose-insert-link-text').val()) ?
+                                                $('.compose-insert-link-text').val() :
+                                                    "http://" + $('.compose-insert-link-text').val(),
+                                            description: url_desc,
+                                            title: url_title
                                             },
-                                            onSuccess: function(data) {                  //optional
-                                            },
-                                            onError: function() {                    //optional
-                                            },
-                                            onComplete: function() {                 //optional
-                                            }
-                                       });
+                                    success: function(data){
+                                        if(data.shortcode){
+                                            $('.compose-textbox').val($('.compose-textbox').val()+ 'http://maybk.co/' + data.shortcode);  
+                                            ComposeCharCheck();
+                                            $('.compose-insert-link-short-url-hidden').val(data.shortcode);
+                                        }
+                                        else{
+                                            console.log(data);
+                                        }
                                     }
-                                    else{
-                                        console.log(data);
-                                    }
-                                }
-                            });
+                                });
+                            },
+                            onError: function() {                    //optional
+                            },
+                            onComplete: function() {                 //optional
+                            }
+                       });
                     });
                     
                     $(this).on('click','.reply-insert-link-btn', function(e){
@@ -808,7 +822,8 @@ $(function(){
                            "url" : BASEURL + "dashboard/media_stream/GenerateShortUrlWithoutCampaign",
                            "data" : {
                                 "url" : validateURL(me.siblings(".reply-insert-link-text").val()) ? me.siblings(".reply-insert-link-text").val() :
-                                    "http://" + me.siblings(".reply-insert-link-text").val()
+                                    "http://" + me.siblings(".reply-insert-link-text").val(),
+                                "description" : 'quick_reply'
                            },
                            "type" : "POST",
                            "success" : function (response){

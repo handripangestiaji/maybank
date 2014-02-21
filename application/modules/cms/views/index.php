@@ -1,9 +1,9 @@
 <div class="row-fluid" style="width: 100%; margin: 0px auto;">
     <div class="row-fluid" >
         <div class="pull-left">
-            <input type="text" placeholder="Search" style="width:175px; float: left; margin-left: 2px;">
+            <!--input type="text" placeholder="Search" style="width:175px; float: left; margin-left: 2px;">
             <a href="" style="float: left; height: 14px;">
-                <span class="add-on" style="background-color: black;color: white;margin-left: -1px; display: inline-block; white-space: nowrap; padding: 5px 6px; font-size: 14px;"><i class="icon-search"></i></span></a>
+                <span class="add-on" style="background-color: black;color: white;margin-left: -1px; display: inline-block; white-space: nowrap; padding: 5px 6px; font-size: 14px;"><i class="icon-search"></i></span></a!-->
         </div>
         <div class="pull-right">
             <?php for($i=0;$i<count($this->user_role);$i++){?>

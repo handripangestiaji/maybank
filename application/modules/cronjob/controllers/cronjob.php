@@ -8,9 +8,6 @@ class Cronjob extends CI_Controller {
         $this->load->model('facebook_model');
         $this->load->model('account_model');
         $this->load->model('twitter_model');
-        $this->load->config('mail_config');
-	$config = $this->config->item('mail_provider');
-	$this->load->library('email',$config);
     }
     
     function index(){
@@ -162,12 +159,15 @@ class Cronjob extends CI_Controller {
         $time_yesterday = date('Y-m-d H:i:s',strtotime('-1 day'));
         $where = "time_to_post Between '".$time_yesterday."' AND '".$time_tomorrow."' AND is_posted is NULL";
         $posts = $this->post_model->GetPosts($where);
+                    
         foreach($posts as $post){
+            print_r($post);
             $dtz = new DateTimeZone($post->timezone);
             $local_time = new DateTime('now', $dtz);
             $offset = $dtz->getOffset( $local_time ) / 3600;
             $local_time = date('Y-m-d H:i',strtotime(($offset < 0 ? $offset : "+".$offset).' hour'));
             $post_time = date('Y-m-d H:i',strtotime($post->time_to_post));
+            print_r($local_time.' & '.$post_time);
             if($local_time == $post_time){
                 //handle if facebook
                 if($post->connection_type == 'facebook'){
@@ -185,6 +185,12 @@ class Cronjob extends CI_Controller {
                 
                 //send email
                 if($post->email_me_when_sent == 1){
+                    $this->load->config('mail_config');
+                    $mail_provider = $this->config->item('mail_provider');
+                    $this->load->library('email', $mail_provider);
+                    $mail_from = $this->config->item('mail_from');
+                    $this->email->from($mail_from['name'],$mail_from['address']);
+                
                     $this->email->set_newline("\r\n");
                     $this->email->from('dcms@maybank.com','maybank');
                     $this->email->to($post->email);
@@ -192,6 +198,7 @@ class Cronjob extends CI_Controller {
                     $template = curl_get_file_contents(base_url().'mail_template/PostSent/'.$post->post_to_id);
                     $this->email->message($template);
                     $this->email->send();
+                    echo $this->email->print_debugger();
                 }
             }
         }

@@ -198,6 +198,27 @@ class case_model extends CI_Model{
         return $this->db->get()->result();
     }
     
+    function CaseRelatedConversationItems($filter){
+        $this->load->model('facebook_model');
+        $this->db->select('a.*,b.comment_content,c.name');
+        $this->db->from("case_related_conversation a LEFT OUTER JOIN 
+                         social_stream_fb_comments b ON b.id=a.social_stream_id LEFT OUTER JOIN
+                         `fb_user_engaged` c ON c.facebook_id=b.from");	
+        if(count($filter) > 0){
+            $this->db->where($filter);
+        }
+        $this->db->order_by('id','desc');
+    	$result= $this->db->get()->result();
+        
+        foreach($result as $row){
+            $row->case = $this->facebook_model->RetriveCommentPostFb(array('a.post_id'=>$row->social_stream_id),array());
+        }
+//        echo "<pre>";
+//        print_r($result);
+//        echo "</pre>";
+        return $result;
+    }
+
     
     function ResolveCase($case_id, $solved_by){
         $this->db->where('case_id', $case_id);

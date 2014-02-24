@@ -604,6 +604,35 @@ class facebook_model extends CI_Model
         $requestResult = curl_get_file_contents('https://graph.facebook.com/32423425 453423/likes');
         $result  = json_decode($requestResult);
     }
+    
+    public function FbRelatedConversation($filter,$sender){
+
+        $sql="(SELECT `a`.`post_id`, `a`.`post_content`,`b`.`comment_stream_id`, 
+                        	`b`.`from`,`c`.`name`,`b`.`comment_content`, 
+                        	`b`.`created_at`,`b`.`user_likes`,`d`.`post_stream_id`, 
+                        	`e`.`post_id` AS comment_post_id,e.channel_id,e.type
+                        FROM (`social_stream_fb_post` a INNER JOIN
+                         social_stream_fb_comments b ON b.post_id=a.post_id INNER JOIN
+                         fb_user_engaged c ON c.facebook_id=b.from INNER JOIN social_stream d ON d.post_id = b.id LEFT OUTER JOIN
+                         social_stream e ON e.post_stream_id=b.comment_stream_id)
+                        WHERE ".$filter."
+                        ORDER BY `a`.`post_id` DESC
+                        LIMIT 20)
+                        UNION
+                        (SELECT	a.conversation_id AS post_id, a.snippet AS post_content, b.detail_id_from_facebook,
+                        	b.sender, `c`.`name`, b.messages AS comment_post_content,
+                        	`b`.`created_at` AS post_date, NULL AS user_likes,`d`.`post_stream_id`,
+                        	`b`.`detail_id` AS comment_post_id, d.channel_id, d.type
+                        FROM (`social_stream_facebook_conversation` a LEFT OUTER JOIN 
+                         social_stream_facebook_conversation_detail b ON b.conversation_id = a.conversation_id LEFT OUTER JOIN
+                         fb_user_engaged c ON c.facebook_id=b.sender INNER JOIN 
+                         social_stream d ON d.post_id=b.conversation_id LEFT OUTER JOIN
+                         `case` e ON e.post_id=d.post_id AND e.status='pending')
+                        WHERE `detail_id_from_facebook` NOT LIKE '%_0' AND b.sender = ".$sender."
+                        ORDER BY `a`.`updated_time` DESC, `b`.`created_at` DESC, `d`.`replied_count` DESC) ";
+        $query = $this->db->query($sql);      
+        return $query->result();
+    }
 
     public function ReadUnread($post_id, $new_val = null){
 	if($new_val == null || $new_val == 0){

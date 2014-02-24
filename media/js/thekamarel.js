@@ -589,6 +589,8 @@ $(function(){
                                 $(this).closest('h4').siblings('.reply-field').hide();
                                 $(this).closest('h4').siblings('.dm-field').hide();
                                 $(this).closest('h4').siblings('.case-field').show();
+                                $(this).closest('h4').siblings('.case-field').find("input[name=type]").val($(this).val());
+                                
                             }
                         );
                         

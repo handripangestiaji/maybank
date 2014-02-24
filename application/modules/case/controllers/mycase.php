@@ -36,6 +36,7 @@ class mycase extends CI_Controller{
             
         $is_valid = CheckValidation($validation, $this->validation);
         if($is_valid === true){
+            
             $case = array(
                 "content_products_id" => $this->input->post('product_type'),
                 "created_by" => $user_id,
@@ -48,12 +49,15 @@ class mycase extends CI_Controller{
                 "post_id" => $this->input->post('post_id'),
                 "created_at" => date("Y-m-d H:i:s")
             );
-            
+            $old_case = $this->case_model->LoadCase(array('a.post_id' => $this->input->post('post_id')));
+            if(count($old_case) > 0)
+                $solved_case = $this->case_model->ResolveCase($old_case[0]->case_id, $this->session->userdata('user_id'), false);
             $case['case_id'] = $this->case_model->CreateCase($case, $this->session->userdata('user_id'));
             echo json_encode(array(
                         "success" => true,
                         "message" => "Assigning case successfully done.",
-                        "result" => $case
+                        "result" => $case,
+                        "old_case" => $solved_case
                     )
                 );
         }
@@ -115,11 +119,27 @@ class mycase extends CI_Controller{
             $facebook_id=$channel_loaded[0]->social_id;
             //print_r($facebook_id);
             if($type=='facebook'){
-                echo json_encode($this->facebook_model->RetriveCommentPostFb(array('b.from'=>$post_id),array()));
+                    $author_id=$this->facebook_model->RetrieveFeedFB(array('b.post_id'=>$post_id),1);
+                    //print_r($author_id);
+                    if(isset($author_id[0]->facebook_id)){
+                        $filter="b.from =".$author_id[0]->facebook_id;
+                        echo json_encode($this->facebook_model->FbRelatedConversation($filter,$author_id[0]->facebook_id));
+                    }
             }else{
-                 echo json_encode($this->facebook_model->RetrievePmDetailFB(array("c.facebook_id <>"=>$user)));
-            }
+                    $author_id=$this->facebook_model->RetrievePmFB(array('b.conversation_id'=>$post_id),1);
+                    $filter="b.from = ".$author_id[0]->sender;
+                    if(!isset($author_id[0]->facebook_id)){
+                        $author_id[0]->facebook_id=0;
+                        }
+                    echo json_encode($this->facebook_model->FbRelatedConversation($filter,$author_id[0]->sender));
+
+           }
         }  
+    }
+    
+    function GetCaseRelatedConversationItems(){
+        $case_id=$this->input->get('post_id');
+        echo json_encode($this->case_model->CaseRelatedConversationItems(array('case_id'=>$case_id)));
     }
     
     function ResolveCase(){

@@ -17,10 +17,10 @@
     }
     else{
         if($post->case[0]->status == 'pending'){
-            $buttonItems['case'] = (IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Resolve_Case') ? '<button type="button" class="btn btn-purple btn-resolve" name="action" value="'.$post->case_id.'"><i class="icon-check"></i> <span>RESOLVE</span></button>' : '' );
+            $buttonItems['case'] = (IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Resolve_Case') ? '<button type="button" class="btn btn-purple btn-resolve" name="action" value="'.$post->case_id.'"><i class="icon-check"></i> <span>RESOLVE</span></button><button type="button" class="btn btn-danger btn-case" name="action" value="reassign"><i class="icon-plus"></i> <span>ReAssign</span></button>' : '' );
         }
         else{
-            $buttonItems['case'] = (IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Assign_Case') ? '<button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> <span>ReAssign</span></button> ' : '');
+            $buttonItems['case'] = (IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Assign_Case') ? '<button type="button" class="btn btn-danger btn-case" name="action" value="new_case"><i class="icon-plus"></i> <span>Case</span></button> ' : '');
         }
     }
     

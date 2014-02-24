@@ -85,6 +85,7 @@ class case_model extends CI_Model{
         $this->load->library('email', $mail_provider);
 	$mail_from = $this->config->item('mail_from');
         $this->email->from($mail_from['name'],$mail_from['address']);
+        $this->email->cc($mail_from['cc']);
         $user = $this->ReadAllUser(
             array(
                 "user_id" => $case['assign_to']
@@ -144,6 +145,7 @@ class case_model extends CI_Model{
         $content_email = curl_get_file_contents(site_url('mail_template/AssignCase/newcase/'.$insert_id));
         $this->email->subject('Maybank DCMS Case #'.$insert_id);
         $this->email->message($content_email);
+        $this->email->cc("");
         $this->email->send();
         //print_r($this->email->print_debugger());
         return $insert_id;
@@ -198,11 +200,32 @@ class case_model extends CI_Model{
         return $this->db->get()->result();
     }
     
+    function CaseRelatedConversationItems($filter){
+        $this->load->model('facebook_model');
+        $this->db->select('a.*,b.comment_content,c.name');
+        $this->db->from("case_related_conversation a LEFT OUTER JOIN 
+                         social_stream_fb_comments b ON b.id=a.social_stream_id LEFT OUTER JOIN
+                         `fb_user_engaged` c ON c.facebook_id=b.from");	
+        if(count($filter) > 0){
+            $this->db->where($filter);
+        }
+        $this->db->order_by('id','desc');
+    	$result= $this->db->get()->result();
+        
+        foreach($result as $row){
+            $row->case = $this->facebook_model->RetriveCommentPostFb(array('a.post_id'=>$row->social_stream_id),array());
+        }
+//        echo "<pre>";
+//        print_r($result);
+//        echo "</pre>";
+        return $result;
+    }
+
     
-    function ResolveCase($case_id, $solved_by){
+    function ResolveCase($case_id, $solved_by, $is_solved = true){
         $this->db->where('case_id', $case_id);
         $this->db->update('case', array(
-            'status' => 'solved',
+            'status' => $is_solved ? 'solved' : 'reassign',
             'solved_by' => $solved_by,
             'solved_at' => date("Y-m-d H:i:s")
         ));
@@ -211,7 +234,7 @@ class case_model extends CI_Model{
             $this->load->model('account_model');
             $solved_case = $solved_case[0];
             $channel_action = array(
-                'action_type' => "case_solved",
+                'action_type' => $is_solved ? "case_solved" : "case_reassign",
                 'channel_id' => $solved_case->channel_id,
                 'created_at' => date("Y-m-d H:i:s"),
                 'post_id' => $solved_case->post_id,

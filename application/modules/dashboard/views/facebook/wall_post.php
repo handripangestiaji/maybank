@@ -82,15 +82,17 @@ if($fb_feed[$i]->post_content != '<br />'):
           $case->setTimezone($timezone);
             
             if($isMyCase[count($isMyCase)-1]->assign_to==$this->session->userdata('user_id') or ($isMyCase[count($isMyCase)-1]->solved_by)){ ?>
-            <button  href="#caseItem-<?php echo isset($isMyCase[count($isMyCase)-1]->case_id) ? $isMyCase[count($isMyCase)-1]->case_id : "" ?>" data-toggle="modal" type="button" value="<?php echo $isMyCase[count($isMyCase)-1]->case_id?>" class="btn <?php echo $fb_feed[$i]->case_id != null ? "btn-purple btn-mini case_related ".$fb_feed[$i]->social_stream_type : "btn-inverse btn-mini" ?>"><?php echo $fb_feed[$i]->case_id != null ? 'CASE #'.$fb_feed[$i]->case_id.' Assign to You ' : 'CASE #'.$isMyCase[count($isMyCase)-1]->case_id.' | '.'RESOLVE BY:'.$isMyCase[count($isMyCase)-1]->resolve_by.' | '.$case->format('j-M-Y h:i A')?></button><?php
-        
+            <button  href="#caseItem-<?php echo isset($isMyCase[count($isMyCase)-1]->case_id) ? $isMyCase[count($isMyCase)-1]->case_id : "" ?>" data-toggle="modal" type="button" value="<?php echo $isMyCase[count($isMyCase)-1]->case_id?>" class="btn <?php echo $fb_feed[$i]->case_id != null ? "btn-purple btn-mini case_related ".$fb_feed[$i]->social_stream_type : "btn-inverse btn-mini" ?>"><?php echo $fb_feed[$i]->case_id != null ? 'Case #'.$fb_feed[$i]->case_id.' Assign to You ' : 'Case #'.$isMyCase[count($isMyCase)-1]->case_id.' | '.'Resolve By:'.$isMyCase[count($isMyCase)-1]->resolve_by.' | '.$case->format('j-M-Y h:i A')?></button><?php
+            
             $assignCase=$this->case_model->CaseRelatedConversationItems(array('case_id'=>$isMyCase[count($isMyCase)-1]->case_id));
             $data['isMyCase'] = $assignCase;
+            $data['caseMsg']=$isMyCase[count($isMyCase)-1];
             $data['assign_case_type']='facebook';
             $this->load->view('dashboard/case_item', $data);
+            
          }else{ ?>
             <button type="button" class="btn <?php echo $fb_feed[$i]->case_id != null ? "btn-purple btn-mini" : "btn-inverse btn-mini" ?>">
-                <?php echo $fb_feed[$i]->case_id != null ? 'CASE #'.$fb_feed[$i]->case_id.' Assign to: '.$isMyCase[count($isMyCase)-1]->full_name : 'REPLIED'?>
+                <?php echo $fb_feed[$i]->case_id != null ? 'Case #'.$fb_feed[$i]->case_id.' Assign to: '.$isMyCase[count($isMyCase)-1]->full_name : 'Replied'?>
             </button>  
         <?php }
     }
@@ -114,7 +116,7 @@ if($fb_feed[$i]->post_content != '<br />'):
         <button type="button" class="btn btn-warning btn-mini no-cursor indicator" >OPEN</button>       
         <?php }    
         if(IsRoleFriendlyNameExist($this->user_role,'Social Stream_Current_Social Functions Like, Retweet')):?>
-        <button class="fblike btn btn-primary btn-mini" style="margin-left: 5px;" value="<?php echo $fb_feed[$i]->post_stream_id;?>"><?php echo $fb_feed[$i]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button> 
+        <button class="fblike btn btn-primary btn-mini" style="margin-left: 5px;" value="<?php echo $fb_feed[$i]->post_stream_id;?>"><?php echo $fb_feed[$i]->user_likes == 1 ? "UNLIK" : "LIKE"?></button> 
         <?php endif ?>
     </p>    
     <p>
@@ -323,8 +325,7 @@ if($fb_feed[$i]->post_content != '<br />'):
     <!-- CASE -->
     <div class="case-field hide">
     <?php
-        $data['posts'] = $fb_feed;
-        $data['i'] = $i;
+        $data['posts'] = $fb_feed;        $data['i'] = $i;
         $this->load->view('dashboard/case_field',$data);
     ?>
     </div>

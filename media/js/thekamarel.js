@@ -1551,7 +1551,7 @@ $(function(){
                                 alert(post_id);                   
                                    }else if(btnDestroyStatus.hasClass('pm')){
                                     type_action=1
-                                   }else{
+                                   }else if(btnDestroyStatus.hasClass('comments')){
                                     type_action=2
                                     post_id=commnet_id;
                                    } 
@@ -1563,13 +1563,15 @@ $(function(){
                                         data: {
                                     post_id: post_id,
                                     channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
-//                                            channel_id : btnDestroyStatus.closest('.floatingBox').find('input.channel-id').val(),
+                                    //channel_id : btnDestroyStatus.closest('.floatingBox').find('input.channel-id').val(),
                                         },
                                         success: function(response)
                                         {
                                             if(response.success == true){
                                                 btnDestroyStatus.closest('li').toggle('slow');
-                                                console.log(response);
+                                                btnDestroyStatus.closest('li').toggle( "bounce", { times: 3, complete:function(){
+                                                    $(this).show();
+                                                }}, "slow");
                                             }
                                             else
                                             {

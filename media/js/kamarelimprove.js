@@ -227,28 +227,45 @@ $(function(){
             callback : function(response){
                 
                 //alert(response.length);
-                console.log(response);
+                
                 $(modalID + " .loader-image").hide();
                 if(response.length == 0)
                     $(modalId).append("<h2>No related conversation found.</h2>");
                 for(i = 0; i<response.length; i++){
-                   // var myDate = new Date(response[i].created_at + " UTC");
-                    $(modalID + ' form').append(
-                         '<div class="related-conversation-body">' + 
-                        '<span class="related-conversation-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>' + 
-                        '<p class="headLine">' +
-                            '<span class="author">' +  response[i].name + '</span>' + 
-                            '<i class="icon-circle"></i>' + 
-                            '<span>posted a <span class="cyanText"></span></span>' +
-                            '<i class="icon-circle"></i>' + 
-                            '<span class="UTCTimestamp">' +response[i].created_at + '</span>' + 
-                            '<i class="icon-play-circle moreOptions pull-right"></i>' +
-                        '</p>' + 
-                        '<div>' +
-                            '<p>' + response[i].comment_content + '</p>' +
-                            '<!--p><button class="btn btn-primary btn-mini btn-reply" style="margin-left: 5px;">Reply</button></p-->' +
-                        '</div></div>'
-                    );                   
+                 if(response[i].type=="facebook_comment"){
+                            post_type="Wall Post";
+                 }else{
+                            post_type="Private Messages";
+                 }   
+                    // var myDate = new Date(response[i].created_at + " UTC");
+                    console.log(response)
+                    if(response[i].name!=null){
+                        $(modalID + ' form').append(
+                             '<div class="related-conversation-body">' + 
+                            '<span class="related-conversation-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>' + 
+                            '<p class="headLine">' +
+                                '<span class="author">' +  response[i].name + '</span>' + 
+                                '<i class="icon-circle"></i>' + 
+                                '<span>posted a <span class="cyanText">'+post_type+'</span></span>' +
+                                '<i class="icon-circle"></i>' + 
+                                '<span class="UTCTimestamp">' +response[i].created_at + '</span>' + 
+                                '<i class="icon-play-circle moreOptions pull-right"></i>' +
+                            '</p>' + 
+                            '<div>' +
+                                '<p>' + response[i].comment_content + '</p>' +
+                                '<!--p><button class="btn btn-primary btn-mini btn-reply" style="margin-left: 5px;">Reply</button></p-->' +
+                            '</div></div>'
+                        );
+                    }else{
+                       $(modalID + ' form').append(
+                             '<div class="related-conversation-body">' + 
+                            '<span class="related-conversation-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>' + 
+                            '<p class="headLine">'+ 
+                            '<p>No related conversation attach.</p>'+
+                            '</p>' + 
+                            '</div>'
+                        );
+                    }                   
                 }
             }
         });

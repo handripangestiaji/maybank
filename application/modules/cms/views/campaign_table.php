@@ -64,9 +64,9 @@
 		                                		<td>
 		                                			<a href="#modal-<?php echo $x['short_code'] ?>" data-toggle='modal'>view</a>
 	                                                <div id="modal-<?php echo $x['short_code'] ?>" class="attachment-modal modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+	                                                    <img src="<?php echo base_url('media/dynamic/qrcode/'.$x['qrcode_image'])?>" style="padding: 0px 25px;"/>
 	                                                    <button type="button" class="close " data-dismiss="modal"><i class="icon-remove"></i></button>
-	                                                    <img src="<?php echo base_url('media/dynamic/qrcode/'.$x['qrcode_image'])?>" style="padding: 30px;"/>
-	                                                </div>
+	                                                    </div>
 												</td>
 	                                		</tr>
 	                                	<?php endforeach;?>

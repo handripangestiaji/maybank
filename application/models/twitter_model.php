@@ -492,7 +492,7 @@ class twitter_model extends CI_Model
         $this->db->from("channel_action a INNER JOIN
 			user b on b.user_id = a.created_by LEFT JOIN
 			twitter_reply c on c.response_post_id = a.stream_id_response LEFT JOIN
-			`case` d on d.post_id = a.post_id LEFT JOIN
+			`case` d on d.case_id = a.case_id LEFT JOIN
 			user e on e.user_id = d.assign_to LEFT JOIN
                         user f on f.user_id = d.solved_by");
         $this->db->where($filter);

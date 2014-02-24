@@ -445,7 +445,7 @@ class facebook_model extends CI_Model
         $this->db->from("channel_action a INNER JOIN
 			user b on b.user_id = a.created_by LEFT JOIN
 			social_stream_fb_comments c on c.comment_stream_id = a.stream_id_response LEFT JOIN
-			`case` d on d.post_id = a.post_id LEFT JOIN
+			`case` d on d.case_id = a.case_id LEFT JOIN
 			user e on e.user_id = d.assign_to LEFT JOIN
 			user f on f.user_id = d.solved_by");
 	if(!$is_where_in)
@@ -569,7 +569,7 @@ class facebook_model extends CI_Model
         
         foreach($result as $row){
             $row->reply_post = $this->IsCommentExists($row->post_stream_id);
-            $row->channel_action = $this->GetChannelAction(array('a.post_id'=>$row->post_stream_id));
+            $row->channel_action = $this->GetChannelAction(array('a.post_id'=>$row->social_stream_post_id));
         }
         return $result;
     }

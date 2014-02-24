@@ -334,5 +334,11 @@ function IsRoleFriendlyNameExist($user_role, $currentPermission, $property='role
 
 
 function RemoveUrlWithin($text){
-    return false;
+    /*echo ereg_replace ("
+        #((http|https|ftp)://(\S*?\.\S*?))(\s|\;|\)|\]|\[|\{|\}|,|\"|'|:|\<|$|\.\s)#ie",
+        "'<a href=\"$1\" target=\"_blank\">$3</a>$4'", ''
+        $text
+    );*/
+    return $text;
+    
 }

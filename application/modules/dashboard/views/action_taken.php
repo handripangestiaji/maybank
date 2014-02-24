@@ -5,11 +5,11 @@
         <table class="table" style="background-color: #ffffff; width: 560px; margin-left: -15px; border-top: 1px solid #e1e1e1;">
             <thead>
               <tr>
-                <th style="width:20%">Time</th>
-                <th style="width:15%">User</th>
-                <th style="width:15%">Action</th>
-                <th style="width:25%">Description</th>
-                <th style="width:25%">Notes</th>
+                <th style="width:100px">Time</th>
+                <th style="width:77px">User</th>
+                <th style="width:79px">Action</th>
+                <th style="width:130px">Description</th>
+                <th style="width:139px">Notes</th>
               </tr>
             </thead>
         </table>
@@ -23,17 +23,17 @@
             if(isset($post->channel_action)):
                     foreach($post->channel_action as $action):?>
                     <tr>
-                      <td style="width:20%"><?php
+                      <td style="width:100px"><?php
                         $timezone = new DateTimeZone($this->session->userdata('timezone'));
                         $date=new DateTime($action->created_at.' Europe/London');
                         $date->setTimezone($timezone);
                         echo $date->format('l, M j, Y h:i A');
                         
                       ?></td>
-                      <td style="width:15%"><?=$action->username?></td>
-                      <td style="width:15%"><?=ucfirst(str_replace('_', ' ', $action->action_type))?></td>
+                      <td style="width:77px"><?=$action->username?></td>
+                      <td style="width:79px"><?=ucfirst(str_replace('_', ' ', $action->action_type))?></td>
                       <!--td><button class="btn btn-primary icon-book"></button></td-->
-                      <td style="width:25%">
+                      <td style="width:130px">
                         <?php
                             if($action->action_type == 'reply_facebook' || $action->action_type == 'twitter_reply'){
                                 echo '"'.$action->comment_content.'"';
@@ -46,7 +46,7 @@
                             }
                         ?>
                       </td>
-                      <td style="width:25%">
+                      <td style="width:139px">
                         <?php
                             if($action->action_type == 'case_created' || $action->action_type == 'case_solved'){
                                 echo $action->messages;

@@ -190,6 +190,13 @@ class ChannelMg extends MY_Controller {
         
     }
     
-   
+    public function country(){
+        if(IsRoleFriendlyNameExist($this->user_role, 'Regional_User')){
+            $this->load->view('country');
+        }
+        else{
+            redirect("/");
+        }
+    }
     
 }

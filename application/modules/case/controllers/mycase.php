@@ -36,6 +36,7 @@ class mycase extends CI_Controller{
             
         $is_valid = CheckValidation($validation, $this->validation);
         if($is_valid === true){
+            
             $case = array(
                 "content_products_id" => $this->input->post('product_type'),
                 "created_by" => $user_id,
@@ -48,12 +49,15 @@ class mycase extends CI_Controller{
                 "post_id" => $this->input->post('post_id'),
                 "created_at" => date("Y-m-d H:i:s")
             );
-            
+            $old_case = $this->case_model->LoadCase(array('a.post_id' => $this->input->post('post_id')));
+            if(count($old_case) > 0)
+                $solved_case = $this->case_model->ResolveCase($old_case[0]->case_id, $this->session->userdata('user_id'), false);
             $case['case_id'] = $this->case_model->CreateCase($case, $this->session->userdata('user_id'));
             echo json_encode(array(
                         "success" => true,
                         "message" => "Assigning case successfully done.",
-                        "result" => $case
+                        "result" => $case,
+                        "old_case" => $solved_case
                     )
                 );
         }

@@ -91,9 +91,6 @@ class case_model extends CI_Model{
                 "user_id" => $case['assign_to']
             )
         );
-        
-        
-        
         $user = is_array($user) && count($user) > 0 ? $user[0] : $user;
         if($case['email'])
             $this->email->to($case['email']);

@@ -21,9 +21,20 @@
 <!-- ==================== ACTIVITIES MENU ==================== -->
 <div class="floatingBoxMenu">
     <ul class="nav stream_head">
-        <li class="active"><a class="wallPosts">Wall Posts<?php if($count_unread_wp!=0){echo '<span class="notifyCircle red">'.$count_unread_wp.'</span>';}?></a></li>
+        <li class="active">
+            <a class="wallPosts">
+            Wall Posts
+            <?php if($count_unread_wp!=0 || isset($is_search)){echo '<span class="notifyCircle red">'.$count_unread_wp.'</span>';}?>
+            <?php if(isset($is_search) && count($fb_feed)!=0){echo '<span class="notifyCircle cyan">'.count($fb_feed).'</span>';}?>
+            </a>
+        </li>
         <!-- <li><a href="#maybankpost">Maybank Posts</a></li> -->
-        <li><a class="privateMessages">Private Messages<?php if($count_unread_pm!=0){echo '<span class="notifyCircle red">'.$count_unread_pm.'</span>';}?></a></li>
+        <li>
+            <a class="privateMessages">Private Messages
+            <?php if($count_unread_pm!=0 || isset($is_search)){echo '<span class="notifyCircle red">'.$count_unread_pm.'</span>';}?>
+            <?php if(isset($is_search) && count($fb_pm)!=0){echo '<span class="notifyCircle cyan">'.count($fb_pm).'</span>';}?>    
+            </a>
+        </li>
     </ul>
 </div>
 <!-- ==================== END OF ACTIVITIES MENU ==================== -->

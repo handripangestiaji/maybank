@@ -51,7 +51,8 @@ if($posts){
            <textarea placeholder="Compose Message" id="content" name="message" ></textarea>
            <br clear="all" />
            <div class="pull-right">
-               <button type="submit" class="btn-purple btn btn-small"><i class="icon-ok-circle icon-large"></i> Assign</button>    
+
+               <button type="submit" class="btn-purple btn btn-small" value="<?php if(isset($case_type)){echo $case_type='reassign';}?>"><i class="icon-ok-circle icon-large"></i> Assign</button>    
            </div>
            </form>
     </div>

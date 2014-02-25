@@ -326,6 +326,7 @@ if($fb_feed[$i]->post_content != '<br />'):
     <?php
         $data['posts'] = $fb_feed;        
         $data['i'] = $i;
+        $data['case_type']='facebook';
         $this->load->view('dashboard/case_field',$data);
     ?>
     </div>

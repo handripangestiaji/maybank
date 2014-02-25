@@ -12,7 +12,7 @@
         "direct_message" => '<button class="btn btn-dm btn-primary" data-toggle="modal"><i class="icon-envelope"></i></button> ',
     );
     
-    if(!$post->case_id){
+    if(count($post->case) == 0){
         $buttonItems['case'] = (IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Assign_Case') ? '<button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> <span>CASE</span></button> ' : '');
     }
     else{

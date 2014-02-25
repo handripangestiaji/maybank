@@ -317,11 +317,10 @@ class twitter_model extends CI_Model
     
     public function ReadTwitterData($filter,$limit = false){
         $this->db->select("e.social_id, a.channel_id, a.post_stream_id, a.retrieved_at, a.created_at as social_stream_created_at, a.type as social_stream_type, a.replied_count,
-                            b.*, c.screen_name, c.profile_image_url, c.name, c.description, c.following, a.is_read, d.*,a.post_id as social_stream_post_id");
+                            b.*, c.screen_name, c.profile_image_url, c.name, c.description, c.following, a.is_read, a.post_id as social_stream_post_id");
         $this->db->from("social_stream a INNER JOIN social_stream_twitter b ON a.post_id = b.post_id 
                         INNER JOIN twitter_user_engaged c ON
-                        c.twitter_user_id = b.twitter_user_id LEFT JOIN
-                         `case` d on d.post_id = a.post_id  INNER JOIN channel e on e.channel_id = a.channel_id");
+                        c.twitter_user_id = b.twitter_user_id INNER JOIN channel e on e.channel_id = a.channel_id");
         if(count($filter) > 0)
 	    $this->db->where($filter);
             

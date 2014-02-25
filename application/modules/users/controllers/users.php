@@ -1395,6 +1395,11 @@ class Users extends MY_Controller {
 	  redirect('users');
     }
     }
+    
+    function country(){
+	$this->load->view('country');
+    }
+    
     //=============================END GROUP===============================
     
     //============================= LOGOUT ================================

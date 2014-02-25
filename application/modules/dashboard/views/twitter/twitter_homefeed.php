@@ -49,8 +49,8 @@ for($i=0;$i<count($homefeed);$i++){
     ?>
     </p>
     <p>
-    <?php if($homefeed[$i]->case_id):?>
-        <button type="button" class="btn <?=$homefeed[$i]->case[0]->status == "pending" ? "btn-purple" : "btn-inverse"?> btn-mini" value="<?php echo $homefeed[$i]->case_id?>">CASE ID #<?php echo $homefeed[$i]->case_id?>
+    <?php if(count($homefeed[$i]->case) > 0):?>
+        <button type="button" class="btn <?=$homefeed[$i]->case[0]->status == "pending" ? "btn-purple" : "btn-inverse"?> btn-mini" value="<?php echo $homefeed[$i]->case[0]->case_id?>">CASE ID #<?php echo $homefeed[$i]->case[0]->case_id?>
             <?php
             if($homefeed[$i]->case[0]->status == "pending")
                 echo isset($homefeed[$i]->case[0]->assign_to->full_name) ? ' Assign to '.$homefeed[$i]->case[0]->assign_to->full_name : '';
@@ -69,7 +69,7 @@ for($i=0;$i<count($homefeed);$i++){
                 echo "Replied by: ".$homefeed[$i]->reply_post[count($homefeed[$i]->reply_post) - 1]->display_name." ".$reply_date->format("d-M-y h:i A") ?>
         </button>
     <?php endif?>
-    <?php if(count($homefeed[$i]->reply_post) == 0 && !$homefeed[$i]->case_id):?>
+    <?php if(count($homefeed[$i]->reply_post) == 0 && count($homefeed[$i]->case) == 0) :?>
         <button type="button" class="btn btn-warning btn-mini">OPEN</button>
     <?php endif?>
     

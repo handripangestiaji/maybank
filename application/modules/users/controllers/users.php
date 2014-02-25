@@ -1397,7 +1397,7 @@ class Users extends MY_Controller {
     }
     
     function country(){
-	$this->load->view('country');
+	$this->load->view('users/country');
     }
     
     //=============================END GROUP===============================

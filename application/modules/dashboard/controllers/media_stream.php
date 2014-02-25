@@ -32,6 +32,7 @@ class Media_stream extends CI_Controller {
 	$filter = array(
 	   'channel_id' => $channel_id,
 	);
+	$channel_confg=$this->account_model->GetChannel($filter);
 	if($is_read != NULL){
 	    if($is_read != 2){
 		$filter['is_read'] = $is_read;
@@ -40,21 +41,21 @@ class Media_stream extends CI_Controller {
 	    }
 	}
 	$limit=30;
-    $channel_confg=$this->account_model->GetChannel($filter);
-    
-	$data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter,$limit);
-	$data['count_fb_feed']=$this->facebook_model->CountFeedFB($filter);
-	//$data['own_post'] = $this->facebook_model->RetrievePostFB($filter);
-	$data['fb_pm'] = $this->facebook_model->RetrievePmFB($filter,$limit);
-    $filter=array();
-	$data['CountPmFB']=$this->facebook_model->CountPmFB($filter);
-	$this->load->model('campaign_model');
-	$data['product_list'] = $this->campaign_model->GetProduct();
-	$data['channel_id'] = $channel_id;
-	$this->load->model('case_model');
-    $filter=array('role_id <>'=>'5','country_code'=>$channel_confg[0]->country_code);
-	$data['user_list'] = $this->case_model->ReadAllUser($filter);
-	$this->load->view('dashboard/facebook/facebook_stream',$data);
+	
+	
+	    $data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter,$limit);
+	    $data['count_fb_feed']=$this->facebook_model->CountFeedFB($filter);
+	    //$data['own_post'] = $this->facebook_model->RetrievePostFB($filter);
+	    $data['fb_pm'] = $this->facebook_model->RetrievePmFB($filter,$limit);
+	$filter=array();
+	    $data['CountPmFB']=$this->facebook_model->CountPmFB($filter);
+	    $this->load->model('campaign_model');
+	    $data['product_list'] = $this->campaign_model->GetProduct();
+	    $data['channel_id'] = $channel_id;
+	    $this->load->model('case_model');
+	$filter=array('role_id <>'=>'5','country_code'=>$channel_confg[0]->country_code);
+	    $data['user_list'] = $this->case_model->ReadAllUser($filter);
+	    $this->load->view('dashboard/facebook/facebook_stream',$data);
     }
     
     public function youtube_stream($channel_id, $is_read = null){
@@ -82,7 +83,7 @@ class Media_stream extends CI_Controller {
     	    if($is_read != 2){
     		$filter['is_read'] = $is_read;
     	    }else{
-		      $filter['case_id is NOT NULL'] = null;
+		    $filter['case'] = '';
 	        }
     	}
     

@@ -27,8 +27,8 @@
         <p><?php echo RemoveUrlWithin($directmessage[$i]->dm_text);?>
         </p>
         <p class="indicator">
-        <?php if($directmessage[$i]->case_id):?>
-            <button type="button" class="btn <?=$directmessage[$i]->case[0]->status == "pending" ? "btn-purple" : "btn-inverse"?> btn-mini" value="<?php echo $directmessage[$i]->case_id?>">CASE ID #<?php echo $mentions[$i]->case_id?>
+        <?php if(count($directmessage[$i]->case) > 0):?>
+            <button type="button" class="btn <?=$directmessage[$i]->case[0]->status == "pending" ? "btn-purple" : "btn-inverse"?> btn-mini" value="<?php echo $directmessage[$i]->case[0]->case_id?>">CASE ID #<?php echo $directmessage[$i]->case[0]->case_id?>
                 <?php
                 if($directmessage[$i]->case[0]->status == "pending")
                     echo isset($directmessage[$i]->case[0]->assign_to->full_name) ? ' Assign to '.$directmessage[$i]->case[0]->assign_to->full_name : '';

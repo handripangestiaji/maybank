@@ -47,23 +47,27 @@
             <span style='color:red;'><?php echo form_error('email'); ?></span></td></td>
             <input name='email1' type="hidden" value="<?php echo $row->email;?>" />
         </tr>
-        <?php if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User SuperUser')):?>
+        <?php
+        if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_Modify_Role') && $row->role_id!=2):
+        ?>
         <tr>
             <td>Role</td>
             <td>
                 <select name="optRole">
                     <?php foreach($role->result() as $r){
-                        if($row->role_id == $r->role_collection_id)
-                        {
+                        if($r->role_collection_id != 2){
+                            if($row->role_id == $r->role_collection_id)
+                            {
                     ?>
                             <option value='<?php echo $r->role_collection_id;?>' selected='selected'><?php echo $r->role_name;?></option>
                     <?php
-                        }
-                        else
-                        {
+                            }
+                            else
+                            {
                     ?>
-                        <option value='<?php echo $r->role_collection_id;?>'><?php echo $r->role_name;?></option>
+                            <option value='<?php echo $r->role_collection_id;?>'><?php echo $r->role_name;?></option>
                     <?php
+                            }
                         }
                     }?>
                 </select>

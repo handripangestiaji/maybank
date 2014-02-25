@@ -12,12 +12,12 @@
         "direct_message" => '<button class="btn btn-dm btn-primary" data-toggle="modal"><i class="icon-envelope"></i></button> ',
     );
     
-    if(!$post->case_id){
+    if(count($post->case) == 0){
         $buttonItems['case'] = (IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Assign_Case') ? '<button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> <span>CASE</span></button> ' : '');
     }
     else{
         if($post->case[0]->status == 'pending'){
-            $buttonItems['case'] = (IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Resolve_Case') ? '<button type="button" class="btn btn-purple btn-resolve" name="action" value="'.$post->case_id.'"><i class="icon-check"></i> <span>RESOLVE</span></button><button type="button" class="btn btn-danger btn-case" name="action" value="reassign"><i class="icon-plus"></i> <span>ReAssign</span></button>' : '' );
+            $buttonItems['case'] = (IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Resolve_Case') ? '<button type="button" class="btn btn-purple btn-resolve" name="action" value="'.$post->case[0]->case_id.'"><i class="icon-check"></i> <span>RESOLVE</span></button><button type="button" class="btn btn-danger btn-case" name="action" value="reassign"><i class="icon-plus"></i> <span>ReAssign</span></button>' : '' );
         }
         else{
             $buttonItems['case'] = (IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Assign_Case') ? '<button type="button" class="btn btn-danger btn-case" name="action" value="new_case"><i class="icon-plus"></i> <span>Case</span></button> ' : '');

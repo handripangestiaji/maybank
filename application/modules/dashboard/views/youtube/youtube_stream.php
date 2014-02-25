@@ -4,8 +4,16 @@
     <!-- ==================== ACTIVITIES MENU ==================== -->
     <div class="floatingBoxMenu">
         <ul class="nav stream_head">
-            <li class="active"><a href="#" class="youtubevideo">Videos Uploaded</a></li>
-            <li><a href="#" class="youtubecomment">Video Comments</a></li>
+            <li class="active">
+                <a href="#" class="youtubevideo">Videos Uploaded
+                <?php if(isset($is_search) && count($youtube_post)!=0){echo '<span class="notifyCircle cyan">'.count($youtube_post).'</span>';}?>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="youtubecomment">Video Comments
+                <?php if(isset($is_search) && count($youtube_comment)!=0){echo '<span class="notifyCircle cyan">'.count($youtube_comment).'</span>';}?>
+                </a>
+            </li>
         </ul>
     </div>
     <!-- ==================== END OF ACTIVITIES MENU ==================== -->

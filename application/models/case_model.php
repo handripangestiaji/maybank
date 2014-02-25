@@ -225,7 +225,7 @@ class case_model extends CI_Model{
     function ResolveCase($case_id, $solved_by, $is_solved = true){
         $this->db->where('case_id', $case_id);
         $this->db->update('case', array(
-            'status' => $is_solved ? 'solved' : 'reassign',
+            'status' => $is_solved == true ? 'solved' : 'reassign',
             'solved_by' => $solved_by,
             'solved_at' => date("Y-m-d H:i:s")
         ));

@@ -44,8 +44,8 @@ for($i=0;$i<count($mentions);$i++){
     ?>
     </p>
     <p class="indicator">
-    <?php if($mentions[$i]->case_id):?>
-        <button type="button" class="btn <?=$mentions[$i]->case[0]->status == "pending" ? "btn-purple" : "btn-inverse"?> btn-mini" value="<?php echo $mentions[$i]->case_id?>">CASE ID #<?php echo $mentions[$i]->case_id?>
+    <?php if(count($mentions[$i]->case) > 0):?>
+        <button type="button" class="btn <?=$mentions[$i]->case[0]->status == "pending" ? "btn-purple" : "btn-inverse"?> btn-mini" value="<?php echo $mentions[$i]->case[0]->case_id?>">CASE ID #<?php echo $mentions[$i]->case[0]->case_id?>
             <?php
             if($mentions[$i]->case[0]->status == "pending")
                 echo isset($mentions[$i]->case[0]->assign_to->full_name) ? ' Assign to '.$mentions[$i]->case[0]->assign_to->full_name : '';
@@ -65,7 +65,7 @@ for($i=0;$i<count($mentions);$i++){
         echo "Replied by: ".$mentions[$i]->reply_post[count($mentions[$i]->reply_post) - 1]->display_name." ".$reply_date->format("d-M-y h:i A") ?>
         </button>
     <?php endif?>
-    <?php if(count($mentions[$i]->reply_post) == 0 && !$mentions[$i]->case_id):?>
+    <?php if(count($mentions[$i]->reply_post) == 0 && count($mentions[$i]->case) == 0):?>
         <button type="button" class="btn btn-warning btn-mini no-cursor">OPEN</button>
     <?php endif?>
    

@@ -441,8 +441,9 @@ $(function(){
                "data" : "case_id=" + btnResolve.val(),
                "success" : function(response){
                     if(response.success){
+                        btnResolve.siblings('.btn-case').remove();
                         btnResolve.removeAttr("disabled").html('<i class="icon-plus"></i> <span>CASE</span>').removeClass('btn-resolve btn-purple').addClass('btn-case btn-danger');
-                        btnResolve.closest('li').find('.btn-purple:first').html('OPEN').removeClass('btn-purple').addClass('btn-warning');
+                        btnResolve.closest('li').find('.btn-purple:first').html('Case ID #' + response.result.case_id + ' solved by ' + response.result.solved_by.display_name).removeClass('btn-purple').addClass('btn-inverse');
                     }
                },
                "error" : function(){

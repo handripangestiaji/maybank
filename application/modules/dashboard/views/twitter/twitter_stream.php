@@ -32,10 +32,24 @@
 <!-- ==================== ACTIVITIES MENU ==================== -->
 <div class="floatingBoxMenu">
     <ul class="nav stream_head">
-        <li class="active"><a class='mentions'>Mentions <span class="notifyCircle red <?php if($count_unread_mentions==0) echo 'hide';?>"><?php echo $count_unread_mentions?></span></a></li>
-        <li><a class='feed'>Homefeed<span class="notifyCircle red <?php if($count_unread_homefeed==0) echo 'hide';?>"><?php echo $count_unread_homefeed?></span></a></li>
-        <li><a class='sendmessage'>Tweets</a></li>
-        <li><a class='direct'>Direct Message <span class="notifyCircle red <?php if($count_unread_dm==0) echo 'hide';?>"><?php echo $count_unread_dm?></span></a></li>
+        <li class="active">
+            <a class='mentions'>
+                Mentions
+                <span class="notifyCircle red
+                <?php if($count_unread_mentions==0 || isset($is_search)) echo 'hide';?>"><?php echo $count_unread_mentions?></span>
+                <?php if(isset($is_search) && count($mentions)!=0) {echo '<span class="notifyCircle cyan">'.count($mentions).'</span>';}?>
+            </a></li>
+        <li><a class='feed'>Homefeed<span class="notifyCircle red
+        <?php if($count_unread_homefeed==0 || isset($is_search)) echo 'hide';?>"><?php echo $count_unread_homefeed ?></span>
+        <?php if(isset($is_search) && count($homefeed)!=0){echo '<span class="notifyCircle cyan">'.count($homefeed).'</span>';}?>
+        </a></li>
+        <li><a class='sendmessage'>Tweets
+        <?php if(isset($is_search) && count($senttweets)!=0){echo '<span class="notifyCircle cyan">'.count($senttweets).'</span>';}?>
+        </a></li>
+        <li><a class='direct'>Direct Message <span class="notifyCircle red
+        <?php if($count_unread_dm==0 || isset($is_search)) echo 'hide';?>"><?php echo $count_unread_dm?></span>
+        <?php if(isset($is_search) && count($directmessage)!=0){echo '<span class="notifyCircle cyan">'.count($directmessage).'</span>';}?>
+        </a></li>
     </ul>
 </div>
 <!-- ==================== END OF ACTIVITIES MENU ==================== -->

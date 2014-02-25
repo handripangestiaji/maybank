@@ -111,8 +111,10 @@ class Users_model extends CI_Model
     
     function update_user($id,$data)
     {
-        if($data['role_id'] == 0 )
-            unset($data['role_id']);
+        if(isset($data['role_id'])){
+            if($data['role_id'] == 0 )
+                unset($data['role_id']);
+        }
         $this->db->where('user_id',$id);
         return $this->db->update($this->user,$data);
     }

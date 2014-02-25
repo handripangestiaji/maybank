@@ -39,11 +39,24 @@
         
         <?php endif?>
         <?php if($directmessage[$i]->response_post_id):?>
-            <button type="button" class="btn btn-inverse btn-mini" value="<?php echo $directmessage[$i]->response_post_id?>">REPLIED</button>
+        
+            <button type="button" class="btn btn-inverse btn-mini"
+                    value="<?php echo $directmessage[$i]->response_post_id?>">Replied By
+                    <?php
+                    
+                    $date = new DateTime($directmessage[$i]->reply_post[0]->created_at.' Europe/London');
+                    $date->setTimezone($timezone);
+                    echo $directmessage[$i]->reply_post[0]->display_name.' at '.$date->format("d-M-y h:i A")?>
+                    </button>
+            
         <?php endif?>
-        <?php if(!$directmessage[$i]->response_post_id && !$directmessage[$i]->case_id):?>
+        <?php if(!$directmessage[$i]->response_post_id && count($directmessage[$i]->case) == 0):?>
             <button type="button" class="btn btn-warning btn-mini">OPEN</button>
         <?php endif?>
+        </p>
+         <p>
+        
+            
         </p>
         <h4 class="filled">
         <a role="button" href="#" class="destroy_status direct_message"><i class="icon-trash greyText"></i></a>

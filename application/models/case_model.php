@@ -84,7 +84,8 @@ class case_model extends CI_Model{
         $mail_provider = $this->config->item('mail_provider');
         $this->load->library('email', $mail_provider);
 	$mail_from = $this->config->item('mail_from');
-        $this->email->from($mail_from['name'],$mail_from['address']);
+        $this->email->initialize();
+        $this->email->from($mail_from['address'], $mail_from['name']);
         $this->email->cc($mail_from['cc']);
         $user = $this->ReadAllUser(
             array(
@@ -108,6 +109,7 @@ class case_model extends CI_Model{
             );
             if($user_assign_detail != null && is_array($user_assign_detail))
                 $user_assign_detail = count($user_assign_detail) > 0 ? $user_assign_detail[0] : null;
+                
             $assign_detail_case = array(
                 'case_id' => $insert_id,
                 'type' => 'user',
@@ -143,7 +145,6 @@ class case_model extends CI_Model{
         $content_email = curl_get_file_contents(site_url('mail_template/AssignCase/newcase/'.$insert_id));
         $this->email->subject('Maybank DCMS Case #'.$insert_id);
         $this->email->message($content_email);
-        $this->email->cc("");
         $this->email->send();
         //print_r($this->email->print_debugger());
         return $insert_id;

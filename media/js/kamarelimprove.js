@@ -141,7 +141,7 @@ $(function(){
                                 '<i class="icon-circle"></i>' + 
                                 '<span>posted a <span class="cyanText">'+ post_type +'</span></span>' + 
                                 '<i class="icon-circle"></i>' + 
-                                '<span class="UTCTimestamp">' + myDate.toString() + '</span>' + 
+                                '<span class="UTCTimestamp">' +  dateFormat(myDate, "mmmm dS, yyyy h:MM:ss TT") + '</span>' + 
                                 '<i class="icon-play-circle moreOptions pull-right"></i>' +
                             '</p>' + 
                             '<div>' +
@@ -199,7 +199,7 @@ $(function(){
                             '<i class="icon-circle"></i>' + 
                             '<span>posted a <span class="cyanText">'+post_type+'</span></span>' +
                             '<i class="icon-circle"></i>' + 
-                            '<span class="UTCTimestamp">' + myDate.toString() + '</span>' + 
+                            '<span class="UTCTimestamp">' +  dateFormat(myDate, "mmmm dS, yyyy h:MM:ss TT") + '</span>' + 
                             '<i class="icon-play-circle moreOptions pull-right"></i>' +
                         '</p>' + 
                         '<div>' +
@@ -214,7 +214,7 @@ $(function(){
         });
     });
     
-    $(this).on('click', '.indicator .case_related', function(e){
+    $(this).on('click', '.case_related', function(e){
         
         var modalID = $(this).attr("href");
         var case_id=$(this).val();

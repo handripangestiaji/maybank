@@ -6,7 +6,7 @@ for($i=0; $i<count($fb_pm);$i++):
 
 $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_pm[$i]->post_id, 'a.status <>'=>'reassign'));
 //print_r($isMyCase);
-//echo $fb_pm[$i]->post_id."{pm-feed}".$fb_feed[$i]->post_id;
+//echo $fb_pm[$i]->post_id."{pm-feed}".$fb_pm[$i]->post_id;
 ?>
 <li id="post<?=$fb_pm[$i]->post_id?>" class="<?php if(isset($isMyCase[0]->assign_to)){echo "case_".$isMyCase[0]->case_id;} ?>">
     <input type="hidden" class="postId" value="<?php echo $fb_pm[$i]->post_id; ?>" />
@@ -32,17 +32,23 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_pm[$i]->po
     <p>
     <?php 
     if(isset($isMyCase[0]->assign_to)){
-        //print_r($isMyCase[0]);
-            $case   =new DateTime($isMyCase[0]->solved_at.' Europe/London');
-            $case->setTimezone($timezone);
+          // print_r($isMyCase[count($isMyCase)-1]);
+          $case=new DateTime($isMyCase[count($isMyCase)-1]->solved_at.' Europe/London');
+          $case->setTimezone($timezone);
+        if($isMyCase[count($isMyCase)-1]->assign_to==$this->session->userdata('user_id') or ($isMyCase[count($isMyCase)-1]->solved_by)){ ?>
+            <button  href="#caseItem-<?php echo isset($isMyCase[count($isMyCase)-1]->case_id) ? $isMyCase[count($isMyCase)-1]->case_id : "" ?>" <?php if($isMyCase[count($isMyCase)-1]->status=="pending"){echo 'data-toggle="modal"';}?> type="button" value="<?php echo $isMyCase[count($isMyCase)-1]->case_id?>" class="btn <?php echo $fb_pm[$i]->case_id != null ? "btn-purple btn-mini case_related ".$fb_pm[$i]->social_stream_type : "btn-inverse btn-mini" ?>"><?php echo $fb_pm[$i]->case_id != null ? 'Case #'.$fb_pm[$i]->case_id.' Assign to You ' : 'Case #'.$isMyCase[count($isMyCase)-1]->case_id.' | '.'Resolve By:'.$isMyCase[count($isMyCase)-1]->resolve_by.' | '.$case->format('j-M-Y h:i A')?></button><?php
             
-        if($isMyCase[count($isMyCase)-1]->assign_to==$this->session->userdata('user_id') and $isMyCase[count($isMyCase)-1]->solved_by==''){ ?>
-            <button type="button" class="btn <?php echo $isMyCase[count($isMyCase)-1]->case_id != null ? "btn-purple" : "btn-inverse btn-mini" ?>"><?php echo $isMyCase[count($isMyCase)-1]->case_id != null ? 'CASE #'.$isMyCase[count($isMyCase)-1]->case_id.' Assign to You ' : 'CASE #'.$isMyCase[count($isMyCase)-1]->case_id.'-'.'RESOLVE BY :'.$isMyCase[count($isMyCase)-1]->full_name?></button>
-        <?php }elseif( $isMyCase[count($isMyCase)-1]->solved_by!=''){?>
-            <button type="button" class="btn <?php echo $isMyCase[count($isMyCase)-1]->solved_by != null ? "btn-inverse btn-mini":"btn-purple" ?>"><?php echo $isMyCase[count($isMyCase)-1]->solved_by != null ? 'CASE #'.$isMyCase[count($isMyCase)-1]->case_id.' | RESOLVE BY :'.$isMyCase[count($isMyCase)-1]->resolve_by.' | '.$case->format('j-M-Y h:i A') : 'CASE #'.$isMyCase[count($isMyCase)-1]->case_id.'-'.'RESOLVE BY :'.$isMyCase[count($isMyCase)-1]->full_name?></button>
-        <?php }else{ ?>
-                <button type="button" class="btn <?php echo $isMyCase[count($isMyCase)-1]->case_id != null ? "btn-purple" : "btn-inverse btn-mini" ?>"><?php echo $isMyCase[count($isMyCase)-1]->case_id != null ? 'CASE #'.$isMyCase[count($isMyCase)-1]->case_id.' Assign to: '.$isMyCase[count($isMyCase)-1]->full_name : 'REPLIED'?></button>  
-    <?php     }
+            $assignCase=$this->case_model->CaseRelatedConversationItems(array('case_id'=>$isMyCase[count($isMyCase)-1]->case_id));
+            $data['isMyCase'] = $assignCase;
+            $data['caseMsg']=$isMyCase[count($isMyCase)-1];
+            $data['assign_case_type']='facebook';
+            $this->load->view('dashboard/case_item', $data);
+            
+         }else{ ?>
+            <button type="button" class="btn <?php echo $fb_pm[$i]->case_id != null ? "btn-purple btn-mini" : "btn-inverse btn-mini" ?>">
+                <?php echo $fb_pm[$i]->case_id != null ? 'Case #'.$fb_pm[$i]->case_id.' Assign to: '.$isMyCase[count($isMyCase)-1]->full_name : 'Replied'?>
+            </button>  
+        <?php }
     }else{ ?>
                 <button type="button" class="btn <?php echo $fb_pm[$i]->message_count-1 == 0 ? "btn-warning btn-mini no-cursor indicator" : "btn-inverse btn-mini no-cursor indicator" ?>"><?php echo $fb_pm[$i]->message_count-1 == 0 ? 'OPEN' :  'REPLIED'?></button>  
     <?php } ?>

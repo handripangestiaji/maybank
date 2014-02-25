@@ -273,7 +273,7 @@ if($fb_feed[$i]->post_content != '<br />'):
                 <button type="button" class="btn btn-primary btn-reply"><i class="icon-mail-reply"></i></button>
            <?php if($isMyCase[count($isMyCase)-1]->status=='pending'){ ?>
                 <button type="button" class="btn btn-purple  btn-resolve_fb" name="action" value="<?=$fb_feed[$i]->case_id?>"><i class="icon-check"></i> RESOLVE</button>
-                <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> ReAssign</button>  
+                <button type="button" class="btn btn-danger btn-case fb_reassign" name="action" value="case"><i class="icon-plus"></i> ReAssign</button>  
            <?php }else{ ?> 
               <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>
            <?php   } ?>
@@ -284,7 +284,7 @@ if($fb_feed[$i]->post_content != '<br />'):
         <button type="button" class="btn btn-primary btn-reply"><i class="icon-mail-reply"></i></button>
         <?php if($isMyCase[count($isMyCase)-1]->status=='pending'):?>
             <button type="button" class="btn btn-purple  btn-resolve_fb" name="action" value="<?=$fb_feed[$i]->case_id?>"><i class="icon-check"></i> RESOLVE</button>
-            <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> ReAssign</button>   
+            <button type="button" class="btn btn-danger btn-case fb_reassign" name="action" value="case"><i class="icon-plus"></i> ReAssign</button>   
         <?php else:?>
             <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>   
         <?php endif?>

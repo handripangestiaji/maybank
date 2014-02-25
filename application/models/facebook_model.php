@@ -554,8 +554,7 @@ class facebook_model extends CI_Model
         if(count($filter) > 0){
 	    $this->db->where("detail_id_from_facebook LIKE '%_0' ");
 	    $this->db->where($filter);
-        }
-	else{
+        }else{
 	    $this->db->where("detail_id_from_facebook LIKE '%_0'");    
         }
 	
@@ -568,7 +567,7 @@ class facebook_model extends CI_Model
         $result= $this->db->get()->result();
         
         foreach($result as $row){
-            $row->reply_post = $this->IsCommentExists($row->post_stream_id);
+            $row->reply_post = $this->RetrievePmDetailFB(array('d.post_id'=>$row->post_id));
             $row->channel_action = $this->GetChannelAction(array('a.post_id'=>$row->social_stream_post_id));
         }
         return $result;

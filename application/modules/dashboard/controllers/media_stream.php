@@ -29,9 +29,12 @@ class Media_stream extends CI_Controller {
     
     
     public function facebook_stream($channel_id,$is_read = NULL){
+        
 	$filter = array(
 	   'channel_id' => $channel_id,
 	);
+    $channel_confg=$this->account_model->GetChannel($filter);
+
 	if($is_read != NULL){
 	    if($is_read != 2){
 		$filter['is_read'] = $is_read;
@@ -40,7 +43,6 @@ class Media_stream extends CI_Controller {
 	    }
 	}
 	$limit=30;
-    $channel_confg=$this->account_model->GetChannel($filter);
     
 	$data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter,$limit);
 	$data['count_fb_feed']=$this->facebook_model->CountFeedFB($filter);

@@ -99,7 +99,6 @@ class mycase extends CI_Controller{
         $channel_id=$this->input->get('channel_id');
         $author_id=$this->input->get('author_id');
         $this->load->model('account_model');
-        
         if($channel_id){
             $filter['channel_id'] = $channel_id;
         }

@@ -116,7 +116,7 @@ if($fb_feed[$i]->post_content != '<br />'):
         <button type="button" class="btn btn-warning btn-mini no-cursor indicator" >OPEN</button>       
         <?php }    
         if(IsRoleFriendlyNameExist($this->user_role,'Social Stream_Current_Social Functions Like, Retweet')):?>
-        <button class="fblike btn btn-primary btn-mini" style="margin-left: 5px;" value="<?php echo $fb_feed[$i]->post_stream_id;?>"><?php echo $fb_feed[$i]->user_likes == 1 ? "UNLIK" : "LIKE"?></button> 
+        <button class="fblike btn btn-primary btn-mini" style="margin-left: 5px;" value="<?php echo $fb_feed[$i]->post_stream_id;?>"><?php echo $fb_feed[$i]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button> 
         <?php endif ?>
     </p>    
     <p>
@@ -325,7 +325,8 @@ if($fb_feed[$i]->post_content != '<br />'):
     <!-- CASE -->
     <div class="case-field hide">
     <?php
-        $data['posts'] = $fb_feed;        $data['i'] = $i;
+        $data['posts'] = $fb_feed;        
+        $data['i'] = $i;
         $this->load->view('dashboard/case_field',$data);
     ?>
     </div>

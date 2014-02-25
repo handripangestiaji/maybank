@@ -83,6 +83,7 @@ class Cronjob extends CI_Controller {
             $newStd->channel = $channel;
             $access_tokens[] = $newStd;
         }
+        print_r($newStd->token);
         
         
         foreach($access_tokens as $access_token){

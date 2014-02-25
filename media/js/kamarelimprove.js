@@ -105,7 +105,8 @@ $(function(){
     $(this).on('click', '.assign-case .facebook', function(e){
         var modalID = $(this).attr("href");
         var facebook_id = $(" input[name=user_id]").val();
-        var type = $(modalID + " input[name=type]").val();
+        var type = $(modalID + " input[name=type_facebook]").val();
+       // alert(type)
         $(modalID + " .loader-image").show();
         $(modalID + " .related-conversation-body").remove();
         var textToAppend = "" ;

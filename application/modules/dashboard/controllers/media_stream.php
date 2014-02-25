@@ -680,9 +680,21 @@ class Media_stream extends CI_Controller {
             'picture'=> $img,
         ); 
         
-        
 //        $return=$this->facebook->api('/'.$post_id.'/messages', 'POST', array('message'=>$comment));
-        $return = $this->facebook->api( "/$post_id/messages", "POST", array ( 'message' => $comment, ));
+        $return = $this->facebook->api( "/t_mid.1393214322627:a67f7957b93a2da328/messages", "POST", array ( 'message' => $comment, ));
+
+        $action = array(
+        		"action_type" => "conversation_facebook",
+        		"channel_id" => $channel_loaded[0]->channel_id,
+        		"created_at" => date("Y-m-d H:i:s"),
+        		"stream_id_response" => $return,
+                "post_id"=>$post_id,
+        		"created_by" => $this->session->userdata('user_id'),
+                "log_text" => $comment,
+                "case_id"=>"",
+            );
+        
+        $this->account_model->CreateFbPMAction($action);
         
         $case=$this->account_model->isCaseIdExists($post_id);
             if(count($case)>0){

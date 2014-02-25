@@ -201,10 +201,11 @@ class case_model extends CI_Model{
     
     function CaseRelatedConversationItems($filter){
         $this->load->model('facebook_model');
-        $this->db->select('a.*,b.comment_content,c.name');
+        $this->db->select('a.*,b.comment_content,c.name,d.type');
         $this->db->from("case_related_conversation a LEFT OUTER JOIN 
                          social_stream_fb_comments b ON b.id=a.social_stream_id LEFT OUTER JOIN
-                         `fb_user_engaged` c ON c.facebook_id=b.from");	
+                         `fb_user_engaged` c ON c.facebook_id=b.from LEFT OUTER JOIN
+                         social_stream d ON d.`post_id`=b.`id`");	
         if(count($filter) > 0){
             $this->db->where($filter);
         }
@@ -212,7 +213,7 @@ class case_model extends CI_Model{
     	$result= $this->db->get()->result();
         
         foreach($result as $row){
-            $row->case = $this->facebook_model->RetriveCommentPostFb(array('a.post_id'=>$row->social_stream_id),array());
+            $row->reletad = $this->facebook_model->RetriveCommentPostFb(array('a.post_id'=>$row->social_stream_id),array());
         }
 //        echo "<pre>";
 //        print_r($result);
@@ -247,8 +248,8 @@ class case_model extends CI_Model{
     }
     
     function chackAssignCase($filter = array()){
-        $this->db->select("`a`.*, `b`.`channel_id`, `b`.`post_stream_id`,c.full_name, `d`.`full_name` AS resolve_by");
-        $this->db->from("`case` a INNER JOIN social_stream b ON a.post_id = b.post_id LEFT OUTER JOIN `user` c ON c.user_id=a.assign_to LEFT OUTER JOIN `user` d ON d.user_id=a.solved_by");
+        $this->db->select("`a`.*, `b`.`channel_id`, `b`.`post_stream_id`,c.full_name, `d`.`full_name` AS resolve_by, e.full_name AS `send_by`");
+        $this->db->from("`case` a INNER JOIN social_stream b ON a.post_id = b.post_id LEFT OUTER JOIN `user` c ON c.user_id=a.assign_to LEFT OUTER JOIN `user` d ON d.user_id=a.solved_by LEFT OUTER JOIN `user` e ON c.user_id=a.created_by");
         $this->db->where($filter);
         $result = $this->db->get()->result();
         return $result;

@@ -40,6 +40,8 @@ class Media_stream extends CI_Controller {
 	    }
 	}
 	$limit=30;
+    $channel_confg=$this->account_model->GetChannel($filter);
+    
 	$data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter,$limit);
 	$data['count_fb_feed']=$this->facebook_model->CountFeedFB($filter);
 	//$data['own_post'] = $this->facebook_model->RetrievePostFB($filter);
@@ -50,7 +52,7 @@ class Media_stream extends CI_Controller {
 	$data['product_list'] = $this->campaign_model->GetProduct();
 	$data['channel_id'] = $channel_id;
 	$this->load->model('case_model');
-    $filter=array('role_id <>'=>'5');
+    $filter=array('role_id <>'=>'5','country_code'=>$channel_confg[0]->country_code);
 	$data['user_list'] = $this->case_model->ReadAllUser($filter);
 	$this->load->view('dashboard/facebook/facebook_stream',$data);
     }
@@ -678,9 +680,21 @@ class Media_stream extends CI_Controller {
             'picture'=> $img,
         ); 
         
-        
 //        $return=$this->facebook->api('/'.$post_id.'/messages', 'POST', array('message'=>$comment));
-        $return = $this->facebook->api( "/$post_id/messages", "POST", array ( 'message' => $comment, ));
+        $return = $this->facebook->api( "/t_mid.1393214322627:a67f7957b93a2da328/messages", "POST", array ( 'message' => $comment, ));
+
+        $action = array(
+        		"action_type" => "conversation_facebook",
+        		"channel_id" => $channel_loaded[0]->channel_id,
+        		"created_at" => date("Y-m-d H:i:s"),
+        		"stream_id_response" => $return,
+                "post_id"=>$post_id,
+        		"created_by" => $this->session->userdata('user_id'),
+                "log_text" => $comment,
+                "case_id"=>"",
+            );
+        
+        $this->account_model->CreateFbPMAction($action);
         
         $case=$this->account_model->isCaseIdExists($post_id);
             if(count($case)>0){
@@ -765,7 +779,7 @@ class Media_stream extends CI_Controller {
     	}elseif($status == 1){
     	    $facebook_data = $this->facebook_model->RetrievePmFB(array('a.post_id' => $this->input->post('post_id')));
         }else{
-            $facebook_data = $this->facebook_model->RetriveCommentPostFb(array('b.id' => $this->input->post('post_id')));
+            $facebook_data = $this->facebook_model->RetriveCommentPostFb(array('b.id' => $this->input->post('post_id')),array());
         }
     	if(count($facebook_data) > 0){
        // print_r($facebook_data);

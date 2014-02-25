@@ -215,6 +215,15 @@ class account_model extends CI_Model
         return $result;
     }
     
+    function CreateFbPMAction($action){
+    	$this->db->trans_start();
+        
+        $result = $this->CreateChannelAction($action);
+        
+        $this->db->trans_complete();
+    	return $result;
+    }
+    
     function ReadSinglePost($post_id, $type){
 	$social_stream_type = array(
 	    "facebook_conversation" => "social_stream_fb_conversation",

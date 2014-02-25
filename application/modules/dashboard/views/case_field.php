@@ -64,7 +64,7 @@ if($posts){
         <input type="hidden" value="<?php echo $posts[$i]->type?>" name="type" />
     <?php else:?>
         <input type="hidden" value="<?php echo $posts[$i]->post_id?>" name="post_id" />
-        <input type="hidden" value="<?php echo $posts[$i]->type?>" name="type" />
+        <input type="hidden" value="<?php echo $posts[$i]->type?>" name="type_facebook" />
     <?php endif?>
     <div class="modal-header">
         <button type="button" class="close " data-dismiss="modal" aria-hidden="true"></button>

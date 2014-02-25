@@ -300,6 +300,7 @@ class twitter_model extends CI_Model
         
         for($i=0;$i<count($result);$i++){
             $result[$i]->sender = $this->ReadTwitterUserFromDb($result[$i]->sender);
+            $result[$i]->reply_post = $this->GetReplyPost(array('reply_to_post_id'=> $result[$i]->social_stream_post_id));
             $result[$i]->channel_action = $this->GetChannelAction(array('a.post_id'=>$result[$i]->social_stream_post_id));
             $result[$i]->case = $this->case_model->LoadCase(array('a.post_id'=>$result[$i]->social_stream_post_id));
         }

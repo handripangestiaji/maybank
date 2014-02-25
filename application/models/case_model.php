@@ -238,7 +238,8 @@ class case_model extends CI_Model{
                 'channel_id' => $solved_case->channel_id,
                 'created_at' => date("Y-m-d H:i:s"),
                 'post_id' => $solved_case->post_id,
-                'created_by' => $solved_by
+                'created_by' => $solved_by,
+                'case_id' => $case_id
             );
             $solved_case->action_id = $this->account_model->CreateChannelAction($channel_action);
             return $solved_case;

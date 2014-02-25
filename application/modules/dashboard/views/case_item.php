@@ -4,7 +4,7 @@
  * @author fitrazh
  * @copyright 2014
  */
- //print_r($isMyCase);
+ if($caseMsg){
  ?><?php //print_r($caseMsg); ?>
             <div id="caseItem-<?php echo $isMyCase[count($isMyCase)-1]->case_id; ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
                 <input type="hidden" value="<?php //echo $isMyCase->case_id; ?>" name="post_id" />
@@ -25,3 +25,4 @@
                     <button class="btn btn-primary add-related-conversation" data-dismiss="modal" value="">Add</button>
                 </div>
             </div>
+<?php } ?>

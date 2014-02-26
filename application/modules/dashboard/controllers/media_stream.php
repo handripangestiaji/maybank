@@ -47,14 +47,17 @@ class Media_stream extends CI_Controller {
 	    $data['count_fb_feed']=$this->facebook_model->CountFeedFB($filter);
 	    //$data['own_post'] = $this->facebook_model->RetrievePostFB($filter);
 	    $data['fb_pm'] = $this->facebook_model->RetrievePmFB($filter,$limit);
-	$filter=array();
+	    $filter=array();
 	    $data['CountPmFB']=$this->facebook_model->CountPmFB($filter);
 	    $this->load->model('campaign_model');
 	    $data['product_list'] = $this->campaign_model->GetProduct();
 	    $data['channel_id'] = $channel_id;
 	    $this->load->model('case_model');
-	$filter=array('role_id <>'=>'5','country_code'=>$channel_confg[0]->country_code);
-	    $data['user_list'] = $this->case_model->ReadAllUser($filter);
+	    
+        $getUserCountry=$this->case_model->ReadAllUser(array('user_id'=>$this->session->userdata('user_id')));
+        $filter=array('role_id <>'=>'5','country_code'=>$getUserCountry->country_code);
+        //print_r($getUserCountry->country_code);
+        $data['user_list'] = $this->case_model->ReadAllUser($filter);
 	    $this->load->view('dashboard/facebook/facebook_stream',$data);
     }
     

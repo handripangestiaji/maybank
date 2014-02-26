@@ -466,13 +466,13 @@ class facebook_model extends CI_Model
 //                         social_stream d ON d.post_id = b.conversation_id LEFT OUTER JOIN
 //                         social_stream e ON e.post_stream_id=b.detail_id_from_facebook");
 $this->db->select("a.*, b.username, b.display_name, c.MESSAGES, d.messages, d.assign_to, 
-	e.display_name AS assign_name, f.display_name AS solved_name");
+	               e.display_name AS assign_name, f.display_name AS solved_name");
 $this->db->from("channel_action a INNER JOIN
-USER b ON b.user_id = a.created_by LEFT JOIN
-			`social_stream_facebook_conversation_detail` c ON c.detail_id = a.post_id LEFT JOIN
-			`case` d ON d.case_id = a.case_id LEFT JOIN
-			USER e ON e.user_id = d.assign_to LEFT JOIN
-			USER f ON f.user_id = d.solved_by");
+                `user` b ON b.user_id = a.created_by LEFT JOIN
+    			`social_stream_facebook_conversation_detail` c ON c.detail_id = a.post_id LEFT JOIN
+    			`case` d ON d.case_id = a.case_id LEFT JOIN
+    			`user` e ON e.user_id = d.assign_to LEFT JOIN
+    			`user` f ON f.user_id = d.solved_by");
 	if(!$is_where_in)
 	    $this->db->where($filter);
 	else

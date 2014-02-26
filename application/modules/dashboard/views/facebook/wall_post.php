@@ -6,7 +6,7 @@ $timezone=new DateTimeZone($this->session->userdata('timezone'));
 for($i=0; $i<count($fb_feed);$i++):
 $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->post_id, 'a.status <>'=>'reassign'));
 if($fb_feed[$i]->post_content != '<br />'):
-
+//echo $fb_feed[$i]->post_id;
 ?>
 <li class="<?php if(isset($isMyCase[0]->assign_to)){echo "case_".$isMyCase[0]->case_id;} ?>" id="post<?=$fb_feed[$i]->social_stream_post_id?>">
     <input type="hidden" class="postId" value="<?php echo $fb_feed[$i]->post_id; ?>" />
@@ -273,7 +273,7 @@ if($fb_feed[$i]->post_content != '<br />'):
                 <button type="button" class="btn btn-primary btn-reply"><i class="icon-mail-reply"></i></button>
            <?php if($isMyCase[count($isMyCase)-1]->status=='pending'){ ?>
                 <button type="button" class="btn btn-purple  btn-resolve_fb" name="action" value="<?=$fb_feed[$i]->case_id?>"><i class="icon-check"></i> RESOLVE</button>
-                <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> ReAssign</button>  
+                <button type="button" class="btn btn-danger btn-case fb_reassign" name="action" value="case"><i class="icon-plus"></i> ReAssign</button>  
            <?php }else{ ?> 
               <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>
            <?php   } ?>
@@ -284,7 +284,7 @@ if($fb_feed[$i]->post_content != '<br />'):
         <button type="button" class="btn btn-primary btn-reply"><i class="icon-mail-reply"></i></button>
         <?php if($isMyCase[count($isMyCase)-1]->status=='pending'):?>
             <button type="button" class="btn btn-purple  btn-resolve_fb" name="action" value="<?=$fb_feed[$i]->case_id?>"><i class="icon-check"></i> RESOLVE</button>
-            <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> ReAssign</button>   
+            <button type="button" class="btn btn-danger btn-case fb_reassign" name="action" value="case"><i class="icon-plus"></i> ReAssign</button>   
         <?php else:?>
             <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>   
         <?php endif?>
@@ -326,6 +326,7 @@ if($fb_feed[$i]->post_content != '<br />'):
     <?php
         $data['posts'] = $fb_feed;        
         $data['i'] = $i;
+        $data['case_type']='facebook';
         $this->load->view('dashboard/case_field',$data);
     ?>
     </div>

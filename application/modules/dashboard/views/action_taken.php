@@ -22,6 +22,7 @@
                     <?php
             if(isset($post->channel_action)):
                     foreach($post->channel_action as $action):?>
+                    <?php //print_r($action);?>
                     <tr>
                       <td style="width:100px"><?php
                         $timezone = new DateTimeZone($this->session->userdata('timezone'));

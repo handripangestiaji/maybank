@@ -7,6 +7,7 @@ for($i=0; $i<count($fb_pm);$i++):
 $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_pm[$i]->post_id, 'a.status <>'=>'reassign'));
 //print_r($isMyCase);
 //echo $fb_pm[$i]->post_id."{pm-feed}".$fb_pm[$i]->post_id;
+//print_r($fb_pm[$i]);
 ?>
 <li id="post<?=$fb_pm[$i]->post_id?>" class="<?php if(isset($isMyCase[0]->assign_to)){echo "case_".$isMyCase[0]->case_id;} ?>">
     <input type="hidden" class="postId" value="<?php echo $fb_pm[$i]->post_id; ?>" />
@@ -50,8 +51,23 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_pm[$i]->po
             </button>  
         <?php }
     }else{ ?>
-                <button type="button" class="btn <?php echo $fb_pm[$i]->message_count-1 == 0 ? "btn-warning btn-mini no-cursor indicator" : "btn-inverse btn-mini no-cursor indicator" ?>"><?php echo $fb_pm[$i]->message_count-1 == 0 ? 'OPEN' :  'REPLIED'?></button>  
-    <?php } ?>
+        <?php //print_r($fb_pm->$is_my_reply)
+        
+        if(isset($fb_pm[$i]->reply_post[0])){
+            if(isset($fb_pm[$i]->is_my_reply[0])){?>        
+          <button type="button" class="btn btn-inverse btn-mini" value="<?php echo $fb_pm[$i]->reply_post[0]->post_id?>">
+        <?php
+        $reply_date = new DateTime($fb_pm[$i]->channel_action[count($fb_pm[$i]->channel_action) - 1]->created_at);
+        $reply_date->setTimezone($timezone);
+        echo "Replied by: ".$fb_pm[$i]->channel_action[count($fb_pm[$i]->channel_action) - 1]->username." ".$reply_date->format("d-M-y h:i A") ?>
+        </button> <?php            
+        }else{?>
+        <button type="button" class="btn btn-warning btn-mini no-cursor indicator" >OPEN</button>       
+         <?php }
+        }
+                 
+
+     } ?>
         <!--button class="btn btn-primary btn-mini" style="margin-left: 5px;">LIKE</button--> </p>
     <p>
         <span class="btn-engagement"><i class="icon-eye-open"></i> <?php echo $fb_pm[$i]->message_count-1;?> Engagements</span>
@@ -107,7 +123,7 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_pm[$i]->po
                 <button type="button" class="btn btn-primary btn-reply"><i class="icon-mail-reply"></i></button>
            <?php if($isMyCase[count($isMyCase)-1]->status=='pending'){ ?>
                 <button type="button" class="btn btn-purple  btn-resolve_fb" name="action" value="<?=$fb_pm[$i]->case_id?>"><i class="icon-check"></i> RESOLVE</button>
-                <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> ReAssign</button>  
+                <button type="button" class="btn btn-danger btn-case fb_reassign" name="action" value="case"><i class="icon-plus"></i> ReAssign</button>  
            <?php }else{ ?> 
               <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>
            <?php   } ?>

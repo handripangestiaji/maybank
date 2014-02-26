@@ -53,20 +53,20 @@ class account_model extends CI_Model
     }
     
     function SaveChannel($channel){
-	$currentChannel = $this->GetChannel(array(
-	    "social_id" => $channel['social_id']
-	));
-	if(count($currentChannel) == 0){
-	    $this->db->insert("channel", $channel);
-	    return $this->db->insert_id();
-	}
-	else{
-	    //print_r($currentChannel);
-	    $channel['is_active'] = 1;
-	    $this->db->where("channel_id", $currentChannel[0]->channel_id);
-	    $this->db->update("channel", $channel);
-	    return $currentChannel[0]->channel_id;
-	}
+    	$currentChannel = $this->GetChannel(array(
+    	    "social_id" => $channel['social_id']
+    	));
+    	if(count($currentChannel) == 0){
+    	    $this->db->insert("channel", $channel);
+    	    return $this->db->insert_id();
+    	}
+    	else{
+    	    //print_r($currentChannel);
+    	    $channel['is_active'] = 1;
+    	    $this->db->where("channel_id", $currentChannel[0]->channel_id);
+    	    $this->db->update("channel", $channel);
+    	    return $currentChannel[0]->channel_id;
+    	}
     }
     
     function YoutubeRefreshToken($token, $channel_id, $created_at){

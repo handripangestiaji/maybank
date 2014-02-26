@@ -457,13 +457,22 @@ class facebook_model extends CI_Model
     }
     
     function GetChannelActionPM($filter, $is_where_in = false){
-        $this->db->select("d.`post_id`, a.snippet AS post_content, a.message_count AS total_comments,  detail_id_from_facebook AS comment_stream_id,
-	    'NULL' AS attachment, b.sender AS `from`, c.name, b.messages AS comment_content,'NULL' AS `user_likes`,d.`post_stream_id`,
-	    b.detail_id AS comment_id,b.conversation_id AS comment_post_id, b.detail_id AS id, d.type AS type_stream,b.`created_at`");
-        $this->db->from("`social_stream_facebook_conversation` a INNER JOIN
-         `social_stream_facebook_conversation_detail` b ON b.conversation_id=a.conversation_id INNER JOIN
-         fb_user_engaged c ON c.facebook_id=b.sender INNER JOIN social_stream d ON d.post_id = b.conversation_id LEFT OUTER JOIN
-         social_stream e ON e.post_stream_id=b.detail_id_from_facebook");
+//        $this->db->select("d.`post_id`, a.snippet AS post_content, a.message_count AS total_comments,  detail_id_from_facebook AS comment_stream_id,
+//	                       b.sender AS `from`, c.name, b.messages AS comment_content,d.`post_stream_id`,
+//	                       b.detail_id AS comment_id,b.conversation_id AS comment_post_id, b.detail_id AS id, d.type AS type_stream,b.`created_at`");
+//        $this->db->from("`social_stream_facebook_conversation` a INNER JOIN
+//                         `social_stream_facebook_conversation_detail` b ON b.conversation_id=a.conversation_id INNER JOIN
+//                         fb_user_engaged c ON c.facebook_id=b.sender INNER JOIN 
+//                         social_stream d ON d.post_id = b.conversation_id LEFT OUTER JOIN
+//                         social_stream e ON e.post_stream_id=b.detail_id_from_facebook");
+$this->db->select("a.*, b.username, b.display_name, c.MESSAGES, d.messages, d.assign_to, 
+	e.display_name AS assign_name, f.display_name AS solved_name");
+$this->db->from("channel_action a INNER JOIN
+USER b ON b.user_id = a.created_by LEFT JOIN
+			`social_stream_facebook_conversation_detail` c ON c.detail_id = a.post_id LEFT JOIN
+			`case` d ON d.case_id = a.case_id LEFT JOIN
+			USER e ON e.user_id = d.assign_to LEFT JOIN
+			USER f ON f.user_id = d.solved_by");
 	if(!$is_where_in)
 	    $this->db->where($filter);
 	else
@@ -601,47 +610,44 @@ class facebook_model extends CI_Model
 	$this->db->order_by('b.created_at','desc');
 	$this->db->order_by('d.replied_count','desc');
         $result= $this->db->get()->result();
-        
+                $my_user_id=$this->session->userdata('user_id');                                
+
         foreach($result as $row){
         
-            $row->reply_post = $this->IsCommentExists($row->post_stream_id);
-            $row->channel_action = $this->GetChannelAction(array('a.post_id'=>$row->post_stream_id));
-        
-//            
-//            $row->reply_post = $this->GetChannelActionPM(array('d.post_id'=>$row->post_id));
-//            $row->channel_action = $this->GetChannelAction(array('a.post_id'=>$row->social_stream_post_id));
-//            
-//            $cek_reply=count($this->RetrievePmDetailFB(array('a.post_id'=>$row->social_stream_post_id),array()));
-//            $cek_action=count($this->GetChannelAction(array('a.created_by'=>$my_user_id,'a.post_id'=>$row->post_id), false));            
-//            
-//            if(($cek_reply>0) or ($cek_action==0 and $cek_reply==0)){
-//                $row->reply_post = $this->RetriveCommentPostFb(array('a.post_id'=>$row->social_stream_post_id),array());
-//        	    $comment_list = array();
-//        	    foreach($row->reply_post as $comment){
-//                    $comment_list[] = $comment->id;
-//                    $row->channel_action = $this->GetChannelAction(array_merge($comment_list, array($row->social_stream_post_id)), true);
-//                }
-//                foreach($row->reply_post as $comment){
-//                    $comment_list[] = $comment->id;
-//                    $row->is_my_reply= $this->GetChannelAction(array('a.created_by'=>$my_user_id,'a.post_id'=>$row->post_id), false);
-//                }                
-//            }elseif($cek_action>0 and $cek_reply==0 ){
-//                $row->reply_post = $this->RetriveCommentPostFb(array('a.post_id'=>$row->social_stream_post_id),array());
-//                $row->actions_post = $this->GetChannelAction(array('a.post_id'=>$row->post_id),array());
-//            	$comment_list = array();
-//                foreach($row->actions_post as $comment){
-//                    $comment_list[] = $comment->id;
-//                    $row->channel_action = $this->GetChannelAction(array_merge($comment_list, array($row->post_id)), true);
-//                }
-//                foreach($row->actions_post as $comment){
-//                    $comment_list[] = $comment->id;
-//                    $row->is_my_reply= $this->GetChannelAction(array('a.created_by'=>$my_user_id,'a.post_id'=>$row->post_id), false);
-//                }
-//                
-//            }                
-//
-            
-            
+//            $row->reply_post = $this->RetrievePmDetailFB(array('d.post_id'=>$row->post_id));
+           $row->reply_post = $this->IsCommentExists($row->post_stream_id);
+            $row->channel_action = $this->GetChannelActionPM(array('d.post_id'=>$row->post_id));
+          //  $row->reply_post = $this->IsCommentExists($row->post_stream_id);
+          //  $row->channel_action = $this->GetChannelAction(array('a.post_id'=>$row->social_stream_post_id));
+              
+            $cek_reply=count($row->reply_post);
+            $cek_action=count($row->channel_action);            
+
+//            echo "count reply:".$cek_reply."|-|count action:".$cek_action."<br>";
+            if(($cek_reply>0) or ($cek_action==0 and $cek_reply==0)){
+                $row->reply_post = $this->RetrievePmDetailFB(array('d.post_id'=>$row->post_id));
+        	    $comment_list = array();
+        	    foreach($row->reply_post as $comment){
+                    $comment_list[] = $comment->detail_id;
+                    $row->channel_action = $this->GetChannelActionPM(array_merge($comment_list, array($row->post_id)), true);
+                }
+                foreach($row->reply_post as $comment){
+                    $comment_list[] = $comment->detail_id;
+                    $row->is_my_reply= $this->GetChannelActionPM(array('a.created_by'=>$my_user_id,'d.post_id'=>$row->post_id), false);
+                }                
+            }elseif($cek_action>0 and $cek_reply==0 ){
+                $row->reply_post = $this->RetrievePmDetailFB(array('d.post_id'=>$row->post_id),array());
+                $row->actions_post = $this->GetChannelActionPM(array('d.post_id'=>$row->post_id),array());
+            	$comment_list = array();
+                foreach($row->actions_post as $comment){
+                    $comment_list[] = $comment->id;
+                    $row->channel_action = $this->GetChannelActionPM(array_merge($comment_list, array($row->post_id)), true);
+                }
+                foreach($row->actions_post as $comment){
+                    $comment_list[] = $comment->id;
+                    $row->is_my_reply= $this->GetChannelActionPM(array('a.created_by'=>$my_user_id,'d.post_id'=>$row->post_id), false);
+                }                
+            } 
         }
         return $result;
     }

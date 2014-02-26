@@ -51,8 +51,23 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_pm[$i]->po
             </button>  
         <?php }
     }else{ ?>
-                <button type="button" class="btn <?php echo $fb_pm[$i]->message_count-1 == 0 ? "btn-warning btn-mini no-cursor indicator" : "btn-inverse btn-mini no-cursor indicator" ?>"><?php echo $fb_pm[$i]->message_count-1 == 0 ? 'OPEN' :  'REPLIED'?></button>  
-    <?php } ?>
+        <?php //print_r($fb_pm->$is_my_reply)
+        
+        if(isset($fb_pm[$i]->reply_post[0])){
+            if(isset($fb_pm[$i]->is_my_reply[0])){?>        
+          <button type="button" class="btn btn-inverse btn-mini" value="<?php echo $fb_pm[$i]->reply_post[0]->post_id?>">
+        <?php
+        $reply_date = new DateTime($fb_pm[$i]->channel_action[count($fb_pm[$i]->channel_action) - 1]->created_at);
+        $reply_date->setTimezone($timezone);
+        echo "Replied by: ".$fb_pm[$i]->channel_action[count($fb_pm[$i]->channel_action) - 1]->username." ".$reply_date->format("d-M-y h:i A") ?>
+        </button> <?php            
+        }else{?>
+        <button type="button" class="btn btn-warning btn-mini no-cursor indicator" >OPEN</button>       
+         <?php }
+        }
+                 
+
+     } ?>
         <!--button class="btn btn-primary btn-mini" style="margin-left: 5px;">LIKE</button--> </p>
     <p>
         <span class="btn-engagement"><i class="icon-eye-open"></i> <?php echo $fb_pm[$i]->message_count-1;?> Engagements</span>

@@ -86,7 +86,7 @@ class case_model extends CI_Model{
 	$mail_from = $this->config->item('mail_from');
         $this->email->initialize();
         $this->email->from($mail_from['address'], $mail_from['name']);
-        $this->email->cc($mail_from['cc']);
+        $this->email->cc($mail_from['cc'].','.$case['email']);
         $user = $this->ReadAllUser(
             array(
                 "user_id" => $case['assign_to']

@@ -396,4 +396,36 @@ class Users_model extends CI_Model
             $this->db->where($filter);
         return $this->db->get()->result();
     }
+    
+    //============================ COUNTRY =========================
+    function insert_country($data)
+    {
+        return $this->db->insert('country',$data);
+    }
+    
+    function get_country($id=null){
+        $this->db->select('*');
+        $this->db->from('country');
+        if($id!=null){
+            $this->db->where('code',$id);
+        }
+        return $this->db->get();
+    }
+    function edit_country($id)
+    {
+        $this->db->where('role_collection_id',$id);
+        return $this->db->get($this->role_detail);
+    }
+    
+    function update_country($id,$data)
+    {
+        $this->db->where('code',$id);
+        return $this->db->update('country',$data);
+    }
+    
+    function delete_country($id)
+    {
+        $this->db->where('code',$id);
+        return $this->db->delete('country');
+    }
 }

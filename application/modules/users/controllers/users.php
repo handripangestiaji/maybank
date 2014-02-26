@@ -1397,7 +1397,8 @@ class Users extends MY_Controller {
     }
     
     function country(){
-	$this->load->view('users/country');
+	$data['countries'] = $this->users_model->get_country();
+	$this->load->view('users/country',$data);
     }
     
     //=============================END GROUP===============================
@@ -1417,6 +1418,45 @@ class Users extends MY_Controller {
             $this->session->sess_destroy();
             redirect('login');
         }
-	
     
+    //============================ COUNTRY ===============================
+    function create_country()
+    {
+	$this->load->view('users/create_country');
+    }
+    
+    function insert_country()
+    {
+	$data = array(
+		      'code' => $this->input->post('code'),
+		      'name' => $this->input->post('name'),
+		      'created_at' => date("Y-m-d H:i:s"),
+		      );
+	$this->users_model->insert_country($data);
+	
+	redirect('users/country');
+    }
+    
+    function edit_country($id)
+    {
+	$data['country'] = $this->users_model->get_country($id);
+	$this->load->view('users/edit_country',$data);
+    }
+    
+    function update_country()
+    {
+	$data = array(
+		      'code' => $this->input->post('code'),
+		      'name' => $this->input->post('name'),
+		      );
+	$this->users_model->update_country($this->input->post('code'),$data);
+	
+	redirect('users/country');
+    }
+    
+    function delete_country($id){
+	$this->users_model->delete_country($id);
+	
+	redirect('users/country');
+    }
 }

@@ -507,8 +507,8 @@ $this->db->from("channel_action a INNER JOIN
         foreach($result as $row){
             
             $cek_reply=count($this->RetriveCommentPostFb(array('a.post_id'=>$row->social_stream_post_id),array()));
-            $cek_action=count($this->GetChannelAction(array('a.created_by'=>$my_user_id,'a.post_id'=>$row->post_id), false));            
-            
+            $cek_action=count($this->GetChannelAction(array('a.post_id'=>$row->post_id), false));            
+
             if(($cek_reply>0) or ($cek_action==0 and $cek_reply==0)){
                 $row->reply_post = $this->RetriveCommentPostFb(array('a.post_id'=>$row->social_stream_post_id),array());
         	    $comment_list = array();
@@ -693,7 +693,7 @@ $this->db->from("channel_action a INNER JOIN
                          social_stream_fb_comments b ON b.post_id=a.post_id INNER JOIN
                          fb_user_engaged c ON c.facebook_id=b.from INNER JOIN social_stream d ON d.post_id = b.id LEFT OUTER JOIN
                          social_stream e ON e.post_stream_id=b.comment_stream_id)
-                        WHERE ".$filter."
+                        WHERE b.from =272288926209649
                         ORDER BY `a`.`post_id` DESC
                         LIMIT 20)
                         UNION

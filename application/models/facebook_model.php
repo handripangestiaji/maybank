@@ -685,7 +685,7 @@ $this->db->from("channel_action a INNER JOIN
     
     public function FbRelatedConversation($filter,$sender){
 
-        $sql="(SELECT `a`.`post_id`, `a`.`post_content`,`b`.`comment_stream_id`, 
+        $sql="SELECT * FROM ((SELECT `a`.`post_id`, `a`.`post_content`,`b`.`comment_stream_id`, 
                         	`b`.`from`,`c`.`name`,`b`.`comment_content`, 
                         	`b`.`created_at`,`b`.`user_likes`,`d`.`post_stream_id`, 
                         	`e`.`post_id` AS comment_post_id,e.channel_id,e.type
@@ -707,8 +707,10 @@ $this->db->from("channel_action a INNER JOIN
                          social_stream d ON d.post_id=b.conversation_id LEFT OUTER JOIN
                          `case` e ON e.post_id=d.post_id AND e.status='pending')
                         WHERE `detail_id_from_facebook` NOT LIKE '%_0' AND b.sender = ".$sender."
-                        ORDER BY `a`.`updated_time` DESC, `b`.`created_at` DESC, `d`.`replied_count` DESC) ";
+                        ORDER BY `b`.`created_at` DESC, `b`.`created_at` DESC, `d`.`replied_count` DESC)) AS related
+                        ORDER BY related.created_at DESC ";
         $query = $this->db->query($sql);      
+        
         return $query->result();
     }
 

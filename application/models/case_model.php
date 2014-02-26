@@ -209,7 +209,7 @@ class case_model extends CI_Model{
         if(count($filter) > 0){
             $this->db->where($filter);
         }
-        $this->db->order_by('id','desc');
+        $this->db->order_by('a.created_at');
     	$result= $this->db->get()->result();
         
         foreach($result as $row){

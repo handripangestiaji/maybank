@@ -50,7 +50,7 @@ for($i=0;$i<count($homefeed);$i++){
     </p>
     <p>
     <?php if(count($homefeed[$i]->case) > 0):?>
-        <button type="button" class="btn <?=$homefeed[$i]->case[0]->status == "pending" ? "btn-purple" : "btn-inverse"?> btn-mini" value="<?php echo $homefeed[$i]->case[0]->case_id?>">CASE ID #<?php echo $homefeed[$i]->case[0]->case_id?>
+        <button type="button" class="btn <?=$homefeed[$i]->case[0]->status == "pending" ? "btn-purple" : "btn-inverse"?> btn-mini" value="<?php echo $homefeed[$i]->case[0]->case_id?>">Case Id #<?php echo $homefeed[$i]->case[0]->case_id?>
             <?php
             if($homefeed[$i]->case[0]->status == "pending")
                 echo isset($homefeed[$i]->case[0]->assign_to->full_name) ? ' Assign to '.$homefeed[$i]->case[0]->assign_to->full_name : '';

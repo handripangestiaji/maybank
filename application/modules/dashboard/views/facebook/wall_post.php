@@ -132,11 +132,14 @@ if($fb_feed[$i]->post_content != '<br />'):
         <br />
         <?php 
             $comment = $fb_feed[$i]->reply_post;
-           // echo "<pre>";
-//            print_r($comment[$j]);
-//            echo "</pre>";
+            // echo "<pre>";     
+            //print_r($comment[$j]);
+            //echo "</pre>";
             for($j=0;$j<count($comment);$j++):
-            
+            $isMyCase2=$this->case_model->chackAssignCase(array('a.post_id' => $comment[$j]->comment_post_id, 'a.status <>'=>'reassign'));
+            //print_r($comment[$j]->comment_post_id);
+            //echo "<br>";
+            //print_r($isMyCase2);
         ?>
         <div class="engagement-body" <?php if($comment[$j]->comment_id!='0'){ ?> style="padding-left: 45px;" <?php } ?>>
             <span class="engagement-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>    
@@ -153,9 +156,6 @@ if($fb_feed[$i]->post_content != '<br />'):
               ?></span></p>
             <p>
               <?php
-//              echo "<pre>";
-//              print_r($comment[$j]);
-//              echo "</pre>";
                 $attachment=json_decode($comment[$j]->attachment);
                 if(isset($attachment->media->image->src)){
                 for($att=0;$att<count($attachment);$att++){
@@ -177,20 +177,20 @@ if($fb_feed[$i]->post_content != '<br />'):
                 <?php 
                     if(isset($isMyCase[count($isMyCase)-1]->assign_to)){
                         if($isMyCase[count($isMyCase)-1]->assign_to==$this->session->userdata('user_id') or ($isMyCase[count($isMyCase)-1]->solved_by)){
-                ?>
+                ?><h4>
                 <p>
                     <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Take Action')):?>
                         <button type="button" role="button" class="btn btn-mini delete_post comments"  value="<?php echo $comment[$j]->comment_post_id?>" style="border: none; background-color: transparent;"><i class="icon-trash greyText"></i></button>
                     <?php endif;?>
-            
                     <button type="button" class="btn btn-warning btn-mini">OPEN</button>
                     <button class="fblike btn btn-primary btn-mini" value="<?php echo $comment[$j]->post_stream_id?>"><?php echo $comment[$j]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button>
                     <?php if(($comment[$j]->comment_id)=='0'){?>
-                    <button type="button" class="btn btn-primary btn-engagement-reply btn-mini" ><i class="icon-mail-reply"></i></button>
+                    <button type="button" class="btn btn-primary btn-engagement-reply btn-mini btn-reply" ><i class="icon-mail-reply"></i></button>
                     <?php } ?>
-                   <!--button type="button" class="btn btn-danger btn-engagement-case btn-mini"><i class="icon-plus"></i> CASE</button-->
-                </p><!--222-->
+                   <!--button type="button" class="btn btn-danger btn-engagement-case btn-mini btn-case"><i class="icon-plus"></i> CASE</button-->
+                </p></h4><!--222 assign to you-->
                 <?php }else{ ?>
+                <h4>
                 <p>
                     <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Take Action')):?>
                         <button type="button" role="button" class="btn btn-mini delete_post comments"  value="<?php echo $comment[$j]->comment_post_id?>" style="border: none; background-color: transparent;"><i class="icon-trash greyText"></i></button>
@@ -199,10 +199,11 @@ if($fb_feed[$i]->post_content != '<br />'):
                     <button type="button" class="btn btn-warning btn-mini">OPEN</button>
                     <button class="fblike btn btn-primary btn-mini" value="<?php echo $comment[$j]->post_stream_id?>"><?php echo $comment[$j]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button>
                     <?php if(($comment[$j]->comment_id)=='0'){?>
-                    <button type="button" class="btn btn-primary btn-engagement-reply btn-mini" ><i class="icon-mail-reply"></i></button>
+                    <button type="button" class="btn btn-primary btn-engagement-reply btn-mini btn-reply" ><i class="icon-mail-reply"></i></button>
                     <?php } ?>
-                   <!--button type="button" class="btn btn-danger btn-engagement-case btn-mini"><i class="icon-plus"></i> CASE</button-->
-                </p> <!--sads3333sad;-->
+                    <!--button type="button" class="btn btn-danger btn-engagement-case btn-mini btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button-->
+                </p>
+                </h4> <!--case to others sads3333sad;-->
                 <?php } 
                 }elseif(!isset($isMyCase[count($isMyCase)-1])){ ?>
                 <h4>
@@ -216,7 +217,7 @@ if($fb_feed[$i]->post_content != '<br />'):
                     <button type="button" class="btn btn-primary btn-engagement-reply btn-mini btn-reply" ><i class="icon-mail-reply"></i></button>
                     <?php } ?>
                    <!--button type="button" class="btn btn-danger btn-engagement-case btn-mini btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button-->
-                </p><!--44-->
+                </p><!--not yet case 44-->
                 </h4>
                 <?php } ?>
                 <div class="fb-reply-engagement-field reply-field hide">
@@ -228,10 +229,10 @@ if($fb_feed[$i]->post_content != '<br />'):
                 </div>
                  <div class="case-field hide">
                 <?php
-                    /*$data['posts'] = $comment;
+                    $data['posts_comment'] = $comment;
                     $data['posts'] = $fb_feed;
                     $data['i'] = $j;
-                    $this->load->view('dashboard/case_field',$data);*/
+                    $this->load->view('dashboard/case_field',$data);
                 ?>
                 </div>                
             </div>

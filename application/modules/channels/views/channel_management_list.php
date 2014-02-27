@@ -41,6 +41,7 @@
             <th>Active</th>
             <th>Connection Type</th>
             <th>Social ID</th>
+            <th>Country</th>
             <th>Action</th>
         </tr>
     </thead>
@@ -53,6 +54,7 @@
             <td><?=$channel->is_active == 1 ? "Active" : "No Active"?></td>
             <td><?=$channel->connection_type.' '.($channel->is_fb_page == 1? " Page" : "") ?></td>
             <td><?=$channel->social_id?></td>
+            <td><?=$channel->country_code?></td>
             <td>
                 <button value="<?=base_url('channels/channelmg/DeleteChannel?channel_id='.$channel->channel_id."&token=".$this->session->userdata('channel_token_delete'))?>" class="btn btn-danger delete" type="button" id="channel_<?=$channel->channel_id?>"><i class="icon-trash"></i> Delete</button>
             </td>

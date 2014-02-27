@@ -3,6 +3,7 @@
 */
 
 $(function(){
+    $('#countrySelect').multiselect();
     $('.sidebarContent').height($(window).height() * 0.95);
     $(this).on('submit', '.case-field form', function(e){
         var thisElement = $(this);
@@ -432,15 +433,15 @@ $(function(){
     
     $(this).on('click', '.btn-resolve', function(e){
         var btnResolve = $(this);
-        
-        confirmed = confirm('Are you sure to solve this case?');
+        confirmed = prompt("Resolved Message?", "","Are you sure to solve this case");
+        //confirmed = confirm('Are you sure to solve this case?');
         e.preventDefault();
         if(confirmed){
             btnResolve.attr("disabled", "disabled");
             $.ajax({
                "url" : BASEURL + "case/mycase/ResolveCase",
                "type" : "POST",
-               "data" : "case_id=" + btnResolve.val(),
+               "data" : "case_id=" + btnResolve.val()+"&solved_message="+confirmed,
                "success" : function(response){
                     if(response.success){
                         btnResolve.siblings('.btn-case').remove();
@@ -459,15 +460,18 @@ $(function(){
     $(this).on('click', '.btn-resolve_fb', function(e){
         var btnResolve = $(this);
         var user_id= $(" input[name=user_id]").val();
-        
-        confirmed = confirm('Are you sure to solve this case?');
+       // var solved_message=
+//        confirmed = confirm('Are you sure to solve this case?');
+        confirmed = prompt("Resolved Message?", "","Are you sure to solve this case");
+        //alert("You have entered : " +  retVal );
+       // alert(confirmed);
         e.preventDefault();
         if(confirmed){
             btnResolve.attr("disabled", "disabled");
             $.ajax({
                "url" : BASEURL + "case/mycase/ResolveCase",
                "type" : "POST",
-               "data" : "case_id=" + btnResolve.val()+"&user_id="+user_id,
+               "data" : "case_id=" + btnResolve.val()+"&user_id="+user_id+"&solved_message="+confirmed,
                
                "success" : function(response){
                     if(response.success){

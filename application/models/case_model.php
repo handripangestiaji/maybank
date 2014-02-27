@@ -210,7 +210,7 @@ class case_model extends CI_Model{
         if(count($filter) > 0){
             $this->db->where($filter);
         }
-        $this->db->order_by('id','desc');
+        $this->db->order_by('a.created_at');
     	$result= $this->db->get()->result();
         
         foreach($result as $row){
@@ -223,11 +223,12 @@ class case_model extends CI_Model{
     }
 
     
-    function ResolveCase($case_id, $solved_by, $is_solved = true){
+    function ResolveCase($case_id, $solved_by,$solved_message, $is_solved = true){
         $this->db->where('case_id', $case_id);
         $this->db->update('case', array(
             'status' => $is_solved == true ? 'solved' : 'reassign',
             'solved_by' => $solved_by,
+            'solved_message' => $solved_message,
             'solved_at' => date("Y-m-d H:i:s")
         ));
         $solved_case = $this->LoadCase(array('case_id' => $case_id));
@@ -251,7 +252,7 @@ class case_model extends CI_Model{
     
     function chackAssignCase($filter = array()){
         $this->db->select("`a`.*, `b`.`channel_id`, `b`.`post_stream_id`,c.full_name, `d`.`full_name` AS resolve_by, e.full_name AS `send_by`");
-        $this->db->from("`case` a INNER JOIN social_stream b ON a.post_id = b.post_id LEFT OUTER JOIN `user` c ON c.user_id=a.assign_to LEFT OUTER JOIN `user` d ON d.user_id=a.solved_by LEFT OUTER JOIN `user` e ON c.user_id=a.created_by");
+        $this->db->from("`case` a INNER JOIN social_stream b ON a.post_id = b.post_id LEFT OUTER JOIN `user` c ON c.user_id=a.assign_to LEFT OUTER JOIN `user` d ON d.user_id=a.solved_by LEFT OUTER JOIN `user` e ON e.user_id=a.created_by");
         $this->db->where($filter);
         $result = $this->db->get()->result();
         return $result;

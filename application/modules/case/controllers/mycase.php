@@ -144,7 +144,7 @@ class mycase extends CI_Controller{
     
     function ResolveCase(){
         if($this->input->is_ajax_request()){
-            $solved_case = $this->case_model->ResolveCase($this->input->post('case_id'), $this->session->userdata('user_id'));
+            $solved_case = $this->case_model->ResolveCase($this->input->post('case_id'),$this->session->userdata('user_id'), $this->input->post('solved_message'));
             if($solved_case)
                     echo json_encode(array(
                         "success" => true,

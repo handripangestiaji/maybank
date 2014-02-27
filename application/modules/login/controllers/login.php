@@ -81,11 +81,12 @@ class Login extends Login_Controller {
 				'display_name' => $user_login->row()->display_name,
 				'role_name' => $user_login->row()->role_name,
 				'role_id' => $user_login->row()->role_id,
-				'web_address' => $user_login->row()->web_address,
+				'email' => $user_login->row()->email,
 				'image_url' => $user_login->row()->image_url,
 				'description' => $user_login->row()->description,
 				'group_id' => $user_login->row()->group_id,
 				'timezone' => $user_login->row()->timezone,
+				'country' => $user_login->row()->country_code,
                                 'is_login' => TRUE
                             );
                     $timezone = new DateTimeZone("Europe/London");

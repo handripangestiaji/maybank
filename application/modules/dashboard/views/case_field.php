@@ -1,10 +1,19 @@
 <div class="row-fluid">
 <?php 
 if($posts){
-        ?>
+//print_r($posts_comment[$i]);
+ if(isset($posts[$i]->post_id)){
+    $post_id=$posts[$i]->post_id;   
+ }
+ if(isset($posts_comment[$i]->comment_post_id)){
+    $post_id=$posts_comment[$i]->comment_post_id;
+ }
+ //print_r($post_id);
+ 
+?>
            <span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
            <form method="post" class="assign-case" action="<?php echo base_url("case/mycase/CreateCase")?>">
-           <input type="hidden" value="<?php echo ($posts[$i]->post_id ? $posts[$i]->post_id : $posts[$i]->social_stream_post_id)?>" name="post_id" />
+           <input type="hidden" value="<?php echo $post_id; ?>" name="post_id" />
            <input type="hidden" value="new_case" name="type" />
            <div class="message"></div>
            <div class="pull-left">

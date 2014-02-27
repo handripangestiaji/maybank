@@ -49,8 +49,11 @@
                       </td>
                       <td style="width:139px">
                         <?php
-                            if($action->action_type == 'case_created' || $action->action_type == 'case_solved'){
+                            if($action->action_type == 'case_created'){
                                 echo $action->messages;
+                            }
+                            if($action->action_type == 'case_solved'){
+                                echo $action->solved_messages;
                             }
                             ?>
                         </td>

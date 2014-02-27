@@ -589,7 +589,9 @@ $(function(){
                                 $(this).closest('h4').siblings('.reply-field').hide();
                                 $(this).closest('h4').siblings('.dm-field').hide();
                                 
-                                 $(this).closest('h4').siblings('.case-field').find("select[name=assign_to]").multiselect({
+                                var id =  $(this).closest('h4').siblings('.case-field').find("select[name=assign_to]").attr('id');
+                                console.log(id);
+                                $('#' + id).multiselect({
                                     buttonText: function(options, select) {
                                         if (options.length == 0) {
                                             return 'None selected <b class="caret"></b>';
@@ -606,7 +608,7 @@ $(function(){
                                         }
                                     }
                                 });
-                                $(this).closest('h4').siblings('.case-field').find("select[name=assign_to]").multiselect('refresh');
+                                //$(this).closest('h4').siblings('.case-field').find("select[name=assign_to]").multiselect('refresh');
                                 
                                 $(this).closest('h4').siblings('.case-field').show();
                                 $(this).closest('h4').siblings('.case-field').find("input[name=type]").val($(this).val());

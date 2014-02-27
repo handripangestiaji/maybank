@@ -1314,6 +1314,7 @@ class Users extends MY_Controller {
 			 'channel' => $this->users_model->select_channel(),
 			 'msge' => NULL
 			);
+	  $data['country_list'] = $this->users_model->get_country_list();
 	  $this->load->view('users/group_edit',$data);
     }
     else
@@ -1339,6 +1340,7 @@ class Users extends MY_Controller {
 			 'channel' => $this->users_model->select_channel(),
 			 'msge' => NULL
 			);
+	       
 	       $this->load->view('users/group_edit',$data);
 	  }
 	  
@@ -1362,6 +1364,7 @@ class Users extends MY_Controller {
 		    $group_id = $this->input->post('group_id');
 		    $data = array(
 				  'group_name' => $this->input->post('group_name'),
+				  'country_code' => $this->input->post('country'),
 				 );
 		    $this->users_model->update_group($group_id,$data);
 		    

@@ -39,7 +39,7 @@ if($posts){
            </div>
            <div class="pull-left" style="width:70%;">
                <select name="assign_to" <!--multiple="multiple"!-->>
-                      <option value=''>-- Select User --</option>
+                      <option value='' id="caseUser<?=$posts[$i]->social_stream_post_id?>">-- Select User --</option>
                       <?php
                       $group_name = null;
                       if(is_array($user_list)){
@@ -49,7 +49,7 @@ if($posts){
                                                          echo '<optgroup label="'.$user_list[$ix]->group_name.'"></optgroup>';           
                                               }
                                               if( $this->session->userdata('user_id') != $user_list[$ix]->user_id){
-                                                         echo '<option value="'.$user_list[$ix]->user_id.'">'.$user_list[$ix]->full_name.'</option>';                                 
+                                                         echo '<option value="'.$user_list[$ix]->user_id.'">&nbsp;&nbsp;&nbsp;&nbsp;'.$user_list[$ix]->full_name.'</option>';                                 
                                               }
                                    }
                                    $group_name = $user_list[$ix]->group_name;           

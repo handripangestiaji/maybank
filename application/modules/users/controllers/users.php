@@ -3,7 +3,7 @@
 class Users extends MY_Controller {
 
     private $connection;
-    public $user_role;
+    public $user_role, $country_list;
 	   
     function __construct()
     {
@@ -17,6 +17,7 @@ class Users extends MY_Controller {
 	$this->load->library('form_validation');
 	$this->user_role = $this->users_model->get_collection_detail(
 		array('role_collection_id'=>$this->session->userdata('role_id')));
+	$this->country_list = $this->users_model->get_country_list();
 	
     }
     
@@ -246,6 +247,7 @@ class Users extends MY_Controller {
 				'location' => $this->input->post('location'),
 				'web_address' => $this->input->post('web_address'),
 				'created_at' => $time->format("Y-m-d H:i:s"),
+				'country_code' => $this->input->post('country'),
 				'created_by' => $created_by
 			 );
 		    
@@ -370,7 +372,8 @@ class Users extends MY_Controller {
 					  'location' => $this->input->post('location'),
 					  'timezone' => $this->input->post('timezone'),
 					  'web_address' =>$this->input->post('web_address'),
-					  'is_active' => $this->input->post('is_active')
+					  'is_active' => $this->input->post('is_active'),
+					  'country_code' => $this->input->post('country')
 					    );
 			      
 			      $this->users_model->update_user($id,$data);
@@ -410,7 +413,8 @@ class Users extends MY_Controller {
 					  'location' => $this->input->post('location'),
 					  'timezone' => $this->input->post('timezone'),
 					  'web_address' =>$this->input->post('web_address'),
-					  'is_active' => $this->input->post('is_active')
+					  'is_active' => $this->input->post('is_active'),
+					  'country_code' => $this->input->post('country')
 					    );
 			      
 			      $this->users_model->update_user($id,$data);
@@ -427,6 +431,7 @@ class Users extends MY_Controller {
 					  'web_address' => $user_login->row()->web_address,
 					  'timezone' => $user_login->row()->timezone,
 					  'description' => $user_login->row()->description,
+					  'country' => $user_login->row()->country_code,
 					  'is_login' => TRUE
 				      );
 			      $this->session->set_userdata($data1);
@@ -1397,7 +1402,8 @@ class Users extends MY_Controller {
     }
     
     function country(){
-	$this->load->view('users/country');
+	$data['countries'] = $this->users_model->get_country();
+	$this->load->view('users/country',$data);
     }
     
     //=============================END GROUP===============================
@@ -1417,6 +1423,45 @@ class Users extends MY_Controller {
             $this->session->sess_destroy();
             redirect('login');
         }
-	
     
+    //============================ COUNTRY ===============================
+    function create_country()
+    {
+	$this->load->view('users/create_country');
+    }
+    
+    function insert_country()
+    {
+	$data = array(
+		      'code' => $this->input->post('code'),
+		      'name' => $this->input->post('name'),
+		      'created_at' => date("Y-m-d H:i:s"),
+		      );
+	$this->users_model->insert_country($data);
+	
+	redirect('users/country');
+    }
+    
+    function edit_country($id)
+    {
+	$data['country'] = $this->users_model->get_country($id);
+	$this->load->view('users/edit_country',$data);
+    }
+    
+    function update_country()
+    {
+	$data = array(
+		      'code' => $this->input->post('code'),
+		      'name' => $this->input->post('name'),
+		      );
+	$this->users_model->update_country($this->input->post('code'),$data);
+	
+	redirect('users/country');
+    }
+    
+    function delete_country($id){
+	$this->users_model->delete_country($id);
+	
+	redirect('users/country');
+    }
 }

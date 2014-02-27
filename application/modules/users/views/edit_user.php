@@ -133,7 +133,18 @@
             </td>
             
         </tr>
-        
+        <tr>
+            <td>Country</td>
+            <td>
+                <select name="country">
+                <?php
+                    foreach($this->country_list as $country):
+                ?>
+                    <option value="<?=$country->code?>"><?=$country->name?></option>
+                <?php endforeach;?>
+                </select>
+            </td>
+        </tr>
         <tr>
             <td>Description</td>
             <td><textarea name='description' type='text'><?php echo set_value('description',isset($row->description) ? $row->description : '')?></textarea></td>

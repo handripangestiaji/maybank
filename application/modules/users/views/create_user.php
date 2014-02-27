@@ -108,7 +108,18 @@
                             <span style='color:red;'><?php echo form_error('userfile'); ?>
                         </td>
                     </tr>
-                    
+                    <tr>
+                        <td>Country</td>
+                        <td>
+                            <select name="country">
+                            <?php
+                                foreach($this->country_list as $country):
+                            ?>
+                                <option value="<?=$country->code?>"><?=$country->name?></option>
+                            <?php endforeach;?>
+                            </select>
+                        </td>
+                    </tr>
                     <tr>
                         <td>Description</td>
                         <td><textarea class="about-me" name='description'><?php echo set_value('description');?></textarea></td>

@@ -3,7 +3,7 @@
 class Users extends MY_Controller {
 
     private $connection;
-    public $user_role;
+    public $user_role, $country_list;
 	   
     function __construct()
     {
@@ -17,6 +17,7 @@ class Users extends MY_Controller {
 	$this->load->library('form_validation');
 	$this->user_role = $this->users_model->get_collection_detail(
 		array('role_collection_id'=>$this->session->userdata('role_id')));
+	$this->country_list = $this->users_model->get_country_list();
 	
     }
     
@@ -246,6 +247,7 @@ class Users extends MY_Controller {
 				'location' => $this->input->post('location'),
 				'web_address' => $this->input->post('web_address'),
 				'created_at' => $time->format("Y-m-d H:i:s"),
+				'country_code' => $this->input->post('country'),
 				'created_by' => $created_by
 			 );
 		    
@@ -370,7 +372,8 @@ class Users extends MY_Controller {
 					  'location' => $this->input->post('location'),
 					  'timezone' => $this->input->post('timezone'),
 					  'web_address' =>$this->input->post('web_address'),
-					  'is_active' => $this->input->post('is_active')
+					  'is_active' => $this->input->post('is_active'),
+					  'country_code' => $this->input->post('country')
 					    );
 			      
 			      $this->users_model->update_user($id,$data);

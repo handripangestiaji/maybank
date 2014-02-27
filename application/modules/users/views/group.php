@@ -87,6 +87,19 @@
                         <td><input type='text' name='group_name' value="<?php set_value('group_name');?>" />
                         <span style='color: red;'><?php echo form_error('group_name');?></span></td>
                     </tr>
+		    <tr>
+			<td>Country</td>
+			<td></td>
+			<td>
+			    <select name="country">
+			    <?php
+				foreach($this->country_list as $country):
+			    ?>
+				<option value="<?=$country->code?>"><?=$country->name?></option>
+			    <?php endforeach;?>
+			    </select>
+			</td>
+		    </tr>
                 </table>
             <hr style="margin-top: 0px;">
             <table style='margin-bottom: 10px;'>

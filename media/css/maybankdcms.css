@@ -795,6 +795,21 @@ input[type="text"].compose-new-message{
 .img_attachment{
 	width: 40%;
 }
+
+.assign-case ul.dropdown-menu li{
+	background-color: #ffffff;
+	border: none;
+	margin-bottom: 0px;
+}
+
+.multiselect-group{
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+ul.tagit{
+	padding: 0px;
+}
 /*==============================================================================================
 ======================================== C M S =================================================
 ==============================================================================================*/

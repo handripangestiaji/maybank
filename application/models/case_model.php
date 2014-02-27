@@ -159,10 +159,16 @@ class case_model extends CI_Model{
                 $filter['a.user_id'] = $filter['user_id'];
                 unset($filter['user_id']);
             }
+            if(isset($filter['country_code'])){
+                if($filter['country_code'] != null)
+                    $filter['b.country_code'] = $filter['country_code'];
+                unset($filter['country_code']);
+            }
             $this->db->where($filter);
         }
         $this->db->select("*");
         $this->db->from("user a inner join user_group b on a.group_id = b.group_id inner join role_collection c on a.role_id = c.role_collection_id");
+        $this->db->order_by('group_name','asc');
         $query_result = $this->db->get();
         if($query_result->num_rows() > 1){
             $result = $query_result->result();

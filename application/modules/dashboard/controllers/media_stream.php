@@ -55,6 +55,7 @@ class Media_stream extends CI_Controller {
 	    $this->load->model('case_model');
 	    
         $filter=array('role_id <>'=>'5');
+	$filter['a.country_code'] = IsRoleFriendlyNameExist($this->user_role, 'Regional_User') ? NULL : $this->session->userdata('country');
         //print_r($getUserCountry->country_code);
         $data['user_list'] = $this->case_model->ReadAllUser($filter);
 	    $this->load->view('dashboard/facebook/facebook_stream',$data);

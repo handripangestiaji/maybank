@@ -34,24 +34,33 @@ if($posts){
             
            <input type="hidden" id="relatedCoversation-<?php echo $posts[$i]->social_stream_post_id ?>" name="related_conversation" value="<?php echo $posts[$i]->post_id?>" />
            <br clear="all" />
-           <div class="pull-left">
+           <div class="pull-left" style="width:30%;">
                Assign To:
            </div>
-           <div class="pull-right">
-               <select name="assign_to">
-                <option value=""></option>
-                   <?php foreach($user_list as $user):?>
-                    <?php if(IsRoleFriendlyNameExist($user->role_detail, 'Social Stream_Current_Resolve_Case')):?>
-                        <option value="<?php echo $user->user_id?>"><?php echo $user->full_name."($user->email)"?></option>
-                    <?php endif?>
-                   <?php endforeach;?>
+           <div class="pull-left" style="width:70%;">
+               <select name="assign_to" <!--multiple="multiple"!-->>
+                      <option value=''>-- Select User --</option>
+                      <?php
+                      $group_name = null;
+                      for($ix=0;$ix<count($user_list);$ix++){
+                                 if(IsRoleFriendlyNameExist($user_list[$i]->role_detail, 'Social Stream_Current_Resolve_Case')){
+                                            if($user_list[$ix]->group_name!=$group_name){
+                                                       echo '<optgroup label="'.$user_list[$ix]->group_name.'"></optgroup>';           
+                                            }
+                                            if( $this->session->userdata('user_id') != $user_list[$ix]->user_id){
+                                                       echo '<option value="'.$post_id.'-'.$user_list[$ix]->user_id.'">'.$user_list[$ix]->full_name.'</option>';                                 
+                                            }
+                                 }
+                                 $group_name = $user_list[$ix]->group_name;           
+                      }
+                      ?>
                </select>
            </div>
            <br clear="all" />
-           <div class="pull-left">
+           <div class="pull-left" style="width:30%;">
                Email:
            </div>
-           <div class="pull-right">
+           <div class="pull-left" style="width:70%;">
                <input type="text" class="email" name="email" />
            </div>
            <br clear="all" />

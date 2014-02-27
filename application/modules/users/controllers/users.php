@@ -413,7 +413,8 @@ class Users extends MY_Controller {
 					  'location' => $this->input->post('location'),
 					  'timezone' => $this->input->post('timezone'),
 					  'web_address' =>$this->input->post('web_address'),
-					  'is_active' => $this->input->post('is_active')
+					  'is_active' => $this->input->post('is_active'),
+					  'country_code' => $this->input->post('country')
 					    );
 			      
 			      $this->users_model->update_user($id,$data);
@@ -430,6 +431,7 @@ class Users extends MY_Controller {
 					  'web_address' => $user_login->row()->web_address,
 					  'timezone' => $user_login->row()->timezone,
 					  'description' => $user_login->row()->description,
+					  'country' => $user_login->row()->country_code,
 					  'is_login' => TRUE
 				      );
 			      $this->session->set_userdata($data1);

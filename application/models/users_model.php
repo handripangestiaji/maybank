@@ -18,7 +18,7 @@ class Users_model extends CI_Model
     
     //======================== USER ==========================
     //view user
-    function select_user1($limit, $start, $role_id,$value)
+    function select_user1($limit, $start, $role_id,$value, $country_code = null)
     {
         $this->db->distinct();
         $this->db->limit($limit, $start);
@@ -28,6 +28,9 @@ class Users_model extends CI_Model
         {
             $where = "a.email like '%".$value."%' OR a.display_name like '%".$value."%' OR a.username like '%".$value."%'";
             $this->db->where($where);
+        }
+        if($country_code != null){
+            $this->db->where('a.country_code', $country_code);
         }
         $this->db->order_by('a.user_id','asc');
         if($role_id != null)
@@ -64,30 +67,39 @@ class Users_model extends CI_Model
         return $this->db->get($this->user);
     }
     
-    function count_record($var , $value)
+    function count_record($var , $value, $country_code = NULL)
     {
-            if($var=='role_id' && $value==0)
-            {
-                $tes = $this->db->get($this->user);
-                return $tes->num_rows();
-            }
-            elseif($var == 'role_id')
-            {
-                $this->db->where('role_id',$value);
-                $tes = $this->db->get($this->user);
-                return $tes->num_rows();
-            }
-            elseif($var == 'teks' )
-            {
-                $where = "email like '%".$value."%' OR display_name like '%".$value."%' OR username like '%".$value."%'";
-                $this->db->where($where);
-                $tes = $this->db->get($this->user);
-                return $tes->num_rows();
-            }
-            else
-            {
-                return $this->db->count_all($this->user);
-            }
+            
+        if($var=='role_id' && $value==0)
+        {
+            if($country_code != null)
+                $this->db->where('country_code', $country_code);
+            $tes = $this->db->get($this->user);
+            return $tes->num_rows();
+        }
+        elseif($var == 'role_id')
+        {
+            $this->db->where('role_id',$value);
+            if($country_code != null)
+                $this->db->where('country_code', $country_code);
+            $tes = $this->db->get($this->user);
+            return $tes->num_rows();
+        }
+        elseif($var == 'teks' )
+        {
+            $where = "(email like '%".$value."%' OR display_name like '%".$value."%' OR username like '%".$value."%')";
+            if($country_code != null)
+                $where .= " AND country_code = '$country_code'";
+            $this->db->where($where);
+            $tes = $this->db->get($this->user);
+            return $tes->num_rows();
+        }
+        else
+        {
+            if($country_code != null)
+                $this->db->where('country_code', $country_code);
+            return $this->db->count_all($this->user);
+        }
     }
     
     //insert user
@@ -165,10 +177,13 @@ class Users_model extends CI_Model
         return $this->db->count_all($this->role);
     }
     
-    function select_role()
+    function select_role($is_regional_user = false, $is_able_to_edit_role = false)
     {
         $this->db->select('*');
+        
         $this->db->join('user','user.user_id=role_collection.created_by','left');
+        if($is_able_to_edit_role)
+            $where = '';
         return $this->db->get($this->role);
     }
     function select_role1($limit, $start)

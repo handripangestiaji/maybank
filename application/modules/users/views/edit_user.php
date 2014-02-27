@@ -48,7 +48,7 @@
             <input name='email1' type="hidden" value="<?php echo $row->email;?>" />
         </tr>
         <?php
-        if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_Modify_Role') && $row->role_id!=2):
+        if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_Modify_Role')):
         ?>
         <tr>
             <td>Role</td>
@@ -133,18 +133,25 @@
             </td>
             
         </tr>
+          <?php
+        if(IsRoleFriendlyNameExist($this->user_role, 'Regional_User')):
+        ?>
         <tr>
-            <td>Country</td>
+            <td>Country </td>
             <td>
                 <select name="country">
                 <?php
                     foreach($this->country_list as $country):
                 ?>
-                    <option value="<?=$country->code?>"><?=$country->name?></option>
+                    <option value="<?=$country->code?>" <?php echo trim($country->code) == trim($row->country_code) ?  "selected='selected'" : ''?>><?=$country->name?></option>
                 <?php endforeach;?>
                 </select>
             </td>
         </tr>
+        <?php else:?>
+        <input type="hidden" name="country" value="<?=$row->country_code?>" />
+        <?php endif;?>
+        
         <tr>
             <td>Description</td>
             <td><textarea name='description' type='text'><?php echo set_value('description',isset($row->description) ? $row->description : '')?></textarea></td>

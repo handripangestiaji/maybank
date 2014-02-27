@@ -108,8 +108,11 @@
                             <span style='color:red;'><?php echo form_error('userfile'); ?>
                         </td>
                     </tr>
+                  <?php
+                    if(IsRoleFriendlyNameExist($this->user_role, 'Regional_User')):
+                    ?>
                     <tr>
-                        <td>Country</td>
+                        <td>Country </td>
                         <td>
                             <select name="country">
                             <?php
@@ -120,6 +123,9 @@
                             </select>
                         </td>
                     </tr>
+                    <?php else:?>
+                        <input type="hidden" name="country" value="<?=$this->session->userdata('country');?>" />
+                    <?php endif;?>
                     <tr>
                         <td>Description</td>
                         <td><textarea class="about-me" name='description'><?php echo set_value('description');?></textarea></td>

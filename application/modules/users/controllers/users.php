@@ -29,13 +29,14 @@ class Users extends MY_Controller {
 	  $cek = $this->session->userdata('search_value');
 	  $cek1 = $this->session->userdata('roleId');
 	  $config['page_query_string'] = TRUE;
-	  
+	  $country_code = IsRoleFriendlyNameExist($this->user_role, 'Regional_User') ? NULL : $this->session->userdata('country');
+	    
 	  if($this->input->get('role_collection_id'))
 	  {
 	       $config['base_url'] = base_url('users/index').'?role_collection_id='.$this->input->get('role_collection_id');
 	       $this->session->unset_userdata('search_value');
 	       
-	       $config['total_rows'] = $this->users_model->count_record('role_id',$this->input->get('role_collection_id'));
+	       $config['total_rows'] = $this->users_model->count_record('role_id',$this->input->get('role_collection_id'), $country_code);
 	       $config['per_page'] = 10;
 	       $config["uri_segment"] = 1;
 	       
@@ -49,15 +50,17 @@ class Users extends MY_Controller {
 	       $config['cur_tag_close'] = '</b>';
 	       $this->pagination->initialize($config);
 	       $page = $this->input->get('per_page');
-	       $data['show'] = $this->users_model->select_user1($config["per_page"], $page, $this->input->get('role_collection_id'), null);
+	       
+	       $data['show'] = $this->users_model->select_user1($config["per_page"], $page, $this->input->get('role_collection_id'), null, $country_code);
 	       $data['links'] = $this->pagination->create_links();
 	       $data['role'] = $this->users_model->select_role();
-	       $data['count'] = $this->users_model->count_record('role_id',$this->input->get('role_collection_id'));
+	       $data['count'] = $this->users_model->count_record('role_id',$this->input->get('role_collection_id'), $country_code);
 	       
 	       $this->load->view('users/index',$data);
 	  }
 	  else
 	  {
+	    
 	       $search = $this->session->userdata('search_value') ? $this->session->userdata('search_value') : $this->input->get('q') ;
 	       $config['base_url'] = base_url('users/index').'?q='.$search;
 	       $config['per_page'] = 10;
@@ -71,18 +74,14 @@ class Users extends MY_Controller {
 	  
 	       $config['cur_tag_open'] = '<b style="margin:0px 5px;">';
 	       $config['cur_tag_close'] = '</b>';
-	       
-	       
-	       
-	       
-	       $config['total_rows'] = $this->users_model->count_record('teks',$search);
+	       $config['total_rows'] = $this->users_model->count_record('teks',$search, $country_code);
 	       $this->pagination->initialize($config);
 	       $page =$this->input->get('per_page');
-	       $data['show'] = $this->users_model->select_user1($config["per_page"], $page, null,$search);
+	       $data['show'] = $this->users_model->select_user1($config["per_page"], $page, null,$search, $country_code);
 
 	       $data['links'] = $this->pagination->create_links();
 	       $data['role'] = $this->users_model->select_role();
-	       $data['count'] = $this->users_model->count_record(null,null);
+	       $data['count'] = $this->users_model->count_record(null,null, $country_code);
 	       
 	       $this->load->view('users/index',$data);
 	  }
@@ -98,6 +97,7 @@ class Users extends MY_Controller {
     {
 	if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_Create_Delete'))
 	{
+	    $country_code = IsRoleFriendlyNameExist($this->user_role, 'Regional_User') ? NULL : $this->session->userdata('country');
 	    $data = array(
 		      'role' => $this->users_model->select_role(),
 		      'group' => $this->users_model->select_group(),

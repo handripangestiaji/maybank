@@ -38,17 +38,18 @@ if($posts){
                Assign To:
            </div>
            <div class="pull-left" style="width:70%;">
-               <select name="assign_to" multiple="multiple">
+               <select name="assign_to" <!--multiple="multiple"!-->>
+                      <option value=''>-- Select User --</option>
                       <?php
-                      $role_name = null;
+                      $group_name = null;
                       for($ix=0;$ix<count($user_list);$ix++){
                                  //if(IsRoleFriendlyNameExist($user_list[$i]->role_detail, 'Social Stream_Current_Resolve_Case')){
-                                            if($user_list[$ix]->role_name!=$role_name){
-                                                       echo '<optgroup label="'.$user_list[$ix]->role_name.'"></optgroup>';           
+                                            if($user_list[$ix]->group_name!=$group_name){
+                                                       echo '<optgroup label="'.$user_list[$ix]->group_name.'"></optgroup>';           
                                             }
-                                            echo '<option value="'.$posts[$i]->social_stream_post_id.'-'.$user_list[$ix]->user_id.'">'.$user_list[$ix]->full_name.'</option>';
+                                            echo '<option value="'.$post_id.'-'.$user_list[$ix]->user_id.'">'.$user_list[$ix]->full_name.'</option>';
                                  //}
-                                 $role_name = $user_list[$ix]->role_name;           
+                                 $group_name = $user_list[$ix]->group_name;           
                       }
                       ?>
                </select>

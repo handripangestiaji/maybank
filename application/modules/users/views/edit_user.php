@@ -77,20 +77,12 @@
             <td>Group</td>
             <td>
                 <select name="optGroup">
-                    <?php foreach($group->result() as $g)
-                    {
-                        if($row->group_id == $g->group_id)
-                        {
+                    <?php foreach($group->result() as $g):
                     ?>
-                        <option value='<?php echo $g->group_id;?>' selected='selected'><?php echo $g->group_name;?></option>
-                    <?php
-                        }
-                        else{
-                    ?>
-                        <option value='<?php echo $g->group_id;?>'><?php echo $g->group_name;?></option>
-                    <?php }
-                    }
-                    ?>
+                        <?php if($g->country_code == $this->session->userdata('country') || (IsRoleFriendlyNameExist($this->user_role, 'Regional_User'))) :?>
+                            <option value='<?php echo $g->group_id;?>' <?=$row->group_id == $g->group_id ? 'selected="selected"' : "" ?>><?php echo $g->group_name;?></option>
+                        <?php endif;?>
+                    <?php endforeach; ?>
                 </select>
             </td>
         </tr>

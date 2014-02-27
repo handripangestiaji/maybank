@@ -1430,6 +1430,7 @@ class Users extends MY_Controller {
 	    
 	    $this->users_model->update_activity($id,$data);
             $this->session->sess_destroy();
+	    
             redirect('login');
         }
     

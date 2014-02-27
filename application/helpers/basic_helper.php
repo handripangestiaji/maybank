@@ -318,7 +318,7 @@ function IsRoleFriendlyNameExist($user_role, $currentPermission, $property='role
     foreach($user_role as $role){
         if($role->$property == $currentPermission)
             return true;
-    }    
+    }
     return false;
 }
 

@@ -27,10 +27,10 @@
         </div>
     <?php }?>
     
-    <div id="confirm_user" class="alert alert-error">
-	    Confirm delete <b>"User"</b> ?
+    <div id="confirm_country" class="alert alert-error">
+	    Confirm delete <b>"Country"</b> ?
             <div style="float: right;">
-                <button id="user_id_delete" class="btn btn-mini btn-danger" onclick="yes_delete_user();">Yes</button>
+                <button id="country_code" class="btn btn-mini btn-danger" onclick="yes_delete();">Yes</button>
                 <button class="btn btn-mini btn-danger" onclick="hide_confirm();return false;">Cancel</button>
             </div>
             <div style="clear: both;"></div>
@@ -59,15 +59,9 @@
             <div style="float: left;">
                 <h4>Country List</h4>
             </div>
-            <?php for($i=0;$i<count($this->user_role);$i++)
-                {
-                    if($this->user_role[$i]->role_friendly_name=='User Management_User_Create_Delete'){
-                ?>
             <div style="float: right;">
                 <input class="btn btn-primary" onclick="btn_add()" type="button" name="btn_new" value="+ New Country" />
             </div>
-            <?php }}?>
-            
             <div style="clear: both;"></div>
             <hr style="margin-top: 0px;">
             <div style="float: left; margin-top: -10px;">
@@ -80,16 +74,21 @@
                     <tr>
                         <th>Country Code</th>
                         <th>Country Name</th>
-                        <th>Action</th>
+                        <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 
                 <tbody>
+                    <?php
+                    foreach($countries->result() as $row){ ?>
                     <tr>
-                        <td></td>
-                        <td></td>
-                        <td><a href="#" class="btn btn-danger btn-delete-country">Delete</a></td>
+                        <td><?php echo $row->code;?></td>
+                        <td><?php echo $row->name;?></td>
+                        <td><a href='<?php echo site_url("users/edit_country/".$row->code);?>'><span><i class="icon-pencil"></i></span></a></td>
+                        <td><a href="" onclick="show_confirm('<?php echo $row->code;?>');return false;"><span><i class="icon-remove redText"></i></span></a></td>
                     </tr>
+                    <?php } ?>
                 </tbody>
                 
             </table>
@@ -112,15 +111,15 @@
         document.getElementById("search_form").submit();
     }
     
-    function yes_delete_user()
+    function yes_delete()
     {
-        var usr_id = document.getElementById("user_id_delete").value;
-        window.location = "<?php echo site_url('users/delete');?>/"+usr_id;
+        var id = document.getElementById("country_code").value;
+        window.location = "<?php echo site_url('users/delete_country');?>/"+id;
     }
     
     function btn_add()
     {
-        window.location.href = "<?php echo site_url('users/create');?>";
+        window.location.href = "<?php echo site_url('users/create_country');?>";
     }
     
     function menu_role()
@@ -135,8 +134,8 @@
     
     function show_confirm(tes)
     {
-        document.getElementById('user_id_delete').value = tes;
-        document.getElementById('confirm_user').style.display = 'block';
+        document.getElementById('country_code').value = tes;
+        document.getElementById('confirm_country').style.display = 'block';
     }
     
     function menu_user()
@@ -146,7 +145,7 @@
     
     function hide_confirm()
     {
-        document.getElementById('confirm_user').style.display = 'none';
+        document.getElementById('confirm_country').style.display = 'none';
     }
     
 $(function(){

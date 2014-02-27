@@ -260,10 +260,14 @@ class Users_model extends CI_Model
         return $this->db->get($this->user);
     }
     
-    function count_record_group()
+    function count_record_group($country_code = NULL)
     {
-        $this->db->select('*');
-        return $this->db->count_all($this->group);
+        $this->db->select('country_code');
+        if($country_code != null)
+            $this->db->where('country_code', $country_code);
+        $count = $this->db->get($this->group);
+        
+        return $count->num_rows();
     }
     
     function select_group($filter = array())
@@ -280,12 +284,14 @@ class Users_model extends CI_Model
         return $this->db->get($this->group);
     }
     
-    function select_group1($limit, $start)
+    function select_group1($limit, $start, $country_code = NULL)
     {
         $this->db->select('*');
         $this->db->limit($limit, $start);
         $this->db->select('user_group.*,user.full_name as name');
         $this->db->join('user','user_group.created_by=user.user_id','left');
+        if($country_code != null)
+            $this->db->where('user_group.country_code', $country_code);
         $query = $this->db->get($this->group);
         
         if ($query->num_rows() > 0) {

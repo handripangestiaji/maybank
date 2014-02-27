@@ -1144,6 +1144,7 @@ class Users extends MY_Controller {
     //============================= GROUP =================================
     function menu_group()
     {
+	$country_code = IsRoleFriendlyNameExist($this->user_role, 'Regional_User') ? NULL : $this->session->userdata('country');
      if(IsRoleFriendlyNameExist($this->user_role, 'User Management_Group_View')){
 	  $select_group = $this->users_model->select_group();
 	  foreach($select_group->result() as $v1)
@@ -1153,7 +1154,7 @@ class Users extends MY_Controller {
 	  }
 	  
 	  $config['base_url'] = base_url().'users/menu_group';
-	  $config['total_rows'] = $this->users_model->count_record_group();
+	  $config['total_rows'] = $this->users_model->count_record_group($country_code);
 	  $config['per_page'] = 10;
 	  $config["uri_segment"] = 3;
 	  
@@ -1169,15 +1170,15 @@ class Users extends MY_Controller {
 	  $this->pagination->initialize($config);
 	  
 	  $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-	  $data['group'] = $this->users_model->select_group1($config["per_page"], $page);
+	  $data['group'] = $this->users_model->select_group1($config["per_page"], $page, $country_code);
 	  $data['count_group'] = $count_group;
 	  $data['plus'] = $this->uri->segment(3);
      
 	  $data['links'] = $this->pagination->create_links();
-	  $data['count'] = $this->users_model->count_record_group();
+	  $data['count'] = $this->users_model->count_record_group($country_code);
 	  $data['channel'] = $this->users_model->select_channel();
 	  $data['group_detail'] = $this->users_model->select_user_group_d();
-			
+	    $data['country_list'] = $this->users_model->get_country_list();
 	  $this->load->view('users/group',$data);
      }
      else{
@@ -1187,6 +1188,7 @@ class Users extends MY_Controller {
     
     function insert_group()
     {
+	$country_code = IsRoleFriendlyNameExist($this->user_role, 'Regional_User') ? NULL : $this->session->userdata('country');
      if(IsRoleFriendlyNameExist($this->user_role, 'User Management_Group_Create_Delete')){
 	  $select_group = $this->users_model->select_group();
 	  foreach($select_group->result() as $v1)
@@ -1211,7 +1213,7 @@ class Users extends MY_Controller {
 	  elseif($this->form_validation->run() == FALSE)
 	  {
 	       $config['base_url'] = base_url().'users/menu_group';
-	       $config['total_rows'] = $this->users_model->count_record_group();
+	       $config['total_rows'] = $this->users_model->count_record_group($country_code);
 	       $config['per_page'] = 10;
 	       $config["uri_segment"] = 3;
 	       
@@ -1252,6 +1254,10 @@ class Users extends MY_Controller {
 				   'is_active' => 1,
 				   'created_by' => $created_by
 				  );
+		    if(IsRoleFriendlyNameExist($this->user_role, 'Regional_User'))
+			$data['country_code'] = $this->input->post('country');
+		    else
+			$data['country_code'] = $this->session->userdata('country');
 		    $this->users_model->insert_group($data);
 		    $last_id=$this->db->insert_id();
 		    

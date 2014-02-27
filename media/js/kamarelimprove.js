@@ -3,6 +3,7 @@
 */
 
 $(function(){
+    $('#countrySelect').multiselect();
     $('.sidebarContent').height($(window).height() * 0.95);
     $(this).on('submit', '.case-field form', function(e){
         var thisElement = $(this);

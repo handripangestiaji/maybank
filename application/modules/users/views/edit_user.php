@@ -55,7 +55,7 @@
             <td>
                 <select name="optRole">
                     <?php foreach($role->result() as $r){
-                        if($r->role_collection_id != 2){
+                        
                             if($row->role_id == $r->role_collection_id)
                             {
                     ?>
@@ -68,7 +68,6 @@
                             <option value='<?php echo $r->role_collection_id;?>'><?php echo $r->role_name;?></option>
                     <?php
                             }
-                        }
                     }?>
                 </select>
             </td>

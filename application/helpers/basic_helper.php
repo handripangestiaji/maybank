@@ -45,10 +45,10 @@ function convertDate($dateSrc, $timeZone){
 
 function get_timezone_list(){
      $timezones = array(
+        'Asia/Kuala_Lumpur' => "(GMT+08:00) Kuala Lumpur",
         'Asia/Bangkok'      => "(GMT+07:00) Bangkok",
         'Asia/Jakarta'      => "(GMT+07:00) Jakarta",
         'Asia/Hong_Kong'    => "(GMT+08:00) Hong Kong",
-        'Asia/Kuala_Lumpur' => "(GMT+08:00) Kuala Lumpur",
         'Asia/Manila'       => "(GMT+08:00) Manila",
         'Australia/Perth'   => "(GMT+08:00) Perth",
         'Asia/Singapore'    => "(GMT+08:00) Singapore",

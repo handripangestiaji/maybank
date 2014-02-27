@@ -48,7 +48,7 @@ if($posts){
                                                        echo '<optgroup label="'.$user_list[$ix]->group_name.'"></optgroup>';           
                                             }
                                             if( $this->session->userdata('user_id') != $user_list[$ix]->user_id){
-                                                       echo '<option value="'.$post_id.'-'.$user_list[$ix]->user_id.'">'.$user_list[$ix]->full_name.'</option>';                                 
+                                                       echo '<option value="'.$user_list[$ix]->user_id.'">'.$user_list[$ix]->full_name.'</option>';                                 
                                             }
                                  }
                                  $group_name = $user_list[$ix]->group_name;           

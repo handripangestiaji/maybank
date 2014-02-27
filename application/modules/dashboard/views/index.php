@@ -198,13 +198,13 @@
         ISSUE #71 All User Role to have search function
     -->
     <div class="pull-right dashboard-search">
+        <?php if(IsRoleFriendlyNameExist($this->user_role, "Search")):?>
         <input class="dashboard-search-field" type="text" placeholder="Search" style="width:200px; float: left; margin-left: 2px;">
         <button class="btn btn-inverse btn-dashboard-search">
             <i class="icon-search"></i>
         </button>
+        <?php endif; ?>
     </div>
-    
-    
 </div>
 <!-- ==================== END COMPOSE MESSAGE ==================== -->
 

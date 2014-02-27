@@ -396,7 +396,6 @@ class Users_model extends CI_Model
             $this->db->where($filter);
         return $this->db->get()->result();
     }
-}
     
     //============================ COUNTRY =========================
     function insert_country($data)
@@ -429,7 +428,7 @@ class Users_model extends CI_Model
         $this->db->where('code',$id);
         return $this->db->delete('country');
     }
- function get_country_list(){
+    function get_country_list(){
         $this->db->select("*");
         $this->db->from('country');
         return $this->db->get()->result();

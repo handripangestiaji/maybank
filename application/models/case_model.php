@@ -161,7 +161,7 @@ class case_model extends CI_Model{
             }
             if(isset($filter['country_code'])){
                 if($filter['country_code'] != null)
-                    $filter['b.country_code'] = $filter['country_code'];
+                    $filter['a.country_code'] = $filter['country_code'];
                 
             }
             unset($filter['country_code']);

@@ -54,8 +54,7 @@ class Media_stream extends CI_Controller {
 	    $data['channel_id'] = $channel_id;
 	    $this->load->model('case_model');
 	    
-        $getUserCountry=$this->case_model->ReadAllUser(array('user_id'=>$this->session->userdata('user_id')));
-        $filter=array('role_id <>'=>'5','country_code'=>$getUserCountry->country_code);
+        $filter=array('role_id <>'=>'5');
         //print_r($getUserCountry->country_code);
         $data['user_list'] = $this->case_model->ReadAllUser($filter);
 	    $this->load->view('dashboard/facebook/facebook_stream',$data);

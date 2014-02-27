@@ -113,8 +113,7 @@ class mycase extends CI_Controller{
     		    )
     		);
 		return;
-	    }
-	else{
+	    }else{
 	       
             $facebook_id=$channel_loaded[0]->social_id;
             //print_r($facebook_id);

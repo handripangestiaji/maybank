@@ -517,6 +517,32 @@ class Cms extends MY_Controller {
      }
     }
     
+    public function edit_product($id)
+    {
+          $product = $this->product_model->getOneBy(array('id' => $id));
+          $data['row'] = $product;
+          $this->load->view('cms/edit_product',$data);
+    }
+    
+    public function update_product(){
+          $this->form_validation->set_rules('id','Id','required');
+          $this->form_validation->set_rules('name','Product Name','required');
+          $this->form_validation->set_rules('description','Description','required');
+          
+          if ($this->form_validation->run() == FALSE){
+               $this->load->view('cms/edit_product');
+          }
+          else{
+               $id = $this->input->post('id');
+               $value = array('product_name' => $this->input->post('name'),
+                              'description' => $this->input->post('description')
+                             );
+               $result = $this->product_model->update($id,$value);
+               $this->session->set_flashdata('msg','Product has been updated');
+               redirect('cms/create_product');
+          }
+    }
+    
     public function url()
     {
 	    $c = $this->uri->segment(3);

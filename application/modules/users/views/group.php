@@ -150,7 +150,9 @@
                 </thead>
                 
                 <tbody>
-                    <?php $i=0; foreach($group as $gr){
+                    <?php $i=0;
+		    if(is_array($group)):
+		    foreach($group as $gr){
 				
 		    ?>
                     <tr>
@@ -188,7 +190,9 @@
                         <td><a href="" onclick="show_confirm('<?php echo $gr->group_id;?>');return false;"><span><i class="icon-remove"></i></span></a></td>
                         <?php }}?>
                     </tr>
-                    <?php $i++;}?>
+                    <?php $i++;}
+		    endif;
+		    ?>
                 </tbody>
                 
             </table>

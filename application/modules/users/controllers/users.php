@@ -4,7 +4,7 @@ class Users extends MY_Controller {
 
     private $connection;
     public $user_role, $country_list;
-	   
+    public $country_code;
     function __construct()
     {
         parent::__construct();
@@ -18,6 +18,7 @@ class Users extends MY_Controller {
 	$this->user_role = $this->users_model->get_collection_detail(
 		array('role_collection_id'=>$this->session->userdata('role_id')));
 	$this->country_list = $this->users_model->get_country_list();
+	$this->country_code = IsRoleFriendlyNameExist($this->user_role, 'Regional_User') ? NULL : $this->session->userdata('country');
 	
     }
     
@@ -53,7 +54,7 @@ class Users extends MY_Controller {
 	       
 	       $data['show'] = $this->users_model->select_user1($config["per_page"], $page, $this->input->get('role_collection_id'), null, $country_code);
 	       $data['links'] = $this->pagination->create_links();
-	       $data['role'] = $this->users_model->select_role();
+	       $data['role'] = $this->users_model->select_role($this->session->userdata('role_id'));
 	       $data['count'] = $this->users_model->count_record('role_id',$this->input->get('role_collection_id'), $country_code);
 	       
 	       $this->load->view('users/index',$data);
@@ -80,7 +81,7 @@ class Users extends MY_Controller {
 	       $data['show'] = $this->users_model->select_user1($config["per_page"], $page, null,$search, $country_code);
 
 	       $data['links'] = $this->pagination->create_links();
-	       $data['role'] = $this->users_model->select_role();
+	       $data['role'] = $this->users_model->select_role($this->session->userdata('role_id'));
 	       $data['count'] = $this->users_model->count_record(null,null, $country_code);
 	       
 	       $this->load->view('users/index',$data);
@@ -98,12 +99,14 @@ class Users extends MY_Controller {
 	if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_Create_Delete'))
 	{
 	    $country_code = IsRoleFriendlyNameExist($this->user_role, 'Regional_User') ? NULL : $this->session->userdata('country');
+	    
 	    $data = array(
-		      'role' => $this->users_model->select_role(),
+		      'role' => $this->users_model->select_role($this->session->userdata('role_id'), $country_code),
 		      'group' => $this->users_model->select_group(),
 		      'double' => NULL,
 		      'doubleUser' => NULL
 		      );
+	    //echo "<pre>".print_r($data['role'])."</pre>";
 	    $this->load->view('users/create_user',$data);
 	}
 	else{
@@ -135,7 +138,7 @@ class Users extends MY_Controller {
 	       if($this->form_validation->run() == FALSE)
 	       {
 		    $data = array(
-		      'role' => $this->users_model->select_role(),
+		      'role' => $this->users_model->select_role($this->session->userdata('role_id')),
 		      'group' => $this->users_model->select_group(),
 		      'double' => NULL,
 		      'doubleUser' => NULL
@@ -146,7 +149,7 @@ class Users extends MY_Controller {
 	       elseif($checkUser->num_rows() >= 1)
 	       {
 		    $data = array(
-		      'role' => $this->users_model->select_role(),
+		      'role' => $this->users_model->select_role($this->session->userdata('role_id')),
 		      'group' => $this->users_model->select_group(),
 		      'doubleUser' => 1,
 		      'double' => NULL
@@ -157,7 +160,7 @@ class Users extends MY_Controller {
 	       elseif($checkMail->num_rows() >= 1)
 	       {
 		    $data = array(
-		      'role' => $this->users_model->select_role(),
+		      'role' => $this->users_model->select_role($this->session->userdata('role_id')),
 		      'group' => $this->users_model->select_group(),
 		      'double' => 1,
 		      'doubleUser' => NULL
@@ -286,7 +289,7 @@ class Users extends MY_Controller {
 	{
 	  $data = array(
 			'id' => $this->users_model->get_byid($id),
-			'role' => $this->users_model->select_role(),
+			'role' => $this->users_model->select_role($this->session->userdata('role_id'), $this->country_code),
 			'group' => $this->users_model->select_group(),
 			'double' => NULL
 			);
@@ -1311,6 +1314,7 @@ class Users extends MY_Controller {
 			 'channel' => $this->users_model->select_channel(),
 			 'msge' => NULL
 			);
+	  $data['country_list'] = $this->users_model->get_country_list();
 	  $this->load->view('users/group_edit',$data);
     }
     else
@@ -1336,6 +1340,7 @@ class Users extends MY_Controller {
 			 'channel' => $this->users_model->select_channel(),
 			 'msge' => NULL
 			);
+	       
 	       $this->load->view('users/group_edit',$data);
 	  }
 	  
@@ -1359,6 +1364,7 @@ class Users extends MY_Controller {
 		    $group_id = $this->input->post('group_id');
 		    $data = array(
 				  'group_name' => $this->input->post('group_name'),
+				  'country_code' => $this->input->post('country'),
 				 );
 		    $this->users_model->update_group($group_id,$data);
 		    
@@ -1427,6 +1433,7 @@ class Users extends MY_Controller {
 	    
 	    $this->users_model->update_activity($id,$data);
             $this->session->sess_destroy();
+	    
             redirect('login');
         }
     

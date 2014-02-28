@@ -177,15 +177,28 @@ class Users_model extends CI_Model
         return $this->db->count_all($this->role);
     }
     
-    function select_role($is_regional_user = false, $is_able_to_edit_role = false)
+    function select_role($role_id = null, $country_code = null)
     {
-        $this->db->select('*');
         
-        $this->db->join('user','user.user_id=role_collection.created_by','left');
-        if($is_able_to_edit_role)
-            $where = '';
-        return $this->db->get($this->role);
+        $regional_user_role_id = $this->get_role_id('Regional_User');
+        $this->db->select('*, (select count(*) from role_collection_detail c where c.role_collection_id = b.role_collection_id) as count_role' );
+        $this->db->from('role_collection b');
+        $this->db->join('user a','a.user_id=b.created_by','left');
+        if($role_id != null){
+            if($country_code != null){
+                $where = '(select count(*) from role_collection_detail c where c.role_collection_id = b.role_collection_id) < (select count(*) from role_collection_detail f where f.role_collection_id = '.$role_id.') AND ';
+                $where .= '(select count(app_role_id) from role_collection_detail g where g.role_collection_id = b.role_collection_id and g.app_role_id = '.$regional_user_role_id->app_role_id.') = 0';
+                $this->db->where($where);
+            }
+        }
+        return $this->db->get();
     }
+    function get_role_id($friendly_name){
+        $sql = "Select app_role_id from application_role where role_friendly_name = '$friendly_name'";
+        $q = $this->db->query($sql);
+        return $q->num_rows() > 0 ? $q->row() : null;
+    }
+    
     function select_role1($limit, $start)
     {
         $this->db->limit($limit, $start);

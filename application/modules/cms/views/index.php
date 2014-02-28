@@ -1,3 +1,10 @@
+<?php
+    if($this->session->flashdata('msg')){ ?>
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert"><i class="icon-remove"></i></button>
+        <strong>Success.</strong> <?php echo $this->session->flashdata('msg'); ?>
+    </div>
+<?php } ?>
 <div class="row-fluid" style="width: 100%; margin: 0px auto;">
     <div class="row-fluid" >
         <div class="pull-left">

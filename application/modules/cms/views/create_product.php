@@ -48,6 +48,7 @@
 		    if($this->user_role[$i]->role_friendly_name=='Content Management_Product_Delete'){
 		    ?>
                 <th>&nbsp;</th>
+                <th>&nbsp;</th>
 		<?php }}?>
               </tr>
             </thead>
@@ -63,6 +64,9 @@
 				    if($this->user_role[$i]->role_friendly_name=='Content Management_Product_Delete'){
 				    ?>
 				<td>
+                                    <a href="<?php echo site_url('cms/edit_product/'.$v->id)?>" class="btn btn-mini btn-primary pull-right">edit</a>
+                                </td>
+                                <td>
 		                	<a href="<?php echo site_url('cms/create_product?action=delete&id='.$v->id)?>" class="btn btn-mini btn-danger pull-right">delete</a>
 		                	<!--<button class="btn btn-mini btn-danger pull-right" type="button">delete</button>-->
 				</td>

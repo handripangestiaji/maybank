@@ -39,19 +39,25 @@ if($posts){
            </div>
            <div class="pull-left" style="width:70%;">
                <select name="assign_to" <!--multiple="multiple"!-->>
-                      <option value=''>-- Select User --</option>
+                      <option value='' id="caseUser<?=$posts[$i]->social_stream_post_id?>">-- Select User --</option>
                       <?php
                       $group_name = null;
-                      for($ix=0;$ix<count($user_list);$ix++){
-                                 if(IsRoleFriendlyNameExist($user_list[$i]->role_detail, 'Social Stream_Current_Resolve_Case')){
-                                            if($user_list[$ix]->group_name!=$group_name){
-                                                       echo '<optgroup label="'.$user_list[$ix]->group_name.'"></optgroup>';           
-                                            }
-                                            if( $this->session->userdata('user_id') != $user_list[$ix]->user_id){
-                                                       echo '<option value="'.$post_id.'-'.$user_list[$ix]->user_id.'">'.$user_list[$ix]->full_name.'</option>';                                 
-                                            }
-                                 }
-                                 $group_name = $user_list[$ix]->group_name;           
+                      if(is_array($user_list)){
+                        for($ix=0;$ix<count($user_list);$ix++){
+                                   if(IsRoleFriendlyNameExist($user_list[$i]->role_detail, 'Social Stream_Current_Resolve_Case')){
+                                              if($user_list[$ix]->group_name!=$group_name){
+                                                         echo '<optgroup label="'.$user_list[$ix]->group_name.'"></optgroup>';           
+                                              }
+                                              if( $this->session->userdata('user_id') != $user_list[$ix]->user_id){
+                                                         echo '<option value="'.$user_list[$ix]->user_id.'">&nbsp;&nbsp;&nbsp;&nbsp;'.$user_list[$ix]->full_name.'</option>';                                 
+                                              }
+                                   }
+                                   $group_name = $user_list[$ix]->group_name;           
+                        }
+                      }
+                      else{
+                             echo '<optgroup label="'.$user_list->group_name.'"></optgroup>';           
+                            echo '<option value="'.$user_list->user_id.'">'.$user_list->full_name.'</option>';                                 
                       }
                       ?>
                </select>

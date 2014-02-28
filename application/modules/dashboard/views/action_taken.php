@@ -52,8 +52,8 @@
                             if($action->action_type == 'case_created'){
                                 echo $action->messages;
                             }
-                            if($action->action_type == 'case_solved'){
-                                echo $action->solved_messages;
+                            else if( $action->action_type == 'case_solved'){
+                                echo $action->solved_message;
                             }
                             ?>
                         </td>

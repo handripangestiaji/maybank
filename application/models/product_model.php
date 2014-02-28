@@ -67,4 +67,9 @@ class Product_model extends CI_Model
 		return $this->db->count_all($this->_table);
 	}
 	
+	public function update($id,$value){
+		$this->db->where('id',$id);
+		return $this->db->update($this->_table,$value);
+	}
+	
 }

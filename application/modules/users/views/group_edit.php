@@ -31,6 +31,19 @@
                             <input type='hidden' name='g_name' value='<?php echo $group->row()->group_name;?>' />
                         </td>
                     </tr>
+		    <?php if(IsRoleFriendlyNameExist($this->user_role, 'Regional_User')):?>
+		    <tr>
+			<td>Country</td>
+			
+			<td>
+			    <select id="countrySelect" name="country">
+				<?php foreach($country_list as $country):?>
+				<option value="<?=$country->code?>"><?=$country->name?></option>
+				<?php endforeach?>
+			    </select>
+			</td>
+		    </tr>
+		    <?php endif;?>
                     <tr>
                         <td>Assign Channel</td>
                         <td>

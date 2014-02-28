@@ -161,6 +161,7 @@ class case_model extends CI_Model{
             }
             $this->db->where($filter);
         }
+        
         $this->db->select("*");
         $this->db->from("user a inner join user_group b on a.group_id = b.group_id inner join role_collection c on a.role_id = c.role_collection_id");
         $this->db->order_by('group_name','asc');

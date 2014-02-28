@@ -426,7 +426,7 @@ class Cms extends MY_Controller {
     {
      if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_View'))
      {
-    	$data['campaigns'] = '';
+        $data['campaigns'] = '';
     	
     	$data['tags'] = '';
     	
@@ -457,8 +457,11 @@ class Cms extends MY_Controller {
 		$offset = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
     	
     	$data['products'] = $this->product_model->get($config['per_page'], $offset);
-    	
-    	$data['pagination'] = $this->pagination->create_links();
+        
+          $data['products_avail'] = $this->product_model->get();
+    	  $data['countries'] = $this->users_model->get_country()->result();
+        
+        $data['pagination'] = $this->pagination->create_links();
     	
     	$action = $this->input->get('action');
         
@@ -521,6 +524,8 @@ class Cms extends MY_Controller {
     {
           $product = $this->product_model->getOneBy(array('id' => $id));
           $data['row'] = $product;
+          $data['products_avail'] = $this->product_model->get();
+    	  $data['countries'] = $this->users_model->get_country()->result();
           $this->load->view('cms/edit_product',$data);
     }
     
@@ -528,6 +533,8 @@ class Cms extends MY_Controller {
           $this->form_validation->set_rules('id','Id','required');
           $this->form_validation->set_rules('name','Product Name','required');
           $this->form_validation->set_rules('description','Description','required');
+          $this->form_validation->set_rules('parent_id','Parent','required');
+          $this->form_validation->set_rules('country_code','Country','required');
           
           if ($this->form_validation->run() == FALSE){
                $this->load->view('cms/edit_product');
@@ -535,7 +542,9 @@ class Cms extends MY_Controller {
           else{
                $id = $this->input->post('id');
                $value = array('product_name' => $this->input->post('name'),
-                              'description' => $this->input->post('description')
+                              'description' => $this->input->post('description'),
+                              'parent_id' => $this->input->post('parent_id'),
+                              'country_code' => $this->input->post('country_code')
                              );
                $result = $this->product_model->update($id,$value);
                $this->session->set_flashdata('msg','Product has been updated');

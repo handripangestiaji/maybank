@@ -21,6 +21,33 @@
                 </div>
             </div>
             <div class="control-group">
+                <label class="control-label">Parent</label>
+                <div class="controls">
+                <select name="product[parent_id]">
+                    <?php foreach($products_avail as $product){ ?>
+                        <option value="<?php echo $product->id ?>"><?php echo $product->product_name ?></option>
+                    <?php } ?>
+                    </select>
+                </div>
+            </div>
+            <?php if($this->session->userdata('country') == 'All'){ ?>
+            <div class="control-group">
+                <label class="control-label">Country</label>
+                <div class="controls">
+                    <select name="product[country_code]">
+                        <?php foreach($countries as $country){
+                            if($country->code != 'All'){ ?>
+                                <option value="<?php echo $country->code ?>"><?php echo $country->name ?></option>
+                            <?php } ?>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+            <?php }
+            else{ ?>
+                <input type="hidden" name="product[country_code]" value="<?php echo $this->session->userdata('country') ?>">
+            <?php }?>
+            <div class="control-group">
                 <div class="pull-left">
                     <button class="btn btn-primary" type="submit">Create</button>
                 </div>
@@ -64,8 +91,7 @@
 		                <td><?php echo $v->description; ?></td>
 		                <td><?php echo $v->increment; ?></td>
 		                <td><?php echo $v->display_name; ?></td>
-                                <?php print_r($this->user_role); ?>
-		                <?php for($i=0;$i<count($this->user_role);$i++){
+                                <?php for($i=0;$i<count($this->user_role);$i++){
 				    if($this->user_role[$i]->role_friendly_name=='Content Management_Product_Edit'){
 				    ?>
                                 <td>

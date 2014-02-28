@@ -48,6 +48,10 @@
 		    if($this->user_role[$i]->role_friendly_name=='Content Management_Product_Delete'){
 		    ?>
                 <th>&nbsp;</th>
+                <?php }}?>
+                <?php for($i=0;$i<count($this->user_role);$i++){
+		    if($this->user_role[$i]->role_friendly_name=='Content Management_Product_Delete'){
+		    ?>
                 <th>&nbsp;</th>
 		<?php }}?>
               </tr>
@@ -60,18 +64,23 @@
 		                <td><?php echo $v->description; ?></td>
 		                <td><?php echo $v->increment; ?></td>
 		                <td><?php echo $v->display_name; ?></td>
+                                <?php print_r($this->user_role); ?>
 		                <?php for($i=0;$i<count($this->user_role);$i++){
-				    if($this->user_role[$i]->role_friendly_name=='Content Management_Product_Delete'){
+				    if($this->user_role[$i]->role_friendly_name=='Content Management_Product_Edit'){
 				    ?>
-				<td>
+                                <td>
                                     <a href="<?php echo site_url('cms/edit_product/'.$v->id)?>" class="btn btn-mini btn-primary pull-right">edit</a>
                                 </td>
+                                <?php }}?>
+                                <?php for($i=0;$i<count($this->user_role);$i++){
+				    if($this->user_role[$i]->role_friendly_name=='Content Management_Product_Delete'){
+				    ?>
                                 <td>
 		                	<a href="<?php echo site_url('cms/create_product?action=delete&id='.$v->id)?>" class="btn btn-mini btn-danger pull-right">delete</a>
 		                	<!--<button class="btn btn-mini btn-danger pull-right" type="button">delete</button>-->
 				</td>
 				<?php }}?>
-					</tr>
+                        </tr>
             	<?php endforeach; ?>
             <?php endif; ?>
             </tbody>

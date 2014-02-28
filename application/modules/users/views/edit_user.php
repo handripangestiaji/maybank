@@ -48,14 +48,14 @@
             <input name='email1' type="hidden" value="<?php echo $row->email;?>" />
         </tr>
         <?php
-        if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_Modify_Role') && $row->role_id!=2):
+        if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_Modify_Role')):
         ?>
         <tr>
             <td>Role</td>
             <td>
                 <select name="optRole">
                     <?php foreach($role->result() as $r){
-                        if($r->role_collection_id != 2){
+                        
                             if($row->role_id == $r->role_collection_id)
                             {
                     ?>
@@ -68,7 +68,6 @@
                             <option value='<?php echo $r->role_collection_id;?>'><?php echo $r->role_name;?></option>
                     <?php
                             }
-                        }
                     }?>
                 </select>
             </td>
@@ -78,20 +77,12 @@
             <td>Group</td>
             <td>
                 <select name="optGroup">
-                    <?php foreach($group->result() as $g)
-                    {
-                        if($row->group_id == $g->group_id)
-                        {
+                    <?php foreach($group->result() as $g):
                     ?>
-                        <option value='<?php echo $g->group_id;?>' selected='selected'><?php echo $g->group_name;?></option>
-                    <?php
-                        }
-                        else{
-                    ?>
-                        <option value='<?php echo $g->group_id;?>'><?php echo $g->group_name;?></option>
-                    <?php }
-                    }
-                    ?>
+                        <?php if($g->country_code == $this->session->userdata('country') || (IsRoleFriendlyNameExist($this->user_role, 'Regional_User'))) :?>
+                            <option value='<?php echo $g->group_id;?>' <?=$row->group_id == $g->group_id ? 'selected="selected"' : "" ?>><?php echo $g->group_name;?></option>
+                        <?php endif;?>
+                    <?php endforeach; ?>
                 </select>
             </td>
         </tr>
@@ -133,18 +124,25 @@
             </td>
             
         </tr>
+          <?php
+        if(IsRoleFriendlyNameExist($this->user_role, 'Regional_User')):
+        ?>
         <tr>
-            <td>Country</td>
+            <td>Country </td>
             <td>
                 <select name="country">
                 <?php
                     foreach($this->country_list as $country):
                 ?>
-                    <option value="<?=$country->code?>"><?=$country->name?></option>
+                    <option value="<?=$country->code?>" <?php echo trim($country->code) == trim($row->country_code) ?  "selected='selected'" : ''?>><?=$country->name?></option>
                 <?php endforeach;?>
                 </select>
             </td>
         </tr>
+        <?php else:?>
+        <input type="hidden" name="country" value="<?=$row->country_code?>" />
+        <?php endif;?>
+        
         <tr>
             <td>Description</td>
             <td><textarea name='description' type='text'><?php echo set_value('description',isset($row->description) ? $row->description : '')?></textarea></td>

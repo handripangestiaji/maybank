@@ -87,19 +87,19 @@
                         <td><input type='text' name='group_name' value="<?php set_value('group_name');?>" />
                         <span style='color: red;'><?php echo form_error('group_name');?></span></td>
                     </tr>
+		    <?php if(IsRoleFriendlyNameExist($this->user_role, 'Regional_User')):?>
 		    <tr>
 			<td>Country</td>
-			<td></td>
+			<td>&nbsp;</td>
 			<td>
-			    <select name="country">
-			    <?php
-				foreach($this->country_list as $country):
-			    ?>
+			    <select id="countrySelect" name="country">
+				<?php foreach($country_list as $country):?>
 				<option value="<?=$country->code?>"><?=$country->name?></option>
-			    <?php endforeach;?>
+				<?php endforeach?>
 			    </select>
 			</td>
 		    </tr>
+		    <?php endif;?>
                 </table>
             <hr style="margin-top: 0px;">
             <table style='margin-bottom: 10px;'>
@@ -111,7 +111,9 @@
                                 <div class="controls">
                                     <select id="multipleSelect" multiple="multiple" name='channel[]'>
                                         <?php foreach($channel->result() as $ch){?>
-                                           <option value="<?php echo $ch->channel_id; ?>"><?php echo $ch->name;?></option>
+					    <?php if($ch->country_code == $this->session->userdata('country') || IsRoleFriendlyNameExist($this->user_role, 'Regional_User')):?>
+						<option value="<?php echo $ch->channel_id; ?>"><?php echo $ch->name."($ch->connection_type)";?></option>
+					    <?php endif;?>
                                         <?php }?>
                                     </select>
                                     <span style='color:red;'><?php echo form_error('channel'); ?>
@@ -135,6 +137,7 @@
                         <th>Group</th>
                         <th>Users</th>
                         <th>Channel</th>
+			<th>Country</th>
                         <th>Creator</th>
                         <?php for($x=0;$x<count($this->user_role);$x++){
                                 if($this->user_role[$x]->role_friendly_name=='User Management_Group_Edit'){
@@ -147,7 +150,11 @@
                 </thead>
                 
                 <tbody>
-                    <?php $i=0; foreach($group as $gr){?>
+                    <?php $i=0;
+		    if(is_array($group)):
+		    foreach($group as $gr){
+				
+		    ?>
                     <tr>
                         <td><?php echo $gr->group_name;?></td>
                         <td><?php echo $count_group[$i+$plus]?></td>
@@ -168,11 +175,14 @@
                                 }
                             ?>
                         </td>
+			<td><?php echo $gr->country_code?></td>
                         <td><?php echo $gr->name;?></td>
+			
                         <?php for($x=0;$x<count($this->user_role);$x++){
                                 if($this->user_role[$x]->role_friendly_name=='User Management_Group_Edit'){
                         ?>
                         <td><a href="<?php echo site_url('users/edit_group/'.$gr->group_id);?>"><span><i class="icon-pencil"></i></span></a></td>
+			
                         <?php }}
                         for($y=0;$y<count($this->user_role);$y++){
                             if($this->user_role[$y]->role_friendly_name=='User Management_Group_Create_Delete'){
@@ -180,7 +190,9 @@
                         <td><a href="" onclick="show_confirm('<?php echo $gr->group_id;?>');return false;"><span><i class="icon-remove"></i></span></a></td>
                         <?php }}?>
                     </tr>
-                    <?php $i++;}?>
+                    <?php $i++;}
+		    endif;
+		    ?>
                 </tbody>
                 
             </table>

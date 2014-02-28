@@ -20,7 +20,10 @@ class listofchannel extends CI_Controller {
         $filter = array(
             'connection_type' => 'facebook'
         );
+        if(!IsRoleFriendlyNameExist($this->user_role, 'Regional_User'))
+            $filter['country_code'] =  $this->session->userdata('country');
         $data['title'] = "Facebook";
+        
         $data['channel_list'] = $this->account_model->GetChannel($filter);
         $data['total_row'] = $this->account_model->GetTableTotalRow('channel', $filter);
         $this->session->set_userdata('channel_token_delete', md5(time()));
@@ -32,6 +35,8 @@ class listofchannel extends CI_Controller {
         $filter = array(
             'connection_type' => 'twitter'
         );
+        if(!IsRoleFriendlyNameExist($this->user_role, 'Regional_User'))
+            $filter['country_code'] =  $this->session->userdata('country');
         $data['title'] = "Twitter";
         $data['channel_list'] = $this->account_model->GetChannel($filter);
         $data['total_row'] = $this->account_model->GetTableTotalRow('channel', $filter);
@@ -44,6 +49,8 @@ class listofchannel extends CI_Controller {
         $filter = array(
             'connection_type' => 'youtube'
         );
+        if(!IsRoleFriendlyNameExist($this->user_role, 'Regional_User'))
+            $filter['country_code'] =  $this->session->userdata('country');
         $data['title'] = "Youtube";
         $data['channel_list'] = $this->account_model->GetChannel($filter);
         $data['total_row'] = $this->account_model->GetTableTotalRow('channel', $filter);
@@ -65,6 +72,8 @@ class listofchannel extends CI_Controller {
                 $channel['is_active'] = 1;
                 $channel['name'] = $pageName[$i];
                 $channel['token_created_at'] = date("Y-m-d H:i:s");
+                if($this->session->userdata('country'))
+                    $channel['country_code'] = $this->session->userdata('country');
                 $i++;
                 $this->account_model->SaveChannel($channel);
                 

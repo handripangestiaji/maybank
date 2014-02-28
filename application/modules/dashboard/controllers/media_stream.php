@@ -55,8 +55,9 @@ class Media_stream extends CI_Controller {
 	    $this->load->model('case_model');
 	    
         $filter=array('role_id <>'=>'5');
+	$filter_user['country_code'] = IsRoleFriendlyNameExist($this->user_role, 'Regional_User') ? NULL : $this->session->userdata('country');
         //print_r($getUserCountry->country_code);
-        $data['user_list'] = $this->case_model->ReadAllUser($filter);
+        $data['user_list'] = $this->case_model->ReadAllUser($filter_user);
 	    $this->load->view('dashboard/facebook/facebook_stream',$data);
     }
     
@@ -90,7 +91,8 @@ class Media_stream extends CI_Controller {
     	}
     
     	$this->load->model('case_model');
-    	$data['user_list'] = $this->case_model->ReadAllUser();
+	$filter_user['country_code'] = IsRoleFriendlyNameExist($this->user_role, 'Regional_User') ? NULL : $this->session->userdata('country');
+    	$data['user_list'] = $this->case_model->ReadAllUser($filter_user);
     	$filter['b.type'] = 'mentions';
     	$data['mentions']=$this->twitter_model->ReadTwitterData($filter,$limit);
         $data['countMentions']=$this->twitter_model->CountTwitterData($filter);

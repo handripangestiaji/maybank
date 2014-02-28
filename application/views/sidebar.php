@@ -138,7 +138,7 @@ if(IsRoleFriendlyNameExist($this->user_role, "Social Stream_Notification")):?>
             <p>Full Name : <?php echo $this->session->userdata('full_name'); ?></p>
             <p>Display Name : <?php echo $this->session->userdata('display_name'); ?></p>
             <p>Role : <?php echo $this->session->userdata('role_name'); ?></p>
-            <p>Email : <span class="cyanText"><?php echo $this->session->userdata('web_address'); ?></span></p>
+            <p>Email : <span class="cyanText"><?php echo $this->session->userdata('email'); ?></span></p>
             <p>Timezone : <?php echo $this->session->userdata('timezone')?></p>
             <p>Country : <?php echo $this->session->userdata('country')?></p>
             <br/>

@@ -23,12 +23,14 @@ class Media_stream extends CI_Controller {
 	$this->load->model('twitter_model');
 	$this->load->model('youtube_model');
 	$this->load->model('account_model');
+	$this->load->model('case_model');
 	$this->user_role = $this->users_model->get_collection_detail(
 		array('role_collection_id'=>$this->session->userdata('role_id')));
     }
     
     
     public function facebook_stream($channel_id,$is_read = NULL){
+	$this->load->model('case_model');
 	$filter = array(
 	   'channel_id' => $channel_id,
 	);
@@ -41,24 +43,24 @@ class Media_stream extends CI_Controller {
 	    }
 	}
 	$limit=30;
-	
-	
-	    $data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter,$limit);
-	    $data['count_fb_feed']=$this->facebook_model->CountFeedFB($filter);
-	    //$data['own_post'] = $this->facebook_model->RetrievePostFB($filter);
-	    $data['fb_pm'] = $this->facebook_model->RetrievePmFB($filter,$limit);
-	    $filter=array();
-	    $data['CountPmFB']=$this->facebook_model->CountPmFB($filter);
-	    $this->load->model('campaign_model');
-	    $data['product_list'] = $this->campaign_model->GetProduct();
-	    $data['channel_id'] = $channel_id;
-	    $this->load->model('case_model');
+	$filter_user['country_code'] = IsRoleFriendlyNameExist($this->user_role, 'Regional_User') ? NULL : $this->session->userdata('country');
+	$data['user_list'] = $this->case_model->ReadAllUser($filter_user);
+	$data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter,$limit);
+	$data['count_fb_feed']=$this->facebook_model->CountFeedFB($filter);
+	//$data['own_post'] = $this->facebook_model->RetrievePostFB($filter);
+	$data['fb_pm'] = $this->facebook_model->RetrievePmFB($filter,$limit);
+	$filter=array();
+	$data['CountPmFB']=$this->facebook_model->CountPmFB($filter);
+	$this->load->model('campaign_model');
+	$data['product_list'] = $this->campaign_model->GetProduct();
+	$data['channel_id'] = $channel_id;
+	    
 	    
         $filter=array('role_id <>'=>'5');
-	$filter_user['country_code'] = IsRoleFriendlyNameExist($this->user_role, 'Regional_User') ? NULL : $this->session->userdata('country');
+	
         //print_r($getUserCountry->country_code);
-        $data['user_list'] = $this->case_model->ReadAllUser($filter_user);
-	    $this->load->view('dashboard/facebook/facebook_stream',$data);
+        
+	$this->load->view('dashboard/facebook/facebook_stream',$data);
     }
     
     public function youtube_stream($channel_id, $is_read = null){
@@ -986,7 +988,8 @@ class Media_stream extends CI_Controller {
     	$limit = ($group_number * $items_per_group);
 
     	$this->load->model('case_model');
-    	$data['user_list'] = $this->case_model->ReadAllUser();
+	$filter_user['country_code'] = IsRoleFriendlyNameExist($this->user_role, 'Regional_User') ? NULL : $this->session->userdata('country');
+	$data['user_list'] = $this->case_model->ReadAllUser($filter_user);
         
         $this->load->model('campaign_model');
         $data['product_list'] = $this->campaign_model->GetProduct();
@@ -1042,7 +1045,8 @@ class Media_stream extends CI_Controller {
     public function SinglePost($post_id){
 	$post = $this->facebook_model->streamId($post_id);
 	$this->load->model('case_model');
-    	$data['user_list'] = $this->case_model->ReadAllUser();
+	$filter_user['country_code'] = IsRoleFriendlyNameExist($this->user_role, 'Regional_User') ? NULL : $this->session->userdata('country');
+	$data['user_list'] = $this->case_model->ReadAllUser($filter_user);
         
         $this->load->model('campaign_model');
         $data['product_list'] = $this->campaign_model->GetProduct();

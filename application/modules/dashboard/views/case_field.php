@@ -42,21 +42,22 @@ if($posts){
                       <option value='' id="caseUser<?=$posts[$i]->social_stream_post_id?>">-- Select User --</option>
                       <?php
                       $group_name = null;
+                      $userIncrement = 0;
                       if(is_array($user_list)){
-                        for($ix=0;$ix<count($user_list);$ix++){
-                                   if(IsRoleFriendlyNameExist($user_list[$i]->role_detail, 'Social Stream_Current_Resolve_Case')){
-                                              if($user_list[$ix]->group_name!=$group_name){
-                                                         echo '<optgroup label="'.$user_list[$ix]->group_name.'"></optgroup>';           
+                        for($userIncrement=0;$userIncrement<count($user_list);$userIncrement++){
+                                   if(IsRoleFriendlyNameExist($user_list[$userIncrement]->role_detail, 'Social Stream_Current_Resolve_Case')){
+                                              if($user_list[$userIncrement]->group_name!=$group_name){
+                                                         echo '<optgroup label="'.$user_list[$userIncrement]->group_name.'"></optgroup>';           
                                               }
-                                              if( $this->session->userdata('user_id') != $user_list[$ix]->user_id){
-                                                         echo '<option value="'.$user_list[$ix]->user_id.'">&nbsp;&nbsp;&nbsp;&nbsp;'.$user_list[$ix]->full_name.'</option>';                                 
+                                              if( $this->session->userdata('user_id') != $user_list[$userIncrement]->user_id){
+                                                         echo '<option value="'.$user_list[$userIncrement]->user_id.'">&nbsp;&nbsp;&nbsp;&nbsp;'.$user_list[$userIncrement]->full_name.'</option>';                                 
                                               }
                                    }
-                                   $group_name = $user_list[$ix]->group_name;           
+                                   $group_name = $user_list[$userIncrement]->group_name;           
                         }
                       }
                       else{
-                             echo '<optgroup label="'.$user_list->group_name.'"></optgroup>';           
+                            echo '<optgroup label="'.$user_list->group_name.'"></optgroup>';           
                             echo '<option value="'.$user_list->user_id.'">'.$user_list->full_name.'</option>';                                 
                       }
                       ?>

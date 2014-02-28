@@ -47,7 +47,7 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_pm[$i]->po
             
          }else{ ?>
             <button type="button" class="btn <?php echo $fb_pm[$i]->case_id != null ? "btn-purple btn-mini" : "btn-inverse btn-mini" ?>">
-                <?php echo $fb_pm[$i]->case_id != null ? 'Case #'.$fb_pm[$i]->case_id.' Assign to: '.$isMyCase[count($isMyCase)-1]->full_name : 'Replied'?>
+                <?php echo $fb_pm[$i]->case_id != null ? 'Case #'.$fb_pm[$i]->case_id.' Assign to: '.$isMyCase[count($isMyCase)-1]->display_name : 'Replied'?>
             </button>  
         <?php }
     }else{ ?>

@@ -159,6 +159,11 @@ class case_model extends CI_Model{
                 $filter['a.user_id'] = $filter['user_id'];
                 unset($filter['user_id']);
             }
+            if(isset($filter['country_code'] )){
+                if($filter['country_code'] != null)
+                    $filter['a.country_code'] = $filter['country_code'];
+            }
+            unset($filter['country_code']);
             $this->db->where($filter);
         }
         

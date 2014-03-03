@@ -97,7 +97,7 @@ class Login extends Login_Controller {
 						'user_id' => $valid->row()->user_id,
 						'login_time' => $time->format("Y-m-d H:i:s")
 					    );
-		    $this->users_model->update_user($data['user_id'], array('timezone' => $this->input->post('timezone')));
+		    //$this->users_model->update_user($data['user_id'], array('timezone' => $this->input->post('timezone')));
                     $this->users_model->insert_activity($login_activity);
                     redirect('dashboard');
                 }

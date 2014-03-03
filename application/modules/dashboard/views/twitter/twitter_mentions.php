@@ -48,9 +48,9 @@ for($i=0;$i<count($mentions);$i++){
         <button type="button" class="btn <?=$mentions[$i]->case[0]->status == "pending" ? "btn-purple" : "btn-inverse"?> btn-mini" value="<?php echo $mentions[$i]->case[0]->case_id?>">Case Id #<?php echo $mentions[$i]->case[0]->case_id?>
             <?php
             if($mentions[$i]->case[0]->status == "pending")
-                echo isset($mentions[$i]->case[0]->assign_to->full_name) ? ' Assign to '.$mentions[$i]->case[0]->assign_to->full_name : '';
+                echo isset($mentions[$i]->case[0]->assign_to->display_name) ? ' Assign to '.$mentions[$i]->case[0]->assign_to->display_name : '';
             else
-                echo isset($mentions[$i]->case[0]->solved_by->full_name) ? ' Solved By '.$mentions[$i]->case[0]->solved_by->full_name : '';
+                echo isset($mentions[$i]->case[0]->solved_by->display_name) ? ' Solved By '.$mentions[$i]->case[0]->solved_by->display_name : '';
             ?>
         </button>
         

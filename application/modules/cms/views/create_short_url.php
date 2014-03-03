@@ -36,7 +36,7 @@ for($i=0;$i<count($this->user_role);$i++){
                             <div class="control-group">
                                 <label class="control-label">Full URL Path</label>
                                 <div class="controls">
-                                  <input type="text" class="span10" name="shorturl[long_url]" <!--placeholder="http://www.maybank2u.com.my/"!-->>
+                                  <input type="text" class="span10" name="shorturl[long_url]" <!--placeholder="http://www.maybank2u.com.my/"!-->
                                   <?php echo "<br />".$this->session->userdata('message')?>
                                 </div>
                             </div>
@@ -85,7 +85,7 @@ for($i=0;$i<count($this->user_role);$i++){
                                 <label class="control-label">Short URL
                                 <p style="font-size: 7pt;">Customize your short URL</p></label>
                                 <div class="controls">
-                                  http://maybk.co/<input type="text" class="span10" name="shorturl[short_code]" style="width: 100px;" value="<?php echo $code?>" maxlength="6"/>
+                                    http://maybk.co/<input type="text" class="span10" name="shorturl[short_code]" style="width: 100px;" value="<?php echo $code?>" maxlength="6"/>
                                 </div>
                             </div>
                             <div class="control-group">
@@ -97,10 +97,9 @@ for($i=0;$i<count($this->user_role);$i++){
                                 </div>
                             </div>
                         </form>
-			
                     </div>
-                    </div>
-               </div><?php }}?>
+               </div>
+               <?php }}?>
                 <div class="row-fluid" style="border-bottom: solid 1px #C9C9C9; margin-bottom: 10px;">
                     <h4>Short URL List</h4>    
                 </div>                                
@@ -171,32 +170,40 @@ for($i=0;$i<count($this->user_role);$i++){
                                   <textarea class="span10" name="shorturl[description]"></textarea>
                                 </div>
                             </div>
-                            <!--
                             <div class="control-group">
                                 <label class="control-label">Product</label>
                                 <div class="controls">
                                     <select id="multipleSelect" multiple="multiple">
-                                        <option value="opt7">First Option</option>
-                                        <option value="opt8">Second Option</option>
-                                        <option value="opt9">Third Option</option>
-                                        <option value="opt10">Fourth Option</option>
-                                        <option value="opt11">Fifth Option</option>
-                                        <option value="opt12">Sixth Option</option>
+                                        <?php if($products): ?>
+                                                <?php foreach($products as $v): ?>
+                                                    <option value="<?php echo $v->id ?>"><?php echo $v->product_name ?></option>
+                                                <?php endforeach; ?>
+                                        <?php else: ?>
+                                                <option>Please add Product first</option>
+                                        <?php endif;?>
                                     </select>
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label">Tag</label>
                                 <div class="controls">
-                                  <input type="text" class="span10">
-                                </div>
+                                <select class="multipleSelect" multiple="multiple" name="tag_id[]">
+                                      <?php if($tags): ?>
+                                              <?php foreach($tags as $v): ?>
+                                                      <option value="<?php echo $v->id ?>"><?php echo $v->tag_name ?></option>
+                                              <?php endforeach; ?>
+                                      <?php else: ?>
+                                              <option>Please add Tag first</option>
+                                      <?php endif;?>
+                                  </select>
+                              </div>
                             </div>
-                            -->
                             <div class="control-group">
                                 <label class="control-label">Short URL
                                 <p style="font-size: 7pt;">Customize your short URL</p></label>
                                 <div class="controls">
                                   http://maybk.co/<input type="text" class="span10" name="shorturl[short_code]" style="width: 100px;" value="<?php echo $code?>" maxlength="6"/>
+                                </div>
                             </div>
                             <div class="control-group">
                                 <div class="pull-left">
@@ -208,7 +215,6 @@ for($i=0;$i<count($this->user_role);$i++){
                             </div>
                         </form>
                     </div>
-                </div>
                 </div>
                 <div class="row-fluid" style="border-bottom: solid 1px #C9C9C9; margin-bottom: 10px;">
                     <h4>Short URL List</h4>    

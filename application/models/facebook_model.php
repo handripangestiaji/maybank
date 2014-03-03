@@ -159,7 +159,7 @@ class facebook_model extends CI_Model
 	    "channel_id" => $channel->channel_id,
 	    "type" => "facebook",
 	    "retrieved_at" => date("Y-m-d H:i:s"),
-	    "created_at" => date("Y-m-d H:i:s", $created_time->updated_time)
+	    "created_at" => $created_time->format("Y-m-d H:i:s")
 	);
 	$updated_time = new DateTime(date("Y-m-d H:i:s e", $each_post->updated_time), $timezone);
 	
@@ -452,6 +452,7 @@ class facebook_model extends CI_Model
 			`case` d on d.case_id = a.case_id LEFT JOIN
 			user e on e.user_id = d.assign_to LEFT JOIN
 			user f on f.user_id = d.solved_by");
+	$this->db->order_by('a.created_at','desc');
 	if(!$is_where_in)
 	    $this->db->where($filter);
 	else
@@ -477,6 +478,7 @@ $this->db->from("channel_action a INNER JOIN
     			`case` d ON d.case_id = a.case_id LEFT JOIN
     			`user` e ON e.user_id = d.assign_to LEFT JOIN
     			`user` f ON f.user_id = d.solved_by");
+$this->db->order_by('a.created_at','desc');
 	if(!$is_where_in)
 	    $this->db->where($filter);
 	else

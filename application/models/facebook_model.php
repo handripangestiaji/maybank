@@ -346,7 +346,9 @@ class facebook_model extends CI_Model
 		    $this->db->update("social_stream_facebook_conversation_detail", $social_stream_facebook_conversation_detail);
 		}
 		else{
-		    $this->db->insert("social_stream_facebook_conversation_detail", $social_stream_facebook_conversation_detail);
+		    if($this->IsFbUserExists($social_stream_facebook_conversation_detail['sender']) && $this->IsFbUserExists($social_stream_facebook_conversation_detail['to'])){
+			$this->db->insert("social_stream_facebook_conversation_detail", $social_stream_facebook_conversation_detail);
+		    }
 		}
 	    }
 	    $this->db->trans_complete();

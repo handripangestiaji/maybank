@@ -81,9 +81,9 @@ if($fb_feed[$i]->post_content != '<br />'):
           $case=new DateTime($isMyCase[count($isMyCase)-1]->solved_at.' Europe/London');
           $case->setTimezone($timezone);
         if($isMyCase[count($isMyCase)-1]->assign_to==$this->session->userdata('user_id') or ($isMyCase[count($isMyCase)-1]->solved_by)){ ?>
-            <button  href="#caseItem-<?php echo isset($isMyCase[count($isMyCase)-1]->case_id) ? $isMyCase[count($isMyCase)-1]->case_id : "" ?>" <?php if($isMyCase[count($isMyCase)-1]->status=="pending"){echo 'data-toggle="modal"';}?> type="button" value="<?php echo $isMyCase[count($isMyCase)-1]->case_id?>" class="btn <?php echo $fb_feed[$i]->case_id != null ? "btn-purple btn-mini case_related ".$fb_feed[$i]->social_stream_type : "btn-inverse btn-mini" ?>"><?php echo $fb_feed[$i]->case_id != null ? 'Case #'.$fb_feed[$i]->case_id.' Assign to You ' : 'Case #'.$isMyCase[count($isMyCase)-1]->case_id.' | '.'Resolve By:'.$isMyCase[count($isMyCase)-1]->resolve_by.' | '.$case->format('j-M-Y h:i A')?></button><?php
+            <button  href="#caseItem-<?php echo isset($isMyCase[count($isMyCase)-1]->case_id) ? $isMyCase[count($isMyCase)-1]->case_id : "" ?>" <?php if($isMyCase[count($isMyCase)-1]->status=="pending"){echo 'data-toggle="modal"';}?> type="button" value="<?php echo $isMyCase[count($isMyCase)-1]->case_id?>" class="btn <?php echo $fb_feed[$i]->case_id != null ? "btn-purple btn-mini case_related ".$fb_feed[$i]->social_stream_type : "btn-inverse btn-mini" ?>" style="text-align:left"><?php echo $fb_feed[$i]->case_id != null ? 'Case #'.$fb_feed[$i]->case_id.' Assign to You ' : 'Case #'.$isMyCase[count($isMyCase)-1]->case_id.' | '.'Resolve By:'.$isMyCase[count($isMyCase)-1]->resolve_by.' | '.$case->format('j-M-Y h:i A')?></button><?php
          }else{ ?>
-            <button  href="#caseItem-<?php echo isset($isMyCase[count($isMyCase)-1]->case_id) ? $isMyCase[count($isMyCase)-1]->case_id : "" ?>" <?php if($isMyCase[count($isMyCase)-1]->status=="pending"){echo 'data-toggle="modal"';}?> type="button" value="<?php echo $isMyCase[count($isMyCase)-1]->case_id?>" class="btn <?php echo $fb_feed[$i]->case_id != null ? "btn-purple btn-mini case_related ".$fb_feed[$i]->social_stream_type : "btn-inverse btn-mini" ?>">
+            <button  href="#caseItem-<?php echo isset($isMyCase[count($isMyCase)-1]->case_id) ? $isMyCase[count($isMyCase)-1]->case_id : "" ?>" <?php if($isMyCase[count($isMyCase)-1]->status=="pending"){echo 'data-toggle="modal"';}?> type="button" value="<?php echo $isMyCase[count($isMyCase)-1]->case_id?>" class="btn <?php echo $fb_feed[$i]->case_id != null ? "btn-purple btn-mini case_related ".$fb_feed[$i]->social_stream_type : "btn-inverse btn-mini" ?>" style="text-align:left">
                 <?php echo $fb_feed[$i]->case_id != null ? 'Case #'.$fb_feed[$i]->case_id.' Assign to: '.$isMyCase[count($isMyCase)-1]->display_name : 'Replied'?>
             </button>  
         <?php }
@@ -102,7 +102,7 @@ if($fb_feed[$i]->post_content != '<br />'):
        // print_r($fb_feed[$i]->reply_post[0]);
         if(isset($fb_feed[$i]->reply_post[0])){
          if(isset($fb_feed[$i]->is_my_reply[0])){?>
-        <button type="button" class="btn btn-inverse btn-mini" value="<?php echo $fb_feed[$i]->reply_post[0]->post_id?>">
+        <button type="button" class="btn btn-inverse btn-mini" style="text-align:left" value="<?php echo $fb_feed[$i]->reply_post[0]->post_id?>">
         <?php
         $reply_date = new DateTime($fb_feed[$i]->channel_action[count($fb_feed[$i]->channel_action) - 1]->created_at);
         $reply_date->setTimezone($timezone);

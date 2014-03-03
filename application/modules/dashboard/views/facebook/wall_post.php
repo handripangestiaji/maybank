@@ -229,10 +229,10 @@ if($fb_feed[$i]->post_content != '<br />'):
                 </div>
                  <div class="case-field hide">
                 <?php
-                    $data['posts_comment'] = $comment;
+                    /*$data['posts'] = $comment;
                     $data['posts'] = $fb_feed;
                     $data['i'] = $j;
-                    $this->load->view('dashboard/case_field',$data);
+                    $this->load->view('dashboard/case_field',$data);*/
                 ?>
                 </div>                
             </div>
@@ -327,7 +327,6 @@ if($fb_feed[$i]->post_content != '<br />'):
     <?php
         $data['posts'] = $fb_feed;        
         $data['i'] = $i;
-        $data['case_type']='facebook';
         $this->load->view('dashboard/case_field',$data);
     ?>
     </div>

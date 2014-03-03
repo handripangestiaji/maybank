@@ -6,7 +6,8 @@ class mycase extends CI_Controller{
         $this->load->model('case_model');
         $this->load->library('validation');
         header('Content-Type: application/x-json');
-        
+        $this->user_role = $this->users_model->get_collection_detail(
+		array('role_collection_id'=>$this->session->userdata('role_id')));
         if(!$this->session->userdata('user_id')){
             die(json_encode(array(
                 'success' => false,
@@ -115,8 +116,7 @@ class mycase extends CI_Controller{
     		    )
     		);
 		return;
-	    }
-	else{
+	    }else{
 	       
             $facebook_id=$channel_loaded[0]->social_id;
             //print_r($facebook_id);
@@ -186,6 +186,7 @@ class mycase extends CI_Controller{
     
     function SearchEmail(){
         $search_value = $this->input->get('term');
-        echo json_encode($this->case_model->SearchUserByEmail($search_value));
+        $country_code = IsRoleFriendlyNameExist($this->user_role, 'Regional_User') ? NULL : $this->session->userdata('country');
+        echo json_encode($this->case_model->SearchUserByEmail($search_value, $country_code));
     }
 }

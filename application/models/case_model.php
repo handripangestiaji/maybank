@@ -287,11 +287,13 @@ class case_model extends CI_Model{
     }
     
     
-    function SearchUserByEmail($email){
+    function SearchUserByEmail($email, $country_code = null){
         $this->db->select('email, username');
         $this->db->from('user');
         $this->db->like('email', $email);
         $this->db->or_like('username', $email);
+        if($country_code != null)
+            $this->db->where('country_code', $country_code);
         return $this->db->get()->result();
     }
 }

@@ -348,7 +348,9 @@ class facebook_model extends CI_Model
 		    $this->db->update("social_stream_facebook_conversation_detail", $social_stream_facebook_conversation_detail);
 		}
 		else{
-		    $this->db->insert("social_stream_facebook_conversation_detail", $social_stream_facebook_conversation_detail);
+		    if($this->IsFbUserExists($social_stream_facebook_conversation_detail['sender']) && $this->IsFbUserExists($social_stream_facebook_conversation_detail['to'])){
+			$this->db->insert("social_stream_facebook_conversation_detail", $social_stream_facebook_conversation_detail);
+		    }
 		}
 	    }
 	    $this->db->trans_complete();
@@ -695,7 +697,7 @@ $this->db->from("channel_action a INNER JOIN
                          social_stream_fb_comments b ON b.post_id=a.post_id INNER JOIN
                          fb_user_engaged c ON c.facebook_id=b.from INNER JOIN social_stream d ON d.post_id = b.id LEFT OUTER JOIN
                          social_stream e ON e.post_stream_id=b.comment_stream_id)
-                        WHERE b.from =272288926209649
+                        WHERE ".$filter."
                         ORDER BY `a`.`post_id` DESC
                         LIMIT 20)
                         UNION

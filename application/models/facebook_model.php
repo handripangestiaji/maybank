@@ -75,7 +75,7 @@ class facebook_model extends CI_Model
         * @author Eko Purnomo
     */
     public function RetrievePost($page_id, $access_token, $isOwnPost = true){
-	 $fql = '{"query1":"SELECT share_count, attachment, post_id, actor_id, share_count, updated_time, message,like_info, comment_info, message_tags FROM stream WHERE source_id = '.$page_id.
+	 $fql = '{"query1":"SELECT share_count, attachment, post_id, actor_id, share_count, updated_time, message,like_info, comment_info, message_tags, created_time FROM stream WHERE source_id = '.$page_id.
 	' AND actor_id '.($isOwnPost ? " = " : " <> " ).$page_id.' order by updated_time desc LIMIT 50",
         "query2" : "SELECT id,post_id, comment_count, parent_id, text, time, likes, attachment, fromid FROM comment WHERE post_id in (Select post_id from #query1 where comment_info.comment_count > 0) ",
         "query3" : "Select uid, name, username,sex from user where uid in (select actor_id from #query1) or uid in (select fromid from #query2)",
@@ -158,7 +158,7 @@ class facebook_model extends CI_Model
 	    "channel_id" => $channel->channel_id,
 	    "type" => "facebook",
 	    "retrieved_at" => date("Y-m-d H:i:s"),
-	    "created_at" => date("Y-m-d H:i:s", $each_post->updated_time)
+	    "created_at" => date("Y-m-d H:i:s", $each_post->created_time)
 	);
 	$updated_time = new DateTime(date("Y-m-d H:i:s e", $each_post->updated_time), $timezone);
 	$breakLine = explode("\n", $each_post->message);

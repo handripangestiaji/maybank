@@ -462,23 +462,15 @@ class facebook_model extends CI_Model
     }
     
     function GetChannelActionPM($filter, $is_where_in = false){
-//        $this->db->select("d.`post_id`, a.snippet AS post_content, a.message_count AS total_comments,  detail_id_from_facebook AS comment_stream_id,
-//	                       b.sender AS `from`, c.name, b.messages AS comment_content,d.`post_stream_id`,
-//	                       b.detail_id AS comment_id,b.conversation_id AS comment_post_id, b.detail_id AS id, d.type AS type_stream,b.`created_at`");
-//        $this->db->from("`social_stream_facebook_conversation` a INNER JOIN
-//                         `social_stream_facebook_conversation_detail` b ON b.conversation_id=a.conversation_id INNER JOIN
-//                         fb_user_engaged c ON c.facebook_id=b.sender INNER JOIN 
-//                         social_stream d ON d.post_id = b.conversation_id LEFT OUTER JOIN
-//                         social_stream e ON e.post_stream_id=b.detail_id_from_facebook");
-$this->db->select("a.*, b.username, b.display_name, c.MESSAGES, d.messages, d.assign_to, 
-	               e.display_name AS assign_name, f.display_name AS solved_name");
-$this->db->from("channel_action a INNER JOIN
-                `user` b ON b.user_id = a.created_by LEFT JOIN
-    			`social_stream_facebook_conversation_detail` c ON c.detail_id = a.post_id LEFT JOIN
-    			`case` d ON d.case_id = a.case_id LEFT JOIN
-    			`user` e ON e.user_id = d.assign_to LEFT JOIN
-    			`user` f ON f.user_id = d.solved_by");
-$this->db->order_by('a.created_at','desc');
+
+    $this->db->select("a.*, b.username, b.display_name, c.MESSAGES, d.messages, d.assign_to, 
+    	               e.display_name AS assign_name, f.display_name AS solved_name,d.solved_message");
+    $this->db->from("channel_action a INNER JOIN
+                    `user` b ON b.user_id = a.created_by LEFT JOIN
+        			`social_stream_facebook_conversation_detail` c ON c.detail_id = a.post_id LEFT JOIN
+        			`case` d ON d.case_id = a.case_id LEFT JOIN
+        			`user` e ON e.user_id = d.assign_to LEFT JOIN
+        			`user` f ON f.user_id = d.solved_by");
 	if(!$is_where_in)
 	    $this->db->where($filter);
 	else

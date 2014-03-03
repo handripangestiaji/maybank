@@ -153,14 +153,16 @@ class facebook_model extends CI_Model
 	$timezone = new DateTimeZone("Europe/London");
 	$stream = $this->IsStreamIdExists($each_post->post_id);
 	$this->SaveFacebookUser($each_post->users);
+	$created_time = new DateTime(date("Y-m-d H:i:s e", $each_post->created_time), $timezone);
 	$social_stream = array(
 	    "post_stream_id" => $each_post->post_id,
 	    "channel_id" => $channel->channel_id,
 	    "type" => "facebook",
 	    "retrieved_at" => date("Y-m-d H:i:s"),
-	    "created_at" => date("Y-m-d H:i:s", $each_post->created_time)
+	    "created_at" => $created_time->format("Y-m-d H:i:s")
 	);
 	$updated_time = new DateTime(date("Y-m-d H:i:s e", $each_post->updated_time), $timezone);
+	
 	$breakLine = explode("\n", $each_post->message);
 	if(count($breakLine) > 0)
 	{

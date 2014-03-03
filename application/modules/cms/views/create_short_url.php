@@ -36,7 +36,7 @@ for($i=0;$i<count($this->user_role);$i++){
                             <div class="control-group">
                                 <label class="control-label">Full URL Path</label>
                                 <div class="controls">
-                                  <input type="text" class="span10" name="shorturl[long_url]" placeholder="http://www.maybank2u.com.my/">
+                                  <input type="text" class="span10" name="shorturl[long_url]" placeholder="" />
                                   <?php echo "<br />".$this->session->userdata('message')?>
                                 </div>
                             </div>
@@ -50,6 +50,7 @@ for($i=0;$i<count($this->user_role);$i++){
                                 <label class="control-label">Campaign</label>
                                 <div class="controls">
                                     <select id="uniqueSelect" name="shorturl[campaign_id]">
+                                        <option value="">--Select A Campaign--</option>
                                         <?php if($campaigns): ?>
                                                 <?php $i=1;?>
                                                 <?php foreach($campaigns as $v): ?>

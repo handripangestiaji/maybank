@@ -466,26 +466,28 @@ $(function(){
                         var streamId, streamType, urlToLoad ;
                         urlToLoad = BASEURL + 'dashboard/media_stream/';
                         streamId = $(this).find('li:nth-child(' + i + ') input').val();
+                        streamName = $(this).find('li:nth-child(' + i + ') a').html();
+                       // console.log('oi error:'+streamName);
                         
                         if($(this).find('li:nth-child(' + i + ') a').hasClass('facebook_stream')){
                             streamType = "facebook";
                             urlToLoad += "facebook_stream/" + streamId
-                            $(this).closest('div').children('button').html('<i class="icon-facebook"></i><h2>Facebook&nbsp;</h2><i class="icon-caret-down"></i>');
+                            $(this).closest('div').children('button').html('<i class="icon-facebook"></i><h2>'+streamName+'&nbsp;</h2><i class="icon-caret-down"></i>');
                             $(this).closest('.containerHeadline').css( "background-color", "#3B5998" );
                             $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');
-                            
+                           // $(this).closest('div').append('<input type="text" name="streamName" value="'+streamName+'"/>');
                         }
                         else if($(this).find('li:nth-child(' + i + ') a').hasClass('twitter_stream')){
                             streamType = "twitter";
                             urlToLoad += "twitter_stream/" + streamId
-                            $(this).closest('div').children('button').html('<i class="icon-twitter"></i><h2>Twitter&nbsp;</h2><i class="icon-caret-down"></i>');
+                            $(this).closest('div').children('button').html('<i class="icon-twitter"></i><h2>'+streamName+'&nbsp;</h2><i class="icon-caret-down"></i>');
                             $(this).closest('.containerHeadline').css( "background-color", "#4099FF" );
                             $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');
-                        }
+                         }
                         else{
                             streamType = "youtube";
                             urlToLoad += "youtube_stream/" + streamId
-                            $(this).closest('div').children('button').html('<i class="icon-youtube"></i><h2>Youtube&nbsp;</h2><i class="icon-caret-down"></i>');
+                            $(this).closest('div').children('button').html('<i class="icon-youtube"></i><h2>'+streamName+'&nbsp;</h2><i class="icon-caret-down"></i>');
                             $(this).closest('.containerHeadline').css( "background-color", "#FF3333" );
                             $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');  
                         }
@@ -532,6 +534,7 @@ $(function(){
                         
                     });
                     $('.facebook_stream').on('click',function() {
+                        streamName = $(this).find('li:nth-child(' + i + ') a').html();
                         $(this).closest('div').children('button').html('<i class="icon-facebook"></i><h2>Facebook&nbsp;</h2><i class="icon-caret-down"></i>');
                         $(this).closest('.containerHeadline').css( "background-color", "#3B5998" );
                         $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');        

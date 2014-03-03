@@ -93,7 +93,7 @@ if($fb_feed[$i]->post_content != '<br />'):
             $data['caseMsg']=$isMyCase[count($isMyCase)-1];
             $data['assign_case_type']='facebook';
             $this->load->view('dashboard/case_item', $data);
-           
+                           
     }
         ?>
         </p>
@@ -106,7 +106,7 @@ if($fb_feed[$i]->post_content != '<br />'):
         <?php
         $reply_date = new DateTime($fb_feed[$i]->channel_action[count($fb_feed[$i]->channel_action) - 1]->created_at);
         $reply_date->setTimezone($timezone);
-        echo "Replied by: ".$fb_feed[$i]->channel_action[count($fb_feed[$i]->channel_action) - 1]->username." ".$reply_date->format("d-M-y h:i A") ?>
+        echo "Replied by: ".$fb_feed[$i]->channel_action[count($fb_feed[$i]->channel_action) - 1]->display_name." ".$reply_date->format("d-M-y h:i A") ?>
         </button> <?php            
         }else{?>
         <button type="button" class="btn btn-warning btn-mini no-cursor indicator" >OPEN</button>       

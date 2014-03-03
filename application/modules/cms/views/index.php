@@ -1,10 +1,17 @@
 <?php
-    if($this->session->flashdata('msg')){ ?>
+    if($this->session->flashdata('message_type')){
+        if($this->session->flashdata('message_type') == 'success') {?>
     <div class="alert alert-success">
         <button type="button" class="close" data-dismiss="alert"><i class="icon-remove"></i></button>
-        <strong>Success.</strong> <?php echo $this->session->flashdata('msg'); ?>
+        <strong>Success.</strong> <?php echo $this->session->flashdata('message_body'); ?>
     </div>
-<?php } ?>
+<?php } else { ?>
+    <div class="alert alert-error">
+        <button type="button" class="close" data-dismiss="alert"><i class="icon-remove"></i></button>
+        <strong>Error.</strong> <?php echo $this->session->flashdata('message_body'); ?>
+    </div>
+<?php }
+}?>
 <div class="row-fluid" style="width: 100%; margin: 0px auto;">
     <div class="row-fluid" >
         <div class="pull-left">

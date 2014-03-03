@@ -10,7 +10,7 @@
     <div class="container-fluid campaignForm">
         <form method="post" action="<?php echo site_url('cms/create_campaign') ?>" class="form-horizontal contentForm">
             <div class="control-group">
-                <label class="control-label">Campaign Name</label>
+                <label class="control-label">Campaign Name<span class="redText"> *</span></label>
                 <div class="controls">
                   <input type="text" class="span10" name="campaign[campaign_name]">
                 </div>
@@ -22,9 +22,9 @@
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label">Product</label>
+                <label class="control-label">Product<span class="redText"> *</span></label>
                 <div class="controls">
-                    <select id="multipleSelect" multiple="multiple" name="products_id[]">
+                    <select class="multipleSelect" multiple="multiple" name="products_id[]">
                     	<?php if($products): ?>
                     		<?php foreach($products as $v): ?>
                     			<option value="<?php echo $v->id ?>"><?php echo $v->product_name ?></option>
@@ -36,9 +36,9 @@
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label">Tag</label>
+                <label class="control-label">Tag<span class="redText"> *</span></label>
                 <div class="controls">
-                  <select id="multipleSelect" multiple="multiple" name="tag_id[]">
+                  <select class="multipleSelect" multiple="multiple" name="tag_id[]">
                     	<?php if($tags): ?>
                     		<?php foreach($tags as $v): ?>
                     			<option value="<?php echo $v->id ?>"><?php echo $v->tag_name ?></option>
@@ -47,6 +47,8 @@
                     		<option>Please add Tag first</option>
                     	<?php endif;?>
                     </select>
+                  <br><br>
+                    <span class="redText">* required</span>
                 </div>
             </div>
             <div class="control-group">

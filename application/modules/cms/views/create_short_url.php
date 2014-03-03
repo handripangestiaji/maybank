@@ -36,7 +36,7 @@ for($i=0;$i<count($this->user_role);$i++){
                             <div class="control-group">
                                 <label class="control-label">Full URL Path</label>
                                 <div class="controls">
-                                  <input type="text" class="span10" name="shorturl[long_url]" placeholder="http://www.maybank2u.com.my/">
+                                  <input type="text" class="span10" name="shorturl[long_url]" <!--placeholder="http://www.maybank2u.com.my/"!-->>
                                   <?php echo "<br />".$this->session->userdata('message')?>
                                 </div>
                             </div>
@@ -50,7 +50,8 @@ for($i=0;$i<count($this->user_role);$i++){
                                 <label class="control-label">Campaign</label>
                                 <div class="controls">
                                     <select id="uniqueSelect" name="shorturl[campaign_id]">
-                                        <?php if($campaigns): ?>
+                                            <option value="">--Select A Campagin--</option>
+                                            <?php if($campaigns): ?>
                                                 <?php $i=1;?>
                                                 <?php foreach($campaigns as $v): ?>
                                                         <option id="opt<?php echo $i?>" value="<?php echo $v->id?>"><?php echo $v->campaign_name ?></option>
@@ -81,9 +82,11 @@ for($i=0;$i<count($this->user_role);$i++){
                             </div>
                             -->
                             <div class="control-group">
-                                <label class="control-label">Short URL</label>
+                                <label class="control-label">Short URL
+                                <p style="font-size: 7pt;">Customize your short URL</p></label>
                                 <div class="controls">
                                   http://maybk.co/<input type="text" class="span10" name="shorturl[short_code]" style="width: 100px;" value="<?php echo $code?>" maxlength="6"/>
+                                </div>
                             </div>
                             <div class="control-group">
                                 <div class="pull-left">
@@ -158,7 +161,7 @@ for($i=0;$i<count($this->user_role);$i++){
                             <div class="control-group">
                                 <label class="control-label">Full URL Path</label>
                                 <div class="controls">
-                                  <input type="text" class="span10" name="shorturl[long_url]" placeholder="http://www.maybank2u.com.my/">
+                                  <input type="text" class="span10" name="shorturl[long_url]">
                                   <?php echo "<br />".$this->session->userdata('message')?>
                                 </div>
                             </div>
@@ -190,7 +193,8 @@ for($i=0;$i<count($this->user_role);$i++){
                             </div>
                             -->
                             <div class="control-group">
-                                <label class="control-label">Short URL</label>
+                                <label class="control-label">Short URL
+                                <p style="font-size: 7pt;">Customize your short URL</p></label>
                                 <div class="controls">
                                   http://maybk.co/<input type="text" class="span10" name="shorturl[short_code]" style="width: 100px;" value="<?php echo $code?>" maxlength="6"/>
                             </div>

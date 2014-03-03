@@ -123,18 +123,21 @@ class Cms extends MY_Controller {
 */
 	        
 	        $this->form_validation->set_rules('campaign[campaign_name]', 'Campaign Name', 'required|xss_clean');
+	        $this->form_validation->set_rules('products_id', 'Products', 'required');
+	        $this->form_validation->set_rules('tag_id', 'Tags', 'required');
 	        
 	        if ($this->form_validation->run() == TRUE)
 	        {
-		        $this->campaign_model->insert($campaigns, $products_id, $tags);
-	        }
+                    $this->campaign_model->insert($campaigns, $products_id, $tags);
+                    $this->session->set_flashdata('message_type', 'success');
+                    $this->session->set_flashdata('message_body', 'Create campaign success');
+                }
 	        else 
 	        {
-		        $this->session->set_flashdata('message_type', 'error');
-		        $this->session->set_flashdata('message_body', 'Please Insert Campaign Parameters');
-	        }
-	        
-	        redirect('cms/create_campaign');
+                    $this->session->set_flashdata('message_type', 'error');
+	            $this->session->set_flashdata('message_body', 'Please fill the required fields');
+                }
+	       redirect('cms/create_campaign'); 
           }
           else
           {
@@ -547,7 +550,8 @@ class Cms extends MY_Controller {
                               'country_code' => $this->input->post('country_code')
                              );
                $result = $this->product_model->update($id,$value);
-               $this->session->set_flashdata('msg','Product has been updated');
+               $this->session->set_flashdata('message_type','Success');
+               $this->session->set_flashdata('message_body','Product has been updated');
                redirect('cms/create_product');
           }
     }

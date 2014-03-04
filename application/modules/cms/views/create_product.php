@@ -24,6 +24,7 @@
                 <label class="control-label">Parent</label>
                 <div class="controls">
                 <select name="product[parent_id]">
+                    <option value="">-- No Parent --</option>
                     <?php foreach($products_avail as $product){ ?>
                         <option value="<?php echo $product->id ?>"><?php echo $product->product_name ?></option>
                     <?php } ?>

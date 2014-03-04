@@ -270,9 +270,9 @@ class Cms extends MY_Controller {
      {
     	$data['campaigns'] = $this->campaign_model->get();
     	
-    	$data['products'] = '';
+    	$data['products'] = $this->product_model->get();
     	
-    	$data['tags'] = '';
+    	$data['tags'] = $this->tag_model->get();
     	
     	
     	// First Tab -----------------------------------------

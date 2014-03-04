@@ -6,7 +6,7 @@ for($i=0;$i<count($this->user_role);$i++){
     <h4>Create Short URL</h4>    
 </div>
 <?php }}?>
-<?php $tab = $this->uri->segment(4) ? $this->uri->segment(4): 'firstTab'; ?>
+<?php $tab = $this->uri->segment(4) ? $this->uri->segment(4): 'secondTab'; ?>
 
     <!-- ==================== TAB ROW ==================== -->
 <div class="row-fluid">
@@ -15,23 +15,27 @@ for($i=0;$i<count($this->user_role);$i++){
 	    if($this->user_role[$x]->role_friendly_name=='Content Management_Short_URL_Create'){    
 	?>
         <ul class="nav nav-tabs">
+            <?php if (IsRoleFriendlyNameExist($this->user_role, 'Content Management_Short_URL_Campaign')): ?>
             <li class="<?php echo $tab=='firstTab'?"active":"" ?>">
                 <a href="#firstTab">Campaign</a>
             </li>
+            <?php endif;?>
+            
             <li class="<?php echo $tab=='secondTab'?"active":"" ?>"><a href="#secondTab">Non Campaign</a></li>
+            
         </ul>
 	<?php }}?>
         <!-- ==================== END OF TAB NAVIGATIION ==================== -->
 
         <div class="container-fluid">
             <!-- ==================== FIRST TAB CONTENT ==================== -->
+            <?php if (IsRoleFriendlyNameExist($this->user_role, 'Content Management_Short_URL_Campaign')): ?>
             <div class="tabContent" id="firstTab">
 		<?php for($x=0;$x<count($this->user_role);$x++){
 		    if($this->user_role[$x]->role_friendly_name=='Content Management_Short_URL_Create'){    
 		?>
                <div class="floatingBox span12">
                     <div class="container-fluid campaignForm">
-			
                         <form class="form-horizontal contentForm" method="post" action="<?php echo site_url('cms/create_short_url')?>">
                             <div class="control-group">
                                 <label class="control-label">Full URL Path<span class="redText"> *</span></label>
@@ -154,8 +158,9 @@ for($i=0;$i<count($this->user_role);$i++){
                     </div>
                 </div>
             </div>
+            <?php endif;?>
             <!-- ==================== END OF FIRST TAB CONTENT ==================== -->
-
+            
             <!-- ==================== SECOND TAB CONTENT ==================== -->
             <div class="tabContent" id="secondTab" style="display: none">
                 <div class="floatingBox span12">
@@ -263,7 +268,8 @@ for($i=0;$i<count($this->user_role);$i++){
                     </div>
             </div>
             <!-- ==================== END OF SECOND TAB CONTENT ==================== -->
-        </div>
+            </div>
+            
     </div>
 </div>
 <!-- ==================== END OF TAB ROW ==================== -->

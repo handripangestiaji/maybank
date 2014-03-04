@@ -197,5 +197,4 @@ class Shorturl {
 		
 		$this->_ci->shorturl_model->update($id, $params);
 	}
-	
 }

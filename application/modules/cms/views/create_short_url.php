@@ -47,7 +47,7 @@ for($i=0;$i<count($this->user_role);$i++){
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label">Campaign</label>
+                                <label class="control-label">Campaign<span class="redText"> *</span></label>
                                 <div class="controls">
                                     <select id="uniqueSelect" name="shorturl[campaign_id]">
                                         <option value="">--Select A Campaign--</option>
@@ -122,46 +122,36 @@ for($i=0;$i<count($this->user_role);$i++){
                         <table class="table table-striped">
                             <thead>
                               <tr>
-                                <th>Campaign Name</th>
                                 <th>Full Url Path</th>
                                 <th>Short Code</th>
                                 <th>Total Used</th>
                                 <th>Date Created</th>
                                 <th>Creator</th>
-				<?php for($x=0;$x<count($this->user_role);$x++){
-				    if($this->user_role[$x]->role_friendly_name=='Content Management_Short_URL_Delete'){    
-				?>
                                 <th>&nbsp;</th>
-				<?php }}?>
-			      </tr>
+                              </tr>
                             </thead>
                             <tbody>
-                            <?php if($urls): ?>
-                                <?php foreach($urls as $v): ?>
+                            <?php if($shorturls): ?>
+                                <?php foreach($shorturls as $v): ?>
                                         <tr>
-                                                <td><?php echo $v->campaign_name ?></td>
-                                                <td><?php echo '<p>'.$v->description.'</p><p>'.$v->long_url.'</p>' ?></td>
-                                                <td><a href="<?php echo site_url('cms/url/'.$v->short_code) ?>" target="_blank" >http://admin.maybk.co/<?php echo $v->short_code ?></a></td>
+                                                <td><?php echo $v->long_url ?></td>
+                                                <td><a href="<?php echo site_url('cms/url/'.$v->short_code) ?>" target="_blank" ><?php echo $v->short_code ?></a></td>
                                                 <td><?php echo $v->increment ?></td>
                                                 <td><?php echo date('M d, Y', strtotime($v->created_at)) ?></td>
                                                 <td><?php echo $v->display_name ?></td>
-                                                <?php for($x=0;$x<count($this->user_role);$x++){
-						    if($this->user_role[$x]->role_friendly_name=='Content Management_Short_URL_Delete'){    
-						?>
-						<td>
+                                                <td>
                                                 <a href="<?php echo site_url('cms/create_short_url?action=delete&id='.$v->id)?>" class="btn btn-mini btn-danger pull-right">delete</a>
                                                 <!-- <button id="delete_btn" class="btn btn-mini btn-danger pull-right" type="button">delete</button> -->
                                                 </td>
-						<?php }}?>
-                                        </tr>
+                                                        </tr>
                                 <?php endforeach; ?>
                             <?php endif;?>
                             </tbody>
                         </table>
                     </div>
                      <div class="page pull-right">
-                     	<?php echo $links ?>
-                     </div>
+                     <?php echo $pagination ?>
+                    </div>
                 </div>
             </div>
             <!-- ==================== END OF FIRST TAB CONTENT ==================== -->
@@ -170,7 +160,7 @@ for($i=0;$i<count($this->user_role);$i++){
             <div class="tabContent" id="secondTab" style="display: none">
                 <div class="floatingBox span12">
                     <div class="container-fluid campaignForm">
-                        <form class="form-horizontal contentForm" method="post" action="<?php echo site_url('cms/create_short_url')?>">
+                        <form class="form-horizontal contentForm" method="post" action="<?php echo site_url('cms/create_short_url_non_campaign')?>">
                             <div class="control-group">
                                 <label class="control-label">Full URL Path<span class="redText"> *</span></label>
                                 <div class="controls">
@@ -187,7 +177,8 @@ for($i=0;$i<count($this->user_role);$i++){
                             <div class="control-group">
                                 <label class="control-label">Product<span class="redText"> *</span></label>
                                 <div class="controls">
-                                    <select id="multipleSelect" multiple="multiple">
+                                    <select name="shorturl[product_id]">
+                                        <option value="">--None Selected--</option>
                                         <?php if($products): ?>
                                                 <?php foreach($products as $v): ?>
                                                     <option value="<?php echo $v->id ?>"><?php echo $v->product_name ?></option>
@@ -204,7 +195,7 @@ for($i=0;$i<count($this->user_role);$i++){
                                 <select class="multipleSelect" multiple="multiple" name="tag_id[]">
                                       <?php if($tags): ?>
                                               <?php foreach($tags as $v): ?>
-                                                      <option value="<?php echo $v->id ?>"><?php echo $v->tag_name ?></option>
+                                                      <option value="<?php echo '-'.$v->id ?>"><?php echo $v->tag_name ?></option>
                                               <?php endforeach; ?>
                                       <?php else: ?>
                                               <option>Please add Tag first</option>

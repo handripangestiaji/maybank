@@ -228,6 +228,24 @@ class case_model extends CI_Model{
         return $result;
     }
 
+    function TwitterRelatedConversation($case_id){
+        $this->db->select('b.*');
+        $this->db->from("case_related_conversation a inner join social_stream b on a.social_stream_id = b.post_id");
+        $this->db->where('a.case_id', $case_id);
+        
+        $result = $this->db->get()->result();
+        
+        foreach($result as $row){
+            if($row->type == 'twitter'){
+                $row->twitter_data = $this->twitter_model->ReadTwitterData(array('a.post_id' => $row->post_id));
+            }
+            else{
+                $row->twitter_data = $this->twitter_model->ReadDMFromDb(array('a.post_id' => $row->post_id));
+            }
+        }
+        return $result;
+    }
+    
     
     function ResolveCase($case_id, $solved_by,$solved_message, $is_solved = true){
         $this->db->where('case_id', $case_id);

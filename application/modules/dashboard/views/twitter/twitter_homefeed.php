@@ -5,6 +5,13 @@ for($i=0;$i<count($homefeed);$i++){
 ?>
     <li <?php if($homefeed[$i]->is_read==0){echo 'class="unread-post"';} ?> id="post<?=$homefeed[$i]->social_stream_post_id?>">
         <div class="message"></div>
+    
+        <?php
+            if(isset($homefeed[$i]->case[0]))
+                $this->load->view('dashboard/twitter/case_view', array(
+                        "caseMsg" => $homefeed[$i]->case[0]
+                    ));
+            ?>
         <input type="hidden" class="postId" value="<?php echo $homefeed[$i]->social_stream_post_id; ?>" />
         <div class="circleAvatar"><img src="<?php echo base_url('dashboard/media_stream/SafePhoto?photo=').$homefeed[$i]->profile_image_url;?>" alt=""></div>
         <div class="read-mark <?php if($homefeed[$i]->is_read==0){echo 'redText';} else { echo 'greyText'; } ?>"><i class="icon-bookmark icon-large"></i></div>
@@ -50,7 +57,8 @@ for($i=0;$i<count($homefeed);$i++){
     </p>
     <p>
     <?php if(count($homefeed[$i]->case) > 0):?>
-        <button type="button" class="btn <?=$homefeed[$i]->case[0]->status == "pending" ? "btn-purple" : "btn-inverse"?> btn-mini" value="<?php echo $homefeed[$i]->case[0]->case_id?>">Case #<?php echo $homefeed[$i]->case[0]->case_id?>
+        
+        <button href="#caseItem<?=$homefeed[$i]->case[0]->case_id?>" data-toggle="modal" type="button" class="btn <?=$homefeed[$i]->case[0]->status == "pending" ? "btn-purple" : "btn-inverse"?> btn-mini" value="<?php echo $homefeed[$i]->case[0]->case_id?>">Case #<?php echo $homefeed[$i]->case[0]->case_id?>
             <?php
             if($homefeed[$i]->case[0]->status == "pending"){
                 echo isset($homefeed[$i]->case[0]->assign_to->display_name) ? ' Assign to:'.$homefeed[$i]->case[0]->assign_to->display_name : '';
@@ -66,7 +74,6 @@ for($i=0;$i<count($homefeed);$i++){
             }
             
             ?>
-            
         </button>
         
     <?php endif?>

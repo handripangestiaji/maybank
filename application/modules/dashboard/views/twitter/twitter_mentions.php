@@ -45,7 +45,10 @@ for($i=0;$i<count($mentions);$i++){
     </p>
     <p class="indicator">
     <?php if(count($mentions[$i]->case) > 0):?>
-        <button type="button" class="btn <?=$mentions[$i]->case[0]->status == "pending" ? "btn-purple" : "btn-inverse"?> btn-mini" value="<?php echo $mentions[$i]->case[0]->case_id?>">Case #<?php echo $mentions[$i]->case[0]->case_id?>
+        
+        <button type="button" href="#caseItem<?=$mentions[$i]->case[0]->case_id?>" data-toggle="modal"
+            class="twitter-case-related btn <?=$mentions[$i]->case[0]->status == "pending" ? "btn-purple" : "btn-inverse"?> btn-mini "
+            value="<?php echo $mentions[$i]->case[0]->case_id?>">Case #<?php echo $mentions[$i]->case[0]->case_id?>
             <?php
             if($mentions[$i]->case[0]->status == "pending"){
                 echo isset($mentions[$i]->case[0]->assign_to->display_name) ? ' Assign to:'.$mentions[$i]->case[0]->assign_to->display_name : '';
@@ -61,7 +64,11 @@ for($i=0;$i<count($mentions);$i++){
             }
             ?>
         </button>
-        
+        <?php
+            $this->load->view('dashboard/twitter/case_view', array(
+                    "caseMsg" => $mentions[$i]->case[0]
+                ));
+        ?>
     <?php endif?>
     <?php if(count($mentions[$i]->reply_post) > 0):?>
         <button type="button" class="btn btn-inverse btn-mini" value="<?php echo $mentions[$i]->reply_post[0]->response_post_id?>">

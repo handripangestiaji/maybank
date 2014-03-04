@@ -262,7 +262,11 @@ if($fb_feed[$i]->post_content != '<br />'):
 
     <h4 class="filled">
         <!--di nonaktifin dulu, karena belum di butuhkan-->
-            <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Take Action')):?>
+            <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Take Action') ||
+                     IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action') ||
+                     IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Delete') ||
+                     IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Delete')
+                     ):?>
                 <a role="button" class='delete_post wall'><i class="icon-trash greyText"></i></a>
                 <!--a style="font-size: 20px; cursor: pointer;"><i class="icon-trash greyText deleteFB"></i></a-->
             <?php endif;?>

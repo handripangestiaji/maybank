@@ -33,7 +33,8 @@
                     '<button type="button" class="btn btn-primary favorit"><i class="icon-star">&nbsp;</i><span></span></button> ';
     }
     
-    if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Take Action')){
+    if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Take Action') ||
+       IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action')){
         foreach($allowed[$come_from] as $state)
         {
             echo $buttonItems[$state];

@@ -15,17 +15,19 @@ for($i=0;$i<count($this->user_role);$i++){
 	    if($this->user_role[$x]->role_friendly_name=='Content Management_Short_URL_Create'){    
 	?>
         <ul class="nav nav-tabs">
-            <li class="<?php echo $tab=='firstTab'?"active":"" ?>">
-                <a href="#firstTab">Campaign</a>
-            </li>
+            <?php if($this->session->userdata('role_id') != '4'){ ?>
+            <li class="<?php echo $tab=='firstTab'?"active":"" ?>"><a href="#firstTab">Campaign</a></li>
             <li class="<?php echo $tab=='secondTab'?"active":"" ?>"><a href="#secondTab">Non Campaign</a></li>
+            <?php } else { ?>
+            <li class="active"><a href="#secondTab">Non Campaign</a></li>
+            <?php } ?>
         </ul>
 	<?php }}?>
         <!-- ==================== END OF TAB NAVIGATIION ==================== -->
 
         <div class="container-fluid">
             <!-- ==================== FIRST TAB CONTENT ==================== -->
-            <div class="tabContent" id="firstTab">
+            <div class="tabContent" id="firstTab" <?php if($this->session->userdata('role_id') == '4'){echo 'style="display:none;"';}else{echo 'style="display:block;"';} ?>>
 		<?php for($x=0;$x<count($this->user_role);$x++){
 		    if($this->user_role[$x]->role_friendly_name=='Content Management_Short_URL_Create'){    
 		?>
@@ -157,7 +159,7 @@ for($i=0;$i<count($this->user_role);$i++){
             <!-- ==================== END OF FIRST TAB CONTENT ==================== -->
 
             <!-- ==================== SECOND TAB CONTENT ==================== -->
-            <div class="tabContent" id="secondTab" style="display: none">
+            <div class="tabContent" id="secondTab" <?php if($this->session->userdata('role_id') == '4'){echo 'style="display:block;"';}else{echo 'style="display:none;"';} ?>>
                 <div class="floatingBox span12">
                     <div class="container-fluid campaignForm">
                         <form class="form-horizontal contentForm" method="post" action="<?php echo site_url('cms/create_short_url_non_campaign')?>">

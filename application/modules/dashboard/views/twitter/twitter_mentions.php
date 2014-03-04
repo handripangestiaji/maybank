@@ -45,12 +45,20 @@ for($i=0;$i<count($mentions);$i++){
     </p>
     <p class="indicator">
     <?php if(count($mentions[$i]->case) > 0):?>
-        <button type="button" class="btn <?=$mentions[$i]->case[0]->status == "pending" ? "btn-purple" : "btn-inverse"?> btn-mini" value="<?php echo $mentions[$i]->case[0]->case_id?>">Case Id #<?php echo $mentions[$i]->case[0]->case_id?>
+        <button type="button" class="btn <?=$mentions[$i]->case[0]->status == "pending" ? "btn-purple" : "btn-inverse"?> btn-mini" value="<?php echo $mentions[$i]->case[0]->case_id?>">Case #<?php echo $mentions[$i]->case[0]->case_id?>
             <?php
-            if($mentions[$i]->case[0]->status == "pending")
-                echo isset($mentions[$i]->case[0]->assign_to->display_name) ? ' Assign to '.$mentions[$i]->case[0]->assign_to->display_name : '';
-            else
-                echo isset($mentions[$i]->case[0]->solved_by->display_name) ? ' Solved By '.$mentions[$i]->case[0]->solved_by->display_name : '';
+            if($mentions[$i]->case[0]->status == "pending"){
+                echo isset($mentions[$i]->case[0]->assign_to->display_name) ? ' Assign to:'.$mentions[$i]->case[0]->assign_to->display_name : '';
+                $created_at = new DateTime($mentions[$i]->case[0]->created_at.' Europe/London', $timezone);
+                $created_at->setTimezone($timezone);
+                echo ' '.$created_at->format("d-M-y h:i A");
+            }
+            else{
+                echo isset($mentions[$i]->case[0]->solved_by->display_name) ? ' Resolved By:'.$mentions[$i]->case[0]->solved_by->display_name : '';
+                $solved_at = new DateTime($mentions[$i]->case[0]->solved_at.' Europe/London', $timezone);
+                $solved_at->setTimezone($timezone);
+                echo ' '.$solved_at->format("d-M-y h:i A");
+            }
             ?>
         </button>
         

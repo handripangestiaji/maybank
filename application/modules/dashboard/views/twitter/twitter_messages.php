@@ -28,12 +28,20 @@
         </p>
         <p class="indicator">
         <?php if(count($directmessage[$i]->case) > 0):?>
-            <button type="button" class="btn <?=$directmessage[$i]->case[0]->status == "pending" ? "btn-purple" : "btn-inverse"?> btn-mini" value="<?php echo $directmessage[$i]->case[0]->case_id?>">Case Id #<?php echo $directmessage[$i]->case[0]->case_id?>
+            <button type="button" class="btn <?=$directmessage[$i]->case[0]->status == "pending" ? "btn-purple" : "btn-inverse"?> btn-mini" value="<?php echo $directmessage[$i]->case[0]->case_id?>">Case #<?php echo $directmessage[$i]->case[0]->case_id?>
                 <?php
-                if($directmessage[$i]->case[0]->status == "pending")
-                    echo isset($directmessage[$i]->case[0]->assign_to->display_name) ? ' Assign to '.$directmessage[$i]->case[0]->assign_to->display_name : '';
-                else
-                    echo isset($directmessage[$i]->case[0]->solved_by->display_name) ? ' Solved by '.$directmessage[$i]->case[0]->solved_by->display_name: '';
+                if($directmessage[$i]->case[0]->status == "pending"){
+                    echo isset($directmessage[$i]->case[0]->assign_to->display_name) ? ' Assign to: '.$directmessage[$i]->case[0]->assign_to->display_name : '';
+                    $created_at = new DateTime($directmessage[$i]->case[0]->created_at.' Europe/London', $timezone);
+                    $created_at->setTimezone($timezone);
+                    echo ' '.$created_at->format("d-M-y h:i A");
+                }
+                else{
+                    echo isset($directmessage[$i]->case[0]->solved_by->display_name) ? ' Resolved by: '.$directmessage[$i]->case[0]->solved_by->display_name: '';
+                    $solved_at = new DateTime($directmessage[$i]->case[0]->solved_at.' Europe/London', $timezone);
+                    $solved_at->setTimezone($timezone);
+                    echo ' '.$solved_at->format("d-M-y h:i A");
+                }
                 ?>
             </button>
         

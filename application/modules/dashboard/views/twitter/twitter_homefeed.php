@@ -50,13 +50,23 @@ for($i=0;$i<count($homefeed);$i++){
     </p>
     <p>
     <?php if(count($homefeed[$i]->case) > 0):?>
-        <button type="button" class="btn <?=$homefeed[$i]->case[0]->status == "pending" ? "btn-purple" : "btn-inverse"?> btn-mini" value="<?php echo $homefeed[$i]->case[0]->case_id?>">Case Id #<?php echo $homefeed[$i]->case[0]->case_id?>
+        <button type="button" class="btn <?=$homefeed[$i]->case[0]->status == "pending" ? "btn-purple" : "btn-inverse"?> btn-mini" value="<?php echo $homefeed[$i]->case[0]->case_id?>">Case #<?php echo $homefeed[$i]->case[0]->case_id?>
             <?php
-            if($homefeed[$i]->case[0]->status == "pending")
-                echo isset($homefeed[$i]->case[0]->assign_to->display_name) ? ' Assign to '.$homefeed[$i]->case[0]->assign_to->display_name : '';
-            else
-                echo isset($homefeed[$i]->case[0]->solved_by->display_name) ? ' Solved By '.$homefeed[$i]->case[0]->solved_by->display_name: '';
+            if($homefeed[$i]->case[0]->status == "pending"){
+                echo isset($homefeed[$i]->case[0]->assign_to->display_name) ? ' Assign to:'.$homefeed[$i]->case[0]->assign_to->display_name : '';
+                $created_at = new DateTime($homefeed[$i]->case[0]->created_at.' Europe/London', $timezone);
+                
+                echo ' '.$created_at->format("d-M-y h:i A");
+            }
+            else{
+                echo isset($homefeed[$i]->case[0]->solved_by->display_name) ? ' Resolved By:'.$homefeed[$i]->case[0]->solved_by->display_name: '';
+                $solved_at = new DateTime($homefeed[$i]->case[0]->solved_at.' Europe/London', $timezone);
+                
+                echo ' '.$solved_at->format("d-M-y h:i A");
+            }
+            
             ?>
+            
         </button>
         
     <?php endif?>

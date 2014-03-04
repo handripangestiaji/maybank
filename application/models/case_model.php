@@ -257,7 +257,7 @@ class case_model extends CI_Model{
     }
     
     function chackAssignCase($filter = array()){
-        $this->db->select("`a`.*, `b`.`channel_id`, `b`.`post_stream_id`,`c`.`display_name`,c.full_name, `d`.`full_name` AS resolve_by, e.full_name AS `send_by`");
+        $this->db->select("`a`.*, `b`.`channel_id`, `b`.`post_stream_id`,`c`.`display_name`,c.full_name, `d`.`display_name` AS resolve_by, e.full_name AS `send_by`");
         $this->db->from("`case` a INNER JOIN social_stream b ON a.post_id = b.post_id LEFT OUTER JOIN `user` c ON c.user_id=a.assign_to LEFT OUTER JOIN `user` d ON d.user_id=a.solved_by LEFT OUTER JOIN `user` e ON e.user_id=a.created_by");
         $this->db->where($filter);
         $result = $this->db->get()->result();

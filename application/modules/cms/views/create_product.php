@@ -35,10 +35,8 @@
                 <label class="control-label">Country</label>
                 <div class="controls">
                     <select name="product[country_code]">
-                        <?php foreach($countries as $country){
-                            if($country->code != 'All'){ ?>
-                                <option value="<?php echo $country->code ?>"><?php echo $country->name ?></option>
-                            <?php } ?>
+                        <?php foreach($countries as $country){ ?>
+                            <option value="<?php echo $country->code ?>"><?php echo $country->name ?></option>
                         <?php } ?>
                     </select>
                 </div>

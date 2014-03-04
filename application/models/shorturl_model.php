@@ -118,4 +118,12 @@ class Shorturl_model extends CI_Model
         return $this->db->count_all($this->_table);
     }
 
+    
+	public function getLastId(){
+		$this->db->select('*');
+		$this->db->order_by('id','desc');
+		$this->db->from('short_urls');
+		$short = $this->db->get()->row();
+		return $short->id;
+	}
 }

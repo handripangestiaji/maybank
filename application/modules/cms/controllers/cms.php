@@ -352,21 +352,28 @@ class Cms extends MY_Controller {
                               $params['user_id'] = $this->session->userdata('user_id');
                               
                               $config = array(
-                                                      array(
-                                                              'field' => 'shorturl[long_url]',
-                                                              'label' => 'Full Url',
-                                                              'rules' => 'required'
-                                                      ),
-                                                      array(
-                                                              'field' => 'shorturl[short_code]',
-                                                              'label' => 'Full Url',
-                                                              'rules' => 'required|max_length[6]'
-                                                      )
-                                              );
-                              
+                                            array(
+                                                    'field' => 'shorturl[long_url]',
+                                                    'label' => 'Full Url',
+                                                    'rules' => 'required'
+                                            ),
+                                            array(
+                                                    'field' => 'shorturl[short_code]',
+                                                    'label' => 'Full Url',
+                                                    'rules' => 'required|max_length[6]'
+                                            ),
+                                            array(
+                                                  'field' => 'shorturl[campaign_id]',
+                                                  'label' => 'Product Id',
+                                                  'rules' => 'required'
+                                            ),
+                                    );
+                    
                               $this->form_validation->set_rules($config);
                               
-                              if($this->form_validation->run() == TRUE)
+                              $tags = $this->input->post('tag_id');
+                              
+                              if($this->form_validation->run() == TRUE && !empty($tags))
                               {
                                       $code = $this->shorturl->urlToShortCode($params);
                                       
@@ -378,6 +385,20 @@ class Cms extends MY_Controller {
                                       {
                                               $this->session->unset_userdata('message');
                                       }
+                               
+                                        $last_id = $this->shorturl_model->getLastId();
+                                     
+                                        if ( is_array($tags) )
+                                        {
+                                             $x=0;
+                                             foreach($tags as $tag){
+                                                  $data = array('short_urls_id' => $last_id,
+                                                                'content_tag_id' => str_replace('-','',$tag)
+                                                               );
+                                                  $x++;
+                                                  $this->db->insert('short_url_tag',$data);     
+                                             }
+                                        }
                                       
                                       $setparam = array(
                                                                       "campaign_id" => $params['campaign_id'], 
@@ -386,6 +407,12 @@ class Cms extends MY_Controller {
                                                               );
                                
                                       $id_campaign_url = $this->campaign_url_model->insert($setparam);
+                                        $this->session->set_flashdata('message_type', 'success');
+                                        $this->session->set_flashdata('message_body', 'Create short url success');
+                              }
+                              else{
+                                  $this->session->set_flashdata('message_type', 'error');
+                                   $this->session->set_flashdata('message_body', 'Please fill the required fields');
                               }
                               redirect('cms/create_short_url');
                          }
@@ -425,6 +452,87 @@ class Cms extends MY_Controller {
      }
     }
      
+     public function create_short_url_non_campaign()
+    {
+          if ($this->input->server('REQUEST_METHOD') === 'POST')
+          {
+               if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Short_URL_Create')){
+                    $params = array();
+                    $params = $this->input->post('shorturl');
+                    $params['user_id'] = $this->session->userdata('user_id');
+                    
+                    $config = array(
+                                            array(
+                                                    'field' => 'shorturl[long_url]',
+                                                    'label' => 'Full Url',
+                                                    'rules' => 'required'
+                                            ),
+                                            array(
+                                                    'field' => 'shorturl[short_code]',
+                                                    'label' => 'Full Url',
+                                                    'rules' => 'required|max_length[6]'
+                                            ),
+                                            array(
+                                                  'field' => 'shorturl[product_id]',
+                                                  'label' => 'Product Id',
+                                                  'rules' => 'required'
+                                            ),
+                                    );
+                    
+                    $this->form_validation->set_rules($config);
+                    $tags = $this->input->post('tag_id');
+                              
+                    if($this->form_validation->run() == TRUE && !empty($tags))
+                    {
+                            $code = $this->shorturl->urlToShortCode($params);
+                            
+                            if(isset($code['message']))
+                            {
+                              $this->session->set_userdata('message', $code['message']);
+                            }
+                            else
+                            {
+                                    $this->session->unset_userdata('message');
+                            }
+                            
+                              $tags = $this->input->post('tag_id');
+                              $last_id = $this->shorturl_model->getLastId();
+                           
+                              if ( is_array($tags) )
+                              {
+                                   $x=0;
+                                   foreach($tags as $tag){
+                                        $data = array('short_urls_id' => $last_id,
+                                                      'content_tag_id' => str_replace('-','',$tag)
+                                                     );
+                                        $x++;
+                                        $this->db->insert('short_url_tag',$data);     
+                                   }
+                              }
+                            
+                            $setparam = array(
+                                                            "campaign_id" => $params['campaign_id'], 
+                                                            "url_id" => $code['url_id'],
+                                                            "user_id" => $params['user_id']
+                                                    );
+                     
+                            $id_campaign_url = $this->campaign_url_model->insert($setparam);
+                              $this->session->set_flashdata('message_type', 'success');
+                              $this->session->set_flashdata('message_body', 'Create short url success');
+                    }
+                    else{
+                         $this->session->set_flashdata('message_type', 'error');
+                         $this->session->set_flashdata('message_body', 'Please fill the required fields');
+                    }
+                    redirect('cms/create_short_url');
+               }
+               else
+               {
+                    redirect('cms');
+               }
+	  }
+     }
+    
     public function create_product()
     {
      if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_View'))

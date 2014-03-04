@@ -585,7 +585,10 @@ class Cms extends MY_Controller {
         	$params = array();
 	        $params = $this->input->post('product');
 	        $params['user_id'] = $this->session->userdata('user_id');
-	        	        
+	       if($params['parent_id'] == ''){
+                    $params['parent_id'] = null;     
+               }
+               
 	        $this->form_validation->set_rules('product[product_name]', 'Product Name', 'required|xss_clean');
 	        
 	        if ($this->form_validation->run() == TRUE)

@@ -481,8 +481,9 @@ class Media_stream extends CI_Controller {
     
     public function FbReplyPost(){
         header("Content-Type: application/x-json");
-	$this->load->model('account_model');
+        $this->load->model('account_model');
         $this->load->model('facebook_model');
+        $this->load->model('post_model');
         $comment = $this->input->post('comment');
         $post_id = $this->input->post('post_id');
         $title = $this->input->post('title');
@@ -491,6 +492,7 @@ class Media_stream extends CI_Controller {
         $img = $this->input->post('img');
         $reply_type=$this->input->post('reply_type');
         $product_type=$this->input->post('product_type');
+        $tags=$this->input->post('tags');
              
         $filter = array(
             "connection_type" => "facebook"
@@ -513,6 +515,22 @@ class Media_stream extends CI_Controller {
 	    else{
 		  $channel =  $channel_loaded[0]->channel_id;
 	    }
+        
+        
+        if($tags != ''){
+	    foreach($tags as $tag){
+		$get_tag = $this->post_model->GetTagByTagName($tag);
+                if($get_tag == NULL){
+                    $tag_id = $this->post_model->InsertTag($tag);
+                }
+                else{
+                    $tag_id = $get_tag->id;
+                }
+                //tag increment
+                $this->post_model->IncrementTag($tag_id);
+                
+	       }
+	}
         
         $stream_id=$this->facebook_model->streamId($post_id);
         //print_r($stream_id);

@@ -1459,7 +1459,7 @@ $(function(){
                             var commentButton = $(this);
                             isSend=commentButton.html()=="SEND";
                             commentButton.html('SENDING...').attr("disabled", "disabled");
-
+                            
                            $.ajax({
                                 url : BASEURL + 'dashboard/media_stream/FbReplyPost',
                                 type: "POST",
@@ -1473,6 +1473,7 @@ $(function(){
                                     title :$(this).parent().siblings('#reply-url-show').find(".title_link").val(),
                                     desc :$(this).parent().siblings('#reply-url-show').find(".descr-link").val(),
                                     img :$(this).parent().siblings('#reply-img-show').find("#reply-preview-img").attr('src'),
+                                    tags:$(this).parent().siblings().find("#compose-tags-reply").tagit("assignedTags"),
                                 },
                                 success: function(response)
                                 {

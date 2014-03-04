@@ -1,12 +1,12 @@
-<?php for($y=0;$y<count($this->user_role);$y++){
-        if($this->user_role[$y]->role_friendly_name=='Social Channel Management_Add'){    
-?>
+
 <div style="float: left;">
     <h5><?=$title?> Channel List</h5>
 </div>
+<?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Channel Management_Add')):?>
 <div style="float: right;">
     <input class="btn btn-primary" onclick="window.location='<?=base_url('channels/channelmg/Add'.$title)?>'" type="button" name="btn_new" value="+ New <?=$title?> Channel" />
 </div>
+<?php endif;?>
 
 <div style="clear: both"></div>
 <hr style="margin-top: 0px;">
@@ -55,9 +55,13 @@
             <td><?=$channel->connection_type.' '.($channel->is_fb_page == 1? " Page" : "") ?></td>
             <td><?=$channel->social_id?></td>
             <td><?=$channel->country_code?></td>
+            <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Channel Management_Remove')):?>
             <td>
                 <button value="<?=base_url('channels/channelmg/DeleteChannel?channel_id='.$channel->channel_id."&token=".$this->session->userdata('channel_token_delete'))?>" class="btn btn-danger delete" type="button" id="channel_<?=$channel->channel_id?>"><i class="icon-trash"></i> Delete</button>
             </td>
+            <?php else:?>
+            <td></td>
+            <?php endif;?>
         </tr>
         <?php endforeach;?>
     </tbody>
@@ -74,5 +78,4 @@
     <a href="#">4</a>
     <a href="#">Last</a>
 </div>
-<?php endif;?>
-<?php }}?>
+<?php endif?>

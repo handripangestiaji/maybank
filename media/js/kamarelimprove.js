@@ -56,7 +56,7 @@ $(function(){
         e.preventDefault();
     });
     
-    $(this).on('click', '.assign-case .twitter', function(e){
+    $(this).on('click', '.assign-case .twitter, .assign-case .twitter_dm', function(e){
         var modalID = $(this).attr("href");
         var twitter_id = $(modalID + " input[name=twitter_user_id]").val();
         var type = $(modalID + " input[name=type]").val();
@@ -107,7 +107,7 @@ $(function(){
     
     $(this).on('click', '.assign-case .facebook', function(e){
         var modalID = $(this).attr("href");
-        var facebook_id = $(" input[name=user_id]").val();
+        var facebook_id = $(modalID).find("input[name=user_id]").val();
         var type = $(modalID + " input[name=type_facebook]").val();
        // alert(type)
         $(modalID + " .loader-image").show();

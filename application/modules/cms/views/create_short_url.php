@@ -34,7 +34,7 @@ for($i=0;$i<count($this->user_role);$i++){
 			
                         <form class="form-horizontal contentForm" method="post" action="<?php echo site_url('cms/create_short_url')?>">
                             <div class="control-group">
-                                <label class="control-label">Full URL Path</label>
+                                <label class="control-label">Full URL Path<span class="redText"> *</span></label>
                                 <div class="controls">
                                   <input type="text" class="span10" name="shorturl[long_url]" <!--placeholder="http://www.maybank2u.com.my/"!-->
                                   <?php echo "<br />".$this->session->userdata('message')?>
@@ -59,6 +59,20 @@ for($i=0;$i<count($this->user_role);$i++){
                                         <?php endif; ?>
                                     </select>
                                 </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">Tag<span class="redText"> *</span></label>
+                                <div class="controls">
+                                <select class="multipleSelect" multiple="multiple" name="tag_id[]">
+                                      <?php if($tags): ?>
+                                              <?php foreach($tags as $v): ?>
+                                                      <option value="<?php echo $v->id ?>"><?php echo $v->tag_name ?></option>
+                                              <?php endforeach; ?>
+                                      <?php else: ?>
+                                              <option>Please add Tag first</option>
+                                      <?php endif;?>
+                                  </select>
+                              </div>
                             </div>
                             <!--
                             <div class="control-group">
@@ -158,7 +172,7 @@ for($i=0;$i<count($this->user_role);$i++){
                     <div class="container-fluid campaignForm">
                         <form class="form-horizontal contentForm" method="post" action="<?php echo site_url('cms/create_short_url')?>">
                             <div class="control-group">
-                                <label class="control-label">Full URL Path</label>
+                                <label class="control-label">Full URL Path<span class="redText"> *</span></label>
                                 <div class="controls">
                                   <input type="text" class="span10" name="shorturl[long_url]">
                                   <?php echo "<br />".$this->session->userdata('message')?>
@@ -171,7 +185,7 @@ for($i=0;$i<count($this->user_role);$i++){
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label">Product</label>
+                                <label class="control-label">Product<span class="redText"> *</span></label>
                                 <div class="controls">
                                     <select id="multipleSelect" multiple="multiple">
                                         <?php if($products): ?>
@@ -185,7 +199,7 @@ for($i=0;$i<count($this->user_role);$i++){
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label">Tag</label>
+                                <label class="control-label">Tag<span class="redText"> *</span></label>
                                 <div class="controls">
                                 <select class="multipleSelect" multiple="multiple" name="tag_id[]">
                                       <?php if($tags): ?>
@@ -203,7 +217,9 @@ for($i=0;$i<count($this->user_role);$i++){
                                 <p style="font-size: 7pt;">Customize your short URL</p></label>
                                 <div class="controls">
                                   http://maybk.co/<input type="text" class="span10" name="shorturl[short_code]" style="width: 100px;" value="<?php echo $code?>" maxlength="6"/>
-                                </div>
+                                <br><br>
+                    <span class="redText">* required</span>
+                            </div>
                             </div>
                             <div class="control-group">
                                 <div class="pull-left">

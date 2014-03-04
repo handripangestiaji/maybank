@@ -186,11 +186,12 @@ if($fb_feed[$i]->post_content != '<br />'):
                         <button type="button" role="button" class="btn btn-mini delete_post comments"  value="<?php echo $comment[$j]->comment_post_id?>" style="border: none; background-color: transparent;"><i class="icon-trash greyText"></i></button>
                         <button type="button" class="btn btn-warning btn-mini">OPEN</button>
                         <button class="fblike btn btn-primary btn-mini" value="<?php echo $comment[$j]->post_stream_id?>"><?php echo $comment[$j]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button>
+                        <?php if(($comment[$j]->comment_id)=='0'){?>
+                        <button type="button" class="btn btn-primary btn-engagement-reply btn-mini btn-reply" ><i class="icon-mail-reply"></i></button>
+                        <?php } ?>
                     <?php endif;?>
                     
-                    <?php if(($comment[$j]->comment_id)=='0'){?>
-                    <button type="button" class="btn btn-primary btn-engagement-reply btn-mini btn-reply" ><i class="icon-mail-reply"></i></button>
-                    <?php } ?>
+                    
                    <!--button type="button" class="btn btn-danger btn-engagement-case btn-mini btn-case"><i class="icon-plus"></i> CASE</button-->
                 </p></h4><!--222 assign to you-->
                 <?php }else{ ?>
@@ -198,13 +199,14 @@ if($fb_feed[$i]->post_content != '<br />'):
                 <p>
                     <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Take Action')):?>
                         <button type="button" role="button" class="btn btn-mini delete_post comments"  value="<?php echo $comment[$j]->comment_post_id?>" style="border: none; background-color: transparent;"><i class="icon-trash greyText"></i></button>
+                        <button type="button" class="btn btn-warning btn-mini">OPEN</button>
+                        <button class="fblike btn btn-primary btn-mini" value="<?php echo $comment[$j]->post_stream_id?>"><?php echo $comment[$j]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button>
+                        <?php if(($comment[$j]->comment_id)=='0'){?>
+                        <button type="button" class="btn btn-primary btn-engagement-reply btn-mini btn-reply" ><i class="icon-mail-reply"></i></button>
+                        <?php } ?>
                     <?php endif;?>
             
-                    <button type="button" class="btn btn-warning btn-mini">OPEN</button>
-                    <button class="fblike btn btn-primary btn-mini" value="<?php echo $comment[$j]->post_stream_id?>"><?php echo $comment[$j]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button>
-                    <?php if(($comment[$j]->comment_id)=='0'){?>
-                    <button type="button" class="btn btn-primary btn-engagement-reply btn-mini btn-reply" ><i class="icon-mail-reply"></i></button>
-                    <?php } ?>
+                    
                     <!--button type="button" class="btn btn-danger btn-engagement-case btn-mini btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button-->
                 </p>
                 </h4> <!--case to others sads3333sad;-->
@@ -214,12 +216,13 @@ if($fb_feed[$i]->post_content != '<br />'):
                     <p>
                     <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Take Action')):?>
                         <button type="button" role="button" class="btn btn-mini delete_post comments"  value="<?php echo $comment[$j]->comment_post_id?>" style="border: none; background-color: transparent;"><i class="icon-trash greyText"></i></button>
+                        <button type="button" class="btn btn-warning btn-mini">OPEN</button>
+                        <button class="fblike btn btn-primary btn-mini" value="<?php echo $comment[$j]->post_stream_id?>"><?php echo $comment[$j]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button>
+                        <?php if(($comment[$j]->comment_id)=='0'){?>
+                        <button type="button" class="btn btn-primary btn-engagement-reply btn-mini btn-reply" ><i class="icon-mail-reply"></i></button>
+                        <?php } ?>
                     <?php endif;?>
-                    <button type="button" class="btn btn-warning btn-mini">OPEN</button>
-                    <button class="fblike btn btn-primary btn-mini" value="<?php echo $comment[$j]->post_stream_id?>"><?php echo $comment[$j]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button>
-                    <?php if(($comment[$j]->comment_id)=='0'){?>
-                    <button type="button" class="btn btn-primary btn-engagement-reply btn-mini btn-reply" ><i class="icon-mail-reply"></i></button>
-                    <?php } ?>
+                    
                    <!--button type="button" class="btn btn-danger btn-engagement-case btn-mini btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button-->
                 </p><!--not yet case 44-->
                 </h4>

@@ -24,6 +24,7 @@ class Media_stream extends CI_Controller {
 	$this->load->model('youtube_model');
 	$this->load->model('account_model');
 	$this->load->model('case_model');
+    $this->load->model('shorturl_model');
 	$this->user_role = $this->users_model->get_collection_detail(
 		array('role_collection_id'=>$this->session->userdata('role_id')));
     }
@@ -511,20 +512,31 @@ class Media_stream extends CI_Controller {
 	else{
 	      $channel =  $channel_loaded[0]->channel_id;
 	}
-        
-        
+    
+        $short_url = $this->shorturl_model->find(array('short_code' => $url));
+        $short_url_id = $short_url->id;
+                   
         if($tags != ''){
 	    foreach($tags as $tag){
 		$get_tag = $this->post_model->GetTagByTagName($tag);
                 if($get_tag == NULL){
                     $tag_id = $this->post_model->InsertTag($tag);
+                    $data = array('short_urls_id' => $short_url_id,
+                                  'content_tag_id' => $tag_id
+                                );
+                    $this->db->insert('short_url_tag',$data);     
                 }
                 else{
                     $tag_id = $get_tag->id;
+                    if(isset($tag_id)){
+                        $data = array('short_urls_id' => $short_url_id ,
+                                      'content_tag_id' => $tag_id
+                                    );
+                        $this->db->insert('short_url_tag',$data);
+                    }
                 }
                 //tag increment
                 $this->post_model->IncrementTag($tag_id);
-                
 	       }
 	}
         

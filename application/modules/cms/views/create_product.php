@@ -24,7 +24,7 @@
                 <label class="control-label">Parent</label>
                 <div class="controls">
                 <select name="product[parent_id]">
-                    <option value="">-- No Parent --</option>
+                    <option value="">-- This is a Parent Product --</option>
                     <?php foreach($products_avail as $product){ ?>
                         <option value="<?php echo $product->id ?>"><?php echo $product->product_name ?></option>
                     <?php } ?>
@@ -67,6 +67,8 @@
             <thead>
               <tr>
                 <th>Products</th>
+                <th>Parent</th>
+                <th>Child</th>
                 <th>Description</th>
                 <th>Total Used</th>
                 <th>Creator</th>
@@ -87,6 +89,19 @@
             	<?php foreach($products as $v): ?>
             		<tr>
 		                <td><?php echo $v->product_name; ?></td>
+                                <td><?php echo $v->parent_name; ?></td>
+                                <td>
+                                <?php
+                                    $r=0;
+                                    foreach($v->children as $child){
+                                        if($r!=0){
+                                            echo ', ';
+                                        }
+                                        echo $child->product_name;
+                                        $r++;
+                                    }
+                                ?>
+                                </td>
 		                <td><?php echo $v->description; ?></td>
 		                <td><?php echo $v->increment; ?></td>
 		                <td><?php echo $v->display_name; ?></td>

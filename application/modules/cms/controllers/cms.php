@@ -567,10 +567,14 @@ class Cms extends MY_Controller {
 		
 		$offset = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
     	
-    	$data['products'] = $this->product_model->get($config['per_page'], $offset);
+    	$products = $this->product_model->get($config['per_page'], $offset);
+        foreach($products as $product){
+          $product->children = $this->product_model->getChildren($product->id)->result();
+        }
+        $data['products'] = $products;
         
-          $data['products_avail'] = $this->product_model->get();
-    	  $data['countries'] = $this->users_model->get_country()->result();
+        $data['products_avail'] = $this->product_model->get();
+          $data['countries'] = $this->users_model->get_country()->result();
         
         $data['pagination'] = $this->pagination->create_links();
     	

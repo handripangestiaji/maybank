@@ -288,6 +288,110 @@ class facebook_model extends CI_Model
         return $conversation;
     }
     
+    public function RetrieveNewConversation($access_token, $url = 'https://graph.facebook.com/me/conversations?access_token='){
+	$requestResult = curl_get_file_contents($url.$access_token);
+	
+	return $requestResult;
+    }
+    
+    
+    public function SaveUserFromFacebook($userid, $access_token){
+	
+	if(!$this->IsFbUserExists($userid)){
+	    $fql = "select uid, name, username, sex from user where uid = $userid";
+	    $requestResult = curl_get_file_contents('https://graph.facebook.com/fql?q='.urlencode($fql)."&access_token=".$access_token);
+	    $requestResult = json_encode($requestResult);
+	    $currentTime = new DateTime(date('Y-m-d H:i:s e'), $timezone);
+	    $this->db->insert('fb_user_engaged', array(
+		"facebook_id" => number_format($user->uid,0,'.',''),
+		"name" => $user->name,
+		"sex" => isset($user->sex) ? $user->sex : "",
+		"created_at" => $currentTime->format("Y-m-d H:i:s"),
+		"retrieved_at" => $currentTime->format("Y-m-d H:i:s"),
+		"username" => $user->username
+	    ));
+	}
+    }
+    
+    
+    public function SaveNewConversation($conversation, $channel, $access_token){
+	$timezone = new DateTimeZone("Europe/London");
+	foreach($conversation as $each_conversation){
+	    $this->db->trans_start();
+	    
+	    /*Save User*/
+	    
+	    foreach($each_conversation->participants->data as $user){
+		$this->SaveUserFromFacebook($user->id, $access_token);
+	    }
+	    
+	    $stream = $this->IsStreamIdExists($each_conversation->id, "facebook_conversation");
+	    $updated_time = new DateTime($each_conversation->updated_time);
+	    $social_stream = array(
+		"post_stream_id" => $each_conversation->id,
+		"channel_id" => $channel->channel_id,
+		"type" => "facebook_conversation",
+		"retrieved_at" => date("Y-m-d H:i:s"),
+		"created_at" => $updated_time->format("Y-m-d H:i:s"),
+	    );
+	    
+	    $social_stream_facebook_conversation = array(
+		"message_count" => $each_conversation->message_count,
+		"snippet" => $each_conversation->snippet,
+		"unread_count" => 0,
+		"status" => 1,
+		"updated_time" => $updated_time->format("Y-m-d H:i:s")
+	    );
+	    
+	    if($stream != null){
+		$this->db->where('post_id', $stream->post_id);
+		$this->db->update('social_stream', $social_stream);
+		$this->db->where('conversation_id', $stream->post_id);
+		$this->db->update('social_stream_facebook_conversation', $social_stream_facebook_conversation);
+	    }
+	    else{
+		$this->db->insert('social_stream', $social_stream);
+		$stream = new stdClass();
+		$stream->post_id = $this->db->insert_id();
+		$social_stream_facebook_conversation['conversation_id'] = $stream->post_id;
+		$this->db->insert('social_stream_facebook_conversation', $social_stream_facebook_conversation);
+	    }
+	    
+	    foreach($each_conversation->messages->data as $conversation_detail){
+		$detail = $this->IsConversationDetailExists($conversation_detail->id);
+		$breakLine = explode("\n", $conversation_detail->message);
+		if(count($breakLine) > 1)
+		{
+		    $conversation_detail->message = '';
+		    foreach($breakLine as $line)
+			$conversation_detail->body .= $line.'<br />';
+		}
+		$created_time = new DateTime($conversation_detail->created_time);
+		$social_stream_facebook_conversation_detail = array(
+		    "attachment" => isset($conversation_detail->attachments) ? json_encode($conversation_detail->attachments) : '',
+		    "detail_id_from_facebook"  => $conversation_detail->id,
+		    "messages" => $conversation_detail->message,
+		    "sender" => number_format($conversation_detail->from->id,0,'.',''),
+		    "to" => number_format($conversation_detail->to->data[0]->id,0,'.',''),
+		    "created_at" =>$created_time->format('Y-m-d H:i:s'),
+		    "conversation_id" => $stream->post_id
+		);
+		if($detail != null){
+		    $this->db->where("detail_id", $detail->detail_id);
+		    $this->db->update("social_stream_facebook_conversation_detail", $social_stream_facebook_conversation_detail);
+		}
+		else{
+		    if($this->IsFbUserExists($social_stream_facebook_conversation_detail['sender']) && $this->IsFbUserExists($social_stream_facebook_conversation_detail['to'])){
+			$this->db->insert("social_stream_facebook_conversation_detail", $social_stream_facebook_conversation_detail);
+		    }
+		}
+		
+	    }
+	    $this->db->trans_complete();
+	}
+    }
+    
+    
     public function SaveConversation($conversation, $channel){
 	$timezone = new DateTimeZone("Europe/London");
 	foreach($conversation as $each_conversation){

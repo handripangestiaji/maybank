@@ -67,8 +67,6 @@ class Cronjob extends CI_Controller {
     
     
     function  FacebookConversation(){
-        
-        
         $filter = array(
             "connection_type" => "facebook"
         );
@@ -83,7 +81,6 @@ class Cronjob extends CI_Controller {
             $newStd->page_id = $channel->social_id;
             $newStd->token = $this->facebook_model->GetPageAccessToken($channel->oauth_token, $channel->social_id);
             $newStd->channel = $channel;
-            print_r($newStd->token);
             $access_tokens[] = $newStd;
         }
         print_r($newStd->token);
@@ -96,7 +93,36 @@ class Cronjob extends CI_Controller {
             print_r($conversation);
             echo "</pre>";
         }
+    }
+    
+    function NewFacebookConversation(){
+        $filter = array(
+            "connection_type" => "facebook"
+        );
+        if($this->input->get('channel_id')){
+            $filter['channel_id'] = $this->input->get('channel_id');
+        }
+        $channel_loaded = $this->account_model->GetChannel($filter);
+        $conversation_list = array();
+        $access_tokens = array();
+        foreach($channel_loaded as $channel){
+            $newStd = new stdClass();
+            $newStd->page_id = $channel->social_id;
+            $newStd->token = $this->facebook_model->GetPageAccessToken($channel->oauth_token, $channel->social_id);
+            $newStd->channel = $channel;
+            $access_tokens[] = $newStd;
+        }
+        print_r($newStd->token);
         
+        
+        foreach($access_tokens as $access_token){
+            $conversation = $this->facebook_model->RetrieveNewConversation($access_token->token);
+            $conversation = json_decode($conversation);
+            $this->facebook_model->SaveNewConversation($conversation->data,$access_token->channel, $access_token);
+            echo "<pre>";
+            print_r($conversation);
+            echo "</pre>";
+        }
     }
     
     function TwitterMentions(){

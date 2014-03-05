@@ -487,7 +487,10 @@ $(function(){
         }
     });
 
-    
+    $(this).on('click', '.twitter-case-related', function(e){
+        
+        $($(this).attr('href')).removeClass('hide fade');
+    });
     
 });
 

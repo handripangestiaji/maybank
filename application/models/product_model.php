@@ -22,9 +22,10 @@ class Product_model extends CI_Model
 	
 	public function get($limit = '', $offset = '')
 	{
-		$this->db->select($this->_table.'.*, user.display_name');
+		$this->db->select($this->_table.'.*, user.display_name,b.product_name as parent_name');
 		
 		$this->db->join('user', $this->_table.'.user_id = user.user_id', 'left');
+		$this->db->join($this->_table.' as b', $this->_table.'.parent_id = b.id', 'left');
 		
 		if($limit || $offset)
 		{
@@ -72,4 +73,10 @@ class Product_model extends CI_Model
 		return $this->db->update($this->_table,$value);
 	}
 	
+	public function getChildren($id){
+		$this->db->select('product_name');
+		$this->db->where('parent_id',$id);
+		$this->db->from($this->_table);
+		return $this->db->get();
+	}
 }

@@ -18,7 +18,6 @@
 
 <!-- ==================== SIDEBAR TASKS ==================== -->
 <?php
-
 if(IsRoleFriendlyNameExist($this->user_role, "Social Stream_Notification")):?>
 <div id="tasksContent">
     <div class="sidebarDivider"></div>

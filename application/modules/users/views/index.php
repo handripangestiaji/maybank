@@ -147,9 +147,13 @@
                         <?php for($i=0;$i<count($this->user_role);$i++){if($this->user_role[$i]->role_friendly_name=='User Management_User_Edit'){?>
                         <td><a href="<?php echo site_url('users/edit/'.$row->user_id);?>"><span><i class="icon-pencil"></i></span></a></td>
                         <?php }}?>
+                        <?php if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_Delete')):?>
                         <td>
                             <a href="" onclick="show_confirm('<?php echo $row->user_id;?>');return false;"><span><i class="icon-remove redText"></i></span></a>
                         </td>
+                        <?php else :?>
+                        <td></td>
+                        <?php endif;?>
                     </tr>
                     <?php }
                     }?>

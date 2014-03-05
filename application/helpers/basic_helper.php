@@ -315,9 +315,19 @@ function convert_image($image, $path){
 
 function IsRoleFriendlyNameExist($user_role, $currentPermission, $property='role_friendly_name'){
     if($currentPermission == '') return true;
+    
     foreach($user_role as $role){
-        if($role->$property == $currentPermission)
-            return true;
+        if(is_array($currentPermission)){
+            foreach($currentPermission as $each){
+                if($role->$property == $each)
+                    return true;
+            }
+        }
+        else{
+            if($role->$property == $currentPermission)
+                return true;    
+        }
+        
     }
     return false;
 }

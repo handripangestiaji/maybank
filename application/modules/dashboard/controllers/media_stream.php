@@ -497,24 +497,20 @@ class Media_stream extends CI_Controller {
         $filter = array(
             "connection_type" => "facebook"
         );
-        
-        if($this->input->get('channel_id')){
-            $filter['channel_id'] = $this->input->get('channel_id');
-        }
-        
+        $filter['channel_id'] = $this->input->post('channel_id');
         $channel_loaded = $this->account_model->GetChannel($filter);
         if(count($channel_loaded) == 0){
-    		echo json_encode(
-    		    array(
-    			'success' => false,
-    			'message' => "Invalid Channel Id"
-    		    )
-    		);
-		return;
-	    }
-	    else{
-		  $channel =  $channel_loaded[0]->channel_id;
-	    }
+	    echo json_encode(
+		array(
+		    'success' => false,
+		    'message' => "Invalid Channel Id"
+		)
+	    );
+	    return;
+	}
+	else{
+	      $channel =  $channel_loaded[0]->channel_id;
+	}
         
         
         if($tags != ''){
@@ -542,6 +538,7 @@ class Media_stream extends CI_Controller {
 	       'appId' => $this->config->item('fb_appid'),
 	       'secret' => $this->config->item('fb_secretkey')
 	    );
+	
     	$this->load->library('facebook',$config);
     	$this->facebook->setaccesstoken($newStd->token);
         $attachment = array(
@@ -657,7 +654,7 @@ class Media_stream extends CI_Controller {
     
     public function FbReplyMsg(){
         header("Content-Type: application/x-json");
-	    $this->load->model('account_model');
+	$this->load->model('account_model');
         $this->load->model('facebook_model');
         $comment = $this->input->post('comment');
         $post_id = $this->input->post('post_id');

@@ -28,15 +28,28 @@
         </p>
         <p class="indicator">
         <?php if(count($directmessage[$i]->case) > 0):?>
-            <button type="button" class="btn <?=$directmessage[$i]->case[0]->status == "pending" ? "btn-purple" : "btn-inverse"?> btn-mini" value="<?php echo $directmessage[$i]->case[0]->case_id?>">Case Id #<?php echo $directmessage[$i]->case[0]->case_id?>
+            <button type="button" data-toggle="modal" href="caseItem<?=$directmessage[$i]->case[0]->case_id?>"
+                class="twitter-case-related btn <?=$directmessage[$i]->case[0]->status == "pending" ? "btn-purple" : "btn-inverse"?> btn-mini" value="<?php echo $directmessage[$i]->case[0]->case_id?>">Case #<?php echo $directmessage[$i]->case[0]->case_id?>
                 <?php
-                if($directmessage[$i]->case[0]->status == "pending")
-                    echo isset($directmessage[$i]->case[0]->assign_to->display_name) ? ' Assign to '.$directmessage[$i]->case[0]->assign_to->display_name : '';
-                else
-                    echo isset($directmessage[$i]->case[0]->solved_by->display_name) ? ' Solved by '.$directmessage[$i]->case[0]->solved_by->display_name: '';
+                if($directmessage[$i]->case[0]->status == "pending"){
+                    echo isset($directmessage[$i]->case[0]->assign_to->display_name) ? ' Assign to: '.$directmessage[$i]->case[0]->assign_to->display_name : '';
+                    $created_at = new DateTime($directmessage[$i]->case[0]->created_at.' Europe/London', $timezone);
+                    $created_at->setTimezone($timezone);
+                    echo ' '.$created_at->format("d-M-y h:i A");
+                }
+                else{
+                    echo isset($directmessage[$i]->case[0]->solved_by->display_name) ? ' Resolved by: '.$directmessage[$i]->case[0]->solved_by->display_name: '';
+                    $solved_at = new DateTime($directmessage[$i]->case[0]->solved_at.' Europe/London', $timezone);
+                    $solved_at->setTimezone($timezone);
+                    echo ' '.$solved_at->format("d-M-y h:i A");
+                }
                 ?>
             </button>
-        
+        <?php
+            $this->load->view('dashboard/twitter/case_view', array(
+                    "caseMsg" => $directmessage[$i]->case[0]
+                ));
+        ?>
         <?php endif?>
         <?php if($directmessage[$i]->response_post_id):?>
         
@@ -59,7 +72,13 @@
             
         </p>
         <h4 class="filled">
-        <a role="button" href="#" class="destroy_status direct_message"><i class="icon-trash greyText"></i></a>
+        <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Take Action') ||
+                 IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action') ||
+                 IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Delete') ||
+                 IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Delete')
+                 ):?>
+            <a role="button" href="#" class="destroy_status direct_message"><i class="icon-trash greyText"></i></a>
+        <?php endif;?>
         <div class="pull-right">
             <?php
                 $data = array(

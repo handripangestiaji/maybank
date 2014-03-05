@@ -990,6 +990,11 @@ ul.tagit{
 	background: none;
 }
 
+.btn-group ul.dropdown-menu{
+	height: 150px;
+	overflow-y: scroll;
+}
+
 /*==============================================================================================
 ======================================== PUBLISHER =============================================
 ==============================================================================================*/
@@ -1005,6 +1010,8 @@ ul.tagit{
 
 .floatingBoxContainers li .link p{margin: 0;width: auto;}
 .link{cursor: pointer}
-.link-description{float: left; position:relative; padding: 5px;width:65%;}
+.link-description{float: left; position:relative; padding: 5px;width:65%;overflow: hidden;}
 .link-description p{text-align: left !important;}
 .sidebarContent{height: 600px;overflow-y: scroll}
+.link-description{overflow: hidden !important}
+p.post-content{overflow: hidden}

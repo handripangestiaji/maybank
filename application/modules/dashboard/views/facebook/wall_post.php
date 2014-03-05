@@ -104,7 +104,7 @@ if($fb_feed[$i]->post_content != '<br />'):
         <?php
        // print_r($fb_feed[$i]->reply_post[0]);
         if(isset($fb_feed[$i]->reply_post[0])){
-         if(isset($fb_feed[$i]->channel_action[count($fb_feed[$i]->channel_action) - 1]->created_at)){?>
+         if(isset($fb_feed[$i]->is_my_reply[0])){?>
         <button type="button" class="btn btn-inverse btn-mini" style="text-align:left" value="<?php echo $fb_feed[$i]->reply_post[0]->post_id?>">
         <?php
         $reply_date = new DateTime($fb_feed[$i]->channel_action[count($fb_feed[$i]->channel_action) - 1]->created_at);
@@ -182,15 +182,8 @@ if($fb_feed[$i]->post_content != '<br />'):
                         if($isMyCase[count($isMyCase)-1]->assign_to==$this->session->userdata('user_id') or ($isMyCase[count($isMyCase)-1]->solved_by)){
                 ?><h4>
                 <p>
-                
-                 <?php 
-                    if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Delete') ||
-                     IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Delete')
-                     ){ ?>
+                    <?php if(IsRoleFriendlyNameExist($this->user_role, array('Social Stream_All_Take Action','Social Stream_Current_Take Action'))):?>
                         <button type="button" role="button" class="btn btn-mini delete_post comments"  value="<?php echo $comment[$j]->comment_post_id?>" style="border: none; background-color: transparent;"><i class="icon-trash greyText"></i></button>
-                <!--a style="font-size: 20px; cursor: pointer;"><i class="icon-trash greyText deleteFB"></i></a-->
-                    <?php }
-                  if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Take Action')):?>
                         <button type="button" class="btn btn-warning btn-mini">OPEN</button>
                         <button class="fblike btn btn-primary btn-mini" value="<?php echo $comment[$j]->post_stream_id?>"><?php echo $comment[$j]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button>
                         <?php if(($comment[$j]->comment_id)=='0'){?>
@@ -204,14 +197,8 @@ if($fb_feed[$i]->post_content != '<br />'):
                 <?php }else{ ?>
                 <h4>
                 <p>
-                   <?php 
-                    if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Delete') ||
-                     IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Delete')
-                     ){ ?>
+                    <?php if(IsRoleFriendlyNameExist($this->user_role, array('Social Stream_All_Take Action','Social Stream_Current_Take Action'))):?>
                         <button type="button" role="button" class="btn btn-mini delete_post comments"  value="<?php echo $comment[$j]->comment_post_id?>" style="border: none; background-color: transparent;"><i class="icon-trash greyText"></i></button>
-                <!--a style="font-size: 20px; cursor: pointer;"><i class="icon-trash greyText deleteFB"></i></a-->
-                    <?php }
-                    if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Take Action')):?>
                         <button type="button" class="btn btn-warning btn-mini">OPEN</button>
                         <button class="fblike btn btn-primary btn-mini" value="<?php echo $comment[$j]->post_stream_id?>"><?php echo $comment[$j]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button>
                         <?php if(($comment[$j]->comment_id)=='0'){?>
@@ -227,14 +214,8 @@ if($fb_feed[$i]->post_content != '<br />'):
                 }elseif(!isset($isMyCase[count($isMyCase)-1])){ ?>
                 <h4>
                     <p>
-                <?php 
-                    if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Delete') ||
-                     IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Delete')
-                     ){ ?>
-                    <button type="button" role="button" class="btn btn-mini delete_post comments"  value="<?php echo $comment[$j]->comment_post_id?>" style="border: none; background-color: transparent;"><i class="icon-trash greyText"></i></button>
-                    <!--a style="font-size: 20px; cursor: pointer;"><i class="icon-trash greyText deleteFB"></i></a-->
-                    <?php }
-                   if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Take Action')):?>
+                    <?php if(IsRoleFriendlyNameExist($this->user_role, array('Social Stream_All_Take Action','Social Stream_Current_Take Action'))):?>
+                        <button type="button" role="button" class="btn btn-mini delete_post comments"  value="<?php echo $comment[$j]->comment_post_id?>" style="border: none; background-color: transparent;"><i class="icon-trash greyText"></i></button>
                         <button type="button" class="btn btn-warning btn-mini">OPEN</button>
                         <button class="fblike btn btn-primary btn-mini" value="<?php echo $comment[$j]->post_stream_id?>"><?php echo $comment[$j]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button>
                         <?php if(($comment[$j]->comment_id)=='0'){?>
@@ -285,13 +266,14 @@ if($fb_feed[$i]->post_content != '<br />'):
 
     <h4 class="filled">
         <!--di nonaktifin dulu, karena belum di butuhkan-->
-            <?php 
-            if( IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Delete') ||
-                IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Delete')
-            ){ ?>
-            <a role="button" class='delete_post wall'><i class="icon-trash greyText"></i></a>
+            <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Take Action') ||
+                     IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action') ||
+                     IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Delete') ||
+                     IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Delete')
+                     ):?>
+                <a role="button" class='delete_post wall'><i class="icon-trash greyText"></i></a>
                 <!--a style="font-size: 20px; cursor: pointer;"><i class="icon-trash greyText deleteFB"></i></a-->
-            <?php }?>
+            <?php endif;?>
         <div class="pull-right">
     <?php  
     //echo(count($isMyCase));

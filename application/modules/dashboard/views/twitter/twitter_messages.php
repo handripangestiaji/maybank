@@ -72,7 +72,13 @@
             
         </p>
         <h4 class="filled">
-        <a role="button" href="#" class="destroy_status direct_message"><i class="icon-trash greyText"></i></a>
+        <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Take Action') ||
+                 IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action') ||
+                 IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Delete') ||
+                 IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Delete')
+                 ):?>
+            <a role="button" href="#" class="destroy_status direct_message"><i class="icon-trash greyText"></i></a>
+        <?php endif;?>
         <div class="pull-right">
             <?php
                 $data = array(

@@ -1863,7 +1863,8 @@ $(function(){
                 url : BASEURL + "channels/listofchannel/FacebookPagePick",
                 urlParameter : {
                     "id" :  value,
-                    "pageName" : pageName
+                    "pageName" : pageName,
+                    "country" : $(this).closest('#addFbStream').find('select[name=country]').val()
                 },
                 reload : true
                 

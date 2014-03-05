@@ -90,7 +90,7 @@
             		<tr>
 		                <td><?php echo $v['campaign_name']; ?></td>
 		                <td><?php ?></td>
-		                <td><?php echo implode(" , ",$v['product_name']); ?></td>
+		                <td><?php if(isset($v['product_name'])) echo implode(" , ",$v['product_name']); ?></td>
 		                <td><?php echo "0" ?></td>
 		                <td><?php echo $v['display_name']; ?></td>
 				<?php

@@ -104,18 +104,16 @@ if($fb_feed[$i]->post_content != '<br />'):
         <?php
        // print_r($fb_feed[$i]->reply_post[0]);
         if(isset($fb_feed[$i]->reply_post[0])){
-         if(isset($fb_feed[$i]->is_my_reply[0])){?>
-        <button type="button" class="btn btn-inverse btn-mini" style="text-align:left" value="<?php echo $fb_feed[$i]->reply_post[0]->post_id?>">
-        <?php
-        $reply_date = new DateTime($fb_feed[$i]->channel_action[count($fb_feed[$i]->channel_action) - 1]->created_at);
-        $reply_date->setTimezone($timezone);
-        echo "Replied by: ".$fb_feed[$i]->channel_action[count($fb_feed[$i]->channel_action) - 1]->display_name." ".$reply_date->format("d-M-y h:i A") ?>
-        </button> <?php            
+            ?>
+            <button type="button" class="btn btn-inverse btn-mini" style="text-align:left" value="<?php echo $fb_feed[$i]->reply_post[0]->post_id?>">
+            <?php
+            $reply_date = new DateTime($fb_feed[$i]->channel_action[count($fb_feed[$i]->channel_action) - 1]->created_at);
+            $reply_date->setTimezone($timezone);
+            echo "Replied by: ".$fb_feed[$i]->channel_action[count($fb_feed[$i]->channel_action) - 1]->display_name." ".$reply_date->format("d-M-y h:i A") ?>
+            </button> <?php            
+            
         }else{?>
-        <button type="button" class="btn btn-warning btn-mini no-cursor indicator" >OPEN</button>       
-         <?php }         
-        }else{?>
-        <button type="button" class="btn btn-warning btn-mini no-cursor indicator" >OPEN</button>       
+            <button type="button" class="btn btn-warning btn-mini no-cursor indicator" >OPEN</button>       
         <?php }    
         if(IsRoleFriendlyNameExist($this->user_role,'Social Stream_Current_Social Functions Like, Retweet')):?>
         <button class="fblike btn btn-primary btn-mini" style="margin-left: 5px;" value="<?php echo $fb_feed[$i]->post_stream_id;?>"><?php echo $fb_feed[$i]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button> 

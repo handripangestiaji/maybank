@@ -4,7 +4,18 @@
 </div>
 <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Channel Management_Add')):?>
 <div style="float: right;">
-    <input class="btn btn-primary" onclick="window.location='<?=base_url('channels/channelmg/Add'.$title)?>'" type="button" name="btn_new" value="+ New <?=$title?> Channel" />
+    <?php if(IsRoleFriendlyNameExist($this->user_role, 'Regional_User') && ($title == 'Twitter' || $title == 'Youtube')):?>
+        
+        <select class='country-select' name="country">
+            <?php
+            $country_list = $this->users_model->get_country_list();
+                foreach($country_list as $country):
+            ?>
+                <option value="<?=$country->code?>"><?=$country->name?></option>
+            <?php endforeach;?>
+        </select>
+    <?php endif;?>
+    <a class="btn btn-primary new-channel" href="<?=base_url('channels/channelmg/Add'.$title)?>" type="button" name="btn_new" value="" >+ New <?=$title?> Channel</a>
 </div>
 <?php endif;?>
 

@@ -44,9 +44,7 @@ if($is){ ?>
                     <?php
                         $options_country = array();
                         foreach($countries as $country){
-                            if($country->code != 'All'){
-                                $options_country[$country->code] = $country->name;
-                            }
+                            $options_country[$country->code] = $country->name;
                         }
                         echo form_dropdown('country_code', $options_country, $row->country_code);
                     ?>

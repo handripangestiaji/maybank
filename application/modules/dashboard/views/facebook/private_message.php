@@ -121,7 +121,8 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_pm[$i]->po
              <?php  
 //    print_r($isMyCase);
     if(isset($isMyCase[count($isMyCase)-1]->assign_to)){
-        if(($isMyCase[count($isMyCase)-1]->assign_to==$this->session->userdata('user_id') && IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action'))){ ?> 
+        if(($isMyCase[count($isMyCase)-1]->assign_to==$this->session->userdata('user_id') &&
+            IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action'))){ ?> 
                 <button type="button" class="btn btn-primary btn-reply"><i class="icon-mail-reply"></i></button>
            <?php if($isMyCase[count($isMyCase)-1]->status=='pending'){ ?>
                 <button type="button" class="btn btn-purple  btn-resolve_fb" name="action" value="<?=$fb_pm[$i]->case_id?>"><i class="icon-check"></i> RESOLVE</button>

@@ -1530,7 +1530,8 @@ $(function(){
                             var commentButton = $(this);
                             isSend=commentButton.html()=="SEND";
                             commentButton.html('SENDING...').attr("disabled", "disabled");
-
+//                            var case_id = $(this).siblings(".case_id").val();
+//                            alert(case_id);
                            $.ajax({
                                 url : BASEURL + 'dashboard/media_stream/FbReplyMsg',
                                 type: "POST",
@@ -1541,6 +1542,7 @@ $(function(){
                                     url:'',
                                     title :$(this).parent().siblings('#reply-url-show').find(".title_link").val(),
                                     desc :$(this).parent().siblings('#reply-url-show').find(".descr-link").val(),
+                                    case_id :$(this).siblings(".case_id").val(),
                                     img :$(this).parent().siblings('#reply-img-show').find("#reply-preview-img").attr('src'),
                                 },
                                 success: function(response)
@@ -1602,7 +1604,7 @@ $(function(){
                                    var type_action;
                                    if(btnDestroyStatus.hasClass('wall')){
                                     type_action=0
-                                alert(post_id);                   
+                              //  alert(post_id);                   
                                    }else if(btnDestroyStatus.hasClass('pm')){
                                     type_action=1
                                    }else if(btnDestroyStatus.hasClass('comments')){

@@ -666,7 +666,7 @@ class Media_stream extends CI_Controller {
     
     public function FbReplyMsg(){
         header("Content-Type: application/x-json");
-	$this->load->model('account_model');
+	   $this->load->model('account_model');
         $this->load->model('facebook_model');
         $comment = $this->input->post('comment');
         $post_id = $this->input->post('post_id');
@@ -674,7 +674,13 @@ class Media_stream extends CI_Controller {
         $url = $this->input->post('url');
         $descr = $this->input->post('desc');
         $img = $this->input->post('img');
+        $case_id = $this->input->post('case_id');
              
+             if($case_id=='null'){
+                $case_id=null;
+             }else{
+                $case_id=$case_id;
+             }
         $filter = array(
             "connection_type" => "facebook"
         );
@@ -719,21 +725,20 @@ class Media_stream extends CI_Controller {
         $return=$this->facebook->api('/'.$stream_id->post_stream_id.'/messages', 'POST', array('message'=>$comment));
         //$return = $this->facebook->api( "/t_mid.1393214322627:a67f7957b93a2da328/messages", "POST", array ( 'message' => $comment, ));
 
-    //print_r($return->id);
+        //print_r($return);
 
         $action = array(
         		"action_type" => "conversation_facebook",
         		"channel_id" => $channel_loaded[0]->channel_id,
         		"created_at" => date("Y-m-d H:i:s"),
-        		"stream_id_response" => $return->id,
+        		"stream_id_response" => $return['id'],
                 "post_id"=>$post_id,
         		"created_by" => $this->session->userdata('user_id'),
                 "log_text" => $comment,
-                "case_id"=>"",
+                "case_id"=> $case_id,
             );
         
         $this->account_model->CreateFbPMAction($action);
-        
         $case=$this->account_model->isCaseIdExists($post_id);
             if(count($case)>0){
                 $post_at=$case[0]->created_at;  

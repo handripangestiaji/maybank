@@ -101,15 +101,20 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_pm[$i]->po
         </div>
        <?php } ?>
        <!-- ==================== CONDENSED TABLE HEADLINE ==================== -->
-        <div href='#modal-action-log-<?php echo $fb_pm[$i]->post_stream_id ?>' data-toggle='modal' class="containerHeadline specialToggleTable">
+        <div href='#modal-action-log-<?php echo $fb_pm[$i]->post_id ?>' data-toggle='modal' class="containerHeadline specialToggleTable">
+
             <i class="icon-table"></i><h2>Action Log</h2>
         </div>
         <!-- ==================== END OF CONDENSED TABLE HEADLINE ==================== -->
 
         <!-- ==================== CONDENSED TABLE FLOATING BOX ==================== -->
            <?php
-            $data_loaded['post'] = $fb_pm[$i];
-            $this->load->view('dashboard/action_taken', $data_loaded);
+           if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action'))
+                {
+                    $data_loaded['post'] = $fb_pm[$i];
+                    $this->load->view('dashboard/action_taken', $data_loaded);
+ 
+                }
             ?>
         <!-- ==================== END OF CONDENSED TABLE FLOATING BOX ==================== --> 
     </div>

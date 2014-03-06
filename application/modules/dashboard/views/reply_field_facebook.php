@@ -88,6 +88,7 @@
         ?>
         <button class="btn btn-primary btn-small btn-send-reply" value="<?php echo $fb_feed[$i]->comment_post_id; ?>">SEND</button> 
       <?php }elseif($reply_type=='reply_dm'){  ?> 
+           <input type="hidden" class="case_id"  value="<?php if(isset($fb_feed[$i]->case_id)){echo $fb_feed[$i]->case_id;}else{echo 'null';} ?>" />   
           <button class="btn btn-primary btn-small btn-send-msg"  value="<?php echo $fb_feed[$i]->post_id; ?>">SEND</button> 
       <?php } ?>           
     </div>
@@ -95,3 +96,4 @@
     <!--div class="reply-status hide">MESSAGE SENT</div-->
 </div>
 </form>
+

@@ -692,27 +692,25 @@ class facebook_model extends CI_Model
     
       public function RetrievePmFB($filter,$limit = false){
         //WHERE detail_id_from_facebook LIKE '%_0'
-        $this->db->select('a.*,b.*,c.name,c.username, d.is_read, d.post_stream_id, d.type,d.type as social_stream_type,d.channel_id, d.post_id,b.created_at AS post_date,e.case_id, a.conversation_id as social_stream_post_id');
-        $this->db->from("social_stream_facebook_conversation a LEFT OUTER JOIN 
-                        social_stream_facebook_conversation_detail b ON b.conversation_id = a.conversation_id LEFT OUTER JOIN
-                        fb_user_engaged c ON c.facebook_id=b.sender INNER JOIN 
-                        social_stream d ON d.post_id=b.conversation_id LEFT OUTER JOIN
-                        `case` e ON e.post_id=d.post_id and e.status='pending'");	
+       $this->db->_protect_identifiers = false;
+        $this->db->select("a.*,b.*,d.name, d.username, c.is_read, c.post_stream_id, c.type, c.type AS social_stream_type, 
+                          c.channel_id, c.post_id, b.created_at AS post_date, e.case_id, a.conversation_id AS social_stream_post_id");
+        $this->db->from("social_stream_facebook_conversation a INNER JOIN
+            	(SELECT *,REPLACE(post_stream_id,'t_','m_') AS new_post_id FROM social_stream WHERE type='facebook_conversation')  c ON c.post_id=a.conversation_id LEFT OUTER JOIN
+            	social_stream_facebook_conversation_detail b ON b.detail_id_from_facebook = c.new_post_id INNER JOIN
+            	fb_user_engaged d ON d.facebook_id=b.sender   LEFT OUTER JOIN
+            	`case` e ON e.post_id=c.post_id AND e.status='pending'");	
         if(count($filter) > 0){
-	    $this->db->where("detail_id_from_facebook LIKE '%_0' ");
-	    $this->db->where($filter);
-        }else{
-	    $this->db->where("detail_id_from_facebook LIKE '%_0'");    
+	       $this->db->where($filter);
         }
 	
-	if($limit){
-	    $this->db->limit($limit);
-	}
-	$this->db->order_by('a.updated_time','desc');
-	$this->db->order_by('b.created_at','desc');
-	$this->db->order_by('d.replied_count','desc');
-        $result= $this->db->get()->result();
-                $my_user_id=$this->session->userdata('user_id');                                
+    	if($limit){
+    	    $this->db->limit($limit);
+    	}
+	   $this->db->order_by('a.updated_time','desc');
+       
+       $result= $this->db->get()->result();
+       $my_user_id=$this->session->userdata('user_id');                                
 
         foreach($result as $row){
         

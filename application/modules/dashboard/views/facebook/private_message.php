@@ -40,18 +40,18 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_pm[$i]->po
             $sendDate=new DateTime($isMyCase[count($isMyCase)-1]->created_at.' Europe/London');
         if($isMyCase[count($isMyCase)-1]->assign_to==$this->session->userdata('user_id') or ($isMyCase[count($isMyCase)-1]->solved_by)){ ?>
             <button  href="#caseItem-<?php echo isset($isMyCase[count($isMyCase)-1]->case_id) ? $isMyCase[count($isMyCase)-1]->case_id : "" ?>" <?php if($isMyCase[count($isMyCase)-1]->status=="pending"){echo 'data-toggle="modal"';}?> type="button" value="<?php echo $isMyCase[count($isMyCase)-1]->case_id?>" class="btn <?php echo $fb_pm[$i]->case_id != null ? "btn-purple btn-mini case_related ".$fb_pm[$i]->social_stream_type : "btn-inverse btn-mini" ?>" style="text-align:left"><?php echo $fb_pm[$i]->case_id != null ? 'Case #'.$fb_pm[$i]->case_id.' Assign to You ' : 'Case #'.$isMyCase[count($isMyCase)-1]->case_id.' '.'Resolve By:'.$isMyCase[count($isMyCase)-1]->resolve_by.' '.$case->format('j-M-Y h:i A')?></button><?php
-            
+         }else{ ?>
+            <button  href="#caseItem-<?php echo isset($isMyCase[count($isMyCase)-1]->case_id) ? $isMyCase[count($isMyCase)-1]->case_id : "" ?>" <?php if($isMyCase[count($isMyCase)-1]->status=="pending"){echo 'data-toggle="modal"';}?> type="button" value="<?php echo $isMyCase[count($isMyCase)-1]->case_id?>" class="btn <?php echo $fb_pm[$i]->case_id != null ? "btn-purple btn-mini case_related ".$fb_pm[$i]->social_stream_type : "btn-inverse btn-mini" ?>" style="text-align:left">
+                <?php echo $fb_pm[$i]->case_id != null ? 'Case #'.$fb_pm[$i]->case_id.' Assign to: '.$isMyCase[count($isMyCase)-1]->display_name.' '.$sendDate->format('j-M-Y h:i A'): 'Replied'?>
+            </button>  
+        <?php }
             $assignCase=$this->case_model->CaseRelatedConversationItems(array('case_id'=>$isMyCase[count($isMyCase)-1]->case_id));
             $data['isMyCase'] = $assignCase;
             $data['caseMsg']=$isMyCase[count($isMyCase)-1];
             $data['assign_case_type']='facebook';
             $this->load->view('dashboard/case_item', $data);
             
-         }else{ ?>
-            <button type="button" class="btn <?php echo $fb_pm[$i]->case_id != null ? "btn-purple btn-mini" : "btn-inverse btn-mini" ?>" style="text-align:left">
-                <?php echo $fb_pm[$i]->case_id != null ? 'Case #'.$fb_pm[$i]->case_id.' Assign to: '.$isMyCase[count($isMyCase)-1]->display_name.' '.$sendDate->format('j-M-Y h:i A'): 'Replied'?>
-            </button>  
-        <?php }
+
     }else{ ?>
         <?php //print_r($fb_pm->$is_my_reply)
         

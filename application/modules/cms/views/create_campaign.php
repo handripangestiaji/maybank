@@ -63,6 +63,7 @@
     </div>
 </div>
  <?php }}?>
+ <!--
 <div class="row-fluid" style="border-bottom: solid 1px #C9C9C9; margin-bottom: 10px;">
     <h4>Campaign List</h4>    
 </div>
@@ -99,7 +100,6 @@
 				?>
 		                <td>
 		                	<a href="<?php echo site_url('cms/create_campaign?action=delete&id='.$v['id'])?>" class="btn btn-mini btn-danger pull-right">delete</a>
-		                	<!--<button class="btn btn-mini btn-danger pull-right" type="button">delete</button>-->
 		                </td>
 				<?php }}?>
 					</tr>
@@ -111,4 +111,4 @@
      <div class="page pull-right">
      	<?php echo $pagination ?>
      </div>
-</div>
+</div!-->

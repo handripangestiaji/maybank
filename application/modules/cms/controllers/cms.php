@@ -20,43 +20,50 @@ class Cms extends MY_Controller {
      if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Campaign_View')||IsRoleFriendlyNameExist($this->user_role,'Content Management_Short_URL_View')
         ||IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_View')||IsRoleFriendlyNameExist($this->user_role,'Content Management_TAG_View'))
      {
-     	$config['base_url'] = site_url('cms/index');
-		
-		$config['total_rows'] = $this->tag_model->count_record();
-		
-		$config['per_page'] = 10;
-		
-		$config["uri_segment"] = 3;
-	  
-		$config['next_link'] = 'Next';
-	  
-		$config['prev_link'] = 'Prev';
-	  
-		$config['first_link'] = 'First';
-	  
-		$config['last_link'] = 'Last';
-     
-		$config['cur_tag_open'] = '<b style="margin:0px 5px;">';
-	  
-		$config['cur_tag_close'] = '</b>';
-	  
-		$this->pagination->initialize($config);
-		
-		$offset = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-		
-    	$data['campaigns'] = $this->campaign_model->getAllArray($config['per_page'], $offset);
-    	
-    	$data['pagination'] = $this->pagination->create_links();
-    	
-    	$data['products'] = $this->product_model->get();
-    	
-    	$data['tags'] = $this->tag_model->get();
-    	
-    	$data['urls'] = '';
-    	
-        $data['cms_view'] = 'campaign_table';
+          $config['base_url'] = site_url('cms/index');
+	  $config['total_rows'] = $this->tag_model->count_record();
+	  $config['per_page'] = 10;
+	  $config["uri_segment"] = 3;
+	  $config['next_link'] = 'Next';
+	  $config['prev_link'] = 'Prev';
+	  $config['first_link'] = 'First';
+	  $config['last_link'] = 'Last';
+          $config['cur_tag_open'] = '<b style="margin:0px 5px;">';
+	  $config['cur_tag_close'] = '</b>';
+	  $this->pagination->initialize($config);
+	  if($this->uri->segment(4) != "secondTab"){
+               $offset = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+          }
+          else{
+               $offset = 0;
+          }
+	  $data['campaigns'] = $this->campaign_model->getAllArray($config['per_page'], $offset);
+          $data['pagination'] = $this->pagination->create_links();
+          $data['products'] = $this->product_model->get();
+          $data['tags'] = $this->tag_model->get();
+          $data['urls'] = '';
+          $data['cms_view'] = 'campaign_table';
         
-        $this->load->view('cms/index',$data);
+          // Second Tab ------------------------------------------
+          $config['base_url'] = site_url('cms/index');
+          $config['total_rows'] = $this->shorturl_model->count_record();
+	  $config['per_page'] = 10;
+	  $config["uri_segment"] = 3;
+	  $config['next_link'] = 'Next';
+	  $config['prev_link'] = 'Prev';
+	  $config['first_link'] = 'First';
+	  $config['last_link'] = 'Last';
+          $config['cur_tag_open'] = '<b style="margin:0px 5px;">';
+	  $config['cur_tag_close'] = '</b>';
+	  $config['suffix'] = '/secondTab';
+	  $config['first_url'] = site_url('cms/index/0/secondTab');
+          $this->pagination->initialize($config);
+	  $offset = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+    	
+          $data['shorturls'] = $this->shorturl_model->get($config['per_page'], $offset);
+          $data['pagination2'] = $this->pagination->create_links();
+    	
+          $this->load->view('cms/index',$data);
      }
      else
      {

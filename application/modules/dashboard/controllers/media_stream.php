@@ -696,6 +696,7 @@ class Media_stream extends CI_Controller {
 	    else{
 		  $channel =  $channel_loaded[0]->channel_id;
 	    }
+        $stream_id=$this->facebook_model->streamId($post_id);
         
         $newStd = new stdClass();
         $newStd->page_id =  $channel_loaded[0]->social_id;
@@ -713,15 +714,18 @@ class Media_stream extends CI_Controller {
             'description' => $descr,
             'picture'=> $img,
         ); 
+    //    print_r($stream_id->post_stream_id);
         
-//        $return=$this->facebook->api('/'.$post_id.'/messages', 'POST', array('message'=>$comment));
-        $return = $this->facebook->api( "/t_mid.1393214322627:a67f7957b93a2da328/messages", "POST", array ( 'message' => $comment, ));
+        $return=$this->facebook->api('/'.$stream_id->post_stream_id.'/messages', 'POST', array('message'=>$comment));
+        //$return = $this->facebook->api( "/t_mid.1393214322627:a67f7957b93a2da328/messages", "POST", array ( 'message' => $comment, ));
+
+    //print_r($return->id);
 
         $action = array(
         		"action_type" => "conversation_facebook",
         		"channel_id" => $channel_loaded[0]->channel_id,
         		"created_at" => date("Y-m-d H:i:s"),
-        		"stream_id_response" => $return,
+        		"stream_id_response" => $return->id,
                 "post_id"=>$post_id,
         		"created_by" => $this->session->userdata('user_id'),
                 "log_text" => $comment,

@@ -72,8 +72,13 @@ class listofchannel extends CI_Controller {
                 $channel['is_active'] = 1;
                 $channel['name'] = $pageName[$i];
                 $channel['token_created_at'] = date("Y-m-d H:i:s");
-                if($this->session->userdata('country'))
-                    $channel['country_code'] = $this->session->userdata('country');
+                if(IsRoleFriendlyNameExist($this->user_role, 'Regional_User'))
+                    $channel['country_code'] = $this->input->post('country');
+                else{
+                    if($this->session->userdata('country'))
+                        $channel['country_code'] = $this->session->userdata('country');        
+                }
+                
                 $i++;
                 $this->account_model->SaveChannel($channel);
                 

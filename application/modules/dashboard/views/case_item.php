@@ -21,8 +21,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                    <button class="btn btn-primary add-related-conversation" data-dismiss="modal" value="">Add</button>
+                    <button class="btn btn-primary add-related-conversation" data-dismiss="modal" value="">Close</button>
                 </div>
             </div>
 <?php } ?>

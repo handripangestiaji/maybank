@@ -35,10 +35,21 @@
                         <label for="chk_<?=$account->id?>" class="css-label"><?=$account->name?></label>
                     <?php endforeach;?>
                 </div>
+                <?php if(IsRoleFriendlyNameExist($this->user_role, 'Regional_User')):?>
+                <label class="control-label">Select Country :</label>
+                <select name="country">
+                    <?php
+                    $country_list = $this->users_model->get_country_list();
+                        foreach($country_list as $country):
+                    ?>
+                        <option value="<?=$country->code?>"><?=$country->name?></option>
+                    <?php endforeach;?>
+                </select>
+                <?php endif;?>
             </div>
         </div>
         <div class="modal-footer">
-            <button  class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+            <button  class="btn" data-dismiss="modal" aria-hidden="true" onclick="window.reload()">Close</button>
             <button class="btn btn-inverse save-changes">Save changes</button>
         </div>
     </div>

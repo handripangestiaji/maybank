@@ -4,6 +4,7 @@
 
 $(function(){
     $('#countrySelect').multiselect();
+  
     $('.sidebarContent').height($(window).height() * 0.95);
     $(this).on('submit', '.case-field form', function(e){
         var thisElement = $(this);
@@ -487,7 +488,10 @@ $(function(){
         }
     });
 
-    
+    $(this).on('click', '.twitter-case-related', function(e){
+        
+        $($(this).attr('href')).removeClass('hide fade');
+    });
     
 });
 

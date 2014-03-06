@@ -26,6 +26,15 @@ $.extend($.expr[":"],
     });
 
 $(function(){
+    
+    $('.country-select').multiselect();
+    var originalHref = null;
+    $(this).on('change', '.country-select', function(e){
+        href = $(this).siblings('.new-channel').attr('href');
+        originalHref = originalHref == null ? href : originalHref;
+        
+        $(this).siblings('.new-channel').attr('href', originalHref + "/" + $(this).val());
+    });
     $(this).on("error", ".circleAvatar img", function() {
         //$( this ).attr( "src", "missing.png" );
         console.log("error");
@@ -336,7 +345,7 @@ $(function(){
                 },
                 });
                 
-                $('.multipleSelect').multiselect({
+                $('.multipleSelect, .country-select').multiselect({
                 buttonText: function(options, select) {
                     if (options.length == 0) {
                         return 'None selected <b class="caret"></b>';
@@ -553,7 +562,7 @@ $(function(){
                     });
                     $('.facebook_stream').on('click',function() {
                         streamName = $(this).find('li:nth-child(' + i + ') a').html();
-                        $(this).closest('div').children('button').html('<i class="icon-facebook"></i><h2>Facebook&nbsp;</h2><i class="icon-caret-down"></i>');
+                        $(this).closest('div').children('button').html('<i class="icon-facebook"></i><h2>' + $(this).html()+ '&nbsp;</h2><i class="icon-caret-down"></i>');
                         $(this).closest('.containerHeadline').css( "background-color", "#3B5998" );
                         $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');        
                         $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/facebook_stream/' + $(this).siblings('.channel-stream-id').val());
@@ -561,7 +570,7 @@ $(function(){
                     });
                     
                     $('.twitter_stream').on('click',function() {
-                        $(this).closest('div').children('button').html('<i class="icon-twitter"></i><h2>Twitter&nbsp;</h2><i class="icon-caret-down"></i>');
+                        $(this).closest('div').children('button').html('<i class="icon-twitter"></i><h2>' + $(this).html()+ '</h2><i class="icon-caret-down"></i>');
                         $(this).closest('.containerHeadline').css( "background-color", "#4099FF" );
                         $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');        
                         $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/twitter_stream/' + $(this).siblings('.channel-stream-id').val());
@@ -569,7 +578,7 @@ $(function(){
                     
                     $('.youtube_stream').on('click',function() {
                         
-                        $(this).closest('div').children('button').html('<i class="icon-youtube"></i><h2>Youtube&nbsp;</h2><i class="icon-caret-down"></i>');
+                        $(this).closest('div').children('button').html('<i class="icon-youtube"></i><h2>' + $(this).html()+ '</h2><i class="icon-caret-down"></i>');
                         $(this).closest('.containerHeadline').css( "background-color", "#FF3333" );
                         $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');
                         $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/youtube_stream/' + $(this).siblings('.channel-stream-id').val());
@@ -1863,7 +1872,8 @@ $(function(){
                 url : BASEURL + "channels/listofchannel/FacebookPagePick",
                 urlParameter : {
                     "id" :  value,
-                    "pageName" : pageName
+                    "pageName" : pageName,
+                    "country" : $(this).closest('#addFbStream').find('select[name=country]').val()
                 },
                 reload : true
                 

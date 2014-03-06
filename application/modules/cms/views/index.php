@@ -21,21 +21,22 @@
         </div>
         <div class="pull-right">
             
-        </div>
+            
     </div!-->
     <div class="cms-content row-fluid">
         <div class="cms-filter pull-left">
             <a href="<?php echo base_url('cms'); ?>"><button class="btn btn-inverse" type="button"><i class="icon-building"></i> View Campaigns & URL</button></a>
-            <?php for($i=0;$i<count($this->user_role);$i++){?>
-                <?php if($this->user_role[$i]->role_friendly_name=='Content Management_Short_URL_View'){?>
-            <a href="<?php echo base_url('cms/create_short_url'); ?>"><button class="btn btn-inverse" type="button"><i class="icon-code"></i> Create Short URL</button></a>
-                <?php } if($this->user_role[$i]->role_friendly_name=='Content Management_Campaign_View'){?>
-            <a href="<?php echo base_url('cms/create_campaign'); ?>"><button class="btn btn-inverse" type="button"><i class="icon-bullhorn"></i> Create Campaign</button></a>
-                <?php } if($this->user_role[$i]->role_friendly_name=='Content Management_Product_View'){?>
+		<?php if(IsRoleFriendlyNameExist($this->user_role, 'Content Management_Short_URL_View')):?>
+		<a href="<?php echo base_url('cms/create_short_url'); ?>"><button class="btn btn-inverse" type="button"><i class="icon-code"></i> Create Short URL</button></a>
+	    <?php endif;?>
+            <?php if(IsRoleFriendlyNameExist($this->user_role, 'Content Management_Campaign_View')){?>
+	    <a href="<?php echo base_url('cms/create_campaign'); ?>"><button class="btn btn-inverse" type="button"><i class="icon-bullhorn"></i> Create Campaign</button></a>
+            <?php } if(IsRoleFriendlyNameExist($this->user_role, 'Content Management_Product_View')){?>
             <a href="<?php echo base_url('cms/create_product'); ?>"><button class="btn btn-inverse" type="button"><i class="icon-gift"></i> Create Product</button></a>
-                <?php } if($this->user_role[$i]->role_friendly_name=='Content Management_TAG_View'){?>
+                <?php } if(IsRoleFriendlyNameExist($this->user_role, 'Content Management_TAG_View')):?>
             <a href="<?php echo base_url('cms/create_tag'); ?>"><button class="btn btn-inverse" type="button"><i class="icon-tag"></i> Create Tag</button></a>
-            <?php }}?>
+	    <?php endif;?>
+            
         </div>
         <div class="cms-table pull-right">
             <?php

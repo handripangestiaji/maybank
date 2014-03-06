@@ -44,7 +44,7 @@ $(function(){
     });
    
     
-    $('.total-case span, .sidebar .notifyCircle, .newCases .badge').html($('.pointer-case').siblings('.red').length);
+    //$('.total-case span, .sidebar .notifyCircle, .newCases .badge').html($('.pointer-case').siblings('.red').length);
     // Create a newDate() object
     var newDate = new Date();
     // Extract the current date from Date object

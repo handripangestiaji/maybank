@@ -20,7 +20,7 @@ class Tag_model extends CI_Model
 		return (empty($status)) ? FALSE : TRUE;
 	}
 	
-	public function get($limit = '', $offset = '')
+	public function get($limit = '', $offset = '', $filter='')
 	{
 		$this->db->select('content_tag.*, user.display_name');
 		
@@ -30,12 +30,17 @@ class Tag_model extends CI_Model
 		{
 			$this->db->limit($limit, $offset);
 		}
+
+        if($filter){
+            $this->db->where($filter);
+        }
+
 		
 		$query = $this->db->get($this->_table);
 		
 		return $query->result();
 	}
-	
+    
 	public function getOneBy($params = array())
 	{
 		if (isset($params['id']))

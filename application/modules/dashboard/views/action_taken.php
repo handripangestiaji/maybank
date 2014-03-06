@@ -1,4 +1,4 @@
-<div id="modal-action-log-<?php echo $post->post_stream_id ?>" class="modal modalDialog hide fade" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+<div id="modal-action-log-<?php if($post->social_stream_type=='facebook_conversation'){echo $post->post_id;}else{echo $post->post_stream_id;} ?>" class="modal modalDialog hide fade" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
     <div class="modal-header" style="padding-bottom: 0px;">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
         <h3>Action Log</h3>

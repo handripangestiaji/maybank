@@ -39,13 +39,13 @@ class ChannelMg extends MY_Controller {
         }
     }
     
-    function AddTwitter(){
+    function AddTwitter($country = ''){
         // Making a request for request_token
         
         $connection = $this->twitteroauth->create($this->config->item('twitter_consumer_token'),
                                                   $this->config->item('twitter_consumer_secret'));
         
-        $request_token = $connection->getRequestToken(site_url('channels/channelmg/TokenTwitter'));
+        $request_token = $connection->getRequestToken(site_url('channels/channelmg/TokenTwitter/'.$country));
         //print_r($connection);
         $this->session->set_userdata('request_token', $request_token['oauth_token']);
         $this->session->set_userdata('request_token_secret', $request_token['oauth_token_secret']);
@@ -61,7 +61,7 @@ class ChannelMg extends MY_Controller {
         }
     }
     
-    public function TokenTwitter()
+    public function TokenTwitter($country = '')
     {
         if($this->session->userdata('request_token')){
             $connection = $this->twitteroauth->create($this->config->item('twitter_consumer_token'),
@@ -81,6 +81,11 @@ class ChannelMg extends MY_Controller {
                 $channel['is_active'] = 1;
                 $channel['name'] = $access_token['screen_name'];
                 $channel['token_created_at'] = date("Y-m-d H:i:s");
+                
+                $channel['country_code'] = $country == '' ? null : $country;
+                if($channel['country_code'] == null && $this->session->userdata('country_code'))
+                    $channel['country_code'] = $this->session->userdata('country_code');
+                    
                 $this->account_model->SaveChannel($channel);
 		//comment
                 redirect('channels/channelmg');

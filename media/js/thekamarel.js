@@ -26,6 +26,15 @@ $.extend($.expr[":"],
     });
 
 $(function(){
+    
+    $('.country-select').multiselect();
+    var originalHref = null;
+    $(this).on('change', '.country-select', function(e){
+        href = $(this).siblings('.new-channel').attr('href');
+        originalHref = originalHref == null ? href : originalHref;
+        
+        $(this).siblings('.new-channel').attr('href', originalHref + "/" + $(this).val());
+    });
     $(this).on("error", ".circleAvatar img", function() {
         //$( this ).attr( "src", "missing.png" );
         console.log("error");
@@ -336,7 +345,7 @@ $(function(){
                 },
                 });
                 
-                $('.multipleSelect').multiselect({
+                $('.multipleSelect, .country-select').multiselect({
                 buttonText: function(options, select) {
                     if (options.length == 0) {
                         return 'None selected <b class="caret"></b>';
@@ -1863,7 +1872,8 @@ $(function(){
                 url : BASEURL + "channels/listofchannel/FacebookPagePick",
                 urlParameter : {
                     "id" :  value,
-                    "pageName" : pageName
+                    "pageName" : pageName,
+                    "country" : $(this).closest('#addFbStream').find('select[name=country]').val()
                 },
                 reload : true
                 

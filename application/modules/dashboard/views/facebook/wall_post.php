@@ -104,7 +104,7 @@ if($fb_feed[$i]->post_content != '<br />'):
         <?php
        // print_r($fb_feed[$i]->reply_post[0]);
         if(isset($fb_feed[$i]->reply_post[0])){
-         if(isset($fb_feed[$i]->is_my_reply[0])){?>
+        if($fb_feed[$i]->channel_action[count($fb_feed[$i]->channel_action) - 1]){?>
         <button type="button" class="btn btn-inverse btn-mini" style="text-align:left" value="<?php echo $fb_feed[$i]->reply_post[0]->post_id?>">
         <?php
         $reply_date = new DateTime($fb_feed[$i]->channel_action[count($fb_feed[$i]->channel_action) - 1]->created_at);

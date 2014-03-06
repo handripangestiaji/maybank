@@ -4,6 +4,7 @@ class Search extends CI_Controller {
 
      private $connection;
      public $user_role;
+     private $the_index = 'media_stream';
     
      function __construct()
      {
@@ -33,7 +34,7 @@ class Search extends CI_Controller {
 	  $channel_id = $this->input->post('channel_id');
 	  $the_channel = $this->account_model->GetChannel(array('channel_id' => $channel_id));
 	  if($the_channel[0]->connection_type == 'facebook'){
-	       $fb_feed = (object)$this->elasticsearch_model->GlobalSearch('media_stream','facebook_feed',$q);
+	       $fb_feed = (object)$this->elasticsearch_model->GlobalSearch($this->the_index,'facebook_feed',$q);
 	       if($fb_feed->hits['hits']){
 		    foreach($fb_feed->hits['hits'] as $wp){
 			 $new_fb_feed[] = (object)$wp['_source'];
@@ -46,7 +47,8 @@ class Search extends CI_Controller {
 	       if($new_fb_feed){
 		    $data_fb_feed = array();
 		    foreach($new_fb_feed as $nff){
-			 $filter_fb = array('b.post_id' => $nff->post_id);
+			 $filter_fb = array('b.post_id' => $nff->post_id,
+					    'channel_id' => $channel_id);
 			 $result = $this->facebook_model->RetrieveFeedFB($filter_fb);
 			 $data_fb_feed = array_merge($data_fb_feed,$result);
 		    }
@@ -56,7 +58,7 @@ class Search extends CI_Controller {
 		}
 		$data['fb_feed'] = $data_fb_feed;
 		
-	       $fb_pm = (object)$this->elasticsearch_model->GlobalSearch('media_stream','facebook_pm',$q);
+	       $fb_pm = (object)$this->elasticsearch_model->GlobalSearch($this->the_index,'facebook_pm',$q);
 	       if($fb_pm->hits['hits']){
 		    foreach($fb_pm->hits['hits'] as $pm){
 			 $new_fb_pm[] = (object)$pm['_source'];
@@ -69,7 +71,8 @@ class Search extends CI_Controller {
 	       if($new_fb_pm){
 		    $data_fb_pm = array();
 		    foreach($new_fb_pm as $nfp){
-			 $filter_fb = array('d.post_id' => $nfp->post_id);
+			 $filter_fb = array('d.post_id' => $nfp->post_id,
+					    'channel_id' => $channel_id);
 			 $result = $this->facebook_model->RetrievePmFB($filter_fb);
 			 $data_fb_pm = array_merge($data_fb_pm,$result);
 		    }
@@ -96,7 +99,7 @@ class Search extends CI_Controller {
 	  elseif($the_channel[0]->connection_type == 'twitter'){
 	       $filter = array('a.channel_id' => $channel_id);
 	 
-	       $tw_mentions = (object)$this->elasticsearch_model->GlobalSearch('media_stream','twitter_mentions',$q);
+	       $tw_mentions = (object)$this->elasticsearch_model->GlobalSearch($this->the_index,'twitter_mentions',$q);
 	       if($tw_mentions->hits['hits']){
 		    foreach($tw_mentions->hits['hits'] as $tw){
 			 $new_tw_mentions[] = (object)$tw['_source'];
@@ -122,7 +125,7 @@ class Search extends CI_Controller {
 	       $filter['b.type'] = 'mentions';
 	       $data['countMentions']=$this->twitter_model->CountTwitterData($filter);
 	       
-	       $tw_homefeed = (object)$this->elasticsearch_model->GlobalSearch('media_stream','twitter_homefeed',$q);
+	       $tw_homefeed = (object)$this->elasticsearch_model->GlobalSearch($this->the_index,'twitter_homefeed',$q);
 	       if($tw_homefeed->hits['hits']){
 		    foreach($tw_homefeed->hits['hits'] as $tw){
 			 $new_tw_homefeed[] = (object)$tw['_source'];
@@ -148,7 +151,7 @@ class Search extends CI_Controller {
 	       $filter['b.type'] = 'home_feed';     
 	       $data['countFeed']=$this->twitter_model->CountTwitterData($filter);
 	       
-     	       $tw_senttweets = (object)$this->elasticsearch_model->GlobalSearch('media_stream','twitter_senttweets',$q);
+     	       $tw_senttweets = (object)$this->elasticsearch_model->GlobalSearch($this->the_index,'twitter_senttweets',$q);
 	       if($tw_senttweets->hits['hits']){
 		    foreach($tw_senttweets->hits['hits'] as $tw){
 			 $new_tw_senttweets[] = (object)$tw['_source'];
@@ -174,7 +177,7 @@ class Search extends CI_Controller {
 	       $filter['b.type'] = 'user_timeline';     
 	       $data['countTweets']=$this->twitter_model->CountTwitterData($filter);
 	       
-	       $tw_dms = (object)$this->elasticsearch_model->GlobalSearch('media_stream','twitter_dms',$q);
+	       $tw_dms = (object)$this->elasticsearch_model->GlobalSearch($this->the_index,'twitter_dms',$q);
 	       if($tw_dms->hits['hits']){
 		    $i = 0;
 		    foreach($tw_dms->hits['hits'] as $tw){
@@ -210,7 +213,7 @@ class Search extends CI_Controller {
 	       $this->load->view('dashboard/twitter/twitter_stream',$data);
 	  }
 	  elseif($the_channel[0]->connection_type == 'youtube'){
-	       $youtube_post = (object)$this->elasticsearch_model->GlobalSearch('media_stream','youtube_post',$q);
+	       $youtube_post = (object)$this->elasticsearch_model->GlobalSearch($this->the_index,'youtube_post',$q);
 	       if($youtube_post->hits['hits']){
 		    foreach($youtube_post->hits['hits'] as $yts){
 			 $new_youtube_post[] = (object)$yts['_source'];
@@ -232,7 +235,7 @@ class Search extends CI_Controller {
 		}
 	       $data['youtube_post'] = $data_youtube_post;
 	       
-	       $youtube_comment = (object)$this->elasticsearch_model->GlobalSearch('media_stream','youtube_comment',$q);
+	       $youtube_comment = (object)$this->elasticsearch_model->GlobalSearch($this->the_index,'youtube_comment',$q);
 	       if($youtube_comment->hits['hits']){
 		    foreach($youtube_comment->hits['hits'] as $yts){
 			 $new_youtube_comment[] = (object)$yts['_source'];
@@ -262,7 +265,7 @@ class Search extends CI_Controller {
      
      public function indexing(){
 	  //create index
-	  $this->elasticsearch_model->PutIndex('media_stream');
+	  $this->elasticsearch_model->PutIndex($this->the_index);
 	  
 	  $channels = $this->account_model->GetChannel();
 	  foreach($channels as $channel){
@@ -286,7 +289,7 @@ class Search extends CI_Controller {
 				   'post_content' => array('type' => 'string'),
 				   'post_stream_id' => array('type' => 'string'),
 				);
-	  $ret = $this->elasticsearch_model->TypeMapping('media_stream','facebook_feed',$fb_feed_map);
+	  $ret = $this->elasticsearch_model->TypeMapping($this->the_index,'facebook_feed',$fb_feed_map);
 	  
 	  $filter = array(
 	       'channel_id' => $channel_id,
@@ -301,7 +304,7 @@ class Search extends CI_Controller {
 			       'post_content' => $wp->post_content,
 			       'post_stream_id' => $wp->post_stream_id
 			       );
-	       $ret = $this->elasticsearch_model->InsertDoc('media_stream','facebook_feed',$wp->post_id,$new_wp);
+	       $ret = $this->elasticsearch_model->InsertDoc($this->the_index,'facebook_feed',$wp->post_id,$new_wp);
 	  }
 	  
 	  //indexing for fb private message
@@ -310,7 +313,7 @@ class Search extends CI_Controller {
 				   'post_stream_id' => array('type' => 'string'),
 				   'post_id' => array('type' => 'long'),
 				);
-	  $ret = $this->elasticsearch_model->TypeMapping('media_stream','facebook_pm',$fb_pm_map);
+	  $ret = $this->elasticsearch_model->TypeMapping($this->the_index,'facebook_pm',$fb_pm_map);
 	  $filter = array(
 	       'channel_id' => $channel_id,
 	    );
@@ -320,7 +323,7 @@ class Search extends CI_Controller {
 			       'name' => $pm->name,
 			       'post_stream_id' => $pm->post_stream_id,
 			       'post_id' => $pm->post_id);
-	       $ret = $this->elasticsearch_model->InsertDoc('media_stream','facebook_pm',$pm->post_id,$new_pm);
+	       $ret = $this->elasticsearch_model->InsertDoc($this->the_index,'facebook_pm',$pm->post_id,$new_pm);
 	  }
      }
      
@@ -333,7 +336,7 @@ class Search extends CI_Controller {
 				   'name' => array('type' => 'string')
 				);
 	  
-	  $ret = $this->elasticsearch_model->TypeMapping('media_stream','twitter_mentions',$tw_mention_map);
+	  $ret = $this->elasticsearch_model->TypeMapping($this->the_index,'twitter_mentions',$tw_mention_map);
 	  $filter = array('a.channel_id' => $channel_id);
 	  $filter['b.type'] = 'mentions';
 	  $mentions = $this->twitter_model->ReadTwitterData($filter);
@@ -344,11 +347,11 @@ class Search extends CI_Controller {
 				'post_id' => $m->post_id,
 				'name' => $m->name
 				);
-	       $ret = $this->elasticsearch_model->InsertDoc('media_stream','twitter_mentions',$m->post_stream_id,$tws);
+	       $ret = $this->elasticsearch_model->InsertDoc($this->the_index,'twitter_mentions',$m->post_stream_id,$tws);
 	  }
 
 	  //create twitter homefeed type
-	  $ret = $this->elasticsearch_model->TypeMapping('media_stream','twitter_homefeed',$tw_mention_map);
+	  $ret = $this->elasticsearch_model->TypeMapping($this->the_index,'twitter_homefeed',$tw_mention_map);
 	  $filter['b.type'] = 'home_feed';
 	  $homefeeds = $this->twitter_model->ReadTwitterData($filter);
 	  foreach($homefeeds as $hf){
@@ -358,11 +361,11 @@ class Search extends CI_Controller {
 				'post_id' => $hf->post_id,
 				'name' => $hf->name
 				); 
-	       $ret = $this->elasticsearch_model->InsertDoc('media_stream','twitter_homefeed',$hf->post_stream_id,$tws);
+	       $ret = $this->elasticsearch_model->InsertDoc($this->the_index,'twitter_homefeed',$hf->post_stream_id,$tws);
 	  }
 	  
 	  //create twitter senttweets type
-	  $ret = $this->elasticsearch_model->TypeMapping('media_stream','twitter_senttweets',$tw_mention_map);
+	  $ret = $this->elasticsearch_model->TypeMapping($this->the_index,'twitter_senttweets',$tw_mention_map);
 	  $filter['b.type'] = 'user_timeline';
 	  $timelines = $this->twitter_model->ReadTwitterData($filter);
 	  foreach($timelines as $tl){
@@ -372,11 +375,11 @@ class Search extends CI_Controller {
 				'post_id' => $tl->post_id,
 				'name' => $tl->name
 				); 
-	       $ret = $this->elasticsearch_model->InsertDoc('media_stream','twitter_senttweets',$tl->post_stream_id,$tws);
+	       $ret = $this->elasticsearch_model->InsertDoc($this->the_index,'twitter_senttweets',$tl->post_stream_id,$tws);
 	  }
 	   
 	  //create twitter direct_messages type
-	  $ret = $this->elasticsearch_model->TypeMapping('media_stream','twitter_dms',$tw_mention_map);
+	  $ret = $this->elasticsearch_model->TypeMapping($this->the_index,'twitter_dms',$tw_mention_map);
 	  unset($filter['b.type']);
 	  $dms = $this->twitter_model->ReadDMFromDb($filter);
 	  foreach($dms as $dm){
@@ -386,7 +389,7 @@ class Search extends CI_Controller {
 				'post_id' => $dm->post_id,
 				'name' => $dm->name
 				); 
-	       $ret = $this->elasticsearch_model->InsertDoc('media_stream','twitter_dms',$dm->post_stream_id,$tws);
+	       $ret = $this->elasticsearch_model->InsertDoc($this->the_index,'twitter_dms',$dm->post_stream_id,$tws);
 	  }
      }
      
@@ -398,7 +401,7 @@ class Search extends CI_Controller {
 				   'description' => array('type' => 'string'),
 				   'channel_name' => array('type' => 'string'),
 				);
-	  $ret = $this->elasticsearch_model->TypeMapping('media_stream','youtube_post',$yt_post_map);
+	  $ret = $this->elasticsearch_model->TypeMapping($this->the_index,'youtube_post',$yt_post_map);
 	  
 	  $filter = array(
 	   'channel_id' => $channel_id,
@@ -411,7 +414,7 @@ class Search extends CI_Controller {
 			    'description' => $post->description,
 			    'channel_name' => $post->channel_name
 			    );
-	       $ret = $this->elasticsearch_model->InsertDoc('media_stream','youtube_post',$post->post_stream_id,$yts);
+	       $ret = $this->elasticsearch_model->InsertDoc($this->the_index,'youtube_post',$post->post_stream_id,$yts);
 	  }
 	  
 	  $yt_comment_map = array('post_id' => array('type' => 'string'),
@@ -420,7 +423,7 @@ class Search extends CI_Controller {
 				   'title' => array('type' => 'string'),
 				   'text' => array('type' => 'string'),
 			       );
-	  $ret = $this->elasticsearch_model->TypeMapping('media_stream','youtube_comment',$yt_comment_map);
+	  $ret = $this->elasticsearch_model->TypeMapping($this->the_index,'youtube_comment',$yt_comment_map);
 	  
 	  $filter = array(
 	   'channel_id' => $channel_id,
@@ -433,7 +436,7 @@ class Search extends CI_Controller {
 			    'title' => $comment->title,
 			    'text' => $comment->text
 			    );
-	       $ret = $this->elasticsearch_model->InsertDoc('media_stream','youtube_comment',$comment->post_stream_id,$yts);
+	       $ret = $this->elasticsearch_model->InsertDoc($this->the_index,'youtube_comment',$comment->post_stream_id,$yts);
 	  }
       }
       
@@ -455,7 +458,7 @@ class Search extends CI_Controller {
 	  //$ret = $this->elasticsearch_model->GlobalSearch('media_stream','twitter_senttweets','tes');
 	  //$ret = $this->elasticsearch_model->GetMapping('media_stream');
 	  //$ret = $this->elasticsearch_model->GetDoc('media_stream','facebook_feed','1');
-	  $ret = $this->elasticsearch_model->DeleteIndex('media_stream');
+	  $ret = $this->elasticsearch_model->DeleteIndex($this->the_index);
 	  //$ret = $this->elasticsearch_model->DeleteType('media_stream','twitter_dm');
 	  print_r($ret);
 	  die();

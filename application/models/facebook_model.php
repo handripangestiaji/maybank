@@ -612,7 +612,7 @@ class facebook_model extends CI_Model
             $cek_action=count($this->GetChannelAction(array('a.post_id'=>$row->post_id), false));            
 
             if(($cek_reply>0) or ($cek_action==0 and $cek_reply==0)){
-                $row->reply_post = $this->RetriveCommentPostFb(array('a.post_id'=>$row->social_stream_post_id),array());
+                $row->reply_post = $this->RetriveCommentPostFb(array('a.post_id'=>$row->social_stream_post_id,'comment_id'=>'0'),array());
         	    $comment_list = array();
         	    foreach($row->reply_post as $comment){
                     $comment_list[] = $comment->id;
@@ -623,7 +623,7 @@ class facebook_model extends CI_Model
                     $row->is_my_reply= $this->GetChannelAction(array('a.created_by'=>$my_user_id,'a.post_id'=>$row->post_id), false);
                 }                
             }elseif($cek_action>0 and $cek_reply==0 ){
-                $row->reply_post = $this->RetriveCommentPostFb(array('a.post_id'=>$row->social_stream_post_id),array());
+                $row->reply_post = $this->RetriveCommentPostFb(array('a.post_id'=>$row->social_stream_post_id,'comment_id'=>'0'),array());
                 $row->actions_post = $this->GetChannelAction(array('a.post_id'=>$row->post_id),array());
             	$comment_list = array();
                 foreach($row->actions_post as $comment){

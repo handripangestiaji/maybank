@@ -514,8 +514,12 @@ class Media_stream extends CI_Controller {
 	}
     
         $short_url = $this->shorturl_model->find(array('short_code' => $url));
-        $short_url_id = $short_url->id;
-                   
+        if(isset($short_url->id)){
+            $short_url_id = $short_url->id;
+        }else{
+            $short_url_id=null;
+        }        
+            
         if($tags != ''){
 	    foreach($tags as $tag){
 		$get_tag = $this->post_model->GetTagByTagName($tag);

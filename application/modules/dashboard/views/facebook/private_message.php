@@ -30,7 +30,7 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_pm[$i]->po
         ?>
         
     </p>
-    <p><?=$fb_pm[$i]->messages?></p>
+    <p><?=$fb_pm[$i]->snippet?></p>
     <p class="indicator">
     <?php 
     if(isset($isMyCase[0]->assign_to)){
@@ -92,7 +92,10 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_pm[$i]->po
                 <i class="icon-circle"></i>
                 <span>posted a <span class="cyanText">comment</span></span>
                 <i class="icon-circle"></i>
-                <span><?php echo $comment[$j]->created_at; ?></span>
+                <span><?php
+                $created_detail_pm = new DateTime($comment[$j]->created_at);
+                $created_detail_pm->setTimezone($timezone);
+                echo $created_detail_pm->format('l, M j, Y h:i A'); ?></span>
                
             </p>
             <div>

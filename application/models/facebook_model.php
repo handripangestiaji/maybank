@@ -344,6 +344,9 @@ class facebook_model extends CI_Model
 	    );
 	    
 	    if($stream != null){
+		$old_social_stream_facebook_conversation = $this->IsFacebookConversation($stream->post_id);
+		if($old_social_stream_facebook_conversation->message_count ==  $each_conversation->message_count)
+		    $social_stream['is_read'] = 1 ;
 		$this->db->where('post_id', $stream->post_id);
 		$this->db->update('social_stream', $social_stream);
 		$this->db->where('conversation_id', $stream->post_id);
@@ -415,6 +418,7 @@ class facebook_model extends CI_Model
 	    
 	    if($stream != null){
 		$this->db->where('post_id', $stream->post_id);
+		$social_stream['is_read'] = 0;
 		$this->db->update('social_stream', $social_stream);
 		$this->db->where('conversation_id', $stream->post_id);
 		$this->db->update('social_stream_facebook_conversation', $social_stream_facebook_conversation);
@@ -701,13 +705,13 @@ class facebook_model extends CI_Model
             	fb_user_engaged d ON d.facebook_id=b.sender   LEFT OUTER JOIN
             	`case` e ON e.post_id=c.post_id AND e.status='pending'");	
         if(count($filter) > 0){
-	       $this->db->where($filter);
+	    $this->db->where($filter);
         }
 	
     	if($limit){
     	    $this->db->limit($limit);
     	}
-	   $this->db->order_by('a.updated_time','desc');
+	$this->db->order_by('a.updated_time','desc');
        
        $result= $this->db->get()->result();
        $my_user_id=$this->session->userdata('user_id');                                
@@ -883,5 +887,12 @@ class facebook_model extends CI_Model
         print_r($return);
         $this->db->trans_complete();
         return $return;
-    }   
+    }
+    
+    function IsFacebookConversation($stream_id){
+	$this->db->select("*");
+	$this->db->from("social_stream_facebook_conversation");
+	$this->db->where('conversation_id', $stream_id);
+	return $this->db->get()->row();
+    }
 }

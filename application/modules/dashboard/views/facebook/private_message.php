@@ -31,7 +31,7 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_pm[$i]->po
         
     </p>
     <p><?=$fb_pm[$i]->messages?></p>
-    <p>
+    <p class="indicator">
     <?php 
     if(isset($isMyCase[0]->assign_to)){
           // print_r($isMyCase[count($isMyCase)-1]);
@@ -53,19 +53,19 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_pm[$i]->po
             
 
     } ?>
-    <p>
+    <p class="indicator">
         <?php //print_r($fb_pm[$i]->channel_action);
         
         if(isset($fb_pm[$i]->reply_post[0])){
             if(isset($fb_pm[$i]->channel_action[count($fb_pm[$i]->channel_action) - 1])){?>        
-          <button type="button" class="btn btn-inverse btn-mini" style="text-align:left"  value="<?php echo $fb_pm[$i]->reply_post[0]->post_id?>">
+          <button type="button" class="btn btn-inverse btn-mini replied-btn" style="text-align:left"  value="<?php echo $fb_pm[$i]->reply_post[0]->post_id?>">
         <?php
         $reply_date = new DateTime($fb_pm[$i]->channel_action[count($fb_pm[$i]->channel_action) - 1]->created_at);
         $reply_date->setTimezone($timezone);
         echo "Replied by: ".$fb_pm[$i]->channel_action[count($fb_pm[$i]->channel_action) - 1]->display_name." ".$reply_date->format("d-M-y h:i A") ?>
         </button> <?php            
         }else{?>
-        <button type="button" class="btn btn-warning btn-mini no-cursor indicator" >OPEN</button>       
+        <button type="button" class="btn btn-warning btn-mini no-cursor indicator open-thread" >OPEN</button>       
          <?php }
         }
         ?>

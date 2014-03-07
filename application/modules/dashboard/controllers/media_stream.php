@@ -715,35 +715,38 @@ class Media_stream extends CI_Controller {
             'description' => $descr,
             'picture'=> $img,
         ); 
-        $return=$this->facebook->api('/'.$stream_id->post_stream_id.'/messages', 'POST', array('message'=>$comment));
+        $return = $this->facebook->api('/'.$stream_id->post_stream_id.'/messages', 'POST', array('message'=>$comment));
         $action = array(
 	    "action_type" => "conversation_facebook",
 	    "channel_id" => $channel_loaded[0]->channel_id,
 	    "created_at" => date("Y-m-d H:i:s"),
 	    "stream_id_response" => $return['id'],
-	    "post_id"=>$post_id,
+	    "post_id" => $post_id,
 	    "created_by" => $this->session->userdata('user_id'),
 	    "log_text" => $comment,
 	    "case_id"=> $case_id,
 	);
         
         $this->account_model->CreateFbPMAction($action);
-        $case=$this->account_model->isCaseIdExists($post_id);
-            if(count($case)>0){
-                $post_at=$case[0]->created_at;  
-                $caseid=$case[0]->case_id;
-            }else{
-                $caseid='';
-                $post_at='';       
-            }
-        
+        $case = $this->account_model->isCaseIdExists($post_id);
+	if(count($case)>0){
+	    $post_at=$case[0]->created_at;  
+	    $caseid=$case[0]->case_id;
+	}else{
+	    $caseid='';
+	    $post_at='';       
+	}
+	$action['created_at'] = new DateTime($action['created_at']);
+	$action['created_at']->setTimezone(new DateTimeZone($this->session->userdata('timezone')));
+	$action['created_at'] = $action['created_at']->format("j-M-Y h:i A");
         echo json_encode(
-    		    array(
-                'success' => true,
-    			'message' => "successfully done",
-    			'result' => $return
-    		    )
-    		);
+	    array(
+		'success' => true,
+		'message' => "Successfully done",
+		'result' => $return,
+		'action_log' => $action
+	    )
+	);
     }
     
  

@@ -85,14 +85,14 @@ class Cronjob extends CI_Controller {
         }
         print_r($newStd->token);
         
-        
+        /*
         foreach($access_tokens as $access_token){
             $conversation = $this->facebook_model->RetrieveConversation($access_token->page_id, $access_token->token);
             $this->facebook_model->SaveConversation($conversation, $access_token->channel);
             echo "<pre>";
             print_r($conversation);
             echo "</pre>";
-        }
+        }*/
     }
     
     function NewFacebookConversation(){
@@ -112,16 +112,15 @@ class Cronjob extends CI_Controller {
             $newStd->channel = $channel;
             $access_tokens[] = $newStd;
         }
-        print_r($newStd->token);
         
         
         foreach($access_tokens as $access_token){
             $conversation = $this->facebook_model->RetrieveNewConversation($access_token->token);
             $conversation = json_decode($conversation);
             $this->facebook_model->SaveNewConversation($conversation->data,$access_token->channel, $access_token);
-            echo "<pre>";
-            print_r($conversation);
-            echo "</pre>";
+         
+            print_r(json_encode($conversation));
+         
         }
     }
     

@@ -53,7 +53,7 @@ $(function(){
     });
    
     
-    $('.total-case span, .sidebar .notifyCircle, .newCases .badge').html($('.pointer-case').siblings('.red').length);
+    //$('.total-case span, .sidebar .notifyCircle, .newCases .badge').html($('.pointer-case').siblings('.red').length);
     // Create a newDate() object
     var newDate = new Date();
     // Extract the current date from Date object
@@ -1556,7 +1556,12 @@ $(function(){
                                         commentButton.html("SEND"); 
                                         setTimeout(function(){
                                                 commentButton.closest('.reply-field').toggle('slow');
-                                            }, 3000); 
+                                            }, 3000);
+                                        commentButton.closest('li').find('.indicator .open-thread, .indicator .replied-btn').remove();
+                                        
+                                        commentButton.closest('li').find('.indicator:first').append(' <button type="button" class=".replied-btn btn btn-inverse btn-mini" style="text-align:left">' +
+                                            'Replied by:you ' + response.action_log.created_at + "</button>");
+                                        
                                     }
                                     else{
                                         commentButton.parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +

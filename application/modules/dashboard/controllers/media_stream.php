@@ -688,33 +688,28 @@ class Media_stream extends CI_Controller {
         $filter = array(
             "connection_type" => "facebook"
         );
-        
-        if($this->input->get('channel_id')){
-            $filter['channel_id'] = $this->input->get('channel_id');
-        }
-        
+        $filter['channel_id'] = $this->input->post('channel_id');
         $channel_loaded = $this->account_model->GetChannel($filter);
         if(count($channel_loaded) == 0){
-    		echo json_encode(
-    		    array(
-    			'success' => false,
-    			'message' => "Invalid Channel Id"
-    		    )
-    		);
-		return;
-	    }
-	    else{
-		  $channel =  $channel_loaded[0]->channel_id;
-	    }
-        $stream_id=$this->facebook_model->streamId($post_id);
-        
+	    echo json_encode(
+		array(
+		    'success' => false,
+		    'message' => "Invalid Channel Id"
+		)
+	    );
+	    return;
+	}
+	else{
+	      $channel =  $channel_loaded[0]->channel_id;
+	}
+        $stream_id = $this->facebook_model->streamId($post_id);
         $newStd = new stdClass();
         $newStd->page_id =  $channel_loaded[0]->social_id;
         $newStd->token = $this->facebook_model->GetPageAccessToken( $channel_loaded[0]->oauth_token, $channel_loaded[0]->social_id);
         $config = array(
-	       'appId' => $this->config->item('fb_appid'),
-	       'secret' => $this->config->item('fb_secretkey')
-	    );
+	    'appId' => $this->config->item('fb_appid'),
+	    'secret' => $this->config->item('fb_secretkey')
+	);
     	$this->load->library('facebook',$config);
     	$this->facebook->setaccesstoken($newStd->token);
         $attachment = array(
@@ -724,96 +719,41 @@ class Media_stream extends CI_Controller {
             'description' => $descr,
             'picture'=> $img,
         ); 
-    //    print_r($stream_id->post_stream_id);
-        
-        $return=$this->facebook->api('/'.$stream_id->post_stream_id.'/messages', 'POST', array('message'=>$comment));
-        //$return = $this->facebook->api( "/t_mid.1393214322627:a67f7957b93a2da328/messages", "POST", array ( 'message' => $comment, ));
-
-        //print_r($return);
-
+        $return = $this->facebook->api('/'.$stream_id->post_stream_id.'/messages', 'POST', array('message'=>$comment));
         $action = array(
-        		"action_type" => "conversation_facebook",
-        		"channel_id" => $channel_loaded[0]->channel_id,
-        		"created_at" => date("Y-m-d H:i:s"),
-        		"stream_id_response" => $return['id'],
-                "post_id"=>$post_id,
-        		"created_by" => $this->session->userdata('user_id'),
-                "log_text" => $comment,
-                "case_id"=> $case_id,
-            );
+	    "action_type" => "conversation_facebook",
+	    "channel_id" => $channel_loaded[0]->channel_id,
+	    "created_at" => date("Y-m-d H:i:s"),
+	    "stream_id_response" => $return['id'],
+	    "post_id" => $post_id,
+	    "created_by" => $this->session->userdata('user_id'),
+	    "log_text" => $comment,
+	    "case_id"=> $case_id,
+	);
         
         $this->account_model->CreateFbPMAction($action);
-        $case=$this->account_model->isCaseIdExists($post_id);
-            if(count($case)>0){
-                $post_at=$case[0]->created_at;  
-                $caseid=$case[0]->case_id;
-            }else{
-                $caseid='';
-                $post_at='';       
-            }
-        
+        $case = $this->account_model->isCaseIdExists($post_id);
+	if(count($case)>0){
+	    $post_at=$case[0]->created_at;  
+	    $caseid=$case[0]->case_id;
+	}else{
+	    $caseid='';
+	    $post_at='';       
+	}
+	$action['created_at'] = new DateTime($action['created_at']);
+	$action['created_at']->setTimezone(new DateTimeZone($this->session->userdata('timezone')));
+	$action['created_at'] = $action['created_at']->format("j-M-Y h:i A");
         echo json_encode(
-    		    array(
-                'success' => true,
-    			'message' => "successfully done",
-    			'result' => $return
-    		    )
-    		);
+	    array(
+		'success' => true,
+		'message' => "Successfully done",
+		'result' => $return,
+		'action_log' => $action
+	    )
+	);
     }
     
-    //public function fbDeleteStatus(){
-//    	header("Content-Type: application/x-json");
-//    	$channel_id =$this->input->post('channel_id');
-//    	$post_id = $this->input->post('post_id');
-//    	//$action['type'] = $this->session->userdata('user_id');
-//          
-//        $filter = array(
-//            "connection_type" => "facebook"
-//        );
-//        
-//        if($channel_id){
-//            $filter['channel_id'] = $channel_id;
-//        }
-//        
-//        $channel_loaded = $this->account_model->GetChannel($filter);
-//        if(count($channel_loaded) == 0){
-//    		echo json_encode(
-//    		    array(
-//    			'success' => false,
-//    			'message' => "Invalid Channel Id"
-//    		    )
-//    		);
-//		  return;
-//	    }
-//	    else{
-//	       
-//            $channel =  $channel_loaded[0]->channel_id;
-//            $newStd = new stdClass();
-//            $newStd->page_id =  $channel_loaded[0]->social_id;
-//            $newStd->token = $this->facebook_model->GetPageAccessToken( $channel_loaded[0]->oauth_token, $channel_loaded[0]->social_id);
-//            $config = array(
-//    	       'appId' => $this->config->item('fb_appid'),
-//    	       'secret' => $this->config->item('fb_secretkey')
-//    	    );
-//        	$is_Post_id=$this->facebook_model->streamId($post_id);
-//            if($is_Post_id){
-//                $this->load->library('facebook',$config);
-//            	$this->facebook->setaccesstoken($newStd->token);
-//                $result = $this->facebook->api( "/".$is_Post_id->post_stream_id."","delete");
-//                if(!isset($result->error)){
-//        		    $row_affected = $this->facebook_model->DeletePostFb($is_Post_id->post_stream_id);
-//                }         
-//            }
-//            echo json_encode(
-//    		    array(
-//    			'success' => true,
-//    			'message' => "Delete Success"
-//    		    )
-//    		);
-//            return;   
-//        }
-//    } 
-    
+ 
     public function fbDeleteStatus($status = 0){
         
     	header("Content-Type: application/x-json");

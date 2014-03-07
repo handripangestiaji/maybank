@@ -345,8 +345,8 @@ class facebook_model extends CI_Model
 	    
 	    if($stream != null){
 		$old_social_stream_facebook_conversation = $this->IsFacebookConversation($stream->post_id);
-		if($old_social_stream_facebook_conversation->message_count ==  $each_conversation->message_count)
-		    $social_stream['is_read'] = 1 ;
+		if($old_social_stream_facebook_conversation->message_count <  $each_conversation->message_count)
+		    $social_stream['is_read'] = 0 ;
 		$this->db->where('post_id', $stream->post_id);
 		$this->db->update('social_stream', $social_stream);
 		$this->db->where('conversation_id', $stream->post_id);

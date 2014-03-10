@@ -1799,6 +1799,9 @@ $(function(){
                                             });
                 //window.location.href = BASEURL + 'dashboard/search?q=' + $('.dashboard-search-field').val();
             }
+            else{
+                window.location.href = BASEURL;
+            }
         });
         
         
@@ -1940,7 +1943,7 @@ $(document).ready(function(){
         },
         eventRender: function(event, element){
             var deleteable;
-            if(event.is_posted != '1' && event.user_role == 'Admin'){
+            if(event.is_posted != '1' && event.deleteable == true){
                 deleteable = "<div class='pull-right'><button type='button' class='btn btn-danger btn-mini btn-delete-schedule-post'><i class='icon-remove'></i></a></div>";
             }
             else{

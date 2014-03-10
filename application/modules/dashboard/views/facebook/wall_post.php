@@ -181,8 +181,9 @@ if($fb_feed[$i]->post_content != '<br />'):
                         if($isMyCase[count($isMyCase)-1]->assign_to==$this->session->userdata('user_id') or ($isMyCase[count($isMyCase)-1]->solved_by)){
                 ?><h4>
                 <p>
-                    <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Take Action') ||
-                             IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action')):?>
+                    <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Delete') ||
+                            IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Delete')
+                            ):?>
                         <button type="button" role="button" class="btn btn-mini delete_post comments"  value="<?php echo $comment[$j]->comment_post_id?>" style="border: none; background-color: transparent;"><i class="icon-trash greyText"></i></button>
                     <?php endif;?>
                     <button type="button" class="btn btn-warning btn-mini">OPEN</button>
@@ -195,8 +196,9 @@ if($fb_feed[$i]->post_content != '<br />'):
                 <?php }else{ ?>
                 <h4>
                 <p>
-                    <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Take Action') || 
-                             IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action')):?>
+                    <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Delete') ||
+                            IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Delete')
+                            ):?>
                         <button type="button" role="button" class="btn btn-mini delete_post comments"  value="<?php echo $comment[$j]->comment_post_id?>" style="border: none; background-color: transparent;"><i class="icon-trash greyText"></i></button>
                     <?php endif;?>
             
@@ -212,8 +214,9 @@ if($fb_feed[$i]->post_content != '<br />'):
                 }elseif(!isset($isMyCase[count($isMyCase)-1])){ ?>
                 <h4>
                     <p>
-                    <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Take Action') ||
-                              IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action')):?>
+                    <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Delete') ||
+                        IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Delete')
+                        ):?>
                         <button type="button" role="button" class="btn btn-mini delete_post comments"  value="<?php echo $comment[$j]->comment_post_id?>" style="border: none; background-color: transparent;"><i class="icon-trash greyText"></i></button>
                     <?php endif;?>
                     <button type="button" class="btn btn-warning btn-mini">OPEN</button>

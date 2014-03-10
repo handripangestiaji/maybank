@@ -1146,6 +1146,13 @@ class Media_stream extends CI_Controller {
 		$short_time = date('H:i A',strtotime($post_time));
 		
 		$time_tommorow = date('Y-m-d H:i:s',strtotime('+30 minute', strtotime($post->time_to_post)));
+		if(IsRoleFriendlyNameExist($this->user_role, "Publisher_Current_Delete_Post") ||
+		   IsRoleFriendlyNameExist($this->user_role, "Publisher_All_Delete_Post")){
+		    $deleteable = true;
+		}else{
+		    $deleteable = false;
+		}
+		
 		$encodeme[] = array('post_to_id' => $post->post_to_id,
 				'real_time' => $post->time_to_post,
 				'title' => $post->name,
@@ -1157,7 +1164,8 @@ class Media_stream extends CI_Controller {
 				'post_time' => $short_time,
 				'is_posted' => $post->is_posted,
 				'allDay' => false,
-				'user_role' =>  $this->session->userdata('role_name')
+				'user_role' =>  $this->session->userdata('role_name'),
+				'deleteable' => $deleteable
 			       );
 	    }
 	}

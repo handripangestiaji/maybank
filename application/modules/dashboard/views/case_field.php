@@ -17,12 +17,12 @@ if($posts){
            <input type="hidden" value="new_case" name="type" />
            <div class="message"></div>
            <div class="pull-left">
-               <select name="case_type">
+               <select name="case_type" style="width: 130px;">
                    <option value="Feedback">Feedback</option>
                    <option value="Enquiry">Enquiry</option>
                    <option value="Complaint">Complaint</option>
                </select>
-               <select name="product_type">
+               <select name="product_type" style="width: 130px;">
                 <?php foreach($product_list as $product):?>
                     <option value="<?php echo $product->id?>"><?php echo $product->product_name?></option>
                 <?php endforeach?>

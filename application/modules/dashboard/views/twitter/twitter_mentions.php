@@ -33,7 +33,15 @@ for($i=0;$i<count($mentions);$i++){
         $html =  linkify(html_entity_decode($html), true, false);
         echo $html;
     ?></p>
+    
     <p>
+    <?php
+    if(count($mentions[$i]->case) > 0)
+            $this->load->view('dashboard/twitter/case_view', array(
+                    "caseMsg" => $mentions[$i]->case[0]
+                ));
+        ?>
+        
     <?php if(isset($entities->media[0])){
             echo "<a href='#modal-".$mentions[$i]->social_stream_post_id."' data-toggle='modal' ><img class='img_attachment' src='".base_url('dashboard/media_stream/SafePhoto?photo=').$entities->media[0]->media_url_https."' /></a>";
             echo '<div id="modal-'.$mentions[$i]->social_stream_post_id.'" class="attachment-modal modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
@@ -64,11 +72,8 @@ for($i=0;$i<count($mentions);$i++){
             }
             ?>
         </button>
-        <?php
-            $this->load->view('dashboard/twitter/case_view', array(
-                    "caseMsg" => $mentions[$i]->case[0]
-                ));
-        ?>
+        
+        
     <?php endif?>
     <?php if(count($mentions[$i]->reply_post) > 0):?>
         <button type="button" class="btn btn-inverse btn-mini" value="<?php echo $mentions[$i]->reply_post[0]->response_post_id?>">

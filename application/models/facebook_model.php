@@ -296,20 +296,31 @@ class facebook_model extends CI_Model
     
     
     public function SaveUserFromFacebook($userid, $access_token){
-	
+	$timezone = new DateTimeZone("Europe/London");
 	if(!$this->IsFbUserExists($userid)){
 	    $fql = "select uid, name, username, sex from user where uid = $userid";
-	    $requestResult = curl_get_file_contents('https://graph.facebook.com/fql?q='.urlencode($fql)."&access_token=".$access_token);
-	    $requestResult = json_encode($requestResult);
-	    $currentTime = new DateTime(date('Y-m-d H:i:s e'), $timezone);
-	    $this->db->insert('fb_user_engaged', array(
-		"facebook_id" => number_format($user->uid,0,'.',''),
-		"name" => $user->name,
-		"sex" => isset($user->sex) ? $user->sex : "",
-		"created_at" => $currentTime->format("Y-m-d H:i:s"),
-		"retrieved_at" => $currentTime->format("Y-m-d H:i:s"),
-		"username" => $user->username
-	    ));
+	    $requestResult = curl_get_file_contents('https://graph.facebook.com/fql?q='.urlencode($fql)."&access_token=".$access_token->token);
+	    $requestResult = json_decode($requestResult);
+	    if(count($requestResult->data) > 0)
+	    {
+		$fbuser = $requestResult->data[0];
+		$currentTime = new DateTime(date('Y-m-d H:i:s e'), $timezone);
+		$fb_user_to_save = array(
+		    "facebook_id" => $fbuser->uid,
+		    "name" => $fbuser->name,
+		    "sex" => isset($fbuser->sex) ? substr($fbuser->sex, 0, 1) : "",
+		    "created_at" => $currentTime->format("Y-m-d H:i:s"),
+		    "retrieved_at" => $currentTime->format("Y-m-d H:i:s"),
+		    "username" => $fbuser->username
+		);
+		print_r($fbuser);
+		print_r($fb_user_to_save);
+		$this->db->insert('fb_user_engaged', $fb_user_to_save);
+		return $this->db->insert_id();
+	    }
+	}
+	else{
+	    return null;
 	}
     }
     

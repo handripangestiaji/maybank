@@ -83,7 +83,7 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_pm[$i]->po
         <br>
         <?php 
             $comment=$this->facebook_model->RetrievePmDetailFB(array('a.conversation_id'=>$fb_pm[$i]->conversation_id));
-            for($j=1;$j < count($comment) ;$j++){
+            for($j=0;$j < count($comment) ;$j++){
                 if($comment[$j]->messages != '' || $comment[$j]->attachment != '' ):
         ?>
         <div class="engagement-body">

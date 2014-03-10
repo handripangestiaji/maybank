@@ -1010,7 +1010,7 @@ class Media_stream extends CI_Controller {
         
         if($action=='privateMessages'){
 	    unset($filter['a.channel_id']);
-            $filter['d.channel_id']=$channel_ids;
+            $filter['channel_id']=$channel_ids;
             $data['fb_pm'] = $this->facebook_model->RetrievePmFB($filter,$limit);
             $data['CountPmFB']=$this->facebook_model->CountPmFB($filter);
             $this->load->view('dashboard/facebook/private_message.php',$data);

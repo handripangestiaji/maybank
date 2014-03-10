@@ -36,7 +36,7 @@
                       <!--td><button class="btn btn-primary icon-book"></button></td-->
                       <td style="width:130px">
                         <?php
-                            if($action->action_type == 'reply_facebook' || $action->action_type == 'twitter_reply'){
+                            if($action->action_type == 'reply_facebook' || $action->action_type == 'twitter_reply' || $action->action_type == 'conversation_facebook'){
                                 echo '"'.$action->comment_content.'"';
                             }
                             elseif($action->action_type == 'case_created'){

@@ -582,11 +582,11 @@ class facebook_model extends CI_Model
     
     function GetChannelActionPM($filter, $is_where_in = false){
 
-    $this->db->select("a.*, b.username, b.display_name, c.MESSAGES, d.messages, d.assign_to, 
+    $this->db->select("a.*, b.username, b.display_name, c.MESSAGES as comment_content, d.messages, d.assign_to, 
     	               e.display_name AS assign_name, f.display_name AS solved_name,d.solved_message");
     $this->db->from("channel_action a INNER JOIN
                     `user` b ON b.user_id = a.created_by LEFT JOIN
-        			`social_stream_facebook_conversation_detail` c ON c.detail_id = a.post_id LEFT JOIN
+        			`social_stream_facebook_conversation_detail` c ON c.detail_id_from_facebook = a.stream_id_response LEFT JOIN
         			`case` d ON d.case_id = a.case_id LEFT JOIN
         			`user` e ON e.user_id = d.assign_to LEFT JOIN
         			`user` f ON f.user_id = d.solved_by");

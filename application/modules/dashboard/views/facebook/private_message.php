@@ -83,7 +83,8 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_pm[$i]->po
         <br>
         <?php 
             $comment=$this->facebook_model->RetrievePmDetailFB(array('a.conversation_id'=>$fb_pm[$i]->conversation_id));
-            for($j=0;$j<count($comment);$j++){
+            for($j=0;$j < count($comment) ;$j++){
+                if($comment[$j]->messages != '' || $comment[$j]->attachment != '' ):
         ?>
         <div class="engagement-body">
             <span class="engagement-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>    
@@ -99,10 +100,29 @@ $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_pm[$i]->po
                
             </p>
             <div>
-                <p>"<?php echo RemoveUrlWithin($comment[$j]->messages); ?>"</p>
+                <?php if($comment[$j]->messages != ""){?>
+                    <p>"<?php echo RemoveUrlWithin($comment[$j]->messages); ?>"</p>
+                <?php }?>
+                
+                <?php if($comment[$j]->attachment != ''):
+                    $attachment = json_decode($comment[$j]->attachment);
+                    $attachment = $attachment->data[0];
+                    if(isset($attachment->image_data)){
+                        if(isset($attachment->image_data->url))
+                            echo '<img src="'.$attachment->image_data->url.'" style="width:60%;margin-left:30px;" />';
+                        else
+                            echo '<img src="https://www.facebook.com/ajax/messaging/attachment.php?attach_id='.$attachment->id.'&mid='.substr($comment[$j]->detail_id_from_facebook, 2).'&preview=1" style="width:60%;margin-left:30px;" />';
+                    }
+                    else {
+                ?>
+                    <a href="https://www.facebook.com/ajax/messaging/attachment.php?attach_id=<?=$attachment->id.'&mid='.substr($comment[$j]->detail_id_from_facebook, 2)?>" targe="_blank">Attachment</a>
+                <?php
+                    }
+                endif;?>
             </div>
         </div>
-       <?php } ?>
+       <?php endif;
+       } ?>
        <!-- ==================== CONDENSED TABLE HEADLINE ==================== -->
         <div href='#modal-action-log-<?php echo $fb_pm[$i]->post_id ?>' data-toggle='modal' class="containerHeadline specialToggleTable">
 

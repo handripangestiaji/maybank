@@ -576,8 +576,8 @@ class facebook_model extends CI_Model
 	    $this->db->where($filter);
 	else
 	    $this->db->where_in('a.post_id',$filter);
-
-        return $this->db->get()->result();
+	$result = $this->db->get()->result();
+        return $result;
     }
     
     function GetChannelActionPM($filter, $is_where_in = false){

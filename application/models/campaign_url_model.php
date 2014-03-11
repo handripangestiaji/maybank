@@ -69,9 +69,7 @@ class Campaign_url_model extends CI_Model
 		
 		$this->db->where('id', $id);
 		
-		$this->db->delete($this->_table);
-		
-		return true;
+		return($this->db->delete($this->_table));
 	}
 	
 	function count_record()

@@ -40,12 +40,17 @@
         </div>
         <div class="cms-table pull-right">
             <?php
-            	$data['campaigns'] = $campaigns ? $campaigns:'';
-            	$data['products'] = $products ? $products:'';
-            	$data['tags'] = $tags ? $tags:'';
-            	$data['urls'] = $urls ? $urls:'';
-            	$data['pagination'] = $pagination ? $pagination : '';
-                $this->load->view($cms_view, $data);
+            	//$data['campaigns'] = $campaigns ? $campaigns:'';
+            	//$data['products'] = $products ? $products:'';
+            	//$data['tags'] = $tags ? $tags:'';
+            	//$data['urls'] = $urls ? $urls:'';
+            	//$data['pagination'] = $pagination ? $pagination : '';
+                if(isset($data)){
+                    $this->load->view($cms_view,$data);
+                }
+                else{
+                    $this->load->view($cms_view);        
+                }
             ?>
         </div>
     </div>

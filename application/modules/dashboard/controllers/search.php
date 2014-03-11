@@ -71,7 +71,7 @@ class Search extends CI_Controller {
 	       if($new_fb_pm){
 		    $data_fb_pm = array();
 		    foreach($new_fb_pm as $nfp){
-			 $filter_fb = array('d.post_id' => $nfp->post_id,
+			 $filter_fb = array('e.post_id' => $nfp->post_id,
 					    'channel_id' => $channel_id);
 			 $result = $this->facebook_model->RetrievePmFB($filter_fb);
 			 $data_fb_pm = array_merge($data_fb_pm,$result);

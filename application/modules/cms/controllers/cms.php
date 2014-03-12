@@ -632,10 +632,11 @@ class Cms extends MY_Controller {
     public function edit_product($id)
     {
           $product = $this->product_model->getOneBy(array('id' => $id));
-          $data['row'] = $product;
-          $data['products_avail'] = $this->product_model->get();
-    	  $data['countries'] = $this->users_model->get_country()->result();
-          $this->load->view('cms/edit_product',$data);
+          $data['data']['row'] = $product;
+          $data['data']['products_avail'] = $this->product_model->get();
+    	  $data['data']['countries'] = $this->users_model->get_country()->result();
+    	  $data['cms_view'] = 'edit_product';
+          $this->load->view('cms/index',$data);
     }
     
     public function edit_campaign($id)
@@ -658,12 +659,14 @@ class Cms extends MY_Controller {
           $this->form_validation->set_rules('description','Description','required');
           $this->form_validation->set_rules('parent_id','Parent','required');
           $this->form_validation->set_rules('country_code','Country','required');
+          $id = $this->input->post('id');
           
           if ($this->form_validation->run() == FALSE){
-               $this->load->view('cms/edit_product');
+               $this->session->set_flashdata('message_type','error');
+               $this->session->set_flashdata('message_body','Please fill the required field.');
+               redirect('cms/edit_product/'.$id);
           }
           else{
-               $id = $this->input->post('id');
                $value = array('product_name' => $this->input->post('name'),
                               'description' => $this->input->post('description'),
                               'parent_id' => $this->input->post('parent_id'),

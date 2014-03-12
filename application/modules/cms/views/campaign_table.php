@@ -43,7 +43,7 @@
                                                             <div class="pull-right" style="width: 25%; text-align: right">
                                                                 <p>
                                                                 <a href="cms/edit_campaign/<?php echo $v['id']; ?>"><button class="btn btn-primary btn-small" type="button">Edit</button></a>
-                                                                <a href="cms/download_campaign/<?php echo $v['id']; ?>"><button class="btn btn-success btn-small" type="button">Download</button></a>
+                                                                <a href="cms/cms_ci/download_campaign/<?php echo $v['id']; ?>"><button class="btn btn-success btn-small" type="button">Download</button></a>
                                                                 <a href="cms/delete_campaign/<?php echo $v['id']; ?>" onclick="return confirm('Are you sure want to delete this campaign?');"><button class="btn btn-danger btn-small" type="button">Delete</button></a>
                                                                 </p>
                                                             </div>

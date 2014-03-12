@@ -313,4 +313,22 @@ echo "<pre>";
 			$this->db->trans_complete();
 		}
 	}
+	
+	public function getForDownload($id){
+		$this->db->select('qrcode_image,short_code,campaign_name,full_name,short_urls.increment as inc,short_urls.created_at as created_at');
+		$this->db->from('content_campaign');
+		$this->db->join('content_campaign_url','content_campaign.id = content_campaign_url.campaign_id');
+		$this->db->join('short_urls','content_campaign_url.url_id = short_urls.id','left');
+		$this->db->join('user','short_urls.user_id = user.user_id','left');
+		$this->db->where('content_campaign.id',$id);
+		return $this->db->get();
+	}
+	
+	public function getProductsByCampaign($id){
+		$this->db->select('*');
+		$this->db->from('content_products_campaign');
+		$this->db->join('content_products','content_products_campaign.products_id = content_products.id');
+		$this->db->where('content_products_campaign.campaign_id');
+		return $this->db->get();
+	}
 }

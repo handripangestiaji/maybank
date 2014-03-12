@@ -2087,7 +2087,7 @@ $.fn.ToCase = function(type){
     var hashUrl = window.location.hash;
     var splitUrl = hashUrl.split('/');
     
-    if(splitUrl.length == 3 ){
+    if(splitUrl.length == 4 ){
         var id = $('#post' + splitUrl[2]).closest('ul.floatingBoxContainers').attr('id');
         
         $('#' + id).parent().find('ul').hide();
@@ -2110,7 +2110,7 @@ $.fn.ToCase = function(type){
             $.ajax({
                 "url" : BASEURL + "dashboard/media_stream/SinglePost/"+splitUrl[2],
                 "success" : function(response){
-                    $('#c'+splitUrl[1] + " .subStream ul:nth-child(1)").prepend(response);
+                    $('#c'+ splitUrl[1] + "_" + splitUrl[3] + " .subStream ul:nth-child(1)").prepend(response);
                     $('#post' + splitUrl[2]).closest('.subStream').animate({
                         scrollTop: 0
                     }, 100, function(){

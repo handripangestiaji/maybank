@@ -936,20 +936,7 @@ class Media_stream extends CI_Controller {
     }
     
     
-    public function ReadSinglePost(){
-	$post_id = $this->input->get('post_id');
-	$type = $this->input->get('type');
-	
-	if($type == "facebook"){
-	    
-	}
-	else if($type == "twitter"){
-	    
-	}
-	else{
-	    
-	}
-    }
+   
     //=========================================END facebook function=============================================    
 
     /**
@@ -1047,6 +1034,7 @@ class Media_stream extends CI_Controller {
         
         $this->load->model('campaign_model');
         $data['product_list'] = $this->campaign_model->GetProduct();
+	$data['no_load_more'] = true;
 	if($post->type == "twitter"){
 	    $filter['a.post_id'] = $post->post_id;
             $data['mentions']=$this->twitter_model->ReadTwitterData($filter,1);
@@ -1058,6 +1046,7 @@ class Media_stream extends CI_Controller {
 	    $filter['c.post_id'] = $post->post_id;
             $data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter,1);
             $data['count_fb_feed']=$this->facebook_model->CountFeedFB($filter);
+	    
             $this->load->view('dashboard/facebook/wall_post.php',$data);
 	}
 	

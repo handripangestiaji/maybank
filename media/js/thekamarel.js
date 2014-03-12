@@ -1488,6 +1488,10 @@ $(function(){
                                 {
                                     commentButton.removeAttr("disabled");
                                     if(response.success == true){
+                                        commentButton.closest('li').find('p.indicator >.open-thread, p.indicator > .replied-btn').remove();
+                                        
+                                        commentButton.closest('li').find('p.indicator').append('<button type="button" class="btn btn-inverse btn-mini replied-btn" style="text-align:left">Replied by: You ' +
+                                                                                               response.action_log.created_at +' </button>');
                                         commentButton.parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
                                         '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
                                         '<strong>Success!</strong> '+response.message+' </div>');

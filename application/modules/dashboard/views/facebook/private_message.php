@@ -10,17 +10,19 @@ $sender = $fb_pm[$i]->participant->sender->facebook_id == $fb_pm[$i]->social_id 
     <?php
         if(count($fb_pm[$i]->case) > 0)
             $this->load->view('dashboard/facebook/case_view', array(
-                    "caseMsg" => $fb_pm[$i]->case[0]
+                    "caseMsg" => $fb_pm[$i]->case[0],
+                    "sender" => $sender
                 ));
     ?>
     <input type="hidden" class="postId" value="<?php echo $fb_pm[$i]->post_id; ?>" />
+    <input type="hidden" name="facebook_user" value="<?php echo $sender->facebook_id; ?>" />
     <div class="circleAvatar"><img src="<?=base_url('dashboard/media_stream/SafePhoto?photo=')."https://graph.facebook.com/".number_format($sender->facebook_id, 0,'.','')?>/picture?small" alt=""></div>
      <?php if (IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action')):?>
         <div class="read-mark <?php echo $fb_pm[$i]->is_read==0 ? 'redText' : 'greyText'?>"><i class="icon-bookmark icon-large"></i></div>
     <?php endif ?>
     <br />
     <p class="headLine">
-        <span class="author"><?php echo $fb_pm[$i]->participant->sender->name; ?></span>
+        <span class="author"><?php echo $sender->name; ?></span>
         <i class="icon-circle"></i>
         <span>Conversations</span>
         <i class="icon-circle"></i>
@@ -133,6 +135,7 @@ $sender = $fb_pm[$i]->participant->sender->facebook_id == $fb_pm[$i]->social_id 
         <?php 
         $data['posts'] = $fb_pm;
         $data['i'] = $i;
+        
         $this->load->view('dashboard/case_field',$data);
         
         ?>

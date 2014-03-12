@@ -24,9 +24,26 @@ $timezone = new DateTimeZone($this->session->userdata('timezone'));
             ?>
             <ol style="margin: 0;padding: 0;">
                 <?php foreach($case_conversation as $conversation):
-                    echo "<pre>";print_r($conversation);echo "</pre>";
+                    $html = "";
+                    if(isset($conversation->facebook_data->snippet))
+                        $html = $conversation->facebook_data->snippet;
+                    else if(isset($conversation->facebook_data->post_content))
+                        $html = $conversation->facebook_data->post_content;
+                    else if(isset($conversation->facebook_data->comment_content))
+                        $html = $conversation->facebook_data->comment_content;
                 ?>
-               
+                  <li style="display: block;">
+                    <img src="<?=base_url('dashboard/media_stream/SafePhoto?photo=')."https://graph.facebook.com/".number_format($sender->facebook_id, 0,'.','')?>/picture?small" alt="" style="height: 40px;margin: 6px 10px" class="left" />
+                        <p style="padding: 9px 2px;margin: 2px 5px" class="left">
+                            
+                            <span class="author"><?php echo $sender->name?>: </span>
+                            <span class="text"><?=$html?></span><br />
+                            <span class="created-time" style="font-size:10px;color: #62312A;">at  <?php $created_at = new DateTime($conversation->created_at.' Europe/London', $timezone);
+                            echo $created_at->format("d-F-y h:i A")
+                            ?></span>
+                        </p>
+                        <br clear="all"/>
+                  </li>
                 <?php endforeach;?>
             </ol>
             

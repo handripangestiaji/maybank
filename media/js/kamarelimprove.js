@@ -106,81 +106,22 @@ $(function(){
         
     });
     
-    $(this).on('click', '.assign-case .facebook', function(e){
+   
+    
+    $(this).on('click', '.assign-case .facebook_conversation, .assign-case .facebook', function(e){
         var modalID = $(this).attr("href");
-        var facebook_id = $(modalID).find("input[name=user_id]").val();
-        var type = $(modalID + " input[name=type_facebook]").val();
-       // alert(type)
+        var facebook_id = $(modalID + " input[name=post_id]").val();
+    
+        var type = $(modalID + " input[name=type]").val();
         $(modalID + " .loader-image").show();
-        $(modalID + " .related-conversation-body").remove();
         var textToAppend = "" ;
-        var author_id = $(modalID).closest('.sender_id');
-        var post_type;
         
         $(this).LoadContentAsync({
-            url : BASEURL + "case/mycase/FacebookRelatedConversation/" + facebook_id + "/"+type,
+            url : BASEURL + "case/mycase/FacebookRelatedConversation/",
             urlParameter : {
                 post_id : $(modalID + " input[name=post_id]").val(),
                 channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
-                //author_id:author_id
-            },
-            callback : function(response){
-//                console.log(response.length);
-                $(modalID + " .loader-image").hide();
-                if(response.length>=1){
-                    for(i = 0; i<response.length;i++){
-                        var myDate = new Date(response[i].created_at + " UTC");
-                        if(response[i].type=="facebook_comment"){
-                            post_type="Wall Post";
-                        }else{
-                            post_type="Private Messages";
-                        }   
-                                             
-                        $(modalID + ' form').append(
-                             '<div class="related-conversation-body">' + 
-                            '<span class="related-conversation-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>' + 
-                            '<p class="headLine">' + 
-                                '<input type="checkbox" class="related-conversation-check" value="' + response[i].comment_post_id + '">' + 
-                                '<span class="author">' +  response[i].name + '</span>' + 
-                                '<i class="icon-circle"></i>' + 
-                                '<span>posted a <span class="cyanText">'+ post_type +'</span></span>' + 
-                                '<i class="icon-circle"></i>' + 
-                                '<span class="UTCTimestamp">' +  dateFormat(myDate, "mmmm dS, yyyy h:MM:ss TT") + '</span>' + 
-                                '<i class="icon-play-circle moreOptions pull-right"></i>' +
-                            '</p>' + 
-                            '<div>' +
-                                '<p>' + response[i].comment_content + '</p>' +
-                                '<!--p><button class="btn btn-primary btn-mini btn-reply" style="margin-left: 5px;">Reply</button></p-->' +
-                            '</div></div>'
-                        );
-                       // $('.UTCTimestamp').localTimeFromUTC('MM/dd/yyyy hh:mm:ss a');
-                    }
-                }else{
-                     $(modalID + ' form').append(
-                             '<div class="related-conversation-body">' + 
-                            '<span class="related-conversation-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>' + 
-                            '<h2>No related conversation exists.</h2>'
-                        );
-                }
-            }
-        });
-    });
-    
-    $(this).on('click', '.assign-case .facebook_conversation', function(e){
-        var modalID = $(this).attr("href");
-        var facebook_id = $(modalID + " input[name=post_id]").val();
-       // var author_id = $(modalID).closest('.sender_id');
-       // console.log(author_id);
-        var type = $(modalID + " input[name=type]").val();
-        $(modalID + " .loader-image").show();
-        //$(modalID + " .related-conversation-body").remove();
-        var textToAppend = "" ;
-        
-        $(this).LoadContentAsync({
-            url : BASEURL + "case/mycase/FacebookRelatedConversation/" + facebook_id + "/" + type,
-            urlParameter : {
-                post_id : $(modalID + " input[name=post_id]").val(),
-                channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),                
+                facebook_id : $(this).closest('li').find('input[name="facebook_user"]').val()
             },
             callback : function(response){
                 //console.log(response);
@@ -188,27 +129,19 @@ $(function(){
                 if(response.length == 0)
                     $(modalId).append("<h2>No related conversation found.</h2>");
                 for(i = 0; i<response.length;i++){
-                      var myDate = new Date(response[i].created_at + " UTC");
-                       if(response[i].type=="facebook_comment"){
-                            post_type="Wall Post";
-                        }else{
-                            post_type="Private Messages";
-                        }  
+                    type = response[i].type.replace("facebook_","");
                     $(modalID + ' form').append(
                          '<div class="related-conversation-body">' + 
                         '<span class="related-conversation-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>' + 
                         '<p class="headLine">' + 
-                            '<input type="checkbox" class="related-conversation-check" value="' + response[i].comment_post_id + '">' + 
-                            '<span class="author">' +  response[i].name + '</span>' + 
+                            '<input type="checkbox" class="related-conversation-check" value="' + response[i].social_stream_post_id + '">' +
+                            '<input type="hidden" class="related-conversation-check" value="' + response[i].type + '">' + 
+                            '<span class="cyanText" style="text-transform:capitalize;"> '+ type +'</span> ' +
                             '<i class="icon-circle"></i>' + 
-                            '<span>posted a <span class="cyanText">'+post_type+'</span></span>' +
-                            '<i class="icon-circle"></i>' + 
-                            '<span class="UTCTimestamp">' +  dateFormat(myDate, "mmmm dS, yyyy h:MM:ss TT") + '</span>' + 
-                            '<i class="icon-play-circle moreOptions pull-right"></i>' +
+                            '<span class="UTCTimestamp">' +  response[i].created_at + '</span>' + 
                         '</p>' + 
                         '<div>' +
-                            '<p>' + response[i].comment_content + '</p>' +
-                            '<!--p><button class="btn btn-primary btn-mini btn-reply" style="margin-left: 5px;">Reply</button></p-->' +
+                            '<p>' + response[i].content + '</p>' +
                         '</div></div>'
                     );
                    

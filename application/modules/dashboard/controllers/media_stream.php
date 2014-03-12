@@ -57,8 +57,6 @@ class Media_stream extends CI_Controller {
 	$this->load->model('campaign_model');
 	$data['product_list'] = $this->campaign_model->GetProduct();
 	$data['channel_id'] = $channel_id;
-	    
-	    
         $filter=array('role_id <>'=>'5');
 	
         //print_r($getUserCountry->country_code);
@@ -610,23 +608,25 @@ class Media_stream extends CI_Controller {
         
         if(!is_array($return) && $return!='error'){//send comment          
             $action = array(
-                "action_type" => "reply_facebook",
-        		"action_type" => "reply_facebook",
-        		"channel_id" =>$channel,
-        		"created_at" => date("Y-m-d H:i:s"),
-        		"created_by" => $this->session->userdata('user_id'),
-        		"stream_id_response" => $return
+		"action_type" => "reply_facebook",
+        	"action_type" => "reply_facebook",
+        	"channel_id" =>$channel,
+        	"created_at" => date("Y-m-d H:i:s"),
+        	"created_by" => $this->session->userdata('user_id'),
+        	"stream_id_response" => $return
     	    );
             
-            echo json_encode(
-    		    array(
-                'success' => true,
-    			'message' => "successfully done",
-    			'result' => $return
-    		    )
-    		);		    
+           	    
             $this->account_model->CreateFbCommentAction($action,$post_id,$this->input->post('like') === 'true' ? 1 : 0);
             $this->account_model->CreateFbReplyAction($post_id,$stream_id->post_stream_id,$comment,$reply_type,$product_type,$url);
+	     echo json_encode(
+    		    array(
+			'success' => true,
+    			'message' => "successfully done",
+    			'result' => $return,
+			'action_log' => $action
+    		    )
+    		);	
                                       
         }elseif(is_array($return)){//replay in reply        
             if($return['id']){
@@ -640,17 +640,21 @@ class Media_stream extends CI_Controller {
         		"stream_id_response" => $return
         	);
             
-            echo json_encode(
-    		    array(
-			'success' => true,
-    			'message' => "successfully done",
-    			'result' => $return
-    		    )
-    		);
+           
             
             $this->account_model->CreateFbCommentAction($action,$post_id,$this->input->post('like') === 'true' ? 1 : 0);
             $this->account_model->CreateFbReplyAction($post_id,'',$comment,$reply_type,$product_type,$url);
-
+	    $action['created_at'] = new DateTime($action['created_at']." Europe/London");
+	    $action['created_at']->setTimezone(new DateTimeZone($this->session->userdata('timezone')));
+	    $action['created_at'] = $action['created_at']->format("d-M-y h:i A");
+	    echo json_encode(
+    		    array(
+			'success' => true,
+    			'message' => "successfully done",
+    			'result' => $return,
+			'action_log' => $action
+    		    )
+    		);
             }else{
                 echo json_encode(
         		    array(
@@ -663,7 +667,7 @@ class Media_stream extends CI_Controller {
        }else{
                 echo json_encode(
         		    array(
-                    'success' => false,
+				'success' => false,
         			'message' => "reply was failed"   			
         		    )
     		    );

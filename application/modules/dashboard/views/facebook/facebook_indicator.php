@@ -16,7 +16,7 @@
         $reply_date->setTimezone($timezone);
 
         $indicator['reply'] = '<button type="button" class="btn btn-inverse btn-mini replied-btn" style="text-align:left"  value="'.$post->social_stream_post_id.'"> Replied By: '.
-                        $post->page_reply[0]->user->display_name ." ".$reply_date->format("d-M-y h:i A").
+                        (isset($post->page_reply[0]->user->display_name) ? $post->page_reply[0]->user->display_name : "--Deleted User--" )." ".$reply_date->format("d-M-y h:i A").
                         "</button>";
         
         

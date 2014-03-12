@@ -134,7 +134,7 @@ class Shorturl_model extends CI_Model
 			throw new \Exception("Invalid Id");
 		}
 		
-		$this->db->where('id', $id);
+		$this->db->where('short_urls_id', $id);
 		$this->db->delete('short_url_tag');
 		
 		$this->db->where('id', $id);

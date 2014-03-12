@@ -49,6 +49,8 @@ class Media_stream extends CI_Controller {
 	$data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter,$limit);
 	$data['count_fb_feed']=$this->facebook_model->CountFeedFB($filter);
 	//$data['own_post'] = $this->facebook_model->RetrievePostFB($filter);
+	$filter['c.channel_id'] = $filter['channel_id'];
+	unset($filter['channel_id']);
 	$data['fb_pm'] = $this->facebook_model->RetrievePmFB($filter,$limit);
 	$filter=array();
 	$data['CountPmFB']=$this->facebook_model->CountPmFB($filter);
@@ -730,8 +732,20 @@ class Media_stream extends CI_Controller {
 	    "log_text" => $comment,
 	    "case_id"=> $case_id,
 	);
-        
+	
         $this->account_model->CreateFbPMAction($action);
+	$page_reply = array(
+	    "case_id" => $this->input->post('case_id') == 'null' ? null : $this->input->post('case_id'),
+	    "url" => null,
+	    "message" => $comment,
+	    "social_stream_post_id" => $post_id,
+	    "conversation_detail_id" => null,
+	    "post_at" => date("Y-m-d H:i:s"),
+	    "created_at" => date("Y-m-d H:i:s"),
+	    "product_id" => $this->input->post('product_id'),
+	    "user_id" => $this->session->userdata('user_id')
+	);
+	$this->account_model->CreateReplyAction($page_reply);
         $case = $this->account_model->isCaseIdExists($post_id);
 	if(count($case)>0){
 	    $post_at=$case[0]->created_at;  
@@ -1014,12 +1028,11 @@ class Media_stream extends CI_Controller {
         
         if($action=='privateMessages'){
 	    unset($filter['a.channel_id']);
-            $filter['channel_id']=$channel_ids;
+            $filter['c.channel_id']=$channel_ids;
             $data['fb_pm'] = $this->facebook_model->RetrievePmFB($filter,$limit);
             $data['CountPmFB']=$this->facebook_model->CountPmFB($filter);
             $this->load->view('dashboard/facebook/private_message.php',$data);
         }
-        //print_r($data);
     }
     
     public function SinglePost($post_id){

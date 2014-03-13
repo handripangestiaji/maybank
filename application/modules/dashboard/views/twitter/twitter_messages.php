@@ -4,6 +4,12 @@
     for($i=0;$i<count($directmessage);$i++){
     ?>
     <li id="post<?=$directmessage[$i]->social_stream_post_id?>">
+        <?php
+            if(count($directmessage[$i]->case) > 0)
+                $this->load->view('dashboard/twitter/case_view', array(
+                    "caseMsg" => $directmessage[$i]->case[0]
+                ));
+        ?>
         <input type="hidden" class="postId" value="<?php echo $directmessage[$i]->social_stream_post_id; ?>" />
         <div class="circleAvatar"><img src="<?php echo base_url('dashboard/media_stream/SafePhoto?photo=').$directmessage[$i]->sender->profile_image_url; ?>" alt=""></div>
         <div class="read-mark <?php if($directmessage[$i]->is_read==0){echo 'redText';} else { echo 'greyText'; } ?>"><i class="icon-bookmark icon-large"></i></div>
@@ -28,7 +34,7 @@
         </p>
         <p class="indicator">
         <?php if(count($directmessage[$i]->case) > 0):?>
-            <button type="button" data-toggle="modal" href="caseItem<?=$directmessage[$i]->case[0]->case_id?>"
+            <button type="button" data-toggle="modal" href="#caseItem<?=$directmessage[$i]->case[0]->case_id?>"
                 class="twitter-case-related btn <?=$directmessage[$i]->case[0]->status == "pending" ? "btn-purple" : "btn-inverse"?> btn-mini" value="<?php echo $directmessage[$i]->case[0]->case_id?>">Case #<?php echo $directmessage[$i]->case[0]->case_id?>
                 <?php
                 if($directmessage[$i]->case[0]->status == "pending"){
@@ -45,11 +51,7 @@
                 }
                 ?>
             </button>
-        <?php
-            $this->load->view('dashboard/twitter/case_view', array(
-                    "caseMsg" => $directmessage[$i]->case[0]
-                ));
-        ?>
+       
         <?php endif?>
         <?php if($directmessage[$i]->response_post_id):?>
         

@@ -21,7 +21,7 @@ class Cms extends MY_Controller {
         ||IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_View')||IsRoleFriendlyNameExist($this->user_role,'Content Management_TAG_View'))
      {
           $config['base_url'] = site_url('cms/index');
-	  $config['total_rows'] = $this->tag_model->count_record();
+	  $config['total_rows'] = $this->campaign_model->count_record();
 	  $config['per_page'] = 10;
 	  $config["uri_segment"] = 3;
 	  $config['next_link'] = 'Next';

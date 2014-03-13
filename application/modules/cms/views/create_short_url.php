@@ -118,45 +118,6 @@ for($i=0;$i<count($this->user_role);$i++){
                     </div>
                </div>
                <?php }}?>
-                <div class="row-fluid" style="border-bottom: solid 1px #C9C9C9; margin-bottom: 10px;">
-                    <h4>Short URL List</h4>    
-                </div>                                
-                <div class="floatingBox table">
-                    <div class="table-head row-fluid">
-                        <table class="table table-striped">
-                            <thead>
-                              <tr>
-                                <th>Full Url Path</th>
-                                <th>Short Code</th>
-                                <th>Total Used</th>
-                                <th>Date Created</th>
-                                <th>Creator</th>
-                                <th>&nbsp;</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                            <?php if($shorturls): ?>
-                                <?php foreach($shorturls as $v): ?>
-                                        <tr>
-                                                <td><?php echo $v->long_url ?></td>
-                                                <td><a href="<?php echo site_url('cms/url/'.$v->short_code) ?>" target="_blank" ><?php echo $v->short_code ?></a></td>
-                                                <td><?php echo $v->increment ?></td>
-                                                <td><?php echo date('M d, Y', strtotime($v->created_at)) ?></td>
-                                                <td><?php echo $v->display_name ?></td>
-                                                <td>
-                                                <a href="<?php echo site_url('cms/create_short_url?action=delete&id='.$v->id)?>" class="btn btn-mini btn-danger pull-right">delete</a>
-                                                <!-- <button id="delete_btn" class="btn btn-mini btn-danger pull-right" type="button">delete</button> -->
-                                                </td>
-                                                        </tr>
-                                <?php endforeach; ?>
-                            <?php endif;?>
-                            </tbody>
-                        </table>
-                    </div>
-                     <div class="page pull-right">
-                     <?php echo $pagination ?>
-                    </div>
-                </div>
             </div>
             <?php endif;?>
             <!-- ==================== END OF FIRST TAB CONTENT ==================== -->
@@ -228,44 +189,6 @@ for($i=0;$i<count($this->user_role);$i++){
                         </form>
                     </div>
                 </div>
-                <div class="row-fluid" style="border-bottom: solid 1px #C9C9C9; margin-bottom: 10px;">
-                    <h4>Short URL List</h4>    
-                </div>                                
-                <div class="floatingBox table">
-                    <div class="table-head row-fluid">
-                        <table class="table table-striped">
-                            <thead>
-                              <tr>
-                                <th>Full Url Path</th>
-                                <th>Short Code</th>
-                                <th>Total Used</th>
-                                <th>Date Created</th>
-                                <th>Creator</th>
-                                <th>&nbsp;</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                            <?php if($shorturls): ?>
-                                <?php foreach($shorturls as $v): ?>
-                                        <tr>
-                                                <td><?php echo $v->long_url ?></td>
-                                                <td><a href="<?php echo site_url('cms/url/'.$v->short_code) ?>" target="_blank" ><?php echo $v->short_code ?></a></td>
-                                                <td><?php echo $v->increment ?></td>
-                                                <td><?php echo date('M d, Y', strtotime($v->created_at)) ?></td>
-                                                <td><?php echo $v->display_name ?></td>
-                                                <td>
-                                                <a href="<?php echo site_url('cms/create_short_url?action=delete&id='.$v->id)?>" class="btn btn-mini btn-danger pull-right">delete</a>
-                                                <!-- <button id="delete_btn" class="btn btn-mini btn-danger pull-right" type="button">delete</button> -->
-                                                </td>
-                                                        </tr>
-                                <?php endforeach; ?>
-                            <?php endif;?>
-                            </tbody>
-                        </table>
-                    </div>
-                     <div class="page pull-right">
-                     <?php echo $pagination ?>
-                    </div>
             </div>
             <!-- ==================== END OF SECOND TAB CONTENT ==================== -->
             </div>

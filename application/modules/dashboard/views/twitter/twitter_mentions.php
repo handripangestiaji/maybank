@@ -198,7 +198,7 @@ for($i=0;$i<count($mentions);$i++){
     </li>
 <?php } 
 ?>
-<?php if((count($mentions) > 0) && (!isset($is_search))): ?>
+<?php if((count($mentions) > 0) && (!isset($is_search)) && !isset($no_load_more)): ?>
     <div class="filled" style="text-align: center;"><input type="hidden" class="total_groups" value="<?php echo $total_groups?>" />
     <input type="hidden"  class="channel_id" value="<?php echo $mentions[0]->channel_id?>"/>
     <input type="hidden"  class="looppage" value=""/>

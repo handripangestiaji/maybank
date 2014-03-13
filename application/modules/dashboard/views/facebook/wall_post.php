@@ -6,14 +6,22 @@ $timezone=new DateTimeZone($this->session->userdata('timezone'));
 for($i=0; $i<count($fb_feed);$i++):
 $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->post_id, 'a.status <>'=>'reassign'));
 if($fb_feed[$i]->post_content != '<br />'):
-//echo $fb_feed[$i]->post_id;
+
 ?>
-<li class="<?php if(isset($isMyCase[0]->assign_to)){echo "case_".$isMyCase[0]->case_id;} ?>" id="post<?=$fb_feed[$i]->social_stream_post_id?>">
+<li  id="post<?=$fb_feed[$i]->social_stream_post_id?>">
+    <?php
+        if(count($fb_feed[$i]->case) > 0)
+            $this->load->view('dashboard/facebook/case_view', array(
+                    "caseMsg" => $fb_feed[$i]->case[0],
+                    "sender" => $fb_feed[$i]->sender
+                ));
+    ?>
     <input type="hidden" class="postId" value="<?php echo $fb_feed[$i]->post_id; ?>" />
     <input type="hidden" name="user_id" value="<?php echo $this->session->userdata('user_id'); ?>" />
+    <input type="hidden" name="facebook_user" value="<?php echo $fb_feed[$i]->facebook_id; ?>" />
     <div class="circleAvatar"><img src="<?php echo base_url('dashboard/media_stream/SafePhoto?photo=')."https://graph.facebook.com/".number_format($fb_feed[$i]->facebook_id, 0,'.','')?>/picture?small" alt=""></div>
     <?php if (IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action')):?>
-    <div class="read-mark <?php if($fb_feed[$i]->is_read==0){echo 'redText';} else { echo 'greyText'; } ?>"><i class="icon-bookmark icon-large"></i></div>
+        <div class="read-mark <?php echo $fb_feed[$i]->is_read==0 ? 'redText' : 'greyText'?>"><i class="icon-bookmark icon-large"></i></div>
     <?php endif ?>
     <br />
     <p class="headLine">
@@ -75,51 +83,8 @@ if($fb_feed[$i]->post_content != '<br />'):
     ?>
     </p>
     <p class="indicator">
-    <?php 
-    if(isset($isMyCase[0]->assign_to)){
-          // print_r($isMyCase[count($isMyCase)-1]);
-          $case=new DateTime($isMyCase[count($isMyCase)-1]->solved_at.' Europe/London');
-          $case->setTimezone($timezone);
-          $sendDate=new DateTime($isMyCase[count($isMyCase)-1]->created_at.' Europe/London');
- 
-          //print_r($isMyCase[count($isMyCase)-1]);
-        if($isMyCase[count($isMyCase)-1]->assign_to==$this->session->userdata('user_id') or ($isMyCase[count($isMyCase)-1]->solved_by)){ ?>
-            <button  href="#caseItem-<?php echo isset($isMyCase[count($isMyCase)-1]->case_id) ? $isMyCase[count($isMyCase)-1]->case_id : "" ?>" <?php if($isMyCase[count($isMyCase)-1]->status=="pending"){echo 'data-toggle="modal"';}?> type="button" value="<?php echo $isMyCase[count($isMyCase)-1]->case_id?>" class="btn <?php echo $fb_feed[$i]->case_id != null ? "btn-purple btn-mini case_related ".$fb_feed[$i]->social_stream_type : "btn-inverse btn-mini" ?>" style="text-align:left"><?php echo $fb_feed[$i]->case_id != null ? 'Case #'.$fb_feed[$i]->case_id.' Assign to You ' : 'Case #'.$isMyCase[count($isMyCase)-1]->case_id.' '.'Resolve By:'.$isMyCase[count($isMyCase)-1]->resolve_by.' '.$case->format('j-M-Y h:i A')?></button><?php
-         }else{ ?>
-            <button  href="#caseItem-<?php echo isset($isMyCase[count($isMyCase)-1]->case_id) ? $isMyCase[count($isMyCase)-1]->case_id : "" ?>" <?php if($isMyCase[count($isMyCase)-1]->status=="pending"){echo 'data-toggle="modal"';}?> type="button" value="<?php echo $isMyCase[count($isMyCase)-1]->case_id?>" class="btn <?php echo $fb_feed[$i]->case_id != null ? "btn-purple btn-mini case_related ".$fb_feed[$i]->social_stream_type : "btn-inverse btn-mini" ?>" style="text-align:left">
-                <?php echo $fb_feed[$i]->case_id != null ? 'Case #'.$fb_feed[$i]->case_id.' Assign to: '.$isMyCase[count($isMyCase)-1]->display_name.' '.$sendDate->format('j-M-Y h:i A') : 'Replied'?>
-            </button>  
-        <?php }
-        
-         $assignCase=$this->case_model->CaseRelatedConversationItems(array('case_id'=>$isMyCase[count($isMyCase)-1]->case_id));
-            $data['isMyCase'] = $assignCase;
-            $data['caseMsg']=$isMyCase[count($isMyCase)-1];
-            $data['assign_case_type']='facebook';
-            $this->load->view('dashboard/case_item', $data);
-                           
-    }
-        ?>
-        </p>
-        <p>
-        <?php
-       // print_r($fb_feed[$i]->reply_post[0]);
-        if(isset($fb_feed[$i]->reply_post[0])){
-        if(isset($fb_feed[$i]->channel_action[count($fb_feed[$i]->channel_action) - 1])){?>
-        <button type="button" class="btn btn-inverse btn-mini" style="text-align:left" value="<?php echo $fb_feed[$i]->reply_post[0]->post_id?>">
-        <?php
-        $reply_date = new DateTime($fb_feed[$i]->channel_action[count($fb_feed[$i]->channel_action) - 1]->created_at);
-        $reply_date->setTimezone($timezone);
-        echo "Replied by: ".$fb_feed[$i]->channel_action[count($fb_feed[$i]->channel_action) - 1]->display_name." ".$reply_date->format("d-M-y h:i A") ?>
-        </button> <?php            
-        }else{?>
-        <button type="button" class="btn btn-warning btn-mini no-cursor indicator" >OPEN</button>       
-         <?php }         
-        }else{?>
-        <button type="button" class="btn btn-warning btn-mini no-cursor indicator" >OPEN</button>       
-        <?php }    
-        if(IsRoleFriendlyNameExist($this->user_role,'Social Stream_Current_Social Functions Like, Retweet')):?>
+        <?php $this->load->view('facebook/facebook_indicator', array('post'=>$fb_feed[$i]))?>
         <button class="fblike btn btn-primary btn-mini" style="margin-left: 5px;" value="<?php echo $fb_feed[$i]->post_stream_id;?>"><?php echo $fb_feed[$i]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button> 
-        <?php endif ?>
     </p>    
     <p>
         <span class="btn-engagement"><i class="icon-eye-open"></i> <?php echo $fb_feed[$i]->total_comments;?> Engagements</span> |
@@ -134,32 +99,110 @@ if($fb_feed[$i]->post_content != '<br />'):
         </div>
         <br />
         <?php 
-            $comment = $fb_feed[$i]->reply_post;
+            $comment = $fb_feed[$i]->comments;
             for($j=0;$j<count($comment);$j++):
             $isMyCase2=$this->case_model->chackAssignCase(array('a.post_id' => $comment[$j]->comment_post_id, 'a.status <>'=>'reassign'));
-            
-            if($comment[$j]->comment_id==0){
-                $data['comment'] = $comment;
-                $data['j'] = $j;
-                $data['isMyCase']=$isMyCase;
-                $data['timezone']=$timezone;
-                $this->load->view('dashboard/facebook/facebook_comment', $data);   
+        ?>
+        <div class="engagement-body" <?php if($comment[$j]->comment_id!='0'){ ?> style="padding-left: 45px;" <?php } ?>>
+            <span class="engagement-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>    
+            <p class="headLine">
+                <span class="author"><?php echo $comment[$j]->name; ?></span>
+                <i class="icon-circle"></i>
+                <span>posted a <span class="cyanText">comment</span></span>
+                <i class="icon-circle"></i>
+                <span><?php 
+                $date=new DateTime($comment[$j]->created_at.' Europe/London');
+                $date->setTimezone($timezone);
+                echo $date->format('l, M j, Y h:i A');
                 
-                $inner_reply['comments']=$this->facebook_model->RetriveCommentPostFb(array('a.post_id'=>$comment[$j]->post_id,'comment_id'=>$comment[$j]->comment_stream_id),array()) ;
-                if(isset($inner_reply['comments'])){
-                    //print_r($inner_reply['comments']);
-                    for($k=0; $k<count($inner_reply['comments']);$k++){
-                          //  print_r($row);
-                            $data['comment'] = $inner_reply['comments'];
-                            $data['j'] = $k;
-                            $data['isMyCase']=$isMyCase;
-                            $data['timezone']=$timezone;
-                            $this->load->view('dashboard/facebook/facebook_comment', $data);   
-                    }         
-                }    
-            }
-                   
-            endfor; ?>
+              ?></span></p>
+            <p>
+              <?php
+                $attachment=json_decode($comment[$j]->attachment);
+                if(isset($attachment->media->image->src)){
+                for($att=0;$att<count($attachment);$att++){
+                    echo    "<a href='#modal_comments-".$comment[$j]->comment_post_id."' data-toggle='modal' ><img class='img_attachment' src='".base_url('dashboard/media_stream/SafePhoto?photo=').$attachment->media->image->src."' /></a>";
+                    echo    '<div id="modal_comments-'.$comment[$j]->comment_post_id.'" class="attachment-modal modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+                            <img src="'.base_url('dashboard/media_stream/SafePhoto?photo=').$attachment->media->image->src.'" />
+                            <button type="button" class="close " data-dismiss="modal"><i class="icon-remove"></i></button>
+                        </div>';
+                }
+             }           
+              ?>
+            </p> 
+            
+            <div class="engagement-comment">
+                <p>"<?php echo RemoveUrlWithin($comment[$j]->comment_content); ?>"</p>
+                <?php 
+                    if(isset($isMyCase[count($isMyCase)-1]->assign_to)){
+                        if($isMyCase[count($isMyCase)-1]->assign_to==$this->session->userdata('user_id') or ($isMyCase[count($isMyCase)-1]->solved_by)){
+                ?><h4>
+                <p>
+                    <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Delete') ||
+                            IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Delete')
+                            ):?>
+                        <button type="button" role="button" class="btn btn-mini delete_post comments"  value="<?php echo $comment[$j]->comment_post_id?>" style="border: none; background-color: transparent;"><i class="icon-trash greyText"></i></button>
+                    <?php endif;?>
+                    <button type="button" class="btn btn-warning btn-mini">OPEN</button>
+                    <button class="fblike btn btn-primary btn-mini" value="<?php echo $comment[$j]->post_stream_id?>"><?php echo $comment[$j]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button>
+                    <?php if(($comment[$j]->comment_id)=='0'){?>
+                    <button type="button" class="btn btn-primary btn-engagement-reply btn-mini btn-reply" ><i class="icon-mail-reply"></i></button>
+                    <?php } ?>
+                   <!--button type="button" class="btn btn-danger btn-engagement-case btn-mini btn-case"><i class="icon-plus"></i> CASE</button-->
+                </p></h4><!--222 assign to you-->
+                <?php }else{ ?>
+                <h4>
+                <p>
+                    <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Delete') ||
+                            IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Delete')
+                            ):?>
+                        <button type="button" role="button" class="btn btn-mini delete_post comments"  value="<?php echo $comment[$j]->comment_post_id?>" style="border: none; background-color: transparent;"><i class="icon-trash greyText"></i></button>
+                    <?php endif;?>
+            
+                    <button type="button" class="btn btn-warning btn-mini">OPEN</button>
+                    <button class="fblike btn btn-primary btn-mini" value="<?php echo $comment[$j]->post_stream_id?>"><?php echo $comment[$j]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button>
+                    <?php if(($comment[$j]->comment_id)=='0'){?>
+                    <button type="button" class="btn btn-primary btn-engagement-reply btn-mini btn-reply" ><i class="icon-mail-reply"></i></button>
+                    <?php } ?>
+                    <!--button type="button" class="btn btn-danger btn-engagement-case btn-mini btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button-->
+                </p>
+                </h4> <!--case to others sads3333sad;-->
+                <?php } 
+                }elseif(!isset($isMyCase[count($isMyCase)-1])){ ?>
+                <h4>
+                    <p>
+                    <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Delete') ||
+                        IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Delete')
+                        ):?>
+                        <button type="button" role="button" class="btn btn-mini delete_post comments"  value="<?php echo $comment[$j]->comment_post_id?>" style="border: none; background-color: transparent;"><i class="icon-trash greyText"></i></button>
+                    <?php endif;?>
+                    <button type="button" class="btn btn-warning btn-mini">OPEN</button>
+                    <button class="fblike btn btn-primary btn-mini" value="<?php echo $comment[$j]->post_stream_id?>"><?php echo $comment[$j]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button>
+                    <?php if(($comment[$j]->comment_id)=='0'){?>
+                    <button type="button" class="btn btn-primary btn-engagement-reply btn-mini btn-reply" ><i class="icon-mail-reply"></i></button>
+                    <?php } ?>
+                   <!--button type="button" class="btn btn-danger btn-engagement-case btn-mini btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button-->
+                </p><!--not yet case 44-->
+                </h4>
+                <?php } ?>
+                <div class="fb-reply-engagement-field reply-field hide">
+                    <?php
+                    $data['fb_feed'] = $comment;
+                    $data['i'] = $j;
+                    $data['reply_type']='reply_nested';
+                    $this->load->view('dashboard/reply_field_facebook', $data)?>  
+                </div>
+                 <div class="case-field hide">
+                <?php
+                    /*$data['posts'] = $comment;
+                    $data['posts'] = $fb_feed;
+                    $data['i'] = $j;
+                    $this->load->view('dashboard/case_field',$data);*/
+                ?>
+                </div>                
+            </div>
+        </div>
+       <?php endfor; ?>
        <!-- ==================== CONDENSED TABLE HEADLINE ==================== -->
         <div href='#modal-action-log-<?php echo $fb_feed[$i]->post_stream_id ?>' data-toggle='modal' class="containerHeadline specialToggleTable">
             <i class="icon-table"></i><h2>Action Log</h2>
@@ -188,54 +231,10 @@ if($fb_feed[$i]->post_content != '<br />'):
                 <!--a style="font-size: 20px; cursor: pointer;"><i class="icon-trash greyText deleteFB"></i></a-->
             <?php endif;?>
         <div class="pull-right">
-    <?php  
-    //echo(count($isMyCase));
-    //print_r($isMyCase[0]);
-    //case
-    if(isset($isMyCase[count($isMyCase)-1]->assign_to)){
-       // print_r($isMyCase[count($isMyCase)-1]);
-        if(($isMyCase[count($isMyCase)-1]->assign_to==$this->session->userdata('user_id') && IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action'))){ ?> 
-                <button type="button" class="btn btn-primary btn-reply"><i class="icon-mail-reply"></i></button>
-           <?php if($isMyCase[count($isMyCase)-1]->status=='pending'){ ?>
-                <button type="button" class="btn btn-purple  btn-resolve_fb" name="action" value="<?=$fb_feed[$i]->case_id?>"><i class="icon-check"></i> RESOLVE</button>
-                <button type="button" class="btn btn-danger btn-case fb_reassign" name="action" value="case"><i class="icon-plus"></i> ReAssign</button>  
-           <?php }else{ ?> 
-              <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>
-           <?php   } ?>
+            <?php $this->load->view('facebook_button', array('post'=> $fb_feed[$i]));?>
         </div>
         <br clear="all" />
-    </h4>
-    <?php }elseif((IsRoleFriendlyNameExist($this->user_role,'Social Stream_All_Resolve_Case'))){ ?>
-        <button type="button" class="btn btn-primary btn-reply"><i class="icon-mail-reply"></i></button>
-        <?php if($isMyCase[count($isMyCase)-1]->status=='pending'):?>
-            <button type="button" class="btn btn-purple  btn-resolve_fb" name="action" value="<?=$fb_feed[$i]->case_id?>"><i class="icon-check"></i> RESOLVE</button>
-            <button type="button" class="btn btn-danger btn-case fb_reassign" name="action" value="case"><i class="icon-plus"></i> ReAssign</button>   
-        <?php else:?>
-            <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>   
-        <?php endif?>
-        </div><!--ASDAS-->
-        <br clear="all" />
-    </h4>
-    <?php } 
-    }else{ 
-        ?>
-            <?php if(!$fb_feed[$i]->case_id):
-                if($isMyCase){ ?>                   
-                 <?php }else{ ?>
-                    <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action')):?>
-                        <button type="button" class="btn btn-primary btn-reply"><i class="icon-mail-reply"></i></button>
-                        <button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> CASE</button>
-                    <?php endif;?>
-                <?php } 
-                  else:?>
-                
-            <?php endif?>
-        </div>
-        <br clear="all" />
-    </h4>        
-    <?php 
-    }
-    ?>
+    </h4> 
     <!-- REPLY -->  
     <div class="reply-field hide">
     <?php
@@ -258,7 +257,7 @@ if($fb_feed[$i]->post_content != '<br />'):
 </li>
 <?php endif;
 endfor;?>
-<?php if(count($fb_feed) > 0 && (!isset($is_search))):?>
+<?php if(count($fb_feed) > 0 && (!isset($is_search)) && !isset($no_load_more)):?>
 <div class="filled" style="text-align: center;"><input type="hidden" class="total_groups" value="<?php echo $total_groups?>" /><input type="hidden"  class="looppage" value=""/><input type="hidden"  class="channel_id" value="<?php echo $fb_feed[0]->channel_id?>"/><button class="loadmore btn btn-info" value="wallPosts"><i class="icon-chevron-down"></i>
  <span>LOAD MORE</span></button></div>
 <?php endif;?>

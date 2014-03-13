@@ -44,7 +44,7 @@ if(IsRoleFriendlyNameExist($this->user_role, "Social Stream_Notification")):?>
         <ul class="tasksList" style="height: 100%">
             <?php foreach($case as $each_case):
               $type = explode("_", $each_case->type);?>
-            <li class="pointerCase" onclick="window.location='<?=base_url('dashboard/socialmedia').'#case/'.$type[0].'/'.$each_case->post_id?>'" >
+            <li class="pointerCase" onclick="window.location='<?=base_url('dashboard/socialmedia').'#case/'.$type[0].'/'.$each_case->post_id.'/'.$each_case->channel_id?>'" >
                 <input type="hidden" name="pointer" class="pointer-case" value="<?php echo $each_case->case_id?>" />
                 
                 <div class="notifHead <?=$each_case->read == 1 ? "purple" : "red"?>" >
@@ -79,7 +79,7 @@ if(IsRoleFriendlyNameExist($this->user_role, "Social Stream_Notification")):?>
             <?php foreach($assign1 as $each_case):?>
             <li class="pointerCase" >
                 <input type="hidden" name="pointer" class="pointer-case" value="<?php echo $each_case->case_id?>" />
-                <div class="notifHead <?=$each_case->read == 1 ? "purple" : "red"?>" onclick="window.location='<?=base_url('dashboard/socialmedia').'#case/'.$each_case->type.'/'.$each_case->post_id?>'">
+                <div class="notifHead <?=$each_case->read == 1 ? "purple" : "red"?>" onclick="window.location='<?=base_url('dashboard/socialmedia').'#case/'.$each_case->type.'/'.$each_case->post_id.'/'.$each_case->channel_id?>'">
                     CASE ID: #<?php echo $each_case->case_id?>
                 </div>
                 <div class="notifBody">

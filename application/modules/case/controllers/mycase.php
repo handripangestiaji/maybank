@@ -97,46 +97,15 @@ class mycase extends CI_Controller{
     }
     
     
-    function FacebookRelatedConversation($user,$type){
+    function FacebookRelatedConversation(){
         $this->load->model('facebook_model');
-        $post_id=$this->input->get('post_id');
-        $channel_id=$this->input->get('channel_id');
-        $author_id=$this->input->get('author_id');
-        $this->load->model('account_model');
-        if($channel_id){
-            $filter['channel_id'] = $channel_id;
-        }
+        $post_id = $this->input->get('post_id');
+        $channel_id = $this->input->get('channel_id');
         
-        $channel_loaded = $this->account_model->GetChannel($filter);
-        if(count($channel_loaded) == 0){
-    		echo json_encode(
-    		    array(
-    			'success' => false,
-    			'message' => "Invalid Channel Id"
-    		    )
-    		);
-		return;
-	    }else{
-	       
-            $facebook_id=$channel_loaded[0]->social_id;
-            //print_r($facebook_id);
-            if($type=='facebook'){
-                    $author_id=$this->facebook_model->RetrieveFeedFB(array('b.post_id'=>$post_id),1);
-                    //print_r($author_id);
-                    if(isset($author_id[0]->facebook_id)){
-                        $filter="b.from =".$author_id[0]->facebook_id;
-                        echo json_encode($this->facebook_model->FbRelatedConversation($filter,$author_id[0]->facebook_id));
-                    }
-            }else{
-                    $author_id=$this->facebook_model->RetrievePmFB(array('b.conversation_id'=>$post_id),1);
-                    $filter="b.from = ".$author_id[0]->sender;
-                    if(!isset($author_id[0]->facebook_id)){
-                        $author_id[0]->facebook_id=0;
-                        }
-                    echo json_encode($this->facebook_model->FbRelatedConversation($filter,$author_id[0]->sender));
-
-           }
-        }  
+        $related_post_feed = $this->case_model->FindFacebookRelatedConversation($this->input->get('facebook_id'), $channel_id);
+        
+        
+        echo json_encode($related_post_feed);
     }
     
     function GetCaseRelatedConversationItems(){

@@ -1,7 +1,7 @@
 <?php 
 
 /**
- * @author fitrazh
+ * @author fitrazh Revised by Eko 11-maret-2013
  * @copyright 2014
  */
  if($caseMsg){

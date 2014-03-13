@@ -126,7 +126,7 @@ class Campaign_model extends CI_Model
 				$campaigns[$i]['tag_name'][] = $value->tag_name;
 			}
 			
-			$this->db->select('content_campaign_url.*, short_urls.*, user.user_id, user.display_name, user.username');
+			$this->db->select('content_campaign_url.*, content_campaign_url.id as content_campaign_url_id, short_urls.*, user.user_id, user.display_name, user.username');
 			
 			$this->db->join('short_urls', 'content_campaign_url.url_id = short_urls.id', 'left');
 			
@@ -140,6 +140,7 @@ class Campaign_model extends CI_Model
 			$totalclicks = 0;
 			foreach($res->result() as $v)
 			{
+				$campaigns[$i]['short_urls'][$x]['content_campaign_url_id'] = $v->content_campaign_url_id;
 				$campaigns[$i]['short_urls'][$x]['long_url'] = $v->long_url;
 				$campaigns[$i]['short_urls'][$x]['short_code'] = $v->short_code;
 				$campaigns[$i]['short_urls'][$x]['description'] = $v->description;
@@ -230,9 +231,10 @@ echo "<pre>";
 	{
 		if (isset($params['id']))
 		{
-			$this->db->where('id', $params['id']);
+			$this->db->where('content_campaign.id', $params['id']);
 		}
 		
+		//$this->db->join('content_products_campaign','content_campaign.id = content_products_campaign.campaign_id');
 		$result = $this->db->get($this->_table);
 		
 		return $result->row();
@@ -255,5 +257,78 @@ echo "<pre>";
 	public function count_record()
 	{
 		return $this->db->count_all($this->_table);
+	}
+	
+	public function get_content_product_campaign_by_campaign_id($id){
+		$this->db->select('*');
+		$this->db->where('campaign_id',$id);
+		$this->db->from('content_products_campaign');
+		$this->db->join('content_products','content_products_campaign.products_id = content_products.id');
+		return $this->db->get();
+	}
+	
+	public function get_content_tag_campaign_by_campaign_id($id){
+		$this->db->select('*');
+		$this->db->where('campaign_id',$id);
+		$this->db->from('content_tag_campaign');
+		$this->db->join('content_tag','content_tag_campaign.tag_id = content_tag.id');
+		return $this->db->get();
+	}
+	
+	public function update($id,$value){
+		$this->db->where('id',$id);
+		$this->db->update('content_campaign',$value);
+	}
+	
+	public function update_campaign_product($id,$products){
+		$this->db->delete('content_products_campaign',array('campaign_id' => $id));
+		print_r($products);
+		$prod_params = array();
+		foreach ($products as $key => $value)
+		{
+			$prod_params['campaign_id'] = $id;
+			$prod_params['products_id'] = $value;
+			$prod_params['created_at'] = date('Y-m-d H:i:s');
+			
+			$this->db->trans_start();
+			$this->db->set($prod_params);
+			$this->db->insert('content_products_campaign');
+			$this->db->trans_complete();
+		}		
+	}
+	
+	public function update_campaign_tag($id,$tags){
+		$this->db->delete('content_tag_campaign',array('campaign_id' => $id));
+		
+		$tag_params = array();
+		foreach ($tags as $key => $value)
+		{
+			$tag_params['campaign_id'] = $id;
+			$tag_params['tag_id'] = $value;
+			$tag_params['created_at'] = date('Y-m-d H:i:s');
+		
+			$this->db->trans_start();
+			$this->db->set($tag_params);
+			$this->db->insert('content_tag_campaign');
+			$this->db->trans_complete();
+		}
+	}
+	
+	public function getForDownload($id){
+		$this->db->select('qrcode_image,short_code,campaign_name,full_name,short_urls.increment as inc,short_urls.created_at as created_at');
+		$this->db->from('content_campaign');
+		$this->db->join('content_campaign_url','content_campaign.id = content_campaign_url.campaign_id');
+		$this->db->join('short_urls','content_campaign_url.url_id = short_urls.id','left');
+		$this->db->join('user','short_urls.user_id = user.user_id','left');
+		$this->db->where('content_campaign.id',$id);
+		return $this->db->get();
+	}
+	
+	public function getProductsByCampaign($id){
+		$this->db->select('*');
+		$this->db->from('content_products_campaign');
+		$this->db->join('content_products','content_products_campaign.products_id = content_products.id');
+		$this->db->where('content_products_campaign.campaign_id');
+		return $this->db->get();
 	}
 }

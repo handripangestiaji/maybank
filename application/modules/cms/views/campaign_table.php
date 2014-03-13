@@ -42,10 +42,9 @@
                                                             </div>
                                                             <div class="pull-right" style="width: 25%; text-align: right">
                                                                 <p>
-                                                                <!--
-                                                                <button class="btn btn-success" type="button">Download</button>
-                                                                <button class="btn btn-danger" type="button">Delete</button>    
-                                                                -->
+                                                                <a href="cms/edit_campaign/<?php echo $v['id']; ?>"><button class="btn btn-primary btn-small" type="button">Edit</button></a>
+                                                                <a href="cms/cms_ci/download_campaign/<?php echo $v['id']; ?>"><button class="btn btn-success btn-small" type="button">Download</button></a>
+                                                                <a href="cms/delete_campaign/<?php echo $v['id']; ?>" onclick="return confirm('Are you sure want to delete this campaign?');"><button class="btn btn-danger btn-small" type="button">Delete</button></a>
                                                                 </p>
                                                             </div>
                                                             <br clear="all" />
@@ -60,6 +59,7 @@
                                                                             <th>Clicks</th>
                                                                             <th>Created By</th>
                                                                             <th>QR Code</th>
+                                                                            <th>&nbsp;</th>
                                                                           </tr>
                                                                         </thead>
                                                                         <tbody>
@@ -78,6 +78,11 @@
                                                                                             <button type="button" class="close " data-dismiss="modal"><i class="icon-remove"></i></button>
                                                                                             </div>
                                                                                                                                 </td>
+                                                                                                <td>
+                                                                                                <?php if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Short_URL_Campaign')){ ?>
+                                                                                                <a href="cms/delete_campaign_url/<?php echo($x['content_campaign_url_id']) ?>" onclick="return confirm('Are you sure want to delete short url from campaign?');" class="redText"><i class="icon-remove"></i></a>
+                                                                                                <?php } ?>
+                                                                                                </td>
                                                                                         </tr>
                                                                                 <?php endforeach;?>
                                                                         <?php endif; ?>
@@ -127,7 +132,7 @@
                                                                             <td><?php echo date('M d, Y', strtotime($v->created_at)) ?></td>
                                                                             <td><?php echo $v->display_name ?></td>
                                                                             <td>
-                                                                            <a href="<?php echo site_url('cms/create_short_url?action=delete&id='.$v->id)?>" class="btn btn-mini btn-danger pull-right">delete</a>
+                                                                            <a href="<?php echo site_url('cms/delete_short_url/'.$v->id)?>" onclick="return confirm('Are you sure want to delete short url from campaign?');" class="btn btn-mini btn-danger pull-right">delete</a>
                                                                             <!-- <button id="delete_btn" class="btn btn-mini btn-danger pull-right" type="button">delete</button> -->
                                                                             </td>
                                                                                     </tr>

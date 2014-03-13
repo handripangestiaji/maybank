@@ -421,37 +421,21 @@ class Cms extends MY_Controller {
                                   $this->session->set_flashdata('message_type', 'error');
                                    $this->session->set_flashdata('message_body', 'Please fill the required fields');
                               }
-                              redirect('cms/create_short_url');
+                              redirect('cms');
                          }
                          else
                          {
                               redirect('cms');
                          }
 		}
-		else if ($action == "delete")
-		{
-                    if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Short_URL_Delete')){
-			$id = $this->input->get("id");
-			
-			$this->campaign_url_model->delete($id);
-			
-			$this->session->unset_userdata('message');
-			
-			redirect('cms/create_short_url');
-                    }
-                    else
-                    {
-                         redirect('cms');
-                    }
-                }
 		else {
 			$this->session->unset_userdata('message');
 		}
 		
-		$data['code'] = substr( md5( time().uniqid().rand() ), 0, 6 );
-        $data['cms_view'] = 'create_short_url';
-        $data['pagination'] = $this->pagination->create_links();
-        $this->load->view('cms/index',$data);
+	       $data['code'] = substr( md5( time().uniqid().rand() ), 0, 6 );
+               $data['cms_view'] = 'create_short_url';
+               $data['pagination'] = $this->pagination->create_links();
+               $this->load->view('cms/index',$data);
      }
      else
      {
@@ -648,10 +632,25 @@ class Cms extends MY_Controller {
     public function edit_product($id)
     {
           $product = $this->product_model->getOneBy(array('id' => $id));
-          $data['row'] = $product;
-          $data['products_avail'] = $this->product_model->get();
-    	  $data['countries'] = $this->users_model->get_country()->result();
-          $this->load->view('cms/edit_product',$data);
+          $data['data']['row'] = $product;
+          $data['data']['products_avail'] = $this->product_model->get();
+    	  $data['data']['countries'] = $this->users_model->get_country()->result();
+    	  $data['cms_view'] = 'edit_product';
+          $this->load->view('cms/index',$data);
+    }
+    
+    public function edit_campaign($id)
+    {
+          $campaign = $this->campaign_model->getOneBy(array('id' => $id));
+          $data['data']['row'] = $campaign;
+          $data['data']['products_avail'] = $this->product_model->get();
+          $data['data']['products_selected'] = $this->campaign_model->get_content_product_campaign_by_campaign_id($id)->result();
+    	  //$data['countries'] = $this->users_model->get_country()->result();
+          $data['data']['tags'] = $this->tag_model->get();
+          
+    	  $data['data']['tags_selected'] = $this->campaign_model->get_content_tag_campaign_by_campaign_id($id)->result();
+    	  $data['cms_view'] = 'edit_campaign';
+          $this->load->view('cms/index',$data);
     }
     
     public function update_product(){
@@ -660,12 +659,14 @@ class Cms extends MY_Controller {
           $this->form_validation->set_rules('description','Description','required');
           $this->form_validation->set_rules('parent_id','Parent','required');
           $this->form_validation->set_rules('country_code','Country','required');
+          $id = $this->input->post('id');
           
           if ($this->form_validation->run() == FALSE){
-               $this->load->view('cms/edit_product');
+               $this->session->set_flashdata('message_type','error');
+               $this->session->set_flashdata('message_body','Please fill the required field.');
+               redirect('cms/edit_product/'.$id);
           }
           else{
-               $id = $this->input->post('id');
                $value = array('product_name' => $this->input->post('name'),
                               'description' => $this->input->post('description'),
                               'parent_id' => $this->input->post('parent_id'),
@@ -675,6 +676,36 @@ class Cms extends MY_Controller {
                $this->session->set_flashdata('message_type','Success');
                $this->session->set_flashdata('message_body','Product has been updated');
                redirect('cms/create_product');
+          }
+    }
+    
+    public function update_campaign(){
+          $this->form_validation->set_rules('id','Id','required');
+          $this->form_validation->set_rules('name','Campaign Name','required');
+          $this->form_validation->set_rules('product[]','Product','required');
+          $this->form_validation->set_rules('tag','Tags','required');
+          $id = $this->input->post('id');
+          
+          if ($this->form_validation->run() == FALSE){
+               $this->session->set_flashdata('message_type','error');
+               $this->session->set_flashdata('message_body','Please fill the required field.');
+               redirect('cms/edit_campaign/'.$id);
+          }
+          else{
+               $value = array('campaign_name' => $this->input->post('name'),
+                              'description' => $this->input->post('description')
+                             );
+               $result = $this->campaign_model->update($id,$value);
+               
+               $products = $this->input->post('product');
+               $this->campaign_model->update_campaign_product($id,$products);
+               
+               $tags = $this->input->post('tag');
+               $this->campaign_model->update_campaign_tag($id,$tags);
+                
+               $this->session->set_flashdata('message_type','success');
+               $this->session->set_flashdata('message_body','Campaign has been updated');
+               redirect('cms');
           }
     }
     
@@ -694,4 +725,43 @@ class Cms extends MY_Controller {
 	    }
 	    
     }
+    
+    public function delete_campaign_url($id){
+          if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Short_URL_Campaign')){
+              print_r($this->campaign_url_model->delete($id));
+              $this->session->set_flashdata('message_type', 'success');
+              $this->session->set_flashdata('message_body', 'Short URL has been remove from campaign.');
+              redirect('cms');
+          }
+          else
+          {
+               redirect('cms');
+          }
+    }
+    
+     public function delete_campaign($id){
+          if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Campaign_Delete')){
+              print_r($this->campaign_model->delete($id));
+              $this->session->set_flashdata('message_type', 'success');
+              $this->session->set_flashdata('message_body', 'Campaign has been romoved.');
+              redirect('cms');
+          }
+          else
+          {
+               redirect('cms');
+          }
+     }
+     
+     public function delete_short_url($id){
+          if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Short_URL_Delete')){
+              print_r($this->shorturl_model->delete($id));
+              $this->session->set_flashdata('message_type', 'success');
+              $this->session->set_flashdata('message_body', 'Short URL has been romoved.');
+              redirect('cms');
+          }
+          else
+          {
+               redirect('cms');
+          }
+     }
 }

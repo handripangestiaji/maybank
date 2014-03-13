@@ -45,6 +45,8 @@
                             elseif($action->action_type == 'case_solved'){
                                 echo 'Solved by '.$action->solved_name;
                             }
+                            else if($action->action_type = "conversation_facebook")
+                                echo $action->log_text;
                         ?>
                       </td>
                       <td style="width:139px">
@@ -55,8 +57,7 @@
                             else if( $action->action_type == 'case_solved'){
                                 echo $action->solved_message;
                             }
-                            else if($action->action_type = "conversation_facebook")
-                                echo $action->log_text;
+                            
                             ?>
                         </td>
                     </tr>

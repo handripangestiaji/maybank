@@ -49,14 +49,14 @@ class Media_stream extends CI_Controller {
 	$data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter,$limit);
 	$data['count_fb_feed']=$this->facebook_model->CountFeedFB($filter);
 	//$data['own_post'] = $this->facebook_model->RetrievePostFB($filter);
+	$filter['c.channel_id'] = $filter['channel_id'];
+	unset($filter['channel_id']);
 	$data['fb_pm'] = $this->facebook_model->RetrievePmFB($filter,$limit);
 	$filter=array();
 	$data['CountPmFB']=$this->facebook_model->CountPmFB($filter);
 	$this->load->model('campaign_model');
 	$data['product_list'] = $this->campaign_model->GetProduct();
 	$data['channel_id'] = $channel_id;
-	    
-	    
         $filter=array('role_id <>'=>'5');
 	
         //print_r($getUserCountry->country_code);
@@ -608,23 +608,25 @@ class Media_stream extends CI_Controller {
         
         if(!is_array($return) && $return!='error'){//send comment          
             $action = array(
-                "action_type" => "reply_facebook",
-        		"action_type" => "reply_facebook",
-        		"channel_id" =>$channel,
-        		"created_at" => date("Y-m-d H:i:s"),
-        		"created_by" => $this->session->userdata('user_id'),
-        		"stream_id_response" => $return
+		"action_type" => "reply_facebook",
+        	"action_type" => "reply_facebook",
+        	"channel_id" =>$channel,
+        	"created_at" => date("Y-m-d H:i:s"),
+        	"created_by" => $this->session->userdata('user_id'),
+        	"stream_id_response" => $return
     	    );
             
-            echo json_encode(
-    		    array(
-                'success' => true,
-    			'message' => "successfully done",
-    			'result' => $return
-    		    )
-    		);		    
+           	    
             $this->account_model->CreateFbCommentAction($action,$post_id,$this->input->post('like') === 'true' ? 1 : 0);
             $this->account_model->CreateFbReplyAction($post_id,$stream_id->post_stream_id,$comment,$reply_type,$product_type,$url);
+	     echo json_encode(
+    		    array(
+			'success' => true,
+    			'message' => "successfully done",
+    			'result' => $return,
+			'action_log' => $action
+    		    )
+    		);	
                                       
         }elseif(is_array($return)){//replay in reply        
             if($return['id']){
@@ -638,17 +640,21 @@ class Media_stream extends CI_Controller {
         		"stream_id_response" => $return
         	);
             
-            echo json_encode(
-    		    array(
-			'success' => true,
-    			'message' => "successfully done",
-    			'result' => $return
-    		    )
-    		);
+           
             
             $this->account_model->CreateFbCommentAction($action,$post_id,$this->input->post('like') === 'true' ? 1 : 0);
             $this->account_model->CreateFbReplyAction($post_id,'',$comment,$reply_type,$product_type,$url);
-
+	    $action['created_at'] = new DateTime($action['created_at']." Europe/London");
+	    $action['created_at']->setTimezone(new DateTimeZone($this->session->userdata('timezone')));
+	    $action['created_at'] = $action['created_at']->format("d-M-y h:i A");
+	    echo json_encode(
+    		    array(
+			'success' => true,
+    			'message' => "successfully done",
+    			'result' => $return,
+			'action_log' => $action
+    		    )
+    		);
             }else{
                 echo json_encode(
         		    array(
@@ -661,7 +667,7 @@ class Media_stream extends CI_Controller {
        }else{
                 echo json_encode(
         		    array(
-                    'success' => false,
+				'success' => false,
         			'message' => "reply was failed"   			
         		    )
     		    );
@@ -730,8 +736,20 @@ class Media_stream extends CI_Controller {
 	    "log_text" => $comment,
 	    "case_id"=> $case_id,
 	);
-        
+	
         $this->account_model->CreateFbPMAction($action);
+	$page_reply = array(
+	    "case_id" => $this->input->post('case_id') == 'null' ? null : $this->input->post('case_id'),
+	    "url" => null,
+	    "message" => $comment,
+	    "social_stream_post_id" => $post_id,
+	    "conversation_detail_id" => null,
+	    "post_at" => date("Y-m-d H:i:s"),
+	    "created_at" => date("Y-m-d H:i:s"),
+	    "product_id" => $this->input->post('product_id'),
+	    "user_id" => $this->session->userdata('user_id')
+	);
+	$this->account_model->CreateReplyAction($page_reply);
         $case = $this->account_model->isCaseIdExists($post_id);
 	if(count($case)>0){
 	    $post_at=$case[0]->created_at;  
@@ -918,20 +936,7 @@ class Media_stream extends CI_Controller {
     }
     
     
-    public function ReadSinglePost(){
-	$post_id = $this->input->get('post_id');
-	$type = $this->input->get('type');
-	
-	if($type == "facebook"){
-	    
-	}
-	else if($type == "twitter"){
-	    
-	}
-	else{
-	    
-	}
-    }
+   
     //=========================================END facebook function=============================================    
 
     /**
@@ -1014,12 +1019,11 @@ class Media_stream extends CI_Controller {
         
         if($action=='privateMessages'){
 	    unset($filter['a.channel_id']);
-            $filter['channel_id']=$channel_ids;
+            $filter['c.channel_id']=$channel_ids;
             $data['fb_pm'] = $this->facebook_model->RetrievePmFB($filter,$limit);
             $data['CountPmFB']=$this->facebook_model->CountPmFB($filter);
             $this->load->view('dashboard/facebook/private_message.php',$data);
         }
-        //print_r($data);
     }
     
     public function SinglePost($post_id){
@@ -1030,6 +1034,7 @@ class Media_stream extends CI_Controller {
         
         $this->load->model('campaign_model');
         $data['product_list'] = $this->campaign_model->GetProduct();
+	$data['no_load_more'] = true;
 	if($post->type == "twitter"){
 	    $filter['a.post_id'] = $post->post_id;
             $data['mentions']=$this->twitter_model->ReadTwitterData($filter,1);
@@ -1041,6 +1046,7 @@ class Media_stream extends CI_Controller {
 	    $filter['c.post_id'] = $post->post_id;
             $data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter,1);
             $data['count_fb_feed']=$this->facebook_model->CountFeedFB($filter);
+	    
             $this->load->view('dashboard/facebook/wall_post.php',$data);
 	}
 	
@@ -1150,6 +1156,13 @@ class Media_stream extends CI_Controller {
 		$short_time = date('H:i A',strtotime($post_time));
 		
 		$time_tommorow = date('Y-m-d H:i:s',strtotime('+30 minute', strtotime($post->time_to_post)));
+		if(IsRoleFriendlyNameExist($this->user_role, "Publisher_Current_Delete_Post") ||
+		   IsRoleFriendlyNameExist($this->user_role, "Publisher_All_Delete_Post")){
+		    $deleteable = true;
+		}else{
+		    $deleteable = false;
+		}
+		
 		$encodeme[] = array('post_to_id' => $post->post_to_id,
 				'real_time' => $post->time_to_post,
 				'title' => $post->name,
@@ -1161,7 +1174,8 @@ class Media_stream extends CI_Controller {
 				'post_time' => $short_time,
 				'is_posted' => $post->is_posted,
 				'allDay' => false,
-				'user_role' =>  $this->session->userdata('role_name')
+				'user_role' =>  $this->session->userdata('role_name'),
+				'deleteable' => $deleteable
 			       );
 	    }
 	}

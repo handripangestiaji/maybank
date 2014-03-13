@@ -222,9 +222,6 @@ class case_model extends CI_Model{
         foreach($result as $row){
             $row->reletad = $this->facebook_model->RetriveCommentPostFb(array('a.post_id'=>$row->social_stream_id),array());
         }
-//        echo "<pre>";
-//        print_r($result);
-//        echo "</pre>";
         return $result;
     }
 
@@ -245,6 +242,81 @@ class case_model extends CI_Model{
         }
         return $result;
     }
+    
+    function ReadSimpleConversation($post_id, $type){
+        $table_loaded = "";
+        $where = "";
+        if($type =='facebook_conversation' ){
+            $table_loaded = "social_stream_facebook_conversation";
+            $where = "conversation_id = ".$post_id;
+        }
+        else if($type == 'facebook'){
+            $table_loaded = "social_stream_fb_post";
+            $where = "post_id = ".$post_id;
+        }
+        else if($type=='facebook_comment'){
+            $table_loaded = "social_stream_fb_comments";
+            $where = "id = ".$post_id;
+        }
+        else
+            return null;
+        $this->db->select("*");
+        $this->db->from($table_loaded);
+        $this->db->where($where);
+        $row = $this->db->get()->row();
+        return $row;
+    }
+    
+    function FacebookRelatedConversation($case_id){
+        $this->load->model('facebook_model');
+        $this->db->select('b.*');
+        $this->db->from("case_related_conversation a inner join social_stream b on a.social_stream_id = b.post_id");
+        $this->db->where('a.case_id', $case_id);
+        
+        $result = $this->db->get()->result();
+        
+        foreach($result as $row){
+            $row->facebook_data = $this->ReadSimpleConversation($row->post_id, $row->type);
+        }
+        return $result;
+    }
+    
+    function FindFacebookRelatedConversation($facebook_id, $channel_id){
+        $this->db->select("a.post_id as social_stream_post_id, post_content as content, b.created_at, attachment,b.type");
+        $this->db->from("social_stream_fb_post a inner join social_stream b on a.post_id = b.post_id");
+        $this->db->where(array(
+           "author_id" => $facebook_id,
+           "channel_id" => $channel_id
+        ));
+        $facebook_post = $this->db->get()->result();
+        
+        $this->db->select("id as social_stream_post_id, comment_content as content, b.created_at, attachment,b.type");
+        $this->db->from("social_stream_fb_comments a inner join social_stream b on a.id = b.post_id");
+        $this->db->where(array(
+           "from" => $facebook_id,
+           "channel_id" => $channel_id
+        ));
+        $facebook_comment = $this->db->get()->result();
+        
+        $this->db->select("detail_id as social_stream_post_id, messages as content, b.created_at, attachment, b.type");
+        $this->db->from("social_stream_facebook_conversation_detail a inner join social_stream b on a.conversation_id = b.post_id");
+        $this->db->where(array(
+           "sender" => $facebook_id,
+           "channel_id" => $channel_id
+        ));
+
+        $facebook_conversation = $this->db->get()->result();
+        
+        $related_conversation = array_merge($facebook_post, $facebook_comment, $facebook_conversation);
+        $timezone = new DateTimeZone($this->session->userdata('timezone'));
+        foreach($related_conversation as $conversation){
+            $created_at = new DateTime($conversation->created_at." Europe/London", $timezone);
+            $conversation->created_at = $created_at->format("d-M-Y h:i A");
+        }
+        
+        return $related_conversation;
+    }
+    
     
     
     function ResolveCase($case_id, $solved_by,$solved_message, $is_solved = true){
@@ -281,6 +353,7 @@ class case_model extends CI_Model{
         $result = $this->db->get()->result();
         return $result;
     }
+    
     
     function UpdateReadStatus($case_id, $status = 1){
         $this->db->where('case_id', $case_id);

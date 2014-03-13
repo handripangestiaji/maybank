@@ -21,8 +21,6 @@
                             <img src="'.base_url('dashboard/media_stream/SafePhoto?photo=').$attachment->media->image->src.'" />
                             <button type="button" class="close " data-dismiss="modal"><i class="icon-remove"></i></button>
                         </div>';
-                    //print_r($comment[$j]);
-                    //echo    "<img src='".base_url('dashboard/media_stream/SafePhoto?photo=').$attachment->media->image->src."' />";
                 }
              }           
               ?>
@@ -35,8 +33,7 @@
                         if($isMyCase[count($isMyCase)-1]->assign_to==$this->session->userdata('user_id') or ($isMyCase[count($isMyCase)-1]->solved_by)){
                 ?><h4>
                 <p>
-                    <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Take Action') ||
-                             IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action')):?>
+                    <?php if(IsRoleFriendlyNameExist($this->user_role, array('Social Stream_All_Delete','Social Stream_Current_Delete'))): ?>
                         <button type="button" role="button" class="btn btn-mini delete_post comments"  value="<?php echo $comment[$j]->comment_post_id?>" style="border: none; background-color: transparent;"><i class="icon-trash greyText"></i></button>
                     <?php endif;?>
                     <button type="button" class="btn btn-warning btn-mini">OPEN</button>
@@ -49,8 +46,7 @@
                 <?php }else{ ?>
                 <h4>
                 <p>
-                    <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Take Action') || 
-                             IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action')):?>
+                    <?php if(IsRoleFriendlyNameExist($this->user_role, array('Social Stream_All_Delete','Social Stream_Current_Delete'))):?>
                         <button type="button" role="button" class="btn btn-mini delete_post comments"  value="<?php echo $comment[$j]->comment_post_id?>" style="border: none; background-color: transparent;"><i class="icon-trash greyText"></i></button>
                     <?php endif;?>
             
@@ -66,8 +62,7 @@
                 }elseif(!isset($isMyCase[count($isMyCase)-1])){ ?>
                 <h4>
                     <p>
-                    <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Take Action') ||
-                              IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action')):?>
+                    <?php if(IsRoleFriendlyNameExist($this->user_role, array('Social Stream_All_Delete','Social Stream_Current_Delete'))):?>
                         <button type="button" role="button" class="btn btn-mini delete_post comments"  value="<?php echo $comment[$j]->comment_post_id?>" style="border: none; background-color: transparent;"><i class="icon-trash greyText"></i></button>
                     <?php endif;?>
                     <button type="button" class="btn btn-warning btn-mini">OPEN</button>

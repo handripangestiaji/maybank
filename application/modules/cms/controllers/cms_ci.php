@@ -12,7 +12,7 @@ class Cms_Ci extends CI_Controller {
         $data['shorturls'] = $this->campaign_model->getForDownload($campaign_id)->result();
         $data['products'] = $this->campaign_model->getProductsByCampaign($campaign_id)->result();
         $this->output->set_header("Content-Type: application/vnd.ms-excel; charset=" . 'UTF-8');
-        $this->output->set_header("Content-Disposition: inline; filename=\"" . 'perumahan' . ".xls\"");
+        $this->output->set_header("Content-Disposition: inline; filename=\"" . $data['shorturls'][0]->campaign_name . ".xls\"");
         $this->load->view('cms/excel',$data);
     }
 }

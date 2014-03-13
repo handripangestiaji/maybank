@@ -1468,7 +1468,7 @@ ul.floatingBoxContainers div.circleAvatar {
 
 .floatingBoxContainers li p.headLine {
     color: #a8a8a8;
-    font-size: 11px;
+    font-size: 12px;
     margin: 5px;
 }
 
@@ -4680,4 +4680,5 @@ ol.mp_list li.mp_highlighted {
 }
 ul.floatingBoxContainers .case-field ul{max-height: 150px;overflow-y: scroll;}
 ul.floatingBoxContainers .case-field li{margin-bottom: 0;}
-ul.floatingBoxContainers .case-field li label{padding: 0;text-transform: none} 
+ul.floatingBoxContainers .case-field li label{padding: 0;text-transform: none}
+.related-conversation .author{font-weight: 600;color: green;}

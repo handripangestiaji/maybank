@@ -1488,6 +1488,10 @@ $(function(){
                                 {
                                     commentButton.removeAttr("disabled");
                                     if(response.success == true){
+                                        commentButton.closest('li').find('p.indicator >.open-thread, p.indicator > .replied-btn').remove();
+                                        
+                                        commentButton.closest('li').find('p.indicator').append('<button type="button" class="btn btn-inverse btn-mini replied-btn" style="text-align:left">Replied by: You ' +
+                                                                                               response.action_log.created_at +' </button>');
                                         commentButton.parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
                                         '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
                                         '<strong>Success!</strong> '+response.message+' </div>');
@@ -2083,7 +2087,7 @@ $.fn.ToCase = function(type){
     var hashUrl = window.location.hash;
     var splitUrl = hashUrl.split('/');
     
-    if(splitUrl.length == 3 ){
+    if(splitUrl.length == 4 ){
         var id = $('#post' + splitUrl[2]).closest('ul.floatingBoxContainers').attr('id');
         
         $('#' + id).parent().find('ul').hide();
@@ -2106,7 +2110,7 @@ $.fn.ToCase = function(type){
             $.ajax({
                 "url" : BASEURL + "dashboard/media_stream/SinglePost/"+splitUrl[2],
                 "success" : function(response){
-                    $('#c'+splitUrl[1] + " .subStream ul:nth-child(1)").prepend(response);
+                    $('#c'+ splitUrl[1] + "_" + splitUrl[3] + " .subStream ul:nth-child(1)").prepend(response);
                     $('#post' + splitUrl[2]).closest('.subStream').animate({
                         scrollTop: 0
                     }, 100, function(){

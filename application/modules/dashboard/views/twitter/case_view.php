@@ -1,7 +1,7 @@
 <?php
 $timezone = new DateTimeZone($this->session->userdata('timezone'));
 ?>
-<div id="caseItem<?=$caseMsg->case_id; ?>" class="modal hide related-conversation" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+<div id="caseItem<?=$caseMsg->case_id; ?>" class="modal hide related-conversations" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
         <input type="hidden" value="<?php //echo $isMyCase->case_id; ?>" name="post_id" />
         <div class="modal-header">
             <button type="button" class="close " data-dismiss="modal" aria-hidden="true"></button>

@@ -64,8 +64,7 @@ class Cronjob extends CI_Controller {
             
         }
     }
-    
-    
+        
     function  FacebookConversation(){
         $filter = array(
             "connection_type" => "facebook"
@@ -84,15 +83,7 @@ class Cronjob extends CI_Controller {
             $access_tokens[] = $newStd;
         }
         print_r($newStd->token);
-        
-        /*
-        foreach($access_tokens as $access_token){
-            $conversation = $this->facebook_model->RetrieveConversation($access_token->page_id, $access_token->token);
-            $this->facebook_model->SaveConversation($conversation, $access_token->channel);
-            echo "<pre>";
-            print_r($conversation);
-            echo "</pre>";
-        }*/
+      
     }
     
     function NewFacebookConversation(){

@@ -190,7 +190,6 @@ class account_model extends CI_Model
             $short_url_id=$this->GetShorUrlId(array("short_code"=>$url));
             if(isset($short_url_id[0])){
                 $urls=$short_url_id[0]->id;
-                //print_r($short_url_id);
                 $actions['url']=$urls;
             }            
         }
@@ -200,14 +199,14 @@ class account_model extends CI_Model
             $actions['conversation_detail_id']=$post->post_id;
         }   
          
-        $actions['message']=$message;
-        $actions['social_stream_post_id']=$post_id;
-        $actions['type']=$reply_type;
-        $actions['product_id']=$product_type;
-        $actions['created_at']=date("Y-m-d H:i:s");
-        $actions['user_id']=$this->session->userdata('user_id');
+        $actions['message'] = $message;
+        $actions['social_stream_post_id'] = $post_id;
+        $actions['type'] = $reply_type;
+        $actions['product_id'] = $product_type;
+        $actions['created_at'] = date("Y-m-d H:i:s");
+        $actions['user_id'] = $this->session->userdata('user_id');
 	
-        $result=$this->CreateReplyAction($actions);
+        $result = $this->CreateReplyAction($actions);
 	
 	$this->db->where("post_id", $post_id );
 	$this->db->update("social_stream", array("replied_count" => 0));

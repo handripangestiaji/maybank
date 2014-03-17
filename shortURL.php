@@ -30,7 +30,8 @@
         if ($result = $mysqli->query($query)) {
             
             if ($result->num_rows > 0) {
-                
+                //$query2 = "Update short_urls set increment = increment + 1 where short_url = '$s'";
+                //$mysqli->query($query2);
                 while($row = $result->fetch_assoc()) {
                         return($row);
                 }

@@ -784,9 +784,7 @@ class Media_stream extends CI_Controller {
         }else{
             $facebook_data = $this->facebook_model->RetriveCommentPostFb(array('b.id' => $this->input->post('post_id')),array());
         }
-    	if(count($facebook_data) > 0){
-       // print_r($facebook_data);
-        
+    	if(count($facebook_data) > 0){        
     	    $facebook_data = $facebook_data[0];
             $channel = $this->account_model->GetChannel(array(
     		'channel_id' => $this->input->post('channel_id')
@@ -801,39 +799,32 @@ class Media_stream extends CI_Controller {
         		);return;
     	    }else{
                 $config = array(
-        	       'appId' => $this->config->item('fb_appid'),
-        	       'secret' => $this->config->item('fb_secretkey')
-        	    );
-
+		    'appId' => $this->config->item('fb_appid'),
+		    'secret' => $this->config->item('fb_secretkey')
+		 );
                 $is_Post_id=$this->facebook_model->streamId($action['post_id']);
-            //    print_r($is_Post_id);
                 if($is_Post_id){
                     $newStd = new stdClass();
                     $newStd->page_id =  $channel[0]->social_id;
                     $newStd->token = $this->facebook_model->GetPageAccessToken( $channel[0]->oauth_token, $channel[0]->social_id);
-
-                  //  print_r($newStd->token);
-//                    if(isset($newStd->token)){}    
                     $this->load->library('facebook',$config);
-                	$this->facebook->setaccesstoken($newStd->token);
+                    $this->facebook->setaccesstoken($newStd->token);
                     $result = $this->facebook->api( "/".$is_Post_id->post_stream_id."","delete");
                    
-                   $result='test'; 
-                    if(isset($result)=='test'){
-//            		        print_r($is_Post_id->post_stream_id);
-//                          print_r($channel[0]->channel_id);
-//                          print_r($this->session->userdata('user_id'));
-
-            		    if($status == 0){//wallpost
+                   
+                    if(isset($result)){
+            		if($status == 0){//wallpost
                           $row_affected = $this->facebook_model->DeletePostFb($is_Post_id->post_stream_id,$channel[0]->channel_id,
                			  $this->session->userdata('user_id') == 0 ? NULL : $this->session->userdata('user_id'),0);
-            		    }elseif($status == 1){//pm
+            		}
+			else if($status == 1)
                           $row_affected = $this->facebook_model->DeletePostFb($is_Post_id->post_stream_id,$channel[0]->channel_id,
                			  $this->session->userdata('user_id') == 0 ? NULL : $this->session->userdata('user_id'),1);
-                        }else{//comment
+			else
                           $row_affected = $this->facebook_model->DeletePostFb($is_Post_id->post_stream_id,$channel[0]->channel_id,
                			  $this->session->userdata('user_id') == 0 ? NULL : $this->session->userdata('user_id'),2);
-                        }
+			  
+			
                         echo json_encode(
                 	 		array(
                 			    'success' => true,
@@ -842,7 +833,7 @@ class Media_stream extends CI_Controller {
                 			    'row_affected' => $row_affected
                 			)
                         );                                
-            		}else{
+            	    }else{
             		     echo json_encode(
                 		    array(
                 			'success' => false,

@@ -298,7 +298,7 @@ class Search extends CI_Controller {
 	  $ret = $this->elasticsearch_model->TypeMapping($this->the_index,'facebook_feed',$fb_feed_map);
 	  
 	  $filter = array(
-	       'channel_id' => $channel_id,
+	       'c.channel_id' => $channel_id,
 	    );
 	  $fb_feed = $this->facebook_model->RetrieveFeedFB($filter,0,false);
 	  
@@ -321,12 +321,13 @@ class Search extends CI_Controller {
 				);
 	  $ret = $this->elasticsearch_model->TypeMapping($this->the_index,'facebook_pm',$fb_pm_map);
 	  $filter = array(
-	       'channel_id' => $channel_id,
+	       'c.channel_id' => $channel_id,
 	    );
 	  $fb_pm = $this->facebook_model->RetrievePmFB($filter);
 	  foreach($fb_pm as $pm){
-	       $new_pm = array('messages' => $pm->messages,
-			       'name' => $pm->name,
+	       $sender = $pm->participant->sender->facebook_id == $pm->social_id ? $pm->participant->to : $pm->participant->sender;
+	       $new_pm = array('messages' => $pm->snippet,
+			       'name' => $sender->name,
 			       'post_stream_id' => $pm->post_stream_id,
 			       'post_id' => $pm->post_id);
 	       $ret = $this->elasticsearch_model->InsertDoc($this->the_index,'facebook_pm',$pm->post_id,$new_pm);
@@ -410,7 +411,7 @@ class Search extends CI_Controller {
 	  $ret = $this->elasticsearch_model->TypeMapping($this->the_index,'youtube_post',$yt_post_map);
 	  
 	  $filter = array(
-	   'channel_id' => $channel_id,
+	   'c.channel_id' => $channel_id,
 	  );
 	  $posts = $this->youtube_model->ReadYoutubePost($filter);
 	  foreach($posts as $post){

@@ -34,12 +34,12 @@ class Shorturl_model extends CI_Model
 	
 	public function get($limit = '', $offset = '')
 	{
+		$this->db->select('short_urls.*,user.display_name');
 		$this->db->join("user", $this->_table.".user_id = user.user_id", "left");
 		
 		$this->db->limit($limit, $offset);
-		
+		$this->db->order_by('short_urls.id desc');
 		$query = $this->db->get($this->_table);
-		
 		return $query->result();
 	}
 	

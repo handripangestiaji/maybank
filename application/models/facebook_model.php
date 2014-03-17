@@ -605,7 +605,7 @@ class facebook_model extends CI_Model
     }
     
     
-    public function RetrieveFeedFB($filter,$limit = 20,$is_limit = true){//retrive yang digunakan untuk feed facebook
+    public function RetrieveFeedFB($filter,$limit = 20,$is_limit = true, $only_assign_case = false){
         $this->db->distinct();
         $this->db->select('a.*, `b`.*, `c`.*,  c.type as social_stream_type, b.post_id as social_stream_post_id,b.post_id, c.created_at as post_date');
         $this->db->from("   fb_user_engaged a INNER JOIN 
@@ -619,10 +619,11 @@ class facebook_model extends CI_Model
         $this->db->order_by('b.updated_at','desc');
         $this->db->order_by('c.created_at','desc');
         $this->db->order_by('c.replied_count','desc');
-
         if(count($filter) >= 1){
             $this->db->where($filter);
         }
+	if($only_assign_case == TRUE )
+	    $this->db->where('b.post_id IN (Select post_id from `case`)');
         $result = $this->db->get()->result();
         
         $my_user_id=$this->session->userdata('user_id');                                
@@ -631,6 +632,7 @@ class facebook_model extends CI_Model
 	    $row->page_reply = $this->PageReply(array('social_stream_post_id' => $row->social_stream_post_id));
 	    $row->sender = $this->IsFbUserExists($row->facebook_id, true);
 	    $row->comments = $this->RetriveCommentPostFb(array('a.post_id'=> $row->social_stream_post_id), array());
+	    $row->channel_action = $this->GetChannelAction(array('a.post_id' => $row->social_stream_post_id));
         }
         
         return $result;
@@ -679,7 +681,7 @@ class facebook_model extends CI_Model
         return $this->db->get()->result();        
     }
     
-    public function RetrievePmFB($filter = array() ,$limit = null){
+    public function RetrievePmFB($filter = array() ,$limit = null, $only_assign_case = false){
 	$this->db->_protect_identifiers = false;
         $this->db->select("a.*, c.is_read, c.post_stream_id, c.type, c.type AS social_stream_type, 
                           c.channel_id, c.post_id, c.created_at AS post_date, a.conversation_id AS social_stream_post_id, d.social_id");
@@ -692,6 +694,8 @@ class facebook_model extends CI_Model
     	if($limit != null){
     	    $this->db->limit($limit);
     	}
+	if($only_assign_case == TRUE )
+	    $this->db->where('c.post_id IN (Select post_id from `case`)');
 	$this->db->order_by('a.updated_time','desc');
 	$result= $this->db->get()->result();
 	
@@ -705,13 +709,15 @@ class facebook_model extends CI_Model
         return $result;
     }
     
-    public function CountPmFB($filter){
+    public function CountPmFB($filter, $only_assign_case = false){
         $this->db->select('count(a.conversation_id) as count_post_id');
         $this->db->from("social_stream_facebook_conversation a LEFT OUTER JOIN 
                         social_stream d ON d.post_id = a.conversation_id");
 	if(count($filter) > 0){
 	    $this->db->where($filter);
-	} 
+	}
+	if($only_assign_case == TRUE )
+	    $this->db->where('d.post_id IN (Select post_id from `case`)');
         $this->db->order_by('created_at','desc');
         return $this->db->get()->result();
     }

@@ -34,7 +34,7 @@ $timezone = new DateTimeZone($this->session->userdata('timezone'));
                 ?>
                   <li style="display: block;">
                     <img src="<?=base_url('dashboard/media_stream/SafePhoto?photo=')."https://graph.facebook.com/".number_format($sender->facebook_id, 0,'.','')?>/picture?small" alt="" style="height: 40px;margin: 6px 10px" class="left" />
-                        <p style="padding: 9px 2px;margin: 2px 5px" class="left">
+                        <p style="padding: 9px 2px;margin: 2px 5px;width:80%" class="left">
                             
                             <span class="author"><?php echo $sender->name?>: </span>
                             <span class="text"><?=$html?></span><br />

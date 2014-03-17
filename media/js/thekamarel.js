@@ -935,7 +935,7 @@ $(function(){
                             var check_twitter = false;
                             var check_fb = false;
                             var check_youtube = false;
-                        
+                            
                             $('.compose-channels option:selected').each(function() {
                                 if($(this).attr('id') == 'opttwitter'){
                                     check_twitter = true;
@@ -1003,6 +1003,7 @@ $(function(){
                                 $(".btn-compose-post").prop('disabled',true);
                                 
                                 if(scheduleTime == ''){
+                                    console.log($('.url-show img.img-link').attr('src'));
                                     $('.compose-post-status').show();
                                     $('.compose-post-status').removeClass('green');
                                     $('.compose-post-status').removeClass('red');
@@ -1019,13 +1020,14 @@ $(function(){
                                                 url : BASEURL + 'cronjob/FbStatusUpdate',
                                                 type: "POST",
                                                 data: {
-                                                        content:$('.compose-textbox').val(),
-                                                        channel_id:$(this).val(),
-                                                        title:$('.url-show').find('input').val(),
-                                                        short_url:$('.compose-insert-link-short-url-hidden').val(),
-                                                        description:$('.url-show').find('textarea').val(),
-                                                        image:$('#compose-preview-img').attr('src') == undefined ? '' :  $('#compose-preview-img').attr('src')
-                                                       },
+                                                    linkImage : $('.url-show img.img-link').attr('src'),
+                                                    content:$('.compose-textbox').val(),
+                                                    channel_id:$(this).val(),
+                                                    title:$('.url-show').find('input').val(),
+                                                    short_url:$('.compose-insert-link-short-url-hidden').val(),
+                                                    description:$('.url-show').find('textarea').val(),
+                                                    image:$('#compose-preview-img').attr('src') == undefined ? '' :  $('#compose-preview-img').attr('src')
+                                                },
                                                 success: function(data)
                                                 {
                                                     var IS_JSON = true;

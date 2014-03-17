@@ -232,10 +232,6 @@ function open_api_template($url){
 }
 
 
-function fb_dummy_accesstoken($access_token = 'CAAFm2lqzuUgBAPRYLUQcU0smQCWJhNM9ZCVFzZASrYdPvdPxhZBbwtwbYEX9F3ABgktReqHhSnY81GNG8b0ZC4Q43QA9ZBpvNewblrZCuIW53c3h7DvhVszMR4ZBQ12T64p9ZA59PyqD1uizVYn3pa5Q1avZA8V5nImMRnyrh1c8bz54Xrq76MiPC'){
-    $account = json_decode(open_api_template('https://graph.facebook.com/me/accounts?access_token='.$access_token));
-    return $account->data[0]->access_token;
-}
 
 function facebook_page_manage($access_token = 'CAAFm2lqzuUgBAPRYLUQcU0smQCWJhNM9ZCVFzZASrYdPvdPxhZBbwtwbYEX9F3ABgktReqHhSnY81GNG8b0ZC4Q43QA9ZBpvNewblrZCuIW53c3h7DvhVszMR4ZBQ12T64p9ZA59PyqD1uizVYn3pa5Q1avZA8V5nImMRnyrh1c8bz54Xrq76MiPC'){
     $account = json_decode(open_api_template('https://graph.facebook.com/me/accounts?access_token='.$access_token));

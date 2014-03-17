@@ -8,7 +8,7 @@
                 <th style="width:100px">Time</th>
                 <th style="width:77px">User</th>
                 <th style="width:79px">Action</th>
-                <th style="width:130px">Description</th>
+                <th style="width:130px">Status</th>
                 <th style="width:139px">Notes</th>
               </tr>
             </thead>

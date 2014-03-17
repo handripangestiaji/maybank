@@ -16,7 +16,7 @@
         }
     }
 ?>
-<input type="hidden" class="channel-id" value="<?php if(count($fb_feed) > 0){echo $fb_feed[0]->channel_id;} else {echo $channel_id;}  ?>">
+<input type="hidden" class="channel-id" value="<?php echo $channel_id?>">
 <div id="cfacebook_<?=$channel_id?>" class="container-fluid" style="height: 95%">
 <!-- ==================== ACTIVITIES MENU ==================== -->
 <div class="floatingBoxMenu">
@@ -39,10 +39,10 @@
 </div>
 <!-- ==================== END OF ACTIVITIES MENU ==================== -->
 
-<div id='cfacebook'  class="container-fluid center subStream">
+<div id='cfacebook_<?=$channel_id?>'  class="container-fluid center subStream">
     <!-- ==================== ALL ACTIVITIES CONTENT ==================== -->
     <ul class="floatingBoxContainers" id="wallPosts">
-        <input type="hidden" value="" name="channel_id" class="channel-id" />
+        <input type="hidden" value="<?=$channel_id?>" name="channel_id" class="channel-id" />
         <?php
             if($fb_feed != NULL){
                 $this->load->view('dashboard/facebook/wall_post', array('fb_feed' => $fb_feed));

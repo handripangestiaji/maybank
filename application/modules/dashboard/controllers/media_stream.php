@@ -39,21 +39,19 @@ class Media_stream extends CI_Controller {
 	if($is_read != NULL){
 	    if($is_read != 2){
 		$filter['is_read'] = $is_read;
-	    }else{
-		$filter['case_id is NOT NULL'] = null;
 	    }
 	}
-	$limit=30;
+	$limit = 30;
 	$filter_user['country_code'] = IsRoleFriendlyNameExist($this->user_role, 'Regional_User') ? NULL : $this->session->userdata('country');
 	$data['user_list'] = $this->case_model->ReadAllUser($filter_user);
-	$data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter,$limit);
-	$data['count_fb_feed']=$this->facebook_model->CountFeedFB($filter);
+	$data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter,$limit, true, $is_read == 2);
+	$data['count_fb_feed']=$this->facebook_model->CountFeedFB($filter, true, $is_read == 2);
 	//$data['own_post'] = $this->facebook_model->RetrievePostFB($filter);
 	$filter['c.channel_id'] = $filter['channel_id'];
 	unset($filter['channel_id']);
-	$data['fb_pm'] = $this->facebook_model->RetrievePmFB($filter,$limit);
+	$data['fb_pm'] = $this->facebook_model->RetrievePmFB($filter,$limit, $is_read == 2);
 	$filter=array();
-	$data['CountPmFB']=$this->facebook_model->CountPmFB($filter);
+	$data['CountPmFB']=$this->facebook_model->CountPmFB($filter, $is_read == 2);
 	$this->load->model('campaign_model');
 	$data['product_list'] = $this->campaign_model->GetProduct();
 	$data['channel_id'] = $channel_id;
@@ -746,7 +744,7 @@ class Media_stream extends CI_Controller {
 	    "conversation_detail_id" => null,
 	    "post_at" => date("Y-m-d H:i:s"),
 	    "created_at" => date("Y-m-d H:i:s"),
-	    "product_id" => $this->input->post('product_id'),
+	    "product_id" => $this->input->post('product_id') == 0 ? NULL : $this->input->post('product_id'),
 	    "user_id" => $this->session->userdata('user_id')
 	);
 	$this->account_model->CreateReplyAction($page_reply);

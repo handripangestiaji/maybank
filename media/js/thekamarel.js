@@ -1534,20 +1534,20 @@ $(function(){
                             var commentButton = $(this);
                             isSend=commentButton.html()=="SEND";
                             commentButton.html('SENDING...').attr("disabled", "disabled");
-//                            var case_id = $(this).siblings(".case_id").val();
-//                            alert(case_id);
                            $.ajax({
                                 url : BASEURL + 'dashboard/media_stream/FbReplyMsg',
                                 type: "POST",
                                 data: {
                                     post_id: $(this).val(),
+                                    product_id : $(this).closest('li').find('.productType').val(),
                                     channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
                                     comment :$(this).parent().siblings(".replaycontent").val(),
                                     url:'',
                                     title :$(this).parent().siblings('#reply-url-show').find(".title_link").val(),
                                     desc :$(this).parent().siblings('#reply-url-show').find(".descr-link").val(),
                                     case_id :$(this).siblings(".case_id").val(),
-                                    img :$(this).parent().siblings('#reply-img-show').find("#reply-preview-img").attr('src'),
+                                    img :$(this).parent().siblings('#reply-img-show').find("#reply-preview-img").attr('src')
+                                    
                                 },
                                 success: function(response)
                                 {

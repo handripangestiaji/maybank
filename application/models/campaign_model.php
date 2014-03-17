@@ -328,7 +328,7 @@ echo "<pre>";
 		$this->db->select('*');
 		$this->db->from('content_products_campaign');
 		$this->db->join('content_products','content_products_campaign.products_id = content_products.id');
-		$this->db->where('content_products_campaign.campaign_id');
+		$this->db->where('content_products_campaign.campaign_id',$id);
 		return $this->db->get();
 	}
 }

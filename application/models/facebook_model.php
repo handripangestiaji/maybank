@@ -378,7 +378,7 @@ class facebook_model extends CI_Model
 		{
 		    $conversation_detail->message = '';
 		    foreach($breakLine as $line)
-			$conversation_detail->body .= $line.'<br />';
+			$conversation_detail->message .= $line.'<br />';
 		}
 		$created_time = new DateTime($conversation_detail->created_time);
 		$social_stream_facebook_conversation_detail = array(

@@ -114,8 +114,9 @@ $(function(){
     
         var type = $(modalID + " input[name=type]").val();
         $(modalID + " .loader-image").show();
-        var textToAppend = "" ;
         
+        var textToAppend = "" ;
+         $(modalID + ' form').html('');
         $(this).LoadContentAsync({
             url : BASEURL + "case/mycase/FacebookRelatedConversation/",
             urlParameter : {
@@ -130,20 +131,22 @@ $(function(){
                     $(modalId).append("<h2>No related conversation found.</h2>");
                 for(i = 0; i<response.length;i++){
                     type = response[i].type.replace("facebook_","");
-                    $(modalID + ' form').append(
-                         '<div class="related-conversation-body">' + 
-                        '<span class="related-conversation-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>' + 
-                        '<p class="headLine">' + 
-                            '<input type="checkbox" class="related-conversation-check" value="' + response[i].social_stream_post_id + '">' +
-                            '<input type="hidden" class="related-conversation-check" value="' + response[i].type + '">' + 
-                            '<span class="cyanText" style="text-transform:capitalize;"> '+ type +'</span> ' +
-                            '<i class="icon-circle"></i>' + 
-                            '<span class="UTCTimestamp">' +  response[i].created_at + '</span>' + 
-                        '</p>' + 
-                        '<div>' +
-                            '<p>' + response[i].content + '</p>' +
-                        '</div></div>'
-                    );
+                    if(response[i].content != '')
+                        $(modalID + ' form').append(
+                            '<div class="related-conversation-body">' + 
+                            '<span class="related-conversation-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>' + 
+                            '<p class="headLine">' + 
+                                '<input type="checkbox" class="related-conversation-check" value="' + response[i].social_stream_post_id + '"><span style="color:#222">' +
+                                $(modalID).closest('li').find('.author').html() + 
+                                '</span><input type="hidden" class="related-conversation-check" value="' + response[i].type + '">' + 
+                                '<span class="cyanText" style="text-transform:capitalize;"> '+ type +'</span> ' +
+                                '<i class="icon-circle"></i>' + 
+                                '<span class="UTCTimestamp">' +  response[i].created_at + '</span>' + 
+                            '</p>' + 
+                            '<div>' +
+                                '<p>' + response[i].content + '</p>' +
+                            '</div></div>'
+                        );
                    
                 }
                 

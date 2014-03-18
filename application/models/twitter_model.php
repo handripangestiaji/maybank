@@ -392,8 +392,9 @@ class twitter_model extends CI_Model
                     'action_type' => "twitter_".$type,
                     'channel_id' => $channel->channel_id,
                     'created_at' => date("Y-m-d H:i:s"),
-                    'post_id' => isset($saved_tweet[0]['post_id']) ? $saved_tweet[0]['post_id'] : $saved_tweet['post_id'],
-                    'created_by' => $reply['user_id']
+                    'post_id' => $reply['reply_to_post_id'],
+                    'created_by' => $reply['user_id'],
+                    'log_text' => $reply['text']
                 );
                 $this->db->insert('channel_action', $channel_action);
                 $this->db->insert('twitter_reply',$reply);
@@ -506,7 +507,7 @@ class twitter_model extends CI_Model
         $this->db->select("a.*, b.username, b.display_name, c.text, d.messages, d.assign_to, e.display_name as assign_name, f.display_name as solved_name, d.solved_message");
         $this->db->from("channel_action a INNER JOIN
 			user b on b.user_id = a.created_by LEFT JOIN
-			twitter_reply c on c.response_post_id = a.stream_id_response LEFT JOIN
+			twitter_reply c on c.reply_to_post_id = a.post_id LEFT JOIN
 			`case` d on d.case_id = a.case_id LEFT JOIN
 			user e on e.user_id = d.assign_to LEFT JOIN
                         user f on f.user_id = d.solved_by");

@@ -22,7 +22,6 @@
                     <?php
             if(isset($post->channel_action)):
                     foreach($post->channel_action as $action):?>
-                    <?php //print_r($action);?>
                     <tr>
                       <td style="width:100px"><?php
                         $timezone = new DateTimeZone($this->session->userdata('timezone'));
@@ -36,8 +35,12 @@
                       <!--td><button class="btn btn-primary icon-book"></button></td-->
                       <td style="width:130px">
                         <?php
-                            if($action->action_type == 'reply_facebook' || $action->action_type == 'twitter_reply'){
+                            
+                            if($action->action_type == 'reply_facebook'){
                                 echo '"'.$action->comment_content.'"';
+                            }
+                            else if($action->action_type == "twitter_reply"){
+                                echo '"'.$action->text.'"';
                             }
                             elseif($action->action_type == 'case_created'){
                                 echo 'Assign to '.$action->assign_name;

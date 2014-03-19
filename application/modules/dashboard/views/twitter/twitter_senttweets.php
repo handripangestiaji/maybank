@@ -45,8 +45,9 @@ for($i=0;$i<count($senttweets);$i++){
         
         <p>
             <a role="button" class="btn-engagement"><i class="icon-eye-open"></i> Engagement</a> 
-            <?php if($senttweets[$i]->retweet_count>0): ?> |
-            <span><i class="icon-retweet greyText"></i><?php echo $senttweets[$i]->retweet_count; ?> re-tweet(s)</span><?php endif;?>
+            <?php if($senttweets[$i]->retweet_count > 0): ?> |
+                <span><i class="icon-retweet greyText"></i><?php echo $senttweets[$i]->retweet_count; ?> re-tweet(s)</span>
+            <?php endif;?>
         </p>
         
         

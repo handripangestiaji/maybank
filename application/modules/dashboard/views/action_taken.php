@@ -37,7 +37,7 @@
                         <?php
                             
                             if($action->action_type == 'reply_facebook'){
-                                echo '"'.$action->comment_content.'"';
+                                echo $action->page_reply_content;
                             }
                             else if($action->action_type == "twitter_reply"){
                                 echo '"'.$action->text.'"';

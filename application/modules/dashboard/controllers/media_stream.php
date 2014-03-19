@@ -578,7 +578,8 @@ class Media_stream extends CI_Controller {
                 
                 try{
                     $return = $this->facebook->api('/'.$stream_id->post_stream_id.'/comments', 'POST', $args);
-                }catch(FacebookApiException $e){
+                }
+		catch(FacebookApiException $e){
                     echo json_encode(
             		    array(
                         'success' => false,
@@ -591,14 +592,15 @@ class Media_stream extends CI_Controller {
         }else{
             try{
                 $return=$this->facebook->api('/'.$stream_id->post_stream_id.'/comments', 'POST', array('message'=>$comment,'attachment'=>$attachment));
-            }catch(FacebookApiException $e){
+            }
+	    catch(FacebookApiException $e){
                 echo json_encode(
-        		    array(
-                    'success' => false,
-        			'message' => "reply was failed",
-        			)
-    		    );
-            $return='error';
+			array(
+			    'success' => false,
+			    'message' => "reply was failed",
+			    )
+		);
+		$return='error';
             }
         }
         
@@ -617,16 +619,17 @@ class Media_stream extends CI_Controller {
            	    
             $this->account_model->CreateFbCommentAction($action,$post_id,$this->input->post('like') === 'true' ? 1 : 0);
             $this->account_model->CreateFbReplyAction($post_id,$stream_id->post_stream_id,$comment,$reply_type,$product_type,$url);
-	     echo json_encode(
-    		    array(
-			'success' => true,
-    			'message' => "successfully done",
-    			'result' => $return,
-			'action_log' => $action
-    		    )
-    		);	
+	    echo json_encode(
+		array(
+		    'success' => true,
+		    'message' => "successfully done",
+		    'result' => $return,
+		    'action_log' => $action
+		)
+	    );	
                                       
-        }elseif(is_array($return)){//replay in reply        
+        }
+	elseif(is_array($return)){//replay in reply        
             if($return['id']){
             $return=$return['id'];
             $action = array(
@@ -637,9 +640,6 @@ class Media_stream extends CI_Controller {
         		"created_by" => $this->session->userdata('user_id'),
         		"stream_id_response" => $return
         	);
-            
-           
-            
             $this->account_model->CreateFbCommentAction($action,$post_id,$this->input->post('like') === 'true' ? 1 : 0);
             $this->account_model->CreateFbReplyAction($post_id,'',$comment,$reply_type,$product_type,$url);
 	    $action['created_at'] = new DateTime($action['created_at']." Europe/London");

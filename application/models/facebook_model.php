@@ -712,7 +712,8 @@ class facebook_model extends CI_Model
     public function CountPmFB($filter, $only_assign_case = false){
         $this->db->select('count(a.conversation_id) as count_post_id');
         $this->db->from("social_stream_facebook_conversation a LEFT OUTER JOIN 
-                        social_stream d ON d.post_id = a.conversation_id");
+                        social_stream d ON d.post_id = a.conversation_id inner join channel c
+			on c.channel_id = d.channel_id");
 	if(count($filter) > 0){
 	    $this->db->where($filter);
 	}

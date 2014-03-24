@@ -4,16 +4,16 @@
     for($i=0;$i<count($directmessage);$i++){
     ?>
     <li id="post<?=$directmessage[$i]->social_stream_post_id?>">
-        <?php
-            if(count($directmessage[$i]->case) > 0)
-                $this->load->view('dashboard/twitter/case_view', array(
-                    "caseMsg" => $directmessage[$i]->case[0]
-                ));
-        ?>
         <input type="hidden" class="postId" value="<?php echo $directmessage[$i]->social_stream_post_id; ?>" />
         <div class="circleAvatar"><img src="<?php echo base_url('dashboard/media_stream/SafePhoto?photo=').$directmessage[$i]->sender->profile_image_url; ?>" alt=""></div>
         <div class="read-mark <?php if($directmessage[$i]->is_read==0){echo 'redText';} else { echo 'greyText'; } ?>"><i class="icon-bookmark icon-large"></i></div>
         <br />
+        <?php
+        if(count($directmessage[$i]->case) > 0)
+            $this->load->view('dashboard/twitter/case_view', array(
+                    "caseMsg" => $directmessage[$i]->case[0]
+                ));
+        ?>
         <p class="headLine">
             <span class="author"><?php echo $directmessage[$i]->sender->screen_name; ?></span>
             <i class="icon-circle"></i>
@@ -51,28 +51,71 @@
                 }
                 ?>
             </button>
-       
+  
         <?php endif?>
-        <?php if($directmessage[$i]->response_post_id):?>
-        
+        <?php if(count($directmessage[$i]->reply_post) > 0):?>
             <button type="button" class="btn btn-inverse btn-mini"
-                    value="<?php echo $directmessage[$i]->response_post_id?>">Replied By
-                    <?php
-                    
-                    $date = new DateTime($directmessage[$i]->reply_post[0]->created_at.' Europe/London');
-                    $date->setTimezone($timezone);
-                    echo $directmessage[$i]->reply_post[0]->display_name.' at '.$date->format("d-M-y h:i A")?>
-                    </button>
+            value="<?php echo $directmessage[$i]->reply_post[0]->response_post_id?>">Replied By
+            <?php
+            
+            $date = new DateTime($directmessage[$i]->reply_post[0]->created_at.' Europe/London');
+            $date->setTimezone($timezone);
+            echo $directmessage[$i]->reply_post[0]->display_name.' at '.$date->format("d-M-y h:i A")?>
+            </button>
             
         <?php endif?>
-        <?php if(!$directmessage[$i]->response_post_id && count($directmessage[$i]->case) == 0):?>
+        <?php if(count($directmessage[$i]->reply_post) == 0 && count($directmessage[$i]->case) == 0):?>
             <button type="button" class="btn btn-warning btn-mini">OPEN</button>
         <?php endif?>
         </p>
-         <p>
-        
-            
+           
+        <p>
+            <a role="button" class="btn-engagement"><i class="icon-eye-open"></i> Outbox To <?=$directmessage[$i]->sender->screen_name?></a>
         </p>
+        <div class="engagement hide">
+           <div class="engagement-header">
+               <span class="engagement-btn-close btn-close pull-right">Close <i class="icon-remove-sign"></i></span>
+           </div>
+           <br/>
+           <div>
+            <?php 
+            
+            foreach($directmessage[$i]->outbox as $outbox):
+             
+           ?>
+               <div class="engagement-body">
+                   <span class="engagement-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>    
+                   <p class="headLine">
+                       <span class="author">
+                           @<?php echo $directmessage[$i]->social_stream_name?>
+                       </span>
+                       <i class="icon-circle"></i>
+                       <span>Sent <span class="cyanText">DM to @<?=$directmessage[$i]->sender->screen_name?></span> At </span>
+                       
+                       <span><?php
+                        $date = new DateTime($outbox->created_at.' Europe/London');
+                        $date->setTimezone($timezone);
+                        echo $date->format("l, M j, Y h:i A");
+                       ?></span>
+                   </p>
+                   <div>
+                       <p><?php echo RemoveUrlWithin($outbox->text) ?></p>
+                   </div>
+               </div>
+             
+           <?php endforeach; ?>
+            <?php
+                $data_loaded['post'] = $directmessage[$i];
+                $this->load->view('dashboard/action_taken', $data_loaded);
+            ?>
+           </div>
+           <div href='#modal-action-log-<?php echo $directmessage[$i]->post_stream_id ?>' data-toggle='modal' class="containerHeadline specialToggleTable">
+                <i class="icon-table"></i><h2>Action Log</h2>
+            </div>
+       </div>
+        
+
+        
         <h4 class="filled">
         <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Take Action') ||
                  IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action') ||
@@ -85,7 +128,8 @@
             <?php
                 $data = array(
                     'come_from' => "direct_messages",
-                    'post' => $directmessage[$i]
+                    'post' => $directmessage[$i],
+                    'dm_type' => $directmessage[$i]->direct_message_type
                 );
                 $this->load->view('dashboard/twitter/twitter_button', $data);
             ?>

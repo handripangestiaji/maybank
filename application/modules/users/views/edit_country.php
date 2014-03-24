@@ -1,11 +1,10 @@
 <div class="row-fluid" style="width: 100%; margin: 0px auto;">    
 <!--<span style="font-size: 14pt; color: black; margin: 5px 0;">USER MANAGEMENT</span>-->
     <div class="cms-content row-fluid">
-        <div class="cms-filter pull-left">
-            <input class="btn btn-primary" type="button" onclick="menu_user()" name="btn_user" value="User" /> <br />
-            <input class="btn" type="button" onclick="menu_role()" name="btn_role" value="Role"  />   <br />
-            <input class="btn" type="button" onclick="menu_group()" name="btn_group" value="Group" />
+         <div class="cms-filter pull-left users-menu">
+	    <?php $this->load->view('users/user_menu')?>
         </div>
+        
                
         <div class="cms-table pull-right">
             <div>

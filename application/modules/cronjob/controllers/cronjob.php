@@ -185,10 +185,13 @@ class Cronjob extends CI_Controller {
             $dtz = new DateTimeZone($post->timezone);
             $local_time = new DateTime('now', $dtz);
             $offset = $dtz->getOffset( $local_time ) / 3600;
-            $local_time = date('Y-m-d H:i',strtotime(($offset < 0 ? $offset : "+".$offset).' hour'));
+            $current_date = new DateTime(date("Y-m-d H:i:s").' Europe/London');
+            $current_date->setTimezone($dtz);
+            
+            $local_time = $current_date->format("Y-m-d H:i");
             $post_time = date('Y-m-d H:i',strtotime($post->time_to_post));
             print_r($local_time.' & '.$post_time);
-            if($local_time == $post_time){
+            if($local_time >= $post_time){
                 //handle if facebook
                 if($post->connection_type == 'facebook'){
                     $post_to = json_decode($this->FbStatusUpdate($post));
@@ -254,7 +257,7 @@ class Cronjob extends CI_Controller {
         $newStd->page_id =  $channel_loaded[0]->social_id;
         $newStd->token = $this->facebook_model->GetPageAccessToken( $channel_loaded[0]->oauth_token, $channel_loaded[0]->social_id);
       
-        $access_token_fb = fb_dummy_accesstoken();
+        
         $config = array(
              'appId' => $this->config->item('fb_appid'),
              'secret' => $this->config->item('fb_secretkey'),
@@ -280,6 +283,7 @@ class Cronjob extends CI_Controller {
                 $data = base64_decode($img);
                 $file_name = uniqid().'.png';
                 $pathToSave = $this->config->item('assets_folder').$file_name;
+                
                 if ( ! write_file($pathToSave, $data)){
                     $result = $this->facebook->api('/me/feed','POST',array('message' => $messages));
                 }
@@ -297,9 +301,12 @@ class Cronjob extends CI_Controller {
             $attachment = array(
                 'message' => $messages,
                 'name' => $title,
+                'picture' => $this->input->post('linkImage'),
                 'link' => 'http://maybk.co/'.$short_code,
                 'description' => $description,
-            );  
+            );
+            if(!$this->input->post('linkImage'))
+                unset($attachment['picture']);
             $result = $this->facebook->api('/me/feed','POST',$attachment);
         }
         

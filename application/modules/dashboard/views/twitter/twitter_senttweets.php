@@ -43,18 +43,7 @@ for($i=0;$i<count($senttweets);$i++){
         </p>
         <!--p><button type="button" class="btn btn-warning btn-mini">OPEN</button-->
         
-        <p>
-            <a role="button" class="btn-engagement"><i class="icon-eye-open"></i> Engagement</a> 
-            <?php if($senttweets[$i]->retweet_count>0): ?> |
-            <span><i class="icon-retweet greyText"></i><?php echo $senttweets[$i]->retweet_count; ?> re-tweet(s)</span><?php endif;?>
-        </p>
-        
-        
-        <!-- ENGAGEMENT -->    
-        <div class="engagement hide">
-            
-        </div>
-        <!-- END ENGAGEMENT -->
+     
         
         <h4 class="filled">
             <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Take Action') ||

@@ -28,7 +28,6 @@ $timezone = new DateTimeZone($this->session->userdata('timezone'));
                 <?php foreach($case_conversation as $conversation): ?>
                 <?php
                 $html = $conversation->twitter_data[0]->text;
-                $entities = json_decode($conversation->twitter_data[0]->twitter_entities);
                 
                 $html =  linkify(html_entity_decode($html), true, true);
                 

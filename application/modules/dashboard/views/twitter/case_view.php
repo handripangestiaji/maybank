@@ -28,12 +28,11 @@ $timezone = new DateTimeZone($this->session->userdata('timezone'));
                 <?php foreach($case_conversation as $conversation): ?>
                 <?php
                 $html = $conversation->twitter_data[0]->text;
-                $entities = json_decode($conversation->twitter_data[0]->twitter_entities);
                 
                 $html =  linkify(html_entity_decode($html), true, true);
                 
                 ?>
-                <li style="display: block;"><p style="padding: 9px 2px;">
+                <li style="display: block;"><p style="padding: 9px 2px;margin: 2px 5px;">
                     <!--span class="author">@<?=$conversation->twitter_data[0]->screen_name?>: </span-->
                     <span class="text"><?=$html?></span> <span> at </span>
                     <span class="created-time" style="font-size:10px;color: #666;"><?php $created_at_twitter = new DateTime($conversation->twitter_data[0]->created_at.' Europe/London', $timezone);

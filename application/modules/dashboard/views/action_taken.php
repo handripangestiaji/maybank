@@ -8,7 +8,7 @@
                 <th style="width:100px">Time</th>
                 <th style="width:77px">User</th>
                 <th style="width:79px">Action</th>
-                <th style="width:130px">Description</th>
+                <th style="width:130px">Status</th>
                 <th style="width:139px">Notes</th>
               </tr>
             </thead>
@@ -22,7 +22,6 @@
                     <?php
             if(isset($post->channel_action)):
                     foreach($post->channel_action as $action):?>
-                    <?php //print_r($action);?>
                     <tr>
                       <td style="width:100px"><?php
                         $timezone = new DateTimeZone($this->session->userdata('timezone'));
@@ -36,8 +35,12 @@
                       <!--td><button class="btn btn-primary icon-book"></button></td-->
                       <td style="width:130px">
                         <?php
-                            if($action->action_type == 'reply_facebook' || $action->action_type == 'twitter_reply' || $action->action_type == 'conversation_facebook'){
-                                echo '"'.$action->comment_content.'"';
+                            
+                            if($action->action_type == 'reply_facebook'){
+                                echo $action->page_reply_content;
+                            }
+                            else if($action->action_type == "twitter_reply"){
+                                echo '"'.$action->text.'"';
                             }
                             elseif($action->action_type == 'case_created'){
                                 echo 'Assign to '.$action->assign_name;

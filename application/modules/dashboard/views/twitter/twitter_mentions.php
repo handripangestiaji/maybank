@@ -115,30 +115,29 @@ for($i=0;$i<count($mentions);$i++){
         <?php 
          $currComment = '';
          for($j=0;$j<count($comment);$j++):
-            
             if($currComment != $comment[$j]->{'text'}):
             $currComment = $comment[$j]->text;
         ?>
-                <div class="engagement-body">
-                    <span class="engagement-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>    
-                    <p class="headLine">
-                        <span class="author">
-                            <?php echo $comment[$j]->name?>
-                        </span>
-                        <i class="icon-circle"></i>
-                        <span>posted a <span class="cyanText">tweet</span></span>
-                        <i class="icon-circle"></i>
-                        <span><?php
-                         $date = new DateTime($mentions[$i]->social_stream_created_at.' Europe/London');
-                         $date_comment = new DateTime($comment[$j]->created_at, $timezone);
-                        ?></span>
-                    </p>
-                    <div>
-                        <p><?php echo RemoveUrlWithin($comment[$j]->text) ?></p>
-                    </div>
+            <div class="engagement-body">
+                <span class="engagement-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>    
+                <p class="headLine">
+                    <span class="author">
+                        <?php echo $comment[$j]->name?>
+                    </span>
+                    <i class="icon-circle"></i>
+                    <span>posted a <span class="cyanText">tweet</span></span>
+                    <i class="icon-circle"></i>
+                    <span><?php
+                     $date = new DateTime($mentions[$i]->social_stream_created_at.' Europe/London');
+                     $date_comment = new DateTime($comment[$j]->created_at, $timezone);
+                    ?></span>
+                </p>
+                <div>
+                    <p><?php echo RemoveUrlWithin($comment[$j]->text) ?></p>
                 </div>
-                <?php endif;?>
-            <?php endfor; ?>
+            </div>
+            <?php endif;?>
+        <?php endfor; ?>
         <!-- ==================== CONDENSED TABLE HEADLINE ==================== -->
         <div href='#modal-action-log-<?php echo $mentions[$i]->post_stream_id ?>' data-toggle='modal' class="containerHeadline specialToggleTable">
             <i class="icon-table"></i><h2>Action Log</h2>

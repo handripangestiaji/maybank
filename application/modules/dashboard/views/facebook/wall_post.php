@@ -5,7 +5,9 @@ $timezone=new DateTimeZone($this->session->userdata('timezone'));
 
 for($i=0; $i<count($fb_feed);$i++):
 $isMyCase=$this->case_model->chackAssignCase(array('a.post_id' => $fb_feed[$i]->post_id, 'a.status <>'=>'reassign'));
-if($fb_feed[$i]->post_content != '<br />'):
+$attachment = json_decode($fb_feed[$i]->attachment);
+
+if($fb_feed[$i]->post_content != '<br />' || isset($attachment->media)):
 
 ?>
 <li  id="post<?=$fb_feed[$i]->social_stream_post_id?>">
@@ -42,7 +44,6 @@ if($fb_feed[$i]->post_content != '<br />'):
     if($fb_feed[$i]->attachment){ 
         $attachment=json_decode($fb_feed[$i]->attachment);
         $attachment = isset($attachment->media) ? $attachment->media: null;
-        //print_r($attachment);
         for($att=0;$att<count($attachment);$att++){
            if($attachment[$att]->type=='photo'){
             

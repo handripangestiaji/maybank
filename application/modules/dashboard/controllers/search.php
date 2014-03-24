@@ -112,7 +112,8 @@ class Search extends CI_Controller {
 		    $data_tw_mentions = array();
 		    foreach($new_tw_mentions as $ntm){
 			 $filter_tw = array('a.post_stream_id' => $ntm->post_stream_id,
-					    'b.type' => 'mentions'
+					    'b.type' => 'mentions',
+					    'a.channel_id' => $channel_id
 					    );
 			 $result = $this->twitter_model->ReadTwitterData($filter_tw);
 			 $data_tw_mentions = array_merge($data_tw_mentions,$result);
@@ -138,7 +139,8 @@ class Search extends CI_Controller {
 		    $data_tw_homefeed = array();
 		    foreach($new_tw_homefeed as $nth){
 			 $filter_tw = array('a.post_stream_id' => $nth->post_stream_id,
-					    'b.type' => 'home_feed'
+					    'b.type' => 'home_feed',
+					    'a.channel_id' => $channel_id
 					    );
 			 $result = $this->twitter_model->ReadTwitterData($filter_tw);
 			 $data_tw_homefeed = array_merge($data_tw_homefeed,$result);
@@ -164,7 +166,8 @@ class Search extends CI_Controller {
 		    $data_tw_senttweets = array();
 		    foreach($new_tw_senttweets as $nts){
 			 $filter_tw = array('a.post_stream_id' => $nts->post_stream_id,
-					    'b.type' => 'user_timeline'
+					    'b.type' => 'user_timeline',
+					    'a.channel_id' => $channel_id
 					    );
 			 $result = $this->twitter_model->ReadTwitterData($filter_tw);
 			 $data_tw_senttweets = array_merge($data_tw_senttweets,$result);
@@ -192,6 +195,7 @@ class Search extends CI_Controller {
 		    $data_tw_dms = array();
 		    foreach($new_tw_dms as $ntd){
 			 $filter_tw = array('a.post_stream_id' => $ntd->post_stream_id,
+					    'a.channel_id' => $channel_id
 					    );
 			 $result = $this->twitter_model->ReadDMFromDb($filter_tw);
 			 $data_tw_dms = array_merge($data_tw_dms,$result);
@@ -225,7 +229,8 @@ class Search extends CI_Controller {
 	       if($new_youtube_post){
 	       $data_youtube_post = array();
 		    foreach($new_youtube_post as $nyp){
-			 $filter_yt = array('a.post_stream_id' => $nyp->post_stream_id);
+			 $filter_yt = array('a.post_stream_id' => $nyp->post_stream_id,
+					    'a.channel_id' => $channel_id);
 			 $result = $this->youtube_model->ReadYoutubePost($filter_yt);
 			 $data_youtube_post = array_merge($data_youtube_post,$result);
 		    }
@@ -247,7 +252,8 @@ class Search extends CI_Controller {
 	       if($new_youtube_comment){
 	       $data_youtube_comment = array();
 		    foreach($new_youtube_comment as $nyc){
-			 $filter_yt = array('a.post_stream_id' => $nyc->post_stream_id);
+			 $filter_yt = array('a.post_stream_id' => $nyc->post_stream_id,
+					    'a.channel_id' => $channel_id);
 			 $result = $this->youtube_model->ReadYoutubeComment($filter_yt);
 			 $data_youtube_comment = array_merge($data_youtube_comment,$result);
 		    }
@@ -292,7 +298,7 @@ class Search extends CI_Controller {
 	  $ret = $this->elasticsearch_model->TypeMapping($this->the_index,'facebook_feed',$fb_feed_map);
 	  
 	  $filter = array(
-	       'channel_id' => $channel_id,
+	       'c.channel_id' => $channel_id,
 	    );
 	  $fb_feed = $this->facebook_model->RetrieveFeedFB($filter,0,false);
 	  
@@ -315,12 +321,13 @@ class Search extends CI_Controller {
 				);
 	  $ret = $this->elasticsearch_model->TypeMapping($this->the_index,'facebook_pm',$fb_pm_map);
 	  $filter = array(
-	       'channel_id' => $channel_id,
+	       'c.channel_id' => $channel_id,
 	    );
 	  $fb_pm = $this->facebook_model->RetrievePmFB($filter);
 	  foreach($fb_pm as $pm){
-	       $new_pm = array('messages' => $pm->messages,
-			       'name' => $pm->name,
+	       $sender = $pm->participant->sender->facebook_id == $pm->social_id ? $pm->participant->to : $pm->participant->sender;
+	       $new_pm = array('messages' => $pm->snippet,
+			       'name' => $sender->name,
 			       'post_stream_id' => $pm->post_stream_id,
 			       'post_id' => $pm->post_id);
 	       $ret = $this->elasticsearch_model->InsertDoc($this->the_index,'facebook_pm',$pm->post_id,$new_pm);
@@ -404,7 +411,7 @@ class Search extends CI_Controller {
 	  $ret = $this->elasticsearch_model->TypeMapping($this->the_index,'youtube_post',$yt_post_map);
 	  
 	  $filter = array(
-	   'channel_id' => $channel_id,
+	   'c.channel_id' => $channel_id,
 	  );
 	  $posts = $this->youtube_model->ReadYoutubePost($filter);
 	  foreach($posts as $post){

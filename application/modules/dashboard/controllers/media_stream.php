@@ -578,7 +578,8 @@ class Media_stream extends CI_Controller {
                 
                 try{
                     $return = $this->facebook->api('/'.$stream_id->post_stream_id.'/comments', 'POST', $args);
-                }catch(FacebookApiException $e){
+                }
+		catch(FacebookApiException $e){
                     echo json_encode(
             		    array(
                         'success' => false,
@@ -591,14 +592,15 @@ class Media_stream extends CI_Controller {
         }else{
             try{
                 $return=$this->facebook->api('/'.$stream_id->post_stream_id.'/comments', 'POST', array('message'=>$comment,'attachment'=>$attachment));
-            }catch(FacebookApiException $e){
+            }
+	    catch(FacebookApiException $e){
                 echo json_encode(
-        		    array(
-                    'success' => false,
-        			'message' => "reply was failed",
-        			)
-    		    );
-            $return='error';
+			array(
+			    'success' => false,
+			    'message' => "reply was failed",
+			    )
+		);
+		$return='error';
             }
         }
         
@@ -617,16 +619,17 @@ class Media_stream extends CI_Controller {
            	    
             $this->account_model->CreateFbCommentAction($action,$post_id,$this->input->post('like') === 'true' ? 1 : 0);
             $this->account_model->CreateFbReplyAction($post_id,$stream_id->post_stream_id,$comment,$reply_type,$product_type,$url);
-	     echo json_encode(
-    		    array(
-			'success' => true,
-    			'message' => "successfully done",
-    			'result' => $return,
-			'action_log' => $action
-    		    )
-    		);	
+	    echo json_encode(
+		array(
+		    'success' => true,
+		    'message' => "successfully done",
+		    'result' => $return,
+		    'action_log' => $action
+		)
+	    );	
                                       
-        }elseif(is_array($return)){//replay in reply        
+        }
+	elseif(is_array($return)){//replay in reply        
             if($return['id']){
             $return=$return['id'];
             $action = array(
@@ -637,9 +640,6 @@ class Media_stream extends CI_Controller {
         		"created_by" => $this->session->userdata('user_id'),
         		"stream_id_response" => $return
         	);
-            
-           
-            
             $this->account_model->CreateFbCommentAction($action,$post_id,$this->input->post('like') === 'true' ? 1 : 0);
             $this->account_model->CreateFbReplyAction($post_id,'',$comment,$reply_type,$product_type,$url);
 	    $action['created_at'] = new DateTime($action['created_at']." Europe/London");
@@ -784,9 +784,7 @@ class Media_stream extends CI_Controller {
         }else{
             $facebook_data = $this->facebook_model->RetriveCommentPostFb(array('b.id' => $this->input->post('post_id')),array());
         }
-    	if(count($facebook_data) > 0){
-       // print_r($facebook_data);
-        
+    	if(count($facebook_data) > 0){        
     	    $facebook_data = $facebook_data[0];
             $channel = $this->account_model->GetChannel(array(
     		'channel_id' => $this->input->post('channel_id')
@@ -801,39 +799,32 @@ class Media_stream extends CI_Controller {
         		);return;
     	    }else{
                 $config = array(
-        	       'appId' => $this->config->item('fb_appid'),
-        	       'secret' => $this->config->item('fb_secretkey')
-        	    );
-
+		    'appId' => $this->config->item('fb_appid'),
+		    'secret' => $this->config->item('fb_secretkey')
+		 );
                 $is_Post_id=$this->facebook_model->streamId($action['post_id']);
-            //    print_r($is_Post_id);
                 if($is_Post_id){
                     $newStd = new stdClass();
                     $newStd->page_id =  $channel[0]->social_id;
                     $newStd->token = $this->facebook_model->GetPageAccessToken( $channel[0]->oauth_token, $channel[0]->social_id);
-
-                  //  print_r($newStd->token);
-//                    if(isset($newStd->token)){}    
                     $this->load->library('facebook',$config);
-                	$this->facebook->setaccesstoken($newStd->token);
+                    $this->facebook->setaccesstoken($newStd->token);
                     $result = $this->facebook->api( "/".$is_Post_id->post_stream_id."","delete");
                    
-                   $result='test'; 
-                    if(isset($result)=='test'){
-//            		        print_r($is_Post_id->post_stream_id);
-//                          print_r($channel[0]->channel_id);
-//                          print_r($this->session->userdata('user_id'));
-
-            		    if($status == 0){//wallpost
+                   
+                    if(isset($result)){
+            		if($status == 0){//wallpost
                           $row_affected = $this->facebook_model->DeletePostFb($is_Post_id->post_stream_id,$channel[0]->channel_id,
                			  $this->session->userdata('user_id') == 0 ? NULL : $this->session->userdata('user_id'),0);
-            		    }elseif($status == 1){//pm
+            		}
+			else if($status == 1)
                           $row_affected = $this->facebook_model->DeletePostFb($is_Post_id->post_stream_id,$channel[0]->channel_id,
                			  $this->session->userdata('user_id') == 0 ? NULL : $this->session->userdata('user_id'),1);
-                        }else{//comment
+			else
                           $row_affected = $this->facebook_model->DeletePostFb($is_Post_id->post_stream_id,$channel[0]->channel_id,
                			  $this->session->userdata('user_id') == 0 ? NULL : $this->session->userdata('user_id'),2);
-                        }
+			  
+			
                         echo json_encode(
                 	 		array(
                 			    'success' => true,
@@ -842,7 +833,7 @@ class Media_stream extends CI_Controller {
                 			    'row_affected' => $row_affected
                 			)
                         );                                
-            		}else{
+            	    }else{
             		     echo json_encode(
                 		    array(
                 			'success' => false,
@@ -1208,7 +1199,7 @@ class Media_stream extends CI_Controller {
 	if(file_exists("./media/dynamic/tmp_photo/".$md5_photo) && $safe_photo)
 	    redirect("/media/dynamic/tmp_photo/".$md5_photo);
 	else{
-	    file_put_contents("./media/dynamic/tmp_photo/".$md5_photo, file_get_contents($this->input->get('photo')));
+	    file_put_contents("./media/dynamic/tmp_photo/".$md5_photo, file_get_contents(urldecode($this->input->get('photo'))));
 	    redirect("/media/dynamic/tmp_photo/".$md5_photo);    
 	}
 	

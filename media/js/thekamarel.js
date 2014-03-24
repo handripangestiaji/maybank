@@ -935,7 +935,7 @@ $(function(){
                             var check_twitter = false;
                             var check_fb = false;
                             var check_youtube = false;
-                        
+                            
                             $('.compose-channels option:selected').each(function() {
                                 if($(this).attr('id') == 'opttwitter'){
                                     check_twitter = true;
@@ -1003,6 +1003,7 @@ $(function(){
                                 $(".btn-compose-post").prop('disabled',true);
                                 
                                 if(scheduleTime == ''){
+                                    console.log($('.url-show img.img-link').attr('src'));
                                     $('.compose-post-status').show();
                                     $('.compose-post-status').removeClass('green');
                                     $('.compose-post-status').removeClass('red');
@@ -1019,13 +1020,14 @@ $(function(){
                                                 url : BASEURL + 'cronjob/FbStatusUpdate',
                                                 type: "POST",
                                                 data: {
-                                                        content:$('.compose-textbox').val(),
-                                                        channel_id:$(this).val(),
-                                                        title:$('.url-show').find('input').val(),
-                                                        short_url:$('.compose-insert-link-short-url-hidden').val(),
-                                                        description:$('.url-show').find('textarea').val(),
-                                                        image:$('#compose-preview-img').attr('src') == undefined ? '' :  $('#compose-preview-img').attr('src')
-                                                       },
+                                                    linkImage : $('.url-show img.img-link').attr('src'),
+                                                    content:$('.compose-textbox').val(),
+                                                    channel_id:$(this).val(),
+                                                    title:$('.url-show').find('input').val(),
+                                                    short_url:$('.compose-insert-link-short-url-hidden').val(),
+                                                    description:$('.url-show').find('textarea').val(),
+                                                    image:$('#compose-preview-img').attr('src') == undefined ? '' :  $('#compose-preview-img').attr('src')
+                                                },
                                                 success: function(data)
                                                 {
                                                     var IS_JSON = true;
@@ -1579,87 +1581,57 @@ $(function(){
                         }
                                                 
                     });
-                                        
-                    //$(this).on('click','.deleteFB',
-//                        function(){
-//
-//                            var delButton = $(this);
-//                            channel_id : $(this).closest('.floatingBox').find('input.channel-id').val()
-//                            post_id=delButton.closest('li').find('.postId').val();
-//                            //type=delButton.closest('li').find('.type').val();
-//                             delButton.attr('disabled', 'disabled').html('DELETING...');
-//                            $.ajax({
-//                                url : BASEURL + 'dashboard/media_stream/fbDeleteStatus',
-//                                type: "POST",
-//                                data: {
-//                                    post_id: post_id,
-//                                    channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
-//                                },
-//                                success: function(response){
-//                                    delButton.removeAttr('disabled').html('SEND');
-//                                }
-//                            });
-//                            
-//                        });
-                        
-                        $(this).on('click', '.delete_post', 
-                            function() {
-                                var btnDestroyStatus = $(this);
-                                var confirmStatus = confirm("Are you sure want to delete this ?");
-                                var post_id=btnDestroyStatus.closest('li').find('.postId').val(); 
-                                var commnet_id=$(this).val();    
+                    $(this).on('click', '.delete_post', 
+                        function() {
+                            var btnDestroyStatus = $(this);
+                            var confirmStatus = confirm("Are you sure want to delete this ?");
+                            var post_id=btnDestroyStatus.closest('li').find('.postId').val(); 
+                            var commnet_id=$(this).val();    
+                            
+                            if(confirmStatus == true){
+                               var type_action;
+                               if(btnDestroyStatus.hasClass('wall')){
+                                type_action=0
+                          //  alert(post_id);                   
+                               }else if(btnDestroyStatus.hasClass('pm')){
+                                type_action=1
+                               }else if(btnDestroyStatus.hasClass('comments')){
+                                type_action=2
+                                post_id=commnet_id;
+                               } 
                                 
-                                if(confirmStatus == true){
-                                   var type_action;
-                                   if(btnDestroyStatus.hasClass('wall')){
-                                    type_action=0
-                              //  alert(post_id);                   
-                                   }else if(btnDestroyStatus.hasClass('pm')){
-                                    type_action=1
-                                   }else if(btnDestroyStatus.hasClass('comments')){
-                                    type_action=2
-                                    post_id=commnet_id;
-                                   } 
-                                    
-                                    btnDestroyStatus.attr('disabled', 'disabled');
-                                    $.ajax({
-                                        url : BASEURL + 'dashboard/media_stream/fbDeleteStatus/' + type_action,
-                                        type: "POST",
-                                        data: {
-                                    post_id: post_id,
-                                    channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
-                                    //channel_id : btnDestroyStatus.closest('.floatingBox').find('input.channel-id').val(),
-                                        },
-                                        success: function(response)
+                                btnDestroyStatus.attr('disabled', 'disabled');
+                                $.ajax({
+                                    url : BASEURL + 'dashboard/media_stream/fbDeleteStatus/' + type_action,
+                                    type: "POST",
+                                    data: {
+                                        post_id: post_id,
+                                        channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
+                                    },
+                                    success: function(response)
+                                    {
+                                        if(response.success == true){
+                                            btnDestroyStatus.closest('li').remove();
+                                        }
+                                        else
                                         {
-                                            if(response.success == true){
-                                                btnDestroyStatus.closest('li').toggle('slow');
-                                                btnDestroyStatus.closest('li').toggle( "bounce", { times: 3, complete:function(){
-                                                    $(this).show();
-                                                }}, "slow");
-                                            }
-                                            else
-                                            {
-                                                btnDestroyStatus.removeAttr('disabled');
-                                                btnDestroyStatus.closest('li').toggle( "bounce", { times: 3, complete:function(){
-                                                    $(this).show();
-                                                    alert(response.message);
-                                                }}, "slow");
-                                            }
-                                        },
-                                        failed : function(response){
                                             btnDestroyStatus.removeAttr('disabled');
                                             btnDestroyStatus.closest('li').toggle( "bounce", { times: 3, complete:function(){
-                                                    $(this).show();
-                                                    alert(response.message);
+                                                $(this).show();
+                                                alert(response.message);
                                             }}, "slow");
                                         }
-                                    });    
-                                }
+                                    },
+                                    failed : function(response){
+                                        btnDestroyStatus.removeAttr('disabled');
+                                        btnDestroyStatus.closest('li').toggle( "bounce", { times: 3, complete:function(){
+                                                $(this).show();
+                                                alert(response.message);
+                                        }}, "slow");
+                                    }
+                                });    
+                            }
                         });
-                        
-                        
-                        
                          $(this).on('click','.pointerCase',
                             function() {
                                

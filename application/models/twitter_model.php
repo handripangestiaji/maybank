@@ -284,11 +284,13 @@ class twitter_model extends CI_Model
     
     public function ReadDMFromDb($filter,$limit = false){
         $filter['b.type'] = 'inbox';
-         $this->db->select("f.social_id, a.post_id as social_stream_post_id, a.channel_id, a.is_read, a.post_stream_id, a.retrieved_at, a.created_at as social_stream_created_at, b.text as dm_text, b.*,c.*, e.*, a.type as social_stream_type");
-         $this->db->from("social_stream a inner join twitter_direct_messages b on a.post_id = b.post_id
-            LEFT OUTER JOIN twitter_user_engaged c ON c.twitter_user_id=b.sender 
-            LEFT JOIN twitter_reply e on a.post_id = e.reply_to_post_id  inner join channel f on f.channel_id = a.channel_id
-            "); 
+        $this->db->select("f.social_id, f.name as social_stream_name,  a.post_id as social_stream_post_id, a.channel_id, a.is_read,
+                          a.post_stream_id, a.retrieved_at, a.created_at as social_stream_created_at,
+                          b.text as dm_text, b.*,c.*,  a.type as social_stream_type, b.type as direct_message_type");
+        $this->db->from("social_stream a inner join twitter_direct_messages b on a.post_id = b.post_id
+            INNER JOIN twitter_user_engaged c ON c.twitter_user_id = b.sender 
+            INNER JOIN channel f on f.channel_id = a.channel_id
+        "); 
         if(count($filter) > 0)
         {
             if(isset($filter['case'])){
@@ -309,8 +311,25 @@ class twitter_model extends CI_Model
             $result[$i]->reply_post = $this->GetReplyPost(array('reply_to_post_id'=> $result[$i]->social_stream_post_id));
             $result[$i]->channel_action = $this->GetChannelAction(array('a.post_id'=>$result[$i]->social_stream_post_id));
             $result[$i]->case = $this->case_model->LoadCase(array('a.post_id'=>$result[$i]->social_stream_post_id));
+            $result[$i]->outbox = $this->ReadDMEngagement($result[$i]->recipient, $result[$i]->sender->twitter_user_id);
+            
         }
         return $result;
+    }
+    
+    
+    /* Outbox of Direct Messages
+        $sender : Sender of Message. It's usually from current Channel.
+        $recepient : Recipient Message.
+    */
+    public function ReadDMEngagement($sender, $recepient){
+        $filter['a.type'] = 'outbox';
+        $filter['recipient'] = $recepient;
+        $filter['sender'] = $sender;
+        $this->db->select("*");
+        $this->db->from('twitter_direct_messages a inner join social_stream b on a.post_id = b.post_id');
+        $this->db->where($filter);
+        return $this->db->get()->result();
     }
     
     public function ReadTwitterUserFromDb($user_id){
@@ -392,8 +411,9 @@ class twitter_model extends CI_Model
                     'action_type' => "twitter_".$type,
                     'channel_id' => $channel->channel_id,
                     'created_at' => date("Y-m-d H:i:s"),
-                    'post_id' => isset($saved_tweet[0]['post_id']) ? $saved_tweet[0]['post_id'] : $saved_tweet['post_id'],
-                    'created_by' => $reply['user_id']
+                    'post_id' => $reply['reply_to_post_id'],
+                    'created_by' => $reply['user_id'],
+                    'log_text' => $reply['text']
                 );
                 $this->db->insert('channel_action', $channel_action);
                 $this->db->insert('twitter_reply',$reply);
@@ -503,16 +523,18 @@ class twitter_model extends CI_Model
      * Get Action from database
     */
     function GetChannelAction($filter){
+        $this->db->distinct();
         $this->db->select("a.*, b.username, b.display_name, c.text, d.messages, d.assign_to, e.display_name as assign_name, f.display_name as solved_name, d.solved_message");
         $this->db->from("channel_action a INNER JOIN
-			user b on b.user_id = a.created_by LEFT JOIN
-			twitter_reply c on c.response_post_id = a.stream_id_response LEFT JOIN
+			user b on b.user_id = a.created_by INNER JOIN
+			twitter_reply c on c.reply_to_post_id = a.post_id LEFT JOIN
 			`case` d on d.case_id = a.case_id LEFT JOIN
 			user e on e.user_id = d.assign_to LEFT JOIN
                         user f on f.user_id = d.solved_by");
         $this->db->order_by('a.created_at','desc');
         $this->db->where($filter);
-        return $this->db->get()->result();
+        $result = $this->db->get()->result();
+        return $result;
     }
     
     /*

@@ -21,7 +21,7 @@ class Cms extends MY_Controller {
         ||IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_View')||IsRoleFriendlyNameExist($this->user_role,'Content Management_TAG_View'))
      {
           $config['base_url'] = site_url('cms/index');
-	  $config['total_rows'] = $this->tag_model->count_record();
+	  $config['total_rows'] = $this->campaign_model->count_record();
 	  $config['per_page'] = 10;
 	  $config["uri_segment"] = 3;
 	  $config['next_link'] = 'Next';
@@ -357,7 +357,8 @@ class Cms extends MY_Controller {
                               $params = array();
                               $params = $this->input->post('shorturl');
                               $params['user_id'] = $this->session->userdata('user_id');
-                              
+                              $params['country_code'] = $this->session->userdata('country');
+			      
                               $config = array(
                                             array(
                                                     'field' => 'shorturl[long_url]',
@@ -416,12 +417,13 @@ class Cms extends MY_Controller {
                                       $id_campaign_url = $this->campaign_url_model->insert($setparam);
                                         $this->session->set_flashdata('message_type', 'success');
                                         $this->session->set_flashdata('message_body', 'Create short url success');
+					redirect('cms/index/0/secondTab');
                               }
                               else{
                                   $this->session->set_flashdata('message_type', 'error');
                                    $this->session->set_flashdata('message_body', 'Please fill the required fields');
-                              }
-                              redirect('cms');
+                                   redirect('cms/create_short_url');
+			      }
                          }
                          else
                          {
@@ -451,7 +453,8 @@ class Cms extends MY_Controller {
                     $params = array();
                     $params = $this->input->post('shorturl');
                     $params['user_id'] = $this->session->userdata('user_id');
-                    
+                    $params['country_code'] = $this->session->userdata('country');
+		    
                     $config = array(
                                             array(
                                                     'field' => 'shorturl[long_url]',
@@ -487,6 +490,7 @@ class Cms extends MY_Controller {
                             }
                             
                               $tags = $this->input->post('tag_id');
+			      
                               $last_id = $this->shorturl_model->getLastId();
                            
                               if ( is_array($tags) )
@@ -510,12 +514,13 @@ class Cms extends MY_Controller {
                             $id_campaign_url = $this->campaign_url_model->insert($setparam);
                               $this->session->set_flashdata('message_type', 'success');
                               $this->session->set_flashdata('message_body', 'Create short url success');
-                    }
+			      redirect('cms/index/0/secondTab');
+		    }
                     else{
                          $this->session->set_flashdata('message_type', 'error');
                          $this->session->set_flashdata('message_body', 'Please fill the required fields');
-                    }
-                    redirect('cms/create_short_url');
+                         redirect('cms/create_short_url');
+		    }
                }
                else
                {

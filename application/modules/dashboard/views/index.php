@@ -158,6 +158,7 @@
                                     <option value="55">55</option>
                                 </select>
                                 <select class="time-sel" id="compose-schedule-ampm">
+                                    <option value="">AM/PM</option>
                                     <option value="AM">AM</option>
                                     <option value="PM">PM</option>
                                 </select>

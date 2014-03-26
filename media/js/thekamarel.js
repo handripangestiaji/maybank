@@ -984,11 +984,15 @@ $(function(){
                             var scheduleTime;
                             if($('#datepickerField').val() != ''){
                                 if($('#compose-schedule-hours').val() == ''){
-                                    alert("You haven't set your post schedule hours");
+                                    alert("You haven't set your schedule time correctly");
                                     confirmed = false;
                                 }
                                 else if($('#compose-schedule-minutes').val() == ''){
-                                    alert("You haven't set your post schedule minutes");
+                                    alert("You haven't set your schedule time correctly");
+                                    confirmed = false;
+                                }
+                                else if($('#compose-schedule-ampm').val() == ''){
+                                    alert("You haven't set your schedule time correctly");
                                     confirmed = false;
                                 }
                                 else{
@@ -1265,7 +1269,7 @@ $(function(){
                                         },
                                 success: function(data){
                                     var new_data = JSON.parse(data);
-                                    $('.select-shorten-url').html('');
+                                    $('.select-shorten-url').html('<option>Please Select</option>');
                                     for(var x=0; x<new_data.length; x++){
                                         $('.select-shorten-url').append('<option>' + 'http://maybk.co/' + new_data[x].short_code + '</option>');
                                     }

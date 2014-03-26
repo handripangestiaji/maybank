@@ -42,9 +42,15 @@
                                                             </div>
                                                             <div class="pull-right" style="width: 25%; text-align: right">
                                                                 <p>
+                                                                <?php if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Campaign_Edit')){ ?>
                                                                 <a href="cms/edit_campaign/<?php echo $v['id']; ?>"><button class="btn btn-primary btn-small" type="button">Edit</button></a>
+                                                                <?php } ?>
+                                                                <?php if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Campaign_Download')){ ?>
                                                                 <a href="cms/cms_ci/download_campaign/<?php echo $v['id']; ?>"><button class="btn btn-success btn-small" type="button">Download</button></a>
+                                                                <?php } ?>
+                                                                <?php if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Campaign_Delete')){ ?>
                                                                 <a href="cms/delete_campaign/<?php echo $v['id']; ?>" onclick="return confirm('Are you sure want to delete this campaign?');"><button class="btn btn-danger btn-small" type="button">Delete</button></a>
+                                                                <?php } ?>
                                                                 </p>
                                                             </div>
                                                             <br clear="all" />
@@ -66,7 +72,7 @@
                                                                         <?php if(isset($v['short_urls'])): ?>
                                                                                 <?php foreach($v['short_urls'] as $x): ?>
                                                                                         <tr>
-                                                                                                <td><a href="<?php echo site_url('cms/url/'.$x['short_code'])?>" target="_blank">http://admin.maybk.co/<?php echo $x['short_code']?></a></td>
+                                                                                                <td><a href="<?php echo site_url('cms/url/'.$x['short_code'])?>" target="_blank">http://maybk.co/<?php echo $x['short_code']?></a></td>
                                                                                                 <td><?php echo '<p>'.$x['description'].'</p><p>'.$x['long_url'].'</p>'?></td>
                                                                                                 <td><?php echo $x['created_at']?></td>
                                                                                                 <td><?php echo $x['increment']?></td>
@@ -114,11 +120,12 @@
                                                     <table class="table table-striped">
                                                         <thead>
                                                           <tr>
-                                                            <th>Full Url Path</th>
-                                                            <th>Short Code</th>
-                                                            <th>Total Used</th>
+                                                            <th>Short URL</th>
+                                                            <th>URL</th>
                                                             <th>Date Created</th>
-                                                            <th>Creator</th>
+                                                            <th>Clicks</th>
+                                                            <th>Created By</th>
+                                                            <th>QR Code</th>
                                                             <th>&nbsp;</th>
                                                           </tr>
                                                         </thead>
@@ -126,16 +133,22 @@
                                                         <?php if($shorturls): ?>
                                                             <?php foreach($shorturls as $v): ?>
                                                                     <tr>
-                                                                            <td><?php echo $v->long_url ?></td>
-                                                                            <td><a href="<?php echo site_url('cms/url/'.$v->short_code) ?>" target="_blank" ><?php echo $v->short_code ?></a></td>
-                                                                            <td><?php echo $v->increment ?></td>
-                                                                            <td><?php echo date('M d, Y', strtotime($v->created_at)) ?></td>
-                                                                            <td><?php echo $v->display_name ?></td>
-                                                                            <td>
-                                                                            <a href="<?php echo site_url('cms/delete_short_url/'.$v->id)?>" onclick="return confirm('Are you sure want to delete short url from campaign?');" class="btn btn-mini btn-danger pull-right">delete</a>
-                                                                            <!-- <button id="delete_btn" class="btn btn-mini btn-danger pull-right" type="button">delete</button> -->
-                                                                            </td>
-                                                                                    </tr>
+                                                                                <td><a href="<?php echo site_url('cms/url/'.$x['short_code'])?>" target="_blank">http://maybk.co/<?php echo $v->short_code ?></a></td>
+                                                                                <td><?php echo '<p>'.$v->description.'</p><p>'.$v->long_url.'</p>'?></td>                                                                                <td><?php echo date('M d, Y', strtotime($v->created_at)) ?></td>
+                                                                                <td><?php echo $v->increment ?></td>
+                                                                                <td><?php echo $v->display_name?></td>
+                                                                                <td>
+                                                                                                <a href="#modal-<?php echo $v->short_code ?>x" data-toggle='modal'>view</a>
+                                                                                        <div id="modal-<?php echo $v->short_code ?>x" class="attachment-modal modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+                                                                                            <img src="<?php echo base_url('media/dynamic/qrcode/'.$v->qrcode_image)?>" style="padding: 0px 25px;"/>
+                                                                                            <button type="button" class="close " data-dismiss="modal"><i class="icon-remove"></i></button>
+                                                                                            </div>
+                                                                                </td>
+                                                                                <td>
+                                                                                <a href="<?php echo site_url('cms/delete_short_url/'.$v->id)?>" onclick="return confirm('Are you sure want to delete this short url?');" class="btn btn-mini btn-danger pull-right">delete</a>
+                                                                                <!-- <button id="delete_btn" class="btn btn-mini btn-danger pull-right" type="button">delete</button> -->
+                                                                                </td>     
+                                                                        </tr>
                                                             <?php endforeach; ?>
                                                         <?php endif;?>
                                                         </tbody>

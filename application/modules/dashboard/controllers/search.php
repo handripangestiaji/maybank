@@ -4,8 +4,8 @@ class Search extends CI_Controller {
 
      private $connection;
      public $user_role;
-     private $the_index = 'media_stream';
-    
+     private $the_index;
+      
      function __construct()
      {
 	  parent::__construct();
@@ -23,6 +23,9 @@ class Search extends CI_Controller {
 	  $this->load->model('twitter_model');
 	  $this->load->model('youtube_model');
 	  $this->load->model('account_model');
+	  $this->load->config('search');
+	  $this->the_index = $this->config->item('index_search');
+	  
 	  $this->user_role = $this->users_model->get_collection_detail(
 		array('role_collection_id'=>$this->session->userdata('role_id')));
      }

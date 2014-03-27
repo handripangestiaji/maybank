@@ -6,7 +6,7 @@
 <div style="float: right;">
     <?php if(IsRoleFriendlyNameExist($this->user_role, 'Regional_User') && ($title == 'Twitter' || $title == 'Youtube')):?>
         
-        <select class='country-select' name="country">
+        <select class='country-select' name="country" style="margin-top: 10px">
             <?php
             $country_list = $this->users_model->get_country_list();
                 foreach($country_list as $country):

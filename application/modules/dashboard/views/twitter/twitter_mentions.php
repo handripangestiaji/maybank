@@ -105,9 +105,9 @@ for($i=0;$i<count($mentions);$i++){
     ?></p>
     
     <p>
-        <a role="button" class="btn-engagement"><i class="icon-eye-open"></i><?=count($comment)?> Engagement</a> 
+        <a role="button" class="btn-engagement"> <i class="icon-eye-open"></i> <?=count($comment)?> Engagement</a> 
         <?php if($mentions[$i]->retweet_count>0): ?>|
-        <span><i class="icon-retweet greyText"></i><?php echo $mentions[$i]->retweet_count; ?> re-tweet(s)</span><?php endif;?>
+        <span> <i class="icon-retweet greyText"></i><?php echo $mentions[$i]->retweet_count; ?> re-tweet(s)</span><?php endif;?>
     </p>
     <!-- ENGAGEMENT -->    
     <div class="engagement hide">

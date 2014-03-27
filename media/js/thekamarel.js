@@ -1955,7 +1955,7 @@ $(document).ready(function(){
         eventRender: function(event, element){
             var deleteable;
             if(event.is_posted != '1' && event.deleteable == true){
-                deleteable = "<div class='pull-right'><button type='button' class='btn btn-danger btn-mini btn-delete-schedule-post'><i class='icon-remove'></i></a></div>";
+                deleteable = "<div class='pull-right'><button type='button' class='btn btn-danger btn-mini btn-delete-schedule-post'><i class='icon-trash'></i></a></div>";
             }
             else{
                 deleteable = '';
@@ -1965,7 +1965,8 @@ $(document).ready(function(){
             "<div class='tooltip-event hide'>" +
                 "<input type='hidden' class='schedule_post_to_id' value='" + event.post_to_id + "'>" +
                 "<div class='pull-left'>" + event.post_date + " | " + event.post_time + "</div>" +
-                deleteable + 
+                "<div class='pull-right'><button type='button' class='btn btn-inverse btn-mini btn-close-schedule-post'><i class='icon-remove'></i></a></div>" +
+                deleteable +
                 "<br clear='all'>" +
                 "<div class='tooltip-content pull-left'>" +
                     "<div class='tooltip-content-head'>" + event.title + "</div>" +
@@ -2006,6 +2007,10 @@ $(document).ready(function(){
         else{
             
         }
+    });
+    
+    $(this).on('click', '.btn-close-schedule-post', function(){
+        $(this).closest('.tooltip-event').hide();
     });
 });
 

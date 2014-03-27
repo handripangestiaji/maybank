@@ -276,174 +276,135 @@ class Cms extends MY_Controller {
      if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Short_URL_View'))
      {
     	$data['campaigns'] = $this->campaign_model->get();
-    	
     	$data['products'] = $this->product_model->get();
-    	
     	$data['tags'] = $this->tag_model->get();
-    	
     	
     	// First Tab -----------------------------------------
     	$cfg['base_url'] = site_url('cms/create_short_url');
-		
-		$cfg['total_rows'] = $this->campaign_url_model->count_record();
-		
-		$cfg['per_page'] = 10;
-		
-		$cfg["uri_segment"] = 3;
-	  
-		$cfg['next_link'] = 'Next';
-	  
-		$cfg['prev_link'] = 'Prev';
-	  
-		$cfg['first_link'] = 'First';
-	  
-		$cfg['last_link'] = 'Last';
-     
-		$cfg['cur_tag_open'] = '<b style="margin:0px 5px;">';
-	  
-		$cfg['cur_tag_close'] = '</b>';
-		
-		$cfg['suffix'] = '/firstTab';
-		
-		$cfg['first_url'] = site_url('cms/create_short_url/0/firstTab');
-	  
-		$this->pagination->initialize($cfg);
-		
-		$offset = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-
-    	$data['urls'] = $this->campaign_url_model->get($cfg['per_page'], $offset);
-    		
+        $cfg['total_rows'] = $this->campaign_url_model->count_record();
+	$cfg['per_page'] = 10;
+	$cfg["uri_segment"] = 3;
+	$cfg['next_link'] = 'Next';
+        $cfg['prev_link'] = 'Prev';
+        $cfg['first_link'] = 'First';
+        $cfg['last_link'] = 'Last';
+        $cfg['cur_tag_open'] = '<b style="margin:0px 5px;">';
+        $cfg['cur_tag_close'] = '</b>';
+	$cfg['suffix'] = '/firstTab';
+	$cfg['first_url'] = site_url('cms/create_short_url/0/firstTab');
+	$this->pagination->initialize($cfg);
+	$offset = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $data['urls'] = $this->campaign_url_model->get($cfg['per_page'], $offset);
     	$data['links'] = $this->pagination->create_links();
     	
     	// End of First Tab ------------------------------------
     	
     	// Second Tab ------------------------------------------
-    	
     	$config['base_url'] = site_url('cms/create_short_url');
-		
-		$config['total_rows'] = $this->shorturl_model->count_record();
-		
-		$config['per_page'] = 10;
-		
-		$config["uri_segment"] = 3;
-	  
-		$config['next_link'] = 'Next';
-	  
-		$config['prev_link'] = 'Prev';
-	  
-		$config['first_link'] = 'First';
-	  
-		$config['last_link'] = 'Last';
-     
-		$config['cur_tag_open'] = '<b style="margin:0px 5px;">';
-	  
-		$config['cur_tag_close'] = '</b>';
-		
-		$config['suffix'] = '/secondTab';
-		
-		$config['first_url'] = site_url('cms/create_short_url/0/secondTab');
-	  
-		$this->pagination->initialize($config);
-		
-		$offset = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-    	
+        $config['total_rows'] = $this->shorturl_model->count_record();
+	$config['per_page'] = 10;
+	$config["uri_segment"] = 3;
+	$config['next_link'] = 'Next';
+	$config['prev_link'] = 'Prev';
+	$config['first_link'] = 'First';
+	$config['last_link'] = 'Last';
+        $config['cur_tag_open'] = '<b style="margin:0px 5px;">';
+        $config['cur_tag_close'] = '</b>';
+	$config['suffix'] = '/secondTab';
+	$config['first_url'] = site_url('cms/create_short_url/0/secondTab');
+        $this->pagination->initialize($config);
+	$offset = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
     	$data['shorturls'] = $this->shorturl_model->get($config['per_page'], $offset);
     	
     	$action = $this->input->get('action');
-    
-		if ($this->input->server('REQUEST_METHOD') === 'POST')
-		{
-                    if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Short_URL_Create')){
-                              $params = array();
-                              $params = $this->input->post('shorturl');
-                              $params['user_id'] = $this->session->userdata('user_id');
-                              $params['country_code'] = $this->session->userdata('country');
-			      
-                              $config = array(
-                                            array(
-                                                    'field' => 'shorturl[long_url]',
-                                                    'label' => 'Full Url',
-                                                    'rules' => 'required'
-                                            ),
-                                            array(
-                                                    'field' => 'shorturl[short_code]',
-                                                    'label' => 'Full Url',
-                                                    'rules' => 'required|max_length[6]'
-                                            ),
-                                            array(
-                                                  'field' => 'shorturl[campaign_id]',
-                                                  'label' => 'Product Id',
-                                                  'rules' => 'required'
-                                            ),
-                                    );
-                    
-                              $this->form_validation->set_rules($config);
-                              
-                              $tags = $this->input->post('tag_id');
-                              
-                              if($this->form_validation->run() == TRUE && !empty($tags))
-                              {
-                                      $code = $this->shorturl->urlToShortCode($params);
-                                      
-                                      if(isset($code['message']))
-                                      {
-                                      $this->session->set_userdata('message', $code['message']);
-                                      }
-                                      else
-                                      {
-                                              $this->session->unset_userdata('message');
-                                      }
-                               
-                                        $last_id = $this->shorturl_model->getLastId();
-                                     
-                                        if ( is_array($tags) )
-                                        {
-                                             $x=0;
-                                             foreach($tags as $tag){
-                                                  $data = array('short_urls_id' => $last_id,
-                                                                'content_tag_id' => str_replace('-','',$tag)
-                                                               );
-                                                  $x++;
-                                                  $this->db->insert('short_url_tag',$data);     
-                                             }
-                                        }
-                                      
-                                      $setparam = array(
-                                                                      "campaign_id" => $params['campaign_id'], 
-                                                                      "url_id" => $code['url_id'],
-                                                                      "user_id" => $params['user_id']
-                                                              );
-                               
-                                      $id_campaign_url = $this->campaign_url_model->insert($setparam);
-                                        $this->session->set_flashdata('message_type', 'success');
-                                        $this->session->set_flashdata('message_body', 'Create short url success');
-					redirect('cms/index/0/secondTab');
-                              }
-                              else{
-                                  $this->session->set_flashdata('message_type', 'error');
-                                   $this->session->set_flashdata('message_body', 'Please fill the required fields');
-                                   redirect('cms/create_short_url');
-			      }
-                         }
-                         else
-                         {
-                              redirect('cms');
-                         }
-		}
-		else {
-			$this->session->unset_userdata('message');
-		}
+     }
+     else {
+	  $this->session->unset_userdata('message');
+     }
+     
+	  $data['code'] = substr( md5( time().uniqid().rand() ), 0, 6 );
+	  $data['cms_view'] = 'create_short_url';
+	  $data['pagination'] = $this->pagination->create_links();
+	  $this->load->view('cms/index',$data);
+     }
+     
+     public function new_create_short_url(){       
+	  if ($this->input->server('REQUEST_METHOD') === 'POST'){
+	       $params = array();
+	       $params = $this->input->post('shorturl');
+	       $params['user_id'] = $this->session->userdata('user_id');
+	       $params['country_code'] = $this->session->userdata('country');
+			 
+	       $config = array(
+			      array(
+				      'field' => 'shorturl[long_url]',
+				      'label' => 'Full Url',
+				      'rules' => 'required'
+			      ),
+			      array(
+				   'field' => 'shorturl[short_code]',
+				   'label' => 'Full Url',
+				   'rules' => 'required|max_length[6]'
+			      ),
+			      array(
+				   'field' => 'shorturl[campaign_id]',
+				   'label' => 'Product Id',
+				   'rules' => 'required'
+			      ),
+			 );
+	       
+	       $this->form_validation->set_rules($config);
+	       $tags = $this->input->post('tag_id');
+	       if($this->form_validation->run() == TRUE && !empty($tags))
+	       {
+		       $code = $this->shorturl->urlToShortCode($params);
+		       
+		       if(isset($code['message'])){
+			 $this->session->set_userdata('message', $code['message']);
+		       }
+		       else{
+			 $this->session->unset_userdata('message');
+		       }
 		
-	       $data['code'] = substr( md5( time().uniqid().rand() ), 0, 6 );
-               $data['cms_view'] = 'create_short_url';
-               $data['pagination'] = $this->pagination->create_links();
-               $this->load->view('cms/index',$data);
+		    if($code){
+			 $last_id = $this->shorturl_model->getLastId();
+		      
+			 if ( is_array($tags) )
+			 {
+			      $x=0;
+			      foreach($tags as $tag){
+				   $data = array('short_urls_id' => $last_id,
+						 'content_tag_id' => str_replace('-','',$tag)
+						);
+				   $x++;
+				   $this->db->insert('short_url_tag',$data);     
+			      }
+			 }
+		       
+		       $setparam = array(
+						       "campaign_id" => $params['campaign_id'], 
+						       "url_id" => $code['url_id'],
+						       "user_id" => $params['user_id']
+					       );
+		
+		       $id_campaign_url = $this->campaign_url_model->insert($setparam);
+			 $this->session->set_flashdata('message_type', 'success');
+			 $this->session->set_flashdata('message_body', 'Create short url success');
+			 redirect('cms/index/0/secondTab');
+		    }
+		    else{
+			 $this->session->set_flashdata('message_type', 'error');
+                         $this->session->set_flashdata('message_body', 'The URL is invalid.');
+                         redirect('cms/create_short_url');
+		    }
+	       }
+	       else{
+		   $this->session->set_flashdata('message_type', 'error');
+		    $this->session->set_flashdata('message_body', 'Please fill the required fields');
+		    redirect('cms/create_short_url');
+	       }
+	  }
      }
-     else
-     {
-          redirect('cms');
-     }
-    }
      
      public function create_short_url_non_campaign()
     {
@@ -482,13 +443,14 @@ class Cms extends MY_Controller {
                             
                             if(isset($code['message']))
                             {
-                              $this->session->set_userdata('message', $code['message']);
+			      $this->session->set_userdata('message', $code['message']);
                             }
                             else
                             {
-                                    $this->session->unset_userdata('message');
+                              $this->session->unset_userdata('message');
                             }
                             
+			    if($code){
                               $tags = $this->input->post('tag_id');
 			      
                               $last_id = $this->shorturl_model->getLastId();
@@ -515,6 +477,12 @@ class Cms extends MY_Controller {
                               $this->session->set_flashdata('message_type', 'success');
                               $this->session->set_flashdata('message_body', 'Create short url success');
 			      redirect('cms/index/0/secondTab');
+			    }
+			    else{
+			      $this->session->set_flashdata('message_type', 'error');
+			      $this->session->set_flashdata('message_body', 'The URL is invalid');
+			      redirect('cms/create_short_url'); 
+			 }
 		    }
                     else{
                          $this->session->set_flashdata('message_type', 'error');

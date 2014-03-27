@@ -78,37 +78,37 @@
                 <th>Total Used</th>
                 <th>Creator</th>
 		<?php
-		    for($i=0;$i<count($this->user_role);$i++){
-			if($this->user_role[$i]->role_friendly_name=='Content Management_Campaign_Delete'){
+		    //for($i=0;$i<count($this->user_role);$i++){
+			//if($this->user_role[$i]->role_friendly_name=='Content Management_Campaign_Delete'){
 		?>
                 <th>&nbsp;</th>
-		<?php }}?>
+		<?php //}}?>
               </tr>
             </thead>
             <tbody>
-            <?php if($campaigns): ?>
-            	<?php foreach($campaigns as $v): ?>
+            <?php //if($campaigns): ?>
+            	<?php //foreach($campaigns as $v): ?>
             		<tr>
-		                <td><?php echo $v['campaign_name']; ?></td>
+		                <td><?php// echo $v['campaign_name']; ?></td>
 		                <td><?php ?></td>
-		                <td><?php if(isset($v['product_name'])) echo implode(" , ",$v['product_name']); ?></td>
-		                <td><?php echo "0" ?></td>
-		                <td><?php echo $v['display_name']; ?></td>
+		                <td><?php// if(isset($v['product_name'])) echo implode(" , ",$v['product_name']); ?></td>
+		                <td><?php// echo "0" ?></td>
+		                <td><?php// echo $v['display_name']; ?></td>
 				<?php
-				    for($i=0;$i<count($this->user_role);$i++){
-					if($this->user_role[$i]->role_friendly_name=='Content Management_Campaign_Delete'){
+				    //for($i=0;$i<count($this->user_role);$i++){
+					//if($this->user_role[$i]->role_friendly_name=='Content Management_Campaign_Delete'){
 				?>
 		                <td>
-		                	<a href="<?php echo site_url('cms/create_campaign?action=delete&id='.$v['id'])?>" class="btn btn-mini btn-danger pull-right">delete</a>
+		                	<a href="<?php //echo site_url('cms/create_campaign?action=delete&id='.$v['id'])?>" class="btn btn-mini btn-danger pull-right">delete</a>
 		                </td>
-				<?php }}?>
+				<?php //}}?>
 					</tr>
-            	<?php endforeach; ?>
-            <?php endif; ?>
+            	<?php //endforeach; ?>
+            <?php// endif; ?>
             </tbody>
         </table>
     </div>
      <div class="page pull-right">
-     	<?php echo $pagination ?>
+     	<?php //echo $pagination ?>
      </div>
 </div!-->

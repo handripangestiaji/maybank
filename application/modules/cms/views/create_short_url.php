@@ -15,9 +15,10 @@ for($i=0;$i<count($this->user_role);$i++){
 	    if($this->user_role[$x]->role_friendly_name=='Content Management_Short_URL_Create'){    
 	?>
         <ul class="nav nav-tabs">
-            <?php if (IsRoleFriendlyNameExist($this->user_role, 'Content Management_Short_URL_Campaign')): ?>
-            <li class="<?php echo $tab=='firstTab'?"active":"" ?>">
-                <a href="#firstTab">Campaign</a>
+            <?php if ((IsRoleFriendlyNameExist($this->user_role, 'Content Management_Short_URL_Campaign')) ||
+		      (IsRoleFriendlyNameExist($this->user_role, 'Content Management_Campaign_Create'))
+		      ): ?><li class="<?php echo $tab=='firstTab'?"active":"" ?>">
+            <a href="#firstTab">Campaign</a>
             </li>
             <?php endif;?>
             
@@ -29,7 +30,9 @@ for($i=0;$i<count($this->user_role);$i++){
 
         <div class="container-fluid">
             <!-- ==================== FIRST TAB CONTENT ==================== -->
-            <?php if (IsRoleFriendlyNameExist($this->user_role, 'Content Management_Short_URL_Campaign')): ?>
+            <?php if ((IsRoleFriendlyNameExist($this->user_role, 'Content Management_Short_URL_Campaign')) ||
+		      (IsRoleFriendlyNameExist($this->user_role, 'Content Management_Campaign_Create'))
+		      ): ?>
             <div class="tabContent" id="firstTab">
 		<?php for($x=0;$x<count($this->user_role);$x++){
 		    if($this->user_role[$x]->role_friendly_name=='Content Management_Short_URL_Create'){    

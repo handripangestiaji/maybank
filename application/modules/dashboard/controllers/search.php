@@ -83,7 +83,7 @@ class Search extends CI_Controller {
 	       $data['fb_pm'] = $data_fb_pm;
 	       
 		$filter = array(
-		    'channel_id' => $channel_id,
+		    'c.channel_id' => $channel_id,
 		 );
 		
 	       $data['count_fb_feed']=$this->facebook_model->CountFeedFB($filter);

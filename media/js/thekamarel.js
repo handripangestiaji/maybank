@@ -497,6 +497,7 @@ $(function(){
                     }, 120000);
                     $('#refreshAllStream').click(function(){
                         $(this).RefreshAllStream();
+                        $('.dashboard-search-field').val('');
                     });
                     var i = 0;
                     $('.containerHeadline .dropdown-stream-channels').each(function(){
@@ -994,11 +995,15 @@ $(function(){
                             var scheduleTime;
                             if($('#datepickerField').val() != ''){
                                 if($('#compose-schedule-hours').val() == ''){
-                                    alert("You haven't set your post schedule hours");
+                                    alert("You haven't set your schedule time correctly");
                                     confirmed = false;
                                 }
                                 else if($('#compose-schedule-minutes').val() == ''){
-                                    alert("You haven't set your post schedule minutes");
+                                    alert("You haven't set your schedule time correctly");
+                                    confirmed = false;
+                                }
+                                else if($('#compose-schedule-ampm').val() == ''){
+                                    alert("You haven't set your schedule time correctly");
                                     confirmed = false;
                                 }
                                 else{
@@ -1275,7 +1280,7 @@ $(function(){
                                         },
                                 success: function(data){
                                     var new_data = JSON.parse(data);
-                                    $('.select-shorten-url').html('');
+                                    $('.select-shorten-url').html('<option>Please Select</option>');
                                     for(var x=0; x<new_data.length; x++){
                                         $('.select-shorten-url').append('<option>' + 'http://maybk.co/' + new_data[x].short_code + '</option>');
                                     }
@@ -1789,7 +1794,35 @@ $(function(){
                 window.location.href = BASEURL;
             }
         });
-   
+        
+        $('.dashboard-search-field').bind('keypress', function(e){
+	    if($('.dashboard-search-field').val() != '' && e.which == 13){
+                var channel_1 = $('#box-id-1').next().find('.channel-id').val();
+                var channel_2 = $('#box-id-2').next().find('.channel-id').val();
+                var channel_3 = $('#box-id-3').next().find('.channel-id').val();
+                $(this).closest('.container-fluid').next().find('.floatingBox').html('Loading...');
+                $('#box-id-1').next().load(BASEURL + 'dashboard/search',
+                                           {
+                                            channel_id : channel_1,
+                                            q : $('.dashboard-search-field').val()
+                                            });
+                $('#box-id-2').next().load(BASEURL + 'dashboard/search',
+                                           {
+                                            channel_id : channel_2,
+                                            q : $('.dashboard-search-field').val()
+                                            });
+                
+                $('#box-id-3').next().load(BASEURL + 'dashboard/search',
+                                           {
+                                            channel_id : channel_3,
+                                            q : $('.dashboard-search-field').val()
+                                            });
+                //window.location.href = BASEURL + 'dashboard/search?q=' + $('.dashboard-search-field').val();
+            }
+	})
+    });
+    
+    $(document).ready(function() {
         var new_height = $( window ).height() - 225;
         $('.boxStream').height(new_height);
   

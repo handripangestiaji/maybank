@@ -20,9 +20,6 @@ $timezone = new DateTimeZone($this->session->userdata('timezone'));
             
             <h4>Related Conversation</h4>
             <?php $case_conversation = $this->case_model->TwitterRelatedConversation($caseMsg->case_id);
-            
-            //print_r($case_conversation);
-            
             ?>
             <ol style="margin: 0;padding: 0;">
                 <?php foreach($case_conversation as $conversation): ?>

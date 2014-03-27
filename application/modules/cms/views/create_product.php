@@ -67,8 +67,7 @@
             <thead>
               <tr>
                 <th>Products</th>
-                <th>Parent</th>
-                <th>Child</th>
+                <th>Sub Products</th>
                 <th>Description</th>
                 <th>Total Used</th>
                 <th>Creator</th>
@@ -89,7 +88,6 @@
             	<?php foreach($products as $v): ?>
             		<tr>
 		                <td><?php echo $v->product_name; ?></td>
-                                <td><?php echo $v->parent_name; ?></td>
                                 <td>
                                 <?php
                                     $r=0;
@@ -116,9 +114,8 @@
 				    if($this->user_role[$i]->role_friendly_name=='Content Management_Product_Delete'){
 				    ?>
                                 <td>
-		                	<a href="<?php echo site_url('cms/create_product?action=delete&id='.$v->id)?>" class="btn btn-mini btn-danger pull-right">delete</a>
-		                	<!--<button class="btn btn-mini btn-danger pull-right" type="button">delete</button>-->
-				</td>
+		                        <a href="<?php echo site_url('cms/create_product?action=delete&id='.$v->id)?>" onclick="return confirm('Are you sure want to delete this product?');" class="btn btn-mini btn-danger pull-right">delete</a>
+		                </td>
 				<?php }}?>
                         </tr>
             	<?php endforeach; ?>

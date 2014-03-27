@@ -19,12 +19,9 @@
 		</div>
 	    <?php }?>
     <div class="cms-content row-fluid">
-        <div class="cms-filter pull-left">
            <div class="cms-filter pull-left users-menu">
 		<?php $this->load->view('users/user_menu')?>
 	    </div>
-        
-        </div>
 	<form id="roleform" method='post' action='<?php echo site_url("users/update_role");?>' >
         <div class="cms-table pull-right">
             <h5>Edit Role</h5>

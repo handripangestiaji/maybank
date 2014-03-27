@@ -1001,7 +1001,7 @@ class Media_stream extends CI_Controller {
         if($action=='wallPosts'){
 	    unset($filter['a.channel_id']);
 	    $filter['channel_id']=$channel_ids;
-             $data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter,$limit);
+             $data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter,$limit, true, $is_read == 2);
              $data['count_fb_feed']=$this->facebook_model->CountFeedFB($filter);
              $this->load->view('dashboard/facebook/wall_post.php',$data);
         }

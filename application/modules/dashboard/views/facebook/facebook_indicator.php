@@ -5,7 +5,7 @@
         $case_date = new DateTime($post->case[0]->created_at.' Europe/London');
         $case_date->setTimezone($timezone);
         
-        $indicator['case'] = ' <button  href="#caseItem-'.$post->case[0]->case_id.'" data-toggle="modal" type="button" class="btn btn-mini  '.
+        $indicator['case'] = ' <button  href="#caseItem-'.$post->case[0]->case_id.'" data-toggle="modal" type="button" style="text-align:left" class="btn btn-mini  '.
                                 ($post->case[0]->status == 'pending' ? "btn-purple" : "btn-inverse").'">Case #'.$post->case[0]->case_id. 
                                 ($post->case[0]->status == 'pending' ?  ' Assign To '.(isset($post->case[0]->assign_to->display_name) ? $post->case[0]->assign_to->display_name : " --Deleted User-- ")
                                  .'' : ' Solved by: '. (isset($post->case[0]->solved_by->display_name) ? $post->case[0]->solved_by->display_name : " --Deleted User-- "))." ".

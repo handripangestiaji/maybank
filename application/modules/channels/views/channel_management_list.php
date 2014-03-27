@@ -14,8 +14,10 @@
                 <option value="<?=$country->code?>"><?=$country->name?></option>
             <?php endforeach;?>
         </select>
+        
     <?php endif;?>
     <a class="btn btn-primary new-channel" href="<?=base_url('channels/channelmg/Add'.$title)?>" type="button" name="btn_new" value="" >+ New <?=$title?> Channel</a>
+    
 </div>
 <?php endif;?>
 

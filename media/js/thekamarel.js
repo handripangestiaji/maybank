@@ -29,15 +29,26 @@ $(function(){
     
     $('.country-select').multiselect();
     var originalHref = null;
-    $(this).on('change', '.country-select', function(e){
-        href = $(this).siblings('.new-channel').attr('href');
+    
+    $(this).on('click', '.new-channel', function(e){
+        href = $(this).attr('href');
         originalHref = originalHref == null ? href : originalHref;
+        country = $(this).siblings('.country-select').val();
+        if(country != undefined){
+            window.location = originalHref + "/" + country;
+            return false;
+        }
+        else
+            return true;    
         
-        $(this).siblings('.new-channel').attr('href', originalHref + "/" + $(this).val());
     });
     $(this).on("error", ".circleAvatar img", function() {
         //$( this ).attr( "src", "missing.png" );
         console.log("error");
+    });
+    
+    $("#addFbStream .close, #addFbStream .btn-close").click(function(){
+        $(this).closest(".container-fluid").remove();
     });
     
     /*=============================================================================================
@@ -1749,8 +1760,7 @@ $(function(){
                     }, 200);
                 });
             });
-            
-    $(document).ready(function() {
+
         $('.btn-dashboard-search').click(function(){
             if($('.dashboard-search-field').val() != ''){
                 var channel_1 = $('#box-id-1').next().find('.channel-id').val();
@@ -1779,16 +1789,10 @@ $(function(){
                 window.location.href = BASEURL;
             }
         });
-        
-        
-    });
-    
-    $(document).ready(function() {
+   
         var new_height = $( window ).height() - 225;
         $('.boxStream').height(new_height);
-    });
-    
-    $(document).ready(function(){
+  
         $('.compose-new-message').click(function(){
             window.location.href = BASEURL + 'dashboard/socialmedia/ComposeMessage';
         })
@@ -1796,11 +1800,10 @@ $(function(){
         $('.btn-cancel-post').click(function(){
             window.location.href = BASEURL + 'dashboard/socialmedia';
         })
-    })
     /*=============================================================================================
      ===================================== CMS ACTIONS ============================================
      =============================================================================================*/    
-    $(document).ready(function() {
+  
         $('#channelMg a:first').LoadContentAsync({
             url : BASEURL + "channels/listofchannel/facebook" ,
             contentReplaced : $('#channelMg .cms-table '),
@@ -1865,8 +1868,7 @@ $(function(){
                 reload : true
                 
             });
-        });
-        
+   
         
         $(this).on('submit', 'form.assign_case', function(e){
             var thisContext = $(this);

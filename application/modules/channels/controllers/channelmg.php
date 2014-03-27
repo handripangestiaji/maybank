@@ -82,12 +82,10 @@ class ChannelMg extends MY_Controller {
                 $channel['name'] = $access_token['screen_name'];
                 $channel['token_created_at'] = date("Y-m-d H:i:s");
                 
-                $channel['country_code'] = $country == '' ? null : $country;
-                if($channel['country_code'] == null && $this->session->userdata('country_code'))
-                    $channel['country_code'] = $this->session->userdata('country_code');
+                $channel['country_code'] = $country == '' ? $this->session->userdata('country') : $country;
+                
                     
                 $this->account_model->SaveChannel($channel);
-		//comment
                 redirect('channels/channelmg');
             }
         }

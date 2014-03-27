@@ -39,7 +39,7 @@ for($i=0;$i<count($this->user_role);$i++){
 		?>
                <div class="floatingBox span12">
                     <div class="container-fluid campaignForm">
-                        <form class="form-horizontal contentForm" method="post" action="<?php echo site_url('cms/create_short_url')?>">
+                        <form class="form-horizontal contentForm" method="post" action="<?php echo site_url('cms/new_create_short_url')?>">
                             <div class="control-group">
                                 <label class="control-label">Full URL Path<span class="redText"> *</span></label>
                                 <div class="controls">

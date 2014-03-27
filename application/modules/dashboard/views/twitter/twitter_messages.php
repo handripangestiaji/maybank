@@ -13,6 +13,9 @@
             $this->load->view('dashboard/twitter/case_view', array(
                     "caseMsg" => $directmessage[$i]->case[0]
                 ));
+        
+        
+        $entities = json_decode($directmessage[$i]->entities);
         ?>
         <p class="headLine">
             <span class="author"><?php echo $directmessage[$i]->sender->screen_name; ?></span>

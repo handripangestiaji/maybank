@@ -431,6 +431,8 @@ $(function(){
     $('.users-menu .btn').each(function(){
         var pathname = window.location.pathname;
         pathname = pathname.replace("/users/", "");
+        pathname = pathname.replace("/users", "");
+        console.log(pathname);
         if(pathname == '/index' || pathname == '/users' || pathname == 'create')
             $('.users-menu .btn:nth-child(1)').addClass('btn-primary');
         else{
@@ -438,18 +440,21 @@ $(function(){
                 $(this).addClass('btn-primary');
             else
             {
-                menuSelected = $(this).attr('href').toString().split(',');
-                for(i=0; i<menuSelected.length; i++)
-                    if(menuSelected[i] == pathname){
-                        $(this).addClass('btn-primary');
-                    }
-                    else{
-                        split_pathname = pathname.toString().split('/');
-                        for(x=0;x<split_pathname.length;x++){
-                            if(split_pathname[x] == menuSelected[i])
-                                $(this).addClass('btn-primary');
+                if($(this).attr('href') != undefined){
+                    var menuSelected = $(this).attr('href').toString().split(',');
+                    for(i=0; i<menuSelected.length; i++)
+                        if(menuSelected[i] == pathname){
+                            $(this).addClass('btn-primary');
                         }
-                    }
+                        else{
+                            split_pathname = pathname.toString().split('/');
+                            for(x=0;x<split_pathname.length;x++){
+                                if(split_pathname[x] == menuSelected[i])
+                                    $(this).addClass('btn-primary');
+                            }
+                        }
+                }
+              
             }
         }
     });

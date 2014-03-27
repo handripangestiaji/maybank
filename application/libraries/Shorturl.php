@@ -26,6 +26,7 @@ class Shorturl {
 			return false;
 		}
 		
+		/*
 		if (self::$checkUrlExists)
 		{
 			if (!$this->verifyUrlExists($url['long_url'])) 
@@ -34,6 +35,7 @@ class Shorturl {
 				return false;
 			}
 		}
+		*/
 		
 		$shortCode = $this->urlExistsInDb($url);
 		
@@ -87,6 +89,8 @@ class Shorturl {
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_NOBODY, true);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
 		curl_exec($ch);
 		
 		$response = curl_getinfo($ch, CURLINFO_HTTP_CODE);

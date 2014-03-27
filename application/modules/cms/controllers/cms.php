@@ -366,6 +366,7 @@ class Cms extends MY_Controller {
 			 $this->session->unset_userdata('message');
 		       }
 		
+		    if($code){
 			 $last_id = $this->shorturl_model->getLastId();
 		      
 			 if ( is_array($tags) )
@@ -390,6 +391,12 @@ class Cms extends MY_Controller {
 			 $this->session->set_flashdata('message_type', 'success');
 			 $this->session->set_flashdata('message_body', 'Create short url success');
 			 redirect('cms/index/0/secondTab');
+		    }
+		    else{
+			 $this->session->set_flashdata('message_type', 'error');
+                         $this->session->set_flashdata('message_body', 'The URL is invalid.');
+                         redirect('cms/create_short_url');
+		    }
 	       }
 	       else{
 		   $this->session->set_flashdata('message_type', 'error');
@@ -436,13 +443,14 @@ class Cms extends MY_Controller {
                             
                             if(isset($code['message']))
                             {
-                              $this->session->set_userdata('message', $code['message']);
+			      $this->session->set_userdata('message', $code['message']);
                             }
                             else
                             {
-                                    $this->session->unset_userdata('message');
+                              $this->session->unset_userdata('message');
                             }
                             
+			    if($code){
                               $tags = $this->input->post('tag_id');
 			      
                               $last_id = $this->shorturl_model->getLastId();
@@ -469,6 +477,12 @@ class Cms extends MY_Controller {
                               $this->session->set_flashdata('message_type', 'success');
                               $this->session->set_flashdata('message_body', 'Create short url success');
 			      redirect('cms/index/0/secondTab');
+			    }
+			    else{
+			      $this->session->set_flashdata('message_type', 'error');
+			      $this->session->set_flashdata('message_body', 'The URL is invalid');
+			      redirect('cms/create_short_url'); 
+			 }
 		    }
                     else{
                          $this->session->set_flashdata('message_type', 'error');

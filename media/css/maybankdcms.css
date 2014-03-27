@@ -1006,7 +1006,8 @@ ul.tagit{
 .tooltip-event .tooltip-content .tooltip-content-body{padding: 5px;}
 .no-pointer {cursor: default !important}
 .pointer{cursor: pointer !important}
-.indicator button, .indicator .btn{cursor: default !important}
+.indicator button, .indicator .btn{cursor: default }
+.indicator .btn.btn-purple, .indicator .twitter-case-related{cursor: pointer !important}
 
 .floatingBoxContainers li .link p{margin: 0;width: auto;}
 .link{cursor: pointer}

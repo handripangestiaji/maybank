@@ -55,7 +55,7 @@ class mycase extends CI_Controller{
             $old_case = $this->case_model->LoadCase(array('a.post_id' => $this->input->post('post_id')));
             $solved_case = NULL;
             if(count($old_case) > 0)
-                $solved_case = $this->case_model->ResolveCase($old_case[0]->case_id, $this->session->userdata('user_id'), false);
+                $solved_case = $this->case_model->ResolveCase($old_case[0]->case_id, $this->session->userdata('user_id'),false, false);
                 $case['case_id'] = $this->case_model->CreateCase($case, $this->session->userdata('user_id'));
                 echo json_encode(array(
                         "success" => true,

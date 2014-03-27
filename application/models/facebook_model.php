@@ -578,7 +578,8 @@ class facebook_model extends CI_Model
 			`case` d on d.case_id = a.case_id LEFT JOIN
 			user e on e.user_id = d.assign_to LEFT JOIN
 			user f on f.user_id = d.solved_by");
-	$this->db->order_by('a.created_at','desc');
+	//$this->db->order_by('a.created_at','desc');
+    $this->db->order_by('a.id','desc');
 	if(!$is_where_in)
 	    $this->db->where($filter);
 	else

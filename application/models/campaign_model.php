@@ -140,18 +140,16 @@ class Campaign_model extends CI_Model
 			$totalclicks = 0;
 			foreach($res->result() as $v)
 			{
-				if(isset($v->short_code)){
-					$campaigns[$i]['short_urls'][$x]['content_campaign_url_id'] = $v->content_campaign_url_id;
-					$campaigns[$i]['short_urls'][$x]['long_url'] = $v->long_url;
-					$campaigns[$i]['short_urls'][$x]['short_code'] = $v->short_code;
-					$campaigns[$i]['short_urls'][$x]['description'] = $v->description;
-					$campaigns[$i]['short_urls'][$x]['increment'] = $v->increment;
-					$campaigns[$i]['short_urls'][$x]['created_at'] = date('M d, Y', strtotime($v->created_at));
-					$campaigns[$i]['short_urls'][$x]['display_name'] = $v->display_name;
-					$campaigns[$i]['short_urls'][$x]['qrcode_image'] = $v->qrcode_image;
-					$totalclicks = $totalclicks + $v->increment;
-					$x++;
-				}
+				$campaigns[$i]['short_urls'][$x]['content_campaign_url_id'] = $v->content_campaign_url_id;
+				$campaigns[$i]['short_urls'][$x]['long_url'] = $v->long_url;
+				$campaigns[$i]['short_urls'][$x]['short_code'] = $v->short_code;
+				$campaigns[$i]['short_urls'][$x]['description'] = $v->description;
+				$campaigns[$i]['short_urls'][$x]['increment'] = $v->increment;
+				$campaigns[$i]['short_urls'][$x]['created_at'] = date('M d, Y', strtotime($v->created_at));
+				$campaigns[$i]['short_urls'][$x]['display_name'] = $v->display_name;
+				$campaigns[$i]['short_urls'][$x]['qrcode_image'] = $v->qrcode_image;
+				$totalclicks = $totalclicks + $v->increment;
+				$x++;
 			}
 			
 			$campaigns[$i]['total_clicks'] = $totalclicks;
@@ -225,7 +223,9 @@ echo "<pre>";
 	public function GetProduct($filter = array()){
 		$this->db->select("*");
 		$this->db->from('content_products');
-		$this->db->where($filter);
+		if($filter){
+			$this->db->where($filter);
+		}
 		return $this->db->get()->result();
 	}
 	

@@ -807,6 +807,7 @@ $(function(){
 
                      $( "#close-cal" ).click(function() {
                        $("#cal-show").css({"display": "none"});
+                       $('#datepickerField').val('');
                     });
 
                     $(".compose-insert-link-btn").click(function(){
@@ -997,6 +998,12 @@ $(function(){
                                 }
                                 else{
                                     scheduleTime = $('#datepickerField').val() + ' ' + $('#compose-schedule-hours').val() + ':' + $('#compose-schedule-minutes').val() + ' ' + $('#compose-schedule-ampm').val();        
+                                    var sch = new Date(scheduleTime);
+                                    var now = new Date();
+                                    if(sch.getTime() < now.getTime()){
+                                        alert("Please set a future post");
+                                        confirmed = false;
+                                    }
                                 }
                             }
                             else{

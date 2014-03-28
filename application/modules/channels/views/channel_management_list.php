@@ -2,7 +2,7 @@
 <div style="float: left;">
     <h5><?=$title?> Channel List</h5>
 </div>
-<?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Channel Management_Add')):?>
+
 <div style="float: right;">
     <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Channel Management_Other_Country_Add') && ($title == 'Twitter' || $title == 'Youtube')):?>
         
@@ -19,34 +19,10 @@
     
     <?php if(IsRoleFriendlyNameExist($this->user_role, array('Social Channel Management_Other_Country_Add', 'Social Channel Management_Own_Country_Add'))):?>
         <a class="btn btn-primary new-channel" href="<?=base_url('channels/channelmg/Add'.$title)?>" type="button" name="btn_new" value="" >+ New <?=$title?> Channel</a>
-    <?php endif;?>
-    
+    <?php endif;?>    
 </div>
-<?php endif;?>
-
 <div style="clear: both"></div>
 <hr style="margin-top: 0px;">
-<!--div style="float: left; margin-top: -10px;">
-    <table>
-        <tr>
-            <td>Show :</td>
-            <td>&nbsp;</td>
-            <td>
-                <select>
-                    <option>All User Role</option>
-                    <option>Super Admin</option>
-                    <option>Administrator</option>
-                    <option>Manager</option>
-                    <option>Author</option>
-                    <option>Viewer</option>
-                </select>
-            </td>
-        </tr>
-    </table>
-</div>
-<div style="float: right; margin-top: -10px;">
-    <input type="text" placeholder="Search User name, Email or ID" />
-</div-->
 <div style="clear: both"></div>
 <table class="table table-striped">
     <thead>

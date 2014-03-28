@@ -1767,7 +1767,18 @@ $(function(){
                         availableTags: sampleTags,
                         allowSpaces: true
                     });
-                });                
+                });     
+                
+                
+                $(this).on('change','.case_type',function(){
+                    var caseType=$(this).val();
+                    if(caseType=="Report_Abuse"){
+                        $(this).siblings('.product_type').attr('disabled', 'disabled');
+                    }else{
+                        $(this).siblings('.product_type').removeAttr('disabled', 'disabled');
+                    }
+                });
+                
                 /*==============================================================================================
                  ====================================== LOAD WYSIWYG EDITOR ====================================
                  =============================================================================================*/   

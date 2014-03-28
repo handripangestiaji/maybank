@@ -20,7 +20,7 @@
                 <table class="table table-striped">
                   <tbody>
                     <?php
-            if(isset($post->channel_action)):
+                    if(isset($post->channel_action)):
                     foreach($post->channel_action as $action):?>
                     <tr>
                       <td style="width:100px"><?php
@@ -48,6 +48,9 @@
                             elseif($action->action_type == 'case_solved'){
                                 echo 'Solved by '.$action->solved_name;
                             }
+                            elseif($action->action_type == 'case_reassign'){
+                                echo 'Reassign by '.$action->solved_name;
+                            }
                             else if($action->action_type = "conversation_facebook")
                                 echo $action->log_text;
                         ?>
@@ -60,7 +63,9 @@
                             else if( $action->action_type == 'case_solved'){
                                 echo $action->solved_message;
                             }
-                            
+                            else if( $action->action_type == 'case_reassign'){
+                                echo '';
+                            }
                             ?>
                         </td>
                     </tr>

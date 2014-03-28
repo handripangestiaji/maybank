@@ -230,7 +230,7 @@ class Cms extends MY_Controller {
 	        else 
 	        {
 		        $this->session->set_flashdata('message_type', 'error');
-		        $this->session->set_flashdata('message_body', 'Please insert Tag name');
+		        $this->session->set_flashdata('message_body', 'Please fill the required field.');
 	        }
 	        redirect('cms/create_tag');
           }
@@ -564,7 +564,7 @@ class Cms extends MY_Controller {
 	        else 
 	        {
 		        $this->session->set_flashdata('message_type', 'error');
-		        $this->session->set_flashdata('message_body', 'Please insert Tag name');
+		        $this->session->set_flashdata('message_body', 'Please fill the required fields');
 	        }
 			      
 	        redirect('cms/create_product');

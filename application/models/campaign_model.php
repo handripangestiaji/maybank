@@ -140,6 +140,7 @@ class Campaign_model extends CI_Model
 			$totalclicks = 0;
 			foreach($res->result() as $v)
 			{
+				$campaigns[$i]['short_urls'][$x]['url_id'] = $v->url_id;
 				$campaigns[$i]['short_urls'][$x]['content_campaign_url_id'] = $v->content_campaign_url_id;
 				$campaigns[$i]['short_urls'][$x]['long_url'] = $v->long_url;
 				$campaigns[$i]['short_urls'][$x]['short_code'] = $v->short_code;

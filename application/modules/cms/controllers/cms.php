@@ -584,7 +584,16 @@ class Cms extends MY_Controller {
     {
           $campaign = $this->campaign_model->getOneBy(array('id' => $id));
           $data['data']['row'] = $campaign;
-          $data['data']['products_avail'] = $this->product_model->get();
+	  
+	  $country_code = $this->session->userdata('country'); 
+	  if($country_code != 'All'){
+	       $filter = array('content_products.country_code' => $country_code);
+	  }
+	  else{
+	       $filter = null;
+	  }
+	  
+          $data['data']['products_avail'] = $this->product_model->get('','',$filter);
           $data['data']['products_selected'] = $this->campaign_model->get_content_product_campaign_by_campaign_id($id)->result();
     	  //$data['countries'] = $this->users_model->get_country()->result();
           $data['data']['tags'] = $this->tag_model->get();

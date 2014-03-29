@@ -72,7 +72,7 @@
                                                                                 <?php foreach($v['short_urls'] as $x):?>
                                                                                         <tr>
                                                                                                 <td><a href="<?php echo site_url('cms/url/'.$x['short_code'])?>" target="_blank">http://maybk.co/<?php echo $x['short_code']?></a></td>
-                                                                                                <td><?php echo '<p>'.$x['description'].'</p><p>'.$x['long_url'].'</p>'?></td>
+                                                                                                <td><?php echo '<p>'.$x['description'].'</p><p>'.addDashForLongText($x['long_url']).'</p>'?></td>
                                                                                                 <td><?php echo $x['created_at']?></td>
                                                                                                 <td><?php echo $x['increment']?></td>
                                                                                                 <td><?php echo $x['display_name']?></td>
@@ -133,7 +133,7 @@
                                                             <?php foreach($shorturls as $v): ?>
                                                                     <tr>
                                                                                 <td><a href="<?php echo site_url('cms/url/'.$x['short_code'])?>" target="_blank">http://maybk.co/<?php echo $v->short_code ?></a></td>
-                                                                                <td><?php echo '<p>'.$v->description.'</p><p>'.$v->long_url.'</p>'?></td>
+                                                                                <td><?php echo '<p>'.$v->description.'</p><p>'.addDashForLongText($v->long_url).'</p>'?></td>
                                                                                 <td><?php echo date('M d, Y', strtotime($v->created_at)) ?></td>
                                                                                 <td><?php echo $v->increment ?></td>
                                                                                 <td><?php echo $v->display_name?></td>

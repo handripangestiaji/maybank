@@ -346,5 +346,11 @@ function RemoveUrlWithin($text){
         $text
     );*/
     return $text;
-    
+}
+
+function addDashForLongText($string){
+    if (strlen($string) >= 50)
+        return substr($string, 0, 50). "..."; //This is a ...script
+      else
+        return $string;
 }

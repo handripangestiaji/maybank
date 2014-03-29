@@ -228,14 +228,32 @@ $(function(){
         });
         
         if(selected > 0){
-            
-            
+            $('#relatedCoversation-'+$(this).val()).parent().find('.btn-add-related').html('Add Related Conversation (' + selected +' added)');
+        }
+        
+        $('#relatedCoversation-'+$(this).val()).val(relatedConversation);
+    });
+   
+    $(this).on('click','.add-related-conversation', function(){
+        var modalBody = $(this).parent().parent().find('.modal-body');
+        currentElement = $(this);
+        var relatedConversation = '';
+        var selected = 0;
+        modalBody.find('input[type="checkbox"]').each(function(){
+            if($(this).is(":checked")){
+                relatedConversation += $(this).val() +",";
+                selected ++ ;
+            }
+        });
+        
+        if(selected > 0){
             $('#relatedCoversation-'+$(this).val()).parent().find('.btn-add-related').html('Add Related Conversation (' + selected +' added)');
         }
         
         $('#relatedCoversation-'+$(this).val()).val(relatedConversation);
     });
     
+ 
     
     $('form.update_password').submit(function(e){
         
@@ -422,6 +440,24 @@ $(function(){
         
             });
         }
+    });
+
+    $(this).on('click','.remove_related',function(e){
+       var btn_add_related=$(this).parent().parent().parent().find('.btn-add-related');
+       var val_add_related=$(this).parent().parent().parent().find('.value_related_conversation');
+       var post_id=$(this).parent().parent().parent().find('.post_id').val(); 
+       alert(post_id);
+       btn_add_related.html('Add Related Conversation');
+       val_add_related.val(post_id);    
+    });
+    
+    $(this).on('change','.case_type',function(){
+                var caseType=$(this).val();
+                if(caseType=="Report_Abuse"){
+                    $(this).siblings('.product_type').attr('disabled', 'disabled');
+                }else{
+                    $(this).siblings('.product_type').removeAttr('disabled', 'disabled');
+                }
     });
 
     $(this).on('click', '.twitter-case-related', function(e){

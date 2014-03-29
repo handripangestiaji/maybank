@@ -1,41 +1,26 @@
-<?php 
-    if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Short_URL_Create')){    
-?>
 <div class="row-fluid" style="border-bottom: solid 1px #C9C9C9; margin-bottom: 10px;">
     <h4>Create Short URL</h4>    
 </div>
-<?php }?>
 <?php $tab = $this->uri->segment(4) ? $this->uri->segment(4): 'secondTab'; ?>
-
     <!-- ==================== TAB ROW ==================== -->
 <div class="row-fluid">
         <!-- ==================== TAB NAVIGATION ==================== -->
-	<?php 
-	    if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Short_URL_Create')){    
-	?>
-        <ul class="nav nav-tabs">
-            <?php if ((IsRoleFriendlyNameExist($this->user_role, 'Content Management_Short_URL_Campaign')) ||
-		      (IsRoleFriendlyNameExist($this->user_role, 'Content Management_Campaign_Create'))
+	<ul class="nav nav-tabs">
+            <?php if ((IsRoleFriendlyNameExist($this->user_role, 'Content Management_Short_URL_Own_Country_Create')) ||
+		      (IsRoleFriendlyNameExist($this->user_role, 'Content Management_Campaign_Own_Country_Create')) ||
+		      (IsRoleFriendlyNameExist($this->user_role, 'Content Management_Short_URL_All_Country_Create')) ||
+		      (IsRoleFriendlyNameExist($this->user_role, 'Content Management_Campaign_All_Country_Create'))
 		      ): ?><li class="<?php echo $tab=='firstTab'?"active":"" ?>">
             <a href="#firstTab">Campaign</a>
             </li>
             <?php endif;?>
-            
-            <li class="<?php echo $tab=='secondTab'?"active":"" ?>"><a href="#secondTab">Non Campaign</a></li>
-            
+            <li class="<?php echo $tab=='secondTab'?"active":"" ?>"><a href="#secondTab">Non Campaign</a></li>      
         </ul>
-	<?php }?>
-        <!-- ==================== END OF TAB NAVIGATIION ==================== -->
+	<!-- ==================== END OF TAB NAVIGATIION ==================== -->
 
         <div class="container-fluid">
             <!-- ==================== FIRST TAB CONTENT ==================== -->
-            <?php if ((IsRoleFriendlyNameExist($this->user_role, 'Content Management_Short_URL_Campaign')) ||
-		      (IsRoleFriendlyNameExist($this->user_role, 'Content Management_Campaign_Create'))
-		      ): ?>
             <div class="tabContent" id="firstTab">
-		<?php 
-		    if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Short_URL_Create')){    
-		?>
                <div class="floatingBox span12">
                     <div class="container-fluid campaignForm">
                         <form class="form-horizontal contentForm" method="post" action="<?php echo site_url('cms/new_create_short_url')?>">
@@ -91,16 +76,11 @@
                                 <div class="pull-left">
                                     <button class="btn btn-primary" type="submit">Create</button>
                                 </div>
-                                <div class="pull-right">
-                                    <button class="btn " type="button">Cancel</button>
-                                </div>
                             </div>
                         </form>
                     </div>
                </div>
-               <?php }?>
             </div>
-            <?php endif;?>
             <!-- ==================== END OF FIRST TAB CONTENT ==================== -->
             
             <!-- ==================== SECOND TAB CONTENT ==================== -->
@@ -162,9 +142,6 @@
                             <div class="control-group">
                                 <div class="pull-left">
                                     <button class="btn btn-primary" type="submit">Create</button>
-                                </div>
-                                <div class="pull-right">
-                                    <button class="btn " type="button">Cancel</button>
                                 </div>
                             </div>
                         </form>

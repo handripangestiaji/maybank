@@ -1,7 +1,3 @@
-<?php
-    if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Campaign_Create')){
-?>
-
 <div class="row-fluid" style="border-bottom: solid 1px #C9C9C9; margin-bottom: 10px;">
     <h4>Create Campaign</h4>    
 </div>
@@ -54,11 +50,7 @@
                 <div class="pull-left">
                     <button class="btn btn-primary" type="submit">Create</button>
                 </div>
-                <div class="pull-right">
-                    <button class="btn " type="button">Cancel</button>
-                </div>
             </div>
         </form>
     </div>
 </div>
- <?php }?>

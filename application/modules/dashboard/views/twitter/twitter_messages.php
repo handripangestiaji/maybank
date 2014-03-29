@@ -93,7 +93,9 @@
                            @<?php echo $directmessage[$i]->social_stream_name?>
                        </span>
                        <i class="icon-circle"></i>
-                       <span>Sent <span class="cyanText">DM to @<?=$directmessage[$i]->sender->screen_name?></span> At </span>
+                       <span>Sent <span class="cyanText">DM to @<?=$directmessage[$i]->sender->screen_name?></span>
+                       <i class="icon-circle"></i>
+                       </span>
                        
                        <span><?php
                         $date = new DateTime($outbox->created_at.' Europe/London');

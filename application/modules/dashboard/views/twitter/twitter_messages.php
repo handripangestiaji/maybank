@@ -112,9 +112,10 @@
             <?php
                 $data_loaded['post'] = $directmessage[$i];
                 $this->load->view('dashboard/action_taken', $data_loaded);
+                $data_loaded['unique_id'] = $unique_id;
             ?>
            </div>
-           <div href='#modal-action-log-<?php echo $directmessage[$i]->post_stream_id ?>' data-toggle='modal' class="containerHeadline specialToggleTable">
+           <div href='#modal-action-log-<?php echo $directmessage[$i]->post_stream_id.$unique_id ?>' data-toggle='modal' class="containerHeadline specialToggleTable">
                 <i class="icon-table"></i><h2>Action Log</h2>
             </div>
        </div>
@@ -134,7 +135,8 @@
                 $data = array(
                     'come_from' => "direct_messages",
                     'post' => $directmessage[$i],
-                    'dm_type' => $directmessage[$i]->direct_message_type
+                    'dm_type' => $directmessage[$i]->direct_message_type,
+                    'unique_id' => $unique_id
                 );
                 $this->load->view('dashboard/twitter/twitter_button', $data);
             ?>

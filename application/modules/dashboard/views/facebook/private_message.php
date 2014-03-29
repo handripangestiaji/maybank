@@ -103,9 +103,11 @@ $sender = $fb_pm[$i]->participant->sender->facebook_id == $fb_pm[$i]->social_id 
             </div>
         </div>
        <?php endif;
-       } ?>
+       }
+       $unique_id = uniqid();
+       ?>
        <!-- ==================== CONDENSED TABLE HEADLINE ==================== -->
-        <div href='#modal-action-log-<?php echo $fb_pm[$i]->post_id ?>' data-toggle='modal' class="containerHeadline specialToggleTable">
+        <div href='#modal-action-log-<?php echo $fb_pm[$i]->post_id.$unique_id ?>' data-toggle='modal' class="containerHeadline specialToggleTable">
 
             <i class="icon-table"></i><h2>Action Log</h2>
         </div>
@@ -116,6 +118,7 @@ $sender = $fb_pm[$i]->participant->sender->facebook_id == $fb_pm[$i]->social_id 
                 {
                     $data_loaded['post'] = $fb_pm[$i];
                     $data_loaded['action_type'] = "conversation_facebook";
+                    $data_loaded['unique_id'] = $unique_id;
                     $this->load->view('dashboard/action_taken', $data_loaded);
  
                 }

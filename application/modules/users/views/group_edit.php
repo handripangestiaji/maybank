@@ -37,11 +37,16 @@
 			<td>
 			    <select id="countrySelect" name="country">
 				<?php foreach($country_list as $country):?>
-				<option value="<?=$country->code?>"><?=$country->name?></option>
+				    <option value="<?=$country->code?>" <?=$group->row()->country_code == $country->code ?
+				    "selected" : ""?> ><?=$country->name?></option>
 				<?php endforeach?>
 			    </select>
 			</td>
 		    </tr>
+		    <?php else:?>
+			<select id="countrySelect" name="country" class="hide">
+			    <option value="<?=$this->session->userdata('country')?>" ><?=$this->session->userdata('country')?></option>
+			</select>
 		    <?php endif;?>
                     <tr>
                         <td>Assign Channel</td>

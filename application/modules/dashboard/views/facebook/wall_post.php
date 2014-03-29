@@ -126,9 +126,11 @@ if($fb_feed[$i]->post_content != '<br />' || isset($attachment->media)):
                 }    
             }
         
-         endfor; ?>
+         endfor;
+         ?>
        <!-- ==================== CONDENSED TABLE HEADLINE ==================== -->
-        <div href='#modal-action-log-<?php echo $fb_feed[$i]->post_stream_id ?>' data-toggle='modal' class="containerHeadline specialToggleTable">
+       <?php $unique_id = uniqid(); ?>
+        <div href='#modal-action-log-<?php echo $fb_feed[$i]->post_stream_id.$unique_id ?>' data-toggle='modal' class="containerHeadline specialToggleTable">
             <i class="icon-table"></i><h2>Action Log</h2>
         </div>
        <!-- ==================== END OF CONDENSED TABLE HEADLINE ==================== -->
@@ -140,6 +142,7 @@ if($fb_feed[$i]->post_content != '<br />' || isset($attachment->media)):
                                                               'Social Stream_Channel_General_Function_All_Country_View')))
                 {
                     $data_loaded['post'] = $fb_feed[$i];
+                    $data_loaded['unique_id'] = $unique_id;
                     $this->load->view('dashboard/action_taken', $data_loaded);
                 }
             ?>

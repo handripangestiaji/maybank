@@ -1143,7 +1143,7 @@ class Media_stream extends CI_Controller {
 				    "user_id" => $this->session->userdata('user_id'),
 				    'short_code' => $short_code,
 				    "description" => $this->input->post('description'),
-				    'country_code' =>  $this->session->userdata('country')
+				    'country_code' =>  $this->session->userdata('country'),
 				    'increment' => 0)));
     }
     

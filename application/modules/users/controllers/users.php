@@ -1328,7 +1328,7 @@ class Users extends MY_Controller {
     
     function update_group()
     {
-     if(IsRoleFriendlyNameExist($this->user_role, 'User Management_Group_Edit')){
+     if(IsRoleFriendlyNameExist($this->user_role, array('User Management_Group_Own_Country_Edit', 'User Management_Group_All_Country_Edit'))){
 	  $this->form_validation->set_rules('group_name', 'Group Name', 'required');
 	  $id = $this->input->post('group_id');
 	  $group = $this->input->post('group_name');

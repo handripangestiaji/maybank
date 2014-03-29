@@ -19,14 +19,31 @@
 		</div>
 	    <?php }?>
     <div class="cms-content row-fluid">
-           <div class="cms-filter pull-left users-menu">
-		<?php $this->load->view('users/user_menu')?>
-	    </div>
+        <div class="cms-filter pull-left">
+	    <?php $this->load->view('users/user_menu')?>
+        </div>
 	<form id="roleform" method='post' action='<?php echo site_url("users/update_role");?>' >
         <div class="cms-table pull-right">
             <h5>Edit Role</h5>
             <hr style="margin-top: 0px;">
-            Role Name <input type='text' name='role_name' value='<?php echo $role->row()->role_name;?>' />
+            Role Name <input type='text' name='role_name' value='<?php echo $role->row()->role_name;?>' /> <br />
+	    
+	    <?php if(IsRoleFriendlyNameExist($this->user_role, array('User Management_Role_All_Country_Edit'))):?>
+	    Country &nbsp;&nbsp;
+            <select name="country_code">
+                <?php
+                    foreach($this->country_list as $country):
+                ?>
+                    <option value="<?=$country->code?>">
+		    <?=$country->name?></option>
+                <?php endforeach;?>
+            </select>
+	    <?php else:?>
+	    <select name="country_code" class="hide">
+		<option value="<?=$this->session->userdata('country')?>"><?=$this->session->userdata('country')?></option>
+	    </select>
+	    <?php endif;?>
+        
 	    <span style='color:red;'><?php echo form_error('role_name'); ?></span>
             <input type='hidden' name='role_id' value='<?php echo $role->row()->role_collection_id;?>' />
 	    <input type='hidden' name='role_name1' value='<?php echo $role->row()->role_name;?>' />

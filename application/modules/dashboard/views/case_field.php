@@ -1,15 +1,13 @@
-<div class="row-fluid">
+    <div class="row-fluid">
 <?php 
 if($posts){
-//print_r($posts_comment[$i]);
  if(isset($posts[$i]->post_id)){
     $post_id=$posts[$i]->post_id;   
  }
+ 
  if(isset($posts_comment[$i]->comment_post_id)){
     $post_id=$posts_comment[$i]->comment_post_id;
  }
- //print_r($post_id);
- 
 ?>
            <span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
            <form method="post" class="assign-case" action="<?php echo base_url("case/mycase/CreateCase")?>">
@@ -17,12 +15,15 @@ if($posts){
            <input type="hidden" value="new_case" name="type" />
            <div class="message"></div>
            <div class="pull-left">
-               <select name="case_type" style="width: 130px;">
+               <select name="case_type" class="case_type" style="width: 130px;">
+                   <option value="">Please Select</option>
+                   <option value="Report_Abuse">Report Abuse</option>
                    <option value="Feedback">Feedback</option>
                    <option value="Enquiry">Enquiry</option>
                    <option value="Complaint">Complaint</option>
                </select>
-               <select name="product_type" style="width: 130px;">
+               <select name="product_type" class="product_type" style="width: 130px;">
+                    <option value="">Please Select</option>
                 <?php foreach($product_list as $product):?>
                       <?php
                           if(isset($product->child)){ ?>
@@ -57,15 +58,14 @@ if($posts){
                       $userIncrement = 0;
                       if(is_array($user_list)){
                         for($userIncrement=0;$userIncrement<count($user_list);$userIncrement++){
-                                   if(IsRoleFriendlyNameExist($user_list[$userIncrement]->role_detail, 'Social Stream_Current_Resolve_Case')){
-                                              if($user_list[$userIncrement]->group_name!=$group_name){
-                                                         echo '<optgroup label="'.$user_list[$userIncrement]->group_name.'"></optgroup>';           
-                                              }
-                                              if( $this->session->userdata('user_id') != $user_list[$userIncrement]->user_id){
-                                                         echo '<option value="'.$user_list[$userIncrement]->user_id.'">&nbsp;&nbsp;&nbsp;&nbsp;'.$user_list[$userIncrement]->full_name.'</option>';                                 
-                                              }
-                                   }
-                                   $group_name = $user_list[$userIncrement]->group_name;           
+                            if($user_list[$userIncrement]->group_name!=$group_name){
+                                echo '<optgroup label="'.$user_list[$userIncrement]->group_name.'"></optgroup>';           
+                            }
+                            if( $this->session->userdata('user_id') != $user_list[$userIncrement]->user_id &&
+                                IsRoleFriendlyNameExist($user_list[$userIncrement]->role, 'Social Stream_Case_Own_Country_AssignReassignResolved')){
+                                echo '<option value="'.$user_list[$userIncrement]->user_id.'">&nbsp;&nbsp;&nbsp;&nbsp;'.$user_list[$userIncrement]->full_name.'</option>';                                 
+                            }
+                            $group_name = $user_list[$userIncrement]->group_name;  
                         }
                       }
                       else{
@@ -88,8 +88,7 @@ if($posts){
            <textarea placeholder="Compose Message" id="content" name="message" ></textarea>
            <br clear="all" />
            <div class="pull-right">
-
-               <button type="submit" class="btn-purple btn btn-small" value="<?php if(isset($case_type)){echo $case_type='reassign';}?>"><i class="icon-ok-circle icon-large"></i> Assign</button>    
+               <button type="submit" class="btn-purple btn btn-small" value="<?php if(isset($case_type)){echo $case_type='reassign';}?>" onclick="return confirm('Please make sure the case type?');" ><i class="icon-ok-circle icon-large"></i> Assign</button>    
            </div>
            </form>
     </div>

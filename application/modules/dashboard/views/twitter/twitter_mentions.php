@@ -4,7 +4,15 @@ $timezone=new DateTimeZone($this->session->userdata('timezone'));
 for($i=0;$i<count($mentions);$i++){
 ?>
     <li <?php if($mentions[$i]->is_read==0){echo 'class="unread-post"';} ?> id="post<?=$mentions[$i]->social_stream_post_id?>">
-        <div class="message"></div>
+    
+        <div class="message">
+             <?php
+            if(count($mentions[$i]->case) > 0)
+                $this->load->view('dashboard/twitter/case_view', array(
+                    "caseMsg" => $mentions[$i]->case[0]
+                ));
+        ?>
+        </div>
         <input type="hidden" class="postId" value="<?php echo $mentions[$i]->social_stream_post_id; ?>" />
         <div class="circleAvatar"><img src="<?php echo base_url('dashboard/media_stream/SafePhoto?photo=').$mentions[$i]->profile_image_url;?>" alt=""></div>
         <div class="read-mark <?php if($mentions[$i]->is_read==0){echo 'redText';} else { echo 'greyText'; } ?>"><i class="icon-bookmark icon-large"></i></div>
@@ -35,12 +43,7 @@ for($i=0;$i<count($mentions);$i++){
     ?></p>
     
     <p>
-    <?php
-    if(count($mentions[$i]->case) > 0)
-            $this->load->view('dashboard/twitter/case_view', array(
-                    "caseMsg" => $mentions[$i]->case[0]
-                ));
-        ?>
+   
         
     <?php if(isset($entities->media[0])){
             echo "<a href='#modal-".$mentions[$i]->social_stream_post_id."' data-toggle='modal' ><img class='img_attachment' src='".base_url('dashboard/media_stream/SafePhoto?photo=').$entities->media[0]->media_url_https."' /></a>";
@@ -102,9 +105,9 @@ for($i=0;$i<count($mentions);$i++){
     ?></p>
     
     <p>
-        <a role="button" class="btn-engagement"><i class="icon-eye-open"></i><?=count($comment)?> Engagement</a> 
+        <a role="button" class="btn-engagement"> <i class="icon-eye-open"></i> <?=count($comment)?> Engagement</a> 
         <?php if($mentions[$i]->retweet_count>0): ?>|
-        <span><i class="icon-retweet greyText"></i><?php echo $mentions[$i]->retweet_count; ?> re-tweet(s)</span><?php endif;?>
+        <span> <i class="icon-retweet greyText"></i><?php echo $mentions[$i]->retweet_count; ?> re-tweet(s)</span><?php endif;?>
     </p>
     <!-- ENGAGEMENT -->    
     <div class="engagement hide">

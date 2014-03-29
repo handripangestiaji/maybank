@@ -34,7 +34,7 @@ $sender = $fb_pm[$i]->participant->sender->facebook_id == $fb_pm[$i]->social_id 
         ?>
     
     </p>
-    <p><?=$fb_pm[$i]->snippet?></p>
+    <p class="snippet"><?=$fb_pm[$i]->snippet?></p>
     <p class="indicator">
     <?php $this->load->view('facebook/facebook_indicator', array('post'=>$fb_pm[$i]))?>
     <p>
@@ -96,7 +96,7 @@ $sender = $fb_pm[$i]->participant->sender->facebook_id == $fb_pm[$i]->social_id 
                     
                 endif;?>
                 <?php if($comment[$j]->messages != ""){?>
-                    <p>"<?php echo RemoveUrlWithin($comment[$j]->messages)?>"</p>
+                    <p><?php echo CreateUrlFromText($comment[$j]->messages)?></p>
                 <?php }?>
                 <p><?=$att_to_print;?> </p>
               
@@ -114,6 +114,7 @@ $sender = $fb_pm[$i]->participant->sender->facebook_id == $fb_pm[$i]->social_id 
            if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action'))
                 {
                     $data_loaded['post'] = $fb_pm[$i];
+                    $data_loaded['action_type'] = "conversation_facebook";
                     $this->load->view('dashboard/action_taken', $data_loaded);
  
                 }

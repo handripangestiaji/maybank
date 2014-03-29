@@ -124,7 +124,7 @@ class Cronjob extends CI_Controller {
             $filter['channel_id'] = $this->input->get('channel_id');
         }
         $channel_loaded = $this->account_model->GetChannel($filter);
-        
+        print_r($channel_loaded);
         foreach($channel_loaded as $channel){
             $this->twitter_model->InitConnection($channel->oauth_token, $channel->oauth_secret);
             $this->twitter_model->Mentions($channel);

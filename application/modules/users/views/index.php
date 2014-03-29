@@ -51,15 +51,12 @@
             <div style="float: left;">
                 <h4>User List</h4>
             </div>
-            <?php for($i=0;$i<count($this->user_role);$i++)
-                {
-                    if($this->user_role[$i]->role_friendly_name=='User Management_User_Create_Delete'){
-                ?>
-            <div style="float: right;">
-                <input class="btn btn-primary" onclick="btn_add()" type="button" name="btn_new" value="+ New User" />
-            </div>
-            <?php }}?>
-            
+            <?php if(IsRoleFriendlyNameExist($this->user_role, array('User Management_User_Own_Country_Create',
+                                                         'User Management_User_All_Country_Create'))):?>
+                <div style="float: right;">
+                    <input class="btn btn-primary" onclick="btn_add()" type="button" name="btn_new" value="+ New User" />
+                </div>
+            <?php endif;?>
             <div style="clear: both;"></div>
             <hr style="margin-top: 0px;">
             <div style="float: left; margin-top: -10px;">
@@ -106,17 +103,21 @@
                         <th>Date Created</th>
                         <th>Country</th>
                         <th>Creator</th>
-                        <?php for($i=0;$i<count($this->user_role);$i++){if($this->user_role[$i]->role_friendly_name=='User Management_User_Edit'){?>
-                        <th>&nbsp;</th>
-                        <th>&nbsp;</th>
-                        <?php }}?>
+                        <?php if(IsRoleFriendlyNameExist($this->user_role, array('User Management_User_Own_Country_Edit',
+                                                         'User Management_User_All_Country_Edit'))):?>
+                        <th colspan="2">Action</th>
+                        
+                        <?php endif;?>
+                        
                     </tr>
                 </thead>
                 
                 <tbody>
                     <?php if($show != null)
                     {
-                        foreach($show as $row){?>
+                        foreach($show as $row){
+                            $is_same_country = $row->country_code == $this->session->userdata('country');
+                            ?>
                     <tr>
                         <td><?php echo $row->username;?></td>
                         <td><?php echo $row->display_name;?></td>
@@ -131,10 +132,17 @@
                         <td><?php echo $row->created_at;?></td>
                         <td><?php echo $row->country_code?></td>
                         <td><?php echo $row->created_by_name;?></td>
-                        <?php for($i=0;$i<count($this->user_role);$i++){if($this->user_role[$i]->role_friendly_name=='User Management_User_Edit'){?>
+                        <?php
+                        $edit_permission = $is_same_country ? array('User Management_User_All_Country_Edit', 'User Management_User_Own_Country_Edit') :
+                                'User Management_User_All_Country_Edit';
+                        if(IsRoleFriendlyNameExist($this->user_role, $edit_permission)):?>
                         <td><a href="<?php echo site_url('users/edit/'.$row->user_id);?>"><span><i class="icon-pencil"></i></span></a></td>
-                        <?php }}?>
-                        <?php if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_Delete')):?>
+                        <?php endif;?>
+                        <?php
+                            $delete_permission = $is_same_country ? array('User Management_User_All_Country_Delete', 'User Management_User_Own_Country_Delete') :
+                                'User Management_User_All_Country_Delete';
+                            if(IsRoleFriendlyNameExist($this->user_role, $delete_permission)):
+                        ?>
                         <td>
                             <a href="" onclick="show_confirm('<?php echo $row->user_id;?>');return false;"><span><i class="icon-remove redText"></i></span></a>
                         </td>

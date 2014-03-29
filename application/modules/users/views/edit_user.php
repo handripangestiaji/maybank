@@ -1,3 +1,4 @@
+
 <div class="row-fluid" style="width: 100%; margin: 0px auto;">    
 
     <?php
@@ -22,7 +23,8 @@
             
             <form method='post' action='<?php echo site_url('users/update_user');?>' enctype="multipart/form-data">
     <table cellspacing=5px>
-        <?php foreach($id->result() as $row){
+        <?php $row = $id->row();
+            if($row == null) exit();
             ?>
         
         <tr>
@@ -52,28 +54,29 @@
         <?php
         $current_user_role = $this->users_model->get_collection_detail(
 		array('role_collection_id' => $row->role_id));
-        if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_Modify_Role') && $this->session->userdata('role_id') != $row->role_id &&
-           !IsRoleFriendlyNameExist($current_user_role, 'Regional_User')):
+        $is_same_country = $this->session->userdata('country') == $row->country_code;
+        
+        $role_check = ($is_same_country && $this->session->userdata('user_id') != $row->user_id && IsRoleFriendlyNameExist($this->user_role, 'User Management_User_Own_Country_Edit')) ||
+        IsRoleFriendlyNameExist($this->user_role, 'User Management_User_All_Country_Edit');
+        if($role_check):
         ?>
         <tr>
             <td>Role</td>
             <td>
                 <select name="optRole">
                     <?php foreach($role->result() as $r){
-                        //if($r->role_collection_id != 2){
-                            if($row->role_id == $r->role_collection_id)
-                            {
+                        if($row->role_id == $r->role_collection_id)
+                        {
                     ?>
                             <option value='<?php echo $r->role_collection_id;?>' selected='selected'><?php echo $r->role_name;?></option>
                     <?php
-                            }
-                            else
-                            {
+                        }
+                        else
+                        {
                     ?>
-                            <option value='<?php echo $r->role_collection_id;?>'><?php echo $r->role_name;?></option>
+                        <option value='<?php echo $r->role_collection_id;?>'><?php echo $r->role_name;?></option>
                     <?php
-                            }
-                        //}
+                        }
                     }?>
                 </select>
             </td>
@@ -208,7 +211,6 @@
                 <input type="button" value="Cancel" onclick="btn_cancel()" />
             </td>
         </tr>
-        <?php }?>
     </table>
 </form>
             

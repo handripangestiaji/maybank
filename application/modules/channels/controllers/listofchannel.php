@@ -17,13 +17,25 @@ class listofchannel extends CI_Controller {
     }
     
     function Facebook(){
+        $isAllowedToView = false;
         $filter = array(
             'connection_type' => 'facebook'
         );
-        if(!IsRoleFriendlyNameExist($this->user_role, 'Regional_User'))
+        if(IsRoleFriendlyNameExist($this->user_role, 'Social Channel Management_Own_Country_View')){
             $filter['country_code'] =  $this->session->userdata('country');
-        $data['title'] = "Facebook";
+            $isAllowedToView = true;
+        }
         
+        if(IsRoleFriendlyNameExist($this->user_role, 'Social Channel Management_Other_Country_View')){
+            if(isset($filter['country_code']))
+                unset($filter['country_code']);
+            $isAllowedToView = true;
+        }
+        if(!$isAllowedToView){
+            echo "<h2>PERMISSION DENIED TO SEE CHANNEL</h2>";
+            exit();
+        }
+        $data['title'] = "Facebook";
         $data['channel_list'] = $this->account_model->GetChannel($filter);
         $data['total_row'] = $this->account_model->GetTableTotalRow('channel', $filter);
         $this->session->set_userdata('channel_token_delete', md5(time()));
@@ -32,11 +44,24 @@ class listofchannel extends CI_Controller {
     }
     
     function Twitter(){
+        $isAllowedToView = false;
         $filter = array(
             'connection_type' => 'twitter'
         );
-        if(!IsRoleFriendlyNameExist($this->user_role, 'Regional_User'))
+        if(IsRoleFriendlyNameExist($this->user_role, 'Social Channel Management_Own_Country_View')){
             $filter['country_code'] =  $this->session->userdata('country');
+            $isAllowedToView = true;
+        }
+        
+        if(IsRoleFriendlyNameExist($this->user_role, 'Social Channel Management_Other_Country_View')){
+            if(isset($filter['country_code']))
+                unset($filter['country_code']);
+            $isAllowedToView = true;
+        }
+        if(!$isAllowedToView){
+            echo "<h2>PERMISSION DENIED TO SEE CHANNEL</h2>";
+            exit();
+        }
         $data['title'] = "Twitter";
         $data['channel_list'] = $this->account_model->GetChannel($filter);
         $data['total_row'] = $this->account_model->GetTableTotalRow('channel', $filter);
@@ -49,11 +74,24 @@ class listofchannel extends CI_Controller {
         $filter = array(
             'connection_type' => 'youtube'
         );
-        if(!IsRoleFriendlyNameExist($this->user_role, 'Regional_User'))
+        $isAllowedToView = false;
+        if(IsRoleFriendlyNameExist($this->user_role, 'Social Channel Management_Own_Country_View')){
             $filter['country_code'] =  $this->session->userdata('country');
-        $data['title'] = "Youtube";
+            $isAllowedToView = true;
+        }
+        
+        if(IsRoleFriendlyNameExist($this->user_role, 'Social Channel Management_Other_Country_View')){
+            if(isset($filter['country_code']))
+                unset($filter['country_code']);
+            $isAllowedToView = true;
+        }
+        if(!$isAllowedToView){
+            echo "<h2>PERMISSION DENIED TO SEE CHANNEL</h2>";
+            exit();
+        }
         $data['channel_list'] = $this->account_model->GetChannel($filter);
         $data['total_row'] = $this->account_model->GetTableTotalRow('channel', $filter);
+        $data['title'] = "Twitter";
         $this->session->set_userdata('channel_token_delete', md5(time()));
         $this->load->view("channels/channel_management_list", $data);
         

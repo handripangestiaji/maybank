@@ -18,91 +18,84 @@ class Users extends MY_Controller {
 	$this->user_role = $this->users_model->get_collection_detail(
 		array('role_collection_id'=>$this->session->userdata('role_id')));
 	$this->country_list = $this->users_model->get_country_list();
-	$this->country_code = IsRoleFriendlyNameExist($this->user_role, 'Regional_User') ? NULL : $this->session->userdata('country');
+	
 	
     }
     
     //===============================USER=======================================
     function index()
     {
-     if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_View'))
-     {
-	  $cek = $this->session->userdata('search_value');
-	  $cek1 = $this->session->userdata('roleId');
-	  $config['page_query_string'] = TRUE;
-	  $country_code = IsRoleFriendlyNameExist($this->user_role, 'Regional_User') ? NULL : $this->session->userdata('country');
-	    
-	  if($this->input->get('role_collection_id'))
-	  {
-	       $config['base_url'] = base_url('users/index').'?role_collection_id='.$this->input->get('role_collection_id');
-	       $this->session->unset_userdata('search_value');
-	       
-	       $config['total_rows'] = $this->users_model->count_record('role_id',$this->input->get('role_collection_id'), $country_code);
-	       $config['per_page'] = 10;
-	       $config["uri_segment"] = 1;
-	       
-	       $config['next_link'] = 'Next';
-	       $config['prev_link'] = 'Prev';
-	       
-	       $config['first_link'] = 'First';
-	       $config['last_link'] = 'Last';
+	$cek = $this->session->userdata('search_value');
+	$cek1 = $this->session->userdata('roleId');
+	$config['page_query_string'] = TRUE;
+	$country_code = IsRoleFriendlyNameExist($this->user_role, 'User Management_User_All_Country_View') ? NULL : $this->session->userdata('country');
 	  
-	       $config['cur_tag_open'] = '<b style="margin:0px 5px;">';
-	       $config['cur_tag_close'] = '</b>';
-	       $this->pagination->initialize($config);
-	       $page = $this->input->get('per_page');
-	       
-	       $data['show'] = $this->users_model->select_user1($config["per_page"], $page, $this->input->get('role_collection_id'), null, $country_code);
-	       $data['links'] = $this->pagination->create_links();
-	       $data['role'] = $this->users_model->select_role($this->session->userdata('role_id'));
-	       $data['count'] = $this->users_model->count_record('role_id',$this->input->get('role_collection_id'), $country_code);
-	       
-	       $this->load->view('users/index',$data);
-	  }
-	  else
-	  {
-	    
-	       $search = $this->session->userdata('search_value') ? $this->session->userdata('search_value') : $this->input->get('q') ;
-	       $config['base_url'] = base_url('users/index').'?q='.$search;
-	       $config['per_page'] = 10;
-	       $config["uri_segment"] = 3;
-	       
-	       $config['next_link'] = 'Next';
-	       $config['prev_link'] = 'Prev';
-	       
-	       $config['first_link'] = 'First';
-	       $config['last_link'] = 'Last';
+	if($this->input->get('role_collection_id'))
+	{
+	     $config['base_url'] = base_url('users/index').'?role_collection_id='.$this->input->get('role_collection_id');
+	     $this->session->unset_userdata('search_value');
+	     
+	     $config['total_rows'] = $this->users_model->count_record('role_id',$this->input->get('role_collection_id'), $country_code);
+	     $config['per_page'] = 10;
+	     $config["uri_segment"] = 1;
+	     
+	     $config['next_link'] = 'Next';
+	     $config['prev_link'] = 'Prev';
+	     
+	     $config['first_link'] = 'First';
+	     $config['last_link'] = 'Last';
+	
+	     $config['cur_tag_open'] = '<b style="margin:0px 5px;">';
+	     $config['cur_tag_close'] = '</b>';
+	     $this->pagination->initialize($config);
+	     $page = $this->input->get('per_page');
+	     
+	     $data['show'] = $this->users_model->select_user1($config["per_page"], $page, $this->input->get('role_collection_id'), null, $country_code);
+	     $data['links'] = $this->pagination->create_links();
+	     $data['role'] = $this->users_model->select_role($this->session->userdata('role_id'));
+	     $data['count'] = $this->users_model->count_record('role_id',$this->input->get('role_collection_id'), $country_code);
+	     
+	     $this->load->view('users/index',$data);
+	}
+	else
+	{
 	  
-	       $config['cur_tag_open'] = '<b style="margin:0px 5px;">';
-	       $config['cur_tag_close'] = '</b>';
-	       $config['total_rows'] = $this->users_model->count_record('teks',$search, $country_code);
-	       $this->pagination->initialize($config);
-	       $page =$this->input->get('per_page');
-	       $data['show'] = $this->users_model->select_user1($config["per_page"], $page, null,$search, $country_code);
+	     $search = $this->session->userdata('search_value') ? $this->session->userdata('search_value') : $this->input->get('q') ;
+	     $config['base_url'] = base_url('users/index').'?q='.$search;
+	     $config['per_page'] = 10;
+	     $config["uri_segment"] = 3;
+	     
+	     $config['next_link'] = 'Next';
+	     $config['prev_link'] = 'Prev';
+	     
+	     $config['first_link'] = 'First';
+	     $config['last_link'] = 'Last';
+	
+	     $config['cur_tag_open'] = '<b style="margin:0px 5px;">';
+	     $config['cur_tag_close'] = '</b>';
+	     $config['total_rows'] = $this->users_model->count_record('teks',$search, $country_code);
+	     $this->pagination->initialize($config);
+	     $page =$this->input->get('per_page');
+	     $data['show'] = $this->users_model->select_user1($config["per_page"], $page, null,$search, $country_code);
 
-	       $data['links'] = $this->pagination->create_links();
-	       $data['role'] = $this->users_model->select_role($this->session->userdata('role_id'));
-	       $data['count'] = $this->users_model->count_record(null,null, $country_code);
-	       
-	       $this->load->view('users/index',$data);
-	  }
-     }
-     else
-     {
-	  redirect('dashboard');
-     }
+	     $data['links'] = $this->pagination->create_links();
+	     $data['role'] = $this->users_model->select_role($this->session->userdata('role_id'));
+	     $data['count'] = $this->users_model->count_record(null,null, $country_code);
+	     
+	     $this->load->view('users/index',$data);
+	}
     }
     
     //view create user
     function create()
     {
-	if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_Create_Delete'))
+	if(IsRoleFriendlyNameExist($this->user_role, array('User Management_User_All_Country_Create', 'User Management_User_Own_Country_Create')))
 	{
-	    $country_code = IsRoleFriendlyNameExist($this->user_role, 'Regional_User') ? NULL : $this->session->userdata('country');
+	    $country_code = IsRoleFriendlyNameExist($this->user_role, 'User Management_User_All_Country_Create') ? NULL : $this->session->userdata('country');
 	    
 	    $data = array(
 		      'role' => $this->users_model->select_role($this->session->userdata('role_id'), $country_code),
-		      'group' => $this->users_model->select_group(),
+		      'group' => $this->users_model->select_group($country_code == null ? null : array('country_code' => $country_code)),
 		      'double' => NULL,
 		      'doubleUser' => NULL
 		      );
@@ -117,7 +110,9 @@ class Users extends MY_Controller {
     
     function insert_user()
     {
-	  if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_Create_Delete')){
+	  if(IsRoleFriendlyNameExist($this->user_role,
+				     array('User Management_User_All_Country_Create',
+					   'User Management_User_Own_Country_Create'))){
 	  if(isset($_POST['Create']))
 	  {
 	       $this->form_validation->set_rules('username', 'User Name', 'required');
@@ -285,12 +280,15 @@ class Users extends MY_Controller {
     
     function edit($id)
     {
-	if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_Edit'))
+	if(IsRoleFriendlyNameExist($this->user_role, array('User Management_User_Own_Country_Edit',
+							'User Management_User_All_Country_Edit')))
 	{
-	  $data = array(
+	    $country_code = IsRoleFriendlyNameExist($this->user_role, 'User Management_User_All_Country_Edit') ? NULL : $this->session->userdata('country');
+	    $data = array(
 			'id' => $this->users_model->get_byid($id),
-			'role' => $this->users_model->select_role($this->session->userdata('role_id'), $this->country_code),
-			'group' => $this->users_model->select_group(),
+			'role' => $this->users_model->select_role($this->session->userdata('role_id'), $country_code),
+			'group' => $country_code != null ? $this->users_model->select_group(array('country_code' => $country_code)) :
+				    $this->users_model->select_group(),
 			'double' => NULL
 			);
 	  $this->load->view('users/edit_user',$data);
@@ -302,7 +300,8 @@ class Users extends MY_Controller {
     
     function update_user()
     {
-     if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_Edit'))
+     if(IsRoleFriendlyNameExist($this->user_role, array('User Management_User_Own_Country_Edit',
+							'User Management_User_All_Country_Edit')))
 	{
 	  $config = array(
 			      'upload_path'   => 'media/dynamic/',
@@ -545,7 +544,7 @@ class Users extends MY_Controller {
     
     function delete($id)
     {
-        if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_Create_Delete'))
+        if(IsRoleFriendlyNameExist($this->user_role, array('User Management_Role_Own_Country_Delete', 'User Management_Role_All_Country_Delete')))
 	{
 	  $this->users_model->delete_user($id);
 	  $this->session->set_flashdata('info_delete', TRUE);
@@ -561,8 +560,10 @@ class Users extends MY_Controller {
     //============================ ROLE ===================================
     function menu_role()
     {
-	if(IsRoleFriendlyNameExist($this->user_role, 'User Management_Role_View')){  
+	if(IsRoleFriendlyNameExist($this->user_role, array('User Management_Role_Own_Country_View',
+							'User Management_Role_All_Country_View'))){  
 	  $select_role = $this->users_model->select_role();
+	  $country_code = IsRoleFriendlyNameExist($this->user_role, 'User Management_Role_All_Country_View') ? NULL : $this->session->userdata('country');
 	  foreach($select_role->result() as $v1)
 	  {
 	       $select_user = $this->users_model->count_role_user($v1->role_collection_id);
@@ -586,7 +587,7 @@ class Users extends MY_Controller {
 	  $this->pagination->initialize($config);
 	  
 	  $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-	  $data['show'] = $this->users_model->select_role1($config["per_page"], $page);
+	  $data['show'] = $this->users_model->select_role1($config["per_page"], $page, $country_code);
 	  $data['count_role'] = $count_role;
 	  $data['links'] = $this->pagination->create_links();
 	  $data['count'] = $this->users_model->count_record_role();
@@ -626,7 +627,8 @@ class Users extends MY_Controller {
     function insert_role()
     {
 	  $data['plus'] = $this->uri->segment(3);
-	  if(IsRoleFriendlyNameExist($this->user_role, 'User Management_Role_Create_Delete')){
+	  if(IsRoleFriendlyNameExist($this->user_role, array('User Management_Role_Own_Country_Create',
+							'User Management_Role_All_Country_Create'))){
 	  $select_role = $this->users_model->select_role();
 	  foreach($select_role->result() as $v1)
 	  {
@@ -639,56 +641,56 @@ class Users extends MY_Controller {
      
 	  $this->form_validation->set_rules('new_role', 'Role Name', 'required');
 	  if($this->form_validation->run() == FALSE)
-	       {
-		    $config['base_url'] = base_url().'users/menu_role';
-		    $config['total_rows'] = $this->users_model->count_record_role();
-		    $config['per_page'] = 10;
-		    $config["uri_segment"] = 3;
-		    
-		    $config['next_link'] = 'Next';
-		    $config['prev_link'] = 'Prev';
-		    
-		    $config['first_link'] = 'First';
-		    $config['last_link'] = 'Last';
-	       
-		    $config['cur_tag_open'] = '<b style="margin:0px 5px;">';
-		    $config['cur_tag_close'] = '</b>';
-		    
-		    $this->pagination->initialize($config);
-		    
-		    $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-		    $data['show'] = $this->users_model->select_role1($config["per_page"], $page);
-		    $data['count_role'] = $count_role;
-		    $data['msg_role'] = NULL;
-		    $data['role_check'] = NULL;
-	       
-		    $data['links'] = $this->pagination->create_links();
-		    $data['count'] = $this->users_model->count_record_role();
-		    
-		    $roles = $this->users_model->select_appRole();
-		    $arr = array();
-		    $tree = array();
-		    $i = 0;
-		    
-		    foreach($roles->result_array() as $v)
-		    {
-			 $arr[$v['app_role_id']] = array_merge(array("label" => $v['role_name'], "parent_id" => $v['parent_id'] , "value" => $v['app_role_id']), array('items' => array()));
-		    }
-		    
-		    foreach($arr as $role_app_id => &$value)
-		    {
-			 if(!$value['parent_id'] || !array_key_exists($value['parent_id'], $arr))
-			 {
-			      $tree[] = &$value;
-			 } else {
-			      $arr[$value['parent_id']]['items'][] = &$value;
-			 }
-		    }
-		    
-		    $data['json'] = json_encode($tree);
-		    
-		    $this->load->view('users/role',$data);
-	       }
+	    {
+		 $config['base_url'] = base_url().'users/menu_role';
+		 $config['total_rows'] = $this->users_model->count_record_role();
+		 $config['per_page'] = 10;
+		 $config["uri_segment"] = 3;
+		 
+		 $config['next_link'] = 'Next';
+		 $config['prev_link'] = 'Prev';
+		 
+		 $config['first_link'] = 'First';
+		 $config['last_link'] = 'Last';
+	    
+		 $config['cur_tag_open'] = '<b style="margin:0px 5px;">';
+		 $config['cur_tag_close'] = '</b>';
+		 
+		 $this->pagination->initialize($config);
+		 
+		 $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+		 $data['show'] = $this->users_model->select_role1($config["per_page"], $page);
+		 $data['count_role'] = $count_role;
+		 $data['msg_role'] = NULL;
+		 $data['role_check'] = NULL;
+	    
+		 $data['links'] = $this->pagination->create_links();
+		 $data['count'] = $this->users_model->count_record_role();
+		 
+		 $roles = $this->users_model->select_appRole();
+		 $arr = array();
+		 $tree = array();
+		 $i = 0;
+		 
+		 foreach($roles->result_array() as $v)
+		 {
+		      $arr[$v['app_role_id']] = array_merge(array("label" => $v['role_name'], "parent_id" => $v['parent_id'] , "value" => $v['app_role_id']), array('items' => array()));
+		 }
+		 
+		 foreach($arr as $role_app_id => &$value)
+		 {
+		      if(!$value['parent_id'] || !array_key_exists($value['parent_id'], $arr))
+		      {
+			   $tree[] = &$value;
+		      } else {
+			   $arr[$value['parent_id']]['items'][] = &$value;
+		      }
+		 }
+		 
+		 $data['json'] = json_encode($tree);
+		 
+		 $this->load->view('users/role',$data);
+	    }
 	  elseif($cek[0]=="")
 	  {
 	       $select_role = $this->users_model->select_role();
@@ -748,54 +750,54 @@ class Users extends MY_Controller {
 	  }
 	  elseif($check_role->num_rows()>=1)
 	  {
-	       $config['base_url'] = base_url().'users/menu_role';
-		    $config['total_rows'] = $this->users_model->count_record_role();
-		    $config['per_page'] = 10;
-		    $config["uri_segment"] = 3;
-		    
-		    $config['next_link'] = 'Next';
-		    $config['prev_link'] = 'Prev';
-		    
-		    $config['first_link'] = 'First';
-		    $config['last_link'] = 'Last';
-	       
-		    $config['cur_tag_open'] = '<b style="margin:0px 5px;">';
-		    $config['cur_tag_close'] = '</b>';
-		    
-		    $this->pagination->initialize($config);
-		    
-		    $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-		    $data['show'] = $this->users_model->select_role1($config["per_page"], $page);
-		    $data['count_role'] = $count_role;
-		    $data['msg_role'] = 1;
-		    $data['role_check'] = NULL;
-	       
-		    $data['links'] = $this->pagination->create_links();
-		    $data['count'] = $this->users_model->count_record_role();
-		    
-		    $roles = $this->users_model->select_appRole();
-		    $arr = array();
-		    $tree = array();
-		    $i = 0;
-		    
-		    foreach($roles->result_array() as $v)
-		    {
-			 $arr[$v['app_role_id']] = array_merge(array("label" => $v['role_name'], "parent_id" => $v['parent_id'] , "value" => $v['app_role_id']), array('items' => array()));
-		    }
-		    
-		    foreach($arr as $role_app_id => &$value)
-		    {
-			 if(!$value['parent_id'] || !array_key_exists($value['parent_id'], $arr))
-			 {
-			      $tree[] = &$value;
-			 } else {
-			      $arr[$value['parent_id']]['items'][] = &$value;
-			 }
-		    }
-		    
-		    $data['json'] = json_encode($tree);
-		    
-		    $this->load->view('users/role',$data);
+	    $config['base_url'] = base_url().'users/menu_role';
+	    $config['total_rows'] = $this->users_model->count_record_role();
+	    $config['per_page'] = 10;
+	    $config["uri_segment"] = 3;
+	    
+	    $config['next_link'] = 'Next';
+	    $config['prev_link'] = 'Prev';
+	    
+	    $config['first_link'] = 'First';
+	    $config['last_link'] = 'Last';
+       
+	    $config['cur_tag_open'] = '<b style="margin:0px 5px;">';
+	    $config['cur_tag_close'] = '</b>';
+	    
+	    $this->pagination->initialize($config);
+	    
+	    $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+	    $data['show'] = $this->users_model->select_role1($config["per_page"], $page);
+	    $data['count_role'] = $count_role;
+	    $data['msg_role'] = 1;
+	    $data['role_check'] = NULL;
+       
+	    $data['links'] = $this->pagination->create_links();
+	    $data['count'] = $this->users_model->count_record_role();
+	    
+	    $roles = $this->users_model->select_appRole();
+	    $arr = array();
+	    $tree = array();
+	    $i = 0;
+	    
+	    foreach($roles->result_array() as $v)
+	    {
+		 $arr[$v['app_role_id']] = array_merge(array("label" => $v['role_name'], "parent_id" => $v['parent_id'] , "value" => $v['app_role_id']), array('items' => array()));
+	    }
+	    
+	    foreach($arr as $role_app_id => &$value)
+	    {
+		 if(!$value['parent_id'] || !array_key_exists($value['parent_id'], $arr))
+		 {
+		      $tree[] = &$value;
+		 } else {
+		      $arr[$value['parent_id']]['items'][] = &$value;
+		 }
+	    }
+	    
+	    $data['json'] = json_encode($tree);
+	    
+	    $this->load->view('users/role',$data);
 	  }
 	  else{
 	       $timezone = new DateTimeZone("Europe/London");
@@ -809,9 +811,11 @@ class Users extends MY_Controller {
 	       $data = array(
 			      'role_name' => $this->input->post('new_role'),
 			      'created_by' => $created_by,
-			      'created_at' => $created_at
+			      'created_at' => $created_at,
+			      'country_code' => $this->input->post('country_code')
 			     );
 	       $this->users_model->insert_role($data);
+	       
 	       $last_id=$this->db->insert_id();
 	       
 	       for($i=0;$i<count($tampung);$i++)
@@ -833,7 +837,8 @@ class Users extends MY_Controller {
     
     function delete_role($id)
     {
-     if(IsRoleFriendlyNameExist($this->user_role, 'User Management_Role_Create_Delete')){
+     if(IsRoleFriendlyNameExist($this->user_role, array('User Management_Role_Own_Country_Delete',
+							'User Management_Role_All_Country_Delete'))){
 	  $cek_roleid = $this->users_model->cek_roleid($id);
 	  if($cek_roleid->num_rows()==0)
 	  {
@@ -855,59 +860,55 @@ class Users extends MY_Controller {
     
     function edit_role($id)
     {
-     if(IsRoleFriendlyNameExist($this->user_role, 'User Management_Role_Edit')){
-	  $data = array(
-			 'role' => $this->users_model->edit_role($id)
-			);
-	  
-	  $roles = $this->users_model->select_appRole();
-	  $role_detail = $this->users_model->edit_role_detail($id);
-	  $data['msg_role'] = NULL;
-	  $data['role_check'] = NULL;
-	  
-	  $arr = array();
-	  $tree = array();
-	  $i = 0;
-	  
-	  foreach($role_detail->result_array() as $d){
-	       $c[] = $d['app_role_id']; 
-	  }
-	  
-	  foreach($roles->result_array() as $v)
-	  {
-	       if (in_array($v['app_role_id'], $c)) {
-		    $checked = true;
-		}
-		else{
-		    $checked = false;
-		}
-	       
-	      $arr[$v['app_role_id']] = array_merge(array("label" => $v['role_name'], "parent_id" => $v['parent_id'] , "value" => $v['app_role_id'], "checked" => $checked), array('items' => array()));
-	  }
-	  
-	  foreach($arr as $role_app_id => &$value)
-	  {
-	       if(!$value['parent_id'] || !array_key_exists($value['parent_id'], $arr))
-	       {
-		    $tree[] = &$value;
-	       } else {
-		    $arr[$value['parent_id']]['items'][] = &$value;
-	       }
-	  }
-	  
-	  $data['json'] = json_encode($tree);
-	  
-	  
-	  $this->load->view('users/role_edit',$data);
-     }
-     else{
-	  redirect('users');
-     }
+	$data = array(
+		       'role' => $this->users_model->edit_role($id)
+		      );
+	
+	$roles = $this->users_model->select_appRole();
+	$role_detail = $this->users_model->edit_role_detail($id);
+	$data['msg_role'] = NULL;
+	$data['role_check'] = NULL;
+	
+	$arr = array();
+	$tree = array();
+	$i = 0;
+	
+	foreach($role_detail->result_array() as $d){
+	     $c[] = $d['app_role_id']; 
+	}
+	
+	foreach($roles->result_array() as $v)
+	{
+	     if (in_array($v['app_role_id'], $c)) {
+		  $checked = true;
+	      }
+	      else{
+		  $checked = false;
+	      }
+	     
+	    $arr[$v['app_role_id']] = array_merge(array("label" => $v['role_name'], "parent_id" => $v['parent_id'] , "value" => $v['app_role_id'], "checked" => $checked), array('items' => array()));
+	}
+	
+	foreach($arr as $role_app_id => &$value)
+	{
+	     if(!$value['parent_id'] || !array_key_exists($value['parent_id'], $arr))
+	     {
+		  $tree[] = &$value;
+	     } else {
+		  $arr[$value['parent_id']]['items'][] = &$value;
+	     }
+	}
+	
+	$data['json'] = json_encode($tree);
+	
+	
+	$this->load->view('users/role_edit',$data);
     }
     
     function update_role()
     {
-     if(IsRoleFriendlyNameExist($this->user_role, 'User Management_Role_Edit')){
+     if(IsRoleFriendlyNameExist($this->user_role, array('User Management_Role_Own_Country_Edit',
+							'User Management_Role_All_Country_Edit'))){
 	  $this->form_validation->set_rules('role_name', 'Role Name', 'required');
 	  $this->form_validation->set_rules('role','Role Permission', 'required');
 	  $cek = $this->input->post('role');
@@ -1065,7 +1066,8 @@ class Users extends MY_Controller {
 	       elseif(strtolower($role_name)==strtolower($role_name1))
 	       {
 		    $data = array(
-				   'role_name' => $this->input->post('role_name')
+				   'role_name' => $this->input->post('role_name'),
+				   'country_code' => $this->input->post('country_code')
 				  );
 		    $id = $this->input->post('role_id');
 		    $this->users_model->update_role($id,$data);
@@ -1147,8 +1149,8 @@ class Users extends MY_Controller {
     //============================= GROUP =================================
     function menu_group()
     {
-	$country_code = IsRoleFriendlyNameExist($this->user_role, 'Regional_User') ? NULL : $this->session->userdata('country');
-     if(IsRoleFriendlyNameExist($this->user_role, 'User Management_Group_View')){
+	$country_code = IsRoleFriendlyNameExist($this->user_role, 'User Management_Group_All_Country_View') ? NULL : $this->session->userdata('country');
+     if(IsRoleFriendlyNameExist($this->user_role, array('User Management_Group_All_Country_View', 'User Management_Group_Own_Country_View'))){
 	  $select_group = $this->users_model->select_group();
 	  foreach($select_group->result() as $v1)
 	  {
@@ -1179,7 +1181,7 @@ class Users extends MY_Controller {
      
 	  $data['links'] = $this->pagination->create_links();
 	  $data['count'] = $this->users_model->count_record_group($country_code);
-	  $data['channel'] = $this->users_model->select_channel();
+	  $data['channel'] = $this->users_model->select_channel($country_code);
 	  $data['group_detail'] = $this->users_model->select_user_group_d();
 	    $data['country_list'] = $this->users_model->get_country_list();
 	  $this->load->view('users/group',$data);
@@ -1191,14 +1193,14 @@ class Users extends MY_Controller {
     
     function insert_group()
     {
-	$country_code = IsRoleFriendlyNameExist($this->user_role, 'Regional_User') ? NULL : $this->session->userdata('country');
-     if(IsRoleFriendlyNameExist($this->user_role, 'User Management_Group_Create_Delete')){
-	  $select_group = $this->users_model->select_group();
-	  foreach($select_group->result() as $v1)
-	  {
-	       $select_user = $this->users_model->count_group_user($v1->group_id);
-	       $count_group[] = $select_user->row()->count_group; 
-	  }
+	$country_code = IsRoleFriendlyNameExist($this->user_role, 'User Management_Group_All_Country_Create') ? NULL : $this->session->userdata('country');
+	if(IsRoleFriendlyNameExist($this->user_role, array('User Management_Group_All_Country_Create', 'User Management_Group_Own_Country_Create'))){
+	    $select_group = $this->users_model->select_group();
+	    foreach($select_group->result() as $v1)
+	    {
+		$select_user = $this->users_model->count_group_user($v1->group_id);
+		$count_group[] = $select_user->row()->count_group; 
+	    }
 	  $data['plus'] = $this->uri->segment(3);
 	  if ($this->input->post('channel')==NULL)
 	  {
@@ -1285,7 +1287,7 @@ class Users extends MY_Controller {
     
     function delete_group($id)
     {
-     if(IsRoleFriendlyNameExist($this->user_role, 'User Management_Group_Create_Delete')){
+     if(IsRoleFriendlyNameExist($this->user_role, array('User Management_Group_All_Country_Delete', 'User Management_Group_Own_Country_Delete'))){
 	  $check_groupid = $this->users_model->check_groupid($id);
 	  if($check_groupid->num_rows()==0)
 	  {
@@ -1307,11 +1309,12 @@ class Users extends MY_Controller {
     
     function edit_group($id)
     {
-     if(IsRoleFriendlyNameExist($this->user_role, 'User Management_Group_Edit')){
+	$country_code = IsRoleFriendlyNameExist($this->user_role, 'User Management_Group_All_Country_Edit') ? NULL : $this->session->userdata('country');
+     if(IsRoleFriendlyNameExist($this->user_role, array('User Management_Group_All_Country_Edit', 'User Management_Group_Own_Country_Edit'))){
 	  $data = array(
 			 'group' => $this->users_model->edit_group($id),
 			 'group_detail' => $this->users_model->edit_group_detail($id),
-			 'channel' => $this->users_model->select_channel(),
+			 'channel' => $this->users_model->select_channel($country_code),
 			 'msge' => NULL
 			);
 	  $data['country_list'] = $this->users_model->get_country_list();
@@ -1325,7 +1328,7 @@ class Users extends MY_Controller {
     
     function update_group()
     {
-     if(IsRoleFriendlyNameExist($this->user_role, 'User Management_Group_Edit')){
+     if(IsRoleFriendlyNameExist($this->user_role, array('User Management_Group_Own_Country_Edit', 'User Management_Group_All_Country_Edit'))){
 	  $this->form_validation->set_rules('group_name', 'Group Name', 'required');
 	  $id = $this->input->post('group_id');
 	  $group = $this->input->post('group_name');

@@ -532,7 +532,7 @@ class Cms extends MY_Controller {
         }
         $data['products'] = $products;
         
-        $data['products_avail'] = $this->product_model->get();
+        $data['products_avail'] = $this->product_model->getParent();
           $data['countries'] = $this->users_model->get_country()->result();
         
         $data['pagination'] = $this->pagination->create_links();

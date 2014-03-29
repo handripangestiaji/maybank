@@ -1,18 +1,17 @@
 <?php 
-for($i=0;$i<count($this->user_role);$i++){
-    if($this->user_role[$i]->role_friendly_name=='Content Management_Short_URL_Create'){    
+    if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Short_URL_Create')){    
 ?>
 <div class="row-fluid" style="border-bottom: solid 1px #C9C9C9; margin-bottom: 10px;">
     <h4>Create Short URL</h4>    
 </div>
-<?php }}?>
+<?php }?>
 <?php $tab = $this->uri->segment(4) ? $this->uri->segment(4): 'secondTab'; ?>
 
     <!-- ==================== TAB ROW ==================== -->
 <div class="row-fluid">
         <!-- ==================== TAB NAVIGATION ==================== -->
-	<?php for($x=0;$x<count($this->user_role);$x++){
-	    if($this->user_role[$x]->role_friendly_name=='Content Management_Short_URL_Create'){    
+	<?php 
+	    if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Short_URL_Create')){    
 	?>
         <ul class="nav nav-tabs">
             <?php if ((IsRoleFriendlyNameExist($this->user_role, 'Content Management_Short_URL_Campaign')) ||
@@ -25,7 +24,7 @@ for($i=0;$i<count($this->user_role);$i++){
             <li class="<?php echo $tab=='secondTab'?"active":"" ?>"><a href="#secondTab">Non Campaign</a></li>
             
         </ul>
-	<?php }}?>
+	<?php }?>
         <!-- ==================== END OF TAB NAVIGATIION ==================== -->
 
         <div class="container-fluid">
@@ -34,8 +33,8 @@ for($i=0;$i<count($this->user_role);$i++){
 		      (IsRoleFriendlyNameExist($this->user_role, 'Content Management_Campaign_Create'))
 		      ): ?>
             <div class="tabContent" id="firstTab">
-		<?php for($x=0;$x<count($this->user_role);$x++){
-		    if($this->user_role[$x]->role_friendly_name=='Content Management_Short_URL_Create'){    
+		<?php 
+		    if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Short_URL_Create')){    
 		?>
                <div class="floatingBox span12">
                     <div class="container-fluid campaignForm">
@@ -81,27 +80,6 @@ for($i=0;$i<count($this->user_role);$i++){
                                   </select>
                               </div>
                             </div>
-                            <!--
-                            <div class="control-group">
-                                <label class="control-label">Product</label>
-                                <div class="controls">
-                                    <select id="multipleSelect" multiple="multiple">
-                                        <option value="opt7">First Option</option>
-                                        <option value="opt8">Second Option</option>
-                                        <option value="opt9">Third Option</option>
-                                        <option value="opt10">Fourth Option</option>
-                                        <option value="opt11">Fifth Option</option>
-                                        <option value="opt12">Sixth Option</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="control-group">
-                                <label class="control-label">Tag</label>
-                                <div class="controls">
-                                  <input type="text" class="span10">
-                                </div>
-                            </div>
-                            -->
                             <div class="control-group">
                                 <label class="control-label">Short URL
                                 <p style="font-size: 7pt;">Customize your short URL</p></label>
@@ -120,7 +98,7 @@ for($i=0;$i<count($this->user_role);$i++){
                         </form>
                     </div>
                </div>
-               <?php }}?>
+               <?php }?>
             </div>
             <?php endif;?>
             <!-- ==================== END OF FIRST TAB CONTENT ==================== -->

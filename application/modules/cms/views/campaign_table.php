@@ -16,7 +16,7 @@
                                               <th>Campaign</th>
                                               <th>Products</th>
                                               <th>Date Created</th>
-                                              <th>Created By</th>
+                                              <th>Creator</th>
                                               <th>&nbsp;</th>
                                             </tr>
                                           </thead>
@@ -62,7 +62,7 @@
                                                                             <th>URL</th>
                                                                             <th>Date Created</th>
                                                                             <th>Clicks</th>
-                                                                            <th>Created By</th>
+                                                                            <th>Creator</th>
                                                                             <th>QR Code</th>
                                                                             <th>&nbsp;</th>
                                                                           </tr>
@@ -123,7 +123,7 @@
                                                             <th>URL</th>
                                                             <th>Date Created</th>
                                                             <th>Clicks</th>
-                                                            <th>Created By</th>
+                                                            <th>Creator</th>
                                                             <th>QR Code</th>
                                                             <th>&nbsp;</th>
                                                           </tr>

@@ -135,11 +135,8 @@ if($fb_feed[$i]->post_content != '<br />' || isset($attachment->media)):
         <!-- ==================== CONDENSED TABLE FLOATING BOX ==================== -->
         
             <?php
-                if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action'))
-                {
-                    $data_loaded['post'] = $fb_feed[$i];
-                    $this->load->view('dashboard/action_taken', $data_loaded);
-                }
+                $data_loaded['post'] = $fb_feed[$i];
+                $this->load->view('dashboard/action_taken', $data_loaded);
             ?>
         <!-- ==================== END OF CONDENSED TABLE FLOATING BOX ==================== --> 
     </div>

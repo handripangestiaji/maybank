@@ -67,27 +67,31 @@ class Campaign_model extends CI_Model
 		return (empty($status)) ? FALSE : TRUE;
 	}
 	
-	public function get()
+	public function get($filter = null)
 	{
 		$this->db->select($this->_table.'.*, user.display_name');
 		
 		$this->db->join('user', $this->_table.'.user_id = user.user_id', 'left');
+		if($filter){
+			$this->db->where($filter);
+		}
 		
 		$query = $this->db->get($this->_table);
 		
 		return $query->result();
 	}
 	
-	public function getAllArray($limit = '', $offset = '')
+	public function getAllArray($limit = '', $offset = '',$filter)
 	{
 		$this->db->select($this->_table.'.*, user.display_name');
-		
 		$this->db->join('user', $this->_table.'.user_id = user.user_id', 'left');
 		
 		if($limit || $offset)
 		{
 			$this->db->limit($limit, $offset);
 		}
+		if($filter)
+			$this->db->where($filter);
 		$query = $this->db->get($this->_table);
 		
 		$campaigns = array();
@@ -257,9 +261,11 @@ echo "<pre>";
 		return true;
 	}
 	
-	public function count_record()
+	public function count_record($filter = null)
 	{
-		return $this->db->count_all($this->_table);
+		if($filter)
+			$this->db->where($filter);
+		return $this->db->count_all_results($this->_table);
 	}
 	
 	public function get_content_product_campaign_by_campaign_id($id){

@@ -1,5 +1,5 @@
 <?php 
-    if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_Create'))
+    if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_All_Country_Create'))
     {
 ?>
 <div class="row-fluid" style="border-bottom: solid 1px #C9C9C9; margin-bottom: 10px;">
@@ -74,12 +74,12 @@
                 <th>Total Used</th>
                 <th>Creator</th>
 		<?php
-		    if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_Edit')){
+		    if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_All_Country_Edit')){
 		    ?>
                 <th>&nbsp;</th>
                 <?php }?>
                 <?php
-		    if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_Delete')){
+		    if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_All_Country_Delete')){
 		    ?>
                 <th>&nbsp;</th>
 		<?php }?>
@@ -108,14 +108,14 @@
 		    <td><?php echo $v->increment; ?></td>
 		    <td><?php echo $v->display_name; ?></td>
 		    <?php
-			if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_Edit')){
+			if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_All_Country_Edit')){
 			?>
 		    <td>
 			<a href="<?php echo site_url('cms/edit_product/'.$v->id)?>" class="btn btn-mini btn-primary pull-right">edit</a>
 		    </td>
 		    <?php }?>
 		    <?php
-			if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_Delete')){
+			if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_All_Country_Delete')){
 			?>
 		    <td>
 			    <a href="<?php echo site_url('cms/create_product?action=delete&id='.$v->id)?>" onclick="return confirm('Are you sure want to delete this product?');" class="btn btn-mini btn-danger pull-right">delete</a>
@@ -136,12 +136,12 @@
 				    <th>Total Used</th>
 				    <th>Creator</th>
 				    <?php
-					if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_Edit')){
+					if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_All_Country_Edit')){
 					?>
 				    <th>&nbsp;</th>
 				    <?php }?>
 				    <?php
-					if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_Delete')){
+					if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_All_Country_Delete')){
 					?>
 				    <th>&nbsp;</th>
 				    <?php }?>
@@ -156,14 +156,14 @@
 					    <td><?php echo $child->increment; ?></td>
 					    <td><?php echo $child->display_name; ?></td>
 					    <?php
-						if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_Edit')){
+						if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_All_Country_Edit')){
 						?>
 					    <td>
 						<a href="<?php echo site_url('cms/edit_product/'.$child->id)?>" class="btn btn-mini btn-primary pull-right">edit</a>
 					    </td>
 					    <?php }?>
 					    <?php
-						if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_Delete')){
+						if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_All_Country_Delete')){
 					    ?>
 					    <td>
 						<a href="<?php echo site_url('cms/create_product?action=delete&id='.$child->id)?>" onclick="return confirm('Are you sure want to delete this product?');" class="btn btn-mini btn-danger pull-right">delete</a>

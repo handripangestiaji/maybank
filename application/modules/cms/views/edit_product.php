@@ -30,6 +30,7 @@ if($is){ ?>
                 <div class="controls">
                     <?php
                         $options = array();
+                        $options[''] = '-- This is a Parent Product --';
                         foreach($products_avail as $product){
                             $options[$product->id] = $product->product_name;
                         }

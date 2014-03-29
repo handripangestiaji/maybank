@@ -20,7 +20,7 @@ class Product_model extends CI_Model
 		return (empty($status)) ? FALSE : TRUE;
 	}
 	
-	public function get($limit = '', $offset = '')
+	public function get($limit = '', $offset = '', $filter = null)
 	{
 		$this->db->select($this->_table.'.*, user.display_name,b.product_name as parent_name');
 		
@@ -30,6 +30,10 @@ class Product_model extends CI_Model
 		if($limit || $offset)
 		{
 			$this->db->limit($limit, $offset);
+		}
+		
+		if($filter){
+			$this->db->where($filter);
 		}
 		
 		$query = $this->db->get($this->_table);

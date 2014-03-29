@@ -8,9 +8,22 @@
             <option value="Enquiry">Enquiry</option>
             <option value="Complaint">Complaint</option>
         </select>
+            
         <select class="productType" style="width: 130px;">
             <?php foreach($product_list as $product):?>
-                <option value="<?=$product->id?>"><?=$product->product_name?></option>
+                <?php
+                    if(isset($product->child)){ ?>
+                        <optgroup label="<?=$product->product_name?>"></optgroup>
+                    <?php }
+                    else{ ?>
+                        <option value="<?=$product->id?>"><?=$product->product_name?></option>
+                    <?php }
+                
+                    if(isset($product->child)){
+                        foreach($product->child as $child){ ?>
+                        <option value="<?=$child->id?>">-&nbsp;&nbsp;<?=$child->product_name?></option> 
+                        <?php }
+                    } ?>
             <?php endforeach?>
         </select>
     </div>

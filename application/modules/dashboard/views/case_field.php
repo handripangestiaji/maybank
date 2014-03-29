@@ -1,7 +1,6 @@
     <div class="row-fluid">
 <?php 
 if($posts){
-//print_r($posts_comment[$i]);
  if(isset($posts[$i]->post_id)){
     $post_id=$posts[$i]->post_id;   
  }
@@ -9,8 +8,6 @@ if($posts){
  if(isset($posts_comment[$i]->comment_post_id)){
     $post_id=$posts_comment[$i]->comment_post_id;
  }
- //print_r($post_id);
- 
 ?>
            <span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
            <form method="post" class="assign-case" action="<?php echo base_url("case/mycase/CreateCase")?>">
@@ -28,8 +25,20 @@ if($posts){
                <select name="product_type" class="product_type" style="width: 130px;">
                     <option value="">Please Select</option>
                 <?php foreach($product_list as $product):?>
-                    <option value="<?php echo $product->id?>"><?php echo $product->product_name?></option>
-                <?php endforeach?>
+                      <?php
+                          if(isset($product->child)){ ?>
+                              <optgroup label="<?=$product->product_name?>"></optgroup>
+                          <?php }
+                          else{ ?>
+                              <option value="<?=$product->id?>"><?=$product->product_name?></option>
+                          <?php }
+                      
+                          if(isset($product->child)){
+                              foreach($product->child as $child){ ?>
+                              <option value="<?=$child->id?>">-&nbsp;&nbsp;<?=$child->product_name?></option> 
+                              <?php }
+                          } ?>
+                  <?php endforeach?>
                </select>
            </div>
            <br clear="all" />
@@ -49,15 +58,29 @@ if($posts){
                       $userIncrement = 0;
                       if(is_array($user_list)){
                         for($userIncrement=0;$userIncrement<count($user_list);$userIncrement++){
-                                   if(IsRoleFriendlyNameExist($user_list[$userIncrement]->role_detail, 'Social Stream_Current_Resolve_Case')){
-                                              if($user_list[$userIncrement]->group_name!=$group_name){
-                                                         echo '<optgroup label="'.$user_list[$userIncrement]->group_name.'"></optgroup>';           
-                                              }
-                                              if( $this->session->userdata('user_id') != $user_list[$userIncrement]->user_id){
-                                                         echo '<option value="'.$user_list[$userIncrement]->user_id.'">&nbsp;&nbsp;&nbsp;&nbsp;'.$user_list[$userIncrement]->full_name.'</option>';                                 
-                                              }
-                                   }
-                                   $group_name = $user_list[$userIncrement]->group_name;           
+                            if($user_list[$userIncrement]->country_code == $this->session->userdata('country')){
+                                if($user_list[$userIncrement]->group_name!=$group_name){
+                                    echo '<optgroup label="'.$user_list[$userIncrement]->group_name.'"></optgroup>';           
+                                }
+                                if( $this->session->userdata('user_id') != $user_list[$userIncrement]->user_id &&
+                                    IsRoleFriendlyNameExist($user_list[$userIncrement]->role, 'Social Stream_Case_Own_Country_AssignReassignResolved')){
+                                    echo '<option value="'.$user_list[$userIncrement]->user_id.'">&nbsp;&nbsp;&nbsp;&nbsp;'.$user_list[$userIncrement]->full_name.'</option>';                                 
+                                }
+                                $group_name = $user_list[$userIncrement]->group_name;  
+                            }
+                            else{
+                                if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Case_All_Country_AssignReassignResolved')){
+                                    if($user_list[$userIncrement]->group_name!=$group_name){
+                                        echo '<optgroup label="'.$user_list[$userIncrement]->group_name.'"></optgroup>';           
+                                    }
+                                    if( $this->session->userdata('user_id') != $user_list[$userIncrement]->user_id &&
+                                        IsRoleFriendlyNameExist($user_list[$userIncrement]->role, 'Social Stream_Case_All_Country_AssignReassignResolved')){
+                                        echo '<option value="'.$user_list[$userIncrement]->user_id.'">&nbsp;&nbsp;&nbsp;&nbsp;'.$user_list[$userIncrement]->full_name.'</option>';                                 
+                                    }
+                                    $group_name = $user_list[$userIncrement]->group_name;  
+                                }
+                            }
+                            
                         }
                       }
                       else{

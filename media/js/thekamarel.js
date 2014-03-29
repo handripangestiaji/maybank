@@ -810,6 +810,9 @@ $(function(){
 
                     $( "#close-img" ).click(function() {
                        $("#img-show").css({"display": "none"});
+                       $(".img-show").find('#filename').val('');
+                        $(".img-show").find("#remove-img").hide();
+                        $('.img-show').find('#compose-preview-img').removeAttr('src');
                     });
 
                      $( "#open-cal" ).click(function() {
@@ -818,6 +821,11 @@ $(function(){
 
                      $( "#close-cal" ).click(function() {
                        $("#cal-show").css({"display": "none"});
+                       $('#datepickerField').val('');
+                       $(".cal-show").find('#datepickerField').val('');
+                        $(".cal-show").find('#compose-schedule-hours').find('option').removeAttr('selected');
+                        $(".cal-show").find('#compose-schedule-minutes').find('option').removeAttr('selected');
+                        $(".cal-show").find('#compose-schedule-ampm').find('option').removeAttr('selected');
                     });
 
                     $(".compose-insert-link-btn").click(function(){
@@ -909,6 +917,10 @@ $(function(){
 
                      $( "#close-url" ).click(function() {
                        $("#url-show").css({"display": "none"});
+                       $('.url-show').find('input').val('');
+                        $('.compose-insert-link-short-url-hidden').val('');
+                        $('.url-show').find('textarea').val('');
+                        $('.url-show').find('p').html('');
                     });
                      
                      $(this).on('click',"#close-reply-url-show", function() {
@@ -1008,6 +1020,12 @@ $(function(){
                                 }
                                 else{
                                     scheduleTime = $('#datepickerField').val() + ' ' + $('#compose-schedule-hours').val() + ':' + $('#compose-schedule-minutes').val() + ' ' + $('#compose-schedule-ampm').val();        
+                                    var sch = new Date(scheduleTime);
+                                    var now = new Date();
+                                    if(sch.getTime() < now.getTime()){
+                                        alert("Please set a future post");
+                                        confirmed = false;
+                                    }
                                 }
                             }
                             else{
@@ -1088,7 +1106,8 @@ $(function(){
                                                             $(".cal-show").find('#datepickerField').val('');
                                                             $(".cal-show").find('#compose-schedule-hours').find('option').removeAttr('selected');
                                                             $(".cal-show").find('#compose-schedule-minutes').find('option').removeAttr('selected');
-                                                            
+                                                            $(".cal-show").find('#compose-schedule-ampm').find('option').removeAttr('selected');
+                    
                                                             $("#url-show").css({"display": "none"});
                                                             $('.url-show').find('input').val('');
                                                             $('.compose-insert-link-short-url-hidden').val('');
@@ -1164,7 +1183,8 @@ $(function(){
                                                                 $(".cal-show").find('#datepickerField').val('');
                                                                 $(".cal-show").find('#compose-schedule-hours').find('option').removeAttr('selected');
                                                                 $(".cal-show").find('#compose-schedule-minutes').find('option').removeAttr('selected');
-                                                                
+                                                                $(".cal-show").find('#compose-schedule-ampm').find('option').removeAttr('selected');
+                    
                                                                 $("#url-show").css({"display": "none"});
                                                                 $('.url-show').find('input').val('');
                                                                 $('.compose-insert-link-short-url-hidden').val('');

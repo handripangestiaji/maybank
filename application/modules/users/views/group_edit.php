@@ -30,7 +30,7 @@
                             <input type='hidden' name='g_name' value='<?php echo $group->row()->group_name;?>' />
                         </td>
                     </tr>
-		    <?php if(IsRoleFriendlyNameExist($this->user_role, 'Regional_User')):?>
+		    <?php if(IsRoleFriendlyNameExist($this->user_role, 'User Management_Group_All_Country_Edit')):?>
 		    <tr>
 			<td>Country</td>
 			

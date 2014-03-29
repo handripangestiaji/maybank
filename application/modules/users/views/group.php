@@ -62,9 +62,8 @@
         
         
         <div class="cms-table pull-right">
-            <?php for($x=0;$x<count($this->user_role);$x++){
-                if($this->user_role[$x]->role_friendly_name=='User Management_Group_Create_Delete'){
-            ?>
+            <?php if(IsRoleFriendlyNameExist($this->user_role, array('User Management_Group_All_Country_Create',
+								     'User Management_Group_Own_Country_Create'))):?>
             <h4>New Group</h4>
             <hr style="margin-top: 0px;">
             <form method='post' action='<?php echo site_url('users/insert_group');?>'>
@@ -75,7 +74,7 @@
                         <td><input type='text' name='group_name' value="<?php set_value('group_name');?>" />
                         <span style='color: red;'><?php echo form_error('group_name');?></span></td>
                     </tr>
-		    <?php if(IsRoleFriendlyNameExist($this->user_role, 'Regional_User')):?>
+		    <?php if(IsRoleFriendlyNameExist($this->user_role, 'User Management_Group_All_Country_Create')):?>
 		    <tr>
 			<td>Country</td>
 			<td>&nbsp;</td>
@@ -99,9 +98,7 @@
                                 <div class="controls">
                                     <select id="multipleSelect" multiple="multiple" name='channel[]'>
                                         <?php foreach($channel->result() as $ch){?>
-					    <?php if($ch->country_code == $this->session->userdata('country') || IsRoleFriendlyNameExist($this->user_role, 'Regional_User')):?>
-						<option value="<?php echo $ch->channel_id; ?>"><?php echo $ch->name."($ch->connection_type)";?></option>
-					    <?php endif;?>
+					    <option value="<?php echo $ch->channel_id; ?>"><?php echo $ch->name."($ch->connection_type)";?></option>
                                         <?php }?>
                                     </select>
                                     <span style='color:red;'><?php echo form_error('channel'); ?>
@@ -112,12 +109,12 @@
                 </table>
             <hr style="margin-top: 0px;">
                 <div style='float: right'>
-                    <input type='submit' class="btn" value='Create' ?>
+                    <input type='submit' class="btn" value='Create' />
                 </div>
             </from>
             <div style='clear: both'></div><br />
             <hr style="margin-top: 0px;">
-            <?php }}?>
+            <?php endif;?>
             <h4>Current Group</h4>
             <table class="table table-striped">
                 <thead>
@@ -127,13 +124,7 @@
                         <th>Channel</th>
 			<th>Country</th>
                         <th>Creator</th>
-                        <?php for($x=0;$x<count($this->user_role);$x++){
-                                if($this->user_role[$x]->role_friendly_name=='User Management_Group_Edit'){
-                        ?>
-                        <th>&nbsp;</th>
-                        <?php }if($this->user_role[$x]->role_friendly_name=='User Management_Group_Create_Delete'){?>
-                        <th>&nbsp;</th>
-                        <?php }}?>
+			<th colspan="2">Action</th>
                     </tr>
                 </thead>
                 
@@ -166,17 +157,21 @@
 			<td><?php echo $gr->country_code?></td>
                         <td><?php echo $gr->name;?></td>
 			
-                        <?php for($x=0;$x<count($this->user_role);$x++){
-                                if($this->user_role[$x]->role_friendly_name=='User Management_Group_Edit'){
+                        <?php
+			    $is_same_country = $this->session->userdata('country') == $gr->country_code;
+			    $edit_permission = $is_same_country ? array('User Management_Group_All_Country_Edit', 'User Management_Group_Own_Country_Edit') :
+                                'User Management_Group_All_Country_Edit';
+			    if(IsRoleFriendlyNameExist($this->user_role,$edit_permission)):
                         ?>
                         <td><a href="<?php echo site_url('users/edit_group/'.$gr->group_id);?>"><span><i class="icon-pencil"></i></span></a></td>
 			
-                        <?php }}
-                        for($y=0;$y<count($this->user_role);$y++){
-                            if($this->user_role[$y]->role_friendly_name=='User Management_Group_Create_Delete'){
+                        <?php endif;
+                         $delete_permission = $is_same_country ? array('User Management_Group_All_Country_Delete', 'User Management_Group_Own_Country_Delete') :
+                                'User Management_Group_All_Country_Delete';
+			    if(IsRoleFriendlyNameExist($this->user_role,$delete_permission)) : 
                         ?>
                         <td><a href="" onclick="show_confirm('<?php echo $gr->group_id;?>');return false;"><span><i class="icon-remove"></i></span></a></td>
-                        <?php }}?>
+                        <?php endif;?>
                     </tr>
                     <?php $i++;}
 		    endif;

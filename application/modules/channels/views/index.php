@@ -43,6 +43,10 @@
                         <option value="<?=$country->code?>"><?=$country->name?></option>
                     <?php endforeach;?>
                 </select>
+                <?php else:?>
+                <select name="country" class="hide">
+                    <option value="<?=$this->session->userdata('country')?>"><?=$this->session->userdata('country')?></option>
+                </select>
                 <?php endif;?>
             </div>
         </div>

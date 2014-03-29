@@ -51,7 +51,8 @@ class Shorturl_model extends CI_Model
 					"short_code" 	=> $params['short_code'],
 					"user_id" 		=> $params['user_id'],
 					"description" 	=> isset($params['description']) ? $params['description'] : "",
-					"qrcode_image"  => $qrcode_name
+					"qrcode_image"  => $qrcode_name,
+					"country_code" => $params['country_code']
 				);
 		
 		$this->db->trans_start();
@@ -133,6 +134,10 @@ class Shorturl_model extends CI_Model
 		{
 			throw new \Exception("Invalid Id");
 		}
+		
+		
+		$this->db->where('url_id', $id);
+		$this->db->delete('content_campaign_url');
 		
 		$this->db->where('short_urls_id', $id);
 		$this->db->delete('short_url_tag');

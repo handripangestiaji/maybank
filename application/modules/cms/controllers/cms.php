@@ -120,14 +120,9 @@ class Cms extends MY_Controller {
 	        
 	        $campaigns = $this->input->post('campaign');
 	        $campaigns['user_id'] = $this->session->userdata('user_id');
-	        
+	        $campaigns['country_code'] = $this->session->userdata('country');
 	        $products_id = $this->input->post('products_id');
 	        $tags = $this->input->post('tag_id');
-	        
-/*
-	        echo "<pre>";
-	        die(print_r($tags));
-*/
 	        
 	        $this->form_validation->set_rules('campaign[campaign_name]', 'Campaign Name', 'required|xss_clean');
 	        $this->form_validation->set_rules('products_id', 'Products', 'required');
@@ -235,7 +230,7 @@ class Cms extends MY_Controller {
 	        else 
 	        {
 		        $this->session->set_flashdata('message_type', 'error');
-		        $this->session->set_flashdata('message_body', 'Please insert Tag name');
+		        $this->session->set_flashdata('message_body', 'Please fill the required field.');
 	        }
 	        redirect('cms/create_tag');
           }
@@ -562,12 +557,16 @@ class Cms extends MY_Controller {
 	        if ($this->form_validation->run() == TRUE)
 	        {
 		        $this->product_model->insert($params);
-	        }
+			 $this->session->set_flashdata('message_type', 'success');
+                         $this->session->set_flashdata('message_body', 'Create product success');
+		
+		}
 	        else 
 	        {
 		        $this->session->set_flashdata('message_type', 'error');
-		        $this->session->set_flashdata('message_body', 'Please insert Tag name');
+		        $this->session->set_flashdata('message_body', 'Please fill the required fields');
 	        }
+			      
 	        redirect('cms/create_product');
           }
           else
@@ -584,7 +583,9 @@ class Cms extends MY_Controller {
                        if ($id)
                        {
                               $this->product_model->delete($id);
-                       }
+			      $this->session->set_flashdata('message_type', 'success');
+                              $this->session->set_flashdata('message_body', 'Product has been deleted.');
+		       }
                        
                        redirect('cms/create_product');
                     }

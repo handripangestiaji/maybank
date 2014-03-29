@@ -11,5 +11,5 @@
 <?php if(IsRoleFriendlyNameExist($this->user_role, array('Social Channel Management_Country',
                                                          'Social Channel Management_Country_Add',
                                                          'Social Channel Management_Country_Delete'))):?>
-    <a href="<?php echo base_url() ?>users/country"><button class="btn <?php if(strpos($this->uri->segment(2),'country')){echo 'btn-primary'; } ?>" type="button">Country</button></a>
+    <a href="<?php echo base_url() ?>users/country"><button class="btn <?php if((strpos($this->uri->segment(2),'country')) || ($this->uri->segment(2) == 'country')){echo 'btn-primary'; } ?>" type="button">Country</button></a>
 <?php endif;?>

@@ -41,9 +41,9 @@
                     <?php endif;?>
                     <button type="button" class="btn btn-warning btn-mini">OPEN</button>
                     <button class="fblike btn btn-primary btn-mini" value="<?php echo $comment[$j]->post_stream_id?>"><?php echo $comment[$j]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button>
-                    <?php if(($comment[$j]->comment_id)=='0'){?>
-                    <button type="button" class="btn btn-primary btn-engagement-reply btn-mini btn-reply" ><i class="icon-mail-reply"></i></button>
-                    <?php } ?>
+                    <?php if(($comment[$j]->comment_id)=='0'):?>
+                        <button type="button" class="btn btn-primary btn-engagement-reply btn-mini btn-reply" ><i class="icon-mail-reply"></i></button>
+                    <?php endif; ?>
                    <!--button type="button" class="btn btn-danger btn-engagement-case btn-mini btn-case"><i class="icon-plus"></i> CASE</button-->
                 </p></h4><!--222 assign to you-->
                 <?php }else{ ?>

@@ -181,14 +181,14 @@ class Users_model extends CI_Model
     {
         
         $regional_user_role_id = $this->get_role_id('Regional_User');
-        $this->db->select('*, (select count(*) from role_collection_detail c where c.role_collection_id = b.role_collection_id) as count_role' );
+        $this->db->select('*, (select count(*) from role_collection_detail c where c.role_collection_id = b.role_collection_id) as count_role,
+                          b.country_code as role_country_code' );
         $this->db->from('role_collection b');
         $this->db->join('user a','a.user_id=b.created_by','left');
         if($role_id != null){
             if($country_code != null){
-                $where = '(select count(*) from role_collection_detail c where c.role_collection_id = b.role_collection_id) < (select count(*) from role_collection_detail f where f.role_collection_id = '.$role_id.') AND ';
-                $where .= '(select count(app_role_id) from role_collection_detail g where g.role_collection_id = b.role_collection_id and g.app_role_id = '.$regional_user_role_id->app_role_id.') = 0';
-                $this->db->where($where);
+                
+                $this->db->where(array('b.country_code' => $country_code));
             }
         }
         return $this->db->get();
@@ -199,11 +199,13 @@ class Users_model extends CI_Model
         return $q->num_rows() > 0 ? $q->row() : null;
     }
     
-    function select_role1($limit, $start)
+    function select_role1($limit, $start, $country_code = null)
     {
         $this->db->limit($limit, $start);
-        $this->db->select('*');
+        $this->db->select('*,  role_collection.country_code as role_country_code');
         $this->db->join('user','user.user_id=role_collection.created_by','left');
+        if($country_code != null)
+            $this->db->where('role_collection.country_code', $country_code);
         $query = $this->db->get($this->role);
         
         if ($query->num_rows() > 0) {
@@ -352,9 +354,13 @@ class Users_model extends CI_Model
     }
     
     //============================ CHANNEL ==============================
-    function select_channel()
+    function select_channel($country_code = null)
     {
-        return $this->db->get($this->channel);
+        $this->db->select('*');
+        $this->db->from('channel');
+        if($country_code != null)
+            $this->db->where('country_code', $country_code);
+        return $this->db->get();
     }
     
     //============================ USER GROUP DETAIL ====================

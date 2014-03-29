@@ -24,6 +24,7 @@
             <button type="button" class="close" data-dismiss="alert">&times;</button>
             <strong>New Role</strong> has been created.
         </div>
+	
     <?php }?>
     <?php
 	$msg = $this->session->flashdata('info');
@@ -68,15 +69,31 @@
         
         <div class="cms-table pull-right">
             <?php
-                for($i=0;$i<count($this->user_role);$i++){
-                    if($this->user_role[$i]->role_friendly_name=='User Management_Role_Create_Delete'){
+                if(IsRoleFriendlyNameExist($this->user_role, array('User Management_Role_All_Country_Create',
+								   'User Management_Role_Own_Country_Create'))):
             ?>
             <form id="roleform" method='post' action="<?php echo site_url('users/insert_role');?>" >
             <h4>New User Role</h4>
             <hr style="margin-top: 0px;">
             New Role <input type='text' name='new_role' value="<?php set_value('new_role');?>"/>
-            <span style='color:red;'><?php echo form_error('new_role'); ?></span></td>
-            
+            <span style='color:red;'><?php echo form_error('new_role'); ?></span><br />
+	    
+	    <?php if(IsRoleFriendlyNameExist($this->user_role, array('User Management_Role_All_Country_Create'))):?>
+	    Country &nbsp;&nbsp;
+            <select name="country_code">
+                <?php
+                    foreach($this->country_list as $country):
+                ?>
+                    <option value="<?=$country->code?>">
+		    <?=$country->name?></option>
+                <?php endforeach;?>
+            </select>
+	    <?php else:?>
+	    <select name="country_code" class="hide">
+		<option value="<?=$this->session->userdata('country')?>"><?=$this->session->userdata('country')?></option>
+	    </select>
+	    <?php endif;?>
+        
             <hr>
             <div style='float: right;'>
                 <input type='button' class='btn' id="next" value='Next' onclick="showHide();return false;" />
@@ -99,7 +116,7 @@
                 </div>
                 </div>
         <hr />
-        <?php }}?>
+        <?php endif;?>
             <!--<input type='button' value='Create Role Permission' onclick='btn_createRole()' />
             --><h4>Current User Role</h4>
             <table class="table table-striped table-role">
@@ -108,12 +125,8 @@
                         <th>User Role</th>
                         <th>Users</th>
                         <th>Creator</th>
-                        <?php for($i=0;$i<count($this->user_role);$i++){?>
-                            <?php if($this->user_role[$i]->role_friendly_name=='User Management_User_Edit'){?>
-                            <th>&nbsp;</th>
-                            <?php }if($this->user_role[$i]->role_friendly_name=='User Management_User_Create_Delete'){?>
-                            <th>&nbsp;</th>
-                        <?php }}?>
+			<th>Country</th>
+			<th colspan="2">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -122,16 +135,22 @@
                         <td><?php echo $row->role_name;?></td>
                         <td><?php echo $count_role[$i+$plus];?></td>
                         <td><?php echo $row->display_name;?></td>
-                        <?php for($x=0;$x<count($this->user_role);$x++){
-                                if($this->user_role[$x]->role_friendly_name=='User Management_Role_Edit'){
+			<td><?php echo $row->role_country_code;?></td>
+                        <?php
+			    $is_same_country = $this->session->userdata('country') == $row->role_country_code;
+			    
+			    $edit_permission = $is_same_country ? array('User Management_Role_All_Country_Edit', 'User Management_Role_Own_Country_Edit') :
+                                'User Management_Role_All_Country_Edit';
+			    if(IsRoleFriendlyNameExist($this->user_role,$edit_permission)):
                         ?>
                             <td><a href='<?php echo site_url("users/edit_role/".$row->role_collection_id);?>'><span><i class="icon-pencil"></i></span></a></td>
-                        <?php   }}
-                            for($y=0;$y<count($this->user_role);$y++){
-                            if($this->user_role[$y]->role_friendly_name=='User Management_Role_Create_Delete'){
+                        <?php endif;
+                            $delete_permission = $is_same_country ? array('User Management_Role_All_Country_Delete', 'User Management_Role_Own_Country_Delete') :
+                                'User Management_Role_All_Country_Delete';
+			    if(IsRoleFriendlyNameExist($this->user_role,$delete_permission)) : 
                         ?>
                         <td><a href="" onclick="show_confirm('<?php echo $row->role_collection_id;?>');return false;"><span><i class="icon-remove"></i></span></a></td>
-                        <?php }}?>
+                        <?php  endif;?>
                     </tr>
                     <?php $i++;}?>
                 </tbody>

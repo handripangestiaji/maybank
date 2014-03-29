@@ -607,15 +607,18 @@ class facebook_model extends CI_Model
     
     public function RetrieveFeedFB($filter,$limit = 20,$is_limit = true, $only_assign_case = false){
         $this->db->distinct();
-        $this->db->select('a.*, `b`.*, `c`.*,  c.type as social_stream_type, b.post_id as social_stream_post_id,b.post_id, c.created_at as post_date');
+        $this->db->select('a.*, `b`.*, `c`.*,  c.type as social_stream_type, b.post_id as social_stream_post_id,b.post_id, c.created_at as post_date, e.country_code');
         $this->db->from("   fb_user_engaged a INNER JOIN 
                             social_stream_fb_post b  ON b.author_id = a.facebook_id inner join 
-                            social_stream c on c.post_id = b.post_id ");
+                            social_stream c on c.post_id = b.post_id inner join channel e on e.channel_id = c.channel_id");
 	
 	if($is_limit){
 	    $this->db->limit($limit);
 	}
-
+	if(isset($filter['channel_id'])){
+	    $filter['c.channel_id'] = $filter['channel_id'];
+	    unset($filter['channel_id']);
+	}
         $this->db->order_by('b.updated_at','desc');
         $this->db->order_by('c.created_at','desc');
         $this->db->order_by('c.replied_count','desc');
@@ -654,7 +657,7 @@ class facebook_model extends CI_Model
         $this->db->select('*, c.type as social_stream_type, a.post_id as social_stream_post_id');
         $this->db->from("fb_user_engaged a INNER JOIN social_stream_fb_post b ON b.author_id=a.facebook_id
 			inner join social_stream c on c.post_id = b.post_id LEFT JOIN
-                        `case` d on d.post_id = c.post_id AND d.status='pending'");
+                        `case` d on d.post_id = c.post_id AND d.status='pending' ");
         if(count($filter) > 0)
 	       $this->db->where($filter);
            
@@ -683,11 +686,14 @@ class facebook_model extends CI_Model
     
     public function RetrievePmFB($filter = array() ,$limit = null, $only_assign_case = false){
 	$this->db->_protect_identifiers = false;
-        $this->db->select("a.*, c.is_read, c.post_stream_id, c.type, c.type AS social_stream_type, 
+        $this->db->select("a.*, c.is_read, c.post_stream_id, c.type, c.type AS social_stream_type, d.country_code,
                           c.channel_id, c.post_id, c.created_at AS post_date, a.conversation_id AS social_stream_post_id, d.social_id");
         $this->db->from("social_stream_facebook_conversation a INNER JOIN
             	social_stream  c ON c.post_id=a.conversation_id inner join channel d on d.channel_id = c.channel_id");
-	
+	if(isset($filter['channel_id'])){
+	    $filter['c.channel_id'] = $filter['channel_id'];
+	    unset($filter['channel_id']);
+	}
         if(count($filter) > 0){
 	    $this->db->where($filter);
         }
@@ -728,7 +734,7 @@ class facebook_model extends CI_Model
         $this->db->from("social_stream_facebook_conversation a LEFT OUTER JOIN 
                         social_stream_facebook_conversation_detail b ON b.conversation_id = a.conversation_id LEFT OUTER JOIN
                         fb_user_engaged c ON c.facebook_id=b.sender LEFT OUTER JOIN
-                        social_stream d ON d.post_id=b.conversation_id");
+                        social_stream d ON d.post_id=b.conversation_id inner join channel e on e.channel_id = d.channel_id");
          if(count($filter) > 0){
 	    $this->db->where($filter);
         }

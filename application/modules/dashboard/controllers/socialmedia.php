@@ -27,7 +27,6 @@ class Socialmedia extends MY_Controller {
     
      public function index()
      {
-	  
 	  $this->load->model('facebook_model');
 	  $this->load->model('twitter_model');
 	  $this->load->model('account_model');

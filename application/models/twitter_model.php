@@ -286,7 +286,7 @@ class twitter_model extends CI_Model
         $filter['b.type'] = 'inbox';
         $this->db->select("f.social_id, f.name as social_stream_name,  a.post_id as social_stream_post_id, a.channel_id, a.is_read,
                           a.post_stream_id, a.retrieved_at, a.created_at as social_stream_created_at,
-                          b.text as dm_text, b.*,c.*,  a.type as social_stream_type, b.type as direct_message_type");
+                          b.text as dm_text, b.*,c.*,  a.type as social_stream_type, b.type as direct_message_type, f.country_code");
         $this->db->from("social_stream a inner join twitter_direct_messages b on a.post_id = b.post_id
             INNER JOIN twitter_user_engaged c ON c.twitter_user_id = b.sender 
             INNER JOIN channel f on f.channel_id = a.channel_id
@@ -342,7 +342,7 @@ class twitter_model extends CI_Model
     
     public function ReadTwitterData($filter,$limit = false){
         $this->db->select("e.social_id, a.channel_id, a.post_stream_id, a.retrieved_at, a.created_at as social_stream_created_at, a.type as social_stream_type, a.replied_count,
-                            b.*, c.screen_name, c.profile_image_url, c.name, c.description, c.following, a.is_read, a.post_id as social_stream_post_id");
+                            b.*, c.screen_name, c.profile_image_url, c.name, c.description, c.following, a.is_read, a.post_id as social_stream_post_id, e.country_code");
         $this->db->from("social_stream a INNER JOIN social_stream_twitter b ON a.post_id = b.post_id 
                         INNER JOIN twitter_user_engaged c ON
                         c.twitter_user_id = b.twitter_user_id INNER JOIN channel e on e.channel_id = a.channel_id");

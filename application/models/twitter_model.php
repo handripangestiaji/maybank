@@ -311,7 +311,7 @@ class twitter_model extends CI_Model
             $result[$i]->reply_post = $this->GetReplyPost(array('reply_to_post_id'=> $result[$i]->social_stream_post_id));
             $result[$i]->channel_action = $this->GetChannelAction(array('a.post_id'=>$result[$i]->social_stream_post_id));
             $result[$i]->case = $this->case_model->LoadCase(array('a.post_id'=>$result[$i]->social_stream_post_id));
-            $result[$i]->outbox = $this->ReadDMEngagement($result[$i]->recipient, $result[$i]->sender->twitter_user_id);
+            $result[$i]->outbox = $this->ReadDMEngagement($result[$i]->recipient, $result[$i]->sender->twitter_user_id, $result[$i]->social_stream_post_id);
             
         }
         return $result;
@@ -322,13 +322,16 @@ class twitter_model extends CI_Model
         $sender : Sender of Message. It's usually from current Channel.
         $recepient : Recipient Message.
     */
-    public function ReadDMEngagement($sender, $recepient){
+    public function ReadDMEngagement($sender, $recepient, $post_id){
         $filter['a.type'] = 'outbox';
         $filter['recipient'] = $recepient;
         $filter['sender'] = $sender;
+        $filter['b.post_id > '] = $post_id;
         $this->db->select("*");
         $this->db->from('twitter_direct_messages a inner join social_stream b on a.post_id = b.post_id');
         $this->db->where($filter);
+        $this->db->order_by('b.created_at', 'asc');
+        $this->db->limit(1);
         return $this->db->get()->result();
     }
     

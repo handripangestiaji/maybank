@@ -21,8 +21,20 @@ if($posts){
                </select>
                <select name="product_type" style="width: 130px;">
                 <?php foreach($product_list as $product):?>
-                    <option value="<?php echo $product->id?>"><?php echo $product->product_name?></option>
-                <?php endforeach?>
+                      <?php
+                          if(isset($product->child)){ ?>
+                              <optgroup label="<?=$product->product_name?>"></optgroup>
+                          <?php }
+                          else{ ?>
+                              <option value="<?=$product->id?>"><?=$product->product_name?></option>
+                          <?php }
+                      
+                          if(isset($product->child)){
+                              foreach($product->child as $child){ ?>
+                              <option value="<?=$child->id?>">-&nbsp;&nbsp;<?=$child->product_name?></option> 
+                              <?php }
+                          } ?>
+                  <?php endforeach?>
                </select>
            </div>
            <br clear="all" />

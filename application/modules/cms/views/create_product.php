@@ -9,7 +9,7 @@
     <div class="container-fluid campaignForm">
         <form method="post" action="<?php echo site_url('cms/create_product')?>" class="form-horizontal contentForm">
             <div class="control-group">
-                <label class="control-label">Product Name</label>
+                <label class="control-label">Product Name<span class="redText"> *</span></label>
                 <div class="controls">
                   <input type="text" class="span10" name="product[product_name]">
                 </div>
@@ -40,6 +40,8 @@
                             <option value="<?php echo $country->code ?>"><?php echo $country->name ?></option>
                         <?php } ?>
                     </select>
+		    <br><br>
+                    <span class="redText">* required</span>
                 </div>
             </div>
             <?php }

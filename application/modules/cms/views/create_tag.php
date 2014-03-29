@@ -9,11 +9,13 @@
     <div class="container-fluid campaignForm">
         <form method="post" action="<?php echo site_url('cms/create_tag')?>" class="form-horizontal contentForm">
             <div class="control-group">
-                <label class="control-label">Tag Name</label>
+                <label class="control-label">Tag Name<span class="redText"> *</span></label>
                 <div class="controls">
                   <input type="text" class="span10" name="tag_name">
                   <?php echo form_error('tag_name')?>
-                </div>
+		    <br><br>
+		    <span class="redText">* required</span>
+		</div>
             </div>
             <div class="control-group">
                 <div class="pull-left">

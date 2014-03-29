@@ -1,6 +1,5 @@
 <?php
-    for($i=0;$i<count($this->user_role);$i++){
-	if($this->user_role[$i]->role_friendly_name=='Content Management_Campaign_Create'){
+    if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Campaign_Create')){
 ?>
 
 <div class="row-fluid" style="border-bottom: solid 1px #C9C9C9; margin-bottom: 10px;">
@@ -62,53 +61,4 @@
         </form>
     </div>
 </div>
- <?php }}?>
- <!--
-<div class="row-fluid" style="border-bottom: solid 1px #C9C9C9; margin-bottom: 10px;">
-    <h4>Campaign List</h4>    
-</div>
-<div class="floatingBox table">
-    <div class="table-head row-fluid">
-        <table class="table table-striped">
-            <thead>
-              <tr>
-                <th>Campaign</th>
-                <th>Description</th>
-                <th>Product</th>
-                <th>Total Used</th>
-                <th>Creator</th>
-		<?php
-		    //for($i=0;$i<count($this->user_role);$i++){
-			//if($this->user_role[$i]->role_friendly_name=='Content Management_Campaign_Delete'){
-		?>
-                <th>&nbsp;</th>
-		<?php //}}?>
-              </tr>
-            </thead>
-            <tbody>
-            <?php //if($campaigns): ?>
-            	<?php //foreach($campaigns as $v): ?>
-            		<tr>
-		                <td><?php// echo $v['campaign_name']; ?></td>
-		                <td><?php ?></td>
-		                <td><?php// if(isset($v['product_name'])) echo implode(" , ",$v['product_name']); ?></td>
-		                <td><?php// echo "0" ?></td>
-		                <td><?php// echo $v['display_name']; ?></td>
-				<?php
-				    //for($i=0;$i<count($this->user_role);$i++){
-					//if($this->user_role[$i]->role_friendly_name=='Content Management_Campaign_Delete'){
-				?>
-		                <td>
-		                	<a href="<?php //echo site_url('cms/create_campaign?action=delete&id='.$v['id'])?>" class="btn btn-mini btn-danger pull-right">delete</a>
-		                </td>
-				<?php //}}?>
-					</tr>
-            	<?php //endforeach; ?>
-            <?php// endif; ?>
-            </tbody>
-        </table>
-    </div>
-     <div class="page pull-right">
-     	<?php //echo $pagination ?>
-     </div>
-</div!-->
+ <?php }?>

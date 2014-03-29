@@ -74,9 +74,22 @@ class Product_model extends CI_Model
 	}
 	
 	public function getChildren($id){
-		$this->db->select('product_name');
-		$this->db->where('parent_id',$id);
-		$this->db->from($this->_table);
-		return $this->db->get();
+		$this->db->select($this->_table.'.*, user.display_name,b.product_name as parent_name');		
+		$this->db->join('user', $this->_table.'.user_id = user.user_id', 'left');
+		$this->db->join($this->_table.' as b', $this->_table.'.parent_id = b.id', 'left');
+		$this->db->where($this->_table.'.parent_id',$id);
+		
+		$query = $this->db->get($this->_table);
+		
+		return $query;
+	}
+	
+	public function getParent(){
+		$this->db->select($this->_table.'.*');		
+		$this->db->where($this->_table.'.parent_id',null);
+		
+		$query = $this->db->get($this->_table);
+		
+		return $query->result();
 	}
 }

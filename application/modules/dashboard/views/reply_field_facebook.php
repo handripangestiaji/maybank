@@ -10,6 +10,7 @@
         </select>
             
         <select class="productType" style="width: 130px;">
+            <option value=''>Please Select</option>
             <?php foreach($product_list as $product):?>
                 <?php
                     if(isset($product->child)){ ?>

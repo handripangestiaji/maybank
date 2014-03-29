@@ -1,5 +1,5 @@
-<?php for($x=0;$x<count($this->user_role);$x++){
-    if($this->user_role[$x]->role_friendly_name=='Content Management_TAG_Create')
+<?php
+    if(IsRoleFriendlyNameExist($this->user_role,'Content Management_TAG_Create'))
     {
 ?>
 <div class="row-fluid" style="border-bottom: solid 1px #C9C9C9; margin-bottom: 10px;">
@@ -29,7 +29,7 @@
     </div>
 </div>
  
- <?php }}?>
+ <?php }?>
  <div class="row-fluid" style="border-bottom: solid 1px #C9C9C9; margin-bottom: 10px;">
     <h4>TAG List</h4>    
 </div>

@@ -1,9 +1,10 @@
-<div class="row-fluid">
+    <div class="row-fluid">
 <?php 
 if($posts){
  if(isset($posts[$i]->post_id)){
     $post_id=$posts[$i]->post_id;   
  }
+ 
  if(isset($posts_comment[$i]->comment_post_id)){
     $post_id=$posts_comment[$i]->comment_post_id;
  }
@@ -14,12 +15,15 @@ if($posts){
            <input type="hidden" value="new_case" name="type" />
            <div class="message"></div>
            <div class="pull-left">
-               <select name="case_type" style="width: 130px;">
+               <select name="case_type" class="case_type" style="width: 130px;">
+                   <option value="">Please Select</option>
+                   <option value="Report_Abuse">Report Abuse</option>
                    <option value="Feedback">Feedback</option>
                    <option value="Enquiry">Enquiry</option>
                    <option value="Complaint">Complaint</option>
                </select>
-               <select name="product_type" style="width: 130px;">
+               <select name="product_type" class="product_type" style="width: 130px;">
+                    <option value="">Please Select</option>
                 <?php foreach($product_list as $product):?>
                       <?php
                           if(isset($product->child)){ ?>
@@ -99,8 +103,7 @@ if($posts){
            <textarea placeholder="Compose Message" id="content" name="message" ></textarea>
            <br clear="all" />
            <div class="pull-right">
-
-               <button type="submit" class="btn-purple btn btn-small" value="<?php if(isset($case_type)){echo $case_type='reassign';}?>"><i class="icon-ok-circle icon-large"></i> Assign</button>    
+               <button type="submit" class="btn-purple btn btn-small" value="<?php if(isset($case_type)){echo $case_type='reassign';}?>" onclick="return confirm('Please make sure the case type?');" ><i class="icon-ok-circle icon-large"></i> Assign</button>    
            </div>
            </form>
     </div>

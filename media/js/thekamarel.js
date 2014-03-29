@@ -1716,12 +1716,46 @@ $(function(){
                                 }
                                 else
                                     me.closest('.container-fluid').siblings('.floatingBoxMenu').find('li.active .notifyCircle').show();
+                            
+                            
+                                    $('.email').tagit({
+                                        autocomplete : {
+                                            source:  function( request, response ) {
+                                                $.ajax({
+                                                    "url" : BASEURL + "case/mycase/SearchEmail",
+                                                    data : {
+                                                        term : request.term
+                                                    },
+                                                    success : function(data){
+                                                        response( $.map( data, function( item ) {
+                                                            return {
+                                                              label: item.username + "(" + item.email + ")",
+                                                              value: item.email
+                                                            }
+                                                        }));
+                                                    }
+                                                });
+                                            }
+                                        },
+                                        beforeTagAdded : function(event, ui){
+                                            if(validateEmail(ui.tagLabel))
+                                                return true;
+                                            else
+                                                return false;
+        
+                                        }
+                                    });
+
                             });
                             me.removeAttr('disabled').html('Loading..');
                             
                             looppage++;
                             loading = false;
-                    });                                                   
+                            
+                            
+                            
+                    });                        
+                                               
                 });
                 
 
@@ -1753,7 +1787,18 @@ $(function(){
                         availableTags: sampleTags,
                         allowSpaces: true
                     });
-                });                
+                });     
+                
+                
+                $(this).on('change','.case_type',function(){
+                    var caseType=$(this).val();
+                    if(caseType=="Report_Abuse"){
+                        $(this).siblings('.product_type').attr('disabled', 'disabled');
+                    }else{
+                        $(this).siblings('.product_type').removeAttr('disabled', 'disabled');
+                    }
+                });
+                
                 /*==============================================================================================
                  ====================================== LOAD WYSIWYG EDITOR ====================================
                  =============================================================================================*/   

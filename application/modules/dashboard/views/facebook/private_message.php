@@ -114,6 +114,7 @@ $sender = $fb_pm[$i]->participant->sender->facebook_id == $fb_pm[$i]->social_id 
            if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action'))
                 {
                     $data_loaded['post'] = $fb_pm[$i];
+                    $data_loaded['action_type'] = "conversation_facebook";
                     $this->load->view('dashboard/action_taken', $data_loaded);
  
                 }

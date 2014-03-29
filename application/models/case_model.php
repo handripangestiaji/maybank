@@ -332,7 +332,7 @@ class case_model extends CI_Model{
             $this->load->model('account_model');
             $solved_case = $solved_case[0];
             $channel_action = array(
-                'action_type' => $is_solved ? "case_solved" : "case_reassign",
+                'action_type' => $is_solved == true ?  'solved' : 'reassign',
                 'channel_id' => $solved_case->channel_id,
                 'created_at' => date("Y-m-d H:i:s"),
                 'post_id' => $solved_case->post_id,

@@ -133,6 +133,7 @@ for($i=0;$i<count($mentions);$i++){
                     <span><?php
                      $date = new DateTime($mentions[$i]->social_stream_created_at.' Europe/London');
                      $date_comment = new DateTime($comment[$j]->created_at, $timezone);
+                     echo $date_comment->format("l, M j, Y h:i A")
                     ?></span>
                 </p>
                 <div>

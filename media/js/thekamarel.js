@@ -713,7 +713,7 @@ $(function(){
                                 catch(e){
                                     currentNumber = 0;
                                 }
-                                if(result == 1){
+                                if(result == 1 && me.closest('li').find('.read-mark').hasClass('redText')) {
                                     currentNumber -=  1;
                                     currentNumber = currentNumber < 0 ? 0 : currentNumber;
                                     me.closest('li').find('.read-mark').removeClass('redText').addClass('greyText');

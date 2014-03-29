@@ -96,7 +96,7 @@ $sender = $fb_pm[$i]->participant->sender->facebook_id == $fb_pm[$i]->social_id 
                     
                 endif;?>
                 <?php if($comment[$j]->messages != ""){?>
-                    <p><?php echo CreateUrlFromText($comment[$j]->messages)?></p>
+                    <p class="engagement-message"><?php echo CreateUrlFromText($comment[$j]->messages)?></p>
                 <?php }?>
                 <p><?=$att_to_print;?> </p>
               
@@ -111,7 +111,8 @@ $sender = $fb_pm[$i]->participant->sender->facebook_id == $fb_pm[$i]->social_id 
         </div>
         
            <?php
-           if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action'))
+           if(IsRoleFriendlyNameExist($this->user_role, array('Social Stream_Channel_General_Function_Own_Country_View',
+                                                              'Social Stream_Channel_General_Function_All_Country_View')))
                 {
                     $data_loaded['post'] = $fb_pm[$i];
                     $data_loaded['action_type'] = "conversation_facebook";

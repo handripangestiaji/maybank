@@ -39,9 +39,9 @@
                 <?php if($count_unread_mentions==0 || isset($is_search)) echo 'hide';?>"><?php echo $count_unread_mentions?></span>
                 <?php if(isset($is_search) && count($mentions)!=0) {echo '<span class="notifyCircle cyan">'.count($mentions).'</span>';}?>
             </a></li>
-        <li><a class='feed'>Homefeed<span class="notifyCircle red
+        <li><a class='feed'>Homefeed<!--span class="notifyCircle red
         <?php if($count_unread_homefeed==0 || isset($is_search)) echo 'hide';?>"><?php echo $count_unread_homefeed ?></span>
-        <?php if(isset($is_search) && count($homefeed)!=0){echo '<span class="notifyCircle cyan">'.count($homefeed).'</span>';}?>
+        <?php if(isset($is_search) && count($homefeed)!=0){echo '<span class="cyan">'.count($homefeed).'</span>';}?>-->
         </a></li>
         <li><a class='sendmessage'>Tweets
         <?php if(isset($is_search) && count($senttweets)!=0){echo '<span class="notifyCircle cyan">'.count($senttweets).'</span>';}?>

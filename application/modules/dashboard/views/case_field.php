@@ -11,7 +11,7 @@ if($posts){
 ?>
            <span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
            <form method="post" class="assign-case" action="<?php echo base_url("case/mycase/CreateCase")?>">
-           <input type="hidden" value="<?php echo $post_id; ?>" name="post_id" />
+           <input type="hidden" value="<?php echo $post_id; ?>" name="post_id" class="post_id" />
            <input type="hidden" value="new_case" name="type" />
            <div class="message"></div>
            <div class="pull-left">
@@ -45,7 +45,7 @@ if($posts){
            <button href="#modalConfirm-<?php echo isset($posts[$i]->social_stream_post_id) ? $posts[$i]->social_stream_post_id : "" ?>" data-toggle="modal"
             class="btn btn-small btn-purple btn-add-related <?php echo $posts[$i]->social_stream_type?>">Add Related Conversation</button>
             
-           <input type="hidden" id="relatedCoversation-<?php echo $posts[$i]->social_stream_post_id ?>" name="related_conversation" value="<?php echo $posts[$i]->social_stream_post_id?>" />
+           <input type="hidden" id="relatedCoversation-<?php echo $posts[$i]->social_stream_post_id ?>" name="related_conversation" class="value_related_conversation" value="<?php echo $posts[$i]->social_stream_post_id?>" />
            <br clear="all" />
            <div class="pull-left" style="width:30%;">
                Assign To:
@@ -118,7 +118,7 @@ if($posts){
         <input type="hidden" value="<?php echo $posts[$i]->type?>" name="type_facebook" />
     <?php endif?>
     <div class="modal-header">
-        <button type="button" class="close " data-dismiss="modal" aria-hidden="true"></button>
+        <button type="button" class="close remove_related" data-dismiss="modal" aria-hidden="true"></button>
         <h3>Add Related Conversation</h3>
     </div>
     <div class="modal-body">
@@ -127,7 +127,7 @@ if($posts){
         </form>
     </div>
     <div class="modal-footer">
-        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+        <button class="btn remove_related" data-dismiss="modal" aria-hidden="true">Cancel</button>
         <button class="btn btn-primary add-related-conversation" data-dismiss="modal" value="<?php echo $posts[$i]->post_id ?>">Add</button>
     </div>
 <?php } ?>

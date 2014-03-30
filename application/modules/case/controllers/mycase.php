@@ -28,8 +28,10 @@ class mycase extends CI_Controller{
         }
         
         $validation[] = array('type' => 'required','name' => 'user_id','value' => $user_id, 'fine_name' => "User ID");
-        $validation[] = array('type' => 'required','name' => 'product_type','value' => $this->input->post('product_type'), 'fine_name' => "Product Type");
         $validation[] = array('type' => 'required','name' => 'case_type','value' => $this->input->post('case_type'), 'fine_name' => "Case Type");
+        if($this->input->post('case_type')!='Report_Abuse'){
+            $validation[] = array('type' => 'required','name' => 'product_type','value' => $this->input->post('product_type'), 'fine_name' => "Product Type");
+        }        
         $validation[] = array('type' => 'required','name' => 'message','value' => $this->input->post('message'), 'fine_name' => "Messages");
 
         //$assign = explode('-',$this->input->post('assign_to'));

@@ -31,7 +31,13 @@
                         
                       ?></td>
                       <td style="width:77px"><?=$action->username?></td>
-                      <td style="width:79px"><?=ucfirst(str_replace('_', ' ', $action->action_type))?></td>
+                      <td style="width:79px">
+                        <?php
+                            echo ucfirst(str_replace('_', ' ', $action->action_type));
+                            if($action->action_type == 'case_created')
+                                echo ' #'.$action->case_id;
+                        ?>      
+                      </td>
                       <!--td><button class="btn btn-primary icon-book"></button></td-->
                       <td style="width:130px">
                         <?php

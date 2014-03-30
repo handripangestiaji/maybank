@@ -463,8 +463,8 @@ $(function(){
                 if(caseType=="Report_Abuse"){
                     $(this).siblings('.product_type').attr('disabled', 'disabled');
                 }else{
-                    $(this).siblings('.product_type').val()=null;
-                    $(this).siblings('.product_type').html('');
+                   // $(this).siblings('.product_type').val()=null;
+                   // $(this).siblings('.product_type').html('');
                     $(this).siblings('.product_type').removeAttr('disabled', 'disabled');
                 }
     });

@@ -13,14 +13,6 @@ if($posts){
            <span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
            <form method="post" class="assign-case" action="<?php echo base_url("case/mycase/CreateCase")?>">
            <input type="hidden" value="<?php echo $post_id; ?>" name="post_id" class="post_id" />
-           <?php
-            if(isset($posts[$i]->case[0]->case_id)){
-            ?>
-                <input type="hidden" value="<?php echo $posts[$i]->case[0]->case_id?>" name="case_id" class="case_id" />
-                <?php
-                $case_conversation = $this->case_model->FacebookRelatedConversation($posts[$i]->case[0]->case_id);
-                $related=count($case_conversation);
-            ?>
            <input type="hidden" value="new_case" name="type" />
            <div class="message"></div>
            <div class="pull-left">
@@ -49,6 +41,15 @@ if($posts){
                           } ?>
                   <?php endforeach?>
                </select>
+           <?php
+            if(isset($posts[$i]->case[0]->case_id)){
+            ?>
+                <input type="hidden" value="<?php echo $posts[$i]->case[0]->case_id?>" name="case_id" class="case_id" />
+                <?php
+                $case_conversation = $this->case_model->FacebookRelatedConversation($posts[$i]->case[0]->case_id);
+                $related=count($case_conversation);
+           
+            ?>
            </div>
            <br clear="all" />
            <button href="#modalConfirm-<?php echo isset($posts[$i]->social_stream_post_id) ? $posts[$i]->social_stream_post_id : "" ?>" data-toggle="modal"
@@ -57,6 +58,8 @@ if($posts){
                 <button href="#modalConfirm-<?php echo isset($posts[$i]->social_stream_post_id) ? $posts[$i]->social_stream_post_id : "" ?>" data-toggle="modal"
                 class="btn btn-small btn-purple btn-add-related <?php echo $posts[$i]->social_stream_type?>">Add Related Conversation</button>
             <?php }?>
+            
+            
            <input type="hidden" id="relatedCoversation-<?php echo $posts[$i]->social_stream_post_id ?>" name="related_conversation" class="value_related_conversation" value="<?php echo $posts[$i]->social_stream_post_id?>" />
            <br clear="all" />
            <div class="pull-left" style="width:30%;">

@@ -710,7 +710,7 @@ class Media_stream extends CI_Controller {
         }else{//input validation
             echo json_encode(array(
                        "success" => false,
-                       "message" => "Reply Comment was failed, Please check your input.",
+                       "message" => "Reply Comment was failed, Please check your input.<br>Reply Type and Product Type value cannot be null",
                        "errors" => $is_valid
                    )
                );

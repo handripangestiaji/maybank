@@ -577,7 +577,35 @@ $(function(){
                         $(this).closest('div').children('button').html('<i class="icon-facebook"></i><h2>' + $(this).html()+ '&nbsp;</h2><i class="icon-caret-down"></i>');
                         $(this).closest('.containerHeadline').css( "background-color", "#3B5998" );
                         $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');        
-                        $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/facebook_stream/' + $(this).siblings('.channel-stream-id').val());
+                        $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/facebook_stream/' + $(this).siblings('.channel-stream-id').val(),function(){
+                            $('.email').tagit({
+                                        autocomplete : {
+                                            source:  function( request, response ) {
+                                                $.ajax({
+                                                    "url" : BASEURL + "case/mycase/SearchEmail",
+                                                    data : {
+                                                        term : request.term
+                                                    },
+                                                    success : function(data){
+                                                        response( $.map( data, function( item ) {
+                                                            return {
+                                                              label: item.username + "(" + item.email + ")",
+                                                              value: item.email
+                                                            }
+                                                        }));
+                                                    }
+                                                });
+                                            }
+                                        },
+                                        beforeTagAdded : function(event, ui){
+                                            if(validateEmail(ui.tagLabel))
+                                                return true;
+                                            else
+                                                return false;
+        
+                                        }
+                                    });
+                        });
                         
                     });
                     
@@ -585,7 +613,35 @@ $(function(){
                         $(this).closest('div').children('button').html('<i class="icon-twitter"></i><h2>' + $(this).html()+ '</h2><i class="icon-caret-down"></i>');
                         $(this).closest('.containerHeadline').css( "background-color", "#4099FF" );
                         $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');        
-                        $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/twitter_stream/' + $(this).siblings('.channel-stream-id').val());
+                        $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/twitter_stream/' + $(this).siblings('.channel-stream-id').val(),function(){
+                             $('.email').tagit({
+                                        autocomplete : {
+                                            source:  function( request, response ) {
+                                                $.ajax({
+                                                    "url" : BASEURL + "case/mycase/SearchEmail",
+                                                    data : {
+                                                        term : request.term
+                                                    },
+                                                    success : function(data){
+                                                        response( $.map( data, function( item ) {
+                                                            return {
+                                                              label: item.username + "(" + item.email + ")",
+                                                              value: item.email
+                                                            }
+                                                        }));
+                                                    }
+                                                });
+                                            }
+                                        },
+                                        beforeTagAdded : function(event, ui){
+                                            if(validateEmail(ui.tagLabel))
+                                                return true;
+                                            else
+                                                return false;
+        
+                                        }
+                                    });
+                        });
                     });
                     
                     $('.youtube_stream').on('click',function() {
@@ -593,7 +649,35 @@ $(function(){
                         $(this).closest('div').children('button').html('<i class="icon-youtube"></i><h2>' + $(this).html()+ '</h2><i class="icon-caret-down"></i>');
                         $(this).closest('.containerHeadline').css( "background-color", "#FF3333" );
                         $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');
-                        $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/youtube_stream/' + $(this).siblings('.channel-stream-id').val());
+                        $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/youtube_stream/' + $(this).siblings('.channel-stream-id').val(),function(){
+                             $('.email').tagit({
+                                        autocomplete : {
+                                            source:  function( request, response ) {
+                                                $.ajax({
+                                                    "url" : BASEURL + "case/mycase/SearchEmail",
+                                                    data : {
+                                                        term : request.term
+                                                    },
+                                                    success : function(data){
+                                                        response( $.map( data, function( item ) {
+                                                            return {
+                                                              label: item.username + "(" + item.email + ")",
+                                                              value: item.email
+                                                            }
+                                                        }));
+                                                    }
+                                                });
+                                            }
+                                        },
+                                        beforeTagAdded : function(event, ui){
+                                            if(validateEmail(ui.tagLabel))
+                                                return true;
+                                            else
+                                                return false;
+        
+                                        }
+                                    });
+                        });
                     });
                 });
                 $(this).on('click', 'p.video', function(){
@@ -1492,7 +1576,7 @@ $(function(){
                         var len=$(this).parent().siblings(".replaycontent").val().length
                         var commnetbox;
                         
-                        var confirmStatus = confirm("Are you sure want to send this messages?")
+                        var confirmStatus = confirm("Are you sure want to send this messages?");
                         
                         if(confirmStatus == true){
                             

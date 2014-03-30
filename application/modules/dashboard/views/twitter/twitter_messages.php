@@ -110,6 +110,7 @@
              
            <?php endforeach; ?>
             <?php
+                $unique_id = uniqid();
                 $data_loaded['post'] = $directmessage[$i];
                 $this->load->view('dashboard/action_taken', $data_loaded);
                 $data_loaded['unique_id'] = $unique_id;

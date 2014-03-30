@@ -202,7 +202,8 @@ class account_model extends CI_Model
         $actions['message'] = $message;
         $actions['social_stream_post_id'] = $post_id;
         $actions['type'] = $reply_type;
-        $actions['product_id'] = $product_type;
+	if($product_type)
+	    $actions['product_id'] = $product_type;
         $actions['created_at'] = date("Y-m-d H:i:s");
         $actions['user_id'] = $this->session->userdata('user_id');
 	

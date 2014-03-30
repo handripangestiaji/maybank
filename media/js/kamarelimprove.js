@@ -111,10 +111,10 @@ $(function(){
     $(this).on('click', '.assign-case .facebook_conversation, .assign-case .facebook', function(e){
         var modalID = $(this).attr("href");
         var facebook_id = $(modalID + " input[name=post_id]").val();
-    
         var type = $(modalID + " input[name=type]").val();
-        $(modalID + " .loader-image").show();
         
+        $(modalID + " .loader-image").show();
+            
         var textToAppend = "" ;
          $(modalID + ' form').html('');
         $(this).LoadContentAsync({
@@ -122,34 +122,41 @@ $(function(){
             urlParameter : {
                 post_id : $(modalID + " input[name=post_id]").val(),
                 channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
-                facebook_id : $(this).closest('li').find('input[name="facebook_user"]').val()
+                facebook_id : $(this).closest('li').find('input[name="facebook_user"]').val(),
+                case_id:$(this).closest('form').find('.case_id').val()                                
             },
             callback : function(response){
-                //console.log(response);
-                $(modalID + " .loader-image").hide();
-                if(response.length == 0)
+              // console.log(response['all_case']);
+              // $(modalID + " .loader-image").hide();
+                if(response['all_case'].length == 0){
                     $(modalId).append("<h2>No related conversation found.</h2>");
-                for(i = 0; i<response.length;i++){
-                    type = response[i].type.replace("facebook_","");
-                    if(response[i].content != '')
-                        $(modalID + ' form').append(
-                            '<div class="related-conversation-body">' + 
-                            '<span class="related-conversation-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>' + 
-                            '<p class="headLine">' + 
-                                '<input type="checkbox" class="related-conversation-check" value="' + response[i].social_stream_post_id + '"><span style="color:#222">' +
-                                $(modalID).closest('li').find('.author').html() + 
-                                '</span><input type="hidden" class="related-conversation-check" value="' + response[i].type + '">' + 
-                                '<span class="cyanText" style="text-transform:capitalize;"> '+ type +'</span> ' +
-                                '<i class="icon-circle"></i>' + 
-                                '<span class="UTCTimestamp">' +  response[i].created_at + '</span>' + 
-                            '</p>' + 
-                            '<div>' +
-                                '<p>' + response[i].content + '</p>' +
-                            '</div></div>'
-                        );
-                   
                 }
-                
+                else{
+                    for(i = 0; i<response['all_case'].length;i++){
+                        type = response['all_case'][i].type.replace("facebook_","");
+                        if(response['all_case'][i].content != ''){
+                            
+                               var htmls= '<div class="related-conversation-body">' + 
+                                '<span class="related-conversation-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>';
+                                
+                                htmls+='<p class="headLine">' + 
+                                    '<input type="checkbox" class="related-conversation-check" value="' + response['all_case'][i].social_stream_post_id + '"><span style="color:#222">' +
+                                    $(modalID).closest('li').find('.author').html() + 
+                                    '</span><input type="hidden" class="related-conversation-check" value="' + response['all_case'][i].type + '">' + 
+                                    '<span class="cyanText" style="text-transform:capitalize;"> '+ type +'</span> ' +
+                                    '<i class="icon-circle"></i>' + 
+                                    '<span class="UTCTimestamp">' +  response['all_case'][i].created_at + '</span>' + 
+                                '</p>'; 
+                                
+                                htmls+='<div>' +
+                                    '<p>' + response['all_case'][i].content + '</p>' +
+                                '</div></div>';
+                                                            
+                            $(modalID + ' form').append(htmls);
+                       }
+                    }
+                }
+                 
             }
         });
     });
@@ -456,6 +463,8 @@ $(function(){
                 if(caseType=="Report_Abuse"){
                     $(this).siblings('.product_type').attr('disabled', 'disabled');
                 }else{
+                    $(this).siblings('.product_type').val()=null;
+                    $(this).siblings('.product_type').html('');
                     $(this).siblings('.product_type').removeAttr('disabled', 'disabled');
                 }
     });

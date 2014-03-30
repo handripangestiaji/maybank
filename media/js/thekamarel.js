@@ -1769,12 +1769,13 @@ $(function(){
                             }
                        });
                     });
-                         $(this).on('click','.replyType',function(){
+                    $(this).on('click','.replyType',function(){
                             var replyType=$(this).val();
                             if(replyType=="Report_Abuse"){
                                 $(this).siblings('.productType').attr('disabled', 'disabled');
                             }else{
-                                $(this).siblings('.productType').removeAttr('disabled', 'disabled');
+                                 $(this).siblings('.productType').removeAttr('disabled', 'disabled');
+                                
                             }
                          });   
             

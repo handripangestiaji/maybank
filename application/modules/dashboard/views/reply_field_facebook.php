@@ -1,4 +1,4 @@
-<form action="" method="post" class="facebook-tweet">
+<div action="" method="post" class="facebook-tweet">
 <div class="row-fluid">
     <span class="fb-reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
     <div class="option-type pull-left">
@@ -96,7 +96,7 @@
     </div>
     <div class="pull-right">
       <?php if($reply_type=='replaycontent'){?>
-        <button class="btn btn-primary btn-small btn-send-reply" value="<?php echo $fb_feed[$i]->post_id; ?>">SEND</button>    
+        <button class="btn btn-primary btn-small btn-send-reply" value="<?php echo $fb_feed[$i]->post_id; ?>">SEND</button>
       <?php }elseif($reply_type=='reply_nested'){
        // print_r($fb_feed[$i]);
         ?>
@@ -109,5 +109,5 @@
     <br clear="all" />
     <!--div class="reply-status hide">MESSAGE SENT</div-->
 </div>
-</form>
+</div>
 

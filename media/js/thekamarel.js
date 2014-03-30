@@ -1487,136 +1487,142 @@ $(function(){
                         });
                     });
                     
-                     $(this).on('click','.btn-send-reply',
-                        function() {
-                        var len=$(this).parent().siblings(".replaycontent").val().length
-                        var commnetbox;
-                        if(len<=0){
-                            commnetbox='-';
-                        }else{
-                             commnetbox=$(this).parent().siblings(".replaycontent").val();
+                     $(this).on('click','.btn-send-reply',function() {
+                        if($(this).parent().siblings('.option-type').find(".productType").val() == ''){
+                            alert('Please select a product');
                         }
+                        else{
+                            var len=$(this).parent().siblings(".replaycontent").val().length
+                            var commnetbox;
+                            if(len<=0){
+                                commnetbox='-';
+                            }else{
+                                 commnetbox=$(this).parent().siblings(".replaycontent").val();
+                            }
                         
-                        if(len>2000){
-                            $(this).parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
-                            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
-                            '<strong>Error!</strong> Your message is more than 2000 characters. It will not post to Facebook. </div>');
-                            
-                        }else{
-                            var commentButton = $(this);
-                            isSend=commentButton.html()=="SEND";
-                            commentButton.html('SENDING...').attr("disabled", "disabled");
-                            
-                           $.ajax({
-                                url : BASEURL + 'dashboard/media_stream/FbReplyPost',
-                                type: "POST",
-                                data: {
-                                    post_id: $(this).val(),
-                                    channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
-                                    comment :commnetbox,
-                                    url:$(this).parent().siblings(".link_url").find(".short_code").val(),
-                                    reply_type:$(this).parent().siblings('.option-type').find(".replyType").val(),
-                                    product_type:$(this).parent().siblings('.option-type').find(".productType").val(),
-                                    title :$(this).parent().siblings('#reply-url-show').find(".title_link").val(),
-                                    desc :$(this).parent().siblings('#reply-url-show').find(".descr-link").val(),
-                                    img :$(this).parent().siblings('#reply-img-show').find("#reply-preview-img").attr('src'),
-                                    tags:$(this).parent().siblings().find("#compose-tags-reply").tagit("assignedTags"),
-                                },
-                                success: function(response)
-                                {
-                                    commentButton.removeAttr("disabled");
-                                    if(response.success == true){
-                                        commentButton.closest('li').find('p.indicator >.open-thread, p.indicator > .replied-btn').remove();
-                                        
-                                        commentButton.closest('li').find('p.indicator').append('<button type="button" class="btn btn-inverse btn-mini replied-btn" style="text-align:left">Replied by: You ' +
-                                                                                               response.action_log.created_at +' </button>');
+                            if(len>2000){
+                                $(this).parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
+                                '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
+                                '<strong>Error!</strong> Your message is more than 2000 characters. It will not post to Facebook. </div>');
+                                
+                            }else{
+                                var commentButton = $(this);
+                                isSend=commentButton.html()=="SEND";
+                                commentButton.html('SENDING...').attr("disabled", "disabled");
+                                
+                               $.ajax({
+                                    url : BASEURL + 'dashboard/media_stream/FbReplyPost',
+                                    type: "POST",
+                                    data: {
+                                        post_id: $(this).val(),
+                                        channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
+                                        comment :commnetbox,
+                                        url:$(this).parent().siblings(".link_url").find(".short_code").val(),
+                                        reply_type:$(this).parent().siblings('.option-type').find(".replyType").val(),
+                                        product_type:$(this).parent().siblings('.option-type').find(".productType").val(),
+                                        title :$(this).parent().siblings('#reply-url-show').find(".title_link").val(),
+                                        desc :$(this).parent().siblings('#reply-url-show').find(".descr-link").val(),
+                                        img :$(this).parent().siblings('#reply-img-show').find("#reply-preview-img").attr('src'),
+                                        tags:$(this).parent().siblings().find("#compose-tags-reply").tagit("assignedTags"),
+                                    },
+                                    success: function(response)
+                                    {
+                                        commentButton.removeAttr("disabled");
+                                        if(response.success == true){
+                                            commentButton.closest('li').find('p.indicator >.open-thread, p.indicator > .replied-btn').remove();
+                                            
+                                            commentButton.closest('li').find('p.indicator').append('<button type="button" class="btn btn-inverse btn-mini replied-btn" style="text-align:left">Replied by: You ' +
+                                                                                                   response.action_log.created_at +' </button>');
+                                            commentButton.parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
+                                            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
+                                            '<strong>Success!</strong> '+response.message+' </div>');
+                                            commentButton.parent().siblings(".replaycontent").val("");
+                                            commentButton.html("SEND"); 
+                                            setTimeout(function(){
+                                                    commentButton.closest('.reply-field').toggle('slow');
+                                                }, 3000); 
+                                        }
+                                        else{
+                                            commentButton.parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
+                                            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
+                                            '<strong>Error!</strong>'+response.message+'</div>');
+                                            commentButton.html("SEND");
+                                        }
+    
+                                    },
+                                    error: function(response) {
+                                        commentButton.removeAttr("disabled");
                                         commentButton.parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
-                                        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
-                                        '<strong>Success!</strong> '+response.message+' </div>');
-                                        commentButton.parent().siblings(".replaycontent").val("");
-                                        commentButton.html("SEND"); 
-                                        setTimeout(function(){
-                                                commentButton.closest('.reply-field').toggle('slow');
-                                            }, 3000); 
-                                    }
-                                    else{
-                                        commentButton.parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
-                                        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
-                                        '<strong>Error!</strong>'+response.message+'</div>');
+                                            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
+                                            '<strong>Error!</strong>: Facebook post not founds/'+response.message+'</div>');
                                         commentButton.html("SEND");
-                                    }
-
-                                },
-                                error: function(response) {
-                                    commentButton.removeAttr("disabled");
-                                    commentButton.parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
-                                        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
-                                        '<strong>Error!</strong>: Facebook post not founds/'+response.message+'</div>');
-                                    commentButton.html("SEND");
-                                },
-                            });
-                            
-                        }
-                                                
+                                    },
+                                });
+                            }
+                        }             
                     }); 
                     
                     $(this).on('click','.btn-send-msg',
                         function() {
-                        var len=$(this).parent().siblings(".replaycontent").val().length
-                        if(len>2000){
-                            $(this).parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
-                            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
-                            '<strong>Error!</strong> Your message is more than 2000 characters. It will not post to Facebook. </div>');
-                            
-                        }else{
-                            var commentButton = $(this);
-                            isSend=commentButton.html()=="SEND";
-                            commentButton.html('SENDING...').attr("disabled", "disabled");
-                           $.ajax({
-                                url : BASEURL + 'dashboard/media_stream/FbReplyMsg',
-                                type: "POST",
-                                data: {
-                                    post_id: $(this).val(),
-                                    product_id : $(this).closest('li').find('.productType').val(),
-                                    channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
-                                    comment :$(this).parent().siblings(".replaycontent").val(),
-                                    url:'',
-                                    title :$(this).parent().siblings('#reply-url-show').find(".title_link").val(),
-                                    desc :$(this).parent().siblings('#reply-url-show').find(".descr-link").val(),
-                                    case_id :$(this).siblings(".case_id").val(),
-                                    img :$(this).parent().siblings('#reply-img-show').find("#reply-preview-img").attr('src')
-                                    
-                                },
-                                success: function(response)
-                                {
-                                    commentButton.removeAttr("disabled");
-                                    if(response.success === true){
-                                        commentButton.parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
-                                        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
-                                        '<strong>Success!</strong> '+response.message+' </div>');
-                                        commentButton.parent().siblings(".replaycontent").val("");
-                                        commentButton.html("SEND"); 
-                                        setTimeout(function(){
-                                                commentButton.closest('.reply-field').toggle('slow');
-                                            }, 3000);
-                                        commentButton.closest('li').find('.indicator .open-thread, .indicator .replied-btn').remove();
-                                        
-                                        commentButton.closest('li').find('.indicator:first').append(' <button type="button" class=".replied-btn btn btn-inverse btn-mini" style="text-align:left">' +
-                                            'Replied by:you ' + response.action_log.created_at + "</button>");
-                                        
-                                    }
-                                    else{
-                                        commentButton.parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
-                                        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
-                                        '<strong>Error!</strong>'+response.message+'</div>');
-                                        commentButton.html("SEND");
-                                    }
-                                },
-                            });
-                            
+                        if($(this).parent().siblings('.option-type').find(".productType").val() == ''){
+                            alert('Please select a product');
                         }
-                                                
+                        else{
+                            var len=$(this).parent().siblings(".replaycontent").val().length
+                            if(len>2000){
+                                $(this).parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
+                                '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
+                                '<strong>Error!</strong> Your message is more than 2000 characters. It will not post to Facebook. </div>');
+                                
+                            }else{
+                                var commentButton = $(this);
+                                isSend=commentButton.html()=="SEND";
+                                commentButton.html('SENDING...').attr("disabled", "disabled");
+                               $.ajax({
+                                    url : BASEURL + 'dashboard/media_stream/FbReplyMsg',
+                                    type: "POST",
+                                    data: {
+                                        post_id: $(this).val(),
+                                        product_id : $(this).closest('li').find('.productType').val(),
+                                        channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
+                                        comment :$(this).parent().siblings(".replaycontent").val(),
+                                        url:'',
+                                        title :$(this).parent().siblings('#reply-url-show').find(".title_link").val(),
+                                        desc :$(this).parent().siblings('#reply-url-show').find(".descr-link").val(),
+                                        case_id :$(this).siblings(".case_id").val(),
+                                        img :$(this).parent().siblings('#reply-img-show').find("#reply-preview-img").attr('src')
+                                        
+                                    },
+                                    success: function(response)
+                                    {
+                                        commentButton.removeAttr("disabled");
+                                        if(response.success === true){
+                                            commentButton.parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
+                                            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
+                                            '<strong>Success!</strong> '+response.message+' </div>');
+                                            commentButton.parent().siblings(".replaycontent").val("");
+                                            commentButton.html("SEND"); 
+                                            setTimeout(function(){
+                                                    commentButton.closest('.reply-field').toggle('slow');
+                                                }, 3000);
+                                            commentButton.closest('li').find('.indicator .open-thread, .indicator .replied-btn').remove();
+                                            
+                                            commentButton.closest('li').find('.indicator:first').append(' <button type="button" class=".replied-btn btn btn-inverse btn-mini" style="text-align:left">' +
+                                                'Replied by:you ' + response.action_log.created_at + "</button>");
+                                            
+                                        }
+                                        else{
+                                            commentButton.parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
+                                            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
+                                            '<strong>Error!</strong>'+response.message+'</div>');
+                                            commentButton.html("SEND");
+                                        }
+                                    },
+                                });
+                            }
+                        }                        
                     });
+                    
                     $(this).on('click', '.delete_post', 
                         function() {
                             var btnDestroyStatus = $(this);

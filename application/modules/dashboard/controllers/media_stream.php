@@ -633,12 +633,11 @@ class Media_stream extends CI_Controller {
             }else{
                 try{
                     $return=$this->facebook->api('/'.$stream_id->post_stream_id.'/comments', 'POST', array('message'=>$comment,'attachment'=>$attachment));
-                }
-    	    catch(FacebookApiException $e){
+                }catch(FacebookApiException $e){
                     echo json_encode(
     			array(
     			    'success' => false,
-    			    'message' => "reply was failed",
+    			    'message' => "reply was failed :".$e,
     			    )
     		);
     		$return='error';

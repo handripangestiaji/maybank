@@ -18,10 +18,10 @@ if($posts){
            <div class="pull-left">
                <select name="case_type" class="case_type" style="width: 130px;">
                    <option value="">Please Select</option>
-                   <option value="Report_Abuse">Report Abuse</option>
                    <option value="Feedback">Feedback</option>
                    <option value="Enquiry">Enquiry</option>
                    <option value="Complaint">Complaint</option>
+                   <option value="Report_Abuse">Report Abuse</option>
                </select>
                <select name="product_type" class="product_type" style="width: 130px;">
                     <option value="">Please Select</option>
@@ -64,6 +64,7 @@ if($posts){
            <br clear="all" />
            <div class="pull-left" style="width:30%;">
                Assign To:
+               
            </div>
            <div class="pull-left" style="width:70%;">
                <select name="assign_to" <!--multiple="multiple"!-->>
@@ -73,20 +74,33 @@ if($posts){
                       $userIncrement = 0;
                       if(is_array($user_list)){
                         for($userIncrement=0;$userIncrement<count($user_list);$userIncrement++){
+                            $is_same_country = $this->session->userdata('country') == $user_list[$userIncrement]->user_country_code;
                             if($user_list[$userIncrement]->group_name!=$group_name){
-                                echo '<optgroup label="'.$user_list[$userIncrement]->group_name.'"></optgroup>';           
+                                echo '<optgroup label="'.$user_list[$userIncrement]->group_name.'"></optgroup>';
+                                $group_name = $user_list[$userIncrement]->group_name;  
                             }
-                            if( $this->session->userdata('user_id') != $user_list[$userIncrement]->user_id &&
-                                IsRoleFriendlyNameExist($user_list[$userIncrement]->role, 'Social Stream_Case_Own_Country_AssignReassignResolved')){
-                                echo '<option value="'.$user_list[$userIncrement]->user_id.'">&nbsp;&nbsp;&nbsp;&nbsp;'.$user_list[$userIncrement]->full_name.'</option>';                                 
+                            else{
+                                if($this->session->userdata('user_id') != $user_list[$userIncrement]->user_id){
+                                    if($is_same_country ){
+                                        if(IsRoleFriendlyNameExist($user_list[$userIncrement]->role_detail,
+                                                array('Social Stream_Case_Own_Country_AssignReassignResolved', 'Social Stream_Case_All_Country_AssignReassignResolved')))
+                                            echo '<option value="'.$user_list[$userIncrement]->user_id.'">&nbsp;&nbsp;&nbsp;&nbsp;'.$user_list[$userIncrement]->full_name.'</option>';                                 
+                                    }
+                                    else{
+                                        if(IsRoleFriendlyNameExist($user_list[$userIncrement]->role_detail,
+                                                'Social Stream_Case_All_Country_AssignReassignResolved'))
+                                            echo '<option value="'.$user_list[$userIncrement]->user_id.'">&nbsp;&nbsp;&nbsp;&nbsp;'.
+                                                $user_list[$userIncrement]->full_name.'</option>';                                 
+                                    }
+                                }
                             }
-                            $group_name = $user_list[$userIncrement]->group_name;  
                         }
                       }
                       else{
                             echo '<optgroup label="'.$user_list->group_name.'"></optgroup>';           
                             echo '<option value="'.$user_list->user_id.'">'.$user_list->full_name.'</option>';                                 
                       }
+                      
                       ?>
                </select>
            </div>

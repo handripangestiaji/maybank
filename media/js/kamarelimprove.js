@@ -504,6 +504,12 @@ $(function(){
         }
     });
     
+    $('#tasksList li').click(function(e){
+        e.preventDefault();
+        $('#caseNotification').show();
+        
+    });
+    
 });
 
 

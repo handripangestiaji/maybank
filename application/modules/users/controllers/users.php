@@ -872,7 +872,7 @@ class Users extends MY_Controller {
 	$arr = array();
 	$tree = array();
 	$i = 0;
-	
+	$c = array();
 	foreach($role_detail->result_array() as $d){
 	     $c[] = $d['app_role_id']; 
 	}

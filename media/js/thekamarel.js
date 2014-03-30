@@ -1565,10 +1565,13 @@ $(function(){
                 });
             });
             
-             $(this).on('click','.btn-send-reply',
-                function() {
-                var len=$(this).parent().siblings(".replaycontent").val().length
-                var commnetbox;
+                     $(this).on('click','.btn-send-reply',function() {
+                        if($(this).parent().siblings('.option-type').find(".productType").val() == ''){
+                            alert('Please select a product');
+                        }
+                        else{
+                            var len=$(this).parent().siblings(".replaycontent").val().length
+                            var commnetbox;
                         
                         var confirmStatus = confirm("Please make sure the case type !");
                         
@@ -1629,78 +1632,83 @@ $(function(){
                                             commentButton.html("SEND");
                                         }
     
-                                },
-                                error: function(response) {
-                                    commentButton.removeAttr("disabled");
-                                    commentButton.parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
-                                        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
-                                        '<strong>Error!</strong>: Facebook post not founds/'+response.message+'</div>');
-                                    commentButton.html("SEND");
-                                },
-                            });
-                    
+                                    },
+                                    error: function(response) {
+                                        commentButton.removeAttr("disabled");
+                                        commentButton.parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
+                                            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
+                                            '<strong>Error!</strong>: Facebook post not founds/'+response.message+'</div>');
+                                        commentButton.html("SEND");
+                                    },
+                                });
+                            }
                         }
-                        }
-                                        
+                    }
             }); 
             
             $(this).on('click','.btn-send-msg',
                 function() {
-                var len=$(this).parent().siblings(".replaycontent").val().length
-                if(len>2000){
-                    $(this).parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
-                    '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
-                    '<strong>Error!</strong> Your message is more than 2000 characters. It will not post to Facebook. </div>');
-                    
-                }else{
-                    var commentButton = $(this);
-                    isSend=commentButton.html()=="SEND";
-                    commentButton.html('SENDING...').attr("disabled", "disabled");
-                   $.ajax({
-                        url : BASEURL + 'dashboard/media_stream/FbReplyMsg',
-                        type: "POST",
-                        data: {
-                            post_id: $(this).val(),
-                            product_id : $(this).closest('li').find('.productType').val(),
-                            channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
-                            comment :$(this).parent().siblings(".replaycontent").val(),
-                            url:'',
-                            title :$(this).parent().siblings('#reply-url-show').find(".title_link").val(),
-                            desc :$(this).parent().siblings('#reply-url-show').find(".descr-link").val(),
-                            case_id :$(this).siblings(".case_id").val(),
-                            img :$(this).parent().siblings('#reply-img-show').find("#reply-preview-img").attr('src')
+                        if($(this).parent().siblings('.option-type').find(".productType").val() == ''){
+                            alert('Please select a product');
+                        }
+                        else{
+                        var len=$(this).parent().siblings(".replaycontent").val().length
+                        if(len>2000){
+                            $(this).parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
+                            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
+                            '<strong>Error!</strong> Your message is more than 2000 characters. It will not post to Facebook. </div>');
                             
-                        },
-                        success: function(response)
-                        {
-                            commentButton.removeAttr("disabled");
-                            if(response.success === true){
-                                commentButton.parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
-                                '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
-                                '<strong>Success!</strong> '+response.message+' </div>');
-                                commentButton.parent().siblings(".replaycontent").val("");
-                                commentButton.html("SEND"); 
-                                setTimeout(function(){
-                                        commentButton.closest('.reply-field').toggle('slow');
-                                    }, 3000);
-                                commentButton.closest('li').find('.indicator .open-thread, .indicator .replied-btn').remove();
-                                
-                                commentButton.closest('li').find('.indicator:first').append(' <button type="button" class=".replied-btn btn btn-inverse btn-mini" style="text-align:left">' +
-                                    'Replied by:you ' + response.action_log.created_at + "</button>");
-                                
-                            }
-                            else{
-                                commentButton.parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
-                                '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
-                                '<strong>Error!</strong>'+response.message+'</div>');
-                                commentButton.html("SEND");
-                            }
-                        },
-                    });
+                        }else{
+                            var commentButton = $(this);
+                            isSend=commentButton.html()=="SEND";
+                            commentButton.html('SENDING...').attr("disabled", "disabled");
+                           $.ajax({
+                                url : BASEURL + 'dashboard/media_stream/FbReplyMsg',
+                                type: "POST",
+                                data: {
+                                    post_id: $(this).val(),
+                                    product_id : $(this).closest('li').find('.productType').val(),
+                                    channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
+                                    comment :$(this).parent().siblings(".replaycontent").val(),
+                                    url:'',
+                                    title :$(this).parent().siblings('#reply-url-show').find(".title_link").val(),
+                                    desc :$(this).parent().siblings('#reply-url-show').find(".descr-link").val(),
+                                    case_id :$(this).siblings(".case_id").val(),
+                                    img :$(this).parent().siblings('#reply-img-show').find("#reply-preview-img").attr('src')
+                                    
+                                },
+                                success: function(response)
+                                {
+                                    commentButton.removeAttr("disabled");
+                                    if(response.success === true){
+                                        commentButton.parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
+                                        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
+                                        '<strong>Success!</strong> '+response.message+' </div>');
+                                        commentButton.parent().siblings(".replaycontent").val("");
+                                        commentButton.html("SEND"); 
+                                        setTimeout(function(){
+                                                commentButton.closest('.reply-field').toggle('slow');
+                                            }, 3000);
+                                        commentButton.closest('li').find('.indicator .open-thread, .indicator .replied-btn').remove();
+                                        
+                                        commentButton.closest('li').find('.indicator:first').append(' <button type="button" class=".replied-btn btn btn-inverse btn-mini" style="text-align:left">' +
+                                            'Replied by:you ' + response.action_log.created_at + "</button>");
+                                        
+                                    }
+                                    else{
+                                        commentButton.parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
+                                        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
+                                        '<strong>Error!</strong>'+response.message+'</div>');
+                                        commentButton.html("SEND");
+                                    }
+                                },
+                            });
+                            
                     
                 }
-                                        
+                        }                        
             });
+                    
             $(this).on('click', '.delete_post', 
                 function() {
                     var btnDestroyStatus = $(this);
@@ -1764,7 +1772,7 @@ $(function(){
                             success : function(response){
                                 if(response.success){
                                     thisElement.find(".notifHead").removeClass('red').addClass('purple');
-                                    $(this).ToCase();
+                                    thisElement.ToCase();
                                 }
                             }
                        });
@@ -2248,44 +2256,49 @@ $.fn.RefreshAllStream = function(){
 };
 
 $.fn.ToCase = function(type){
-    var hashUrl = window.location.hash;
-    var splitUrl = hashUrl.split('/');
+    var thisElement = $(this);
+    console.log(thisElement.html());
     
-    if(splitUrl.length == 4 ){
-        var id = $('#post' + splitUrl[2]).closest('ul.floatingBoxContainers').attr('id');
-        
-        $('#' + id).parent().find('ul').hide();
-        $('#' + id).show();
-        $('#' + id).closest('.boxStream').find('.stream_head li').removeClass('active');
-        $('#' + id).closest('.subStream').find('.' + id).parent().addClass('active');
-        var location = $('#' + id).closest('ul.floatingBoxContainers').attr('id');
-        $('#' + id).closest('.boxStream').find('.stream_head .'+location).parent().addClass('active');
-        if($('#post' + splitUrl[2]).length > 0){
-            $('#post' + splitUrl[2]).closest('ul.floatingBoxContainers').prepend($('#post' + splitUrl[2]));
-            $('#post' + splitUrl[2]).closest('.subStream').animate({
-                scrollTop: 0
-            }, 100, function(){
-                $('#post' + splitUrl[2]).toggle('bounce', { times: 3, complete:function(){
-                    $(this).removeAttr('style');
-		}}, 'slow');
-            });
-        }
-        else{
-            $.ajax({
-                "url" : BASEURL + "dashboard/media_stream/SinglePost/"+splitUrl[2],
-                "success" : function(response){
-                    $('#c'+ splitUrl[1] + "_" + splitUrl[3] + " .subStream ul:nth-child(1)").prepend(response);
-                    $('#post' + splitUrl[2]).closest('.subStream').animate({
-                        scrollTop: 0
-                    }, 100, function(){
-                        $('#post' + splitUrl[2]).toggle('bounce', { times: 3, complete:function(){
-                            $(this).removeAttr('style');
-                        }}, 'slow');
-                    });
+    $.ajax({
+        'url' : BASEURL + 'case/mycase/ReadCase',
+        'type' : 'GET',
+        'data' : 'case_id=' + thisElement.find('.pointer-case').val(),
+        'success' : function(response){
+            $('#caseNotification .assign-by').html(response.created_by.full_name + "(" + response.created_by.username + ")" );
+            $('#caseNotification .assign-date').html(response.created_at);
+            $('#caseNotification .type-post').html(response.type);
+            $('#caseNotification .case-id').html(response.case_id);
+            $('#caseNotification ol').html('');
+            for(i=0; i<response.related_conversation.length;i++){
+                if(response.type == 'twitter' || response.type == 'twitter_dm'){
+                     $template = '<li style="display: block;">' +
+                     '<img src="'+ BASEURL + 'dashboard/media_stream/SafePhoto?photo=' + response.related_conversation[i]['twitter_data'][0].profile_image_url  + '" alt="" style="height: 40px;margin: 6px 10px" class="left" />' + 
+                        '<p style="padding: 0px 2px;margin: 2px 5px;width:80%" class="left">' + 
+                            '<span class="author" style="font-weight:600;padding:0;">' + response.related_conversation[i]['twitter_data'][0].screen_name + '</span>: ' +
+                            '<span class="text">'+ linkify(response.related_conversation[i]['twitter_data'][0].text) + '</span><br />' + 
+                            '<span class="created-time" style="font-size:10px;color: #62312A;">' + response.related_conversation[i]['twitter_data'][0].created_at  +
+                            '</span>'+
+                        '</p>' + 
+                        '<br clear="all"/>' +
+                    '</li>';
                 }
-            });
+                else{
+                    $template = '<li style="display: block;">' +
+                     '<img src="'+ BASEURL + 'dashboard/media_stream/SafePhoto?photo=' + response.related_conversation[i]['facebook_data'][0].author_id  + '" alt="" style="height: 40px;margin: 6px 10px" class="left" />' + 
+                        '<p style="padding: 0px 2px;margin: 2px 5px;width:80%" class="left">' + 
+                            '<span class="author" style="font-weight:600;padding:0;">' + response.related_conversation[i]['facebook_data'][0].name + '</span>: ' +
+                            '<span class="text">'+ linkify(response.related_conversation[i]['facebook_data'][0].post_content) + '</span><br />' + 
+                            '<span class="created-time" style="font-size:10px;color: #62312A;">' + response.related_conversation[i]['twitter_data'][0].created_at  +
+                            '</span>'+
+                        '</p>' + 
+                        '<br clear="all"/>' +
+                    '</li>';
+                }
+               
+                $('#caseNotification ol').append($template);
+            }
         }
-    }    
+    });
 };
 
 
@@ -2297,7 +2310,23 @@ function validateURL(textval) {
     return role;
 }
 
+function linkify(inputText) {
+    var replacedText, replacePattern1, replacePattern2, replacePattern3;
 
+    //URLs starting with http://, https://, or ftp://
+    replacePattern1 = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
+    replacedText = inputText.replace(replacePattern1, '<a href="$1" target="_blank">$1</a>');
+
+    //URLs starting with "www." (without // before it, or it'd re-link the ones done above).
+    replacePattern2 = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
+    replacedText = replacedText.replace(replacePattern2, '$1<a href="http://$2" target="_blank">$2</a>');
+
+    //Change email addresses to mailto:: links.
+    replacePattern3 = /(([a-zA-Z0-9\-\_\.])+@[a-zA-Z\_]+?(\.[a-zA-Z]{2,6})+)/gim;
+    replacedText = replacedText.replace(replacePattern3, '<a href="mailto:$1">$1</a>');
+
+    return replacedText;
+}
 function validateEmail(email) { 
     var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);

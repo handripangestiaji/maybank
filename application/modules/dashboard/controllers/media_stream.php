@@ -44,7 +44,7 @@ class Media_stream extends CI_Controller {
 	    }
 	}
 	$limit = 30;
-	$filter_user['country_code'] = IsRoleFriendlyNameExist($this->user_role, 'Regional_User') ? NULL : $this->session->userdata('country');
+	$filter_user['country_code'] = IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Case_All_Country_AssignReassignResolved') ? NULL : $this->session->userdata('country');
 	$data['user_list'] = $this->case_model->ReadAllUser($filter_user);
 	$data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter,$limit, true, $is_read == 2);
 	$data['count_fb_feed']=$this->facebook_model->CountFeedFB($filter, true, $is_read == 2);
@@ -106,7 +106,7 @@ class Media_stream extends CI_Controller {
     	}
     
     	$this->load->model('case_model');
-	$filter_user['country_code'] = IsRoleFriendlyNameExist($this->user_role, 'Regional_User') ? NULL : $this->session->userdata('country');
+	$filter_user['country_code'] = IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Case_All_Country_AssignReassignResolved') ? NULL : $this->session->userdata('country');
     	$data['user_list'] = $this->case_model->ReadAllUser($filter_user);
     	$filter['b.type'] = 'mentions';
     	$data['mentions']=$this->twitter_model->ReadTwitterData($filter,$limit);
@@ -147,7 +147,8 @@ class Media_stream extends CI_Controller {
 	header("Content-Type: application/x-json");
 	$twitter_reply['image_to_post'] = $this->input->post('filename');
 	$twitter_reply['reply_to_post_id'] = $this->input->post('post_id');
-	$twitter_reply['content_products_id'] = $this->input->post('product_type');
+	if($this->input->post('product_type'))
+	    $twitter_reply['content_products_id'] = $this->input->post('product_type');
 	$twitter_reply['reply_type'] = $this->input->post('reply_type');
 	$twitter_reply['text'] = $this->input->post('content');
 	$twitter_reply['user_id'] = $this->session->userdata('user_id');
@@ -517,6 +518,7 @@ class Media_stream extends CI_Controller {
         $descr = $this->input->post('desc');
         $img = $this->input->post('img');
         $reply_type=$this->input->post('reply_type');
+	
         $product_type=$this->input->post('product_type');
         $tags=$this->input->post('tags');
         
@@ -1009,7 +1011,7 @@ class Media_stream extends CI_Controller {
     	$limit = ($group_number * $items_per_group);
 
     	$this->load->model('case_model');
-	$filter_user['country_code'] = IsRoleFriendlyNameExist($this->user_role, 'Regional_User') ? NULL : $this->session->userdata('country');
+	$filter_user['country_code'] = IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Case_All_Country_AssignReassignResolved') ? NULL : $this->session->userdata('country');
 	$data['user_list'] = $this->case_model->ReadAllUser($filter_user);
         
         $this->load->model('campaign_model');
@@ -1065,7 +1067,7 @@ class Media_stream extends CI_Controller {
     public function SinglePost($post_id){
 	$post = $this->facebook_model->streamId($post_id);
 	$this->load->model('case_model');
-	$filter_user['country_code'] = IsRoleFriendlyNameExist($this->user_role, 'Regional_User') ? NULL : $this->session->userdata('country');
+	$filter_user['country_code'] = IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Case_All_Country_AssignReassignResolved') ? NULL : $this->session->userdata('country');
 	$data['user_list'] = $this->case_model->ReadAllUser($filter_user);
         
         $this->load->model('campaign_model');

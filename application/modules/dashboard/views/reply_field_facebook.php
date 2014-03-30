@@ -1,4 +1,4 @@
-<form action="" method="post" class="facebook-tweet">
+<div action="" method="post" class="facebook-tweet">
 
 <div class="row-fluid">
     <span class="fb-reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
@@ -116,5 +116,5 @@
     <br clear="all" />
     <!--div class="reply-status hide">MESSAGE SENT</div-->
 </div>
-</form>
+</div>
 

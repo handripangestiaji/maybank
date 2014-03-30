@@ -53,7 +53,7 @@ class Shorturl_model extends CI_Model
 					"user_id" 		=> $params['user_id'],
 					"description" 	=> isset($params['description']) ? $params['description'] : "",
 					"qrcode_image"  => $qrcode_name,
-					"country_code" => $params['country_code']
+					"country_code" => isset($params['country_code']) ? $params['country_code'] : $this->session->userdata('country')
 				);
 		
 		$this->db->trans_start();

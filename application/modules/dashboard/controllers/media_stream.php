@@ -16,6 +16,7 @@ class Media_stream extends CI_Controller {
 	$this->load->library('ion_auth');
 	$this->load->library('Twitteroauth');  
 	$this->load->library('session');
+    $this->load->library('validation');
 	$this->load->helper('url');
 	$this->load->helper('array');  
 	$this->load->helper('form');
@@ -25,6 +26,7 @@ class Media_stream extends CI_Controller {
 	$this->load->model('account_model');
 	$this->load->model('case_model');
     $this->load->model('shorturl_model');
+    
 	$this->user_role = $this->users_model->get_collection_detail(
 		array('role_collection_id'=>$this->session->userdata('role_id')));
     }
@@ -42,7 +44,7 @@ class Media_stream extends CI_Controller {
 	    }
 	}
 	$limit = 30;
-	$filter_user['country_code'] = IsRoleFriendlyNameExist($this->user_role, 'Regional_User') ? NULL : $this->session->userdata('country');
+	$filter_user['country_code'] = IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Case_All_Country_AssignReassignResolved') ? NULL : $this->session->userdata('country');
 	$data['user_list'] = $this->case_model->ReadAllUser($filter_user);
 	$data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter,$limit, true, $is_read == 2);
 	$data['count_fb_feed']=$this->facebook_model->CountFeedFB($filter, true, $is_read == 2);
@@ -104,7 +106,7 @@ class Media_stream extends CI_Controller {
     	}
     
     	$this->load->model('case_model');
-	$filter_user['country_code'] = IsRoleFriendlyNameExist($this->user_role, 'Regional_User') ? NULL : $this->session->userdata('country');
+	$filter_user['country_code'] = IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Case_All_Country_AssignReassignResolved') ? NULL : $this->session->userdata('country');
     	$data['user_list'] = $this->case_model->ReadAllUser($filter_user);
     	$filter['b.type'] = 'mentions';
     	$data['mentions']=$this->twitter_model->ReadTwitterData($filter,$limit);
@@ -145,7 +147,8 @@ class Media_stream extends CI_Controller {
 	header("Content-Type: application/x-json");
 	$twitter_reply['image_to_post'] = $this->input->post('filename');
 	$twitter_reply['reply_to_post_id'] = $this->input->post('post_id');
-	$twitter_reply['content_products_id'] = $this->input->post('product_type');
+	if($this->input->post('product_type'))
+	    $twitter_reply['content_products_id'] = $this->input->post('product_type');
 	$twitter_reply['reply_type'] = $this->input->post('reply_type');
 	$twitter_reply['text'] = $this->input->post('content');
 	$twitter_reply['user_id'] = $this->session->userdata('user_id');
@@ -503,6 +506,7 @@ class Media_stream extends CI_Controller {
     }
     
     public function FbReplyPost(){
+        
         header("Content-Type: application/x-json");
         $this->load->model('account_model');
         $this->load->model('facebook_model');
@@ -514,186 +518,207 @@ class Media_stream extends CI_Controller {
         $descr = $this->input->post('desc');
         $img = $this->input->post('img');
         $reply_type=$this->input->post('reply_type');
+	
         $product_type=$this->input->post('product_type');
         $tags=$this->input->post('tags');
-             
-        $filter = array(
-            "connection_type" => "facebook"
-        );
-        $filter['channel_id'] = $this->input->post('channel_id');
-        $channel_loaded = $this->account_model->GetChannel($filter);
-        if(count($channel_loaded) == 0){
-	    echo json_encode(
-		array(
-		    'success' => false,
-		    'message' => "Invalid Channel Id"
-		)
-	    );
-	    return;
-	}
-	else{
-	      $channel =  $channel_loaded[0]->channel_id;
-	}
-    
-        $short_url = $this->shorturl_model->find(array('short_code' => $url));
-        if(isset($short_url->id)){
-            $short_url_id = $short_url->id;
-        }else{
-            $short_url_id=null;
+        
+        if($reply_type=='Report_Abuse'){
+            $product_type=null;
+        }
+        
+        $validation[] = array('type' => 'required','name' => 'reply_type','value' => $reply_type, 'fine_name' => "Reply Type");
+        if($reply_type!='Report_Abuse'){
+            $validation[] = array('type' => 'required','name' => 'product_type','value' => $product_type, 'fine_name' => "Product Type");
         }        
-            
-        if($tags != ''){
-	    foreach($tags as $tag){
-		$get_tag = $this->post_model->GetTagByTagName($tag);
-                if($get_tag == NULL){
-                    $tag_id = $this->post_model->InsertTag($tag);
-                    $data = array('short_urls_id' => $short_url_id,
-                                  'content_tag_id' => $tag_id
-                                );
-                    $this->db->insert('short_url_tag',$data);     
-                }
-                else{
-                    $tag_id = $get_tag->id;
-                    if(isset($tag_id)){
-                        $data = array('short_urls_id' => $short_url_id ,
+        $validation[] = array('type' => 'required','name' => 'comment','value' => $comment, 'fine_name' => "Comment");
+        $is_valid = CheckValidation($validation, $this->validation);
+
+        if($is_valid === true){
+            $filter = array(
+                "connection_type" => "facebook"
+            );
+            $filter['channel_id'] = $this->input->post('channel_id');
+            $channel_loaded = $this->account_model->GetChannel($filter);
+            if(count($channel_loaded) == 0){
+        	    echo json_encode(
+        		array(
+        		    'success' => false,
+        		    'message' => "Invalid Channel Id"
+        		)
+        	    );
+        	    return;
+            }else{
+        	      $channel =  $channel_loaded[0]->channel_id;
+        	}
+        
+            $short_url = $this->shorturl_model->find(array('short_code' => $url));
+            if(isset($short_url->id)){
+                $short_url_id = $short_url->id;
+            }else{
+                $short_url_id=null;
+            }        
+                
+            if($tags != ''){
+    	    foreach($tags as $tag){
+    		$get_tag = $this->post_model->GetTagByTagName($tag);
+                    if($get_tag == NULL){
+                        $tag_id = $this->post_model->InsertTag($tag);
+                        $data = array('short_urls_id' => $short_url_id,
                                       'content_tag_id' => $tag_id
                                     );
-                        $this->db->insert('short_url_tag',$data);
+                         if(isset($short_url_id)){           
+                            $this->db->insert('short_url_tag',$data);     
+                         }
+                    }
+                    else{
+                        $tag_id = $get_tag->id;
+                        if(isset($tag_id)){
+                            $data = array('short_urls_id' => $short_url_id ,
+                                          'content_tag_id' => $tag_id
+                                        );
+                            if(isset($short_url_id)){
+                                $this->db->insert('short_url_tag',$data);
+                            }
+                        }
+                    }
+                    //tag increment
+                    $this->post_model->IncrementTag($tag_id);
+    	       }
+            }
+            
+            $stream_id=$this->facebook_model->streamId($post_id);
+            //print_r($stream_id);
+            
+            $newStd = new stdClass();
+            $newStd->page_id =  $channel_loaded[0]->social_id;
+            $newStd->token = $this->facebook_model->GetPageAccessToken( $channel_loaded[0]->oauth_token, $channel_loaded[0]->social_id);
+            $config = array(
+    	       'appId' => $this->config->item('fb_appid'),
+    	       'secret' => $this->config->item('fb_secretkey')
+    	    );
+    	
+        	$this->load->library('facebook',$config);
+        	$this->facebook->setaccesstoken($newStd->token);
+            $attachment = array(
+                'message' => $comment,
+                'name' => $title,
+                'link' => '',
+                'description' => $descr,
+                'picture'=> $img,
+            ); 
+            
+            if($img != ''){
+                $this->load->helper('file');
+                $image = $img;
+                $image  = str_replace('data:image/png;base64,', '', $image);
+                $image  = str_replace('data:image/jpeg;base64,', '', $image);
+                $image  = str_replace(' ', '+', $image);
+                $data = base64_decode($image);
+                $file_name = uniqid().'.png';
+                $pathToSave = $this->config->item('assets_folder').$file_name;
+                if (write_file($pathToSave, $data)){    
+                    $this->facebook->setFileUploadSupport(true);
+                    $args = array('message' => $comment, 'attachment' => '@'. realpath($pathToSave));
+                    
+                    try{
+                        $return = $this->facebook->api('/'.$stream_id->post_stream_id.'/comments', 'POST', $args);
+                    }catch(FacebookApiException $e){
+                        echo json_encode(
+                		    array(
+                            'success' => false,
+                			'message' => "reply was failed :".$e,
+                		    )
+                        );
+                        $return='error';
                     }
                 }
-                //tag increment
-                $this->post_model->IncrementTag($tag_id);
-	       }
-	}
-        
-        $stream_id=$this->facebook_model->streamId($post_id);
-        //print_r($stream_id);
-        
-        $newStd = new stdClass();
-        $newStd->page_id =  $channel_loaded[0]->social_id;
-        $newStd->token = $this->facebook_model->GetPageAccessToken( $channel_loaded[0]->oauth_token, $channel_loaded[0]->social_id);
-        $config = array(
-	       'appId' => $this->config->item('fb_appid'),
-	       'secret' => $this->config->item('fb_secretkey')
-	    );
-	
-    	$this->load->library('facebook',$config);
-    	$this->facebook->setaccesstoken($newStd->token);
-        $attachment = array(
-            'message' => $comment,
-            'name' => $title,
-            'link' => '',
-            'description' => $descr,
-            'picture'=> $img,
-        ); 
-        
-        if($img != ''){
-            $this->load->helper('file');
-            $image = $img;
-            $image  = str_replace('data:image/png;base64,', '', $image);
-            $image  = str_replace('data:image/jpeg;base64,', '', $image);
-            $image  = str_replace(' ', '+', $image);
-            $data = base64_decode($image);
-            $file_name = uniqid().'.png';
-            $pathToSave = $this->config->item('assets_folder').$file_name;
-            if (write_file($pathToSave, $data)){    
-                $this->facebook->setFileUploadSupport(true);
-                $args = array('message' => $comment, 'attachment' => '@' . realpath($pathToSave));
-                
+            }else{
                 try{
-                    $return = $this->facebook->api('/'.$stream_id->post_stream_id.'/comments', 'POST', $args);
+                    $return=$this->facebook->api('/'.$stream_id->post_stream_id.'/comments', 'POST', array('message'=>$comment,'attachment'=>$attachment));
+                }catch(FacebookApiException $e){
+                    echo json_encode(
+    			array(
+    			    'success' => false,
+    			    'message' => "reply was failed :".$e,
+    			    )
+    		);
+    		$return='error';
                 }
-		catch(FacebookApiException $e){
+            }
+            
+            $pull_ronjob=curl_get_file_contents(base_url('/cronjob/FacebookStreamFeed'));
+            
+            if(!is_array($return) && $return!='error'){//send comment          
+                $action = array(
+    		"action_type" => "reply_facebook",
+            	"action_type" => "reply_facebook",
+            	"channel_id" =>$channel,
+            	"created_at" => date("Y-m-d H:i:s"),
+            	"created_by" => $this->session->userdata('user_id'),
+            	"stream_id_response" => $return
+        	    );
+                
+               	    
+                $this->account_model->CreateFbCommentAction($action,$post_id,$this->input->post('like') === 'true' ? 1 : 0);
+                $this->account_model->CreateFbReplyAction($post_id,$stream_id->post_stream_id,$comment,$reply_type,$product_type,$url);
+    	    echo json_encode(
+    		array(
+    		    'success' => true,
+    		    'message' => "successfully done",
+    		    'result' => $return,
+    		    'action_log' => $action
+    		)
+    	    );	
+                                          
+            }elseif(is_array($return)){//replay in reply        
+                if($return['id']){
+                $return=$return['id'];
+                $action = array(
+                    "post_id"=>$post_id,
+            		"action_type" => "reply_facebook",
+            		"channel_id" => $channel_loaded[0]->channel_id,
+            		"created_at" => date("Y-m-d H:i:s"),
+            		"created_by" => $this->session->userdata('user_id'),
+            		"stream_id_response" => $return
+            	);
+                $this->account_model->CreateFbCommentAction($action,$post_id,$this->input->post('like') === 'true' ? 1 : 0);
+                $this->account_model->CreateFbReplyAction($post_id,'',$comment,$reply_type,$product_type,$url);
+    	    $action['created_at'] = new DateTime($action['created_at']." Europe/London");
+    	    $action['created_at']->setTimezone(new DateTimeZone($this->session->userdata('timezone')));
+    	    $action['created_at'] = $action['created_at']->format("d-M-y h:i A");
+    	    echo json_encode(
+        		    array(
+    			'success' => true,
+        			'message' => "successfully done",
+        			'result' => $return,
+    			'action_log' => $action
+        		    )
+        		);
+                }else{
                     echo json_encode(
             		    array(
                         'success' => false,
             			'message' => "reply was failed",
+            			'result' => $return
             		    )
-                    );
-                    $return='error';
+        		    );
                 }
-            }
-        }else{
-            try{
-                $return=$this->facebook->api('/'.$stream_id->post_stream_id.'/comments', 'POST', array('message'=>$comment,'attachment'=>$attachment));
-            }
-	    catch(FacebookApiException $e){
-                echo json_encode(
-			array(
-			    'success' => false,
-			    'message' => "reply was failed",
-			    )
-		);
-		$return='error';
-            }
+           }else{
+                    echo json_encode(
+            		    array(
+    				    'success' => false,
+            			'message' => "reply was failed"   			
+            		    )
+        		    );
+          }
+        }else{//input validation
+            echo json_encode(array(
+                       "success" => false,
+                       "message" => "Reply Comment was failed, Please check your input.<br>Reply Type and Product Type value cannot be null",
+                       "errors" => $is_valid
+                   )
+               );
         }
-        
-        $pull_ronjob=curl_get_file_contents(base_url('/cronjob/FacebookStreamFeed'));
-        
-        if(!is_array($return) && $return!='error'){//send comment          
-            $action = array(
-		"action_type" => "reply_facebook",
-        	"action_type" => "reply_facebook",
-        	"channel_id" =>$channel,
-        	"created_at" => date("Y-m-d H:i:s"),
-        	"created_by" => $this->session->userdata('user_id'),
-        	"stream_id_response" => $return
-    	    );
-            
-           	    
-            $this->account_model->CreateFbCommentAction($action,$post_id,$this->input->post('like') === 'true' ? 1 : 0);
-            $this->account_model->CreateFbReplyAction($post_id,$stream_id->post_stream_id,$comment,$reply_type,$product_type,$url);
-	    echo json_encode(
-		array(
-		    'success' => true,
-		    'message' => "successfully done",
-		    'result' => $return,
-		    'action_log' => $action
-		)
-	    );	
-                                      
-        }
-	elseif(is_array($return)){//replay in reply        
-            if($return['id']){
-            $return=$return['id'];
-            $action = array(
-                "post_id"=>$post_id,
-        		"action_type" => "reply_facebook",
-        		"channel_id" => $channel_loaded[0]->channel_id,
-        		"created_at" => date("Y-m-d H:i:s"),
-        		"created_by" => $this->session->userdata('user_id'),
-        		"stream_id_response" => $return
-        	);
-            $this->account_model->CreateFbCommentAction($action,$post_id,$this->input->post('like') === 'true' ? 1 : 0);
-            $this->account_model->CreateFbReplyAction($post_id,'',$comment,$reply_type,$product_type,$url);
-	    $action['created_at'] = new DateTime($action['created_at']." Europe/London");
-	    $action['created_at']->setTimezone(new DateTimeZone($this->session->userdata('timezone')));
-	    $action['created_at'] = $action['created_at']->format("d-M-y h:i A");
-	    echo json_encode(
-    		    array(
-			'success' => true,
-    			'message' => "successfully done",
-    			'result' => $return,
-			'action_log' => $action
-    		    )
-    		);
-            }else{
-                echo json_encode(
-        		    array(
-                    'success' => false,
-        			'message' => "reply was failed",
-        			'result' => $return
-        		    )
-    		    );
-            }
-       }else{
-                echo json_encode(
-        		    array(
-				'success' => false,
-        			'message' => "reply was failed"   			
-        		    )
-    		    );
-      }
     }
     
     public function FbReplyMsg(){
@@ -986,7 +1011,7 @@ class Media_stream extends CI_Controller {
     	$limit = ($group_number * $items_per_group);
 
     	$this->load->model('case_model');
-	$filter_user['country_code'] = IsRoleFriendlyNameExist($this->user_role, 'Regional_User') ? NULL : $this->session->userdata('country');
+	$filter_user['country_code'] = IsRoleFriendlyNameExist($this->user_role, 'Stream_Case_All_Country_AssignReassignResolved') ? NULL : $this->session->userdata('country');
 	$data['user_list'] = $this->case_model->ReadAllUser($filter_user);
         
         $this->load->model('campaign_model');
@@ -1042,7 +1067,7 @@ class Media_stream extends CI_Controller {
     public function SinglePost($post_id){
 	$post = $this->facebook_model->streamId($post_id);
 	$this->load->model('case_model');
-	$filter_user['country_code'] = IsRoleFriendlyNameExist($this->user_role, 'Regional_User') ? NULL : $this->session->userdata('country');
+	$filter_user['country_code'] = IsRoleFriendlyNameExist($this->user_role, 'Stream_Case_All_Country_AssignReassignResolved') ? NULL : $this->session->userdata('country');
 	$data['user_list'] = $this->case_model->ReadAllUser($filter_user);
         
         $this->load->model('campaign_model');
@@ -1143,6 +1168,7 @@ class Media_stream extends CI_Controller {
 				    "user_id" => $this->session->userdata('user_id'),
 				    'short_code' => $short_code,
 				    "description" => $this->input->post('description'),
+                    "country_code"=>$this->session->userdata('country'),
 				    'increment' => 0)));
     }
     

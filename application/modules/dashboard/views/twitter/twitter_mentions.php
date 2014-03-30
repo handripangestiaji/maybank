@@ -133,6 +133,7 @@ for($i=0;$i<count($mentions);$i++){
                     <span><?php
                      $date = new DateTime($mentions[$i]->social_stream_created_at.' Europe/London');
                      $date_comment = new DateTime($comment[$j]->created_at, $timezone);
+                     echo $date_comment->format("l, M j, Y h:i A")
                     ?></span>
                 </p>
                 <div>
@@ -141,8 +142,9 @@ for($i=0;$i<count($mentions);$i++){
             </div>
             <?php endif;?>
         <?php endfor; ?>
+        <?php $unique_id = uniqid(); ?>
         <!-- ==================== CONDENSED TABLE HEADLINE ==================== -->
-        <div href='#modal-action-log-<?php echo $mentions[$i]->post_stream_id ?>' data-toggle='modal' class="containerHeadline specialToggleTable">
+        <div href='#modal-action-log-<?php echo $mentions[$i]->post_stream_id.$unique_id ?>' data-toggle='modal' class="containerHeadline specialToggleTable">
             <i class="icon-table"></i><h2>Action Log</h2>
         </div>
         <!-- ==================== END OF CONDENSED TABLE HEADLINE ==================== -->
@@ -150,6 +152,7 @@ for($i=0;$i<count($mentions);$i++){
         <!-- ==================== CONDENSED TABLE FLOATING BOX ==================== -->
         <?php
             $data_loaded['post'] = $mentions[$i];
+            $data_loaded['unique_id'] = $unique_id;
             $this->load->view('dashboard/action_taken', $data_loaded);
             ?>
         <!-- ==================== END OF CONDENSED TABLE FLOATING BOX ==================== --> 

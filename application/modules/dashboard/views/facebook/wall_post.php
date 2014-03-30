@@ -22,12 +22,13 @@ if($fb_feed[$i]->post_content != '<br />' || isset($attachment->media)):
     <input type="hidden" name="user_id" value="<?php echo $this->session->userdata('user_id'); ?>" />
     <input type="hidden" name="facebook_user" value="<?php echo $fb_feed[$i]->facebook_id; ?>" />
     <div class="circleAvatar"><img src="<?php echo base_url('dashboard/media_stream/SafePhoto?photo=')."https://graph.facebook.com/".number_format($fb_feed[$i]->facebook_id, 0,'.','')?>/picture?small" alt=""></div>
-    <?php if (IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action')):?>
+    <?php if (IsRoleFriendlyNameExist($this->user_role, array('Social Stream_Channel_General_Function_Own_Country_Reply',
+                                                              'Social Stream_Channel_General_Function_All_Country_Reply'))):?>
         <div class="read-mark <?php echo $fb_feed[$i]->is_read==0 ? 'redText' : 'greyText'?>"><i class="icon-bookmark icon-large"></i></div>
     <?php endif ?>
     <br />
     <p class="headLine">
-        <span class="author"><?php echo $fb_feed[$i]->name//."(".$fb_feed[$i][$i]->users->usename.")"?></span>
+        <span class="author"><?php echo $fb_feed[$i]->name?></span>
         <i class="icon-circle"></i>
         <span>posted a <span class="cyanText">new post</span></span>
         <i class="icon-circle"></i>
@@ -125,9 +126,11 @@ if($fb_feed[$i]->post_content != '<br />' || isset($attachment->media)):
                 }    
             }
         
-         endfor; ?>
+         endfor;
+         ?>
        <!-- ==================== CONDENSED TABLE HEADLINE ==================== -->
-        <div href='#modal-action-log-<?php echo $fb_feed[$i]->post_stream_id ?>' data-toggle='modal' class="containerHeadline specialToggleTable">
+       <?php $unique_id = uniqid(); ?>
+        <div href='#modal-action-log-<?php echo $fb_feed[$i]->post_stream_id.$unique_id ?>' data-toggle='modal' class="containerHeadline specialToggleTable">
             <i class="icon-table"></i><h2>Action Log</h2>
         </div>
        <!-- ==================== END OF CONDENSED TABLE HEADLINE ==================== -->
@@ -135,8 +138,13 @@ if($fb_feed[$i]->post_content != '<br />' || isset($attachment->media)):
         <!-- ==================== CONDENSED TABLE FLOATING BOX ==================== -->
         
             <?php
-                $data_loaded['post'] = $fb_feed[$i];
-                $this->load->view('dashboard/action_taken', $data_loaded);
+                if(IsRoleFriendlyNameExist($this->user_role, array('Social Stream_Channel_General_Function_Own_Country_View',
+                                                              'Social Stream_Channel_General_Function_All_Country_View')))
+                {
+                    $data_loaded['post'] = $fb_feed[$i];
+                    $data_loaded['unique_id'] = $unique_id;
+                    $this->load->view('dashboard/action_taken', $data_loaded);
+                }
             ?>
         <!-- ==================== END OF CONDENSED TABLE FLOATING BOX ==================== --> 
     </div>

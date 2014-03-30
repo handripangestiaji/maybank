@@ -93,7 +93,9 @@
                            @<?php echo $directmessage[$i]->social_stream_name?>
                        </span>
                        <i class="icon-circle"></i>
-                       <span>Sent <span class="cyanText">DM to @<?=$directmessage[$i]->sender->screen_name?></span> At </span>
+                       <span>Sent <span class="cyanText">DM to @<?=$directmessage[$i]->sender->screen_name?></span>
+                       <i class="icon-circle"></i>
+                       </span>
                        
                        <span><?php
                         $date = new DateTime($outbox->created_at.' Europe/London');
@@ -108,11 +110,13 @@
              
            <?php endforeach; ?>
             <?php
+                $unique_id = uniqid();
                 $data_loaded['post'] = $directmessage[$i];
                 $this->load->view('dashboard/action_taken', $data_loaded);
+                $data_loaded['unique_id'] = $unique_id;
             ?>
            </div>
-           <div href='#modal-action-log-<?php echo $directmessage[$i]->post_stream_id ?>' data-toggle='modal' class="containerHeadline specialToggleTable">
+           <div href='#modal-action-log-<?php echo $directmessage[$i]->post_stream_id.$unique_id ?>' data-toggle='modal' class="containerHeadline specialToggleTable">
                 <i class="icon-table"></i><h2>Action Log</h2>
             </div>
        </div>
@@ -132,7 +136,8 @@
                 $data = array(
                     'come_from' => "direct_messages",
                     'post' => $directmessage[$i],
-                    'dm_type' => $directmessage[$i]->direct_message_type
+                    'dm_type' => $directmessage[$i]->direct_message_type,
+                    'unique_id' => $unique_id
                 );
                 $this->load->view('dashboard/twitter/twitter_button', $data);
             ?>

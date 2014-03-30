@@ -96,24 +96,32 @@ $sender = $fb_pm[$i]->participant->sender->facebook_id == $fb_pm[$i]->social_id 
                     
                 endif;?>
                 <?php if($comment[$j]->messages != ""){?>
-                    <p><?php echo CreateUrlFromText($comment[$j]->messages)?></p>
+                    <p class="engagement-message"><?php echo CreateUrlFromText($comment[$j]->messages)?></p>
                 <?php }?>
                 <p><?=$att_to_print;?> </p>
               
             </div>
         </div>
        <?php endif;
-       } ?>
+       }
+       $unique_id = uniqid();
+       ?>
        <!-- ==================== CONDENSED TABLE HEADLINE ==================== -->
-        <div href='#modal-action-log-<?php echo $fb_pm[$i]->post_id ?>' data-toggle='modal' class="containerHeadline specialToggleTable">
+        <div href='#modal-action-log-<?php echo $fb_pm[$i]->post_id.$unique_id ?>' data-toggle='modal' class="containerHeadline specialToggleTable">
 
             <i class="icon-table"></i><h2>Action Log</h2>
         </div>
         
            <?php
-                $data_loaded['post'] = $fb_pm[$i];
-                $data_loaded['action_type'] = "conversation_facebook";
-                $this->load->view('dashboard/action_taken', $data_loaded);
+           if(IsRoleFriendlyNameExist($this->user_role, array('Social Stream_Channel_General_Function_Own_Country_View',
+                                                              'Social Stream_Channel_General_Function_All_Country_View')))
+                {
+                    $data_loaded['post'] = $fb_pm[$i];
+                    $data_loaded['action_type'] = "conversation_facebook";
+                    $data_loaded['unique_id'] = $unique_id;
+                    $this->load->view('dashboard/action_taken', $data_loaded);
+ 
+                }
             ?>
     </div>
     <!-- END ENGAGEMENT -->

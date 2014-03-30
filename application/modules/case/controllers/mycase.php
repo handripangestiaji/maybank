@@ -28,8 +28,10 @@ class mycase extends CI_Controller{
         }
         
         $validation[] = array('type' => 'required','name' => 'user_id','value' => $user_id, 'fine_name' => "User ID");
-        $validation[] = array('type' => 'required','name' => 'product_type','value' => $this->input->post('product_type'), 'fine_name' => "Product Type");
         $validation[] = array('type' => 'required','name' => 'case_type','value' => $this->input->post('case_type'), 'fine_name' => "Case Type");
+        if($this->input->post('case_type')!='Report_Abuse'){
+            $validation[] = array('type' => 'required','name' => 'product_type','value' => $this->input->post('product_type'), 'fine_name' => "Product Type");
+        }        
         $validation[] = array('type' => 'required','name' => 'message','value' => $this->input->post('message'), 'fine_name' => "Messages");
 
         //$assign = explode('-',$this->input->post('assign_to'));
@@ -157,7 +159,18 @@ class mycase extends CI_Controller{
     
     function SearchEmail(){
         $search_value = $this->input->get('term');
-        $country_code = IsRoleFriendlyNameExist($this->user_role, 'Regional_User') ? NULL : $this->session->userdata('country');
-        echo json_encode($this->case_model->SearchUserByEmail($search_value, $country_code));
+        $country_code = IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Case_All_Country_AssignReassignResolved') ? NULL : $this->session->userdata('country');
+        $result_user = $this->case_model->SearchUserByEmail($search_value, $country_code);
+        for($x = 0; $x < count($result_user); $x++){
+            if($country_code == null){
+                if(!IsRoleFriendlyNameExist($result_user[$x]->role_detail, 'Social Stream_Case_All_Country_AssignReassignResolved'))
+                    unset($result_user[$x]);
+            }
+            else{
+                if(!IsRoleFriendlyNameExist($result_user[$x]->role_detail, 'Social Stream_Case_Own_Country_AssignReassignResolved'))
+                    unset($result_user[$x]);
+            }
+        }
+        echo json_encode($result_user);
     }
 }

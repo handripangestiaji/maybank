@@ -138,7 +138,8 @@ for($i=0;$i<count($homefeed);$i++){
                 </div>
         <?php } ?>
         <!-- ==================== CONDENSED TABLE HEADLINE ==================== -->
-        <div href='#modal-action-log-<?php echo $homefeed[$i]->post_stream_id ?>' data-toggle='modal' class="containerHeadline specialToggleTable">
+        <?php $unique_id = uniqid(); ?>
+        <div href='#modal-action-log-<?php echo $homefeed[$i]->post_stream_id.$unique_id  ?>' data-toggle='modal' class="containerHeadline specialToggleTable">
             <i class="icon-table"></i><h2>Action Log</h2>
         </div>
         <!-- ==================== END OF CONDENSED TABLE HEADLINE ==================== -->
@@ -146,6 +147,7 @@ for($i=0;$i<count($homefeed);$i++){
         <!-- ==================== CONDENSED TABLE FLOATING BOX ==================== -->
             <?php
             $data_loaded['post'] = $homefeed[$i];
+            $data_loaded['unique_id'] = $unique_id;
             $this->load->view('dashboard/action_taken', $data_loaded);?>
         <!-- ==================== END OF CONDENSED TABLE FLOATING BOX ==================== --> 
     </div>

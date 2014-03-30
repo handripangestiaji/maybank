@@ -34,7 +34,7 @@
                 <?php
                     foreach($this->country_list as $country):
                 ?>
-                    <option value="<?=$country->code?>">
+                    <option value="<?=$country->code?>" <?=$country->code == $role->row()->country_code ? "selected='selected'" : ""?> >
 		    <?=$country->name?></option>
                 <?php endforeach;?>
             </select>

@@ -54,6 +54,7 @@
 
 .floatingBoxContainers li p.headLine{
 	margin: 5px 0px;
+	white-space: normal !important
 }
 
 .compose-icons {
@@ -1010,7 +1011,7 @@ ul.tagit{
 .indicator .btn.btn-purple, .indicator .twitter-case-related{cursor: pointer !important}
 
 .floatingBoxContainers li .link p{margin: 0;width: auto;}
-p.snippet, .engagement-body p{white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
+p.inside-link{white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
 .link{cursor: pointer}
 .link-description{float: left; position:relative; padding: 5px;width:65%;overflow: hidden;}
 .link-description p{text-align: left !important;}

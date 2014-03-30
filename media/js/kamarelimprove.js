@@ -446,7 +446,7 @@ $(function(){
        var btn_add_related=$(this).parent().parent().parent().find('.btn-add-related');
        var val_add_related=$(this).parent().parent().parent().find('.value_related_conversation');
        var post_id=$(this).parent().parent().parent().find('.post_id').val(); 
-       alert(post_id);
+       //alert(post_id);
        btn_add_related.html('Add Related Conversation');
        val_add_related.val(post_id);    
     });

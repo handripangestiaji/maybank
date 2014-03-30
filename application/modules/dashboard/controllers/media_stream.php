@@ -104,7 +104,7 @@ class Media_stream extends CI_Controller {
     	}
     
     	$this->load->model('case_model');
-	$filter_user['country_code'] = IsRoleFriendlyNameExist($this->user_role, 'Stream_Case_All_Country_AssignReassignResolved') ? NULL : $this->session->userdata('country');
+	$filter_user['country_code'] = IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Case_All_Country_AssignReassignResolved') ? NULL : $this->session->userdata('country');
     	$data['user_list'] = $this->case_model->ReadAllUser($filter_user);
     	$filter['b.type'] = 'mentions';
     	$data['mentions']=$this->twitter_model->ReadTwitterData($filter,$limit);

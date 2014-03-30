@@ -1011,7 +1011,7 @@ class Media_stream extends CI_Controller {
     	$limit = ($group_number * $items_per_group);
 
     	$this->load->model('case_model');
-	$filter_user['country_code'] = IsRoleFriendlyNameExist($this->user_role, 'Stream_Case_All_Country_AssignReassignResolved') ? NULL : $this->session->userdata('country');
+	$filter_user['country_code'] = IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Case_All_Country_AssignReassignResolved') ? NULL : $this->session->userdata('country');
 	$data['user_list'] = $this->case_model->ReadAllUser($filter_user);
         
         $this->load->model('campaign_model');
@@ -1067,7 +1067,7 @@ class Media_stream extends CI_Controller {
     public function SinglePost($post_id){
 	$post = $this->facebook_model->streamId($post_id);
 	$this->load->model('case_model');
-	$filter_user['country_code'] = IsRoleFriendlyNameExist($this->user_role, 'Stream_Case_All_Country_AssignReassignResolved') ? NULL : $this->session->userdata('country');
+	$filter_user['country_code'] = IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Case_All_Country_AssignReassignResolved') ? NULL : $this->session->userdata('country');
 	$data['user_list'] = $this->case_model->ReadAllUser($filter_user);
         
         $this->load->model('campaign_model');

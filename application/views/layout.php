@@ -58,7 +58,7 @@
         
         <!-- ==================== PAGE CONTENT ==================== -->
         <div class="content">
-
+	    <?php $this->load->view('case_popup')?>
             <!-- ==================== BREADCRUMBS / DATETIME ==================== -->
             <ul class="breadcrumb">
 		<li><i class="icon-home"></i><a href="<?php echo base_url('dashboard'); ?>"> Home</a> <span class="divider"><i class="icon-angle-right"></i></span></li>

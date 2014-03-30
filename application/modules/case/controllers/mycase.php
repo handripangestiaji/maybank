@@ -29,13 +29,11 @@ class mycase extends CI_Controller{
         
         $validation[] = array('type' => 'required','name' => 'user_id','value' => $user_id, 'fine_name' => "User ID");
         $validation[] = array('type' => 'required','name' => 'case_type','value' => $this->input->post('case_type'), 'fine_name' => "Case Type");
-        if($this->input->post('case_type')!='Report_Abuse'){
+        if($this->input->post('case_type') != 'Report_Abuse'){
             $validation[] = array('type' => 'required','name' => 'product_type','value' => $this->input->post('product_type'), 'fine_name' => "Product Type");
         }        
         $validation[] = array('type' => 'required','name' => 'message','value' => $this->input->post('message'), 'fine_name' => "Messages");
 
-        //$assign = explode('-',$this->input->post('assign_to'));
-	//$allPost['assign_to'] = $assign[1];
 	if($allPost['assign_to'])
             $validation[] = array('type' => 'required','name' => 'assign_to','value' => $allPost['assign_to'], 'fine_name' => "Assign To");
         else
@@ -56,6 +54,8 @@ class mycase extends CI_Controller{
                 "post_id" => $this->input->post('post_id'),
                 "created_at" => date("Y-m-d H:i:s")
             );
+            if($this->input->post('product_type'))
+                unset($case['content_products_id']);
             $old_case = $this->case_model->LoadCase(array('a.post_id' => $this->input->post('post_id')));
             $solved_case = NULL;
             if(count($old_case) > 0)
@@ -172,5 +172,31 @@ class mycase extends CI_Controller{
             }
         }
         echo json_encode($result_user);
+    }
+    
+    
+    function ReadCase(){
+        $this->load->model('twitter_model');
+        $case_id = $this->input->get('case_id');
+        $timezone = $this->session->userdata('timezone');
+        $case = $this->case_model->LoadCase(array('case_id' => $case_id));
+        if(count($case) > 0){
+            $case = $case[0];
+            $case->related_conversation = array();
+            $created_at = new DateTime($case->created_at.' Europe/London');
+            $created_at->setTimezone(new DateTimeZone($timezone));
+            $case->created_at = $created_at->format('l, M j, Y h:i A');
+            if($case->type == 'twitter' || $case->type == 'twitter_dm'){
+                $case->related_conversation = $this->case_model->TwitterRelatedConversation($case->case_id);
+            }
+            else{
+                $case->related_conversation = $this->case_model->FacebookRelatedConversation($case->case_id);
+            }
+            
+            echo json_encode($case);
+        }
+        else
+            echo json_encode(NULL);
+        
     }
 }

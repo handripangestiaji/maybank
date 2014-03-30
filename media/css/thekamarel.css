@@ -1470,6 +1470,7 @@ ul.floatingBoxContainers div.circleAvatar {
     color: #a8a8a8;
     font-size: 12px;
     margin: 5px;
+    white-space: normal;
 }
 
 .floatingBoxContainers li p.headLine i {

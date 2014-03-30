@@ -16,14 +16,13 @@
                                               <th>Campaign</th>
                                               <th>Products</th>
                                               <th>Date Created</th>
-                                              <th>Created By</th>
+                                              <th>Creator</th>
                                               <th>&nbsp;</th>
                                             </tr>
                                           </thead>
                                           <tbody>
                                           <?php if ($campaigns): ?>
                                                 <?php foreach ($campaigns as $v): ?>
-                                                
                                                         <tr class="table-head-tr">
                                                                 <td><?php echo $v['campaign_name']; ?></td>
                                                                 <td><?php echo isset($v['product_name']) ? implode(" , ",$v['product_name']) : ""; ?></td>
@@ -41,13 +40,16 @@
                                                             </div>
                                                             <div class="pull-right" style="width: 25%; text-align: right">
                                                                 <p>
-                                                                <?php if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Campaign_Edit')){ ?>
+                                                                <?php if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Campaign_Own_Country_Edit') ||
+                                                                         (IsRoleFriendlyNameExist($this->user_role,'Content Management_Campaign_All_Country_Edit'))){ ?>
                                                                 <a href="cms/edit_campaign/<?php echo $v['id']; ?>"><button class="btn btn-primary btn-small" type="button">Edit</button></a>
                                                                 <?php } ?>
-                                                                <?php if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Campaign_Download')){ ?>
+                                                                <?php if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Campaign_Own_Country_Download') ||
+                                                                         (IsRoleFriendlyNameExist($this->user_role,'Content Management_Campaign_All_Country_Download'))){ ?>
                                                                 <a href="cms/cms_ci/download_campaign/<?php echo $v['id']; ?>"><button class="btn btn-success btn-small" type="button">Download</button></a>
                                                                 <?php } ?>
-                                                                <?php if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Campaign_Delete')){ ?>
+                                                                <?php if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Campaign_Own_Country_Delete') ||
+                                                                         (IsRoleFriendlyNameExist($this->user_role,'Content Management_Campaign_All_Country_Delete'))){ ?>
                                                                 <a href="cms/delete_campaign/<?php echo $v['id']; ?>" onclick="return confirm('Are you sure want to delete this campaign?');"><button class="btn btn-danger btn-small" type="button">Delete</button></a>
                                                                 <?php } ?>
                                                                 </p>
@@ -62,7 +64,7 @@
                                                                             <th>URL</th>
                                                                             <th>Date Created</th>
                                                                             <th>Clicks</th>
-                                                                            <th>Created By</th>
+                                                                            <th>Creator</th>
                                                                             <th>QR Code</th>
                                                                             <th>&nbsp;</th>
                                                                           </tr>
@@ -72,7 +74,7 @@
                                                                                 <?php foreach($v['short_urls'] as $x):?>
                                                                                         <tr>
                                                                                                 <td><a href="<?php echo site_url('cms/url/'.$x['short_code'])?>" target="_blank">http://maybk.co/<?php echo $x['short_code']?></a></td>
-                                                                                                <td><?php echo '<p>'.$x['description'].'</p><p>'.$x['long_url'].'</p>'?></td>
+                                                                                                <td><?php echo '<p>'.$x['description'].'</p><p>'.addDashForLongText($x['long_url']).'</p>'?></td>
                                                                                                 <td><?php echo $x['created_at']?></td>
                                                                                                 <td><?php echo $x['increment']?></td>
                                                                                                 <td><?php echo $x['display_name']?></td>
@@ -84,8 +86,9 @@
                                                                                             </div>
                                                                                                                                 </td>
                                                                                                 <td>
-                                                                                                <?php if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Short_URL_Campaign')){ ?>
-                                                                                                <a href="cms/delete_campaign_url/<?php echo($x['content_campaign_url_id']) ?>" onclick="return confirm('Are you sure want to delete short url from campaign?');" class="redText"><i class="icon-remove"></i></a>
+                                                                                                <?php if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Short_URL_Own_Country_Delete') ||
+                                                                                                                (IsRoleFriendlyNameExist($this->user_role,'Content Management_Short_URL_All_Country_Delete'))){ ?>
+                                                                                                                <a href="cms/delete_campaign_url/<?php echo($x['content_campaign_url_id']) ?>" onclick="return confirm('Are you sure want to delete short url from campaign?');" class="redText"><i class="icon-remove"></i></a>
                                                                                                 <?php } ?>
                                                                                                 </td>
                                                                                         </tr>
@@ -123,7 +126,7 @@
                                                             <th>URL</th>
                                                             <th>Date Created</th>
                                                             <th>Clicks</th>
-                                                            <th>Created By</th>
+                                                            <th>Creator</th>
                                                             <th>QR Code</th>
                                                             <th>&nbsp;</th>
                                                           </tr>
@@ -132,8 +135,8 @@
                                                         <?php if($shorturls): ?>
                                                             <?php foreach($shorturls as $v): ?>
                                                                     <tr>
-                                                                                <td><a href="<?php echo site_url('cms/url/'.$x['short_code'])?>" target="_blank">http://maybk.co/<?php echo $v->short_code ?></a></td>
-                                                                                <td><?php echo '<p>'.$v->description.'</p><p>'.$v->long_url.'</p>'?></td>
+                                                                                <td><a href="<?php echo site_url('cms/url/'.$v->short_code)?>" target="_blank">http://maybk.co/<?php echo $v->short_code ?></a></td>
+                                                                                <td><?php echo '<p>'.$v->description.'</p><p>'.addDashForLongText($v->long_url).'</p>'?></td>
                                                                                 <td><?php echo date('M d, Y', strtotime($v->created_at)) ?></td>
                                                                                 <td><?php echo $v->increment ?></td>
                                                                                 <td><?php echo $v->display_name?></td>
@@ -145,8 +148,10 @@
                                                                                             </div>
                                                                                 </td>
                                                                                 <td>
-                                                                                <a href="<?php echo site_url('cms/delete_short_url/'.$v->id)?>" onclick="return confirm('Are you sure want to delete this short url?');" class="btn btn-mini btn-danger pull-right">delete</a>
-                                                                                <!-- <button id="delete_btn" class="btn btn-mini btn-danger pull-right" type="button">delete</button> -->
+                                                                                <?php if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Short_URL_Own_Country_Delete') ||
+                                                                                                (IsRoleFriendlyNameExist($this->user_role,'Content Management_Short_URL_All_Country_Delete'))){ ?>
+                                                                                       <a href="<?php echo site_url('cms/delete_short_url/'.$v->id)?>" onclick="return confirm('Are you sure want to delete this short url?');" class="btn btn-mini btn-danger pull-right">delete</a>
+                                                                                <?php } ?>
                                                                                 </td>     
                                                                         </tr>
                                                             <?php endforeach; ?>

@@ -1,5 +1,5 @@
-<?php for($x=0;$x<count($this->user_role);$x++){
-    if($this->user_role[$x]->role_friendly_name=='Content Management_TAG_Create')
+<?php
+    if(IsRoleFriendlyNameExist($this->user_role,'Content Management_TAG_All_Country_Create'))
     {
 ?>
 <div class="row-fluid" style="border-bottom: solid 1px #C9C9C9; margin-bottom: 10px;">
@@ -29,7 +29,7 @@
     </div>
 </div>
  
- <?php }}?>
+ <?php }?>
  <div class="row-fluid" style="border-bottom: solid 1px #C9C9C9; margin-bottom: 10px;">
     <h4>TAG List</h4>    
 </div>
@@ -41,29 +41,28 @@
                 <th>Tags</th>
                 <th>Total Used</th>
                 <th>Creator</th>
-		<?php for($x=0;$x<count($this->user_role);$x++){
-		    if($this->user_role[$x]->role_friendly_name=='Content Management_TAG_Delete'){
+		<?php
+		    if(IsRoleFriendlyNameExist($this->user_role,'Content Management_TAG_All_Country_Delete')){
 		?>
                 <th>&nbsp;</th>
-		<?php }}?>
+		<?php }?>
               </tr>
             </thead>
             <tbody>
             <?php if($tags): ?>
             	<?php foreach($tags as $v): ?>
-            		<tr>
-		                <td><?php echo $v->tag_name ?></td>
-		                <td><?php echo $v->increment ?></td>
-		                <td><?php echo $v->display_name ?></td>
-		                <?php for($x=0;$x<count($this->user_role);$x++){
-				    if($this->user_role[$x]->role_friendly_name=='Content Management_TAG_Delete'){
-				?>
-				<td>
-		                <a href="<?php echo site_url('cms/create_tag?action=delete&id='.$v->id)?>" onclick="return window.confirm('Are you sure want to delete this record?')" class="btn btn-mini btn-danger pull-right">delete</a>
-		                <!-- <button id="delete_btn" class="btn btn-mini btn-danger pull-right" type="button">delete</button> -->
-		                </td>
-				<?php }}?>
-					</tr>
+		    <tr>
+			<td><?php echo $v->tag_name ?></td>
+			<td><?php echo $v->increment ?></td>
+			<td><?php echo $v->display_name ?></td>
+			<?php
+			    if(IsRoleFriendlyNameExist($this->user_role,'Content Management_TAG_All_Country_Delete')){
+			?>
+			<td>
+			<a href="<?php echo site_url('cms/create_tag?action=delete&id='.$v->id)?>" onclick="return window.confirm('Are you sure want to delete this Tag?')" class="btn btn-mini btn-danger pull-right">delete</a>
+			</td>
+			<?php }?>
+		    </tr>
             	<?php endforeach; ?>
             <?php endif;?>
             </tbody>

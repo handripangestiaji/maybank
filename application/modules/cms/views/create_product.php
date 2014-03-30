@@ -1,11 +1,11 @@
-<?php for($i=0;$i<count($this->user_role);$i++){
-    if($this->user_role[$i]->role_friendly_name=='Content Management_Product_Create')
+<?php 
+    if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_All_Country_Create'))
     {
 ?>
 <div class="row-fluid" style="border-bottom: solid 1px #C9C9C9; margin-bottom: 10px;">
     <h4>Create Product</h4>    
 </div>
- <div class="floatingBox">
+<div class="floatingBox">
     <div class="container-fluid campaignForm">
         <form method="post" action="<?php echo site_url('cms/create_product')?>" class="form-horizontal contentForm">
             <div class="control-group">
@@ -59,7 +59,7 @@
         </form>
     </div>
 </div>
- <?php }}?>
+ <?php }?>
  <div class="row-fluid" style="border-bottom: solid 1px #C9C9C9; margin-bottom: 10px;">
     <h4>Product List</h4>    
 </div>
@@ -73,58 +73,118 @@
                 <th>Description</th>
                 <th>Total Used</th>
                 <th>Creator</th>
-		<?php for($i=0;$i<count($this->user_role);$i++){
-		    if($this->user_role[$i]->role_friendly_name=='Content Management_Product_Delete'){
+		<?php
+		    if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_All_Country_Edit')){
 		    ?>
                 <th>&nbsp;</th>
-                <?php }}?>
-                <?php for($i=0;$i<count($this->user_role);$i++){
-		    if($this->user_role[$i]->role_friendly_name=='Content Management_Product_Delete'){
+                <?php }?>
+                <?php
+		    if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_All_Country_Delete')){
 		    ?>
                 <th>&nbsp;</th>
-		<?php }}?>
+		<?php }?>
+                <th>&nbsp;</th>
               </tr>
             </thead>
-            <tbody>
-            <?php if($products): ?>
-            	<?php foreach($products as $v): ?>
-            		<tr>
-		                <td><?php echo $v->product_name; ?></td>
-                                <td>
-                                <?php
-                                    $r=0;
-                                    foreach($v->children as $child){
-                                        if($r!=0){
-                                            echo ', ';
-                                        }
-                                        echo $child->product_name;
-                                        $r++;
-                                    }
-                                ?>
-                                </td>
-		                <td><?php echo $v->description; ?></td>
-		                <td><?php echo $v->increment; ?></td>
-		                <td><?php echo $v->display_name; ?></td>
-                                <?php for($i=0;$i<count($this->user_role);$i++){
-				    if($this->user_role[$i]->role_friendly_name=='Content Management_Product_Edit'){
-				    ?>
-                                <td>
-                                    <a href="<?php echo site_url('cms/edit_product/'.$v->id)?>" class="btn btn-mini btn-primary pull-right">edit</a>
-                                </td>
-                                <?php }}?>
-                                <?php for($i=0;$i<count($this->user_role);$i++){
-				    if($this->user_role[$i]->role_friendly_name=='Content Management_Product_Delete'){
-				    ?>
-                                <td>
-		                        <a href="<?php echo site_url('cms/create_product?action=delete&id='.$v->id)?>" onclick="return confirm('Are you sure want to delete this product?');" class="btn btn-mini btn-danger pull-right">delete</a>
-		                </td>
-				<?php }}?>
-                        </tr>
-            	<?php endforeach; ?>
-            <?php endif; ?>
-            </tbody>
-        </table>
-    </div>
+	    <tbody>
+	    <?php if ($products): ?>
+		<?php foreach($products as $v): ?>
+		<?php if($v->parent_id == null){ ?>
+		<tr class="table-head-tr">
+		    <td><?php echo $v->product_name; ?></td>
+		    <td>
+		    <?php
+			$r=0;
+			foreach($v->children as $child){
+			    if($r!=0){
+				echo ', ';
+			    }
+			    echo $child->product_name;
+			    $r++;
+			}
+		    ?>
+		    </td>
+		    <td><?php echo $v->description; ?></td>
+		    <td><?php echo $v->increment; ?></td>
+		    <td><?php echo $v->display_name; ?></td>
+		    <?php
+			if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_All_Country_Edit')){
+			?>
+		    <td>
+			<a href="<?php echo site_url('cms/edit_product/'.$v->id)?>" class="btn btn-mini btn-primary pull-right">edit</a>
+		    </td>
+		    <?php }?>
+		    <?php
+			if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_All_Country_Delete')){
+			?>
+		    <td>
+			    <a href="<?php echo site_url('cms/create_product?action=delete&id='.$v->id)?>" onclick="return confirm('Are you sure want to delete this product?');" class="btn btn-mini btn-danger pull-right">delete</a>
+		    </td>
+	            <td><button class="btn btn-mini btn-primary pull-right table-btn-show-sub" type="button">Show <i class="icon-caret-down"></i></button></td>
+                    <?php }?>
+		</tr>
+		
+		<tr class="table-sub-tr">
+		<td colspan="12" class="table-sub-td" style="background-color: #7F7B96; padding: 15px;">
+		    <div class="floatingBox table">
+			<div class="table-sub row-fluid">
+			    <table class="table table-striped">
+				<thead>
+				  <tr>
+				    <th>Sub Products</th>
+				    <th>Description</th>
+				    <th>Total Used</th>
+				    <th>Creator</th>
+				    <?php
+					if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_All_Country_Edit')){
+					?>
+				    <th>&nbsp;</th>
+				    <?php }?>
+				    <?php
+					if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_All_Country_Delete')){
+					?>
+				    <th>&nbsp;</th>
+				    <?php }?>
+				  </tr>
+				</thead>
+				<tbody>
+				<?php if($v->children): ?>
+				    <?php foreach($v->children as $child): ?>
+					<tr>
+					    <td><?php echo $child->product_name; ?></td>
+					    <td><?php echo $child->description; ?></td>
+					    <td><?php echo $child->increment; ?></td>
+					    <td><?php echo $child->display_name; ?></td>
+					    <?php
+						if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_All_Country_Edit')){
+						?>
+					    <td>
+						<a href="<?php echo site_url('cms/edit_product/'.$child->id)?>" class="btn btn-mini btn-primary pull-right">edit</a>
+					    </td>
+					    <?php }?>
+					    <?php
+						if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_All_Country_Delete')){
+					    ?>
+					    <td>
+						<a href="<?php echo site_url('cms/create_product?action=delete&id='.$child->id)?>" onclick="return confirm('Are you sure want to delete this product?');" class="btn btn-mini btn-danger pull-right">delete</a>
+					    </td>
+					    <?php }?>
+					</tr>
+				    <?php endforeach; ?>
+				<?php endif; ?>
+				</tbody>
+			    </table>
+			</div>
+		    </div>
+		</td>
+	    </tr>
+	    <?php } ?>
+	<?php endforeach; ?>
+  <?php endif; ?>
+  </tbody>
+</table>  
+</div>
+</div>
      <div class="page pull-right">
      	<?php echo $pagination; ?>
      </div>

@@ -379,12 +379,19 @@ class case_model extends CI_Model{
     
     
     function SearchUserByEmail($email, $country_code = null){
-        $this->db->select('email, username');
+        $this->db->select('email, username, role_id');
         $this->db->from('user');
         $this->db->like('email', $email);
         $this->db->or_like('username', $email);
         if($country_code != null)
             $this->db->where('country_code', $country_code);
-        return $this->db->get()->result();
+        $result = $this->db->get()->result();
+        foreach($result as $row){
+            $this->db->select("b.app_role_id, b.role_friendly_name, b.role_group");
+            $this->db->from("role_collection_detail a inner join application_role b on a.app_role_id = b.app_role_id");
+            $this->db->where("a.role_collection_id", $row->role_id);
+            $row->role_detail = $this->db->get()->result();
+        }
+        return $result;
     }
 }

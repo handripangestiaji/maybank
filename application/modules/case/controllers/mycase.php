@@ -157,7 +157,18 @@ class mycase extends CI_Controller{
     
     function SearchEmail(){
         $search_value = $this->input->get('term');
-        $country_code = IsRoleFriendlyNameExist($this->user_role, 'Regional_User') ? NULL : $this->session->userdata('country');
-        echo json_encode($this->case_model->SearchUserByEmail($search_value, $country_code));
+        $country_code = IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Case_All_Country_AssignReassignResolved') ? NULL : $this->session->userdata('country');
+        $result_user = $this->case_model->SearchUserByEmail($search_value, $country_code);
+        for($x = 0; $x < count($result_user); $x++){
+            if($country_code == null){
+                if(!IsRoleFriendlyNameExist($result_user[$x]->role_detail, 'Social Stream_Case_All_Country_AssignReassignResolved'))
+                    unset($result_user[$x]);
+            }
+            else{
+                if(!IsRoleFriendlyNameExist($result_user[$x]->role_detail, 'Social Stream_Case_Own_Country_AssignReassignResolved'))
+                    unset($result_user[$x]);
+            }
+        }
+        echo json_encode($result_user);
     }
 }

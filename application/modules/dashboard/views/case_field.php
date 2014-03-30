@@ -58,20 +58,33 @@ if($posts){
                       $userIncrement = 0;
                       if(is_array($user_list)){
                         for($userIncrement=0;$userIncrement<count($user_list);$userIncrement++){
+                            $is_same_country = $this->session->userdata('country_code') == $user_list[$userIncrement]->country_code;
                             if($user_list[$userIncrement]->group_name!=$group_name){
-                                echo '<optgroup label="'.$user_list[$userIncrement]->group_name.'"></optgroup>';           
+                                echo '<optgroup label="'.$user_list[$userIncrement]->group_name.'"></optgroup>';
+                                $group_name = $user_list[$userIncrement]->group_name;  
                             }
-                            if( $this->session->userdata('user_id') != $user_list[$userIncrement]->user_id &&
-                                IsRoleFriendlyNameExist($user_list[$userIncrement]->role, 'Social Stream_Case_Own_Country_AssignReassignResolved')){
-                                echo '<option value="'.$user_list[$userIncrement]->user_id.'">&nbsp;&nbsp;&nbsp;&nbsp;'.$user_list[$userIncrement]->full_name.'</option>';                                 
+                            else{
+                                if($this->session->userdata('user_id') != $user_list[$userIncrement]->user_id){
+                                    if(!$is_same_country ){
+                                        if(IsRoleFriendlyNameExist($user_list[$userIncrement]->role_detail,
+                                                'Social Stream_Case_Own_Country_AssignReassignResolved'))
+                                            echo '<option value="'.$user_list[$userIncrement]->user_id.'">&nbsp;&nbsp;&nbsp;&nbsp;'.$user_list[$userIncrement]->full_name.'</option>';                                 
+                                    }
+                                    else{
+                                        if(IsRoleFriendlyNameExist($user_list[$userIncrement]->role_detail,
+                                                'Social Stream_Case_All_Country_AssignReassignResolved'))
+                                            echo '<option value="'.$user_list[$userIncrement]->user_id.'">&nbsp;&nbsp;&nbsp;&nbsp;'.
+                                                $user_list[$userIncrement]->full_name.'</option>';                                 
+                                    }
+                                }
                             }
-                            $group_name = $user_list[$userIncrement]->group_name;  
                         }
                       }
                       else{
                             echo '<optgroup label="'.$user_list->group_name.'"></optgroup>';           
                             echo '<option value="'.$user_list->user_id.'">'.$user_list->full_name.'</option>';                                 
                       }
+                      
                       ?>
                </select>
            </div>

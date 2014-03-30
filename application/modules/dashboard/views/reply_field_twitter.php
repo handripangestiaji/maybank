@@ -7,11 +7,14 @@
         <input type="hidden" value="<?php echo $type?>" name="type" />
         <div class="message"></div>
         <select name="reply_type" style="width: 130px;">
+            <option value="">Please Select</option>
+            <option value="Report Abuse">Report Abuse</option>
             <option value="Feedback">Feedback</option>
             <option value="Enquiry">Enquiry</option>
             <option value="Complaint">Complaint</option>
         </select>
         <select name="product_type" style="width: 130px;">
+            <option value="">Please Select</option>
          <?php foreach($product_list as $product):?>
                 <?php
                     if(isset($product->child)){ ?>

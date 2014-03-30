@@ -1642,7 +1642,8 @@ $(function(){
                                     },
                                 });
                             }
-                        }             
+                        }
+                    }
             }); 
             
             $(this).on('click','.btn-send-msg',

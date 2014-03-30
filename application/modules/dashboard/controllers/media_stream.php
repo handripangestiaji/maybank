@@ -525,7 +525,7 @@ class Media_stream extends CI_Controller {
         }
         
         $validation[] = array('type' => 'required','name' => 'reply_type','value' => $reply_type, 'fine_name' => "Reply Type");
-        if($product_type!='Report_Abuse'){
+        if($reply_type!='Report_Abuse'){
             $validation[] = array('type' => 'required','name' => 'product_type','value' => $product_type, 'fine_name' => "Product Type");
         }        
         $validation[] = array('type' => 'required','name' => 'comment','value' => $comment, 'fine_name' => "Comment");
@@ -564,7 +564,9 @@ class Media_stream extends CI_Controller {
                         $data = array('short_urls_id' => $short_url_id,
                                       'content_tag_id' => $tag_id
                                     );
-                        $this->db->insert('short_url_tag',$data);     
+                         if(isset($short_url_id)){           
+                            $this->db->insert('short_url_tag',$data);     
+                         }
                     }
                     else{
                         $tag_id = $get_tag->id;
@@ -572,7 +574,9 @@ class Media_stream extends CI_Controller {
                             $data = array('short_urls_id' => $short_url_id ,
                                           'content_tag_id' => $tag_id
                                         );
-                            $this->db->insert('short_url_tag',$data);
+                            if(isset($short_url_id)){
+                                $this->db->insert('short_url_tag',$data);
+                            }
                         }
                     }
                     //tag increment
@@ -616,12 +620,11 @@ class Media_stream extends CI_Controller {
                     
                     try{
                         $return = $this->facebook->api('/'.$stream_id->post_stream_id.'/comments', 'POST', $args);
-                    }
-    		catch(FacebookApiException $e){
+                    }catch(FacebookApiException $e){
                         echo json_encode(
                 		    array(
                             'success' => false,
-                			'message' => "reply was failed",
+                			'message' => "reply was failed :".$e,
                 		    )
                         );
                         $return='error';

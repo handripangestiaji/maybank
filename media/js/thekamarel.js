@@ -1570,7 +1570,7 @@ $(function(){
                 var len=$(this).parent().siblings(".replaycontent").val().length
                 var commnetbox;
                         
-                        var confirmStatus = confirm("Are you sure want to send this messages?");
+                        var confirmStatus = confirm("Please make sure the case type !");
                         
                         if(confirmStatus == true){
                             

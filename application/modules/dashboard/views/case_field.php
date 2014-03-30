@@ -65,9 +65,9 @@ if($posts){
                             }
                             else{
                                 if($this->session->userdata('user_id') != $user_list[$userIncrement]->user_id){
-                                    if(!$is_same_country ){
+                                    if($is_same_country ){
                                         if(IsRoleFriendlyNameExist($user_list[$userIncrement]->role_detail,
-                                                array('Social Stream_Case_Own_Country_AssignReassignResolved', 'Social Stream_Case_All_Country_AssignReassignResolved')))
+                                                array('Social Stream_Case_Own_Country_AssignReassignResolved', 'Social Stream_Case_All_Country_AssignReassignResolved', '')))
                                             echo '<option value="'.$user_list[$userIncrement]->user_id.'">&nbsp;&nbsp;&nbsp;&nbsp;'.$user_list[$userIncrement]->full_name.'</option>';                                 
                                     }
                                     else{

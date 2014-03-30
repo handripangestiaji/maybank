@@ -42,7 +42,7 @@ class Media_stream extends CI_Controller {
 	    }
 	}
 	$limit = 30;
-	$filter_user['country_code'] = IsRoleFriendlyNameExist($this->user_role, 'Regional_User') ? NULL : $this->session->userdata('country');
+	$filter_user['country_code'] = IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Case_All_Country_AssignReassignResolved') ? NULL : $this->session->userdata('country');
 	$data['user_list'] = $this->case_model->ReadAllUser($filter_user);
 	$data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter,$limit, true, $is_read == 2);
 	$data['count_fb_feed']=$this->facebook_model->CountFeedFB($filter, true, $is_read == 2);

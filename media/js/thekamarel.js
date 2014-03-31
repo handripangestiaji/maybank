@@ -1650,7 +1650,9 @@ $(function(){
             
             $(this).on('click','.btn-send-msg',
                 function() {
-                        if($(this).parent().siblings('.option-type').find(".productType").val() == ''){
+                    if($(this).parent().siblings('.option-type').find(".productType").val() == '' && 
+                           $(this).parent().siblings('.option-type').find(".replyType").val() !='Report_Abuse')
+                        {
                             alert('Please select a product');
                         }
                         else{

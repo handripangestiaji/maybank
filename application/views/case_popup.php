@@ -45,16 +45,17 @@
                 <input type="hidden" value="" name="post_id" class="post_id" />
                 <input type="hidden" value="" name="type" class="data-type"/>
                 <input type="hidden" value="" name="twitter_user_id" class="twitter-userid"/>
+                
                 <div class="message"></div>
-                <div class="pull-left">
-                    <select name="reply_type" class="case_type" style="width: 130px;">
+                <div class="pull-left option-type">
+                    <select name="reply_type" class="replyType case_type" style="width: 130px;">
                        <option value="">Please Select</option>
                        <option value="Feedback">Feedback</option>
                        <option value="Enquiry">Enquiry</option>
                        <option value="Complaint">Complaint</option>
                        <option value="Report_Abuse">Report Abuse</option>
                     </select>
-                    <select name="product_type" class="product_type" style="width: 130px;">
+                    <select name="product_type" class="product_type productType" style="width: 130px;">
                         <?php foreach($product_list as $product):?>
                               <?php
                               if(isset($product->child)){ ?>
@@ -90,15 +91,25 @@
                         </div>
                     </div>
                 </div>
-                <div class="left">
-                    <div class="left">
-                        <i class="icon-tag icon-large"></i>    
-                    </div>
-                    <div class="left">
-                        <ul id="compose-tags-reply" style="width: 200px;"></ul>        
-                    </div>
-                    <br clear="all" />
-                </div>    
+                 <br clear="all"/>
+              <div class="left">
+                <select class="multipleSelect" multiple="multiple" name="tag_id[]">
+                <?php
+                    $this->load->model('tag_model');
+                      $tags=$this->tag_model->get();
+                      if($tags): ?>
+                      
+                              <?php 
+                              $ids=uniqid();
+                              foreach($tags as $v): ?>
+                                      <option value="<?php echo $ids."|".$v->id; ?>"><?php echo $v->tag_name ?></option>
+                              <?php endforeach; ?>
+                      <?php else: ?>
+                              <option>Please add Tag first</option>
+                      <?php endif;?>
+                  </select>
+                </div>
+              
                 <br clear="all" />
                 <br />
                 <div class="pull-left reply-char-count">
@@ -143,16 +154,17 @@
                     <br clear="all" />
                 </div>
                 <div class="pull-right">
-                    <button class="btn btn-primary btn-small btn-send"  type="submit" value="" >SEND</button> 
+                    <input type="hidden" value="" name="case_id" class="case_id"/>
+                    <button class="btn btn-primary btn-small btn-send popup"  type="submit" value="" >SEND</button> 
                 </div>
                 <br clear="all" />
             </form>
 	    </div>
 	</div>
 	<div class='case-assign'>
-	    <div class="row-fluid reply-field hide" style="width: 90%;">
+	    <div class="row-fluid reply-field case-field hide" style="width: 90%;">
 		<span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
-		<form method="post" class="assign-case" action="<?php echo base_url("case/mycase/CreateCase")?>">
+		<form method="post" class="" action="<?php echo base_url("case/mycase/CreateCase")?>">
 		<input type="hidden" value="" name="post_id" class="post_id" />
 		<input type="hidden" value="new_case" name="type" />
 		<div class="message"></div>
@@ -239,7 +251,7 @@
 		<textarea placeholder="Compose Message" id="content" name="message" ></textarea>
 		<br clear="all" />
 		<div class="pull-right">
-		    <button type="submit" class="btn-purple btn btn-small" value="reassign" onclick="return confirm('Please make sure the case type?');" ><i class="icon-ok-circle icon-large"></i> Assign</button>    
+		    <button type="submit" class="btn-purple btn btn-small btn-reassign popup" value="reassign" onclick="return confirm('Please make sure the case type?');" ><i class="icon-ok-circle icon-large"></i> Assign</button>    
 		</div>
 		</form>
 	    </div>

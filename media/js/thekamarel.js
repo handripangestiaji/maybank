@@ -1622,9 +1622,12 @@ $(function(){
                                             '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
                                             '<strong>Success!</strong> '+response.message+' </div>');
                                             commentButton.parent().siblings(".replaycontent").val("");
-                                            commentButton.html("SEND"); 
+                                            
                                             setTimeout(function(){
                                                     commentButton.closest('.reply-field').toggle('slow');
+                                                    commentButton.html("SEND");
+                                                    if(commentButton.hasClass('popup'))
+                                                        window.location.reload();
                                                 }, 3000); 
                                         }
                                         else{
@@ -1650,10 +1653,11 @@ $(function(){
             
             $(this).on('click','.btn-send-msg',
                 function() {
-                        if($(this).parent().siblings('.option-type').find(".productType").val() == ''){
+                    if($(this).parent().siblings('.option-type').find(".productType").val() == '' && 
+                       $(this).parent().siblings('.option-type').find(".replyType").val() !='Report_Abuse')
+                       {
                             alert('Please select a product');
-                        }
-                        else{
+                       }else{
                         var len=$(this).parent().siblings(".replaycontent").val().length
                         if(len>2000){
                             $(this).parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
@@ -1677,7 +1681,6 @@ $(function(){
                                     desc :$(this).parent().siblings('#reply-url-show').find(".descr-link").val(),
                                     case_id :$(this).siblings(".case_id").val(),
                                     img :$(this).parent().siblings('#reply-img-show').find("#reply-preview-img").attr('src')
-                                    
                                 },
                                 success: function(response)
                                 {
@@ -1695,7 +1698,8 @@ $(function(){
                                         
                                         commentButton.closest('li').find('.indicator:first').append(' <button type="button" class=".replied-btn btn btn-inverse btn-mini" style="text-align:left">' +
                                             'Replied by:you ' + response.action_log.created_at + "</button>");
-                                        
+                                        if(commentButton.hasClass('popup'))
+                                            window.location.reload();
                                     }
                                     else{
                                         commentButton.parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
@@ -1848,6 +1852,28 @@ $(function(){
 
                                 }
                             });
+                            
+                             $(document).ready(function() {
+			      
+				 $('.multipleSelect').multiselect({
+                    buttonText: function(options, select) {
+                    if (options.length == 0) {
+                        return 'None selected <b class="caret"></b>';
+                    }
+                    else if (options.length > 1) {
+                        return options.length + ' selected <b class="caret"></b>';
+                    }
+                    else {
+                        var selected = '';
+                        options.each(function() {
+                            selected += $(this).text() + ', ';
+                        });
+                        return selected.substr(0, selected.length -2) + ' <b class="caret"></b>';
+                    }
+                },
+                });
+                    
+			    });
 
                     });
                     me.removeAttr('disabled').html('Loading..');
@@ -2313,6 +2339,7 @@ $.fn.ToCase = function(type){
             }
             $('#caseNotification .type-post').html(response.channel.name + " | " + channel_type );
             $('#caseNotification .case-id').html(response.case_id);
+            $('#caseNotification .case_id').val(response.case_id);
             $('#caseNotification .assign-message').html(response.messages);
             $('#caseNotification .btn-resolve').val(response.case_id);
             $('#caseNotification ol').html('');

@@ -1018,3 +1018,9 @@ p.inside-link{white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
 .sidebarContent{height: 600px;overflow-y: scroll}
 .link-description{overflow: hidden !important}
 p.post-content{overflow: hidden}
+
+ul.floatingBoxContainers .dropdown-menu li{
+    background-color: #FFF;
+    margin-bottom: 0px;
+     border: 0px none ;
+}

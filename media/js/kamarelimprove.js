@@ -12,9 +12,10 @@ $(function(){
         $(this).find('button[type=submit]').html('<i class="icon-stop icon-large"></i> Assigning case...');
         var openButton = $(this).closest('li').find('button:first');
         var fb_reassign=$(this).find('button[type=submit]').val();
+        e.preventDefault();
         $.ajax({
             "url" : BASEURL + "case/mycase/CreateCase",
-            "data" : $(this).serialize(),
+            "data" : $(this).serialize() + "&popup="+thisElement.find('.btn-reassign').hasClass('popup'),
             "type" : "POST",
             "success" : function(response){
                 if(response.success){
@@ -25,13 +26,10 @@ $(function(){
                     '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
                     '<strong>Well done!</strong> CASE #' + response.result.case_id + " was made. " +  response.message + '</div>');
                     openButton.removeClass('btn-warning').addClass('btn-purple').html('CASE #' + response.result.case_id ).val(response.result.case_id);
-                   
-//                   if(fb_reassign != "reassign"){
-//                        thisElement.closest('li').find('.btn-case').removeClass('btn-danger btn-case').addClass('btn-purple btn-resolve').html('<i class="icon-check"></i><span>RESOLVE</span>');
-//                        thisElement.closest('li').find('.btn-case').parent().append('<button type="button" class="btn btn-danger btn-case" name="action" value="reassign"><i class="icon-plus"></i> <span>ReAssign</span></button>');
-//                    }
-
                     thisElement.parent().parent().toggle('slow');
+                    if(thisElement.find('.btn-reassign').hasClass('popup')){
+                        window.location.reload();
+                    }
                 }
                 else{
                     var errorMessages = "<ul class='error-list'>";
@@ -382,7 +380,8 @@ $(function(){
                                 scrollTop: 0
                             });
                         }, 1500);
-                        
+                        if(commentButton.hasClass('popup'))
+                            window.location.reload();
                     }
                 }
                 catch(e){

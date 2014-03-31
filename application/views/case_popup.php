@@ -37,7 +37,7 @@
         <br clear="all" />
         <div class="action-reply">
             <div class="reply-field hide" style="width: 90%;">
-                <span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
+                <span class="reply-field-btn-close-2 btn-close pull-right"><i class="icon-remove"></i></span>
                 <input type="hidden" value="" name="post_id" class="post_id" />
                 <input type="hidden" value="new_case" name="type" />
                 <div class="message"></div>

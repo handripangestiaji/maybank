@@ -2259,26 +2259,41 @@ $.fn.RefreshAllStream = function(){
 
 $.fn.ToCase = function(type){
     var thisElement = $(this);
+    $('#caseNotification').hide();
     $.ajax({
         'url' : BASEURL + 'case/mycase/ReadCase',
         'type' : 'GET',
         'data' : 'case_id=' + thisElement.find('.pointer-case').val(),
         'success' : function(response){
+            $('#caseNotification').show();
             $('#caseNotification .assign-by').html(response.created_by.full_name + "(" + response.created_by.username + ")" );
             $('#caseNotification .assign-date').html(response.created_at);
-            if(response.type == 'twitter')
+            if(response.type == 'twitter'){
+                $('#caseNotification .image-upload').show();
+                $('#caseNotification .reply-fb-char-count').html('144');
                 channel_type = 'Twitter';
-            else if(response.type == 'twitter_dm')
+            }
+            else if(response.type == 'twitter dm'){
+                $('#caseNotification .image-upload').hide();
+                $('#caseNotification .reply-fb-char-count').html('144');
                 channel_type = 'Twitter Direct Message';
-            else if(response.type == 'facebook')
+            }
+            else if(response.type == 'facebook'){
+                $('#caseNotification .image-upload').show();
+                $('#caseNotification .reply-fb-char-count').html('2000');
                 channel_type = 'Wall Post';
-            else
+            }
+            else{
+                $('#caseNotification .image-upload').hide();
+                $('#caseNotification .reply-fb-char-count').html('2000');
                 channel_type = "Facebook PM";
+            }
             $('#caseNotification .type-post').html(response.channel.name + " | " + channel_type );
             $('#caseNotification .case-id').html(response.case_id);
             $('#caseNotification .assign-message').html(response.messages);
             $('#caseNotification .btn-resolve').val(response.case_id);
             $('#caseNotification ol').html('');
+            
             for(var i=0; i<response.related_conversation.length;i++){
                 if(response.related_conversation[i].type == 'twitter' || response.related_conversation[i].type == 'twitter_dm'){
                      $template = '<li style="display: block;">' +

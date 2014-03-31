@@ -515,7 +515,9 @@ $(function(){
         $('#caseNotification').show();
         
     });
-    
+    $('#caseNotification .reply-field-btn-close-2').click(function(e){
+        $(this).closest('#caseNotification').find('.reply-field').hide();
+    });
     $('#caseNotification .btn-reply').click(function(e){
        $(this).closest("#caseNotification").find('.reply-field').show();
     });

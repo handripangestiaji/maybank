@@ -1,4 +1,4 @@
-<form action="" method="post" class="reply-tweet">
+<form action="" method="post" class="reply-tweet form">
 <div class="row-fluid">
     <span class="dm-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
     <div class="pull-left">

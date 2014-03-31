@@ -1608,7 +1608,7 @@ $(function(){
                                         title :$(this).parent().siblings('#reply-url-show').find(".title_link").val(),
                                         desc :$(this).parent().siblings('#reply-url-show').find(".descr-link").val(),
                                         img :$(this).parent().siblings('#reply-img-show').find("#reply-preview-img").attr('src'),
-                                        tags:$(this).parent().siblings().find("#compose-tags-reply").tagit("assignedTags"),
+                                        tags:$(this).parent().siblings().find(".multipleSelect").val(),
                                     },
                                     success: function(response)
                                     {

@@ -92,8 +92,23 @@
             <i class="icon-tag icon-large"></i>    
         </div>
         <div class="left">
-            <ul id="compose-tags-reply" style="width: 200px;"></ul>        
+            <label class="control-label">Tag<span class="redText"> *</span></label>
+            <select class="multipleSelect" multiple="multiple" name="tag_id[]">
+            <?php 
+                  $tags=$this->tag_model->get();
+                  if($tags): ?>
+                  
+                          <?php 
+                          $ids=uniqid();
+                          foreach($tags as $v): ?>
+                                  <option value="<?php echo $ids."|".$v->id; ?>"><?php echo $v->tag_name ?></option>
+                          <?php endforeach; ?>
+                  <?php else: ?>
+                          <option>Please add Tag first</option>
+                  <?php endif;?>
+              </select>
         </div>
+                        
         <br clear="all" />
     </div>    
     <br clear="all" />

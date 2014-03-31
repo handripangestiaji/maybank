@@ -56,6 +56,29 @@
             <i class="icon-camera"></i> 
         </a>
     </div>
+     <div class="left">
+        <div class="left">
+            <i class="icon-tag icon-large"></i>    
+        </div>
+        <div class="left">
+            <select class="multipleSelect" multiple="multiple" name="tag_id[]">
+            <?php 
+                  $tags=$this->tag_model->get();
+                  if($tags): ?>
+                  
+                          <?php 
+                          $ids=uniqid();
+                          foreach($tags as $v): ?>
+                                  <option value="<?php echo $ids."|".$v->id; ?>"><?php echo $v->tag_name ?></option>
+                          <?php endforeach; ?>
+                  <?php else: ?>
+                          <option>Please add Tag first</option>
+                  <?php endif;?>
+              </select>
+        </div>
+                        
+        <br clear="all" />
+    </div>    
     <br clear="all"/>
     <div id="reply-img-show" class="hide">
         <div class="compose-form img-attached">
@@ -87,30 +110,7 @@
         </div>
     </div>
     <?php } ?>
-    <div class="left">
-        <div class="left">
-            <i class="icon-tag icon-large"></i>    
-        </div>
-        <div class="left">
-            <label class="control-label">Tag<span class="redText"> *</span></label>
-            <select class="multipleSelect" multiple="multiple" name="tag_id[]">
-            <?php 
-                  $tags=$this->tag_model->get();
-                  if($tags): ?>
-                  
-                          <?php 
-                          $ids=uniqid();
-                          foreach($tags as $v): ?>
-                                  <option value="<?php echo $ids."|".$v->id; ?>"><?php echo $v->tag_name ?></option>
-                          <?php endforeach; ?>
-                  <?php else: ?>
-                          <option>Please add Tag first</option>
-                  <?php endif;?>
-              </select>
-        </div>
-                        
-        <br clear="all" />
-    </div>    
+   
     <br clear="all" />
     <br />
     <div class="pull-left reply-char-count">

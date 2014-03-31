@@ -994,12 +994,12 @@ $(function(){
             });
 
              $( "#close-url" ).click(function() {
-               $("#url-show").css({"display": "none"});
-               $('.url-show').find('input').val('');
+                $("#url-show").css({"display": "none"});
+                $('.url-show').find('input').val('');
                 $('.compose-insert-link-short-url-hidden').val('');
                 $('.url-show').find('textarea').val('');
                 $('.url-show').find('p').html('');
-            });
+             });
              
              $(this).on('click',"#close-reply-url-show", function() {
                $(this).closest("#reply-url-show").hide();

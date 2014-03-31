@@ -56,6 +56,7 @@
                        <option value="Report_Abuse">Report Abuse</option>
                     </select>
                     <select name="product_type" class="product_type productType" style="width: 130px;">
+                        <option value="">Please Select</option>
                         <?php foreach($product_list as $product):?>
                               <?php
                               if(isset($product->child)){ ?>

@@ -80,8 +80,6 @@ class mycase extends CI_Controller{
                    )
                );
         }
-        
-        
     }
     
     function TwitterRelatedConversation($twitter_user_id, $type = "mentions"){

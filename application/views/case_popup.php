@@ -35,6 +35,7 @@
 	    }
 	}
         
+	
         ?>
         <br clear="all" />
         <div class="action-reply">
@@ -158,21 +159,116 @@
                 </div>
                 <br clear="all" />
             </form>
-            </div>
-        </div>
+	    </div>
+	</div>
+	<div class='case-assign'>
+	    <div class="row-fluid reply-field hide" style="width: 90%;">
+		<span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
+		<form method="post" class="assign-case" action="<?php echo base_url("case/mycase/CreateCase")?>">
+		<input type="hidden" value="" name="post_id" class="post_id" />
+		<input type="hidden" value="new_case" name="type" />
+		<div class="message"></div>
+		<div class="pull-left">
+		    <select name="case_type" class="case_type" style="width: 130px;">
+			<option value="">Please Select</option>
+			<option value="Feedback">Feedback</option>
+			<option value="Enquiry">Enquiry</option>
+			<option value="Complaint">Complaint</option>
+			<option value="Report_Abuse">Report Abuse</option>
+		    </select>
+		    <select name="product_type" class="product_type" style="width: 130px;">
+			<option value="">Please Select</option>
+			<?php foreach($product_list as $product):?>
+			      <?php
+				  if(isset($product->child)){ ?>
+				      <optgroup label="<?=$product->product_name?>"></optgroup>
+				  <?php }
+				  else{ ?>
+				      <option value="<?=$product->id?>"><?=$product->product_name?></option>
+				  <?php }
+				  if(isset($product->child)){
+				      foreach($product->child as $child){ ?>
+				      <option value="<?=$child->id?>">-&nbsp;&nbsp;<?=$child->product_name?></option> 
+				      <?php }
+				  } ?>
+			  <?php endforeach?>
+		    </select>
+		</div>
+		<br clear="all" />
+		<div class="pull-left" style="width:30%;">
+		    Assign To: 
+		</div>
+		<div class="pull-left" style="width:70%;">
+		    <select name="assign_to" <!--multiple="multiple"!-->>
+		    <option value='' id="caseUser<?php //$posts[$i]->social_stream_post_id ?>">-- Select User --</option>
+		    <?php
+			$this->load->model('case_model');
+		    	$filter_user['country_code'] = IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Case_All_Country_AssignReassignResolved') ? NULL : $this->session->userdata('country');
+			$user_list = $this->case_model->ReadAllUser($filter_user);
+			$group_name = null;
+			$userIncrement = 0;
+			if(is_array($user_list)){
+			    for($userIncrement=0;$userIncrement<count($user_list);$userIncrement++){
+				$is_same_country = $this->session->userdata('country') == $user_list[$userIncrement]->user_country_code;
+				if($user_list[$userIncrement]->group_name!=$group_name){
+				    echo '<optgroup label="'.$user_list[$userIncrement]->group_name.'"></optgroup>';
+				    $group_name = $user_list[$userIncrement]->group_name;  
+				}
+				else{
+				    if($this->session->userdata('user_id') != $user_list[$userIncrement]->user_id){
+					 if($is_same_country ){
+					     if(IsRoleFriendlyNameExist($user_list[$userIncrement]->role_detail,
+						     array('Social Stream_Case_Own_Country_AssignReassignResolved', 'Social Stream_Case_All_Country_AssignReassignResolved')))
+						 echo '<option value="'.$user_list[$userIncrement]->user_id.'">&nbsp;&nbsp;&nbsp;&nbsp;'.$user_list[$userIncrement]->full_name.'</option>';                                 
+					 }
+					 else{
+					     if(IsRoleFriendlyNameExist($user_list[$userIncrement]->role_detail,
+						     'Social Stream_Case_All_Country_AssignReassignResolved'))
+						 echo '<option value="'.$user_list[$userIncrement]->user_id.'">&nbsp;&nbsp;&nbsp;&nbsp;'.
+						     $user_list[$userIncrement]->full_name.'</option>';                                 
+					 }
+				     }
+				 }
+			     }
+			   }
+			   else{
+				 echo '<optgroup label="'.$user_list->group_name.'"></optgroup>';           
+				 echo '<option value="'.$user_list->user_id.'">'.$user_list->full_name.'</option>';                                 
+			   }
+			   ?>
+		    </select>
+		</div>
+		<br clear="all" />
+		<div class="pull-left" style="width:30%;">
+		    Email:
+		</div>
+		<div class="pull-left" style="width:70%;">
+		    <input type="text" class="email" name="email" />
+		</div>
+		<br clear="all" />
+		Message :
+		<br>
+		<textarea placeholder="Compose Message" id="content" name="message" ></textarea>
+		<br clear="all" />
+		<div class="pull-right">
+		    <button type="submit" class="btn-purple btn btn-small" value="reassign" onclick="return confirm('Please make sure the case type?');" ><i class="icon-ok-circle icon-large"></i> Assign</button>    
+		</div>
+		</form>
+	    </div>
+	</div>
     </div>
     <div class="modal-footer" style="">
-        <?php if(IsRoleFriendlyNameExist($this->user_role, array('Social Stream_Channel_General_Function_All_Country_Reply',
-                                                                 'Social Stream_Channel_General_Function_Own_Country_Reply'))):?>
-        <button class="btn btn-purple btn-reply" >Reply</button>
-        <?php endif;?>
-        <?php if(IsRoleFriendlyNameExist($this->user_role, array('Social Stream_Case_Own_Country_AssignReassignResolved',
-                                                                 'Social Stream_Case_All_Country_AssignReassignResolved'))):?>
-            <button type="button" class="btn btn-orange btn-resolve popup" name="action" value=""><i class="icon-check"></i> <span>RESOLVE</span></button>
-            <button type="button" class="btn btn-danger btn-case" name="action" value="reassign"><i class="icon-plus"></i>
-                <span>ReAssign</span>
-            </button>
-        <?php endif;?>
+	<?php if(IsRoleFriendlyNameExist($this->user_role, array('Social Stream_Channel_General_Function_All_Country_Reply',
+								 'Social Stream_Channel_General_Function_Own_Country_Reply'))):?>
+	<button class="btn btn-purple btn-reply-popup" >Reply</button>
+	<?php endif;?>
+	<?php if(IsRoleFriendlyNameExist($this->user_role, array('Social Stream_Case_Own_Country_AssignReassignResolved',
+								 'Social Stream_Case_All_Country_AssignReassignResolved'))):?>
+	    <button type="button" class="btn btn-orange btn-resolve popup" name="action" value=""><i class="icon-check"></i> <span>RESOLVE</span></button>
+	    <button type="button" class="btn btn-danger btn-assign-popup" name="action" value="reassign"><i class="icon-plus"></i>
+		<span>ReAssign</span>
+	    </button>
+	<?php endif;?>
     </div>
     </div>
 </div>

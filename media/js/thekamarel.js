@@ -994,12 +994,12 @@ $(function(){
             });
 
              $( "#close-url" ).click(function() {
-               $("#url-show").css({"display": "none"});
-               $('.url-show').find('input').val('');
+                $("#url-show").css({"display": "none"});
+                $('.url-show').find('input').val('');
                 $('.compose-insert-link-short-url-hidden').val('');
                 $('.url-show').find('textarea').val('');
                 $('.url-show').find('p').html('');
-            });
+             });
              
              $(this).on('click',"#close-reply-url-show", function() {
                $(this).closest("#reply-url-show").hide();
@@ -1608,7 +1608,7 @@ $(function(){
                                         title :$(this).parent().siblings('#reply-url-show').find(".title_link").val(),
                                         desc :$(this).parent().siblings('#reply-url-show').find(".descr-link").val(),
                                         img :$(this).parent().siblings('#reply-img-show').find("#reply-preview-img").attr('src'),
-                                        tags:$(this).parent().siblings().find("#compose-tags-reply").tagit("assignedTags"),
+                                        tags:$(this).parent().siblings().find(".multipleSelect").val(),
                                     },
                                     success: function(response)
                                     {

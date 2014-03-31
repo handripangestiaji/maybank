@@ -56,6 +56,7 @@
             <i class="icon-camera"></i> 
         </a>
     </div>
+    <?php } ?>
      <div class="left">
         <div class="left">
             <i class="icon-tag icon-large"></i>    
@@ -80,6 +81,7 @@
         <br clear="all" />
     </div>    
     <br clear="all"/>
+     <?php if($reply_type!='reply_dm'){?>
     <div id="reply-img-show" class="hide">
         <div class="compose-form img-attached">
             <!-- close button for image attached -->

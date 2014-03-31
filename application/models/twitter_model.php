@@ -305,13 +305,20 @@ class twitter_model extends CI_Model
         
          $this->db->order_by('a.created_at','desc');
          $result = $this->db->get()->result();
-        
+        $nowSender = '';
+        $c = 0;
         for($i=0;$i<count($result);$i++){
-            $result[$i]->sender = $this->ReadTwitterUserFromDb($result[$i]->sender);
             $result[$i]->reply_post = $this->GetReplyPost(array('reply_to_post_id'=> $result[$i]->social_stream_post_id));
             $result[$i]->channel_action = $this->GetChannelAction(array('a.post_id'=>$result[$i]->social_stream_post_id));
             $result[$i]->case = $this->case_model->LoadCase(array('a.post_id'=>$result[$i]->social_stream_post_id));
-            $result[$i]->outbox = $this->ReadDMEngagement($result[$i]->recipient, $result[$i]->sender->twitter_user_id, $result[$i]->social_stream_post_id);
+            if($nowSender == $result[$i]->sender){
+                $c++;   
+            }
+            else
+                $c = 0;
+            $nowSender = $result[$i]->sender;
+            $result[$i]->sender = $this->ReadTwitterUserFromDb($result[$i]->sender);
+            $result[$i]->outbox = $this->ReadDMEngagement($result[$i]->recipient, $result[$i]->sender->twitter_user_id, $result[$i]->social_stream_post_id, $c );
             
         }
         return $result;
@@ -322,16 +329,17 @@ class twitter_model extends CI_Model
         $sender : Sender of Message. It's usually from current Channel.
         $recepient : Recipient Message.
     */
-    public function ReadDMEngagement($sender, $recepient, $post_id){
+    public function ReadDMEngagement($sender, $recepient, $post_id, $no = 0){
         $filter['a.type'] = 'outbox';
         $filter['recipient'] = $recepient;
         $filter['sender'] = $sender;
-        $filter['b.post_id > '] = $post_id;
-        $this->db->select("*");
-        $this->db->from('twitter_direct_messages a inner join social_stream b on a.post_id = b.post_id');
+        $filter['b.post_id >= '] = $post_id;
+        $this->db->select("a.*, b.*, (a.post_id - $post_id) as difference_id ");
+        $this->db->from("twitter_direct_messages a inner join social_stream b on a.post_id = b.post_id left join
+                        channel_action c on a.post_id = c.post_id ");
         $this->db->where($filter);
-        $this->db->order_by('b.created_at', 'asc');
-        $this->db->limit(1);
+        $this->db->order_by('b.post_id', 'desc');
+        $this->db->limit(1, $no);
         return $this->db->get()->result();
     }
     

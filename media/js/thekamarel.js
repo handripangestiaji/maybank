@@ -2259,20 +2259,42 @@ $.fn.RefreshAllStream = function(){
 
 $.fn.ToCase = function(type){
     var thisElement = $(this);
+    $('#caseNotification').hide();
     $.ajax({
         'url' : BASEURL + 'case/mycase/ReadCase',
         'type' : 'GET',
         'data' : 'case_id=' + thisElement.find('.pointer-case').val(),
         'success' : function(response){
+            $('#caseNotification').show();
             $('#caseNotification .assign-by').html(response.created_by.full_name + "(" + response.created_by.username + ")" );
             $('#caseNotification .assign-date').html(response.created_at);
-            $('#caseNotification .type-post').html(response.channel.name + " | " + response.type );
+            if(response.type == 'twitter'){
+                $('#caseNotification .image-upload').show();
+                $('#caseNotification .reply-fb-char-count').html('144');
+                channel_type = 'Twitter';
+            }
+            else if(response.type == 'twitter dm'){
+                $('#caseNotification .image-upload').hide();
+                $('#caseNotification .reply-fb-char-count').html('144');
+                channel_type = 'Twitter Direct Message';
+            }
+            else if(response.type == 'facebook'){
+                $('#caseNotification .image-upload').show();
+                $('#caseNotification .reply-fb-char-count').html('2000');
+                channel_type = 'Wall Post';
+            }
+            else{
+                $('#caseNotification .image-upload').hide();
+                $('#caseNotification .reply-fb-char-count').html('2000');
+                channel_type = "Facebook PM";
+            }
+            $('#caseNotification .type-post').html(response.channel.name + " | " + channel_type );
             $('#caseNotification .case-id').html(response.case_id);
             $('#caseNotification .assign-message').html(response.messages);
             $('#caseNotification .btn-resolve').val(response.case_id);
             $('#caseNotification ol').html('');
+            
             for(var i=0; i<response.related_conversation.length;i++){
-                console.log(response.related_conversation[i]);
                 if(response.related_conversation[i].type == 'twitter' || response.related_conversation[i].type == 'twitter_dm'){
                      $template = '<li style="display: block;">' +
                      '<img src="'+ BASEURL + 'dashboard/media_stream/SafePhoto?photo=' + response.related_conversation[i]['twitter_data'][0].profile_image_url  + '" alt="" style="height: 40px;margin: 6px 10px" class="left" />' + 
@@ -2288,6 +2310,7 @@ $.fn.ToCase = function(type){
                 else if(response.related_conversation[i].type == 'facebook'|| response.related_conversation[i].type == 'facebook conversation'){
                     var img = '';
                     if(response.related_conversation[i]['facebook_data'].attachment != null){
+                        if(response.related_conversation[i]['facebook_data'].attachment.type == 'image')
                         img = '<img src="'+BASEURL+'dashboard/media_stream/SafePhoto?photo=' +
                             response.related_conversation[i]['facebook_data'].attachment[0].src +
                             '" style="height:200px" /> <br />';

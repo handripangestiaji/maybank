@@ -74,7 +74,6 @@ $(function(){
                 //console.log(response);
                 $(modalID + " .loader-image").hide();
                 var post_stream_id = [];
-                console.log(response);
                 if(response.length == 0)
                     $(modalId).append("<h2>No related conversation found.</h2>");
                 else
@@ -515,6 +514,12 @@ $(function(){
         e.preventDefault();
         $('#caseNotification').show();
         
+    });
+    $('#caseNotification .reply-field-btn-close-2').click(function(e){
+        $(this).closest('#caseNotification').find('.reply-field').hide();
+    });
+    $('#caseNotification .btn-reply').click(function(e){
+       $(this).closest("#caseNotification").find('.reply-field').show();
     });
     
 });

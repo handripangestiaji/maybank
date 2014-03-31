@@ -142,7 +142,7 @@
             
         </tr>
           <?php
-        if(IsRoleFriendlyNameExist($this->user_role, 'Regional_User')):
+        if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_All_Country_Edit')):
         ?>
         <tr>
             <td>Country </td>

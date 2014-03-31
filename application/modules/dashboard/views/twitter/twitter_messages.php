@@ -104,7 +104,7 @@
                        ?></span>
                    </p>
                    <div>
-                       <p><?php echo RemoveUrlWithin($outbox->text) ?></p>
+                       <p><?php echo $outbox->text ?></p>
                    </div>
                </div>
              

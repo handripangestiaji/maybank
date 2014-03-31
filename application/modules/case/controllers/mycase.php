@@ -41,7 +41,7 @@ class mycase extends CI_Controller{
             
         $is_valid = CheckValidation($validation, $this->validation);
         if($is_valid === true){
-            
+            $old_case = $this->case_model->LoadCase(array('a.post_id' => $this->input->post('post_id')));
             $case = array(
                 "content_products_id" => $this->input->post('product_type'),
                 "created_by" => $user_id,
@@ -57,9 +57,10 @@ class mycase extends CI_Controller{
             );
             if(!$this->input->post('product_type'))
                 unset($case['content_products_id']);
-            $old_case = $this->case_model->LoadCase(array('a.post_id' => $this->input->post('post_id')));
+            
             $solved_case = NULL;
             if(count($old_case) > 0)
+                $case['old_case_id'] = $old_case[0]->case_id;
                 $solved_case = $this->case_model->ResolveCase($old_case[0]->case_id, $this->session->userdata('user_id'), '', false);
                 $case['case_id'] = $this->case_model->CreateCase($case, $this->session->userdata('user_id'));
                 echo json_encode(array(
@@ -189,7 +190,7 @@ class mycase extends CI_Controller{
             $created_at->setTimezone(new DateTimeZone($timezone));
             $case->created_at = $created_at->format('l, M j, Y h:i A');
             $case->type = str_replace('_', ' ', $case->type);
-            if($case->type == 'twitter' || $case->type == 'twitter_dm'){
+            if($case->type == 'twitter' || $case->type == 'twitter dm'){
                 $case->related_conversation = $this->case_model->TwitterRelatedConversation($case->case_id);
             }
             else{

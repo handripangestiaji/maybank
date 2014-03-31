@@ -994,12 +994,12 @@ $(function(){
             });
 
              $( "#close-url" ).click(function() {
-               $("#url-show").css({"display": "none"});
-               $('.url-show').find('input').val('');
+                $("#url-show").css({"display": "none"});
+                $('.url-show').find('input').val('');
                 $('.compose-insert-link-short-url-hidden').val('');
                 $('.url-show').find('textarea').val('');
                 $('.url-show').find('p').html('');
-            });
+             });
              
              $(this).on('click',"#close-reply-url-show", function() {
                $(this).closest("#reply-url-show").hide();
@@ -1608,7 +1608,7 @@ $(function(){
                                         title :$(this).parent().siblings('#reply-url-show').find(".title_link").val(),
                                         desc :$(this).parent().siblings('#reply-url-show').find(".descr-link").val(),
                                         img :$(this).parent().siblings('#reply-img-show').find("#reply-preview-img").attr('src'),
-                                        tags:$(this).parent().siblings().find("#compose-tags-reply").tagit("assignedTags"),
+                                        tags:$(this).parent().siblings().find(".multipleSelect").val(),
                                     },
                                     success: function(response)
                                     {
@@ -2278,33 +2278,47 @@ $.fn.ToCase = function(type){
         'data' : 'case_id=' + thisElement.find('.pointer-case').val(),
         'success' : function(response){
             $('#caseNotification').show();
+            $('#caseNotification .image-upload').show();
             $('#caseNotification .assign-by').html(response.created_by.full_name + "(" + response.created_by.username + ")" );
             $('#caseNotification .assign-date').html(response.created_at);
+            $('#caseNotification .btn-send').removeClass('btn-send-reply btn-send-msg');
             if(response.type == 'twitter'){
                 $('#caseNotification .image-upload').show();
                 $('#caseNotification .reply-fb-char-count').html('144');
                 channel_type = 'Twitter';
+                $('#caseNotification .data-type').val('reply');
+                $('#caseNotification .twitter-userid').val(response.main_post.twitter_user_id);
             }
             else if(response.type == 'twitter dm'){
                 $('#caseNotification .image-upload').hide();
                 $('#caseNotification .reply-fb-char-count').html('144');
                 channel_type = 'Twitter Direct Message';
+                $('#caseNotification .data-type').val('direct_message');
+                $('#caseNotification .twitter-userid').val(response.main_post.twitter_user_id);
             }
             else if(response.type == 'facebook'){
                 $('#caseNotification .image-upload').show();
                 $('#caseNotification .reply-fb-char-count').html('2000');
                 channel_type = 'Wall Post';
+                $('#caseNotification .btn-send').addClass('btn-send-reply');
+                $('#caseNotification .data-type').val('reply_facebook');
+                $('#caseNotification .twitter-userid').val('');
             }
             else{
                 $('#caseNotification .image-upload').hide();
                 $('#caseNotification .reply-fb-char-count').html('2000');
                 channel_type = "Facebook PM";
+                $('#caseNotification .data-type').val('reply_facebook_pm');
+                $('#caseNotification .btn-send').addClass('btn-send-msg');
             }
             $('#caseNotification .type-post').html(response.channel.name + " | " + channel_type );
             $('#caseNotification .case-id').html(response.case_id);
             $('#caseNotification .assign-message').html(response.messages);
             $('#caseNotification .btn-resolve').val(response.case_id);
             $('#caseNotification ol').html('');
+            $('#caseNotification .btn-send').val(response.post_id);
+            $('#caseNotification .post_id').val(response.post_id);
+            $('#caseNotification .channel-id').val(response.channel.channel_id);
             
             for(var i=0; i<response.related_conversation.length;i++){
                 if(response.related_conversation[i].type == 'twitter' || response.related_conversation[i].type == 'twitter_dm'){

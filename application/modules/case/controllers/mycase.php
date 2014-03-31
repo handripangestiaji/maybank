@@ -187,9 +187,15 @@ class mycase extends CI_Controller{
             $created_at = new DateTime($case->created_at.' Europe/London');
             $created_at->setTimezone(new DateTimeZone($timezone));
             $case->created_at = $created_at->format('l, M j, Y h:i A');
+            $case->main_post = new stdClass();
             $case->type = str_replace('_', ' ', $case->type);
             if($case->type == 'twitter' || $case->type == 'twitter dm'){
                 $case->related_conversation = $this->case_model->TwitterRelatedConversation($case->case_id);
+                if($case->type == 'twitter dm')
+                    $case->main_post = $this->twitter_model->ReadDMFromDb(array('a.post_id' => $case->post_id), 1);
+                else
+                    $case->main_post = $this->twitter_model->ReadTwitterData(array('a.post_id' => $case->post_id), 1);
+                $case->main_post  = isset($case->main_post[0]) ? $case->main_post[0] : $case->main_post;
             }
             else{
                 $case->related_conversation = $this->case_model->FacebookRelatedConversation($case->case_id);

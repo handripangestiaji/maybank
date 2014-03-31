@@ -1,4 +1,6 @@
 <div id="caseNotification" class="modal modalDialog hide fade" tabindex="1" role="dialog" aria-hidden="true" style="display: none;z-index: 10099" >
+    <div class="floatingBox">
+    <input class="channel-id" type="hidden" value="" />
     <div class="modal-header" style="padding-bottom: 0px;">
         <h3 style=" float: left;width: 200px;">Case #<span class="case-id"></span></h3>
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
@@ -33,16 +35,19 @@
 	    }
 	}
         
+	
         ?>
         <br clear="all" />
         <div class="action-reply">
             <div class="reply-field hide" style="width: 90%;">
+            <form class="reply-tweet">
                 <span class="reply-field-btn-close-2 btn-close pull-right"><i class="icon-remove"></i></span>
                 <input type="hidden" value="" name="post_id" class="post_id" />
-                <input type="hidden" value="new_case" name="type" />
+                <input type="hidden" value="" name="type" class="data-type"/>
+                <input type="hidden" value="" name="twitter_user_id" class="twitter-userid"/>
                 <div class="message"></div>
                 <div class="pull-left">
-                    <select name="case_type" class="case_type" style="width: 130px;">
+                    <select name="reply_type" class="case_type" style="width: 130px;">
                        <option value="">Please Select</option>
                        <option value="Feedback">Feedback</option>
                        <option value="Enquiry">Enquiry</option>
@@ -67,7 +72,7 @@
                         <?php endforeach;?>
                     </select>
                 </div>
-                <textarea class='replaycontent' placeholder="Compose Message"></textarea>
+                <textarea class='replaycontent' name="content" placeholder="Compose Message"></textarea>
                 <div class="link_url pull-left"  style="margin-bottom: 5px;">
                     <i class="icon-link"></i>
                     <input type="text" class="source_link reply-insert-link-text">
@@ -137,15 +142,18 @@
                     </div>
                     <br clear="all" />
                 </div>
-            </div>
-        </div>
-    
-	<div class="case-assign">
-	    <div class="reply-field hide" style="width: 90%;">
-	    <div class="row-fluid">
+                <div class="pull-right">
+                    <button class="btn btn-primary btn-small btn-send"  type="submit" value="" >SEND</button> 
+                </div>
+                <br clear="all" />
+            </form>
+	    </div>
+	</div>
+	<div class='case-assign'>
+	    <div class="row-fluid reply-field hide" style="width: 90%;">
 		<span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
 		<form method="post" class="assign-case" action="<?php echo base_url("case/mycase/CreateCase")?>">
-		<input type="hidden" value="<?php //echo $post_id; ?>" name="post_id" class="post_id" />
+		<input type="hidden" value="" name="post_id" class="post_id" />
 		<input type="hidden" value="new_case" name="type" />
 		<div class="message"></div>
 		<div class="pull-left">
@@ -166,7 +174,6 @@
 				  else{ ?>
 				      <option value="<?=$product->id?>"><?=$product->product_name?></option>
 				  <?php }
-			      
 				  if(isset($product->child)){
 				      foreach($product->child as $child){ ?>
 				      <option value="<?=$child->id?>">-&nbsp;&nbsp;<?=$child->product_name?></option> 
@@ -183,7 +190,9 @@
 		    <select name="assign_to" <!--multiple="multiple"!-->>
 		    <option value='' id="caseUser<?php //$posts[$i]->social_stream_post_id ?>">-- Select User --</option>
 		    <?php
-			/*
+			$this->load->model('case_model');
+		    	$filter_user['country_code'] = IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Case_All_Country_AssignReassignResolved') ? NULL : $this->session->userdata('country');
+			$user_list = $this->case_model->ReadAllUser($filter_user);
 			$group_name = null;
 			$userIncrement = 0;
 			if(is_array($user_list)){
@@ -214,7 +223,6 @@
 				 echo '<optgroup label="'.$user_list->group_name.'"></optgroup>';           
 				 echo '<option value="'.$user_list->user_id.'">'.$user_list->full_name.'</option>';                                 
 			   }
-			   */
 			   ?>
 		    </select>
 		</div>
@@ -231,12 +239,11 @@
 		<textarea placeholder="Compose Message" id="content" name="message" ></textarea>
 		<br clear="all" />
 		<div class="pull-right">
-		    <button type="submit" class="btn-purple btn btn-small" value="<?php if(isset($case_type)){echo $case_type='reassign';}?>" onclick="return confirm('Please make sure the case type?');" ><i class="icon-ok-circle icon-large"></i> Assign</button>    
+		    <button type="submit" class="btn-purple btn btn-small" value="reassign" onclick="return confirm('Please make sure the case type?');" ><i class="icon-ok-circle icon-large"></i> Assign</button>    
 		</div>
 		</form>
 	    </div>
 	</div>
-    </div>
     </div>
     <div class="modal-footer" style="">
 	<?php if(IsRoleFriendlyNameExist($this->user_role, array('Social Stream_Channel_General_Function_All_Country_Reply',
@@ -250,5 +257,6 @@
 		<span>ReAssign</span>
 	    </button>
 	<?php endif;?>
+    </div>
     </div>
 </div>

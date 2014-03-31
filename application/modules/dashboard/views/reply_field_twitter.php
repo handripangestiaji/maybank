@@ -8,10 +8,10 @@
         <div class="message"></div>
         <select name="reply_type" style="width: 130px;">
             <option value="">Please Select</option>
-            <option value="Report Abuse">Report Abuse</option>
             <option value="Feedback">Feedback</option>
             <option value="Enquiry">Enquiry</option>
             <option value="Complaint">Complaint</option>
+            <option value="Report Abuse">Report Abuse</option>
         </select>
         <select name="product_type" style="width: 130px;">
             <option value="">Please Select</option>
@@ -46,7 +46,31 @@
         </a>
     </div>
     <br clear="all" />
-   
+    <div class="left">
+        <div class="left">
+            <i class="icon-tag icon-large"></i>    
+        </div>
+        <!--div class="left">
+            <ul id="compose-tags-reply" style="width: 200px;"></ul>        
+        </div-->
+        <div class="left">
+            <select class="multipleSelect" multiple="multiple" name="tag_id[]">
+            <?php 
+                  $tags=$this->tag_model->get();
+                  if($tags): ?>
+                  
+                          <?php 
+                          $ids=uniqid();
+                          foreach($tags as $v): ?>
+                                  <option value="<?php echo $ids."|".$v->id; ?>"><?php echo $v->tag_name ?></option>
+                          <?php endforeach; ?>
+                  <?php else: ?>
+                          <option>Please add Tag first</option>
+                  <?php endif;?>
+              </select>
+        </div>
+        <br clear="all" />
+    </div>    
     <div id="reply-img-show" class="hide">
         <div class="compose-form img-attached">
             <!-- close button for image attached -->
@@ -80,15 +104,7 @@
             </div>
         </div>
     </div>
-    <div class="left">
-        <div class="left">
-            <i class="icon-tag icon-large"></i>    
-        </div>
-        <div class="left">
-            <ul id="compose-tags-reply" style="width: 200px;"></ul>        
-        </div>
-        <br clear="all" />
-    </div>    
+   
     <br clear="all" />
     <?php endif?>
     <br/>

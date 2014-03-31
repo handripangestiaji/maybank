@@ -162,9 +162,9 @@
 	    </div>
 	</div>
 	<div class='case-assign'>
-	    <div class="row-fluid reply-field hide" style="width: 90%;">
+	    <div class="row-fluid reply-field case-field hide" style="width: 90%;">
 		<span class="reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
-		<form method="post" class="assign-case" action="<?php echo base_url("case/mycase/CreateCase")?>">
+		<form method="post" class="" action="<?php echo base_url("case/mycase/CreateCase")?>">
 		<input type="hidden" value="" name="post_id" class="post_id" />
 		<input type="hidden" value="new_case" name="type" />
 		<div class="message"></div>
@@ -251,7 +251,7 @@
 		<textarea placeholder="Compose Message" id="content" name="message" ></textarea>
 		<br clear="all" />
 		<div class="pull-right">
-		    <button type="submit" class="btn-purple btn btn-small" value="reassign" onclick="return confirm('Please make sure the case type?');" ><i class="icon-ok-circle icon-large"></i> Assign</button>    
+		    <button type="submit" class="btn-purple btn btn-small btn-reassign popup" value="reassign" onclick="return confirm('Please make sure the case type?');" ><i class="icon-ok-circle icon-large"></i> Assign</button>    
 		</div>
 		</form>
 	    </div>

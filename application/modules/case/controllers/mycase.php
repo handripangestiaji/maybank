@@ -62,8 +62,14 @@ class mycase extends CI_Controller{
             if(count($old_case) > 0){
                 $case['old_case_id'] = $old_case[0]->case_id;
                 $solved_case = $this->case_model->ResolveCase($old_case[0]->case_id, $this->session->userdata('user_id'), '', false);
+
             }
+            
             $case['case_id'] = $this->case_model->CreateCase($case, $this->session->userdata('user_id'));
+            if($this->input->post('popup') == 'true'){
+                $this->db->where('case_id', $case['old_case_id']);
+                $this->db->update('case_related_conversation', array('case_id' => $case['case_id']));    
+            }
             echo json_encode(array(
                     "success" => true,
                     "message" => "Assigning case successfully done.",

@@ -190,7 +190,7 @@ class mycase extends CI_Controller{
             $created_at->setTimezone(new DateTimeZone($timezone));
             $case->created_at = $created_at->format('l, M j, Y h:i A');
             $case->type = str_replace('_', ' ', $case->type);
-            if($case->type == 'twitter' || $case->type == 'twitter_dm'){
+            if($case->type == 'twitter' || $case->type == 'twitter dm'){
                 $case->related_conversation = $this->case_model->TwitterRelatedConversation($case->case_id);
             }
             else{

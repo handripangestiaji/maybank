@@ -2266,7 +2266,15 @@ $.fn.ToCase = function(type){
         'success' : function(response){
             $('#caseNotification .assign-by').html(response.created_by.full_name + "(" + response.created_by.username + ")" );
             $('#caseNotification .assign-date').html(response.created_at);
-            $('#caseNotification .type-post').html(response.channel.name + " | " + response.type );
+            if(response.type == 'twitter')
+                channel_type = 'Twitter';
+            else if(response.type == 'twitter_dm')
+                channel_type = 'Twitter Direct Message';
+            else if(response.type == 'facebook')
+                channel_type = 'Wall Post';
+            else
+                channel_type = "Facebook PM";
+            $('#caseNotification .type-post').html(response.channel.name + " | " + channel_type );
             $('#caseNotification .case-id').html(response.case_id);
             $('#caseNotification .assign-message').html(response.messages);
             $('#caseNotification .btn-resolve').val(response.case_id);

@@ -494,7 +494,7 @@ $(function(){
     });
     
     $('#caseNotification .btn-reply').click(function(e){
-       $(this).closest("#caseNotification").find('.reply-field').show().focus();
+       $(this).closest("#caseNotification").find('.reply-field').show();
     });
     
 });

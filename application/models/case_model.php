@@ -9,6 +9,7 @@ class case_model extends CI_Model{
         
         
     function LoadCase($filter = array()){
+        $this->load->model('account_model');
         $this->db->select("a.*, b.channel_id, b.post_stream_id, b.type");
         $this->db->from("`case` a inner join social_stream b on a.post_id = b.post_id");
         $this->db->where($filter);
@@ -25,6 +26,13 @@ class case_model extends CI_Model{
             $eachrow->content_products_id = $this->ReadAllProducts(
                 array("id" => $eachrow->content_products_id)  
             );
+            $eachrow->channel = $this->account_model->GetChannel(array(
+                                    'channel_id' => $eachrow->channel_id
+                                ));
+            if(count($eachrow->channel) > 0){
+                $eachrow->channel = $eachrow->channel[0];
+            }
+            
             if($eachrow->solved_by)
                 $eachrow->solved_by = $this->ReadAllUser(
                     array('user_id' => $eachrow->solved_by)  
@@ -33,6 +41,7 @@ class case_model extends CI_Model{
         
         return $result;
     }
+    
     
     function LoadAssign()
     {
@@ -64,20 +73,30 @@ class case_model extends CI_Model{
     function CreateCase($case, $created_by){
         $related_conversation = $case['related_conversation'];
         $conv = explode(',', $related_conversation);
+        $conv_type = explode(',', $case['related_conversation_type']);
         unset($case['related_conversation']);
+        unset($case['related_conversation_type']);
         $case['related_conversation_count'] = count($conv);
         $this->db->trans_start();
         $this->db->insert('case', $case);
         $insert_id = $this->db->insert_id();
         if($related_conversation != ''){
-            foreach($conv as $related){
-                if($related != '')
+            for($d = 0; $d< count($conv); $d++){
+                if($conv[$d] != '' && $conv_type[$d] != 'facebook_conversation')
                     $this->db->insert('case_related_conversation',
                                 array(
-                                    "social_stream_id" => $related,
+                                    "social_stream_id" => $conv[$d],
                                     "created_at" => date("Y-m-d H:i:s"),
                                     "case_id" => $insert_id
                                 ));
+                else if($conv[$d] != '' && $conv_type[$d] == 'facebook_conversation'){
+                     $this->db->insert('case_related_conversation',
+                                array(
+                                    "fb_conversation_detail_id" => $conv[$d],
+                                    "created_at" => date("Y-m-d H:i:s"),
+                                    "case_id" => $insert_id
+                                ));
+                }
             }
         }
         $this->load->config('mail_config');
@@ -242,44 +261,68 @@ class case_model extends CI_Model{
         }
         return $result;
     }
-    
-    function ReadSimpleConversation($post_id, $type){
-        $table_loaded = "";
-        $where = "";
-        if($type =='facebook_conversation' ){
-            $table_loaded = "social_stream_facebook_conversation";
-            $where = "conversation_id = ".$post_id;
-        }
-        else if($type == 'facebook'){
-            $table_loaded = "social_stream_fb_post";
-            $where = "post_id = ".$post_id;
-        }
-        else if($type=='facebook_comment'){
-            $table_loaded = "social_stream_fb_comments";
-            $where = "id = ".$post_id;
-        }
-        else
-            return null;
-        $this->db->select("*");
-        $this->db->from($table_loaded);
-        $this->db->where($where);
-        $row = $this->db->get()->row();
-        return $row;
-    }
-    
+        
     function FacebookRelatedConversation($case_id){
         $this->load->model('facebook_model');
-        $this->db->select('b.*');
-        $this->db->from("case_related_conversation a inner join social_stream b on a.social_stream_id = b.post_id");
+        $this->db->select('b.*, a.fb_conversation_detail_id');
+        $this->db->from("case_related_conversation a left join social_stream b on a.social_stream_id = b.post_id");
         $this->db->where('a.case_id', $case_id);
         
         $result = $this->db->get()->result();
         
         foreach($result as $row){
-            $row->facebook_data = $this->ReadSimpleConversation($row->post_id, $row->type);
+            if($row->fb_conversation_detail_id == null){
+                if($row->type == 'facebook_conversation')
+                    $row->facebook_data = $this->ReadSimpleConversation($row->post_id, "facebook_conversation_snippet");
+                else
+                    $row->facebook_data = $this->ReadSimpleConversation($row->post_id, "facebook");
+            }
+            else
+                $row->facebook_data = $this->ReadSimpleConversation($row->fb_conversation_detail_id, "facebook_conversation");
+                
+            if(isset($row->facebook_data->attachment))
+                $row->facebook_data->attachment = json_decode($row->facebook_data->attachment);
         }
+        
         return $result;
     }
+    
+    function ReadSimpleConversation($post_id, $type){
+        $table_loaded = "";
+        $where = "";
+        $limit = 100;
+        if($type =='facebook_conversation'){
+            $table_loaded = "social_stream_facebook_conversation_detail a inner join fb_user_engaged c on a.sender = c.facebook_id";
+            $where = "a.detail_id = ".$post_id;
+        }
+        else if($type =='facebook_conversation_snippet'){
+            $table_loaded = "social_stream_facebook_conversation_detail a inner join fb_user_engaged c on a.sender = c.facebook_id";
+            $where = "a.conversation_id = ".$post_id;
+            $limit = 1;
+            $order_by = 'a.created_at';
+        }
+        else if($type == 'facebook'){
+            $table_loaded = "social_stream_fb_post a inner join fb_user_engaged c on a.author_id = c.facebook_id";
+            $where = "post_id = ".$post_id;
+        }
+        else if($type=='facebook_comment'){
+            $table_loaded = "social_stream_fb_comments a inner join fb_user_engaged c on a.from = c.facebook_id ";
+            $where = "id = ".$post_id;
+        }
+        else
+            return null;
+        
+        $this->db->select("*");
+        $this->db->from($table_loaded);
+        $this->db->where($where);
+        $this->db->limit($limit);
+        if(isset($order_by))
+            $this->db->order_by($order_by, 'desc');
+        $row = $this->db->get()->row();
+        
+        return $row;
+    }
+
     
     function FindFacebookRelatedConversation($facebook_id, $channel_id){
         $this->db->select("a.post_id as social_stream_post_id, post_content as content, b.created_at, attachment,b.type");

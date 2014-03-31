@@ -2259,8 +2259,6 @@ $.fn.RefreshAllStream = function(){
 
 $.fn.ToCase = function(type){
     var thisElement = $(this);
-    console.log(thisElement.html());
-    
     $.ajax({
         'url' : BASEURL + 'case/mycase/ReadCase',
         'type' : 'GET',
@@ -2268,11 +2266,14 @@ $.fn.ToCase = function(type){
         'success' : function(response){
             $('#caseNotification .assign-by').html(response.created_by.full_name + "(" + response.created_by.username + ")" );
             $('#caseNotification .assign-date').html(response.created_at);
-            $('#caseNotification .type-post').html(response.type);
+            $('#caseNotification .type-post').html(response.channel.name + " | " + response.type );
             $('#caseNotification .case-id').html(response.case_id);
+            $('#caseNotification .assign-message').html(response.messages);
+            $('#caseNotification .btn-resolve').val(response.case_id);
             $('#caseNotification ol').html('');
-            for(i=0; i<response.related_conversation.length;i++){
-                if(response.type == 'twitter' || response.type == 'twitter_dm'){
+            for(var i=0; i<response.related_conversation.length;i++){
+                console.log(response.related_conversation[i]);
+                if(response.related_conversation[i].type == 'twitter' || response.related_conversation[i].type == 'twitter_dm'){
                      $template = '<li style="display: block;">' +
                      '<img src="'+ BASEURL + 'dashboard/media_stream/SafePhoto?photo=' + response.related_conversation[i]['twitter_data'][0].profile_image_url  + '" alt="" style="height: 40px;margin: 6px 10px" class="left" />' + 
                         '<p style="padding: 0px 2px;margin: 2px 5px;width:80%" class="left">' + 
@@ -2284,13 +2285,32 @@ $.fn.ToCase = function(type){
                         '<br clear="all"/>' +
                     '</li>';
                 }
+                else if(response.related_conversation[i].type == 'facebook'|| response.related_conversation[i].type == 'facebook conversation'){
+                    var img = '';
+                    if(response.related_conversation[i]['facebook_data'].attachment != null){
+                        img = '<img src="'+BASEURL+'dashboard/media_stream/SafePhoto?photo=' +
+                            response.related_conversation[i]['facebook_data'].attachment[0].src +
+                            '" style="height:200px" /> <br />';
+                    }
+                    $template = '<li style="display: block;">' +
+                     '<img src="'+ BASEURL + 'dashboard/media_stream/SafePhoto?photo=https://graph.facebook.com/' + response.related_conversation[i]['facebook_data'].author_id  + '/picture" alt="" style="height: 40px;margin: 6px 10px" class="left" />' + 
+                        '<p style="padding: 0px 2px;margin: 2px 5px;width:80%" class="left">' + 
+                            '<span class="author" style="font-weight:600;padding:0;">' + response.related_conversation[i]['facebook_data'].name + '</span>: ' +
+                            '<span class="text">'+ linkify(response.related_conversation[i]['facebook_data'].post_content) + '</span><br />' +
+                            img +
+                            '<span class="created-time" style="font-size:10px;color: #62312A;">' + response.related_conversation[i]['facebook_data'].created_at  +
+                            '</span>'+
+                        '</p>' + 
+                        '<br clear="all"/>' +
+                    '</li>';
+                }
                 else{
                     $template = '<li style="display: block;">' +
-                     '<img src="'+ BASEURL + 'dashboard/media_stream/SafePhoto?photo=' + response.related_conversation[i]['facebook_data'][0].author_id  + '" alt="" style="height: 40px;margin: 6px 10px" class="left" />' + 
+                     '<img src="'+ BASEURL + 'dashboard/media_stream/SafePhoto?photo=https://graph.facebook.com/' + response.related_conversation[i]['facebook_data'].sender  + '/picture" alt="" style="height: 40px;margin: 6px 10px" class="left" />' + 
                         '<p style="padding: 0px 2px;margin: 2px 5px;width:80%" class="left">' + 
-                            '<span class="author" style="font-weight:600;padding:0;">' + response.related_conversation[i]['facebook_data'][0].name + '</span>: ' +
-                            '<span class="text">'+ linkify(response.related_conversation[i]['facebook_data'][0].post_content) + '</span><br />' + 
-                            '<span class="created-time" style="font-size:10px;color: #62312A;">' + response.related_conversation[i]['twitter_data'][0].created_at  +
+                            '<span class="author" style="font-weight:600;padding:0;">' + response.related_conversation[i]['facebook_data'].name + '</span>: ' +
+                            '<span class="text">'+ linkify(response.related_conversation[i]['facebook_data'].messages) + '</span><br />' + 
+                            '<span class="created-time" style="font-size:10px;color: #62312A;">' + response.related_conversation[i]['facebook_data'].created_at  +
                             '</span>'+
                         '</p>' + 
                         '<br clear="all"/>' +

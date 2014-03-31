@@ -1,4 +1,4 @@
-    <div class="row-fluid">
+<div class="row-fluid">
 <?php 
 if($posts){
 
@@ -61,6 +61,7 @@ if($posts){
             
             
            <input type="hidden" id="relatedCoversation-<?php echo $posts[$i]->social_stream_post_id ?>" name="related_conversation" class="value_related_conversation" value="<?php echo $posts[$i]->social_stream_post_id?>" />
+           <input type="hidden" id="relatedCoversationType-<?php echo $posts[$i]->social_stream_post_id ?>" name="related_conversation_type" class="value_related_conversation" value="<?php echo $posts[$i]->social_stream_post_id?>" />
            <br clear="all" />
            <div class="pull-left" style="width:30%;">
                Assign To:

@@ -4683,3 +4683,4 @@ ul.floatingBoxContainers .case-field ul{max-height: 150px;overflow-y: scroll;}
 ul.floatingBoxContainers .case-field li{margin-bottom: 0;}
 ul.floatingBoxContainers .case-field li label{padding: 0;text-transform: none}
 .related-conversation .author{font-weight: 600;color: green;}
+.reply-field ul.dropdown-menu li{padding:0;margin: 2px;border:  none; }

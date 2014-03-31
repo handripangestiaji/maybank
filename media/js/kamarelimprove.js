@@ -382,7 +382,8 @@ $(function(){
                                 scrollTop: 0
                             });
                         }, 1500);
-                        
+                        if(commentButton.hasClass('popup'))
+                            window.location.reload();
                     }
                 }
                 catch(e){

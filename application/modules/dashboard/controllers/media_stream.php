@@ -746,7 +746,7 @@ class Media_stream extends CI_Controller {
     
     public function FbReplyMsg(){
         header("Content-Type: application/x-json");
-	   $this->load->model('account_model');
+	$this->load->model('account_model');
         $this->load->model('facebook_model');
         $comment = $this->input->post('comment');
         $post_id = $this->input->post('post_id');

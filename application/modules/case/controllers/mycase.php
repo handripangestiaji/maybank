@@ -59,17 +59,18 @@ class mycase extends CI_Controller{
                 unset($case['content_products_id']);
             
             $solved_case = NULL;
-            if(count($old_case) > 0)
+            if(count($old_case) > 0){
                 $case['old_case_id'] = $old_case[0]->case_id;
                 $solved_case = $this->case_model->ResolveCase($old_case[0]->case_id, $this->session->userdata('user_id'), '', false);
-                $case['case_id'] = $this->case_model->CreateCase($case, $this->session->userdata('user_id'));
-                echo json_encode(array(
-                        "success" => true,
-                        "message" => "Assigning case successfully done.",
-                        "result" => $case,
-                        "old_case" => $solved_case
-                    )
-                );
+            }
+            $case['case_id'] = $this->case_model->CreateCase($case, $this->session->userdata('user_id'));
+            echo json_encode(array(
+                    "success" => true,
+                    "message" => "Assigning case successfully done.",
+                    "result" => $case,
+                    "old_case" => $solved_case
+                )
+            );
         }
         else{
             echo json_encode(array(
@@ -180,6 +181,7 @@ class mycase extends CI_Controller{
     
     function ReadCase(){
         $this->load->model('twitter_model');
+        $this->load->model('facebook_model');
         $case_id = $this->input->get('case_id');
         $timezone = $this->session->userdata('timezone');
         $case = $this->case_model->LoadCase(array('case_id' => $case_id));
@@ -197,16 +199,19 @@ class mycase extends CI_Controller{
                     $case->main_post = $this->twitter_model->ReadDMFromDb(array('a.post_id' => $case->post_id), 1);
                 else
                     $case->main_post = $this->twitter_model->ReadTwitterData(array('a.post_id' => $case->post_id), 1);
-                $case->main_post  = isset($case->main_post[0]) ? $case->main_post[0] : $case->main_post;
             }
             else{
+                 if($case->type == 'facebook')
+                    $case->main_post = $this->facebook_model->RetrieveFeedFB(array('c.post_id' => $case->post_id), 1);
+                else
+                    $case->main_post = $this->facebook_model->RetrievePmFB(array('c.post_id' => $case->post_id), 1);
+                
                 $case->related_conversation = $this->case_model->FacebookRelatedConversation($case->case_id);
             }
-            
+            $case->main_post  = isset($case->main_post[0]) ? $case->main_post[0] : $case->main_post;
             echo json_encode($case);
         }
         else
             echo json_encode(NULL);
-        
     }
 }

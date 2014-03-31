@@ -125,7 +125,7 @@ class Cms extends MY_Controller {
 	       else{
 		    $filter = null;
 	       }
-	       $data['products'] = $this->product_model->get('','', $filter);
+	       $data['products'] = $this->product_model->get('','', null);
 	       
 	       $data['tags'] = $this->tag_model->get();
 	       $data['cms_view'] = 'create_campaign';
@@ -593,7 +593,7 @@ class Cms extends MY_Controller {
 	       $filter = null;
 	  }
 	  
-          $data['data']['products_avail'] = $this->product_model->get('','',$filter);
+          $data['data']['products_avail'] = $this->product_model->get('','',null);
           $data['data']['products_selected'] = $this->campaign_model->get_content_product_campaign_by_campaign_id($id)->result();
     	  //$data['countries'] = $this->users_model->get_country()->result();
           $data['data']['tags'] = $this->tag_model->get();

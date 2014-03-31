@@ -215,33 +215,18 @@ $(function(){
         });
     });
     
-    $(this).on('click','.add-related-conversation', function(){
-        var modalBody = $(this).parent().parent().find('.modal-body');
-        currentElement = $(this);
-        var relatedConversation = '';
-        var selected = 0;
-        modalBody.find('input[type="checkbox"]').each(function(){
-            if($(this).is(":checked")){
-                relatedConversation += $(this).val() +",";
-                selected ++ ;
-            }
-        });
-        
-        if(selected > 0){
-            $('#relatedCoversation-'+$(this).val()).parent().find('.btn-add-related').html('Add Related Conversation (' + selected +' added)');
-        }
-        
-        $('#relatedCoversation-'+$(this).val()).val(relatedConversation);
-    });
+
    
     $(this).on('click','.add-related-conversation', function(){
         var modalBody = $(this).parent().parent().find('.modal-body');
         currentElement = $(this);
         var relatedConversation = '';
         var selected = 0;
+        var relatedConversationType = ''
         modalBody.find('input[type="checkbox"]').each(function(){
             if($(this).is(":checked")){
                 relatedConversation += $(this).val() +",";
+                relatedConversationType += $(this).siblings('input[type=hidden]').val() + ",";
                 selected ++ ;
             }
         });
@@ -251,6 +236,7 @@ $(function(){
         }
         
         $('#relatedCoversation-'+$(this).val()).val(relatedConversation);
+        $('#relatedCoversationType-'+$(this).val()).val(relatedConversationType);
     });
     
  
@@ -389,7 +375,6 @@ $(function(){
     $(this).on('click', '.btn-resolve', function(e){
         var btnResolve = $(this);
         confirmed = prompt("Resolved Message?", "","Are you sure to solve this case");
-        //confirmed = confirm('Are you sure to solve this case?');
         e.preventDefault();
         if(confirmed){
             btnResolve.attr("disabled", "disabled");
@@ -402,7 +387,10 @@ $(function(){
                         btnResolve.siblings('.btn-case').remove();
                         btnResolve.removeAttr("disabled").html('<i class="icon-plus"></i> <span>CASE</span>').removeClass('btn-resolve btn-purple').addClass('btn-case btn-danger');
                         btnResolve.closest('li').find('.btn-purple:first').html('Case ID #' + response.result.case_id + ' solved by ' + response.result.solved_by.display_name).removeClass('btn-purple').addClass('btn-inverse');
+                        if(btnResolve.hasClass('popup'))
+                            window.location.reload();
                     }
+
                },
                "error" : function(){
                     alert("There is something error when resolve this case.")
@@ -415,11 +403,7 @@ $(function(){
     $(this).on('click', '.btn-resolve_fb', function(e){
         var btnResolve = $(this);
         var user_id= $(" input[name=user_id]").val();
-       // var solved_message=
-//        confirmed = confirm('Are you sure to solve this case?');
         confirmed = prompt("Resolved Message?", "","Are you sure to solve this case");
-        //alert("You have entered : " +  retVal );
-       // alert(confirmed);
         e.preventDefault();
         if(confirmed){
             btnResolve.attr("disabled", "disabled");

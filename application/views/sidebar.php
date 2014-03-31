@@ -1,4 +1,4 @@
-
+<?php $timezone = new DateTimeZone($this->session->userdata('timezone'));?>
 <!-- ==================== SIDEBAR COLLAPSED ==================== -->
 <div id="collapsedSidebarContent">
     <div class="sidebarDivider"></div>
@@ -53,7 +53,6 @@ if(IsRoleFriendlyNameExist($this->user_role, "Social Stream_Notification")):?>
                 </div>
                 <div class="notifBody">
                     <?php
-                        $timezone = new DateTimeZone($this->session->userdata('timezone'));
                         $date = new DateTime($each_case->created_at.' Europe/London');
                         $date->setTimezone($timezone);
                         echo $date->format("M d, Y, h:i A");
@@ -69,8 +68,8 @@ if(IsRoleFriendlyNameExist($this->user_role, "Social Stream_Notification")):?>
                 </div>
                 <div class="notifBody">
                     <?php
-                        $timezone = new DateTimeZone($this->session->userdata('timezone'));
-                        $date = new DateTime($each_case->created_at, $timezone);
+                        $date = new DateTime($each_case->created_at.' Europe/London');
+                        $date->setTimezone($timezone);
                         echo $date->format("M d, Y, h:i A");
                     ?>
                 </div>
@@ -87,8 +86,8 @@ if(IsRoleFriendlyNameExist($this->user_role, "Social Stream_Notification")):?>
                 </div>
                 <div class="notifBody">
                     <?php
-                        $timezone = new DateTimeZone($this->session->userdata('timezone'));
-                        $date = new DateTime($each_case->created_at.' Europe/London', $timezone);
+                        $date = new DateTime($each_case->created_at.' Europe/London');
+                        $date->setTimezone($timezone);
                         echo $date->format("M d, Y, h:i A");
                         
                     ?>
@@ -103,8 +102,9 @@ if(IsRoleFriendlyNameExist($this->user_role, "Social Stream_Notification")):?>
                 </div>
                 <div class="notifBody">
                     <?php
-                        $timezone = new DateTimeZone($this->session->userdata('timezone'));
-                        $date = new DateTime($each_case->created_at, $timezone);
+                        
+                        $date = new DateTime($each_case->created_at.' Europe/London');
+                        $date->setTimezone($timezone);
                         echo $date->format("M d, Y, h:i A");
                     ?>
                 </div>

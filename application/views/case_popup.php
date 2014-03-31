@@ -6,12 +6,12 @@
         <br clear="all" />
     </div>
     <div class="modal-body" style="padding: 10px 0px 10px 15px;">
-        <h3 style="text-transform: capitalize;" class="type-post"></h3>
+        <h4 style="text-transform: capitalize;" class="type-post"></h4>
         
         <table>
             <tr><td style="width:20%">Assign By</td><td>:</td><td class="assign-by"></td></tr>
             <tr><td>Date</td><td>:</td><td class="assign-date"></td></tr>
-            <tr><td colspan="2" class="assign-message">
+            <tr><td colspan="3" class="assign-message">
                 
             </td></tr>
         </table>
@@ -19,13 +19,18 @@
         <h4>Related Conversation</h4>
         <ol style="margin: 0;padding: 0;" class="related-conversation-list">
         </ol>
-    
+        <div class="action">
+            
+        </div>
     </div>
     <div class="modal-footer" style="">
+        <button class="btn btn-purple reply" >Reply</button>
         
-            
-            <button class="btn btn-purple reply" >Reply</button>
-            <button class="btn btn-warning" >Resolve</button>
-            <button class="btn btn-danger" class="reply" >ReAssign</button>
+        
+        <button type="button" class="btn btn-orange btn-resolve popup" name="action" value=""><i class="icon-check"></i> <span>RESOLVE</span></button>
+        
+        <button type="button" class="btn btn-danger btn-case" name="action" value="reassign"><i class="icon-plus"></i>
+            <span>ReAssign</span>
+        </button>
     </div>
 </div>

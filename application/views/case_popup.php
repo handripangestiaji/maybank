@@ -1,4 +1,6 @@
 <div id="caseNotification" class="modal modalDialog hide fade" tabindex="1" role="dialog" aria-hidden="true" style="display: none;z-index: 10099" >
+    <div class="floatingBox">
+    <input class="channel-id" type="hidden" value="" />
     <div class="modal-header" style="padding-bottom: 0px;">
         <h3 style=" float: left;width: 200px;">Case #<span class="case-id"></span></h3>
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
@@ -37,12 +39,14 @@
         <br clear="all" />
         <div class="action-reply">
             <div class="reply-field hide" style="width: 90%;">
+            <form class="reply-tweet">
                 <span class="reply-field-btn-close-2 btn-close pull-right"><i class="icon-remove"></i></span>
                 <input type="hidden" value="" name="post_id" class="post_id" />
-                <input type="hidden" value="new_case" name="type" />
+                <input type="hidden" value="" name="type" class="data-type"/>
+                <input type="hidden" value="" name="twitter_user_id" class="twitter-userid"/>
                 <div class="message"></div>
                 <div class="pull-left">
-                    <select name="case_type" class="case_type" style="width: 130px;">
+                    <select name="reply_type" class="case_type" style="width: 130px;">
                        <option value="">Please Select</option>
                        <option value="Feedback">Feedback</option>
                        <option value="Enquiry">Enquiry</option>
@@ -67,7 +71,7 @@
                         <?php endforeach;?>
                     </select>
                 </div>
-                <textarea class='replaycontent' placeholder="Compose Message"></textarea>
+                <textarea class='replaycontent' name="content" placeholder="Compose Message"></textarea>
                 <div class="link_url pull-left"  style="margin-bottom: 5px;">
                     <i class="icon-link"></i>
                     <input type="text" class="source_link reply-insert-link-text">
@@ -137,8 +141,11 @@
                     </div>
                     <br clear="all" />
                 </div>
-                
-                
+                <div class="pull-right">
+                    <button class="btn btn-primary btn-small btn-send"  type="submit" value="" >SEND</button> 
+                </div>
+                <br clear="all" />
+            </form>
             </div>
         </div>
     </div>
@@ -154,5 +161,6 @@
                 <span>ReAssign</span>
             </button>
         <?php endif;?>
+    </div>
     </div>
 </div>

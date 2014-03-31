@@ -479,6 +479,7 @@ $(function(){
         
         $($(this).attr('href')).removeClass('hide fade');
     });
+    
     $('.users-menu .btn').each(function(){
         var pathname = window.location.pathname;
         pathname = pathname.replace("/users/", "");

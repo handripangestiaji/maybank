@@ -1566,7 +1566,9 @@ $(function(){
             });
             
                      $(this).on('click','.btn-send-reply',function() {
-                        if($(this).parent().siblings('.option-type').find(".productType").val() == ''){
+                        if($(this).parent().siblings('.option-type').find(".productType").val() == '' && 
+                           $(this).parent().siblings('.option-type').find(".replyType").val() !='Report_Abuse')
+                        {
                             alert('Please select a product');
                         }
                         else{
@@ -1777,12 +1779,13 @@ $(function(){
                             }
                        });
                     });
-                         $(this).on('click','.replyType',function(){
+                    $(this).on('click','.replyType',function(){
                             var replyType=$(this).val();
                             if(replyType=="Report_Abuse"){
                                 $(this).siblings('.productType').attr('disabled', 'disabled');
                             }else{
-                                $(this).siblings('.productType').removeAttr('disabled', 'disabled');
+                                 $(this).siblings('.productType').removeAttr('disabled', 'disabled');
+                                
                             }
                          });   
             

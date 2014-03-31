@@ -106,9 +106,10 @@ class mycase extends CI_Controller{
         $this->load->model('facebook_model');
         $post_id = $this->input->get('post_id');
         $channel_id = $this->input->get('channel_id');
-        
-        $related_post_feed = $this->case_model->FindFacebookRelatedConversation($this->input->get('facebook_id'), $channel_id);
-        
+        $case_id=$this->input->get('case_id');
+
+        $related_post_feed['all_case'] = $this->case_model->FindFacebookRelatedConversation($this->input->get('facebook_id'), $channel_id);
+        $related_post_feed['assign'] = $this->case_model->FacebookRelatedConversation($case_id);
         
         echo json_encode($related_post_feed);
     }

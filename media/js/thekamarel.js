@@ -1651,11 +1651,10 @@ $(function(){
             $(this).on('click','.btn-send-msg',
                 function() {
                     if($(this).parent().siblings('.option-type').find(".productType").val() == '' && 
-                           $(this).parent().siblings('.option-type').find(".replyType").val() !='Report_Abuse')
-                        {
+                       $(this).parent().siblings('.option-type').find(".replyType").val() !='Report_Abuse')
+                       {
                             alert('Please select a product');
-                        }
-                        else{
+                       }else{
                         var len=$(this).parent().siblings(".replaycontent").val().length
                         if(len>2000){
                             $(this).parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
@@ -1850,6 +1849,28 @@ $(function(){
 
                                 }
                             });
+                            
+                             $(document).ready(function() {
+			      
+				 $('.multipleSelect').multiselect({
+                    buttonText: function(options, select) {
+                    if (options.length == 0) {
+                        return 'None selected <b class="caret"></b>';
+                    }
+                    else if (options.length > 1) {
+                        return options.length + ' selected <b class="caret"></b>';
+                    }
+                    else {
+                        var selected = '';
+                        options.each(function() {
+                            selected += $(this).text() + ', ';
+                        });
+                        return selected.substr(0, selected.length -2) + ' <b class="caret"></b>';
+                    }
+                },
+                });
+                    
+			    });
 
                     });
                     me.removeAttr('disabled').html('Loading..');

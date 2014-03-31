@@ -274,7 +274,7 @@ class Cms extends MY_Controller {
 	       else{
 		    $filter = null;
 	       }
-	       $data['products'] = $this->product_model->get('','', $filter);
+	       $data['products'] = $this->product_model->get();
  	       
 	       if($country_code != 'All'){
 		    $filter = array('content_campaign.country_code' => $country_code);

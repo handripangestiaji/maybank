@@ -2272,7 +2272,6 @@ $.fn.ToCase = function(type){
             $('#caseNotification .btn-resolve').val(response.case_id);
             $('#caseNotification ol').html('');
             for(var i=0; i<response.related_conversation.length;i++){
-                console.log(response.related_conversation[i]);
                 if(response.related_conversation[i].type == 'twitter' || response.related_conversation[i].type == 'twitter_dm'){
                      $template = '<li style="display: block;">' +
                      '<img src="'+ BASEURL + 'dashboard/media_stream/SafePhoto?photo=' + response.related_conversation[i]['twitter_data'][0].profile_image_url  + '" alt="" style="height: 40px;margin: 6px 10px" class="left" />' + 
@@ -2288,6 +2287,7 @@ $.fn.ToCase = function(type){
                 else if(response.related_conversation[i].type == 'facebook'|| response.related_conversation[i].type == 'facebook conversation'){
                     var img = '';
                     if(response.related_conversation[i]['facebook_data'].attachment != null){
+                        if(response.related_conversation[i]['facebook_data'].attachment.type == 'image')
                         img = '<img src="'+BASEURL+'dashboard/media_stream/SafePhoto?photo=' +
                             response.related_conversation[i]['facebook_data'].attachment[0].src +
                             '" style="height:200px" /> <br />';

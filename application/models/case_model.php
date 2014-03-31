@@ -27,8 +27,8 @@ class case_model extends CI_Model{
                 array("id" => $eachrow->content_products_id)  
             );
             $eachrow->channel = $this->account_model->GetChannel(array(
-                                    'channel_id' => $eachrow->channel_id
-                                ));
+                'channel_id' => $eachrow->channel_id
+            ));
             if(count($eachrow->channel) > 0){
                 $eachrow->channel = $eachrow->channel[0];
             }

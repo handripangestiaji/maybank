@@ -1015,7 +1015,19 @@ class Media_stream extends CI_Controller {
 	$data['user_list'] = $this->case_model->ReadAllUser($filter_user);
         
         $this->load->model('campaign_model');
-        $data['product_list'] = $this->campaign_model->GetProduct();
+	$product_list = $this->campaign_model->GetProduct(array('parent_id' => null));
+	foreach($product_list as $prod){    
+	    $product_child = $this->campaign_model->GetProduct(array('parent_id' => $prod->id));
+	    
+	    if($product_child){
+		$chi = array();
+		foreach($product_child as $child){
+		    $chi[] = $child;
+		}
+	        $prod->child = $chi;
+	    }
+	}
+	$data['product_list'] = $product_list;
 
 	
         if($action=='mentions'){

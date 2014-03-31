@@ -80,6 +80,15 @@
             </div>
         </div>
     </div>
+    <div class="left">
+        <div class="left">
+            <i class="icon-tag icon-large"></i>    
+        </div>
+        <div class="left">
+            <ul id="compose-tags-reply" style="width: 200px;"></ul>        
+        </div>
+        <br clear="all" />
+    </div>    
     <br clear="all" />
     <?php endif?>
     <br/>

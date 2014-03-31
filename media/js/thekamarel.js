@@ -2176,7 +2176,15 @@ $(document).ready(function(){
     });
     
     $(this).on('click','.btn-assign-popup',function(){
+        $(this).closest('.modal-footer').siblings('.modal-body').find('.reply-field').hide();
         $(this).closest('.modal-footer').siblings('.modal-body').find('.case-assign').show();
+        $(this).closest('.modal-footer').siblings('.modal-body').find('.case-assign').find('.reply-field').show();
+    });
+    
+    $(this).on('click','.btn-reply-popup',function(){
+        $(this).closest('.modal-footer').siblings('.modal-body').find('.reply-field').hide();
+        $(this).closest('.modal-footer').siblings('.modal-body').find('.action-reply').show();
+        $(this).closest('.modal-footer').siblings('.modal-body').find('.action-reply').find('.reply-field').show();
     });
 });
 

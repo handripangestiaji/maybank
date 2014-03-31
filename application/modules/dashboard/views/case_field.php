@@ -65,7 +65,6 @@ if($posts){
            <br clear="all" />
            <div class="pull-left" style="width:30%;">
                Assign To:
-               
            </div>
            <div class="pull-left" style="width:70%;">
                <select name="assign_to" <!--multiple="multiple"!-->>

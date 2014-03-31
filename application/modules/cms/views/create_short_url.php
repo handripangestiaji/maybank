@@ -106,13 +106,21 @@
                                 <div class="controls">
                                     <select name="shorturl[product_id]">
                                         <option value="">--None Selected--</option>
-                                        <?php if($products): ?>
-                                                <?php foreach($products as $v): ?>
-                                                    <option value="<?php echo $v->id ?>"><?php echo $v->product_name ?></option>
-                                                <?php endforeach; ?>
-                                        <?php else: ?>
-                                                <option>Please add Product first</option>
-                                        <?php endif;?>
+					<?php foreach($product_list as $product):?>
+					    <?php
+						if(isset($product->child)){ ?>
+						    <optgroup label="<?=$product->product_name?>"></optgroup>
+						<?php }
+						else{ ?>
+						    <option value="<?=$product->id?>"><?=$product->product_name?></option>
+						<?php }
+					    
+						if(isset($product->child)){
+						    foreach($product->child as $child){ ?>
+						    <option value="<?=$child->id?>">-&nbsp;&nbsp;<?=$child->product_name?></option> 
+						    <?php }
+						} ?>
+					<?php endforeach?>
                                     </select>
                                 </div>
                             </div>

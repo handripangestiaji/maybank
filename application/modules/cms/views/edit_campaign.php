@@ -20,17 +20,23 @@
             <div class="control-group">
                 <label class="control-label">Product<span class="redText"> *</span></label>
                 <div class="controls">
-                    	<?php
-                        $new_ps = array();
-                        foreach($products_selected as $ps){
-                            $new_ps[] = $ps->id;
-                        }
-                        $options = array();
-                        foreach($products_avail as $product){
-                            $options[$product->id] = $product->product_name;
-                        }
-                        echo form_multiselect('product[]', $options, $new_ps, 'class="multipleSelect" multiple="multiple"');
-                        ?>
+		    <select class="multipleSelect" multiple="multiple" name="product[]">
+                    	<?php foreach($product_list as $product):?>
+			    <?php
+				if(isset($product->child)){ ?>
+				    <optgroup label="<?=$product->product_name?>"></optgroup>
+				<?php }
+				else{ ?>
+				    <option value="<?=$product->id?>" <?php if(in_array($product->id,$product_selected)){echo 'selected="selected"';} ?>><?=$product->product_name?></option>
+				<?php }
+			    
+				if(isset($product->child)){
+				    foreach($product->child as $child){ ?>
+				    <option value="<?=$child->id?>" <?php if(in_array($child->id,$product_selected)){echo 'selected="selected"';} ?>>-&nbsp;&nbsp;<?=$child->product_name?></option> 
+				    <?php }
+				} ?>
+			<?php endforeach?>
+		    </select>
                 </div>
             </div>
             <div class="control-group">

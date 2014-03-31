@@ -5,14 +5,14 @@ class Cms extends MY_Controller {
      public $user_role;
 	public function __construct()
 	{
-		parent::__construct();
-                $this->load->model('users_model');
-		$this->load->library(array('Shorturl', 'ciqrcode'));
-		$this->load->model(array('tag_model', 'product_model', 'campaign_model', 'shorturl_model', 'campaign_url_model'));
-		$this->load->helper('form');
-		$this->load->library('form_validation');
-                $this->user_role=$this->users_model->get_collection_detail(
-                                        array('role_collection_id'=>$this->session->userdata('role_id')));
+	       parent::__construct();
+	       $this->load->model('users_model');
+	       $this->load->library(array('Shorturl', 'ciqrcode'));
+	       $this->load->model(array('tag_model', 'product_model', 'campaign_model', 'shorturl_model', 'campaign_url_model'));
+	       $this->load->helper('form');
+	       $this->load->library('form_validation');
+	       $this->user_role=$this->users_model->get_collection_detail(
+               array('role_collection_id'=>$this->session->userdata('role_id')));
 	}
 
     public function index()
@@ -119,13 +119,19 @@ class Cms extends MY_Controller {
 	  {
 	       $country_code = $this->session->userdata('country');
 	       
-	       if($country_code != 'All'){
-		   $filter = array('content_products.country_code' => $country_code);
+	       $product_list = $this->campaign_model->GetProduct(array('parent_id' => null));
+	       foreach($product_list as $prod){    
+		   $product_child = $this->campaign_model->GetProduct(array('parent_id' => $prod->id));
+		   
+		   if($product_child){
+		       $chi = array();
+		       foreach($product_child as $child){
+			   $chi[] = $child;
+		       }
+		       $prod->child = $chi;
+		   }
 	       }
-	       else{
-		    $filter = null;
-	       }
-	       $data['products'] = $this->product_model->get('','', null);
+	       $data['product_list'] = $product_list;
 	       
 	       $data['tags'] = $this->tag_model->get();
 	       $data['cms_view'] = 'create_campaign';
@@ -268,13 +274,19 @@ class Cms extends MY_Controller {
 	  {
 	       $country_code = $this->session->userdata('country');
 	       
-	       if($country_code != 'All'){
-		    $filter = array('content_products.country_code' => $country_code);
+	       $product_list = $this->campaign_model->GetProduct(array('parent_id' => null));
+	       foreach($product_list as $prod){    
+		   $product_child = $this->campaign_model->GetProduct(array('parent_id' => $prod->id));
+		   
+		   if($product_child){
+		       $chi = array();
+		       foreach($product_child as $child){
+			   $chi[] = $child;
+		       }
+		       $prod->child = $chi;
+		   }
 	       }
-	       else{
-		    $filter = null;
-	       }
-	       $data['products'] = $this->product_model->get();
+	       $data['product_list'] = $product_list;
  	       
 	       if($country_code != 'All'){
 		    $filter = array('content_campaign.country_code' => $country_code);
@@ -585,17 +597,28 @@ class Cms extends MY_Controller {
           $campaign = $this->campaign_model->getOneBy(array('id' => $id));
           $data['data']['row'] = $campaign;
 	  
-	  $country_code = $this->session->userdata('country'); 
-	  if($country_code != 'All'){
-	       $filter = array('content_products.country_code' => $country_code);
+	  $product_list = $this->campaign_model->GetProduct(array('parent_id' => null));
+	  foreach($product_list as $prod){    
+	      $product_child = $this->campaign_model->GetProduct(array('parent_id' => $prod->id));
+	      
+	      if($product_child){
+		  $chi = array();
+		  foreach($product_child as $child){
+		      $chi[] = $child;
+		  }
+		  $prod->child = $chi;
+	      }
 	  }
-	  else{
-	       $filter = null;
+	  $data['data']['product_list'] = $product_list;
+	       
+	  $products_selected = $this->campaign_model->get_content_product_campaign_by_campaign_id($id)->result();
+    	  if($products_selected){
+	       foreach($products_selected as $select){
+		    $prod_sel[] = $select->products_id;
+	       }
 	  }
-	  
-          $data['data']['products_avail'] = $this->product_model->get('','',null);
-          $data['data']['products_selected'] = $this->campaign_model->get_content_product_campaign_by_campaign_id($id)->result();
-    	  //$data['countries'] = $this->users_model->get_country()->result();
+	  $data['data']['product_selected'] = $prod_sel;
+	  //$data['countries'] = $this->users_model->get_country()->result();
           $data['data']['tags'] = $this->tag_model->get();
           
     	  $data['data']['tags_selected'] = $this->campaign_model->get_content_tag_campaign_by_campaign_id($id)->result();

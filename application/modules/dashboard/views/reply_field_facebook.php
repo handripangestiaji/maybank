@@ -1,4 +1,4 @@
-<div action="" method="post" class="facebook-tweet">
+<div action="" method="post" class="facebook-tweet form">
 
 <div class="row-fluid">
     <span class="fb-reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>

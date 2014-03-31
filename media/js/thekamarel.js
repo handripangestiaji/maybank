@@ -979,7 +979,7 @@ $(function(){
                    "type" : "POST",
                    "success" : function (response){
                         me.removeAttr("disabled").html("SHORTEN");
-                        tweetsText = me.closest('form').find(".replaycontent");
+                        tweetsText = me.closest('.form').find(".replaycontent");
                         shortcode= me.closest('.link_url').find(".short_code");
                         tweetsText.val(tweetsText.val() + " http://maybk.co/" + response.shortcode);
                         shortcode.val(response.shortcode);
@@ -2173,6 +2173,10 @@ $(document).ready(function(){
     
     $(this).on('click', '.btn-close-schedule-post', function(){
         $(this).closest('.tooltip-event').hide();
+    });
+    
+    $(this).on('click','.btn-assign-popup',function(){
+        $(this).closest('.modal-footer').siblings('.modal-body').find('.case-assign').show();
     });
 });
 

@@ -126,33 +126,56 @@ $(function(){
             },
             callback : function(response){
               // console.log(response['all_case']);
-              // $(modalID + " .loader-image").hide();
+               //console.log(response['all_case']);
+               //console.log(response['assign']);
+               $(modalID + " .loader-image").hide();
                 if(response['all_case'].length == 0){
                     $(modalId).append("<h2>No related conversation found.</h2>");
                 }
                 else{
+
+                for(var j=0;j<response['assign'].length;j++){
                     for(i = 0; i<response['all_case'].length;i++){
                         type = response['all_case'][i].type.replace("facebook_","");
                         if(response['all_case'][i].content != ''){
-                            
-                               var htmls= '<div class="related-conversation-body">' + 
-                                '<span class="related-conversation-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>';
-                                
-                                htmls+='<p class="headLine">' + 
-                                    '<input type="checkbox" class="related-conversation-check" value="' + response['all_case'][i].social_stream_post_id + '"><span style="color:#222">' +
-                                    $(modalID).closest('li').find('.author').html() + 
-                                    '</span><input type="hidden" class="related-conversation-check" value="' + response['all_case'][i].type + '">' + 
-                                    '<span class="cyanText" style="text-transform:capitalize;"> '+ type +'</span> ' +
-                                    '<i class="icon-circle"></i>' + 
-                                    '<span class="UTCTimestamp">' +  response['all_case'][i].created_at + '</span>' + 
-                                '</p>'; 
-                                
-                                htmls+='<div>' +
-                                    '<p>' + response['all_case'][i].content + '</p>' +
-                                '</div></div>';
-                                                            
-                            $(modalID + ' form').append(htmls);
-                       }
+                                if(response['all_case'][i].social_stream_post_id===response['assign'][j].post_id){
+                                    var htmls= '<div class="related-conversation-body">' + 
+                                    '<span class="related-conversation-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>';
+                                    htmls+='<p class="headLine">'; 
+                                    htmls+='<input type="checkbox" class="related-conversation-check" checked value="' + response['all_case'][i].social_stream_post_id + '"><span style="color:#222">';
+                                    htmls+=$(modalID).closest('li').find('.author').html() + 
+                                        '</span><input type="hidden" class="related-conversation-check" value="' + response['all_case'][i].type + '">' + 
+                                        '<span class="cyanText" style="text-transform:capitalize;"> '+ type +'</span> ' +
+                                        '<i class="icon-circle"></i>' + 
+                                        '<span class="UTCTimestamp">' +  response['all_case'][i].created_at + '</span>' + 
+                                    '</p>'; 
+                                    
+                                    htmls+='<div>' +
+                                        '<p>' + response['all_case'][i].content + '</p>' +
+                                    '</div>';
+                                     htmls+='</div>';
+                                    $(modalID + ' form').append(htmls);
+                                }else{
+                                    var htmls= '<div class="related-conversation-body">' + 
+                                    '<span class="related-conversation-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>';
+                                    htmls+='<p class="headLine">'; 
+                                    htmls+='<input type="checkbox" class="related-conversation-check" value="' + response['all_case'][i].social_stream_post_id + '"><span style="color:#222">';
+                                    htmls+=$(modalID).closest('li').find('.author').html() + 
+                                        '</span><input type="hidden" class="related-conversation-check" value="' + response['all_case'][i].type + '">' + 
+                                        '<span class="cyanText" style="text-transform:capitalize;"> '+ type +'</span> ' +
+                                        '<i class="icon-circle"></i>' + 
+                                        '<span class="UTCTimestamp">' +  response['all_case'][i].created_at + '</span>' + 
+                                    '</p>'; 
+                                    
+                                    htmls+='<div>' +
+                                        '<p>' + response['all_case'][i].content + '</p>' +
+                                    '</div>';
+                                     htmls+='</div>';
+                                    $(modalID + ' form').append(htmls);
+                                }
+                            }
+                             
+                        }
                     }
                 }
                  

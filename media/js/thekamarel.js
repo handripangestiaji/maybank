@@ -985,7 +985,8 @@ $(function(){
                         shortcode.val(response.shortcode);
                         me.closest('reply-shorturl-show-content').val(" http://maybk.co/" + response.shortcode);
                        // alert("http://maybank.co/" + response.shortcode)
-                        $('.multipleSelect').siblings('.btn-group').find('button').removeAttr('disabled');
+//                       alert(me.parent().parent().find('.tags_p').find('.tags_c').html());
+                        me.parent().parent().find('.tags_p').find('.tags_c').find('.multipleSelect').siblings('.btn-group').find('button').removeAttr('disabled');
                    },
                    failed : function(response){
                         me.removeAttr("disabled").html("SHORTEN");

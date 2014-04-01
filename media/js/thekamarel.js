@@ -26,6 +26,24 @@ $.extend($.expr[":"],
     });
 
 $(function(){
+     $('.multipleSelect').multiselect({
+        buttonText: function(options, select) {
+        if (options.length == 0) {
+            return 'TAG Short-URL <b class="caret"></b> ';
+        }
+        else if (options.length > 1) {
+            return options.length + ' selected <b class="caret"></b>';
+        }
+        else {
+            var selected = '';
+            options.each(function() {
+                selected += $(this).text() + ', ';
+            });
+            return selected.substr(0, selected.length -2) + ' <b class="caret"></b>';
+        }
+    },
+    });
+    $('.multipleSelect').siblings('.btn-group').find('button').attr('disabled','disabled');
     
     $('.country-select').multiselect();
     var originalHref = null;
@@ -987,10 +1005,13 @@ $(function(){
                         var notif = me.closest('#caseNotification').find('.replaycontent');
                         if(notif.val() != undefined){
                             notif.val(notif.val() + " http://maybk.co/" + response.shortcode);
-                        };
+                        };                        
+                        $('#caseNotification .tag-notif').siblings('.btn-group').find('button').removeAttr('disabled');
+                        me.parent().parent().find('.tags_p').find('.tags_c').find('.multipleSelect').siblings('.btn-group').find('button').removeAttr('disabled');
                    },
                    failed : function(response){
                         me.removeAttr("disabled").html("SHORTEN");
+
                    }
                    
                 });
@@ -1583,11 +1604,7 @@ $(function(){
                         
                         if(confirmStatus == true){
                             
-                            if(len<=0){
-                                commnetbox='-';
-                            }else{
                                  commnetbox=$(this).parent().siblings(".replaycontent").val();
-                            }
                             
                             if(len>2000){
                                 $(this).parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
@@ -1798,7 +1815,17 @@ $(function(){
                                  $(this).siblings('.productType').removeAttr('disabled', 'disabled');
                                 
                             }
+                         });
+                    $(this).on('click','.reply_type',function(){
+                            var replyType=$(this).val();
+                            if(replyType=="Report_Abuse"){
+                                $(this).siblings('.product_type').attr('disabled', 'disabled');
+                            }else{
+                                 $(this).siblings('.product_type').removeAttr('disabled', 'disabled');
+                                
+                            }
                          });   
+    
             
               /*load more content*/  
             looppage=2;
@@ -2331,6 +2358,7 @@ $.fn.ToCase = function(type){
             $('#caseNotification .message').html('');
             $('#caseNotification .reply-preview-img').attr('src', '').closest('#reply-img-show').hide();
             $('#caseNotification .solved-message').html(response.solved_message);
+            $('#caseNotification .tag_notif').siblings('.btn-group').find('button').attr('disabled','disabled');
             if(response.solved_message == '' || response.solved_message == null){
                 $('#caseNotification .solved-message').closest('tr').hide();
             }

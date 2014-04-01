@@ -104,7 +104,7 @@
                 </div>
                  <br clear="all"/>
               <div class="left">
-                <select class="multipleSelect" multiple="multiple" name="tag_id[]">
+                <select class="multipleSelect tag-notif" multiple="multiple" name="tag_id[]" disabled="disabled">
                 <?php
                     $this->load->model('tag_model');
                       $tags=$this->tag_model->get();

@@ -18,26 +18,9 @@
 ?>
             <script type="text/javascript">
 			    $(document).ready(function() {
-			      
-				 $('.multipleSelect').multiselect({
-                    buttonText: function(options, select) {
-                    if (options.length == 0) {
-                        return 'None selected <b class="caret"></b>';
-                    }
-                    else if (options.length > 1) {
-                        return options.length + ' selected <b class="caret"></b>';
-                    }
-                    else {
-                        var selected = '';
-                        options.each(function() {
-                            selected += $(this).text() + ', ';
-                        });
-                        return selected.substr(0, selected.length -2) + ' <b class="caret"></b>';
-                    }
-                },
+			     
+	      		
                 });
-                    
-			    });
 			</script>
 <input type="hidden" class="channel-id" value="<?php echo $channel_id?>">
 <div id="cfacebook_<?=$channel_id?>" class="container-fluid" style="height: 95%">

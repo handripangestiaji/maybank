@@ -57,11 +57,11 @@
         </a>
     </div>
     <?php } ?>
-     <div class="left">
+     <div class="left tags_p">
         <div class="left">
             <i class="icon-tag icon-large"></i>    
         </div>
-        <div class="left">
+        <div class="left tags_c">
             <select class="multipleSelect" multiple="multiple" name="tag_id[]">
             <?php 
                   $tags=$this->tag_model->get();

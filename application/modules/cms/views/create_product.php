@@ -83,8 +83,12 @@
 		    ?>
                 <th>&nbsp;</th>
 		<?php }?>
+		<?php
+		    if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_All_Country_View')){
+		    ?>
                 <th>&nbsp;</th>
-              </tr>
+		<?php }?>
+	      </tr>
             </thead>
 	    <tbody>
 	    <?php if ($products): ?>
@@ -118,9 +122,15 @@
 			if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_All_Country_Delete')){
 			?>
 		    <td>
-			    <a href="<?php echo site_url('cms/create_product?action=delete&id='.$v->id)?>" onclick="return confirm('Are you sure want to delete this product?');" class="btn btn-mini btn-danger pull-right">delete</a>
+			<a href="<?php echo site_url('cms/create_product?action=delete&id='.$v->id)?>" onclick="return confirm('Are you sure want to delete this product?');" class="btn btn-mini btn-danger pull-right">delete</a>
 		    </td>
-	            <td><button class="btn btn-mini btn-primary pull-right table-btn-show-sub" type="button">Show <i class="icon-caret-down"></i></button></td>
+		    <?php }?>
+		    <?php
+			if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Product_All_Country_View')){
+			?>
+	            <td>
+			<button class="btn btn-mini btn-primary pull-right table-btn-show-sub" type="button">Show <i class="icon-caret-down"></i></button>
+		    </td>
                     <?php }?>
 		</tr>
 		

@@ -578,12 +578,9 @@ class Media_stream extends CI_Controller {
         $tags=$this->input->post('tags');
         
         
-        if($reply_type=='Report_Abuse'){
-            $product_type=null;
-        }
-        
         $validation[] = array('type' => 'required','name' => 'replaycontent','value' => $comment, 'fine_name' => "Replay Content");
         $validation[] = array('type' => 'required','name' => 'reply_type','value' => $reply_type, 'fine_name' => "Reply Type");
+        //print_r($reply_type);
         if($reply_type!='Report_Abuse'){
             $validation[] = array('type' => 'required','name' => 'product_type','value' => $product_type, 'fine_name' => "Product Type");
         }        

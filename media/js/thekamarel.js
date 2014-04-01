@@ -985,9 +985,11 @@ $(function(){
                         shortcode.val(response.shortcode);
                         me.closest('reply-shorturl-show-content').val(" http://maybk.co/" + response.shortcode);
                        // alert("http://maybank.co/" + response.shortcode)
+                        $('.multipleSelect').siblings('.btn-group').find('button').removeAttr('disabled');
                    },
                    failed : function(response){
                         me.removeAttr("disabled").html("SHORTEN");
+
                    }
                    
                 });
@@ -1579,11 +1581,7 @@ $(function(){
                         
                         if(confirmStatus == true){
                             
-                            //if(len<=0){
-//                                aler='-';
-//                            }else{
-//                                 commnetbox=$(this).parent().siblings(".replaycontent").val();
-//                            }
+                                 commnetbox=$(this).parent().siblings(".replaycontent").val();
                             
                             if(len>2000){
                                 $(this).parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +

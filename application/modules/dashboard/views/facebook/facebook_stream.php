@@ -18,11 +18,11 @@
 ?>
             <script type="text/javascript">
 			    $(document).ready(function() {
-			      
-				 $('.multipleSelect').multiselect({
+			     
+	      		 $('.multipleSelect').multiselect({
                     buttonText: function(options, select) {
                     if (options.length == 0) {
-                        return 'TAG Short-URL <b class="caret"></b>';
+                        return 'TAG Short-URL <b class="caret"></b> ';
                     }
                     else if (options.length > 1) {
                         return options.length + ' selected <b class="caret"></b>';
@@ -36,8 +36,9 @@
                     }
                 },
                 });
-                    
-			    });
+                $('.multipleSelect').siblings('.btn-group').find('button').attr('disabled','disabled');
+                
+                });
 			</script>
 <input type="hidden" class="channel-id" value="<?php echo $channel_id?>">
 <div id="cfacebook_<?=$channel_id?>" class="container-fluid" style="height: 95%">

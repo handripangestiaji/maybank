@@ -47,6 +47,8 @@
                     }
                 },
                 });
+                $('.multipleSelect').siblings('.btn-group').find('button').attr('disabled','disabled');
+
                     
 			    });
 			</script>

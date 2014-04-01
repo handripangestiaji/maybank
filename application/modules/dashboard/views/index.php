@@ -57,7 +57,18 @@
                             <i class="icon-tag icon-large"></i>    
                         </div>
                         <div class="left" style="margin-left:5px;">
-                            <ul id="compose-tags" style="width: 200px;"></ul>        
+                            <!--ul id="compose-tags" style="width: 200px;"></ul!-->
+                            <select id="compose-tags" class="multipleSelect" multiple="multiple" name="tags">
+                                <?php 
+                                      if($tags): ?>
+                                      <?php 
+                                              foreach($tags as $v): ?>
+                                                      <option value="<?php echo $v->tag_name; ?>"><?php echo $v->tag_name ?></option>
+                                              <?php endforeach; ?>
+                                      <?php else: ?>
+                                              <option>Please add Tag first</option>
+                                      <?php endif;?>
+                                  </select>
                         </div>
                         <br clear="all" />
                     </div>

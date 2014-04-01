@@ -1356,7 +1356,8 @@ $(function(){
                             data: {
                                     channels:channels,
                                     content:$('.compose-textbox').val(),
-                                    tags:$("#compose-tags").tagit("assignedTags"),
+                                    //tags:$("select.multipleSelect").tagit("assignedTags"),
+                                    tags:$("#compose-tags").val(),
                                     schedule:scheduleTime,
                                     title:$('#url-show').find('input').val(),
                                     short_url:$('.compose-insert-link-short-url-hidden').val(),

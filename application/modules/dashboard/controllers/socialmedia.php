@@ -31,7 +31,9 @@ class Socialmedia extends MY_Controller {
 	  $this->load->model('twitter_model');
 	  $this->load->model('account_model');
 	  $this->load->model('campaign_model');
+	  $this->load->model('tag_model');
 	  $filter = array();
+	  $data['tags'] = $tags=$this->tag_model->get();            
 	  $data['campaign'] = $this->campaign_model->get();
 	  $data['channels'] = $this->account_model->GetChannel();
 	  $data['count_new_cases'] = 63;

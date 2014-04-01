@@ -26,7 +26,8 @@ $.extend($.expr[":"],
     });
 
 $(function(){
-     $('.multipleSelect').multiselect({
+
+    $('.multipleSelect').multiselect({
         buttonText: function(options, select) {
         if (options.length == 0) {
             return 'TAG Short-URL <b class="caret"></b> ';
@@ -44,7 +45,6 @@ $(function(){
     },
     });
     $('.multipleSelect').siblings('.btn-group').find('button').attr('disabled','disabled');
-    
     $('.country-select').multiselect();
     var originalHref = null;
     
@@ -583,6 +583,25 @@ $(function(){
                                     $(this).css('margin-top', (100 - $(this).height()) / 2)
                                 };
                             });
+                            
+                            $('.multipleSelect').multiselect({
+                                buttonText: function(options, select) {
+                                if (options.length == 0) {
+                                    return 'TAG Short-URL <b class="caret"></b> ';
+                                }
+                                else if (options.length > 1) {
+                                    return options.length + ' selected <b class="caret"></b>';
+                                }
+                                else {
+                                    var selected = '';
+                                    options.each(function() {
+                                        selected += $(this).text() + ', ';
+                                    });
+                                    return selected.substr(0, selected.length -2) + ' <b class="caret"></b>';
+                                }
+                            },
+                            });
+                            $('.multipleSelect').siblings('.btn-group').find('button').attr('disabled','disabled');
                         });
                         
                     });
@@ -1886,28 +1905,24 @@ $(function(){
 
                                 }
                             });
-                            
-                             $(document).ready(function() {
-			      
-				 $('.multipleSelect').multiselect({
-                    buttonText: function(options, select) {
-                    if (options.length == 0) {
-                        return 'None selected <b class="caret"></b>';
-                    }
-                    else if (options.length > 1) {
-                        return options.length + ' selected <b class="caret"></b>';
-                    }
-                    else {
-                        var selected = '';
-                        options.each(function() {
-                            selected += $(this).text() + ', ';
-                        });
-                        return selected.substr(0, selected.length -2) + ' <b class="caret"></b>';
-                    }
-                },
-                });
-                    
-			    });
+                            $('.multipleSelect').multiselect({
+                                buttonText: function(options, select) {
+                                if (options.length == 0) {
+                                    return 'TAG Short-URL <b class="caret"></b> ';
+                                }
+                                else if (options.length > 1) {
+                                    return options.length + ' selected <b class="caret"></b>';
+                                }
+                                else {
+                                    var selected = '';
+                                    options.each(function() {
+                                        selected += $(this).text() + ', ';
+                                    });
+                                    return selected.substr(0, selected.length -2) + ' <b class="caret"></b>';
+                                }
+                            },
+                            });
+                            $('.multipleSelect').siblings('.btn-group').find('button').attr('disabled','disabled');
 
                     });
                     me.removeAttr('disabled').html('Loading..');

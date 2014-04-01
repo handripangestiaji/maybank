@@ -970,7 +970,7 @@ class Media_stream extends CI_Controller {
 	else{
 	    $short_url_id = NULL;
 	}
-	
+	$tags = $this->input->post('tags');
 	$this->post_model->InsertPost($this->input->post('content'),
 				      $this->input->post('channels'),
 				      $this->input->post('tags'),

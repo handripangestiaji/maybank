@@ -13,34 +13,44 @@
         <table>
             <tr><td style="width:20%">Assign By</td><td>:</td><td class="assign-by"></td></tr>
             <tr><td>Date</td><td>:</td><td class="assign-date"></td></tr>
-            <tr><td colspan="3" class="assign-message">
+            <tr><td>Status</td><td>:</td><td class="status"></td></tr>
+            <tr><td>Message</td><td>:</td><td  class="assign-message">
+                
+            </td></tr>
+            <tr><td>Solved Message</td><td>:</td><td  class="solved-message">
                 
             </td></tr>
         </table>
+        <div class="original-post">
+            <h4>Original Post</h4>
+            <div class="content-original-post">
+                
+            </div>
+        </div>
+        <a href="#" id="caseRelatedConversation"> <i class="icon-eye-open"></i> View Related Conversation</a>
+        <br clear="all" />
+        <div class="related-conversation-view" style="display: none">
         
-        <h4>Related Conversation</h4>
-        <ol style="margin: 0;padding: 0;" class="related-conversation-list">
-        </ol>
+            <ol style="margin: 0;padding: 0;" class="related-conversation-list">
+            </ol>
+        </div>
         <?php
         $this->load->model('campaign_model');
         $product_list = $this->campaign_model->GetProduct(array('parent_id' => null));
-	foreach($product_list as $prod){    
-	    $product_child = $this->campaign_model->GetProduct(array('parent_id' => $prod->id));
-	    if($product_child){
-		$chi = array();
-		foreach($product_child as $child){
-		    $chi[] = $child;
-		}
-	        $prod->child = $chi;
-	    }
-	}
-        
-	
-        ?>
+        foreach($product_list as $prod){    
+            $product_child = $this->campaign_model->GetProduct(array('parent_id' => $prod->id));
+            if($product_child){
+                $chi = array();
+                foreach($product_child as $child){
+                    $chi[] = $child;
+                }
+                $prod->child = $chi;
+            }
+        }?>
         <br clear="all" />
         <div class="action-reply">
             <div class="reply-field hide" style="width: 90%;">
-            <form class="reply-tweet">
+            <form class="reply-tweet" class="form">
                 <span class="reply-field-btn-close-2 btn-close pull-right"><i class="icon-remove"></i></span>
                 <input type="hidden" value="" name="post_id" class="post_id" />
                 <input type="hidden" value="" name="type" class="data-type"/>
@@ -84,7 +94,7 @@
                  <div id="reply-url-show" class="hide">
                     <div class="compose-form img-attached">
                         <!-- close button for image attached -->
-                        <a id="close-reply-url-show" href="javascript:void(0);">
+                        <a id="close-reply-url-show" class="reply-preview-img" href="javascript:void(0);">
                             <i class="icon-remove-sign icon-large"></i>
                         </a>
                         <div class="reply-url-show-content">
@@ -131,7 +141,7 @@
                             </a>
                             <div class="dummyfile">
                                 <input type="file" id="replyInputImageFile" style="display: none;">
-                                <input id="replyfilename" type="text" class="input disabled" name="filename" readonly>
+                                <input id="replyfilename" type="text" class="input disabled" name="filename_" readonly>
                                 <a id="replyfileselectbutton" class="btn btn-small btn-inverse">Upload Image</a>
                             </div>
                                       
@@ -140,7 +150,7 @@
                                     <a id="reply-remove-img" href="javascript:void(0); class="hide">
                                         <i class="icon-remove icon-2x"></i>
                                     </a>
-                                    <img id="reply-preview-img"/>
+                                    <img id="reply-preview-img" class="reply-preview-img"/>
                                 </div>
                                 <!-- img-place end -->
                             </div>
@@ -261,11 +271,11 @@
     <div class="modal-footer" style="">
 	<?php if(IsRoleFriendlyNameExist($this->user_role, array('Social Stream_Channel_General_Function_All_Country_Reply',
 								 'Social Stream_Channel_General_Function_Own_Country_Reply'))):?>
-	<button class="btn btn-purple btn-reply-popup" >Reply</button>
+	<button class="btn btn-primary btn-reply-popup" ><i class="icon-mail-reply"></i></button>
 	<?php endif;?>
 	<?php if(IsRoleFriendlyNameExist($this->user_role, array('Social Stream_Case_Own_Country_AssignReassignResolved',
 								 'Social Stream_Case_All_Country_AssignReassignResolved'))):?>
-	    <button type="button" class="btn btn-orange btn-resolve popup" name="action" value=""><i class="icon-check"></i> <span>RESOLVE</span></button>
+	    <button type="button" class="btn btn-primary btn-resolve popup" name="action" value=""><i class="icon-check"></i> <span>RESOLVE</span></button>
 	    <button type="button" class="btn btn-danger btn-assign-popup" name="action" value="reassign"><i class="icon-plus"></i>
 		<span>ReAssign</span>
 	    </button>

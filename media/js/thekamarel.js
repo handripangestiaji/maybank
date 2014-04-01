@@ -984,7 +984,10 @@ $(function(){
                         tweetsText.val(tweetsText.val() + " http://maybk.co/" + response.shortcode);
                         shortcode.val(response.shortcode);
                         me.closest('reply-shorturl-show-content').val(" http://maybk.co/" + response.shortcode);
-                       // alert("http://maybank.co/" + response.shortcode)
+                        var notif = me.closest('#caseNotification').find('.replaycontent');
+                        if(notif.val() != undefined){
+                            notif.val(notif.val() + " http://maybk.co/" + response.shortcode);
+                        };
                    },
                    failed : function(response){
                         me.removeAttr("disabled").html("SHORTEN");
@@ -1594,7 +1597,11 @@ $(function(){
                                 var commentButton = $(this);
                                 isSend=commentButton.html()=="SEND";
                                 commentButton.html('SENDING...').attr("disabled", "disabled");
-                                
+                                img = '';
+                                if($(this).closest('#caseNotification').length == 0)
+                                    img = $(this).parent().siblings('#reply-img-show').find("#reply-preview-img").attr('src');
+                                else
+                                    img = $(this).closest('#caseNotification').find('img#reply-preview-img').attr('src');
                                $.ajax({
                                     url : BASEURL + 'dashboard/media_stream/FbReplyPost',
                                     type: "POST",
@@ -1607,7 +1614,7 @@ $(function(){
                                         product_type:$(this).parent().siblings('.option-type').find(".productType").val(),
                                         title :$(this).parent().siblings('#reply-url-show').find(".title_link").val(),
                                         desc :$(this).parent().siblings('#reply-url-show').find(".descr-link").val(),
-                                        img :$(this).parent().siblings('#reply-img-show').find("#reply-preview-img").attr('src'),
+                                        img : img,
                                         tags:$(this).parent().siblings().find(".multipleSelect").val(),
                                     },
                                     success: function(response)
@@ -1626,8 +1633,7 @@ $(function(){
                                             setTimeout(function(){
                                                     commentButton.closest('.reply-field').toggle('slow');
                                                     commentButton.html("SEND");
-                                                    if(commentButton.hasClass('popup'))
-                                                        window.location.reload();
+                                                   
                                                 }, 3000); 
                                         }
                                         else{
@@ -2298,6 +2304,7 @@ $.fn.RefreshAllStream = function(){
 $.fn.ToCase = function(type){
     var thisElement = $(this);
     $('#caseNotification').hide();
+    $('#caseNotification .btn-send').removeClass('btn-send-reply btn-send-msg');
     $.ajax({
         'url' : BASEURL + 'case/mycase/ReadCase',
         'type' : 'GET',
@@ -2307,30 +2314,106 @@ $.fn.ToCase = function(type){
             $('#caseNotification .image-upload').show();
             $('#caseNotification .assign-by').html(response.created_by.full_name + "(" + response.created_by.username + ")" );
             $('#caseNotification .assign-date').html(response.created_at);
-            $('#caseNotification .btn-send').removeClass('btn-send-reply btn-send-msg');
+            
+            $('#caseNotification .status').html(response.status);
+            $('#caseNotification .content-original-post').html('');
+            
+            $('#caseNotification .case-id').html(response.case_id);
+            $('#caseNotification .case_id').val(response.case_id);
+            $('#caseNotification .assign-message').html(response.messages);
+            $('#caseNotification .btn-resolve').val(response.case_id);
+            $('#caseNotification ol').html('');
+            $('#caseNotification .btn-send, #caseNotification .post_id').val(response.post_id);
+            $('#caseNotification .channel-id').val(response.channel.channel_id);
+            $('#caseNotification .replaycontent').val('');
+            $('#caseNotification .reply-insert-link-text').val('');
+            $('#caseNotification .message').html('');
+            $('#caseNotification .reply-preview-img').attr('src', '').closest('#reply-img-show').hide();
+            $('#caseNotification .solved-message').html(response.solved_message);
+            if(response.solved_message == '' || response.solved_message == null){
+                $('#caseNotification .solved-message').closest('tr').hide();
+            }
+            else
+                $('#caseNotification .solved-message').closest('tr').show();
             if(response.type == 'twitter'){
+                $('#caseNotification .btn-send').attr('type','submit');
                 $('#caseNotification .image-upload').show();
                 $('#caseNotification .reply-fb-char-count').html('144');
                 channel_type = 'Twitter';
                 $('#caseNotification .data-type').val('reply');
                 $('#caseNotification .twitter-userid').val(response.main_post.twitter_user_id);
+                $('#caseNotification .replaycontent').val('@' + response.main_post.screen_name);
+                $template2 = '<li style="display: block;">' +
+                     '<img src="'+ BASEURL + 'dashboard/media_stream/SafePhoto?photo=' + response.main_post.profile_image_url  + '" alt="" style="height: 40px;margin: 6px 10px" class="left" />' + 
+                        '<p style="padding: 0px 2px;margin: 2px 5px;width:80%" class="left">' + 
+                            '<span class="author" style="font-weight:600;padding:0;">' + response.main_post.screen_name + '</span>: ' +
+                            '<span class="text">'+ linkify(response.main_post.text) + '</span><br />' + 
+                            '<span class="created-time" style="font-size:10px;color: #62312A;">' + response.main_post.social_stream_created_at  +
+                            '</span>'+
+                        '</p>' + 
+                        '<br clear="all"/>' +
+                    '</li>';
+               
             }
             else if(response.type == 'twitter dm'){
+                $('#caseNotification .btn-send').attr('type','submit');
                 $('#caseNotification .image-upload').hide();
                 $('#caseNotification .reply-fb-char-count').html('144');
                 channel_type = 'Twitter Direct Message';
                 $('#caseNotification .data-type').val('direct_message');
                 $('#caseNotification .twitter-userid').val(response.main_post.twitter_user_id);
+                $template2 = '<li style="display: block;">' +
+                     '<img src="'+ BASEURL + 'dashboard/media_stream/SafePhoto?photo=' + response.main_post.profile_image_url  + '" alt="" style="height: 40px;margin: 6px 10px" class="left" />' + 
+                        '<p style="padding: 0px 2px;margin: 2px 5px;width:80%" class="left">' + 
+                            '<span class="author" style="font-weight:600;padding:0;">' + response.main_post.screen_name + '</span>: ' +
+                            '<span class="text">'+ linkify(response.main_post.text) + '</span><br />' + 
+                            '<span class="created-time" style="font-size:10px;color: #62312A;">' + response.main_post.social_stream_created_at  +
+                            '</span>'+
+                        '</p>' + 
+                        '<br clear="all"/>' +
+                    '</li>';
             }
             else if(response.type == 'facebook'){
                 $('#caseNotification .image-upload').show();
+                $('#caseNotification .btn-send').attr('type','button');
                 $('#caseNotification .reply-fb-char-count').html('2000');
                 channel_type = 'Wall Post';
                 $('#caseNotification .btn-send').addClass('btn-send-reply');
                 $('#caseNotification .data-type').val('reply_facebook');
                 $('#caseNotification .twitter-userid').val('');
+                var img = '';
+                if(response.main_post.attachment != null){
+                    if(response.main_post.attachment.type == 'image')
+                    img = '<img src="'+BASEURL+'dashboard/media_stream/SafePhoto?photo=' +
+                        response.main_post.attachment[0].src +
+                        '" style="height:200px" /> <br />';
+                }
+                $template2 = '<li style="display: block;">' +
+                '<img src="'+ BASEURL + 'dashboard/media_stream/SafePhoto?photo=https://graph.facebook.com/' + response.main_post.author_id  + '/picture" alt="" style="height: 40px;margin: 6px 10px" class="left" />' + 
+                   '<p style="padding: 0px 2px;margin: 2px 5px;width:80%" class="left">' + 
+                       '<span class="author" style="font-weight:600;padding:0;">' + response.main_post.name + '</span>: ' +
+                       '<span class="text">'+ linkify(response.main_post.post_content) + '</span><br />' +
+                       img +
+                       '<span class="created-time" style="font-size:10px;color: #62312A;">' + response.main_post.created_at  +
+                       '</span>'+
+                   '</p>' + 
+                   '<br clear="all"/>' +
+               '</li>';
             }
             else{
+                $('#caseNotification .btn-send').attr('type','button');
+                img = '';
+                   $template2 = '<li style="display: block;">' +
+                '<img src="'+ BASEURL + 'dashboard/media_stream/SafePhoto?photo=https://graph.facebook.com/' + response.main_post.participant.sender.facebook_id + '/picture" alt="" style="height: 40px;margin: 6px 10px" class="left" />' + 
+                   '<p style="padding: 0px 2px;margin: 2px 5px;width:80%" class="left">' + 
+                       '<span class="author" style="font-weight:600;padding:0;">' + response.main_post.participant.sender.name + '</span>: ' +
+                       '<span class="text">'+ linkify(response.main_post.snippet) + '</span><br />' +
+                       img +
+                       '<span class="created-time" style="font-size:10px;color: #62312A;">' + response.main_post.post_date  +
+                       '</span>'+
+                   '</p>' + 
+                   '<br clear="all"/>' +
+               '</li>';
                 $('#caseNotification .image-upload').hide();
                 $('#caseNotification .reply-fb-char-count').html('2000');
                 channel_type = "Facebook PM";
@@ -2338,14 +2421,7 @@ $.fn.ToCase = function(type){
                 $('#caseNotification .btn-send').addClass('btn-send-msg');
             }
             $('#caseNotification .type-post').html(response.channel.name + " | " + channel_type );
-            $('#caseNotification .case-id').html(response.case_id);
-            $('#caseNotification .case_id').val(response.case_id);
-            $('#caseNotification .assign-message').html(response.messages);
-            $('#caseNotification .btn-resolve').val(response.case_id);
-            $('#caseNotification ol').html('');
-            $('#caseNotification .btn-send').val(response.post_id);
-            $('#caseNotification .post_id').val(response.post_id);
-            $('#caseNotification .channel-id').val(response.channel.channel_id);
+            $('#caseNotification .content-original-post').html($template2);
             
             for(var i=0; i<response.related_conversation.length;i++){
                 if(response.related_conversation[i].type == 'twitter' || response.related_conversation[i].type == 'twitter_dm'){

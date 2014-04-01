@@ -4,7 +4,9 @@
 
 $(function(){
     $('#countrySelect').multiselect();
-  
+    $(this).on('click','.indicator-case', function(e){
+        $(this).ToCase('');
+    });
     $('.sidebarContent').height($(window).height() * 0.95);
     $(this).on('submit', '.case-field form', function(e){
         var thisElement = $(this);
@@ -343,11 +345,18 @@ $(function(){
         var openButton = $(this).closest('li').find('button:first');
         var me = $(this);
         e.preventDefault();
+        filename = ($(this).find('.reply-preview-img').attr('src') == undefined ? '' :  $(this).find('.reply-preview-img').attr('src'));
+        
+        if( $(this).closest('#caseNotification').length != 0){
+            filename = $(this).closest('#caseNotification').find('img.reply-preview-img').attr('src');;
+            filename = filename == undefined ? '' : filename;
+        }
+        
         $.ajax({
             "url" : BASEURL + "dashboard/media_stream/ReplyTwitter",
             "type" : "POST",
             "data" : $(this).serialize() + "&channel_id=" + $(this).closest('.floatingBox').find('input.channel-id').val() +
-                        "&filename=" + ($(this).find('.reply-preview-img').attr('src') == undefined ? '' :  $(this).find('.reply-preview-img').attr('src')),
+                        "&filename=" + filename,
             "success" : function(response){
                 buttonSubmit.removeAttr('disabled').html('SEND');
                 try{
@@ -368,20 +377,21 @@ $(function(){
                         me.find('.message').html('<div class="alert alert-success">' +
                         '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
                         '<h4>Reply Tweet</h4> ' + response.message + '!</div>');
-                        me.find('input, textarea').val('');
-                        me.find('.reply-preview-img').toggle('slow');
-                        openButton.removeClass('btn-warning').addClass('btn-inverse').html('REPLIED').val('');
-                        setTimeout(function(){
-                            me.closest('.reply-field').toggle('slow');
-                            var currentHtml = me.closest('li');
-                            currentHtml.find('.reply-preview-img').toggle('slow');
-                            me.closest('ul').prepend(currentHtml);
-                            me.closest('.subStream').animate({
-                                scrollTop: 0
-                            });
-                        }, 1500);
-                        if(commentButton.hasClass('popup'))
-                            window.location.reload();
+                        if(me.closest('#caseNotification').length == 0){
+                            me.find('input, textarea').val('');
+                            me.find('.reply-preview-img').toggle('slow');
+                            if(openButton.length != 0)
+                                openButton.removeClass('btn-warning').addClass('btn-inverse').html('Replied By You').val('');
+                            setTimeout(function(){
+                                me.closest('.reply-field').toggle('slow');
+                                var currentHtml = me.closest('li');
+                                currentHtml.find('.reply-preview-img').toggle('slow');
+                                me.closest('ul').prepend(currentHtml);
+                                me.closest('.subStream').animate({
+                                    scrollTop: 0
+                                });
+                            }, 1500);
+                        }
                     }
                 }
                 catch(e){
@@ -509,7 +519,10 @@ $(function(){
             }
         }
     });
-    
+    $(this).on('click', '#caseRelatedConversation', function(e){
+        e.preventDefault();
+        $(this).siblings('.related-conversation-view').removeClass('hide').toggle('slow');
+    });
     $('#tasksList li').click(function(e){
         e.preventDefault();
         $('#caseNotification').show();
@@ -521,6 +534,7 @@ $(function(){
     $('#caseNotification .btn-reply').click(function(e){
        $(this).closest("#caseNotification").find('.reply-field').show();
     });
+    
     
 });
 

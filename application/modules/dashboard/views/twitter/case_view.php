@@ -17,7 +17,8 @@ $timezone = new DateTimeZone($this->session->userdata('timezone'));
                     <tr><td>Solved message</td><td>:</td><td><?php echo $caseMsg->solved_message;?></td></tr>
                 <?php endif;?>
             </table>
-            
+            <h4>Original Post</h4>
+            <div class="related-conversation-view"></div>
             <h4>Related Conversation</h4>
             <?php $case_conversation = $this->case_model->TwitterRelatedConversation($caseMsg->case_id);
             ?>

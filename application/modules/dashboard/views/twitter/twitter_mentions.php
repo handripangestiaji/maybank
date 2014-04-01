@@ -57,8 +57,8 @@ for($i=0;$i<count($mentions);$i++){
     <p class="indicator">
     <?php if(count($mentions[$i]->case) > 0):?>
         
-        <button type="button" href="#caseItem<?=$mentions[$i]->case[0]->case_id?>" data-toggle="modal"
-            class="twitter-case-related btn <?=$mentions[$i]->case[0]->status == "pending" ? "btn-purple" : "btn-inverse"?> btn-mini "
+        <button type="button" href="#caseNotification" data-toggle="modal"
+            class="indicator-case twitter-case-related btn <?=$mentions[$i]->case[0]->status == "pending" ? "btn-purple" : "btn-inverse"?> btn-mini "
             value="<?php echo $mentions[$i]->case[0]->case_id?>">Case #<?php echo $mentions[$i]->case[0]->case_id?>
             <?php
             if($mentions[$i]->case[0]->status == "pending"){
@@ -74,6 +74,7 @@ for($i=0;$i<count($mentions);$i++){
                 echo ' '.$solved_at->format("d-M-y h:i A");
             }
             ?>
+            <input type="hidden" class="pointer-case" value="<?=$mentions[$i]->case[0]->case_id?>" />
         </button>
         
         

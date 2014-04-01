@@ -37,8 +37,8 @@
         </p>
         <p class="indicator">
         <?php if(count($directmessage[$i]->case) > 0):?>
-            <button type="button" data-toggle="modal" href="#caseItem<?=$directmessage[$i]->case[0]->case_id?>"
-                class="twitter-case-related btn <?=$directmessage[$i]->case[0]->status == "pending" ? "btn-purple" : "btn-inverse"?> btn-mini" value="<?php echo $directmessage[$i]->case[0]->case_id?>">Case #<?php echo $directmessage[$i]->case[0]->case_id?>
+            <button type="button" data-toggle="modal" href="#caseNotification"
+                class="indicator-case twitter-case-related btn <?=$directmessage[$i]->case[0]->status == "pending" ? "btn-purple" : "btn-inverse"?> btn-mini" value="<?php echo $directmessage[$i]->case[0]->case_id?>">Case #<?php echo $directmessage[$i]->case[0]->case_id?>
                 <?php
                 if($directmessage[$i]->case[0]->status == "pending"){
                     echo isset($directmessage[$i]->case[0]->assign_to->display_name) ? ' Assign to: '.$directmessage[$i]->case[0]->assign_to->display_name : '';
@@ -53,6 +53,7 @@
                     echo ' '.$solved_at->format("d-M-y h:i A");
                 }
                 ?>
+                <input type="hidden" class="pointer-case" value="<?=$directmessage[$i]->case[0]->case_id?>" />
             </button>
   
         <?php endif?>

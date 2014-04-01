@@ -1579,11 +1579,11 @@ $(function(){
                         
                         if(confirmStatus == true){
                             
-                            if(len<=0){
-                                commnetbox='-';
-                            }else{
-                                 commnetbox=$(this).parent().siblings(".replaycontent").val();
-                            }
+                            //if(len<=0){
+//                                aler='-';
+//                            }else{
+//                                 commnetbox=$(this).parent().siblings(".replaycontent").val();
+//                            }
                             
                             if(len>2000){
                                 $(this).parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
@@ -1791,7 +1791,17 @@ $(function(){
                                  $(this).siblings('.productType').removeAttr('disabled', 'disabled');
                                 
                             }
+                         });
+                    $(this).on('click','.reply_type',function(){
+                            var replyType=$(this).val();
+                            if(replyType=="Report_Abuse"){
+                                $(this).siblings('.product_type').attr('disabled', 'disabled');
+                            }else{
+                                 $(this).siblings('.product_type').removeAttr('disabled', 'disabled');
+                                
+                            }
                          });   
+    
             
               /*load more content*/  
             looppage=2;

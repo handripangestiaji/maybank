@@ -157,6 +157,18 @@ class Media_stream extends CI_Controller {
     $twitter_reply['user_id'] = $this->session->userdata('user_id');
     $tags=$this->input->post('tag_id');
     $url=$this->input->post('url');
+    $url=$this->input->post('tweeter_user');
+    
+    $validation[] = array('type' => 'required','name' => 'replaycontent','value' => $twitter_reply['text'], 'fine_name' => "Replay Content");
+    $validation[] = array('type' => 'required','name' => 'reply_type','value' => $twitter_reply['reply_type'], 'fine_name' => "Reply Type");
+    if($this->input->post('reply_type')!='Report_Abuse'){
+        $validation[] = array('type' => 'required','name' => 'product_type','value' => $twitter_reply['content_products_id'], 'fine_name' => "Product Type");
+    }        
+
+    $is_valid = CheckValidation($validation, $this->validation);
+    
+    if($is_valid === true){
+        
 	if($this->input->post('type') == 'reply')
 	    $twitter_data = $this->twitter_model->ReadTwitterData(
 		array(
@@ -171,117 +183,129 @@ class Media_stream extends CI_Controller {
 		),
 		1
 	    );
-	if(count($twitter_data) > 0 || $this->input->post('type') == 'direct_message'){
-	    
-	    $channel = $this->account_model->GetChannel(array(
-		'channel_id' => $this->input->post('channel_id')
-	    ));
-	    if(count($channel) == 0){
-		echo json_encode(
-		    array(
-			'success' => false,
-			'message' => "Invalid Channel Id"
-		    )
-		);
-		return;
-	    }
-	    else{
-		$channel = $channel[0];
-	    }
-        
-         $short_url = $this->shorturl_model->find(array('short_code' => $url));
-            if(isset($short_url->id)){
-                $short_url_id = $short_url->id;
-            }else{
-                $short_url_id=null;
-            }      
-        
-         if($tags != ''){
-    	    foreach($tags as $tag){
-//    	    print_r(substr($tag,14));
-            $tag_id = substr($tag,14);//$this->post_model->GetTagByTagId($tag);
-                    //$tag_id = $get_tag->id;
-                    if(isset($tag_id)){
-                        $data = array('short_urls_id' => $short_url_id ,
-                                      'content_tag_id' => $tag_id
-                                    );
-                        if(isset($short_url_id)){
-                            $this->db->insert('short_url_tag',$data);
+        //die();
+    	if(count($twitter_data) > 0 || $this->input->post('type') == 'direct_message'){
+    	    
+    	    $channel = $this->account_model->GetChannel(array(
+    		'channel_id' => $this->input->post('channel_id')
+    	    ));
+    	    if(count($channel) == 0){
+    		echo json_encode(
+    		    array(
+    			'success' => false,
+    			'message' => "Invalid Channel Id"
+    		    )
+    		);
+    		return;
+    	    }
+    	    else{
+    		$channel = $channel[0];
+    	    }
+            
+             $short_url = $this->shorturl_model->find(array('short_code' => $url));
+                if(isset($short_url->id)){
+                    $short_url_id = $short_url->id;
+                }else{
+                    $short_url_id=null;
+                }      
+            
+             if($tags != ''){
+        	    foreach($tags as $tag){
+    //    	    print_r(substr($tag,14));
+                $tag_id = substr($tag,14);//$this->post_model->GetTagByTagId($tag);
+                        //$tag_id = $get_tag->id;
+                        if(isset($tag_id)){
+                            $data = array('short_urls_id' => $short_url_id ,
+                                          'content_tag_id' => $tag_id
+                                        );
+                            if(isset($short_url_id)){
+                                $this->db->insert('short_url_tag',$data);
+                            }
                         }
-                    }
-                    //tag increment
-                    $this->post_model->IncrementTag($tag_id);
-    	       }
-            }
-	    
-	    $this->load->library('Twitteroauth');
-	    $this->connection = $this->twitteroauth->create($this->config->item('twitter_consumer_token'),$this->config->item('twitter_consumer_secret'), $channel->oauth_token,
-							    $channel->oauth_secret);
-	    if($this->input->post('type') == 'reply'){
-		$twitter_data = $twitter_data[0];
-		$parameters = array('status' => $this->input->post('content'),'in_reply_to_status_id'=>$twitter_data->post_stream_id);
-		 if($twitter_reply['image_to_post']){
-		    $this->load->helper('file');
-		    $img = $twitter_reply['image_to_post'];
-		    $img = str_replace('data:image/png;base64,', '', $img);
-		    $img = str_replace('data:image/jpeg;base64,', '', $img);
-		    $img = str_replace(' ', '+', $img);
-		    $data = base64_decode($img);
-		    $file_name = uniqid().'.png';
-		    $pathToSave = $this->config->item('assets_folder').'/'.$file_name;
-		    $twitter_reply['image_to_post'] = $pathToSave;
-		    if ( ! write_file($pathToSave, $data)){
-			$validation = array('result' => FALSE,'name' => 'image '.$pathToSave,'error_code' => 112);
-			$result=$this->connection->post('statuses/update', $parameters);
-		    }
-		    else{
-			require_once './application/libraries/codebird.php';
-			$this->load->config('twitter');
-			Codebird::setConsumerKey($this->config->item('twitter_consumer_token'), $this->config->item('twitter_consumer_secret'));
-			$cb = Codebird::getInstance();
-			$cb->setToken($channel->oauth_token, $channel->oauth_secret);
-			$parameters['media[]'] = $pathToSave;
-			$result = $cb->statuses_updateWithMedia($parameters);
-			$result->params = $parameters;
-		    }
-		}
-		else{
-		    $result=$this->connection->post('statuses/update', $parameters);
-		}
-		$return = $this->twitter_model->CreateReply($twitter_reply, $result, $channel, 'reply');
-	    }
-	    else{
-		$parameters = array(
-		    'user_id' => $this->input->post('twitter_user_id'),
-		    'text' => $this->input->post('content')
-		);
-		$result = $this->connection->post('direct_messages/new', $parameters);
-		$return = $this->twitter_model->CreateReply($twitter_reply, $result, $channel, 'direct_message');
-	    }
-	    if($return){
-		echo json_encode(array(
-		    'success' => true,
-		    'message' => "Reply tweet successfully done.",
-		    'result' => $result
-		));
-	    }
-	    else{
-		echo json_encode(array(
-		    'success' => false,
-		    'message' => "Reply tweet was failed.",
-		    'result' => $result
-		));
-	    }
-	    
-	}
-	else{
-	    echo json_encode(
-		array(
-		    'success' => false,
-		    'message' => "Invalid POST Id"
-		)
-	    );
-	}
+                        //tag increment
+                        $this->post_model->IncrementTag($tag_id);
+        	       }
+                }
+    	    
+    	    $this->load->library('Twitteroauth');
+    	    $this->connection = $this->twitteroauth->create($this->config->item('twitter_consumer_token'),$this->config->item('twitter_consumer_secret'), $channel->oauth_token,
+    							    $channel->oauth_secret);
+    	    if($this->input->post('type') == 'reply'){
+    		$twitter_data = $twitter_data[0];
+    		$parameters = array('status' => $this->input->post('content'),'in_reply_to_status_id'=>$twitter_data->post_stream_id);
+    		 if($twitter_reply['image_to_post']){
+    		    $this->load->helper('file');
+    		    $img = $twitter_reply['image_to_post'];
+    		    $img = str_replace('data:image/png;base64,', '', $img);
+    		    $img = str_replace('data:image/jpeg;base64,', '', $img);
+    		    $img = str_replace(' ', '+', $img);
+    		    $data = base64_decode($img);
+    		    $file_name = uniqid().'.png';
+    		    $pathToSave = $this->config->item('assets_folder').'/'.$file_name;
+    		    $twitter_reply['image_to_post'] = $pathToSave;
+    		    if ( ! write_file($pathToSave, $data)){
+    			$validation = array('result' => FALSE,'name' => 'image '.$pathToSave,'error_code' => 112);
+    			$result=$this->connection->post('statuses/update', $parameters);
+    		    }
+    		    else{
+    			require_once './application/libraries/codebird.php';
+    			$this->load->config('twitter');
+    			Codebird::setConsumerKey($this->config->item('twitter_consumer_token'), $this->config->item('twitter_consumer_secret'));
+    			$cb = Codebird::getInstance();
+    			$cb->setToken($channel->oauth_token, $channel->oauth_secret);
+    			$parameters['media[]'] = $pathToSave;
+    			$result = $cb->statuses_updateWithMedia($parameters);
+    			$result->params = $parameters;
+    		    }
+    		}
+    		else{
+    		    $result=$this->connection->post('statuses/update', $parameters);
+    		}
+    		$return = $this->twitter_model->CreateReply($twitter_reply, $result, $channel, 'reply');
+    	    }
+    	    else{
+    		$parameters = array(
+    		    'user_id' => $this->input->post('twitter_user_id'),
+    		    'text' => $this->input->post('content')
+    		);
+    		$result = $this->connection->post('direct_messages/new', $parameters);
+    		$return = $this->twitter_model->CreateReply($twitter_reply, $result, $channel, 'direct_message');
+    	    }
+    	    if($return){
+    		echo json_encode(array(
+    		    'success' => true,
+    		    'message' => "Reply tweet successfully done.",
+    		    'result' => $result
+    		));
+    	    }
+    	    else{
+    		echo json_encode(array(
+    		    'success' => false,
+    		    'message' => "Reply tweet was failed.",
+    		    'result' => $result
+    		));
+    	    }
+    	    
+    	}
+    	else{
+    	    echo json_encode(
+    		array(
+    		    'success' => false,
+    		    'message' => "Invalid POST Id"
+    		)
+    	    );
+    	
+        }
+     }else{
+            echo json_encode(
+    		array(
+    		    'success' => false,
+    		    "message" => "<br>Reply tweet was failed :<br>- Reply Type, <br>- Product Type &<br>- Compose Message<br>Value cannot be null.",
+                "errors" => $is_valid
+    		)
+    	    );
+    	}
+        
     }
     
     public function ActionTwitter($type = 'retweet'){
@@ -558,11 +582,11 @@ class Media_stream extends CI_Controller {
             $product_type=null;
         }
         
+        $validation[] = array('type' => 'required','name' => 'replaycontent','value' => $comment, 'fine_name' => "Replay Content");
         $validation[] = array('type' => 'required','name' => 'reply_type','value' => $reply_type, 'fine_name' => "Reply Type");
         if($reply_type!='Report_Abuse'){
             $validation[] = array('type' => 'required','name' => 'product_type','value' => $product_type, 'fine_name' => "Product Type");
         }        
-        $validation[] = array('type' => 'required','name' => 'comment','value' => $comment, 'fine_name' => "Comment");
         $is_valid = CheckValidation($validation, $this->validation);
 
         if($is_valid === true){
@@ -589,7 +613,7 @@ class Media_stream extends CI_Controller {
             }else{
                 $short_url_id=null;
             }        
-                
+               // die();
             if($tags != ''){
     	    foreach($tags as $tag){
 //    	    print_r(substr($tag,14));
@@ -737,7 +761,7 @@ class Media_stream extends CI_Controller {
         }else{//input validation
             echo json_encode(array(
                        "success" => false,
-                       "message" => "Reply Comment was failed, Please check your input.<br>Reply Type and Product Type value cannot be null",
+                       "message" => "<br>Reply Comment was failed :<br>- Reply Type, <br>- Product Type &<br>- Compose Message<br>Value cannot be null.",
                        "errors" => $is_valid
                    )
                );

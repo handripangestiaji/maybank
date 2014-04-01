@@ -5,15 +5,16 @@
         <input type="hidden" value="<?php echo $mentions[$i]->social_stream_post_id ?>" name="post_id" />
         <input type="hidden" value="<?php echo $mentions[$i]->twitter_user_id?>" name="twitter_user_id" />
         <input type="hidden" value="<?php echo $type?>" name="type" />
+        <input type="hidden" value="<?php echo $mentions[$i]->screen_name?>" name="twitter_user" />
         <div class="message"></div>
-        <select name="reply_type" style="width: 130px;">
+        <select name="reply_type" class='reply_type' style="width: 130px;">
             <option value="">Please Select</option>
             <option value="Feedback">Feedback</option>
             <option value="Enquiry">Enquiry</option>
             <option value="Complaint">Complaint</option>
-            <option value="Report Abuse">Report Abuse</option>
+            <option value="Report_Abuse">Report Abuse</option>
         </select>
-        <select name="product_type" style="width: 130px;">
+        <select name="product_type" class="product_type" style="width: 130px;">
             <option value="">Please Select</option>
          <?php foreach($product_list as $product):?>
                 <?php

@@ -33,7 +33,7 @@
 				 $('.multipleSelect').multiselect({
                     buttonText: function(options, select) {
                     if (options.length == 0) {
-                        return 'None selected <b class="caret"></b>';
+                        return 'TAG Short-URL <b class="caret"></b>';
                     }
                     else if (options.length > 1) {
                         return options.length + ' selected <b class="caret"></b>';

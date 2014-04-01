@@ -62,7 +62,7 @@
             <i class="icon-tag icon-large"></i>    
         </div>
         <div class="left">
-            <select class="multipleSelect" multiple="multiple" name="tag_id[]">
+            <select class="multipleSelect" multiple="multiple" name="tag_id[]" disabled>
             <?php 
                   $tags=$this->tag_model->get();
                   if($tags): ?>

@@ -58,7 +58,7 @@ for($i=0;$i<count($homefeed);$i++){
     <p>
     <?php if(count($homefeed[$i]->case) > 0):?>
         
-        <button href="#caseItem<?=$homefeed[$i]->case[0]->case_id?>" data-toggle="modal" type="button" class="btn <?=$homefeed[$i]->case[0]->status == "pending" ? "btn-purple" : "btn-inverse"?> btn-mini" value="<?php echo $homefeed[$i]->case[0]->case_id?>">Case #<?php echo $homefeed[$i]->case[0]->case_id?>
+        <button href="#caseNotification" data-toggle="modal" type="button" class="btn indicator-case <?=$homefeed[$i]->case[0]->status == "pending" ? "btn-purple" : "btn-inverse"?> btn-mini" value="<?php echo $homefeed[$i]->case[0]->case_id?>">Case #<?php echo $homefeed[$i]->case[0]->case_id?>
             <?php
             if($homefeed[$i]->case[0]->status == "pending"){
                 echo isset($homefeed[$i]->case[0]->assign_to->display_name) ? ' Assign to:'.$homefeed[$i]->case[0]->assign_to->display_name : '';
@@ -74,6 +74,7 @@ for($i=0;$i<count($homefeed);$i++){
             }
             
             ?>
+            <input type="hidden" class="pointer-case" value="<?=$homefeed[$i]->case[0]->case_id?>" />
         </button>
         
     <?php endif?>

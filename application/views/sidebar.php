@@ -18,7 +18,14 @@
 
 <!-- ==================== SIDEBAR TASKS ==================== -->
 <?php
-if(IsRoleFriendlyNameExist($this->user_role, "Social Stream_Notification")):?>
+if(IsRoleFriendlyNameExist($this->user_role, "Social Stream_Notification")):
+$come_from =array(
+    'twitter' => "Twitter",
+    'twitter_dm' => "Twitter Direct Message",
+    'facebook' => "Wall Post",
+    'facebook_conversation' => 'Private Message'
+)
+?>
 
 <div id="tasksContent">
     <div class="sidebarDivider"></div>
@@ -57,24 +64,13 @@ if(IsRoleFriendlyNameExist($this->user_role, "Social Stream_Notification")):?>
                         $date->setTimezone($timezone);
                         echo $date->format("M d, Y, h:i A");
                     ?>
-                    <p><?=$each_case->messages?></p>
+                    <p>
+                    <?=$come_from[$each_case->type]?> <br />
+                    <?=$each_case->messages?></p>
                 </div>
             </li>
             <?php endforeach?>
-            <?php foreach($reply_pending as $pending):?>
-            <!--li>
-                <div class="notifHead purple">
-                    New Reply POST ID : #<?php echo $pending->id?>
-                </div>
-                <div class="notifBody">
-                    <?php
-                        $date = new DateTime($each_case->created_at.' Europe/London');
-                        $date->setTimezone($timezone);
-                        echo $date->format("M d, Y, h:i A");
-                    ?>
-                </div>
-            </li-->
-            <?php endforeach;?>
+
         </ul>
         <?php if($count_assign!=0){?>
         <ul class="tasksList" style="height: 100%">
@@ -85,31 +81,19 @@ if(IsRoleFriendlyNameExist($this->user_role, "Social Stream_Notification")):?>
                     CASE ID: #<?php echo $each_case->case_id?>
                 </div>
                 <div class="notifBody">
-                    <?php
+                 
+                    <p><?=$come_from[$each_case->type]?> <br />
+                       <?php
                         $date = new DateTime($each_case->created_at.' Europe/London');
                         $date->setTimezone($timezone);
                         echo $date->format("M d, Y, h:i A");
                         
-                    ?>
-                    <p><?=$each_case->messages?></p>
+                    ?><br />
+                    <?=$each_case->messages?></p>
                 </div>
             </li>
             <?php endforeach?>
-            <?php foreach($reply_pending as $pending):?>
-            <!--li>
-                <div class="notifHead purple">
-                    New Reply POST ID : #<?php echo $pending->id?>
-                </div>
-                <div class="notifBody">
-                    <?php
-                        
-                        $date = new DateTime($each_case->created_at.' Europe/London');
-                        $date->setTimezone($timezone);
-                        echo $date->format("M d, Y, h:i A");
-                    ?>
-                </div>
-            </li-->
-            <?php endforeach;?>
+
         </ul>
         <?php }?>
         </div>

@@ -46,11 +46,8 @@ for($i=0;$i<count($senttweets);$i++){
      
         
         <h4 class="filled">
-            <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Take Action') ||
-                 IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action') ||
-                 IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Delete') ||
-                 IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Delete')
-                 ):?>
+            <?php if(IsRoleFriendlyNameExist($this->user_role,array('Social Stream_Channel_General_Function_Own_Country_Delete',
+                                                                    'Social Stream_Channel_General_Function_All_Country_Delete'))):?>
                 <a role="button" class='destroy_status'><i class="icon-trash greyText"></i></a>
             <?php endif;?>
             <div class="pull-right">

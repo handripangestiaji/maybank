@@ -356,6 +356,24 @@ $(function(){
                 },
                 });
                 
+                $('#compose-tags').multiselect({
+                buttonText: function(options, select) {
+                    if (options.length == 0) {
+                        return 'None selected <b class="caret"></b>';
+                    }
+                    else if (options.length > 1) {
+                        return options.length + ' selected <b class="caret"></b>';
+                    }
+                    else {
+                        var selected = '';
+                        options.each(function() {
+                            selected += $(this).text() + ', ';
+                        });
+                        return selected.substr(0, selected.length -2) + ' <b class="caret"></b>';
+                    }
+                },
+                });
+                
                 $('.multipleSelect, .country-select').multiselect({
                 buttonText: function(options, select) {
                     if (options.length == 0) {

@@ -533,6 +533,10 @@ $(function(){
        $(this).closest("#caseNotification").find('.reply-field').show();
     });
     
+    $('#caseViewAction').click(function(e){
+        e.preventDefault();
+        $(this).siblings('.case-action-log').toggle('slow');
+    });
     
 });
 

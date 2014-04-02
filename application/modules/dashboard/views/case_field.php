@@ -79,7 +79,7 @@ if($posts){
                                 echo '<optgroup label="'.$user_list[$userIncrement]->group_name.'"></optgroup>';
                                 $group_name = $user_list[$userIncrement]->group_name;  
                             }
-                            else{
+                            
                                 if($this->session->userdata('user_id') != $user_list[$userIncrement]->user_id){
                                     if($is_same_country ){
                                         if(IsRoleFriendlyNameExist($user_list[$userIncrement]->role_detail,
@@ -95,7 +95,7 @@ if($posts){
                                                 $user_list[$userIncrement]->full_name.'</option>';                                 
                                     }
                                 }
-                            }
+                            
                         }
                       }
                       else{

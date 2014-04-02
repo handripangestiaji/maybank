@@ -75,7 +75,7 @@ if($posts){
                       if(is_array($user_list)){
                         for($userIncrement=0;$userIncrement<count($user_list);$userIncrement++){
                             $is_same_country = $this->session->userdata('country') == $user_list[$userIncrement]->user_country_code;
-                            if($user_list[$userIncrement]->group_name!=$group_name){
+                            if($user_list[$userIncrement]->group_name != $group_name){
                                 echo '<optgroup label="'.$user_list[$userIncrement]->group_name.'"></optgroup>';
                                 $group_name = $user_list[$userIncrement]->group_name;  
                             }
@@ -83,7 +83,9 @@ if($posts){
                                 if($this->session->userdata('user_id') != $user_list[$userIncrement]->user_id){
                                     if($is_same_country ){
                                         if(IsRoleFriendlyNameExist($user_list[$userIncrement]->role_detail,
-                                                array('Social Stream_Case_Own_Country_AssignReassignResolved', 'Social Stream_Case_All_Country_AssignReassignResolved')))
+                                                array('Social Stream_Case_Own_Country_AssignReassignResolved',
+                                                      'Social Stream_Case_All_Country_AssignReassignResolved',
+                                                      'User Management_View_Region')))
                                             echo '<option value="'.$user_list[$userIncrement]->user_id.'">&nbsp;&nbsp;&nbsp;&nbsp;'.$user_list[$userIncrement]->full_name.'</option>';                                 
                                     }
                                     else{

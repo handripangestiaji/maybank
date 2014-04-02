@@ -36,7 +36,7 @@
         </div>
         
         <a href="#" id="caseViewAction"> <i class="icon-eye-open"></i> View Action Log</a>
-        
+        <br clear="all" />
         <div class="case-action-log" style="display: none;">
             <table class="table table-striped">
                 <thead><tr style="background-color: #ffffff; width: 100%; margin-left: -15px; border-top: 1px solid #e1e1e1;">

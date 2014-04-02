@@ -213,6 +213,13 @@ class mycase extends CI_Controller{
                 $case->related_conversation = $this->case_model->FacebookRelatedConversation($case->case_id);
             }
             $case->main_post  = isset($case->main_post[0]) ? $case->main_post[0] : $case->main_post;
+            
+            if(isset($case->main_post->attachment)){
+                $case->main_post->attachment = json_decode($case->main_post->attachment);
+            }
+            if(isset($case->main_post->twitter_entities)){
+                $case->main_post->twitter_entities = json_decode($case->main_post->twitter_entities);
+            }
             echo json_encode($case);
         }
         else

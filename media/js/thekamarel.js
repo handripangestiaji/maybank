@@ -2380,6 +2380,15 @@ $.fn.ToCase = function(type){
         'data' : 'case_id=' + thisElement.find('.pointer-case').val(),
         'success' : function(response){
             $('#caseNotification').show();
+            
+            if(response.status == 'pending'){
+                $('#caseNotification .btn-assign-popup > span').html('ReAssign');
+                $('#caseNotification .btn-resolve').show();
+            }
+            else{
+                $('#caseNotification .btn-resolve').hide();
+                $('#caseNotification .btn-assign-popup > span').html('Case');
+            }
             $('#caseNotification .image-upload').show();
             $('#caseNotification .assign-by').html(response.created_by.full_name + "(" + response.created_by.username + ")" );
             $('#caseNotification .assign-date').html(response.created_at);
@@ -2400,6 +2409,7 @@ $.fn.ToCase = function(type){
             $('#caseNotification .reply-preview-img').attr('src', '').closest('#reply-img-show').hide();
             $('#caseNotification .solved-message').html(response.solved_message);
             $('#caseNotification .tag_notif').siblings('.btn-group').find('button').attr('disabled','disabled');
+            
             if(response.solved_message == '' || response.solved_message == null){
                 $('#caseNotification .solved-message').closest('tr').hide();
             }
@@ -2414,11 +2424,24 @@ $.fn.ToCase = function(type){
                 $('#caseNotification .data-type').val('reply');
                 $('#caseNotification .twitter-userid').val(response.main_post.twitter_user_id);
                 $('#caseNotification .replaycontent').val('@' + response.main_post.screen_name);
-                $template2 = '<li style="display: block;">' +
+               
+                if(response.main_post.twitter_entities.media.length > 0){
+                    for(te = 0; te < response.main_post.twitter_entities.media.length; te++)
+                    if(response.main_post.twitter_entities.media[te].type == 'photo')
+                     img = '<img src="'+BASEURL+'dashboard/media_stream/SafePhoto?photo=' +
+                        response.main_post.twitter_entities.media[te].media_url_https +
+                        '" style="height:200px" /> <br />';
+                }
+                if(response.main_post.twitter_entities.urls.length > 0){
+                    for(te = 0; te < response.main_post.twitter_entities.urls.length; te++)
+                        response.main_post.text = response.main_post.text.replace(response.main_post.twitter_entities.urls[te].url,
+                                                                                  response.main_post.twitter_entities.urls[te].expanded_url);
+                }
+                 $template2 = '<li style="display: block;">' +
                      '<img src="'+ BASEURL + 'dashboard/media_stream/SafePhoto?photo=' + response.main_post.profile_image_url  + '" alt="" style="height: 40px;margin: 6px 10px" class="left" />' + 
                         '<p style="padding: 0px 2px;margin: 2px 5px;width:80%" class="left">' + 
                             '<span class="author" style="font-weight:600;padding:0;">' + response.main_post.screen_name + '</span>: ' +
-                            '<span class="text">'+ linkify(response.main_post.text) + '</span><br />' + 
+                            '<span class="text">'+ linkify(response.main_post.text) + '</span><br />' + img + 
                             '<span class="created-time" style="font-size:10px;color: #62312A;">' + response.main_post.social_stream_created_at  +
                             '</span>'+
                         '</p>' + 
@@ -2443,6 +2466,7 @@ $.fn.ToCase = function(type){
                         '</p>' + 
                         '<br clear="all"/>' +
                     '</li>';
+                    
             }
             else if(response.type == 'facebook'){
                 $('#caseNotification .image-upload').show();
@@ -2454,10 +2478,16 @@ $.fn.ToCase = function(type){
                 $('#caseNotification .twitter-userid').val('');
                 var img = '';
                 if(response.main_post.attachment != null){
-                    if(response.main_post.attachment.type == 'image')
-                    img = '<img src="'+BASEURL+'dashboard/media_stream/SafePhoto?photo=' +
-                        response.main_post.attachment[0].src +
+                    if(response.main_post.attachment.media.length > 0){
+                        if(response.main_post.attachment.media[0].type == 'photo')
+                        img = '<img src="'+BASEURL+'dashboard/media_stream/SafePhoto?photo=' +
+                        response.main_post.attachment.media[0].src +
                         '" style="height:200px" /> <br />';
+                        else if(response.main_post.attachment.media[0].type == 'link')
+                            img = '<br />';
+                    }
+                    
+                    
                 }
                 $template2 = '<li style="display: block;">' +
                 '<img src="'+ BASEURL + 'dashboard/media_stream/SafePhoto?photo=https://graph.facebook.com/' + response.main_post.author_id  + '/picture" alt="" style="height: 40px;margin: 6px 10px" class="left" />' + 
@@ -2494,7 +2524,6 @@ $.fn.ToCase = function(type){
             $('#caseNotification .type-post').html(response.channel.name + " | " + channel_type );
             $('#caseNotification .content-original-post').html($template2);
             $('#caseNotification .case-action-log table tbody').html('');
-            $('#caseNotification .btn-resolve').show();
             $('#caseNotication .action-reply, #caseNotication .case-assign,' +
               '#caseNotication .case-action-log, #caseNotification .related-conversation-view').hide();
             for(x=0;x<response.main_post.channel_action.length;x++){

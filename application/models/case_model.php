@@ -267,7 +267,7 @@ class case_model extends CI_Model{
         $this->db->select('b.*, a.fb_conversation_detail_id');
         $this->db->from("case_related_conversation a left join social_stream b on a.social_stream_id = b.post_id");
         $this->db->where('a.case_id', $case_id);
-        
+        $this->db->limit(100);
         $result = $this->db->get()->result();
         
         foreach($result as $row){

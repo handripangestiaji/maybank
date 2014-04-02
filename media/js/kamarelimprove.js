@@ -138,7 +138,7 @@ $(function(){
                     for(i = 0; i<response['all_case'].length;i++){
                         type = response['all_case'][i].type.replace("facebook_","");
                         if(response['all_case'][i].content != ''){
-                                if(response['all_case'][i].social_stream_post_id===response['assign'][j].post_id){
+                                if(response['all_case'][i].social_stream_post_id === response['assign'][j].post_id){
                                     var htmls= '<div class="related-conversation-body">' + 
                                     '<span class="related-conversation-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>';
                                     htmls+='<p class="headLine">'; 

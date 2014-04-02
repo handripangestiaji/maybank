@@ -638,7 +638,10 @@ class facebook_model extends CI_Model
 	    $row->page_reply = $this->PageReply(array('social_stream_post_id' => $row->social_stream_post_id));
 	    $row->sender = $this->IsFbUserExists($row->facebook_id, true);
 	    $row->comments = $this->RetriveCommentPostFb(array('a.post_id'=> $row->social_stream_post_id), array());
-	    $row->channel_action = $this->GetChannelAction(array('a.post_id' => $row->social_stream_post_id));
+	    $where_in = array($row->social_stream_post_id);
+	    foreach($row->comments as $comment)
+		$where_in[] = $comment->post_id;
+	    $row->channel_action = $this->GetChannelAction($where_in, true);
         }
         
         return $result;

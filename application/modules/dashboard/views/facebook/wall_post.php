@@ -86,7 +86,10 @@ if($fb_feed[$i]->post_content != '<br />' || isset($attachment->media)):
     </p>
     <p class="indicator">
         <?php $this->load->view('facebook/facebook_indicator', array('post'=>$fb_feed[$i]))?>
-        <button class="fblike btn btn-primary btn-mini" style="margin-left: 5px;" value="<?php echo $fb_feed[$i]->post_stream_id;?>"><?php echo $fb_feed[$i]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button> 
+        <?php if(IsRoleFriendlyNameExist($this->user_role, array('Social Stream_Facebook_All_Country_LikeUnlike',
+                                                              'Social Stream_Facebook_All_Country_LikeUnlike'))):?>        
+        <button class="fblike btn btn-primary btn-mini" style="margin-left: 5px;" value="<?php echo $fb_feed[$i]->post_stream_id;?>"><?php echo $fb_feed[$i]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button>
+        <?php endif;?>                                                              
     </p>    
     <p>
         <span class="btn-engagement"><i class="icon-eye-open"></i> <?php echo $fb_feed[$i]->total_comments;?> Engagements</span> |

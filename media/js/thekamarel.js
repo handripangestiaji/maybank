@@ -638,7 +638,30 @@ $(function(){
         
                                         }
                                     });
+                                    
+                                $('.multipleSelect').multiselect({
+                                    buttonText: function(options, select) {
+                                    if (options.length == 0) {
+                                        return 'TAG Short-URL <b class="caret"></b> ';
+                                    }
+                                    else if (options.length > 1) {
+                                        return options.length + ' selected <b class="caret"></b>';
+                                    }
+                                    else {
+                                        var selected = '';
+                                        options.each(function() {
+                                            selected += $(this).text() + ', ';
+                                        });
+                                        return selected.substr(0, selected.length -2) + ' <b class="caret"></b>';
+                                    }
+                                },
+                                });
+                                $('.multipleSelect').siblings('.btn-group').find('button').attr('disabled','disabled');
+                        
+                                    
                         });
+                        
+                        
                         
                     });
                     
@@ -980,6 +1003,9 @@ $(function(){
                                     $('.compose-textbox').val($('.compose-textbox').val()+ 'http://maybk.co/' + data.shortcode);  
                                     ComposeCharCheck();
                                     $('.compose-insert-link-short-url-hidden').val(data.shortcode);
+//                                        alert($('#compose-tags').next().find('button').html());
+                                    $('#compose-tags').next().find('button').removeAttr('disabled');
+
                                 }
                                 else{
                                     console.log(data);

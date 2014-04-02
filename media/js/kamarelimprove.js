@@ -2,6 +2,7 @@
     This file was created by Eko Purnomo to improve kamarel.js
 */
 
+
 $(function(){
     $('#countrySelect').multiselect();
     $(this).on('click','.indicator-case', function(e){

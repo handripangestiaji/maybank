@@ -1743,6 +1743,7 @@ $(function(){
                                 data: {
                                     post_id: $(this).val(),
                                     product_id : $(this).closest('li').find('.productType').val(),
+                                    reply_type : $(this).closest('li').find('.replyType').val(),
                                     channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
                                     comment :$(this).parent().siblings(".replaycontent").val(),
                                     url:'',
@@ -2353,19 +2354,75 @@ $.fn.RefreshAllStream = function(){
                 $(this).load(BASEURL + 'dashboard/media_stream/facebook_stream/' + channelId + '/' + is_read, function(){
                     $(this).find('.channel-id').val(channelId);
                 });
+                 $('.multipleSelect').multiselect({
+                buttonText: function(options, select) {
+                if (options.length == 0) {
+                    return 'TAG Short-URL <b class="caret"></b> ';
+                }
+                else if (options.length > 1) {
+                    return options.length + ' selected <b class="caret"></b>';
+                }
+                else {
+                    var selected = '';
+                    options.each(function() {
+                        selected += $(this).text() + ', ';
+                    });
+                    return selected.substr(0, selected.length -2) + ' <b class="caret"></b>';
+                }
+            },
+            });
+            $('.multipleSelect').siblings('.btn-group').find('button').attr('disabled','disabled');
             }
             else if($(this).closest('div').prev().find('i').attr('class') == 'icon-twitter'){
                 $(this).html('&nbsp;&nbsp;Loading...');        
                 $(this).load(BASEURL + 'dashboard/media_stream/twitter_stream/' + channelId + '/'+ is_read, function(){
                     $(this).find('.channel-id').val(channelId);
                 });
+                 $('.multipleSelect').multiselect({
+                buttonText: function(options, select) {
+                if (options.length == 0) {
+                    return 'TAG Short-URL <b class="caret"></b> ';
+                }
+                else if (options.length > 1) {
+                    return options.length + ' selected <b class="caret"></b>';
+                }
+                else {
+                    var selected = '';
+                    options.each(function() {
+                        selected += $(this).text() + ', ';
+                    });
+                    return selected.substr(0, selected.length -2) + ' <b class="caret"></b>';
+                }
+            },
+            });
+            $('.multipleSelect').siblings('.btn-group').find('button').attr('disabled','disabled');
             }
             else if($(this).closest('div').prev().find('i').attr('class') == 'icon-youtube'){
                 $(this).html('&nbsp;&nbsp;Loading...');        
                 $(this).load(BASEURL + 'dashboard/media_stream/youtube_stream/' + channelId + '/'+ is_read, function(){
                     $(this).find('.channel-id').val(channelId);
                 });
+                 $('.multipleSelect').multiselect({
+                buttonText: function(options, select) {
+                if (options.length == 0) {
+                    return 'TAG Short-URL <b class="caret"></b> ';
+                }
+                else if (options.length > 1) {
+                    return options.length + ' selected <b class="caret"></b>';
+                }
+                else {
+                    var selected = '';
+                    options.each(function() {
+                        selected += $(this).text() + ', ';
+                    });
+                    return selected.substr(0, selected.length -2) + ' <b class="caret"></b>';
+                }
+            },
+            });
+            $('.multipleSelect').siblings('.btn-group').find('button').attr('disabled','disabled');
             }
+           
+
         }
     });
 };

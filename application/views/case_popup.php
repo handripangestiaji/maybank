@@ -34,6 +34,23 @@
             <ol style="margin: 0;padding: 0;" class="related-conversation-list">
             </ol>
         </div>
+        
+        <a href="#" id="caseViewAction"> <i class="icon-eye-open"></i> View Action Log</a>
+        
+        <div class="case-action-log" style="display: none;">
+            <table class="table table-striped">
+                <thead><tr style="background-color: #ffffff; width: 100%; margin-left: -15px; border-top: 1px solid #e1e1e1;">
+                <th style="width:90px">Time</th>
+                <th style="width:67px">User</th>
+                <th style="width:69px">Action</th>
+                <th style="width:110px">Status</th>
+                <th style="width:119px">Notes</th>
+                </tr></thead>
+                <tbody>
+                    
+                </tbody>
+            </table>
+        </div>
         <?php
         $this->load->model('campaign_model');
         $product_list = $this->campaign_model->GetProduct(array('parent_id' => null));

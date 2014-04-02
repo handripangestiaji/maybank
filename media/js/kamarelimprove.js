@@ -13,7 +13,7 @@ $(function(){
         $(this).find('button[type=submit]').attr('disabled', 'disabled');
         $(this).find('button[type=submit]').html('<i class="icon-stop icon-large"></i> Assigning case...');
         var openButton = $(this).closest('li').find('button:first');
-        var fb_reassign=$(this).find('button[type=submit]').val();
+        var fb_reassign=$(this).find('button[type=submit]'  ).val();
         e.preventDefault();
         $.ajax({
             "url" : BASEURL + "case/mycase/CreateCase",
@@ -134,28 +134,9 @@ $(function(){
                 }
                 else{
 
-                for(var j=0;j<response['assign'].length;j++){
                     for(i = 0; i<response['all_case'].length;i++){
                         type = response['all_case'][i].type.replace("facebook_","");
                         if(response['all_case'][i].content != ''){
-                                if(response['all_case'][i].social_stream_post_id===response['assign'][j].post_id){
-                                    var htmls= '<div class="related-conversation-body">' + 
-                                    '<span class="related-conversation-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>';
-                                    htmls+='<p class="headLine">'; 
-                                    htmls+='<input type="checkbox" class="related-conversation-check" checked value="' + response['all_case'][i].social_stream_post_id + '"><span style="color:#222">';
-                                    htmls+=$(modalID).closest('li').find('.author').html() + 
-                                        '</span><input type="hidden" class="related-conversation-check" value="' + response['all_case'][i].type + '">' + 
-                                        '<span class="cyanText" style="text-transform:capitalize;"> '+ type +'</span> ' +
-                                        '<i class="icon-circle"></i>' + 
-                                        '<span class="UTCTimestamp">' +  response['all_case'][i].created_at + '</span>' + 
-                                    '</p>'; 
-                                    
-                                    htmls+='<div>' +
-                                        '<p>' + response['all_case'][i].content + '</p>' +
-                                    '</div>';
-                                     htmls+='</div>';
-                                    $(modalID + ' form').append(htmls);
-                                }else{
                                     var htmls= '<div class="related-conversation-body">' + 
                                     '<span class="related-conversation-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>';
                                     htmls+='<p class="headLine">'; 
@@ -172,9 +153,6 @@ $(function(){
                                     '</div>';
                                      htmls+='</div>';
                                     $(modalID + ' form').append(htmls);
-                                }
-                            }
-                             
                         }
                     }
                 }

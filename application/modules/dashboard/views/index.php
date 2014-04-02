@@ -58,7 +58,7 @@
                         </div>
                         <div class="left" style="margin-left:5px;">
                             <!--ul id="compose-tags" style="width: 200px;"></ul!-->
-                            <select id="compose-tags" multiple="multiple" name="tags">
+                            <select id="compose-tags" class="multipleSelect" multiple="multiple" name="tags">
                                 <?php 
                                       if($tags): ?>
                                       <?php 

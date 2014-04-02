@@ -2405,6 +2405,7 @@ $.fn.ToCase = function(type){
             }
             else
                 $('#caseNotification .solved-message').closest('tr').show();
+                
             if(response.type == 'twitter'){
                 $('#caseNotification .btn-send').attr('type','submit');
                 $('#caseNotification .image-upload').show();
@@ -2493,7 +2494,9 @@ $.fn.ToCase = function(type){
             $('#caseNotification .type-post').html(response.channel.name + " | " + channel_type );
             $('#caseNotification .content-original-post').html($template2);
             $('#caseNotification .case-action-log table tbody').html('');
-            console.log(response.main_post.channel_action);
+            $('#caseNotification .btn-resolve').show();
+            $('#caseNotication .action-reply, #caseNotication .case-assign,' +
+              '#caseNotication .case-action-log, #caseNotification .related-conversation-view').hide();
             for(x=0;x<response.main_post.channel_action.length;x++){
                 status = "", status2 = "";
                 if(response.main_post.channel_action[x].action_type == "reply_facebook"){
@@ -2503,13 +2506,14 @@ $.fn.ToCase = function(type){
                     status = response.main_post.channel_action[x].text;
                 }
                 else if(response.main_post.channel_action[x].action_type == 'case_created'){
-                    status = response.main_post.channel_action[x].assign_name ;
+                    status = " Assign to " + response.main_post.channel_action[x].assign_name ;
                     status2 = response.main_post.channel_action[x].messages;
                 }
                 else if(response.main_post.channel_action[x].action_type  == 'case_solved' ||
                         response.main_post.channel_action[x].action_type  == 'case_reassign'){
                     status = response.main_post.channel_action[x].solved_name;
                     status2 = response.main_post.channel_action[x].solved_message;
+                    $('#caseNotification .btn-resolve').hide();
                 }
                 else
                     status = response.main_post.channel_action[x].log_text;

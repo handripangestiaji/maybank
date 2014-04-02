@@ -1871,21 +1871,21 @@ $(function(){
                             }
                        });
                     });
-                    $(this).on('click','.replyType',function(){
-                            var replyType=$(this).val();
-                            if(replyType=="Report_Abuse"){
+                    $(this).on('change','.replyType',function(){
+                            var replyType = $(this).val();
+                            if(replyType == "Report_Abuse")
                                 $(this).siblings('.productType').attr('disabled', 'disabled');
-                            }else{
-                                 $(this).siblings('.productType').removeAttr('disabled', 'disabled');
+                            else{
+                                 $(this).siblings('.productType').removeAttr('disabled');
                                 
                             }
                          });
-                    $(this).on('click','.reply_type',function(){
+                    $(this).on('change','.reply_type',function(){
                             var replyType=$(this).val();
                             if(replyType=="Report_Abuse"){
                                 $(this).siblings('.product_type').attr('disabled', 'disabled');
                             }else{
-                                 $(this).siblings('.product_type').removeAttr('disabled', 'disabled');
+                                 $(this).siblings('.product_type').removeAttr('disabled');
                                 
                             }
                          });   

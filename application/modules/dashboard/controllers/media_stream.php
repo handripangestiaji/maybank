@@ -154,18 +154,21 @@ class Media_stream extends CI_Controller {
 	$twitter_reply['reply_type'] = $this->input->post('reply_type');
 	$twitter_reply['text'] = $this->input->post('content');
 	$twitter_reply['user_id'] = $this->session->userdata('user_id');
-    $twitter_reply['user_id'] = $this->session->userdata('user_id');
-    $tags=$this->input->post('tag_id');
-    $url=$this->input->post('url');
-    $url=$this->input->post('tweeter_user');
+	$twitter_reply['user_id'] = $this->session->userdata('user_id');
+	$tags=$this->input->post('tag_id');
+	$url=$this->input->post('url');
+	$url=$this->input->post('tweeter_user');
+	
+	
+	$content_element = $this->input->post('type') == 'direct_message' ? 'content' : 'text';
+	
+	$validation[] = array('type' => 'required','name' => 'replaycontent','value' => $this->input->post($content_element), 'fine_name' => "Replay Content");
+	$validation[] = array('type' => 'required','name' => 'reply_type','value' => $twitter_reply['reply_type'], 'fine_name' => "Reply Type");
+	if($this->input->post('reply_type') != 'Report_Abuse' && $this->input->post('reply_type') != ''){
+	    $validation[] = array('type' => 'required','name' => 'product_type','value' => $twitter_reply['content_products_id'], 'fine_name' => "Product Type");
+	}        
     
-    $validation[] = array('type' => 'required','name' => 'replaycontent','value' => $twitter_reply['text'], 'fine_name' => "Replay Content");
-    $validation[] = array('type' => 'required','name' => 'reply_type','value' => $twitter_reply['reply_type'], 'fine_name' => "Reply Type");
-    if($this->input->post('reply_type')!='Report_Abuse'){
-        $validation[] = array('type' => 'required','name' => 'product_type','value' => $twitter_reply['content_products_id'], 'fine_name' => "Product Type");
-    }        
-
-    $is_valid = CheckValidation($validation, $this->validation);
+	$is_valid = CheckValidation($validation, $this->validation);
     
     if($is_valid === true){
         

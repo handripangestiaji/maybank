@@ -498,12 +498,55 @@ $(function(){
                             $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');        
                             $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/facebook_stream/' + social_id + '/' + is_read, function(){
                                 $(this).find('.channel-id').val(social_id);
+                            
+                            $('.multipleSelect').multiselect({
+                                buttonText: function(options, select) {
+                                if (options.length == 0) {
+                                    return 'TAG Short-URL <b class="caret"></b> ';
+                                }
+                                else if (options.length > 1) {
+                                    return options.length + ' selected <b class="caret"></b>';
+                                }
+                                else {
+                                    var selected = '';
+                                    options.each(function() {
+                                        selected += $(this).text() + ', ';
+                                    });
+                                    return selected.substr(0, selected.length -2) + ' <b class="caret"></b>';
+                                }
+                            },
                             });
+                            $('.multipleSelect').siblings('.btn-group').find('button').attr('disabled','disabled');
+
+                            });
+                    
+                                                
                         }
                         else if($(this).closest('div').prev().find('i').attr('class') == 'icon-twitter'){
                             $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');        
                             $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/twitter_stream/' + social_id + '/' + is_read, function(){
                                 $(this).find('.channel-id').val(social_id);
+                            
+                            $('.multipleSelect').multiselect({
+                                buttonText: function(options, select) {
+                                if (options.length == 0) {
+                                    return 'TAG Short-URL <b class="caret"></b> ';
+                                }
+                                else if (options.length > 1) {
+                                    return options.length + ' selected <b class="caret"></b>';
+                                }
+                                else {
+                                    var selected = '';
+                                    options.each(function() {
+                                        selected += $(this).text() + ', ';
+                                    });
+                                    return selected.substr(0, selected.length -2) + ' <b class="caret"></b>';
+                                }
+                            },
+                            });
+                            $('.multipleSelect').siblings('.btn-group').find('button').attr('disabled','disabled');
+                    
+                            
                             });
                         }
                     });
@@ -1853,21 +1896,21 @@ $(function(){
                             }
                        });
                     });
-                    $(this).on('click','.replyType',function(){
+                    $(this).on('change','.replyType',function(){
                             var replyType=$(this).val();
                             if(replyType=="Report_Abuse"){
                                 $(this).siblings('.productType').attr('disabled', 'disabled');
                             }else{
-                                 $(this).siblings('.productType').removeAttr('disabled', 'disabled');
+                                 $(this).siblings('.productType').removeAttr('disabled');
                                 
                             }
                          });
-                    $(this).on('click','.reply_type',function(){
+                    $(this).on('change','.reply_type',function(){
                             var replyType=$(this).val();
                             if(replyType=="Report_Abuse"){
                                 $(this).siblings('.product_type').attr('disabled', 'disabled');
                             }else{
-                                 $(this).siblings('.product_type').removeAttr('disabled', 'disabled');
+                                 $(this).siblings('.product_type').removeAttr('disabled');
                                 
                             }
                          });   

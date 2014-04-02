@@ -2491,7 +2491,7 @@ $.fn.ToCase = function(type){
                 
                 
                 template3 = "<tr><td>" + response.main_post.channel_action[x].created_at +
-                "</td><td>" + response.main_post.channel_action[x].created_at + "</td><td>" +
+                "</td><td>" + response.main_post.channel_action[x].username + "</td><td>" +
                 response.main_post.channel_action[x].action_type + " </td><td>" + status +"</td><td>" +
                 status2+"</td></tr>";
                 $('#caseNotification .case-action-log table tbody').append(template3);

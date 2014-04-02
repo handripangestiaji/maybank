@@ -776,90 +776,112 @@ class Media_stream extends CI_Controller {
         $descr = $this->input->post('desc');
         $img = $this->input->post('img');
         $case_id = $this->input->post('case_id');
+        $reply_type = $this->input->post('reply_type');
+        $product_type = $this->input->post('product_id');
              
+        
+        $validation[] = array('type' => 'required','name' => 'replaycontent','value' => $comment, 'fine_name' => "Replay Content");
+        $validation[] = array('type' => 'required','name' => 'reply_type','value' => $reply_type, 'fine_name' => "Reply Type");
+      //  print_r($reply_type);
+        if($reply_type!='Report_Abuse'){
+            $validation[] = array('type' => 'required','name' => 'product_type','value' => $product_type, 'fine_name' => "Product Type");
+        }        
+        $is_valid = CheckValidation($validation, $this->validation);
+
+        if($is_valid === true){
+//                 print_r($comment);
+//                 die();
              if($case_id=='null'){
                 $case_id=null;
              }else{
                 $case_id=$case_id;
              }
-        $filter = array(
-            "connection_type" => "facebook"
-        );
-        $filter['channel_id'] = $this->input->post('channel_id');
-        $channel_loaded = $this->account_model->GetChannel($filter);
-        if(count($channel_loaded) == 0){
-	    echo json_encode(
-		array(
-		    'success' => false,
-		    'message' => "Invalid Channel Id"
-		)
-	    );
-	    return;
-	}
-	else{
-	      $channel =  $channel_loaded[0]->channel_id;
-	}
-        $stream_id = $this->facebook_model->streamId($post_id);
-        $newStd = new stdClass();
-        $newStd->page_id =  $channel_loaded[0]->social_id;
-        $newStd->token = $this->facebook_model->GetPageAccessToken( $channel_loaded[0]->oauth_token, $channel_loaded[0]->social_id);
-        $config = array(
-	    'appId' => $this->config->item('fb_appid'),
-	    'secret' => $this->config->item('fb_secretkey')
-	);
-    	$this->load->library('facebook',$config);
-    	$this->facebook->setaccesstoken($newStd->token);
-        $attachment = array(
-            'message' => $comment,
-            'name' => $title,
-            'link' => $url,
-            'description' => $descr,
-            'picture'=> $img,
-        ); 
-        $return = $this->facebook->api('/'.$stream_id->post_stream_id.'/messages', 'POST', array('message'=>$comment));
-        $action = array(
-	    "action_type" => "conversation_facebook",
-	    "channel_id" => $channel_loaded[0]->channel_id,
-	    "created_at" => date("Y-m-d H:i:s"),
-	    "stream_id_response" => $return['id'],
-	    "post_id" => $post_id,
-	    "created_by" => $this->session->userdata('user_id'),
-	    "log_text" => $comment,
-	    "case_id"=> $case_id,
-	);
-	
-        $this->account_model->CreateFbPMAction($action);
-	$page_reply = array(
-	    "case_id" => $this->input->post('case_id') == 'null' ? null : $this->input->post('case_id'),
-	    "url" => null,
-	    "message" => $comment,
-	    "social_stream_post_id" => $post_id,
-	    "conversation_detail_id" => null,
-	    "post_at" => date("Y-m-d H:i:s"),
-	    "created_at" => date("Y-m-d H:i:s"),
-	    "product_id" => $this->input->post('product_id') == 0 ? NULL : $this->input->post('product_id'),
-	    "user_id" => $this->session->userdata('user_id')
-	);
-	$this->account_model->CreateReplyAction($page_reply);
-        $case = $this->account_model->isCaseIdExists($post_id);
-	if(count($case)>0){
-	    $post_at=$case[0]->created_at;  
-	    $caseid=$case[0]->case_id;
-	}else{
-	    $caseid='';
-	    $post_at='';       
-	}
-	$action['created_at'] = new DateTime($action['created_at']);
-	$action['created_at']->setTimezone(new DateTimeZone($this->session->userdata('timezone')));
-	$action['created_at'] = $action['created_at']->format("j-M-Y h:i A");
-        echo json_encode(
-	    array(
-		'success' => true,
-		'message' => "Successfully done",
-		'result' => $return,
-		'action_log' => $action
-	    )
-	);
+            $filter = array(
+                "connection_type" => "facebook"
+            );
+            $filter['channel_id'] = $this->input->post('channel_id');
+            $channel_loaded = $this->account_model->GetChannel($filter);
+            if(count($channel_loaded) == 0){
+    	    echo json_encode(
+    		array(
+    		    'success' => false,
+    		    'message' => "Invalid Channel Id"
+    		)
+    	    );
+    	    return;
+    	}
+    	else{
+    	      $channel =  $channel_loaded[0]->channel_id;
+    	}
+            $stream_id = $this->facebook_model->streamId($post_id);
+            $newStd = new stdClass();
+            $newStd->page_id =  $channel_loaded[0]->social_id;
+            $newStd->token = $this->facebook_model->GetPageAccessToken( $channel_loaded[0]->oauth_token, $channel_loaded[0]->social_id);
+            $config = array(
+    	    'appId' => $this->config->item('fb_appid'),
+    	    'secret' => $this->config->item('fb_secretkey')
+    	);
+        	$this->load->library('facebook',$config);
+        	$this->facebook->setaccesstoken($newStd->token);
+            $attachment = array(
+                'message' => $comment,
+                'name' => $title,
+                'link' => $url,
+                'description' => $descr,
+                'picture'=> $img,
+            ); 
+            $return = $this->facebook->api('/'.$stream_id->post_stream_id.'/messages', 'POST', array('message'=>$comment));
+            $action = array(
+    	    "action_type" => "conversation_facebook",
+    	    "channel_id" => $channel_loaded[0]->channel_id,
+    	    "created_at" => date("Y-m-d H:i:s"),
+    	    "stream_id_response" => $return['id'],
+    	    "post_id" => $post_id,
+    	    "created_by" => $this->session->userdata('user_id'),
+    	    "log_text" => $comment,
+    	    "case_id"=> $case_id,
+    	);
+    	
+            $this->account_model->CreateFbPMAction($action);
+    	$page_reply = array(
+    	    "case_id" => $this->input->post('case_id') == 'null' ? null : $this->input->post('case_id'),
+    	    "url" => null,
+    	    "message" => $comment,
+    	    "social_stream_post_id" => $post_id,
+    	    "conversation_detail_id" => null,
+    	    "post_at" => date("Y-m-d H:i:s"),
+    	    "created_at" => date("Y-m-d H:i:s"),
+    	    "product_id" => $this->input->post('product_id') == 0 ? NULL : $this->input->post('product_id'),
+    	    "user_id" => $this->session->userdata('user_id')
+    	);
+    	$this->account_model->CreateReplyAction($page_reply);
+            $case = $this->account_model->isCaseIdExists($post_id);
+    	if(count($case)>0){
+    	    $post_at=$case[0]->created_at;  
+    	    $caseid=$case[0]->case_id;
+    	}else{
+    	    $caseid='';
+    	    $post_at='';       
+    	}
+    	$action['created_at'] = new DateTime($action['created_at']);
+    	$action['created_at']->setTimezone(new DateTimeZone($this->session->userdata('timezone')));
+    	$action['created_at'] = $action['created_at']->format("j-M-Y h:i A");
+            echo json_encode(
+    	    array(
+    		'success' => true,
+    		'message' => "Successfully done",
+    		'result' => $return,
+    		'action_log' => $action
+    	    )
+    	);
+    }else{
+         echo json_encode(array(
+                       "success" => false,
+                       "message" => "<br>Reply Comment was failed :<br>- Reply Type, <br>- Product Type &<br>- Compose Message<br>Value cannot be null.",
+                       "errors" => $is_valid
+                   )
+               );
+    }//sadsa
     }
     
  

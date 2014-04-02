@@ -1743,6 +1743,7 @@ $(function(){
                                 data: {
                                     post_id: $(this).val(),
                                     product_id : $(this).closest('li').find('.productType').val(),
+                                    reply_type : $(this).closest('li').find('.replyType').val(),
                                     channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
                                     comment :$(this).parent().siblings(".replaycontent").val(),
                                     url:'',

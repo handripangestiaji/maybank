@@ -52,7 +52,7 @@
                         Insert
                         </button>
                     </div>
-                    <div class="right">
+                    <div class="right tag_p">
                        <div class="left">
                             <i class="icon-tag icon-large"></i>    
                         </div>

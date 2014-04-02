@@ -1003,6 +1003,9 @@ $(function(){
                                     $('.compose-textbox').val($('.compose-textbox').val()+ 'http://maybk.co/' + data.shortcode);  
                                     ComposeCharCheck();
                                     $('.compose-insert-link-short-url-hidden').val(data.shortcode);
+//                                        alert($('#compose-tags').next().find('button').html());
+                                    $('#compose-tags').next().find('button').removeAttr('disabled');
+
                                 }
                                 else{
                                     console.log(data);

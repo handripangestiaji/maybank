@@ -340,12 +340,13 @@ $(function(){
                 buttonSubmit.removeAttr('disabled').html('SEND');
                 try{
                     if(response.success == false){
-                        var message = '';
+                        var message = response.message;
                         if(response.result.errors){
                             for(x=0; x<response.result.errors.length; x++){
                                 message += response.result.errors[x].message + "<br />";
                             }
                         }
+                        
                         
                         me.find('.message').html('<div class="alert alert-warning">' +
                         '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +

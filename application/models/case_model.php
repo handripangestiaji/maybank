@@ -274,6 +274,8 @@ class case_model extends CI_Model{
             if($row->fb_conversation_detail_id == null){
                 if($row->type == 'facebook_conversation')
                     $row->facebook_data = $this->ReadSimpleConversation($row->post_id, "facebook_conversation_snippet");
+                else if($row->type == 'facebook_comment')
+                    $row->facebook_data = $this->ReadSimpleConversation($row->post_id, "facebook_comment");
                 else
                     $row->facebook_data = $this->ReadSimpleConversation($row->post_id, "facebook");
             }

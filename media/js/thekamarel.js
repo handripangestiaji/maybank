@@ -2651,7 +2651,8 @@ $.fn.ToCase = function(type){
                         '<br clear="all"/>' +
                     '</li>';
                 }
-                else if(response.related_conversation[i].type == 'facebook'|| response.related_conversation[i].type == 'facebook conversation'){
+                else if(response.related_conversation[i].type == 'facebook'|| response.related_conversation[i].type == 'facebook conversation' ||
+                        response.related_conversation[i].type == 'facebook_comment'){
                     var img = '';
                     if(response.related_conversation[i]['facebook_data'].attachment != null){
                         if(response.related_conversation[i]['facebook_data'].attachment.type == 'image')
@@ -2659,11 +2660,18 @@ $.fn.ToCase = function(type){
                             response.related_conversation[i]['facebook_data'].attachment[0].src +
                             '" style="height:200px" /> <br />';
                     }
+                    author_id = response.related_conversation[i]['facebook_data'].author_id;
+                    post_content  = linkify(response.related_conversation[i]['facebook_data'].post_content);
+                    if(response.related_conversation[i].type == 'facebook_comment')
+                    {
+                        author_id = response.related_conversation[i]['facebook_data'].facebook_id;
+                        post_content  = linkify(response.related_conversation[i]['facebook_data'].comment_content);
+                    }
                     $template = '<li style="display: block;">' +
-                     '<img src="'+ BASEURL + 'dashboard/media_stream/SafePhoto?photo=https://graph.facebook.com/' + response.related_conversation[i]['facebook_data'].author_id  + '/picture" alt="" style="height: 40px;margin: 6px 10px" class="left" />' + 
+                     '<img src="'+ BASEURL + 'dashboard/media_stream/SafePhoto?photo=https://graph.facebook.com/' +  author_id  + '/picture" alt="" style="height: 40px;margin: 6px 10px" class="left" />' + 
                         '<p style="padding: 0px 2px;margin: 2px 5px;width:80%" class="left">' + 
                             '<span class="author" style="font-weight:600;padding:0;">' + response.related_conversation[i]['facebook_data'].name + '</span>: ' +
-                            '<span class="text">'+ linkify(response.related_conversation[i]['facebook_data'].post_content) + '</span><br />' +
+                            '<span class="text">'+ post_content  + '</span><br />' +
                             img +
                             '<span class="created-time" style="font-size:10px;color: #62312A;">' + response.related_conversation[i]['facebook_data'].created_at  +
                             '</span>'+

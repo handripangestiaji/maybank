@@ -19,7 +19,7 @@
             <div class="control-group">
                 <label class="control-label">Product<span class="redText"> *</span></label>
                 <div class="controls">
-                    <select class="multipleSelect" multiple="multiple" name="products_id[]">
+                    <select class="shorturl-tags" multiple="multiple" name="products_id[]">
                     	<?php foreach($product_list as $product):?>
 			    <?php
 				if(isset($product->child)){ ?>
@@ -41,7 +41,7 @@
             <div class="control-group">
                 <label class="control-label">Tag<span class="redText"> *</span></label>
                 <div class="controls">
-                  <select class="multipleSelect" multiple="multiple" name="tag_id[]">
+                  <select class="shorturl-tags" multiple="multiple" name="tag_id[]">
                     	<?php if($tags): ?>
                     		<?php foreach($tags as $v): ?>
                     			<option value="<?php echo $v->id ?>"><?php echo $v->tag_name ?></option>

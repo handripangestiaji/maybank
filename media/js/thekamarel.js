@@ -2700,6 +2700,7 @@ function validateURL(textval) {
 }
 
 function linkify(inputText) {
+    if(inputText == '') return inputText;
     var replacedText, replacePattern1, replacePattern2, replacePattern3;
 
     //URLs starting with http://, https://, or ftp://

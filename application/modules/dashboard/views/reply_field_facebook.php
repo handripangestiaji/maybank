@@ -63,7 +63,8 @@
         </div>
         <div class="left tags_c">
             <select class="multipleSelect" multiple="multiple" name="tag_id[]">
-            <?php 
+            <?php
+                $this->load->model('tag_model');
                   $tags=$this->tag_model->get();
                   if($tags): ?>
                   

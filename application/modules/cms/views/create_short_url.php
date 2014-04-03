@@ -54,7 +54,7 @@
                             <div class="control-group">
                                 <label class="control-label">Tag<span class="redText"> *</span></label>
                                 <div class="controls">
-                                <select class="multipleSelect" multiple="multiple" name="tag_id[]">
+                                <select class="shorturl-tags" multiple="multiple" name="tag_id[]">
                                       <?php if($tags): ?>
                                               <?php foreach($tags as $v): ?>
                                                       <option value="<?php echo $v->id ?>"><?php echo $v->tag_name ?></option>
@@ -127,7 +127,7 @@
                             <div class="control-group">
                                 <label class="control-label">Tag<span class="redText"> *</span></label>
                                 <div class="controls">
-                                <select class="multipleSelect" multiple="multiple" name="tag_id[]">
+                                <select class="shorturl-tags" multiple="multiple" name="tag_id[]">
                                       <?php if($tags): ?>
                                               <?php foreach($tags as $v): ?>
                                                       <option value="<?php echo '-'.$v->id ?>"><?php echo $v->tag_name ?></option>

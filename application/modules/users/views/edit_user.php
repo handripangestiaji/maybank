@@ -65,7 +65,7 @@
             <td>
                 <select name="optRole">
                     <?php foreach($role->result() as $r){
-                        if($r->role_collection_id != $this->session->userdata('role_id') || (IsRoleFriendlyNameExist($this->user, 'User Management User_All_Country_Create'))) {
+                        if($r->role_collection_id != $this->session->userdata('role_id') || (IsRoleFriendlyNameExist($this->user, 'User Management_User_All_Country_Edit'))) {
                             if($row->role_id == $r->role_collection_id)
                             {
                         ?>

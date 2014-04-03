@@ -1737,13 +1737,21 @@ $(function(){
                             var commentButton = $(this);
                             isSend=commentButton.html()=="SEND";
                             commentButton.html('SENDING...').attr("disabled", "disabled");
+                            productType =  $(this).closest('li').find('.productType').val();
+                            replyType = $(this).closest('li').find('.replyType').val();
+                            messageTag = commentButton.parent().siblings('.pull-left').find('.message');
+                            if($(this).closest('#caseNotification').length > 0){
+                                productType = $(this).closest('#caseNotification').find('.productType').val();
+                                replyType = $(this).closest('#caseNotification').find('.replyType').val();
+                                messageTag = $(this).closest('#caseNotification').find('.message');
+                            }
                            $.ajax({
                                 url : BASEURL + 'dashboard/media_stream/FbReplyMsg',
                                 type: "POST",
                                 data: {
                                     post_id: $(this).val(),
-                                    product_id : $(this).closest('li').find('.productType').val(),
-                                    reply_type : $(this).closest('li').find('.replyType').val(),
+                                    product_id : productType,
+                                    reply_type : replyType,
                                     channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
                                     comment :$(this).parent().siblings(".replaycontent").val(),
                                     url:'',
@@ -1756,7 +1764,7 @@ $(function(){
                                 {
                                     commentButton.removeAttr("disabled");
                                     if(response.success === true){
-                                        commentButton.parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
+                                        messageTag.html('<div class="alert alert-warning">' +
                                         '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
                                         '<strong>Success!</strong> '+response.message+' </div>');
                                         commentButton.parent().siblings(".replaycontent").val("");
@@ -1768,8 +1776,7 @@ $(function(){
                                         
                                         commentButton.closest('li').find('.indicator:first').append(' <button type="button" class=".replied-btn btn btn-inverse btn-mini" style="text-align:left">' +
                                             'Replied by:you ' + response.action_log.created_at + "</button>");
-                                        if(commentButton.hasClass('popup'))
-                                            window.location.reload();
+                                        
                                     }
                                     else{
                                         commentButton.parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +

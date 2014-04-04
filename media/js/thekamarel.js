@@ -2507,7 +2507,8 @@ $.fn.ToCase = function(type){
                 $('#caseNotification .twitter-userid').val(response.main_post.twitter_user_id);
                 $('#caseNotification .replaycontent').val('@' + response.main_post.screen_name);
                
-                if(response.main_post.twitter_entities.media.length > 0){
+            
+                if(response.main_post.twitter_entities.media != undefined){
                     for(te = 0; te < response.main_post.twitter_entities.media.length; te++)
                     if(response.main_post.twitter_entities.media[te].type == 'photo')
                      img = '<img src="'+BASEURL+'dashboard/media_stream/SafePhoto?photo=' +

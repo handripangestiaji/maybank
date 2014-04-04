@@ -158,11 +158,7 @@ class Media_stream extends CI_Controller {
 	$tags=$this->input->post('tag_id');
 	$url=$this->input->post('url');
 	$url=$this->input->post('tweeter_user');
-	
-	
-	$content_element = $this->input->post('type') == 'direct_message' ? 'content' : 'text';
-	
-	$validation[] = array('type' => 'required','name' => 'replaycontent','value' => $this->input->post($content_element), 'fine_name' => "Replay Content");
+	$validation[] = array('type' => 'required','name' => 'replay_content','value' => $this->input->post('content'), 'fine_name' => "Replay Content");
 	$validation[] = array('type' => 'required','name' => 'reply_type','value' => $twitter_reply['reply_type'], 'fine_name' => "Reply Type");
 	if($this->input->post('reply_type') != 'Report_Abuse' && $this->input->post('reply_type') != ''){
 	    $validation[] = array('type' => 'required','name' => 'product_type','value' => $twitter_reply['content_products_id'], 'fine_name' => "Product Type");
@@ -186,7 +182,6 @@ class Media_stream extends CI_Controller {
 		),
 		1
 	    );
-        //die();
     	if(count($twitter_data) > 0 || $this->input->post('type') == 'direct_message'){
     	    
     	    $channel = $this->account_model->GetChannel(array(

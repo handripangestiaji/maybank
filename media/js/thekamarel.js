@@ -497,7 +497,6 @@ $(function(){
                 });
 
                 $(document).ready(function() {
-                    
                     $(this).on('click', '.stream_head > li > a',
                         function(e) {
                             previous = $(this).closest('ul.stream_head').find('li.active');
@@ -506,6 +505,7 @@ $(function(){
                             var id_tab_name = '#' + $(this).attr('class');
                             $(this).closest('.floatingBoxMenu').next().find('.floatingBoxContainers').hide(); 
                             $(this).closest('.floatingBoxMenu').next().find(id_tab_name).show();
+                            $(this).closest('.floatingBoxMenu').next().scrollTop(0);
                             e.preventDefault();
                     });
                     

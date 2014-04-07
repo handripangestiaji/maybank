@@ -703,15 +703,14 @@ class Media_stream extends CI_Controller {
                	    
                 $this->account_model->CreateFbCommentAction($action,$post_id,$this->input->post('like') === 'true' ? 1 : 0);
                 $this->account_model->CreateFbReplyAction($post_id,$stream_id->post_stream_id,$comment,$reply_type,$product_type,$url);
-    	    echo json_encode(
-    		array(
-    		    'success' => true,
-    		    'message' => "successfully done",
-    		    'result' => $return,
-    		    'action_log' => $action
-    		)
-    	    );	
-                                          
+		echo json_encode(
+		    array(
+			'success' => true,
+			'message' => "successfully done",
+			'result' => $return,
+			'action_log' => $action
+		    )
+		);	
             }elseif(is_array($return)){//replay in reply        
                 if($return['id']){
                 $return=$return['id'];
@@ -725,16 +724,16 @@ class Media_stream extends CI_Controller {
             	);
                 $this->account_model->CreateFbCommentAction($action,$post_id,$this->input->post('like') === 'true' ? 1 : 0);
                 $this->account_model->CreateFbReplyAction($post_id,'',$comment,$reply_type,$product_type,$url);
-    	    $action['created_at'] = new DateTime($action['created_at']." Europe/London");
-    	    $action['created_at']->setTimezone(new DateTimeZone($this->session->userdata('timezone')));
-    	    $action['created_at'] = $action['created_at']->format("d-M-y h:i A");
-    	    echo json_encode(
+		$action['created_at'] = new DateTime($action['created_at']." Europe/London");
+		$action['created_at']->setTimezone(new DateTimeZone($this->session->userdata('timezone')));
+		$action['created_at'] = $action['created_at']->format("d-M-y h:i A");
+		echo json_encode(
         		    array(
-    			'success' => true,
-        			'message' => "successfully done",
-        			'result' => $return,
-    			'action_log' => $action
-        		    )
+				'success' => true,
+				'message' => "successfully done",
+				'result' => $return,
+				'action_log' => $action
+			    )
         		);
                 }else{
                     echo json_encode(

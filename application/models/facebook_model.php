@@ -220,6 +220,14 @@ class facebook_model extends CI_Model
 		    "created_at" => $updated_time->format("Y-m-d H:i:s")
 		);
 		
+		$breakLine = explode("\n", $each_post->comments[$x]->text);
+		if(count($breakLine) > 1)
+		{
+		    $each_post->comments[$x]->text = '';
+		    foreach($breakLine as $line)
+			$each_post->comments[$x]->text .= $line.'<br />';
+		}
+		
 		$social_stream_fb_comments = array(
 		    "post_id" => $insert_id,
 		    "attachment" => json_encode($each_post->comments[$x]->attachment), 

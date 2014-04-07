@@ -356,10 +356,13 @@ function addDashForLongText($string){
 }
 
 function CreateUrlFromText($text){
+    $text = str_replace("<br />", "\n", $text);
     $text = strip_tags($text);
+    
     $reg_exUrl = "/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/";
+    
     if(preg_match($reg_exUrl, $text, $url)) 
-        return preg_replace($reg_exUrl, "<p class='inside-link'><a target='_blank' href='{$url[0]}'>{$url[0]}</a></p> ", $text);
-    else 
-        return $text;
+        $text = preg_replace($reg_exUrl, "<span class='inside-link'><a target='_blank' href='{$url[0]}'>".substr($url[0], 0, 50)."</a></span> ", $text);
+    $text = str_replace("\n", "<br />", $text);
+    return $text;
 }

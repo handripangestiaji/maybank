@@ -1667,7 +1667,7 @@ $(function(){
                         
                         if(confirmStatus == true){
                             
-                                 commnetbox=$(this).parent().siblings(".replaycontent").val();
+                            commnetbox=$(this).parent().siblings(".replaycontent").val();
                             
                             if(len>2000){
                                 $(this).parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
@@ -1697,6 +1697,7 @@ $(function(){
                                         desc :$(this).parent().siblings('#reply-url-show').find(".descr-link").val(),
                                         img : img,
                                         tags:$(this).parent().siblings().find(".multipleSelect").val(),
+                                        case_id:$(this).parent().siblings('.option-type').find('.case_id').val(),
                                     },
                                     success: function(response)
                                     {

@@ -497,7 +497,6 @@ $(function(){
                 });
 
                 $(document).ready(function() {
-                    
                     $(this).on('click', '.stream_head > li > a',
                         function(e) {
                             previous = $(this).closest('ul.stream_head').find('li.active');
@@ -506,6 +505,7 @@ $(function(){
                             var id_tab_name = '#' + $(this).attr('class');
                             $(this).closest('.floatingBoxMenu').next().find('.floatingBoxContainers').hide(); 
                             $(this).closest('.floatingBoxMenu').next().find(id_tab_name).show();
+                            $(this).closest('.floatingBoxMenu').next().scrollTop(0);
                             e.preventDefault();
                     });
                     
@@ -1667,7 +1667,7 @@ $(function(){
                         
                         if(confirmStatus == true){
                             
-                                 commnetbox=$(this).parent().siblings(".replaycontent").val();
+                            commnetbox=$(this).parent().siblings(".replaycontent").val();
                             
                             if(len>2000){
                                 $(this).parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
@@ -1697,6 +1697,7 @@ $(function(){
                                         desc :$(this).parent().siblings('#reply-url-show').find(".descr-link").val(),
                                         img : img,
                                         tags:$(this).parent().siblings().find(".multipleSelect").val(),
+                                        case_id:$(this).parent().siblings('.option-type').find('.case_id').val(),
                                     },
                                     success: function(response)
                                     {

@@ -159,10 +159,14 @@ class Media_stream extends CI_Controller {
 	$url=$this->input->post('url');
 	$url=$this->input->post('tweeter_user');
 	$validation[] = array('type' => 'required','name' => 'replay_content','value' => $this->input->post('content'), 'fine_name' => "Replay Content");
-	$validation[] = array('type' => 'required','name' => 'reply_type','value' => $twitter_reply['reply_type'], 'fine_name' => "Reply Type");
-	if($this->input->post('reply_type') != 'Report_Abuse' && $this->input->post('reply_type') != ''){
+	$case_status = $this->input->post('case_status');
+	if(!$case_status || ($case_status == 'solved')){
+	    $validation[] = array('type' => 'required','name' => 'reply_type','value' => $twitter_reply['reply_type'], 'fine_name' => "Reply Type");
+	}
+	
+	if(($this->input->post('reply_type') != 'Report_Abuse') && (!$case_status || ($case_status == 'solved'))){
 	    $validation[] = array('type' => 'required','name' => 'product_type','value' => $twitter_reply['content_products_id'], 'fine_name' => "Product Type");
-	}        
+	}
     
 	$is_valid = CheckValidation($validation, $this->validation);
     
@@ -570,18 +574,18 @@ class Media_stream extends CI_Controller {
         $descr = $this->input->post('desc');
         $img = $this->input->post('img');
         $reply_type=$this->input->post('reply_type');
-	   
-    
-        $product_type=$this->input->post('product_type');
+	$product_type=$this->input->post('product_type');
         $tags=$this->input->post('tags');
-        
-        
+        $case_id = $this->input->post('case_id');
+	
         $validation[] = array('type' => 'required','name' => 'replaycontent','value' => $comment, 'fine_name' => "Replay Content");
-        $validation[] = array('type' => 'required','name' => 'reply_type','value' => $reply_type, 'fine_name' => "Reply Type");
-        //print_r($reply_type);
-        if($reply_type!='Report_Abuse'){
+        if(!$case_id){
+	    $validation[] = array('type' => 'required','name' => 'reply_type','value' => $reply_type, 'fine_name' => "Reply Type");
+	}
+	//print_r($reply_type);
+        if($reply_type!='Report_Abuse' && (!$case_id)){
             $validation[] = array('type' => 'required','name' => 'product_type','value' => $product_type, 'fine_name' => "Product Type");
-        }        
+        }
         $is_valid = CheckValidation($validation, $this->validation);
 
         if($is_valid === true){
@@ -772,23 +776,23 @@ class Media_stream extends CI_Controller {
         $url = $this->input->post('url');
         $descr = $this->input->post('desc');
         $img = $this->input->post('img');
-        $case_id = $this->input->post('case_id');
         $reply_type = $this->input->post('reply_type');
         $product_type = $this->input->post('product_id');
+        $case_id = $this->input->post('case_id');
              
-        
         $validation[] = array('type' => 'required','name' => 'replaycontent','value' => $comment, 'fine_name' => "Replay Content");
-        $validation[] = array('type' => 'required','name' => 'reply_type','value' => $reply_type, 'fine_name' => "Reply Type");
-      //  print_r($reply_type);
-        if($reply_type!='Report_Abuse'){
+        if($case_id == 'null'){
+	    $validation[] = array('type' => 'required','name' => 'reply_type','value' => $reply_type, 'fine_name' => "Reply Type");
+	}
+	
+	if($reply_type!='Report_Abuse' && ($case_id=='null')){
             $validation[] = array('type' => 'required','name' => 'product_type','value' => $product_type, 'fine_name' => "Product Type");
-        }        
-        $is_valid = CheckValidation($validation, $this->validation);
+        } 
+        
+	$is_valid = CheckValidation($validation, $this->validation);
 
         if($is_valid === true){
-//                 print_r($comment);
-//                 die();
-             if($case_id=='null'){
+	     if($case_id=='null'){
                 $case_id=null;
              }else{
                 $case_id=$case_id;

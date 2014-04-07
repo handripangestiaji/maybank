@@ -2362,84 +2362,63 @@ $.fn.RefreshAllStream = function(){
                 $(this).html('&nbsp;&nbsp;Loading...');        
                 $(this).load(BASEURL + 'dashboard/media_stream/facebook_stream/' + channelId + '/' + is_read, function(){
                     $(this).find('.channel-id').val(channelId);
+                    $(this).BindMultipleSelect();
                 });
-                 $('.multipleSelect').multiselect({
-                buttonText: function(options, select) {
-                if (options.length == 0) {
-                    return 'TAG Short-URL <b class="caret"></b> ';
-                }
-                else if (options.length > 1) {
-                    return options.length + ' selected <b class="caret"></b>';
-                }
-                else {
-                    var selected = '';
-                    options.each(function() {
-                        selected += $(this).text() + ', ';
-                    });
-                    return selected.substr(0, selected.length -2) + ' <b class="caret"></b>';
-                }
-            },
-            });
-            $('.multipleSelect').siblings('.btn-group').find('button').attr('disabled','disabled');
             }
             else if($(this).closest('div').prev().find('i').attr('class') == 'icon-twitter'){
                 $(this).html('&nbsp;&nbsp;Loading...');        
                 $(this).load(BASEURL + 'dashboard/media_stream/twitter_stream/' + channelId + '/'+ is_read, function(){
                     $(this).find('.channel-id').val(channelId);
+                    $(this).BindMultipleSelect();
                 });
-                 $('.multipleSelect').multiselect({
-                buttonText: function(options, select) {
-                if (options.length == 0) {
-                    return 'TAG Short-URL <b class="caret"></b> ';
-                }
-                else if (options.length > 1) {
-                    return options.length + ' selected <b class="caret"></b>';
-                }
-                else {
-                    var selected = '';
-                    options.each(function() {
-                        selected += $(this).text() + ', ';
-                    });
-                    return selected.substr(0, selected.length -2) + ' <b class="caret"></b>';
-                }
-            },
-            });
-            $('.multipleSelect').siblings('.btn-group').find('button').attr('disabled','disabled');
+            
             }
             else if($(this).closest('div').prev().find('i').attr('class') == 'icon-youtube'){
                 $(this).html('&nbsp;&nbsp;Loading...');        
                 $(this).load(BASEURL + 'dashboard/media_stream/youtube_stream/' + channelId + '/'+ is_read, function(){
                     $(this).find('.channel-id').val(channelId);
+                    $(this).BindMultipleSelect();
                 });
-                 $('.multipleSelect').multiselect({
-                buttonText: function(options, select) {
-                if (options.length == 0) {
-                    return 'TAG Short-URL <b class="caret"></b> ';
-                }
-                else if (options.length > 1) {
-                    return options.length + ' selected <b class="caret"></b>';
-                }
-                else {
-                    var selected = '';
-                    options.each(function() {
-                        selected += $(this).text() + ', ';
-                    });
-                    return selected.substr(0, selected.length -2) + ' <b class="caret"></b>';
-                }
-            },
-            });
-            $('.multipleSelect').siblings('.btn-group').find('button').attr('disabled','disabled');
+            
             }
-           
+        
 
         }
     });
+};
+
+$.fn.BindMultipleSelect = function(){
+    $('.multipleSelect').multiselect({
+            buttonText: function(options, select) {
+            if (options.length == 0) {
+                return 'TAG Short-URL <b class="caret"></b> ';
+            }
+            else if (options.length > 1) {
+                return options.length + ' selected <b class="caret"></b>';
+            }
+            else {
+                var selected = '';
+                options.each(function() {
+                    selected += $(this).text() + ', ';
+                });
+                return selected.substr(0, selected.length -2) + ' <b class="caret"></b>';
+            }
+        },
+    });
+    $('.multipleSelect').siblings('.btn-group').find('button').attr('disabled','disabled');
+}
+
+$.fn.ResetCaseNotification = function(){
+    $('#caseNotification input, #caseNotification select').val('');
+    $('#caseNotification .multipleSelect').siblings('.btn-group').find('button').attr('disabled','disabled');
+    $('#caseNotification .reply-field, #caseNotification .case-assign, #caseNotification .related-conversation-view, #caseNotification .case-action-log').hide();;
 };
 
 $.fn.ToCase = function(type){
     var thisElement = $(this);
     $('#caseNotification').hide();
     $('#caseNotification .btn-send').removeClass('btn-send-reply btn-send-msg');
+    $(this).ResetCaseNotification();
     $.ajax({
         'url' : BASEURL + 'case/mycase/ReadCase',
         'type' : 'GET',
@@ -2476,17 +2455,21 @@ $.fn.ToCase = function(type){
             $('#caseNotification .solved-message').html(response.solved_message);
             $('#caseNotification .tag_notif').siblings('.btn-group').find('button').attr('disabled','disabled');
             
-            if(response.solved_message == '' || response.solved_message == null){
+            if(response.status == "pending"){
                 $('#caseNotification .solved-message').closest('tr').hide();
+                $('#caseNotification .replyType').hide().val(response.case_type);
+                $('#caseNotification .productType').hide().val(response.content_products_id.id);
             }
-            else
+            else{
                 $('#caseNotification .solved-message').closest('tr').show();
-                
+                $('#caseNotification .replyType').show();
+                $('#caseNotification .productType').show();
+            }
             if(response.type == 'twitter'){
                 $('#caseNotification .btn-send').attr('type','submit');
                 $('#caseNotification .image-upload').show();
                 $('#caseNotification .reply-fb-char-count').html('144');
-                channel_type = 'Twitter';
+                channel_type = 'Mentions';
                 $('#caseNotification .data-type').val('reply');
                 $('#caseNotification .twitter-userid').val(response.main_post.twitter_user_id);
                 $('#caseNotification .replaycontent').val('@' + response.main_post.screen_name);
@@ -2520,7 +2503,7 @@ $.fn.ToCase = function(type){
                 $('#caseNotification .btn-send').attr('type','submit');
                 $('#caseNotification .image-upload').hide();
                 $('#caseNotification .reply-fb-char-count').html('144');
-                channel_type = 'Twitter Direct Message';
+                channel_type = 'Direct Message';
                 $('#caseNotification .data-type').val('direct_message');
                 $('#caseNotification .twitter-userid').val(response.main_post.twitter_user_id);
                 $template2 = '<li style="display: block;">' +
@@ -2544,7 +2527,7 @@ $.fn.ToCase = function(type){
                 $('#caseNotification .data-type').val('reply_facebook');
                 $('#caseNotification .twitter-userid').val('');
                 var img = '';
-                if(response.main_post.attachment != null){
+                if(response.main_post.attachment.media != null){
                     if(response.main_post.attachment.media.length > 0){
                         if(response.main_post.attachment.media[0].type == 'photo')
                         img = '<img src="'+BASEURL+'dashboard/media_stream/SafePhoto?photo=' +
@@ -2584,7 +2567,7 @@ $.fn.ToCase = function(type){
                '</li>';
                 $('#caseNotification .image-upload').hide();
                 $('#caseNotification .reply-fb-char-count').html('2000');
-                channel_type = "Facebook PM";
+                channel_type = "Private Message";
                 $('#caseNotification .data-type').val('reply_facebook_pm');
                 $('#caseNotification .btn-send').addClass('btn-send-msg');
             }
@@ -2696,7 +2679,7 @@ function linkify(inputText) {
     if(inputText == '') return inputText;
     try{
          var replacedText, replacePattern1, replacePattern2, replacePattern3;
-
+        inputText = inputText.replace(/\r\n/g, '<br />').replace(/[\r\n]/g, '<br />');
         //URLs starting with http://, https://, or ftp://
         replacePattern1 = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
         replacedText = inputText.replace(replacePattern1, '<a href="$1" target="_blank">$1</a>');

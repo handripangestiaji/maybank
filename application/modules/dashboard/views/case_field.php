@@ -135,7 +135,7 @@ if($posts){
         <input type="hidden" value="<?php echo $posts[$i]->type?>" name="type_facebook" />
     <?php endif?>
     <div class="modal-header">
-        <button type="button" class="close remove_related" data-dismiss="modal" aria-hidden="true"></button>
+        <button type="button" class="close remove_related" data-dismiss="modal" aria-hidden="true"></button> <br />
         <h3>Add Related Conversation</h3>
     </div>
     <div class="modal-body">

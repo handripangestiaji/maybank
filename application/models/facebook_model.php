@@ -81,6 +81,7 @@ class facebook_model extends CI_Model
         "query3" : "Select uid, name, username,sex from user where uid in (select actor_id from #query1) or uid in (select fromid from #query2)",
         "query4" : "Select page_id, name, username from page where page_id in (select actor_id from #query1) or page_id in (select fromid from #query2)"
         }';
+	print $fql;
 	$requestResult = curl_get_file_contents('https://graph.facebook.com/fql?q='.urlencode($fql)."&access_token=".$access_token);
 	$result  = json_decode($requestResult);
 	if(is_array($result->data)){

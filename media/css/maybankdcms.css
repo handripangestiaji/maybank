@@ -1024,3 +1024,5 @@ ul.floatingBoxContainers .dropdown-menu li{
     margin-bottom: 0px;
      border: 0px none ;
 }
+
+#caseNotification ul.tagit input[type="text"]{background-color: #fff; padding:15px 3px;}

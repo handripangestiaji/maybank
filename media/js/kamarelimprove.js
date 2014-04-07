@@ -362,7 +362,8 @@ $(function(){
                             me.find('.reply-preview-img').toggle('slow');
                             if(openButton.length != 0)
                                 openButton.removeClass('btn-warning').addClass('btn-inverse').html('Replied By You').val('');
-                            setTimeout(function(){
+                        }
+                         setTimeout(function(){
                                 me.closest('.reply-field').toggle('slow');
                                 var currentHtml = me.closest('li');
                                 currentHtml.find('.reply-preview-img').toggle('slow');
@@ -370,8 +371,7 @@ $(function(){
                                 me.closest('.subStream').animate({
                                     scrollTop: 0
                                 });
-                            }, 1500);
-                        }
+                        }, 1500);
                     }
                 }
                 catch(e){

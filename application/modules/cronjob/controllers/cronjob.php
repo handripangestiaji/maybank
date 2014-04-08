@@ -209,21 +209,20 @@ class Cronjob extends CI_Controller {
                 //send email
                 if($post->email_me_when_sent == 1){
                     $this->load->config('mail_config');
-                    $mail_provider = $this->config->item('mail_provider');
-                    $this->load->library('email', $mail_provider);
+                    $mail_config = $this->config->item('mail_provider');
+		    $this->load->library('email', $mail_config);
+                    $this->email->initialize($mail_config);
                     $mail_from = $this->config->item('mail_from');
-                    $this->email->from($mail_from['name'],$mail_from['address']);
+		    $this->email->from($mail_from['address'], $mail_from['name']);
                 
-                    $this->email->set_newline("\r\n");
-                    $this->email->from('dcms@maybank.com','maybank');
                     $this->email->to($post->email);
                     $this->email->subject('Message Posted');
+                    $this->email->set_newline("\r\n");
                     $template = curl_get_file_contents(base_url().'mail_template/PostSent/'.$post->post_to_id);
                     $this->email->message($template);
-                    $this->email->send();
-                    echo $this->email->print_debugger();
+		    $this->email->send();
                 }
-            }
+	    }
         }
     }
     

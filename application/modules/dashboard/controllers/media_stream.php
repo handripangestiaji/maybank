@@ -489,11 +489,13 @@ class Media_stream extends CI_Controller {
 		else if($type == 'unfollow'){
 		    $return_value = $this->twitter_model->RemoveFriends($twitter_data, $this->session->userdata('user_id'));
 		}
+	
 		echo json_encode(
 		    array(
 			'success' => true,
 			'message' => "Relation was sucessfully made.",
-			'result' => $return_value
+			'result' => $return_value,
+			'twitter_data' => $twitter_data
 		    )
 		);
 	    }

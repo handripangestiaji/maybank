@@ -33,7 +33,7 @@
             </span>
             
         </p>
-        <p><?php echo RemoveUrlWithin($directmessage[$i]->dm_text);?>
+        <p><?php echo linkify($directmessage[$i]->dm_text, true);?>
         </p>
         <p class="indicator">
         <?php if(count($directmessage[$i]->case) > 0):?>

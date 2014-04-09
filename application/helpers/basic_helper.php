@@ -255,7 +255,7 @@ function CheckValidation($dataToValidated, $validationObj){
 
 
 function linkify($string, $twitter=false, $url=false) {
-
+    $string = str_replace("\n", "<br />", $string);
     // reg exp pattern
     $pattern = "/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/";
     $new_string = $string;

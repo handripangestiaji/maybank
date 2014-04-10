@@ -1662,8 +1662,13 @@ $(function(){
                         else{
                             var len=$(this).parent().siblings(".replaycontent").val().length
                             var commnetbox;
-                        
-                        var confirmStatus = confirm("Please make sure the case type !");
+                        console.log($(this).parent().siblings('.option-type').find(".productType").val());
+                        if($(this).parent().siblings('.option-type').find(".productType").val() != undefined){ 
+                            var confirmStatus = confirm("Please make sure the case type !");
+                        }
+                        else{
+                            var confirmStatus = true;
+                        }
                         
                         if(confirmStatus == true){
                             

@@ -462,7 +462,8 @@ class twitter_model extends CI_Model
                 'channel_id' => $twitter_post->channel_id,
                 'created_at' => date("Y-m-d H:i:s"),
                 'post_id' => $twitter_post->post_id,
-                'created_by' => $created_by
+                'created_by' => $created_by,
+                "log_text" => ($is_removed ? 'unfollow' : 'follow').' @'.$twitter_post->screen_name
             );
             $current_relation = $this->GetRelation($twitter_post->channel_id, $twitter_post->twitter_user_id);
             if(!$is_removed)
@@ -485,6 +486,7 @@ class twitter_model extends CI_Model
             $this->db->where('twitter_user_id', $twitter_post->twitter_user_id);
             $this->db->update('social_stream_twitter', array('is_following' => $is_removed ? 0 : 1));
             $this->db->trans_complete();
+            $this->db->insert('channel_action', $channel_action);
             return $twitter_user_friends;
         }
         else

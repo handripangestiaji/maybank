@@ -84,7 +84,7 @@ for($i=0;$i<count($mentions);$i++){
         
         <?php
         
-        $reply_date = new DateTime($mentions[$i]->reply_post[count($mentions[$i]->reply_post) - 1]->created_at);
+        $reply_date = new DateTime($mentions[$i]->reply_post[count($mentions[$i]->reply_post) - 1]->created_at.' Europe/London');
         $reply_date->setTimezone($timezone);
         echo "Replied by: ".$mentions[$i]->reply_post[count($mentions[$i]->reply_post) - 1]->display_name." ".$reply_date->format("d-M-y h:i A") ?>
         </button>
@@ -132,8 +132,9 @@ for($i=0;$i<count($mentions);$i++){
                     <span>posted a <span class="cyanText">tweet</span></span>
                     <i class="icon-circle"></i>
                     <span><?php
-                     $date = new DateTime($mentions[$i]->social_stream_created_at.' Europe/London');
-                     $date_comment = new DateTime($comment[$j]->created_at, $timezone);
+                     
+                     $date_comment = new DateTime($comment[$j]->created_at.' Europe/London');
+                     $date_comment->setTimezone($timezone);
                      echo $date_comment->format("l, M j, Y h:i A")
                     ?></span>
                 </p>

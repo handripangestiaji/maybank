@@ -39,7 +39,7 @@ if($fb_feed[$i]->post_content != '<br />' || isset($attachment->media)):
             echo $date->format('l, M j, Y h:i A');
         ?>        
     </p>
-    <p class="post-content"><?php echo RemoveUrlWithin($fb_feed[$i]->post_content)?></p>
+    <p class="post-content"><?php echo CreateUrlFromText($fb_feed[$i]->post_content)?></p>
     <p>
     <?php
     if($fb_feed[$i]->attachment){ 
@@ -56,8 +56,8 @@ if($fb_feed[$i]->post_content != '<br />' || isset($attachment->media)):
                         </div>';
            }elseif($attachment[$att]->type=='link'){              
                 $attachment = json_decode($fb_feed[$i]->attachment)?>
-            <center>
-            <div class="compose-schedule" style="width: 85%;" >
+            
+            <div class="compose-schedule" style="width: 85%;margin:10px auto;" >
                 <div class="compose-form img-attached link" onclick="window.open('<?=$attachment->media[$att]->href?>')">
                     <!-- close button for image attached -->
                     <div style="">
@@ -74,7 +74,7 @@ if($fb_feed[$i]->post_content != '<br />' || isset($attachment->media)):
                     <!-- img-list-upload end -->  
                 </div>
             </div>  <br clear="all" />
-           </center>
+           
            <?php }elseif($attachment[$att]->type=='video'){?>
                 <iframe width="90%" height="240" src="<?php echo $attachment[$att]->video->source_url."?version=3&autohide=1&autoplay=0"?>"></iframe>
                 <a href="<?php echo $attachment[$att]->video->display_url?>" ><?php echo $attachment[0]->alt?></a>
@@ -86,7 +86,10 @@ if($fb_feed[$i]->post_content != '<br />' || isset($attachment->media)):
     </p>
     <p class="indicator">
         <?php $this->load->view('facebook/facebook_indicator', array('post'=>$fb_feed[$i]))?>
-        <button class="fblike btn btn-primary btn-mini" style="margin-left: 5px;" value="<?php echo $fb_feed[$i]->post_stream_id;?>"><?php echo $fb_feed[$i]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button> 
+        <?php if(IsRoleFriendlyNameExist($this->user_role, array('Social Stream_Facebook_All_Country_LikeUnlike',
+                                                              'Social Stream_Facebook_All_Country_LikeUnlike'))):?>        
+        <button class="fblike btn btn-primary btn-mini" style="margin-left: 5px;" value="<?php echo $fb_feed[$i]->post_stream_id;?>"><?php echo $fb_feed[$i]->user_likes == 1 ? "UNLIKE" : "LIKE"?></button>
+        <?php endif;?>                                                              
     </p>    
     <p>
         <span class="btn-engagement"><i class="icon-eye-open"></i> <?php echo $fb_feed[$i]->total_comments;?> Engagements</span> |
@@ -114,9 +117,7 @@ if($fb_feed[$i]->post_content != '<br />' || isset($attachment->media)):
                 
                 $inner_reply['comments']=$this->facebook_model->RetriveCommentPostFb(array('a.post_id'=>$comment[$j]->post_id,'comment_id'=>$comment[$j]->comment_stream_id),array()) ;
                 if(isset($inner_reply['comments'])){
-                    //print_r($inner_reply['comments']);
                     for($k=0; $k<count($inner_reply['comments']);$k++){
-                          //  print_r($row);
                             $data['comment'] = $inner_reply['comments'];
                             $data['j'] = $k;
                             $data['isMyCase']=$isMyCase;
@@ -151,12 +152,11 @@ if($fb_feed[$i]->post_content != '<br />' || isset($attachment->media)):
     <!-- END ENGAGEMENT -->
 
     <h4 class="filled">
-        <!--di nonaktifin dulu, karena belum di butuhkan-->
-            <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_All_Delete') ||
-                     IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Delete')
+        
+            <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Channel_General_Function_Own_Country_Delete') ||
+                     IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Channel_General_Function_All_Country_Delete')
                      ):?>
                 <a role="button" class='delete_post wall'><i class="icon-trash greyText"></i></a>
-                <!--a style="font-size: 20px; cursor: pointer;"><i class="icon-trash greyText deleteFB"></i></a-->
             <?php endif;?>
         <div class="pull-right">
             <?php $this->load->view('facebook_button', array('post'=> $fb_feed[$i]));?>

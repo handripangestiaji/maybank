@@ -20,7 +20,7 @@
             <div class="control-group">
                 <label class="control-label">Product<span class="redText"> *</span></label>
                 <div class="controls">
-		    <select class="multipleSelect" multiple="multiple" name="product[]">
+		    <select class="shorturl-tags" multiple="multiple" name="product[]">
                     	<?php foreach($product_list as $product):?>
 			    <?php
 				if(isset($product->child)){ ?>
@@ -51,7 +51,7 @@
                         foreach($tags as $tag){
                             $options[$tag->id] = $tag->tag_name;
                         }
-                        echo form_multiselect('tag[]', $options, $new_tags, 'class="multipleSelect" multiple="multiple"');
+                        echo form_multiselect('tag[]', $options, $new_tags, 'class="shorturl-tags" multiple="multiple"');
                     ?>
                     <br><br>
                 <span class="redText">* required</span>

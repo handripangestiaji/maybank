@@ -67,10 +67,16 @@
                         <td>
                             <select name="optRole">
                                 <?php
-				foreach($role->result() as $r){
-					if(($this->session->userdata('role_name') == 'Group Admin') || ($r->role_name != 'Country Admin')){?>
-					<option value='<?php echo $r->role_collection_id;?>'><?php echo $r->role_name;?></option>
-                                <?php }}?>
+								foreach($role->result() as $r){
+									if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_All_Country_Create'))
+										echo '<option value="'.$r->role_collection_id.'">'.$r->role_name.'</option>';
+									else{
+										if($r->role_collection_id != $this->session->userdata('role_id')) 	
+											echo '<option value="'.$r->role_collection_id.'">'.$r->role_name.'</option>';
+									}
+								}				
+								?>
+                                
                             </select>
                         </td>
                     </tr>

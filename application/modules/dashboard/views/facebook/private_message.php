@@ -34,11 +34,11 @@ $sender = $fb_pm[$i]->participant->sender->facebook_id == $fb_pm[$i]->social_id 
         ?>
     
     </p>
-    <p class="snippet"><?=$fb_pm[$i]->snippet?></p>
+    <p class="snippet"><?php echo count($fb_pm[$i]->conversation_detail) > 0 ? CreateUrlFromText($fb_pm[$i]->conversation_detail[0]->messages) : "";?></p>
     <p class="indicator">
     <?php $this->load->view('facebook/facebook_indicator', array('post'=>$fb_pm[$i]))?>
     <p>
-        <span class="btn-engagement"><i class="icon-eye-open"></i> <?php echo $fb_pm[$i]->message_count-1;?> Engagements</span>
+        <span class="btn-engagement"><i class="icon-eye-open"></i> <?php echo $fb_pm[$i]->message_count;?> Engagements</span>
     </p>
 
     <!-- ENGAGEMENT -->    

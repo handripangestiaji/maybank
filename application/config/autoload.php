@@ -110,7 +110,7 @@ $autoload['language'] = array();
 |
 */
 
-$autoload['model'] = array('users_model');
+$autoload['model'] = array('users_model','tag_model');
 
 
 /* End of file autoload.php */

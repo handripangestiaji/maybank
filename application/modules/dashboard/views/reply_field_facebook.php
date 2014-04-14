@@ -4,6 +4,8 @@
     <span class="fb-reply-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
     <div class="option-type pull-left">
         <div class="message"></div>
+        <?php
+        if(!$fb_feed[$i]->case || ($fb_feed[$i]->case[0]->status == 'solved')){ ?>
         <select class="replyType" style="width: 130px;">
             <option value="">Please Select</option>
             <option value="Feedback">Feedback</option>
@@ -30,6 +32,9 @@
                     } ?>
             <?php endforeach?>
         </select>
+        <?php } else { ?>
+            <input type="hidden" value="<?php echo $fb_feed[$i]->case[0]->case_id?>" name="case_id" class="case_id" />
+        <?php } ?>
     </div>
     <textarea class='replaycontent' placeholder="Compose Message"></textarea>
     <br clear="all" />
@@ -63,7 +68,8 @@
         </div>
         <div class="left tags_c">
             <select class="multipleSelect" multiple="multiple" name="tag_id[]">
-            <?php 
+            <?php
+                $this->load->model('tag_model');
                   $tags=$this->tag_model->get();
                   if($tags): ?>
                   
@@ -126,7 +132,7 @@
         ?>
         <button class="btn btn-primary btn-small btn-send-reply" value="<?php echo $fb_feed[$i]->comment_post_id; ?>">SEND</button> 
       <?php }elseif($reply_type=='reply_dm'){  ?> 
-           <input type="hidden" class="case_id"  value="<?php if(isset($fb_feed[$i]->case_id)){echo $fb_feed[$i]->case_id;}else{echo 'null';} ?>" />   
+           <input type="hidden" class="case_id"  value="<?php if($fb_feed[$i]->case){echo $fb_feed[$i]->case[0]->case_id;}else{echo 'null';} ?>" />   
           <button class="btn btn-primary btn-small btn-send-msg"  value="<?php echo $fb_feed[$i]->post_id; ?>" >SEND</button> 
       <?php } ?>           
     </div>

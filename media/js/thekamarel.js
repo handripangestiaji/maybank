@@ -392,6 +392,24 @@ $(function(){
                 },
                 });
                 
+                $('.shorturl-tags').multiselect({
+                buttonText: function(options, select) {
+                    if (options.length == 0) {
+                        return 'None selected <b class="caret"></b>';
+                    }
+                    else if (options.length > 1) {
+                        return options.length + ' selected <b class="caret"></b>';
+                    }
+                    else {
+                        var selected = '';
+                        options.each(function() {
+                            selected += $(this).text() + ', ';
+                        });
+                        return selected.substr(0, selected.length -2) + ' <b class="caret"></b>';
+                    }
+                },
+                });
+                
                 $('.compose-textbox').click(
                     function() {
                         $('.compose-innercontainer').addClass("compose-expanded");
@@ -479,7 +497,6 @@ $(function(){
                 });
 
                 $(document).ready(function() {
-                    
                     $(this).on('click', '.stream_head > li > a',
                         function(e) {
                             previous = $(this).closest('ul.stream_head').find('li.active');
@@ -488,6 +505,7 @@ $(function(){
                             var id_tab_name = '#' + $(this).attr('class');
                             $(this).closest('.floatingBoxMenu').next().find('.floatingBoxContainers').hide(); 
                             $(this).closest('.floatingBoxMenu').next().find(id_tab_name).show();
+                            $(this).closest('.floatingBoxMenu').next().scrollTop(0);
                             e.preventDefault();
                     });
                     
@@ -498,55 +516,12 @@ $(function(){
                             $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');        
                             $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/facebook_stream/' + social_id + '/' + is_read, function(){
                                 $(this).find('.channel-id').val(social_id);
-                            
-                            $('.multipleSelect').multiselect({
-                                buttonText: function(options, select) {
-                                if (options.length == 0) {
-                                    return 'TAG Short-URL <b class="caret"></b> ';
-                                }
-                                else if (options.length > 1) {
-                                    return options.length + ' selected <b class="caret"></b>';
-                                }
-                                else {
-                                    var selected = '';
-                                    options.each(function() {
-                                        selected += $(this).text() + ', ';
-                                    });
-                                    return selected.substr(0, selected.length -2) + ' <b class="caret"></b>';
-                                }
-                            },
                             });
-                            $('.multipleSelect').siblings('.btn-group').find('button').attr('disabled','disabled');
-
-                            });
-                    
-                                                
                         }
                         else if($(this).closest('div').prev().find('i').attr('class') == 'icon-twitter'){
                             $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');        
                             $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/twitter_stream/' + social_id + '/' + is_read, function(){
                                 $(this).find('.channel-id').val(social_id);
-                            
-                            $('.multipleSelect').multiselect({
-                                buttonText: function(options, select) {
-                                if (options.length == 0) {
-                                    return 'TAG Short-URL <b class="caret"></b> ';
-                                }
-                                else if (options.length > 1) {
-                                    return options.length + ' selected <b class="caret"></b>';
-                                }
-                                else {
-                                    var selected = '';
-                                    options.each(function() {
-                                        selected += $(this).text() + ', ';
-                                    });
-                                    return selected.substr(0, selected.length -2) + ' <b class="caret"></b>';
-                                }
-                            },
-                            });
-                            $('.multipleSelect').siblings('.btn-group').find('button').attr('disabled','disabled');
-                    
-                            
                             });
                         }
                     });
@@ -1692,7 +1667,7 @@ $(function(){
                         
                         if(confirmStatus == true){
                             
-                                 commnetbox=$(this).parent().siblings(".replaycontent").val();
+                            commnetbox=$(this).parent().siblings(".replaycontent").val();
                             
                             if(len>2000){
                                 $(this).parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
@@ -1722,6 +1697,7 @@ $(function(){
                                         desc :$(this).parent().siblings('#reply-url-show').find(".descr-link").val(),
                                         img : img,
                                         tags:$(this).parent().siblings().find(".multipleSelect").val(),
+                                        case_id:$(this).parent().siblings('.option-type').find('.case_id').val(),
                                     },
                                     success: function(response)
                                     {
@@ -1780,13 +1756,21 @@ $(function(){
                             var commentButton = $(this);
                             isSend=commentButton.html()=="SEND";
                             commentButton.html('SENDING...').attr("disabled", "disabled");
+                            productType =  $(this).closest('li').find('.productType').val();
+                            replyType = $(this).closest('li').find('.replyType').val();
+                            messageTag = commentButton.parent().siblings('.pull-left').find('.message');
+                            if($(this).closest('#caseNotification').length > 0){
+                                productType = $(this).closest('#caseNotification').find('.productType').val();
+                                replyType = $(this).closest('#caseNotification').find('.replyType').val();
+                                messageTag = $(this).closest('#caseNotification').find('.message');
+                            }
                            $.ajax({
                                 url : BASEURL + 'dashboard/media_stream/FbReplyMsg',
                                 type: "POST",
                                 data: {
                                     post_id: $(this).val(),
-                                    product_id : $(this).closest('li').find('.productType').val(),
-                                    reply_type : $(this).closest('li').find('.replyType').val(),
+                                    product_id : productType,
+                                    reply_type : replyType,
                                     channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
                                     comment :$(this).parent().siblings(".replaycontent").val(),
                                     url:'',
@@ -1799,7 +1783,7 @@ $(function(){
                                 {
                                     commentButton.removeAttr("disabled");
                                     if(response.success === true){
-                                        commentButton.parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
+                                        messageTag.html('<div class="alert alert-warning">' +
                                         '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
                                         '<strong>Success!</strong> '+response.message+' </div>');
                                         commentButton.parent().siblings(".replaycontent").val("");
@@ -1811,8 +1795,7 @@ $(function(){
                                         
                                         commentButton.closest('li').find('.indicator:first').append(' <button type="button" class=".replied-btn btn btn-inverse btn-mini" style="text-align:left">' +
                                             'Replied by:you ' + response.action_log.created_at + "</button>");
-                                        if(commentButton.hasClass('popup'))
-                                            window.location.reload();
+                                        
                                     }
                                     else{
                                         commentButton.parent().siblings('.pull-left').find('.message').html('<div class="alert alert-warning">' +
@@ -1832,49 +1815,32 @@ $(function(){
                 function() {
                     var btnDestroyStatus = $(this);
                     var confirmStatus = confirm("Are you sure want to delete this ?");
-                    var post_id=btnDestroyStatus.closest('li').find('.postId').val(); 
-                    var commnet_id=$(this).val();    
-                    
+                    var post_id = btnDestroyStatus.closest('li').find('.postId').val(); 
+                    var parentElement = "li";
                     if(confirmStatus == true){
                        var type_action;
                        if(btnDestroyStatus.hasClass('wall')){
-                        type_action=0
-                  //  alert(post_id);                   
+                            type_action=0
                        }else if(btnDestroyStatus.hasClass('pm')){
-                        type_action=1
+                            type_action=1
                        }else if(btnDestroyStatus.hasClass('comments')){
-                        type_action=2
-                        post_id=commnet_id;
+                            type_action=2
+                            post_id = $(this).val();
+                            parentElement = ".engagement-body";
                        } 
-                        
                         btnDestroyStatus.attr('disabled', 'disabled');
+                        btnDestroyStatus.closest(parentElement).toggle("slow");
                         $.ajax({
                             url : BASEURL + 'dashboard/media_stream/fbDeleteStatus/' + type_action,
                             type: "POST",
-                            data: {
-                                post_id: post_id,
-                                channel_id : $(this).closest('.floatingBox').find('input.channel-id').val(),
-                            },
+                            data: "post_id=" + post_id + "&channel_id=" + $(this).closest('.floatingBox').find('input.channel-id').val(),
                             success: function(response)
                             {
-                                if(response.success == true){
-                                    btnDestroyStatus.closest('li').remove();
-                                }
-                                else
-                                {
-                                    btnDestroyStatus.removeAttr('disabled');
-                                    btnDestroyStatus.closest('li').toggle( "bounce", { times: 3, complete:function(){
-                                        $(this).show();
-                                        alert(response.message);
-                                    }}, "slow");
-                                }
+                                
+                                console.log(response);
                             },
                             failed : function(response){
-                                btnDestroyStatus.removeAttr('disabled');
-                                btnDestroyStatus.closest('li').toggle( "bounce", { times: 3, complete:function(){
-                                        $(this).show();
-                                        alert(response.message);
-                                }}, "slow");
+                                btnDestroyStatus.closest(parentElement).toggle("show");
                             }
                         });    
                     }
@@ -1897,10 +1863,10 @@ $(function(){
                        });
                     });
                     $(this).on('change','.replyType',function(){
-                            var replyType=$(this).val();
-                            if(replyType=="Report_Abuse"){
+                            var replyType = $(this).val();
+                            if(replyType == "Report_Abuse")
                                 $(this).siblings('.productType').attr('disabled', 'disabled');
-                            }else{
+                            else{
                                  $(this).siblings('.productType').removeAttr('disabled');
                                 
                             }
@@ -2396,90 +2362,78 @@ $.fn.RefreshAllStream = function(){
                 $(this).html('&nbsp;&nbsp;Loading...');        
                 $(this).load(BASEURL + 'dashboard/media_stream/facebook_stream/' + channelId + '/' + is_read, function(){
                     $(this).find('.channel-id').val(channelId);
+                    $(this).BindMultipleSelect();
                 });
-                 $('.multipleSelect').multiselect({
-                buttonText: function(options, select) {
-                if (options.length == 0) {
-                    return 'TAG Short-URL <b class="caret"></b> ';
-                }
-                else if (options.length > 1) {
-                    return options.length + ' selected <b class="caret"></b>';
-                }
-                else {
-                    var selected = '';
-                    options.each(function() {
-                        selected += $(this).text() + ', ';
-                    });
-                    return selected.substr(0, selected.length -2) + ' <b class="caret"></b>';
-                }
-            },
-            });
-            $('.multipleSelect').siblings('.btn-group').find('button').attr('disabled','disabled');
             }
             else if($(this).closest('div').prev().find('i').attr('class') == 'icon-twitter'){
                 $(this).html('&nbsp;&nbsp;Loading...');        
                 $(this).load(BASEURL + 'dashboard/media_stream/twitter_stream/' + channelId + '/'+ is_read, function(){
                     $(this).find('.channel-id').val(channelId);
+                    $(this).BindMultipleSelect();
                 });
-                 $('.multipleSelect').multiselect({
-                buttonText: function(options, select) {
-                if (options.length == 0) {
-                    return 'TAG Short-URL <b class="caret"></b> ';
-                }
-                else if (options.length > 1) {
-                    return options.length + ' selected <b class="caret"></b>';
-                }
-                else {
-                    var selected = '';
-                    options.each(function() {
-                        selected += $(this).text() + ', ';
-                    });
-                    return selected.substr(0, selected.length -2) + ' <b class="caret"></b>';
-                }
-            },
-            });
-            $('.multipleSelect').siblings('.btn-group').find('button').attr('disabled','disabled');
+            
             }
             else if($(this).closest('div').prev().find('i').attr('class') == 'icon-youtube'){
                 $(this).html('&nbsp;&nbsp;Loading...');        
                 $(this).load(BASEURL + 'dashboard/media_stream/youtube_stream/' + channelId + '/'+ is_read, function(){
                     $(this).find('.channel-id').val(channelId);
+                    $(this).BindMultipleSelect();
                 });
-                 $('.multipleSelect').multiselect({
-                buttonText: function(options, select) {
-                if (options.length == 0) {
-                    return 'TAG Short-URL <b class="caret"></b> ';
-                }
-                else if (options.length > 1) {
-                    return options.length + ' selected <b class="caret"></b>';
-                }
-                else {
-                    var selected = '';
-                    options.each(function() {
-                        selected += $(this).text() + ', ';
-                    });
-                    return selected.substr(0, selected.length -2) + ' <b class="caret"></b>';
-                }
-            },
-            });
-            $('.multipleSelect').siblings('.btn-group').find('button').attr('disabled','disabled');
+            
             }
-           
+        
 
         }
     });
+};
+
+$.fn.BindMultipleSelect = function(){
+    $('.multipleSelect').multiselect({
+            buttonText: function(options, select) {
+            if (options.length == 0) {
+                return 'TAG Short-URL <b class="caret"></b> ';
+            }
+            else if (options.length > 1) {
+                return options.length + ' selected <b class="caret"></b>';
+            }
+            else {
+                var selected = '';
+                options.each(function() {
+                    selected += $(this).text() + ', ';
+                });
+                return selected.substr(0, selected.length -2) + ' <b class="caret"></b>';
+            }
+        },
+    });
+    $('.multipleSelect').siblings('.btn-group').find('button').attr('disabled','disabled');
+}
+
+$.fn.ResetCaseNotification = function(){
+    $('#caseNotification input, #caseNotification select').val('');
+    $('#caseNotification .multipleSelect').siblings('.btn-group').find('button').attr('disabled','disabled');
+    $('#caseNotification .reply-field, #caseNotification .case-assign, #caseNotification .related-conversation-view, #caseNotification .case-action-log').hide();;
 };
 
 $.fn.ToCase = function(type){
     var thisElement = $(this);
     $('#caseNotification').hide();
     $('#caseNotification .btn-send').removeClass('btn-send-reply btn-send-msg');
+    $(this).ResetCaseNotification();
     $.ajax({
         'url' : BASEURL + 'case/mycase/ReadCase',
         'type' : 'GET',
         'data' : 'case_id=' + thisElement.find('.pointer-case').val(),
         'success' : function(response){
             $('#caseNotification').show();
+            
+            if(response.status == 'pending'){
+                $('#caseNotification .btn-assign-popup > span').html('ReAssign');
+                $('#caseNotification .btn-resolve').show();
+            }
+            else{
+                $('#caseNotification .btn-resolve').hide();
+                $('#caseNotification .btn-assign-popup > span').html('Case');
+            }
             $('#caseNotification .image-upload').show();
             $('#caseNotification .assign-by').html(response.created_by.full_name + "(" + response.created_by.username + ")" );
             $('#caseNotification .assign-date').html(response.created_at);
@@ -2500,25 +2454,44 @@ $.fn.ToCase = function(type){
             $('#caseNotification .reply-preview-img').attr('src', '').closest('#reply-img-show').hide();
             $('#caseNotification .solved-message').html(response.solved_message);
             $('#caseNotification .tag_notif').siblings('.btn-group').find('button').attr('disabled','disabled');
-            if(response.solved_message == '' || response.solved_message == null){
+            
+            if(response.status == "pending"){
                 $('#caseNotification .solved-message').closest('tr').hide();
+                $('#caseNotification .replyType').hide().val(response.case_type);
+                $('#caseNotification .productType').hide().val(response.content_products_id.id);
             }
-            else
+            else{
                 $('#caseNotification .solved-message').closest('tr').show();
-                
+                $('#caseNotification .replyType').show();
+                $('#caseNotification .productType').show();
+            }
             if(response.type == 'twitter'){
                 $('#caseNotification .btn-send').attr('type','submit');
                 $('#caseNotification .image-upload').show();
                 $('#caseNotification .reply-fb-char-count').html('144');
-                channel_type = 'Twitter';
+                channel_type = 'Mentions';
                 $('#caseNotification .data-type').val('reply');
                 $('#caseNotification .twitter-userid').val(response.main_post.twitter_user_id);
                 $('#caseNotification .replaycontent').val('@' + response.main_post.screen_name);
-                $template2 = '<li style="display: block;">' +
+               
+            
+                if(response.main_post.twitter_entities.media != undefined){
+                    for(te = 0; te < response.main_post.twitter_entities.media.length; te++)
+                    if(response.main_post.twitter_entities.media[te].type == 'photo')
+                     img = '<img src="'+BASEURL+'dashboard/media_stream/SafePhoto?photo=' +
+                        response.main_post.twitter_entities.media[te].media_url_https +
+                        '" style="height:200px" /> <br />';
+                }
+                if(response.main_post.twitter_entities.urls.length > 0){
+                    for(te = 0; te < response.main_post.twitter_entities.urls.length; te++)
+                        response.main_post.text = response.main_post.text.replace(response.main_post.twitter_entities.urls[te].url,
+                                                                                  response.main_post.twitter_entities.urls[te].expanded_url);
+                }
+                 $template2 = '<li style="display: block;">' +
                      '<img src="'+ BASEURL + 'dashboard/media_stream/SafePhoto?photo=' + response.main_post.profile_image_url  + '" alt="" style="height: 40px;margin: 6px 10px" class="left" />' + 
                         '<p style="padding: 0px 2px;margin: 2px 5px;width:80%" class="left">' + 
                             '<span class="author" style="font-weight:600;padding:0;">' + response.main_post.screen_name + '</span>: ' +
-                            '<span class="text">'+ linkify(response.main_post.text) + '</span><br />' + 
+                            '<span class="text">'+ linkify(response.main_post.text) + '</span><br />' + img + 
                             '<span class="created-time" style="font-size:10px;color: #62312A;">' + response.main_post.social_stream_created_at  +
                             '</span>'+
                         '</p>' + 
@@ -2530,7 +2503,7 @@ $.fn.ToCase = function(type){
                 $('#caseNotification .btn-send').attr('type','submit');
                 $('#caseNotification .image-upload').hide();
                 $('#caseNotification .reply-fb-char-count').html('144');
-                channel_type = 'Twitter Direct Message';
+                channel_type = 'Direct Message';
                 $('#caseNotification .data-type').val('direct_message');
                 $('#caseNotification .twitter-userid').val(response.main_post.twitter_user_id);
                 $template2 = '<li style="display: block;">' +
@@ -2543,6 +2516,7 @@ $.fn.ToCase = function(type){
                         '</p>' + 
                         '<br clear="all"/>' +
                     '</li>';
+                    
             }
             else if(response.type == 'facebook'){
                 $('#caseNotification .image-upload').show();
@@ -2553,11 +2527,17 @@ $.fn.ToCase = function(type){
                 $('#caseNotification .data-type').val('reply_facebook');
                 $('#caseNotification .twitter-userid').val('');
                 var img = '';
-                if(response.main_post.attachment != null){
-                    if(response.main_post.attachment.type == 'image')
-                    img = '<img src="'+BASEURL+'dashboard/media_stream/SafePhoto?photo=' +
-                        response.main_post.attachment[0].src +
+                if(response.main_post.attachment.media != null){
+                    if(response.main_post.attachment.media.length > 0){
+                        if(response.main_post.attachment.media[0].type == 'photo')
+                        img = '<img src="'+BASEURL+'dashboard/media_stream/SafePhoto?photo=' +
+                        response.main_post.attachment.media[0].src +
                         '" style="height:200px" /> <br />';
+                        else if(response.main_post.attachment.media[0].type == 'link')
+                            img = '<br />';
+                    }
+                    
+                    
                 }
                 $template2 = '<li style="display: block;">' +
                 '<img src="'+ BASEURL + 'dashboard/media_stream/SafePhoto?photo=https://graph.facebook.com/' + response.main_post.author_id  + '/picture" alt="" style="height: 40px;margin: 6px 10px" class="left" />' + 
@@ -2587,14 +2567,13 @@ $.fn.ToCase = function(type){
                '</li>';
                 $('#caseNotification .image-upload').hide();
                 $('#caseNotification .reply-fb-char-count').html('2000');
-                channel_type = "Facebook PM";
+                channel_type = "Private Message";
                 $('#caseNotification .data-type').val('reply_facebook_pm');
                 $('#caseNotification .btn-send').addClass('btn-send-msg');
             }
             $('#caseNotification .type-post').html(response.channel.name + " | " + channel_type );
             $('#caseNotification .content-original-post').html($template2);
             $('#caseNotification .case-action-log table tbody').html('');
-            $('#caseNotification .btn-resolve').show();
             $('#caseNotication .action-reply, #caseNotication .case-assign,' +
               '#caseNotication .case-action-log, #caseNotification .related-conversation-view').hide();
             for(x=0;x<response.main_post.channel_action.length;x++){
@@ -2640,7 +2619,8 @@ $.fn.ToCase = function(type){
                         '<br clear="all"/>' +
                     '</li>';
                 }
-                else if(response.related_conversation[i].type == 'facebook'|| response.related_conversation[i].type == 'facebook conversation'){
+                else if(response.related_conversation[i].type == 'facebook'|| response.related_conversation[i].type == 'facebook conversation' ||
+                        response.related_conversation[i].type == 'facebook_comment'){
                     var img = '';
                     if(response.related_conversation[i]['facebook_data'].attachment != null){
                         if(response.related_conversation[i]['facebook_data'].attachment.type == 'image')
@@ -2648,11 +2628,18 @@ $.fn.ToCase = function(type){
                             response.related_conversation[i]['facebook_data'].attachment[0].src +
                             '" style="height:200px" /> <br />';
                     }
+                    author_id = response.related_conversation[i]['facebook_data'].author_id;
+                    post_content  = linkify(response.related_conversation[i]['facebook_data'].post_content);
+                    if(response.related_conversation[i].type == 'facebook_comment')
+                    {
+                        author_id = response.related_conversation[i]['facebook_data'].facebook_id;
+                        post_content  = linkify(response.related_conversation[i]['facebook_data'].comment_content);
+                    }
                     $template = '<li style="display: block;">' +
-                     '<img src="'+ BASEURL + 'dashboard/media_stream/SafePhoto?photo=https://graph.facebook.com/' + response.related_conversation[i]['facebook_data'].author_id  + '/picture" alt="" style="height: 40px;margin: 6px 10px" class="left" />' + 
+                     '<img src="'+ BASEURL + 'dashboard/media_stream/SafePhoto?photo=https://graph.facebook.com/' +  author_id  + '/picture" alt="" style="height: 40px;margin: 6px 10px" class="left" />' + 
                         '<p style="padding: 0px 2px;margin: 2px 5px;width:80%" class="left">' + 
                             '<span class="author" style="font-weight:600;padding:0;">' + response.related_conversation[i]['facebook_data'].name + '</span>: ' +
-                            '<span class="text">'+ linkify(response.related_conversation[i]['facebook_data'].post_content) + '</span><br />' +
+                            '<span class="text">'+ post_content  + '</span><br />' +
                             img +
                             '<span class="created-time" style="font-size:10px;color: #62312A;">' + response.related_conversation[i]['facebook_data'].created_at  +
                             '</span>'+
@@ -2689,21 +2676,28 @@ function validateURL(textval) {
 }
 
 function linkify(inputText) {
-    var replacedText, replacePattern1, replacePattern2, replacePattern3;
-
-    //URLs starting with http://, https://, or ftp://
-    replacePattern1 = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
-    replacedText = inputText.replace(replacePattern1, '<a href="$1" target="_blank">$1</a>');
-
-    //URLs starting with "www." (without // before it, or it'd re-link the ones done above).
-    replacePattern2 = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
-    replacedText = replacedText.replace(replacePattern2, '$1<a href="http://$2" target="_blank">$2</a>');
-
-    //Change email addresses to mailto:: links.
-    replacePattern3 = /(([a-zA-Z0-9\-\_\.])+@[a-zA-Z\_]+?(\.[a-zA-Z]{2,6})+)/gim;
-    replacedText = replacedText.replace(replacePattern3, '<a href="mailto:$1">$1</a>');
-
-    return replacedText;
+    if(inputText == '') return inputText;
+    try{
+         var replacedText, replacePattern1, replacePattern2, replacePattern3;
+        inputText = inputText.replace(/\r\n/g, '<br />').replace(/[\r\n]/g, '<br />');
+        //URLs starting with http://, https://, or ftp://
+        replacePattern1 = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
+        replacedText = inputText.replace(replacePattern1, '<a href="$1" target="_blank">$1</a>');
+    
+        //URLs starting with "www." (without // before it, or it'd re-link the ones done above).
+        replacePattern2 = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
+        replacedText = replacedText.replace(replacePattern2, '$1<a href="http://$2" target="_blank">$2</a>');
+    
+        //Change email addresses to mailto:: links.
+        replacePattern3 = /(([a-zA-Z0-9\-\_\.])+@[a-zA-Z\_]+?(\.[a-zA-Z]{2,6})+)/gim;
+        replacedText = replacedText.replace(replacePattern3, '<a href="mailto:$1">$1</a>');
+    
+        return replacedText;
+    }
+    catch(ex){
+        return "";
+    }
+   
 }
 function validateEmail(email) { 
     var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

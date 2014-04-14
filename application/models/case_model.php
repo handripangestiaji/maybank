@@ -267,13 +267,15 @@ class case_model extends CI_Model{
         $this->db->select('b.*, a.fb_conversation_detail_id');
         $this->db->from("case_related_conversation a left join social_stream b on a.social_stream_id = b.post_id");
         $this->db->where('a.case_id', $case_id);
-        
+        $this->db->limit(100);
         $result = $this->db->get()->result();
         
         foreach($result as $row){
             if($row->fb_conversation_detail_id == null){
                 if($row->type == 'facebook_conversation')
                     $row->facebook_data = $this->ReadSimpleConversation($row->post_id, "facebook_conversation_snippet");
+                else if($row->type == 'facebook_comment')
+                    $row->facebook_data = $this->ReadSimpleConversation($row->post_id, "facebook_comment");
                 else
                     $row->facebook_data = $this->ReadSimpleConversation($row->post_id, "facebook");
             }

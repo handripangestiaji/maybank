@@ -340,12 +340,13 @@ $(function(){
                 buttonSubmit.removeAttr('disabled').html('SEND');
                 try{
                     if(response.success == false){
-                        var message = '';
+                        var message = response.message;
                         if(response.result.errors){
                             for(x=0; x<response.result.errors.length; x++){
                                 message += response.result.errors[x].message + "<br />";
                             }
                         }
+                        
                         
                         me.find('.message').html('<div class="alert alert-warning">' +
                         '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
@@ -361,7 +362,8 @@ $(function(){
                             me.find('.reply-preview-img').toggle('slow');
                             if(openButton.length != 0)
                                 openButton.removeClass('btn-warning').addClass('btn-inverse').html('Replied By You').val('');
-                            setTimeout(function(){
+                        }
+                         setTimeout(function(){
                                 me.closest('.reply-field').toggle('slow');
                                 var currentHtml = me.closest('li');
                                 currentHtml.find('.reply-preview-img').toggle('slow');
@@ -369,8 +371,7 @@ $(function(){
                                 me.closest('.subStream').animate({
                                     scrollTop: 0
                                 });
-                            }, 1500);
-                        }
+                        }, 1500);
                     }
                 }
                 catch(e){

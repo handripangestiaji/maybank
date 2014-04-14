@@ -20,8 +20,8 @@
 <?php
 if(IsRoleFriendlyNameExist($this->user_role, "Social Stream_Notification")):
 $come_from =array(
-    'twitter' => "Twitter",
-    'twitter_dm' => "Twitter Direct Message",
+    'twitter' => "Mentions",
+    'twitter_dm' => "Direct Message",
     'facebook' => "Wall Post",
     'facebook_conversation' => 'Private Message'
 )

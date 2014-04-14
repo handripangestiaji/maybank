@@ -7,6 +7,8 @@
         <input type="hidden" value="<?php echo $type?>" name="type" />
         <input type="hidden" value="<?php echo $mentions[$i]->screen_name?>" name="twitter_user" />
         <div class="message"></div>
+        <?php
+        if(!$mentions[$i]->case || ($mentions[$i]->case[0]->status == 'solved')){ ?>
         <select name="reply_type" class='reply_type' style="width: 130px;">
             <option value="">Please Select</option>
             <option value="Feedback">Feedback</option>
@@ -32,7 +34,12 @@
                     } ?>
             <?php endforeach?>
         </select>
+        <?php } ?>
     </div>
+    <?php if($mentions[$i]->case){ ?>
+        <input type="hidden" value="<?php echo $mentions[$i]->case[0]->case_id?>" name="case_id" class="case_id" />
+        <input type="hidden" value="<?php echo $mentions[$i]->case[0]->status?>" name="case_status" class="case_status" />
+    <?php } ?>
     <textarea class='replaycontent' placeholder="Compose Message" name="content"><?php echo $type == 'reply' ? '@'.$mentions[$i]->screen_name : ''; ?> &nbsp;</textarea>
     <br clear="all" />
      <?php  if($type == 'reply'):?>
@@ -56,7 +63,8 @@
         </div-->
         <div class="left tags_c">
             <select class="multipleSelect" multiple="multiple" name="tag_id[]">
-            <?php 
+            <?php
+                $this->load->model('tag_model');
                   $tags=$this->tag_model->get();
                   if($tags): ?>
                   

@@ -17,7 +17,8 @@ $sender = $fb_pm[$i]->participant->sender->facebook_id == $fb_pm[$i]->social_id 
     <input type="hidden" class="postId" value="<?php echo $fb_pm[$i]->post_id; ?>" />
     <input type="hidden" name="facebook_user" value="<?php echo $sender->facebook_id; ?>" />
     <div class="circleAvatar"><img src="<?=base_url('dashboard/media_stream/SafePhoto?photo=')."https://graph.facebook.com/".number_format($sender->facebook_id, 0,'.','')?>/picture?small" alt=""></div>
-     <?php if (IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Current_Take Action')):?>
+    <?php if (IsRoleFriendlyNameExist($this->user_role, array('Social Stream_Channel_General_Function_Own_Country_Reply',
+                                                              'Social Stream_Channel_General_Function_All_Country_Reply'))):?>
         <div class="read-mark <?php echo $fb_pm[$i]->is_read==0 ? 'redText' : 'greyText'?>"><i class="icon-bookmark icon-large"></i></div>
     <?php endif ?>
     <br />

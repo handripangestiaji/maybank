@@ -165,7 +165,7 @@ class Media_stream extends CI_Controller {
 	}
 	
 	if(($this->input->post('reply_type') != 'Report_Abuse') && (!$case_status || ($case_status == 'solved'))){
-	    $validation[] = array('type' => 'required','name' => 'product_type','value' => $twitter_reply['content_products_id'], 'fine_name' => "Product Type");
+	    $validation[] = array('type' => 'required','name' => 'product_type','value' => isset($twitter_reply['content_products_id']) ? $twitter_reply['content_products_id'] : NULL , 'fine_name' => "Product Type");
 	}
     
 	$is_valid = CheckValidation($validation, $this->validation);

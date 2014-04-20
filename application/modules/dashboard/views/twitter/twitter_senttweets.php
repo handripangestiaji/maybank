@@ -21,12 +21,10 @@ for($i=0;$i<count($senttweets);$i++){
         </p>
         <p>
             <?php
+                $senttweets[$i]->text = str_replace("\n", "<br />", $senttweets[$i]->text);
                 $html = html_entity_decode($senttweets[$i]->text);
-                foreach($entities->urls as $url){
-                    $html = substr($html, 0, $url->indices[0]);
-                    $html .= "<a href='$url->expanded_url' target='_blank'>$url->display_url</a>";
-                    $html .= substr($senttweets[$i]->text, $url->indices[1]);
-                }
+                
+                
                 $html =  linkify(html_entity_decode($html), true, false);
                 echo $html;
             ?>

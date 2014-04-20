@@ -16,12 +16,7 @@
         }
     }
 ?>
-            <script type="text/javascript">
-			    $(document).ready(function() {
-			     
-	      		
-                });
-			</script>
+
 <input type="hidden" class="channel-id" value="<?php echo $channel_id?>">
 <div id="cfacebook_<?=$channel_id?>" class="container-fluid" style="height: 95%">
 <!-- ==================== ACTIVITIES MENU ==================== -->

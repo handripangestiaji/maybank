@@ -93,16 +93,14 @@ class mycase extends CI_Controller{
         $filter["b.twitter_user_id"] = $twitter_user_id;
         //$filter["b.type"] = $type;
         $filter["a.post_id !="] = $this->input->get('post_id');
-        $result = $this->twitter_model->ReadTwitterData($filter, 10);
-        $post_stream_id = array();
+        $result = $this->twitter_model->ReadTwitterData($filter, 25);
+        $post_stream_id = "";
         for($i = 0 ; $i< count($result) ; $i++){
-            if(!in_array($result[$i]->post_stream_id, $post_stream_id)){
-                $post_stream_id[] = $result[$i]->post_stream_id;    
-            }
-            else{
+            
+            if($result[$i]->post_stream_id == $post_stream_id){
                 unset($result[$i]);
             }
-            
+            $post_stream_id = isset($result[$i]->post_stream_id) ? $result[$i]->post_stream_id : $post_stream_id;  
         }
         echo json_encode(array_values($result));
     }

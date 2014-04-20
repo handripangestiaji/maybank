@@ -158,15 +158,15 @@ class Media_stream extends CI_Controller {
 	$tags=$this->input->post('tag_id');
 	$url=$this->input->post('url');
 	$url=$this->input->post('tweeter_user');
+	$validation[] = array('type' => 'required','name' => 'replay_content','value' => $this->input->post('content'), 'fine_name' => "Replay Content");
+	$case_status = $this->input->post('case_status');
+	if(!$case_status || ($case_status == 'solved')){
+	    $validation[] = array('type' => 'required','name' => 'reply_type','value' => $twitter_reply['reply_type'], 'fine_name' => "Reply Type");
+	}
 	
-	
-	$content_element = $this->input->post('type') == 'direct_message' ? 'content' : 'text';
-	
-	$validation[] = array('type' => 'required','name' => 'replaycontent','value' => $this->input->post($content_element), 'fine_name' => "Replay Content");
-	$validation[] = array('type' => 'required','name' => 'reply_type','value' => $twitter_reply['reply_type'], 'fine_name' => "Reply Type");
-	if($this->input->post('reply_type') != 'Report_Abuse' && $this->input->post('reply_type') != ''){
+	if(($this->input->post('reply_type') != 'Report_Abuse') && (!$case_status || ($case_status == 'solved'))){
 	    $validation[] = array('type' => 'required','name' => 'product_type','value' => $twitter_reply['content_products_id'], 'fine_name' => "Product Type");
-	}        
+	}
     
 	$is_valid = CheckValidation($validation, $this->validation);
     
@@ -186,7 +186,6 @@ class Media_stream extends CI_Controller {
 		),
 		1
 	    );
-        //die();
     	if(count($twitter_data) > 0 || $this->input->post('type') == 'direct_message'){
     	    
     	    $channel = $this->account_model->GetChannel(array(
@@ -490,11 +489,13 @@ class Media_stream extends CI_Controller {
 		else if($type == 'unfollow'){
 		    $return_value = $this->twitter_model->RemoveFriends($twitter_data, $this->session->userdata('user_id'));
 		}
+	
 		echo json_encode(
 		    array(
 			'success' => true,
 			'message' => "Relation was sucessfully made.",
-			'result' => $return_value
+			'result' => $return_value,
+			'twitter_data' => $twitter_data
 		    )
 		);
 	    }
@@ -575,18 +576,18 @@ class Media_stream extends CI_Controller {
         $descr = $this->input->post('desc');
         $img = $this->input->post('img');
         $reply_type=$this->input->post('reply_type');
-	   
-    
-        $product_type=$this->input->post('product_type');
+	$product_type=$this->input->post('product_type');
         $tags=$this->input->post('tags');
-        
-        
+        $case_id = $this->input->post('case_id');
+	
         $validation[] = array('type' => 'required','name' => 'replaycontent','value' => $comment, 'fine_name' => "Replay Content");
-        $validation[] = array('type' => 'required','name' => 'reply_type','value' => $reply_type, 'fine_name' => "Reply Type");
-        //print_r($reply_type);
-        if($reply_type!='Report_Abuse'){
+        if(!$case_id){
+	    $validation[] = array('type' => 'required','name' => 'reply_type','value' => $reply_type, 'fine_name' => "Reply Type");
+	}
+	//print_r($reply_type);
+        if($reply_type!='Report_Abuse' && (!$case_id)){
             $validation[] = array('type' => 'required','name' => 'product_type','value' => $product_type, 'fine_name' => "Product Type");
-        }        
+        }
         $is_valid = CheckValidation($validation, $this->validation);
 
         if($is_valid === true){
@@ -708,15 +709,14 @@ class Media_stream extends CI_Controller {
                	    
                 $this->account_model->CreateFbCommentAction($action,$post_id,$this->input->post('like') === 'true' ? 1 : 0);
                 $this->account_model->CreateFbReplyAction($post_id,$stream_id->post_stream_id,$comment,$reply_type,$product_type,$url);
-    	    echo json_encode(
-    		array(
-    		    'success' => true,
-    		    'message' => "successfully done",
-    		    'result' => $return,
-    		    'action_log' => $action
-    		)
-    	    );	
-                                          
+		echo json_encode(
+		    array(
+			'success' => true,
+			'message' => "successfully done",
+			'result' => $return,
+			'action_log' => $action
+		    )
+		);	
             }elseif(is_array($return)){//replay in reply        
                 if($return['id']){
                 $return=$return['id'];
@@ -730,16 +730,16 @@ class Media_stream extends CI_Controller {
             	);
                 $this->account_model->CreateFbCommentAction($action,$post_id,$this->input->post('like') === 'true' ? 1 : 0);
                 $this->account_model->CreateFbReplyAction($post_id,'',$comment,$reply_type,$product_type,$url);
-    	    $action['created_at'] = new DateTime($action['created_at']." Europe/London");
-    	    $action['created_at']->setTimezone(new DateTimeZone($this->session->userdata('timezone')));
-    	    $action['created_at'] = $action['created_at']->format("d-M-y h:i A");
-    	    echo json_encode(
+		$action['created_at'] = new DateTime($action['created_at']." Europe/London");
+		$action['created_at']->setTimezone(new DateTimeZone($this->session->userdata('timezone')));
+		$action['created_at'] = $action['created_at']->format("d-M-y h:i A");
+		echo json_encode(
         		    array(
-    			'success' => true,
-        			'message' => "successfully done",
-        			'result' => $return,
-    			'action_log' => $action
-        		    )
+				'success' => true,
+				'message' => "successfully done",
+				'result' => $return,
+				'action_log' => $action
+			    )
         		);
                 }else{
                     echo json_encode(
@@ -778,23 +778,23 @@ class Media_stream extends CI_Controller {
         $url = $this->input->post('url');
         $descr = $this->input->post('desc');
         $img = $this->input->post('img');
-        $case_id = $this->input->post('case_id');
         $reply_type = $this->input->post('reply_type');
         $product_type = $this->input->post('product_id');
+        $case_id = $this->input->post('case_id');
              
-        
         $validation[] = array('type' => 'required','name' => 'replaycontent','value' => $comment, 'fine_name' => "Replay Content");
-        $validation[] = array('type' => 'required','name' => 'reply_type','value' => $reply_type, 'fine_name' => "Reply Type");
-      //  print_r($reply_type);
-        if($reply_type!='Report_Abuse'){
+        if($case_id == 'null'){
+	    $validation[] = array('type' => 'required','name' => 'reply_type','value' => $reply_type, 'fine_name' => "Reply Type");
+	}
+	
+	if($reply_type!='Report_Abuse' && ($case_id=='null')){
             $validation[] = array('type' => 'required','name' => 'product_type','value' => $product_type, 'fine_name' => "Product Type");
-        }        
-        $is_valid = CheckValidation($validation, $this->validation);
+        } 
+        
+	$is_valid = CheckValidation($validation, $this->validation);
 
         if($is_valid === true){
-//                 print_r($comment);
-//                 die();
-             if($case_id=='null'){
+	     if($case_id=='null'){
                 $case_id=null;
              }else{
                 $case_id=$case_id;

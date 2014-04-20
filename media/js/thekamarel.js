@@ -2493,7 +2493,7 @@ $.fn.ToCase = function(type){
                      '<img src="'+ BASEURL + 'dashboard/media_stream/SafePhoto?photo=' + response.main_post.profile_image_url  + '" alt="" style="height: 40px;margin: 6px 10px" class="left" />' + 
                         '<p style="padding: 0px 2px;margin: 2px 5px;width:80%" class="left">' + 
                             '<span class="author" style="font-weight:600;padding:0;">' + response.main_post.screen_name + '</span> <span class="cyanText" style="text-transform:capitalize;"> Mentions</span> ' +
-                            '<span class="UTCTime" ' + dateFormat(myDate, "mmmm dS, yyyy h:MM TT") +
+                            '<span class="UTCTime"> ' + dateFormat(myDate, "mmmm dS, yyyy h:MM TT") +
                             '</span><br />'+
                             '<span class="text">'+ linkify(response.main_post.text) + '</span><br />' + img + 
                             
@@ -2514,7 +2514,7 @@ $.fn.ToCase = function(type){
                         '<p style="padding: 0px 2px;margin: 2px 5px;width:80%" class="left">' + 
                             '<span class="author" style="font-weight:600;padding:0;">' + response.main_post.screen_name + '</span>:  <span class="cyanText" style="text-transform:capitalize;"> Direct Message</span> ' +
                             '<span class="created-time">' + dateFormat(myDate, "mmmm dS, yyyy h:MM TT")  +
-                            '</span>'+
+                            '</span> <br />'+
                             '<span class="text">'+ linkify(response.main_post.text) + '</span><br />' + 
                         '</p>' + 
                         '<br clear="all"/>' +

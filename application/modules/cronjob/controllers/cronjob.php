@@ -481,7 +481,7 @@ class Cronjob extends CI_Controller {
     }
     
     
-    function LookUpShortUrl(){
+    public function LookUpUrl($short_url = ''){
         header("Content-Type:application/json");
         if($this->input->get('short_url')){
             $this->db->select("long_url");

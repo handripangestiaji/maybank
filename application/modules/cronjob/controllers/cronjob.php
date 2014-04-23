@@ -11,7 +11,35 @@ class Cronjob extends CI_Controller {
     }
     
     function index(){
-        
+        header("Content-Type:application/json");
+        if($this->input->get('short_url')){
+            $this->db->select("long_url");
+            $this->db->from('short_urls');
+            $this->db->where('short_code', $this->input->get('short_url'));
+            $row = $this->db->get()->row();
+            if($row != null)
+                echo json_encode(array(
+                    'long_url' => $row->long_url,
+                    'short_url' => $this->input->get('short_url')
+                 ));
+            else{
+                $staging = $this->load->database('staging', true);
+                $staging->select("long_url");
+                $staging->from('short_urls');
+                $staging->where('short_code', $this->input->get('short_url'));
+                $row = $staging->get()->row();
+                echo json_encode(array(
+                    'long_url' => isset($row->long_url) ? $row->long_url : NULL,
+                    'short_url' => $this->input->get('short_url')
+                 ));
+                $staging->close();
+            }
+        }
+        else
+              echo json_encode(array(
+                'long_url' => NULL,
+                'short_url' => $this->input->get('short_url')
+             ));
     }
     
     // Purposed for save facebook stream to database.... 
@@ -494,22 +522,23 @@ class Cronjob extends CI_Controller {
                     'short_url' => $this->input->get('short_url')
                  ));
             else{
-                $staging = $this->load->database('staging');
+                $staging = $this->load->database('staging', true);
                 $staging->select("long_url");
                 $staging->from('short_urls');
                 $staging->where('short_code', $this->input->get('short_url'));
                 $row = $staging->get()->row();
                 echo json_encode(array(
-                    'long_url' => $row->long_url,
+                    'long_url' => isset($row->long_url) ? $row->long_url : NULL,
                     'short_url' => $this->input->get('short_url')
                  ));
+                $staging->close();
             }
         }
         else
               echo json_encode(array(
                 'long_url' => NULL,
                 'short_url' => $this->input->get('short_url')
-             ));
+             ));       
 
     }
    

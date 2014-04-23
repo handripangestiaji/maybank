@@ -1,5 +1,6 @@
 
 <?php
+    define (LIVEDOMAIN, "http://dcms.cloudmotion.co/");
     $expectedURL = trim($_SERVER['REQUEST_URI']);
     $expectedURL = substr(str_replace($_SERVER['SCRIPT_NAME'], '', $expectedURL), 1);
     
@@ -8,42 +9,37 @@
     
     $isShortURL = false;
     $result = getLongURL($expectedURL);
-    if ($result) { $isShortURL = true; }
-    $longURL = $result['long_url'];
- 
-    if ($isShortURL)
-    {
-            redirectTo($longURL, $shortURL);
-    } else {
+    if ($result->long_url != null) 
+        redirectTo($result->long_url);
+    else {
             show404();  // no shortURL found, display standard 404 page
     }
     
     function getLongURL($s)
     {
-        // define these variables for your system
-        $host = "127.0.0.1"; $user = "root"; $pass = ""; $db = "maybank";
-        $mysqli = new mysqli($host, $user, $pass, $db);
-        // you may just want to fall thru to 404 here if connection error
-        if (mysqli_connect_errno()) { die("Unable to connect !"); }
-        $query = "SELECT * FROM short_urls WHERE short_code = '$s';";
-        
-        if ($result = $mysqli->query($query)) {
-            
-            if ($result->num_rows > 0) {
-                $query2 = "Update short_urls set increment = increment + 1 where short_url = '$s'";
-                $mysqli->query($query2);
-                while($row = $result->fetch_assoc()) {
-                        return($row);
-                }
-            } else {
-                return false;
-            }
-        } else {
-                return false;
-        }
-        
-        $mysqli->close();
+        $data =  curl_get_file_contents(LIVEDOMAIN.'cronjob/lookupshorturl?short_url='.$s);
+        return $data;
     }
+    
+    function curl_get_file_contents($URL) {
+        $c = curl_init();
+        curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($c, CURLOPT_URL, $URL);
+        curl_setopt($c, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt( $c, CURLOPT_ENCODING, "UTF-8" );
+        curl_setopt( $c, CURLOPT_RETURNTRANSFER, true );
+        curl_setopt( $c, CURLOPT_AUTOREFERER, true );
+        curl_setopt( $c, CURLOPT_CONNECTTIMEOUT, 60 );
+        curl_setopt( $c, CURLOPT_TIMEOUT, 60 );
+        curl_setopt( $c, CURLOPT_MAXREDIRS, 10 );
+        curl_setopt($c, CURLOPT_FRESH_CONNECT, TRUE);
+        $contents = curl_exec($c);
+        $err  = curl_getinfo($c,CURLINFO_HTTP_CODE);
+        curl_close($c);
+        if ($contents) return $contents;
+        else return FALSE;
+    }
+      
     
     function redirectTo($longURL)
     {

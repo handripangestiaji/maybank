@@ -1,14 +1,8 @@
 
 <?php
+    ini_set("display_errors", 0);
     define (LIVEDOMAIN, "http://dcms.cloudmotion.co/");
-    $expectedURL = trim($_SERVER['REQUEST_URI']);
-    $expectedURL = substr(str_replace($_SERVER['SCRIPT_NAME'], '', $expectedURL), 1);
-    
-    // security: strip all but alphanumerics & dashes
-    //$shortURL = preg_replace("/[^a-z0-9-]+/i", "", $shortURL);
-    
-    $isShortURL = false;
-    $result = getLongURL($expectedURL);
+    $result = getLongURL($_GET['short_url']);
     if ($result->long_url != null) 
         redirectTo($result->long_url);
     else {
@@ -54,7 +48,6 @@
     function show404()
     {
         // display/include your standard 404 page here
-        echo "404 Page Not Found.";
-        exit;
+        redirectTo('http://www.maybank.com/');
     }
 ?>

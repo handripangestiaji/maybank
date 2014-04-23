@@ -494,11 +494,11 @@ class Cronjob extends CI_Controller {
                     'short_url' => $this->input->get('short_url')
                  ));
             else{
-                $this->load->database('staging');
-                $this->staging->select("long_url");
-                $this->staging->from('short_urls');
-                $this->staging->where('short_code', $this->input->get('short_url'));
-                $row = $this->staging->get()->row();
+                $staging = $this->load->database('staging');
+                $staging->select("long_url");
+                $staging->from('short_urls');
+                $staging->where('short_code', $this->input->get('short_url'));
+                $row = $staging->get()->row();
                 echo json_encode(array(
                     'long_url' => $row->long_url,
                     'short_url' => $this->input->get('short_url')

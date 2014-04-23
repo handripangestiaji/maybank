@@ -478,8 +478,39 @@ class Cronjob extends CI_Controller {
         else{
             return null;
         }
-        
-        
+    }
+    
+    
+    function LookUpShortUrl(){
+        header("Content-Type:application/json");
+        if($this->input->get('short_url')){
+            $this->db->select("long_url");
+            $this->db->from('short_urls');
+            $this->db->where('short_code', $this->input->get('short_url'));
+            $row = $this->db->get()->row();
+            if($row != null)
+                echo json_encode(array(
+                    'long_url' => $row->long_url,
+                    'short_url' => $this->input->get('short_url')
+                 ));
+            else{
+                $this->load->database('staging');
+                $this->staging->select("long_url");
+                $this->staging->from('short_urls');
+                $this->staging->where('short_code', $this->input->get('short_url'));
+                $row = $this->staging->get()->row();
+                echo json_encode(array(
+                    'long_url' => $row->long_url,
+                    'short_url' => $this->input->get('short_url')
+                 ));
+            }
+        }
+        else
+              echo json_encode(array(
+                'long_url' => NULL,
+                'short_url' => $this->input->get('short_url')
+             ));
+
     }
    
 }

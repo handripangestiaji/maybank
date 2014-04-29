@@ -197,7 +197,7 @@ class Users extends MY_Controller {
 		    $lower = 'abcdefghijklmnopqrstuvwxyz';
 		    $upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 		    $number = '0123456789';
-		    $simbol = '!@#$%';
+		    $simbol = '!@~';
 		    
 		    $clower = mb_strlen($lower);
 		    $cupper = mb_strlen($upper);

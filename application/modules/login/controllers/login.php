@@ -152,7 +152,7 @@ class Login extends Login_Controller {
 		    $lower = 'abcdefghijklmnopqrstuvwxyz';
 		    $upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 		    $number = '0123456789';
-		    $simbol = '!@#$%';
+		    $simbol = '~!@';
 		    
 		    $clower = mb_strlen($lower);
 		    $cupper = mb_strlen($upper);
@@ -196,7 +196,7 @@ class Login extends Login_Controller {
 		    $this->email->from($mail_from['address'],$mail_from['name']);
 
 		    $this->email->to($email);
-		    $this->email->cc('monitoring@kalajeda.com');
+		    $this->email->cc($mail_from['cc']);
 		    
 		    $this->email->subject('Forgot Password');
 		    $template = curl_get_file_contents(base_url('mail_template/ForgotPass/'.$id.'/'.urlencode($pass)));

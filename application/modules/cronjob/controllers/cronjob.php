@@ -10,7 +10,7 @@ class Cronjob extends CI_Controller {
         $this->load->model('twitter_model');
     }
     
-    function index(){
+    /*function index(){
         header("Content-Type:application/json");
         if($this->input->get('short_url')){
             $this->db->select("long_url");
@@ -18,14 +18,14 @@ class Cronjob extends CI_Controller {
             $this->db->where('short_code', $this->input->get('short_url'));
             $row = $this->db->get()->row();
             if($row != null)
-                redirect('long_url' => $row->long_url);
+                redirect($row->long_url);
             else{
                 $staging = $this->load->database('staging', true);
                 $staging->select("long_url");
                 $staging->from('short_urls');
                 $staging->where('short_code', $this->input->get('short_url'));
                 $row = $staging->get()->row();
-                redirect('long_url' => $row->long_url);
+                redirect($row->long_url);
                 $staging->close();
             }
         }
@@ -34,7 +34,7 @@ class Cronjob extends CI_Controller {
                 'long_url' => NULL,
                 'short_url' => $this->input->get('short_url')
              ));
-    }
+    }*/
     
     // Purposed for save facebook stream to database.... 
     function FacebookStreamOwnPost(){

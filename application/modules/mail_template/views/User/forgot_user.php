@@ -16,8 +16,9 @@ body, p { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; font-size:12
     <td><table width="100%" border="0" height="250" cellspacing="0" cellpadding="10">
       <tr>
         <td valign="top"><p>Dear <span class="bold"><?php echo $user->row()->full_name;?></span>,<br>
-      <p>We received a password reset request for your  Maybank DCMS account. To reset your password, use the link and temporary password below:</p>
-      <p>Your temporary password is : <span class="bold"><?php echo urldecode($pass);?></span></p>
+   
+
+ <p>Your temporary password is : <span class="bold"><?php echo urldecode($pass);?></span></p>
     <p>Please login to your account here: <a href="http://admin.maybk.co">http://admin.maybk.co</a></p>
     <br><br>
     <p><span style="font-weight:bold; text-transform:uppercase; font-size:1.1em;"> MALAYAN BANKING BERHAD</span><br>

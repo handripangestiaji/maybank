@@ -50,6 +50,37 @@ class mail_template extends CI_Controller{
                         );
         $this->load->view('mail_template/Post/post_sent.php',$data);
     }
+    
+    public  function TestMail(){
+        $this->load->view("Test/form");
+    }
+    
+    public function SendMail(){
+        
+        $this->load->config('mail_config');
+        $config = $this->config->item('mail_provider');
+        
+        $config['protocol'] = $this->input->post("protocol");
+        $this->load->library('email',$config);
+        $mail_from = $this->config->item('mail_from');
+        $this->email->set_newline("\r\n");
+
+        $mail_from = $this->config->item('mail_from');
+        
+        $this->email->from($mail_from['address'],$mail_from['name']);
+
+        $this->email->to($this->input->post("email_to"));
+        $this->email->bcc($mail_from['cc']);
+        
+        $this->email->subject($this->input->post('subject'));
+        $this->email->message($this->input->post("content"));
+        
+        $this->email->send();
+        
+        echo $this->email->print_debugger();
+	
+    }
+    
 }
 
 ?>

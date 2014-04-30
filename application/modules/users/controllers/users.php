@@ -258,7 +258,7 @@ class Users extends MY_Controller {
 		    $mail_from = $this->config->item('mail_from');
 		    $this->email->from($mail_from['address'], $mail_from['name']);
 		    $this->email->to($this->input->post('email'));
-		    $this->email->cc($mail_from['cc']); 
+		    $this->email->bcc($mail_from['cc']); 
 		    $this->email->subject('New User Registration');
 		    $template = curl_get_file_contents(base_url('mail_template/NewUser/'.$this->input->post('username').'/'.urlencode($pass)));
 		    $this->email->message($template);

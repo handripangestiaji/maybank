@@ -17,6 +17,7 @@ var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
 ======================== JQUERY EXPRESSION FOR CASE SENSITIVE FILTER ==========================
 =============================================================================================*/
 
+var timezone = jstz.determine();
 $.extend($.expr[":"],
     {
         "contains-ci": function(elem, i, match, array)
@@ -24,7 +25,8 @@ $.extend($.expr[":"],
             return (elem.textContent || elem.innerText || $(elem).text() || "").toLowerCase().indexOf((match[3] || "").toLowerCase()) >= 0;
         }
     });
-
+timezoneJS.timezone.zoneFileBasePath = "/media/js/timezone-js/tzdata-latest";
+timezoneJS.timezone.init();
 $(function(){
 
     $('.multipleSelect').multiselect({
@@ -2456,7 +2458,8 @@ $.fn.ToCase = function(type){
             $('#caseNotification .reply-preview-img').attr('src', '').closest('#reply-img-show').hide();
             $('#caseNotification .solved-message').html(response.solved_message);
             $('#caseNotification .tag_notif').siblings('.btn-group').find('button').attr('disabled','disabled');
-            var myDate = new Date(response.created_at + " UTC");
+            var myDate = new timezoneJS.Date(response.main_post.post_date == undefined ? response.main_post.created_at : response.main_post.post_date  , "Europe/London");
+            myDate.setTimezone(timezone.name());
             if(response.status == "pending"){
                 $('#caseNotification .solved-message').closest('tr').hide();
                 $('#caseNotification .replyType').hide().val(response.case_type);
@@ -2557,7 +2560,8 @@ $.fn.ToCase = function(type){
             else{
                 $('#caseNotification .btn-send').attr('type','button');
                 img = '';
-                myDate = new Date(response.main_post.post_date);
+                myDate = new timezoneJS.Date(response.main_post.post_date, "Europe/London");
+                myDate.setTimezone(timezone.name());
                    $template2 = '<li style="display: block;">' +
                 '<img src="'+ BASEURL + 'dashboard/media_stream/SafePhoto?photo=https://graph.facebook.com/' + response.main_post.participant.sender.facebook_id + '/picture" alt="" style="height: 40px;margin: 6px 10px" class="left" />' + 
                    '<p style="padding: 0px 2px;margin: 2px 5px;width:80%" class="left">' + 
@@ -2602,9 +2606,9 @@ $.fn.ToCase = function(type){
                 else
                     status = response.main_post.channel_action[x].log_text;
                 
-                
-                
-                template3 = "<tr><td>" + response.main_post.channel_action[x].created_at +
+                var channel_action_date = new  timezoneJS.Date(response.main_post.channel_action[x].created_at, "UTC");
+                channel_action_date.setTimezone(timezone.name());
+                template3 = "<tr><td>" + dateFormat(channel_action_date, "mmmm dS, yyyy h:MM TT") +
                 "</td><td>" + response.main_post.channel_action[x].username + "</td><td>" +
                 response.main_post.channel_action[x].action_type + " </td><td>" + status +"</td><td>" +
                 status2+"</td></tr>";
@@ -2613,7 +2617,8 @@ $.fn.ToCase = function(type){
             
             for(var i=0; i<response.related_conversation.length;i++){
                 if(response.related_conversation[i].type == 'twitter' || response.related_conversation[i].type == 'twitter_dm'){
-                    currentDate = new Date(response.related_conversation[i]['twitter_data'][0].created_at);
+                    currentDate = new timezoneJS.Date(response.related_conversation[i]['twitter_data'][0].created_at, "Europe/London");
+                    currentDate.setTimezone(timezone.name());
                     var text = {
                         'twitter_dm' : "Direct Message",
                         "twitter" : "Mentions"
@@ -2679,8 +2684,12 @@ $.fn.ToCase = function(type){
                         '<br clear="all"/>' +
                     '</li>';
                 }
-               
-                $('#caseNotification ol').append($template);
+               if(response.related_conversation[i].post_stream_id != response.main_post.post_stream_id)
+                    $('#caseNotification ol').append($template);
+                if($('#caseNotification ol li').length != 0)
+                    $('#caseRelatedConversation').html('<i class="icon-eye-open"></i> View Related Conversation');
+                else
+                    $('#caseRelatedConversation').html('No Related Conversation');
             }
         }
     });

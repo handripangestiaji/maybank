@@ -87,7 +87,7 @@
                             <select name="optGroup">
                                 <?php foreach($group->result() as $g){ ?>
                                     <?php
-                                    if($g->country_code == $this->session->userdata('country') || (IsRoleFriendlyNameExist($this->user_role, 'Management_Group_All_Country_View'))) :?>
+                                    if($g->country_code == $this->session->userdata('country') || (IsRoleFriendlyNameExist($this->user_role, 'User Management_User_Own_Country_View'))) :?>
                                         <option value='<?php echo $g->group_id;?>'><?php echo $g->group_name;?></option>
                                     <?php endif;?>
                                 <?php }?>

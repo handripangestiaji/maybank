@@ -2606,7 +2606,7 @@ $.fn.ToCase = function(type){
                 else
                     status = response.main_post.channel_action[x].log_text;
                 
-                var channel_action_date = new  timezoneJS.Date(response.main_post.channel_action[x].created_at, "UTC");
+                var channel_action_date = new  timezoneJS.Date(response.main_post.channel_action[x].created_at + "+0000");
                 channel_action_date.setTimezone(timezone.name());
                 template3 = "<tr><td>" + dateFormat(channel_action_date, "mmmm dS, yyyy h:MM TT") +
                 "</td><td>" + response.main_post.channel_action[x].username + "</td><td>" +

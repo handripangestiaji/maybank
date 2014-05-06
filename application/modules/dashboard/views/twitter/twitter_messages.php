@@ -25,7 +25,7 @@
             <span>
             <?php
             
-            $date=new DateTime($directmessage[$i]->social_stream_created_at.' Europe/London');
+            $date=new DateTime($directmessage[$i]->social_stream_created_at.' UTC');
             $date->setTimezone($timezone);
             echo $date->format('l, M j, Y h:i A');
             
@@ -42,13 +42,13 @@
                 <?php
                 if($directmessage[$i]->case[0]->status == "pending"){
                     echo isset($directmessage[$i]->case[0]->assign_to->display_name) ? ' Assign to: '.$directmessage[$i]->case[0]->assign_to->display_name : '';
-                    $created_at = new DateTime($directmessage[$i]->case[0]->created_at.' Europe/London', $timezone);
+                    $created_at = new DateTime($directmessage[$i]->case[0]->created_at.' UTC', $timezone);
                     $created_at->setTimezone($timezone);
                     echo ' '.$created_at->format("d-M-y h:i A");
                 }
                 else{
                     echo isset($directmessage[$i]->case[0]->solved_by->display_name) ? ' Resolved by: '.$directmessage[$i]->case[0]->solved_by->display_name: '';
-                    $solved_at = new DateTime($directmessage[$i]->case[0]->solved_at.' Europe/London', $timezone);
+                    $solved_at = new DateTime($directmessage[$i]->case[0]->solved_at.' UTC', $timezone);
                     $solved_at->setTimezone($timezone);
                     echo ' '.$solved_at->format("d-M-y h:i A");
                 }
@@ -62,7 +62,7 @@
             value="<?php echo $directmessage[$i]->reply_post[0]->response_post_id?>">Replied By
             <?php
             
-            $date = new DateTime($directmessage[$i]->reply_post[0]->created_at.' Europe/London');
+            $date = new DateTime($directmessage[$i]->reply_post[0]->created_at.' UTC');
             $date->setTimezone($timezone);
             echo $directmessage[$i]->reply_post[0]->display_name.' at '.$date->format("d-M-y h:i A")?>
             </button>
@@ -99,7 +99,7 @@
                        </span>
                        
                        <span><?php
-                        $date = new DateTime($outbox->created_at.' Europe/London');
+                        $date = new DateTime($outbox->created_at.' UTC');
                         $date->setTimezone($timezone);
                         echo $date->format("l, M j, Y h:i A");
                        ?></span>

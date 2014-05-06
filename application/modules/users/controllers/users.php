@@ -227,7 +227,7 @@ class Users extends MY_Controller {
 		    $pass = str_shuffle(mb_substr($low.$up.$num.$sim,0,10));
 		    
 		    $created_by = $this->session->userdata('user_id') == 0 ? NULL : $this->session->userdata('user_id');
-		    $timezone = new DateTimeZone("Europe/London");
+		    $timezone = new DateTimeZone("UTC");
 		    $time = new DateTime(date("Y-m-d H:i:s e"), $timezone);
 		    $data=array(
 				'username' => $this->input->post('username'),
@@ -800,7 +800,7 @@ class Users extends MY_Controller {
 	    $this->load->view('users/role',$data);
 	  }
 	  else{
-	       $timezone = new DateTimeZone("Europe/London");
+	       $timezone = new DateTimeZone("UTC");
 	       $time = new DateTime(date("Y-m-d H:i:s e"), $timezone);
 	       $created_at = $time->format("Y-m-d H:i:s");
 	       $created_by = $this->session->userdata('user_id');
@@ -1130,7 +1130,7 @@ class Users extends MY_Controller {
     }
     function insert_appRole()
     {
-	  $timezone = new DateTimeZone("Europe/London");
+	  $timezone = new DateTimeZone("UTC");
 	  $time = new DateTime(date("Y-m-d H:i:s e"), $timezone);
 	  
 	  $data = array(
@@ -1245,7 +1245,7 @@ class Users extends MY_Controller {
 	       $this->load->view('users/group',$data);
 	  }
 	  else{
-		    $timezone = new DateTimeZone("Europe/London");
+		    $timezone = new DateTimeZone("UTC");
 		    $time = new DateTime(date("Y-m-d H:i:s e"), $timezone);
 		    $created_at = $time->format("Y-m-d H:i:s");
 		    $created_by = $this->session->userdata('user_id');
@@ -1426,7 +1426,7 @@ class Users extends MY_Controller {
     //============================= LOGOUT ================================
     function logout()
         {
-	    $timezone = new DateTimeZone("Europe/London");
+	    $timezone = new DateTimeZone("UTC");
 	    $time = new DateTime(date("Y-m-d H:i:s e"), $timezone);
 	    $data = array(
 			'logout_time' => $time->format("Y-m-d H:i:s")

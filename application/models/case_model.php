@@ -355,7 +355,7 @@ class case_model extends CI_Model{
         $related_conversation = array_merge($facebook_post, $facebook_comment, $facebook_conversation);
         $timezone = new DateTimeZone($this->session->userdata('timezone'));
         foreach($related_conversation as $conversation){
-            $created_at = new DateTime($conversation->created_at." Europe/London", $timezone);
+            $created_at = new DateTime($conversation->created_at." UTC", $timezone);
             $conversation->created_at = $created_at->format("d-M-Y h:i A");
         }
         

@@ -207,7 +207,7 @@ class Cronjob extends CI_Controller {
             $dtz = new DateTimeZone($post->timezone);
             $local_time = new DateTime('now', $dtz);
             $offset = $dtz->getOffset( $local_time ) / 3600;
-            $current_date = new DateTime(date("Y-m-d H:i:s").' Europe/London');
+            $current_date = new DateTime(date("Y-m-d H:i:s").' UTC');
             $current_date->setTimezone($dtz);
             
             $local_time = $current_date->format("Y-m-d H:i");

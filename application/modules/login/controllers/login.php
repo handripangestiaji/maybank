@@ -110,7 +110,7 @@ class Login extends Login_Controller {
 				'country' => $user_login->row()->country_code,
                                 'is_login' => TRUE
                             );
-                    $timezone = new DateTimeZone("Europe/London");
+                    $timezone = new DateTimeZone("UTC");
                     $time = new DateTime(date("Y-m-d H:i:s e"), $timezone);
                     $this->session->set_userdata($data);
 		    

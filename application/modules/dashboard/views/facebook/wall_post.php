@@ -34,7 +34,7 @@ if($fb_feed[$i]->post_content != '<br />' || isset($attachment->media)):
         <i class="icon-circle"></i>
         <span>
         <?php 
-            $date=new DateTime($fb_feed[$i]->post_date.' Europe/London');
+            $date=new DateTime($fb_feed[$i]->post_date.' UTC');
             $date->setTimezone($timezone);
             echo $date->format('l, M j, Y h:i A');
         ?>        

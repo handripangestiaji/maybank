@@ -29,7 +29,7 @@ $sender = $fb_pm[$i]->participant->sender->facebook_id == $fb_pm[$i]->social_id 
         <i class="icon-circle"></i>
         <span>
         <?php 
-            $date=new DateTime($fb_pm[$i]->post_date.' Europe/London');
+            $date=new DateTime($fb_pm[$i]->post_date.' UTC');
             $date->setTimezone($timezone);
             echo $date->format('l, M j, Y h:i A');
         ?>

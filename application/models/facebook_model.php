@@ -151,7 +151,7 @@ class facebook_model extends CI_Model
     */
     public function SavePost($each_post, $channel){
 	$this->db->trans_start();
-	$timezone = new DateTimeZone("Europe/London");
+	$timezone = new DateTimeZone("UTC");
 	$stream = $this->IsStreamIdExists($each_post->post_id);
 	$this->SaveFacebookUser($each_post->users);
 	$created_time = new DateTime(date("Y-m-d H:i:s e", $each_post->created_time), $timezone);
@@ -305,7 +305,7 @@ class facebook_model extends CI_Model
     
     
     public function SaveUserFromFacebook($userid, $access_token){
-	$timezone = new DateTimeZone("Europe/London");
+	$timezone = new DateTimeZone("UTC");
 	if(!$this->IsFbUserExists($userid)){
 	    $fql = "select uid, name, username, sex from user where uid = $userid";
 	    $requestResult = curl_get_file_contents('https://graph.facebook.com/fql?q='.urlencode($fql)."&access_token=".$access_token->token);
@@ -335,7 +335,7 @@ class facebook_model extends CI_Model
     
     
     public function SaveNewConversation($conversation, $channel, $access_token){
-	$timezone = new DateTimeZone("Europe/London");
+	$timezone = new DateTimeZone("UTC");
 	foreach($conversation as $each_conversation){
 	    $this->db->trans_start();
 	    
@@ -416,7 +416,7 @@ class facebook_model extends CI_Model
     
     
     public function SaveConversation($conversation, $channel){
-	$timezone = new DateTimeZone("Europe/London");
+	$timezone = new DateTimeZone("UTC");
 	foreach($conversation as $each_conversation){
 	    $this->db->trans_start();
 	    $stream = $this->IsStreamIdExists($each_conversation->thread_id, "facebook_conversation");

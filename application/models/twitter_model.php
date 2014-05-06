@@ -114,7 +114,7 @@ class twitter_model extends CI_Model
     */
     public function SaveTweets($tweet, $channel, $come_from = "mentions"){
         $this->db->trans_start();
-        $timezone = new DateTimeZone("Europe/London");
+        $timezone = new DateTimeZone("UTC");
         $created_at = new DateTime($tweet->created_at, $timezone);
         $retrieved_at = new DateTime(date("Y-m-d H:i:s e"), $timezone);
         $post_id = $this->GetTweetId($tweet->id_str, "twitter", $channel->channel_id, $come_from);
@@ -178,7 +178,7 @@ class twitter_model extends CI_Model
     }
     
     public function SaveDirectMessages($direct_message, $channel){
-        $timezone = new DateTimeZone("Europe/London");
+        $timezone = new DateTimeZone("UTC");
         $created_at = new DateTime($direct_message->created_at, $timezone);
         $retrieved_at = new DateTime(date("Y-m-d H:i:s e"), $timezone);
         $this->db->trans_start();
@@ -218,7 +218,7 @@ class twitter_model extends CI_Model
     }
     
     public function SaveTwitterUsers($user){
-        $timezone = new DateTimeZone("Europe/London");
+        $timezone = new DateTimeZone("UTC");
         $created_at = new DateTime($user->created_at, $timezone);
         $retrieved_at = new DateTime(date("Y-m-d H:i:s e"), $timezone);
         $user_to_save = array(

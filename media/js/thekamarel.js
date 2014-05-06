@@ -2458,7 +2458,7 @@ $.fn.ToCase = function(type){
             $('#caseNotification .reply-preview-img').attr('src', '').closest('#reply-img-show').hide();
             $('#caseNotification .solved-message').html(response.solved_message);
             $('#caseNotification .tag_notif').siblings('.btn-group').find('button').attr('disabled','disabled');
-            var myDate = new timezoneJS.Date(response.main_post.post_date == undefined ? response.main_post.created_at : response.main_post.post_date  , "Europe/London");
+            var myDate = new timezoneJS.Date(response.main_post.post_date == undefined ? response.main_post.created_at : response.main_post.post_date + " +0000");
             myDate.setTimezone(timezone.name());
             if(response.status == "pending"){
                 $('#caseNotification .solved-message').closest('tr').hide();
@@ -2560,7 +2560,7 @@ $.fn.ToCase = function(type){
             else{
                 $('#caseNotification .btn-send').attr('type','button');
                 img = '';
-                myDate = new timezoneJS.Date(response.main_post.post_date, "Europe/London");
+                myDate = new timezoneJS.Date(response.main_post.post_date + " +0000");
                 myDate.setTimezone(timezone.name());
                    $template2 = '<li style="display: block;">' +
                 '<img src="'+ BASEURL + 'dashboard/media_stream/SafePhoto?photo=https://graph.facebook.com/' + response.main_post.participant.sender.facebook_id + '/picture" alt="" style="height: 40px;margin: 6px 10px" class="left" />' + 
@@ -2617,7 +2617,7 @@ $.fn.ToCase = function(type){
             
             for(var i=0; i<response.related_conversation.length;i++){
                 if(response.related_conversation[i].type == 'twitter' || response.related_conversation[i].type == 'twitter_dm'){
-                    currentDate = new timezoneJS.Date(response.related_conversation[i]['twitter_data'][0].created_at, "Europe/London");
+                    currentDate = new timezoneJS.Date(response.related_conversation[i]['twitter_data'][0].created_at + " +0000");
                     currentDate.setTimezone(timezone.name());
                     var text = {
                         'twitter_dm' : "Direct Message",

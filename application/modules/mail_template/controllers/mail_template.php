@@ -46,6 +46,7 @@ class mail_template extends CI_Controller{
                         'socmeds' => $post[0]->connection_type,
                         'posted_at' => $post[0]->post_created_at,
                         'result' => 'Success',
+                        'user_timezone' => $post[0]->timezone,
                         'error_message' => '-'
                         );
         $this->load->view('mail_template/Post/post_sent.php',$data);

@@ -203,7 +203,6 @@ class Cronjob extends CI_Controller {
         $posts = $this->post_model->GetPosts($where);
                     
         foreach($posts as $post){
-            print_r($post);
             $dtz = new DateTimeZone($post->timezone);
             $local_time = new DateTime('now', $dtz);
             $offset = $dtz->getOffset( $local_time ) / 3600;
@@ -237,13 +236,12 @@ class Cronjob extends CI_Controller {
                     $this->email->from($mail_from['name'],$mail_from['address']);
                 
                     $this->email->set_newline("\r\n");
-                    $this->email->from('dcms@maybank.com','maybank');
                     $this->email->to($post->email);
-                    $this->email->subject('Message Posted');
+                    $this->email->subject('Your scheduled post was published');
+                    $this->email->bcc($mail_from['cc']);
                     $template = curl_get_file_contents(base_url().'mail_template/PostSent/'.$post->post_to_id);
                     $this->email->message($template);
                     $this->email->send();
-                    echo $this->email->print_debugger();
                 }
             }
         }

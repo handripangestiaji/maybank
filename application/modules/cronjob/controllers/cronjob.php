@@ -203,6 +203,7 @@ class Cronjob extends CI_Controller {
         $posts = $this->post_model->GetPosts($where);
                     
         foreach($posts as $post){
+            //print_r($post);
             $dtz = new DateTimeZone($post->timezone);
             $local_time = new DateTime('now', $dtz);
             $offset = $dtz->getOffset( $local_time ) / 3600;
@@ -211,7 +212,7 @@ class Cronjob extends CI_Controller {
             
             $local_time = $current_date->format("Y-m-d H:i");
             $post_time = date('Y-m-d H:i',strtotime($post->time_to_post));
-            print_r($local_time.' & '.$post_time);
+            //print_r($local_time.' & '.$post_time);
             if($local_time >= $post_time){
                 //handle if facebook
                 if($post->connection_type == 'facebook'){
@@ -233,15 +234,17 @@ class Cronjob extends CI_Controller {
                     $mail_provider = $this->config->item('mail_provider');
                     $this->load->library('email', $mail_provider);
                     $mail_from = $this->config->item('mail_from');
-                    $this->email->from($mail_from['name'],$mail_from['address']);
+                    
                 
                     $this->email->set_newline("\r\n");
+                    $this->email->from($mail_from['address'], $mail_from['name']);
                     $this->email->to($post->email);
                     $this->email->subject('Your scheduled post was published');
                     $this->email->bcc($mail_from['cc']);
                     $template = curl_get_file_contents(base_url().'mail_template/PostSent/'.$post->post_to_id);
                     $this->email->message($template);
                     $this->email->send();
+                    echo $this->email->print_debugger();
                 }
             }
         }

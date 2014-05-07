@@ -31,6 +31,7 @@
         
         ?>
         <table>
+            <tr><td>Creator Email</td><td>:</td><td><?=$post['email']?></td></tr>
             <tr><td>Message</td><td>:</td><td><?=$post['messages']?></td></tr>
             <tr><td>Posted at</td><td>:</td><td><?=$post['posted_at']->format('l, M j, Y h:i A')?></td></tr>
             <tr><td>Social Media</td><td>:</td><td><?=$post['socmeds']?></td></tr>

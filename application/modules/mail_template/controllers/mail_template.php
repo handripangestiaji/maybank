@@ -42,6 +42,7 @@ class mail_template extends CI_Controller{
         $where = "post_to_id = '".$post_to_id."'";
         $post = $this->post_model->GetPosts($where);
         $data['post'] = array(
+                        'email' => $post[0]->email,
                         'messages' => $post[0]->messages,
                         'socmeds' => $post[0]->connection_type,
                         'posted_at' => $post[0]->post_created_at,

@@ -23,16 +23,13 @@ body, p { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; font-size:12
     <br><br>
     <p><span style="font-weight:bold; text-transform:uppercase; font-size:1.1em;"> MALAYAN BANKING BERHAD</span><br>
 (This is a computer generated email, no signature is required)<p>
-
     </td>
     </table>
       </td>
       </tr>
   </tr>
   <tr>
-    <td>
-      This message is intended only for the use of the person to whom it is expressly addressed and may contain information that is confidential and legally privileged. If you are not the intended recipient, you are hereby notified that any use, reliance on, reference to, review, disclosure or copying of the message and the information it contains for any purpose is prohibited. If you have received this message in error, please notify the sender by reply e-mail of the mis-delivery and delete all its contents. Opinions, conclusions and other information in this message that do not relate to the official business of Malayan Banking Berhad shall be understood as neither given nor endorsed by it. 
-    </td>
+    <td style="font-size:10px; color:#333;">This message is intended only for the use of the person to whom it is expressly addressed and may contain information that is confidential and legally privileged. If you are not the intended recipient, you are hereby notified that any use, reliance on, reference to, review, disclosure or copying of the message and the information it contains for any purpose is prohibited. If you have received this message in error, please notify the sender by reply e-mail of the mis-delivery and delete all its contents. Opinions, conclusions and other information in this message that do not relate to the official business of Malayan Banking Berhad shall be understood as neither given nor endorsed by it. </td>
   </tr>
 </table>
 </body>

@@ -2364,14 +2364,14 @@ $.fn.RefreshAllStream = function(){
             var is_read = $(this).siblings('.containerHeadline').find('.change-read-unread-stream').val();
             if($(this).closest('div').prev().find('i').attr('class') == 'icon-facebook'){
                 $(this).html('&nbsp;&nbsp;Loading...');        
-                $(this).load(BASEURL + 'dashboard/media_stream/facebook_stream/' + channelId + '/' + is_read, function(){
+                $(this).load(BASEURL + 'dashboard/media_stream/facebook_stream/' + channelId + '/' + is_read + "?uid=" + Math.random(), function(){
                     $(this).find('.channel-id').val(channelId);
                     $(this).BindMultipleSelect();
                 });
             }
             else if($(this).closest('div').prev().find('i').attr('class') == 'icon-twitter'){
                 $(this).html('&nbsp;&nbsp;Loading...');        
-                $(this).load(BASEURL + 'dashboard/media_stream/twitter_stream/' + channelId + '/'+ is_read, function(){
+                $(this).load(BASEURL + 'dashboard/media_stream/twitter_stream/' + channelId + '/'+ is_read + "?uid=" + Math.random(), function(){
                     $(this).find('.channel-id').val(channelId);
                     $(this).BindMultipleSelect();
                 });
@@ -2379,7 +2379,7 @@ $.fn.RefreshAllStream = function(){
             }
             else if($(this).closest('div').prev().find('i').attr('class') == 'icon-youtube'){
                 $(this).html('&nbsp;&nbsp;Loading...');        
-                $(this).load(BASEURL + 'dashboard/media_stream/youtube_stream/' + channelId + '/'+ is_read, function(){
+                $(this).load(BASEURL + 'dashboard/media_stream/youtube_stream/' + channelId + '/'+ is_read + "?uid=" + Math.random(), function(){
                     $(this).find('.channel-id').val(channelId);
                     $(this).BindMultipleSelect();
                 });
@@ -2458,7 +2458,7 @@ $.fn.ToCase = function(type){
             $('#caseNotification .reply-preview-img').attr('src', '').closest('#reply-img-show').hide();
             $('#caseNotification .solved-message').html(response.solved_message);
             $('#caseNotification .tag_notif').siblings('.btn-group').find('button').attr('disabled','disabled');
-            var myDate = new timezoneJS.Date(response.main_post.post_date == undefined ? response.main_post.created_at : response.main_post.post_date + " +0000");
+            var myDate = new timezoneJS.Date(response.main_post.post_date == undefined ? response.main_post.created_at + " +0000" : response.main_post.post_date + " +0000");
             myDate.setTimezone(timezone.name());
             if(response.status == "pending"){
                 $('#caseNotification .solved-message').closest('tr').hide();

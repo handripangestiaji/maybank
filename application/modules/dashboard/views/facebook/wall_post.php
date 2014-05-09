@@ -47,13 +47,19 @@ if($fb_feed[$i]->post_content != '<br />' || isset($attachment->media)):
         $attachment = isset($attachment->media) ? $attachment->media: null;
         for($att=0;$att<count($attachment);$att++){
            if($attachment[$att]->type=='photo'){
-            
-                $src = substr($attachment[$att]->src, 0, strlen($attachment[$att]->src) - 5)."n.jpg";
+                
+                if(isset($attachment[$att]->photo->images[1])){
+                    $src = $attachment[$att]->photo->images[1]->src;
+                }
+                else{
+                    $src = $attachment[$att]->src;
+                }
                 echo    "<a href='#modal-".$fb_feed[$i]->post_id."-".$attachment[$att]->type."' data-toggle='modal' ><img class='img_attachment' src='".base_url('dashboard/media_stream/SafePhoto?photo=').$src."' /></a>";
                 echo    '<div id="modal-'.$fb_feed[$i]->post_id.'-'.$attachment[$att]->type.'" class="attachment-modal modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
                             <img src="'.base_url('dashboard/media_stream/SafePhoto?photo=').$src.'" />
                             <button type="button" class="close " data-dismiss="modal"><i class="icon-remove"></i></button>
                         </div>';
+                break;
            }elseif($attachment[$att]->type=='link'){              
                 $attachment = json_decode($fb_feed[$i]->attachment)?>
             
@@ -108,7 +114,7 @@ if($fb_feed[$i]->post_content != '<br />' || isset($attachment->media)):
             for($j=0;$j<count($comment);$j++):
             $isMyCase2=$this->case_model->chackAssignCase(array('a.post_id' => $comment[$j]->comment_post_id, 'a.status <>'=>'reassign'));
         
-        if($comment[$j]->comment_id==0){
+            if($comment[$j]->comment_id==0){
                 $data['comment'] = $comment;
                 $data['j'] = $j;
                 $data['isMyCase']=$isMyCase;

@@ -630,11 +630,13 @@ class facebook_model extends CI_Model
 	if(isset($filter['channel_id'])){
 	    $filter['c.channel_id'] = $filter['channel_id'];
 	    unset($filter['channel_id']);
+	    $filter['c.is_deleted'] = 0;
 	}
         $this->db->order_by('b.updated_at','desc');
         $this->db->order_by('c.created_at','desc');
         $this->db->order_by('c.replied_count','desc');
         if(count($filter) >= 1){
+	    $filter['is_deleted'] = 0;
             $this->db->where($filter);
         }
 	if($only_assign_case == TRUE )
@@ -673,8 +675,9 @@ class facebook_model extends CI_Model
         $this->db->from("fb_user_engaged a INNER JOIN social_stream_fb_post b ON b.author_id=a.facebook_id
 			inner join social_stream c on c.post_id = b.post_id LEFT JOIN
                         `case` d on d.post_id = c.post_id AND d.status='pending' ");
+	$filter['is_deleted'] = 0;
         if(count($filter) > 0)
-	       $this->db->where($filter);
+	    $this->db->where($filter);
            
         $this->db->limit(20);
         $this->db->order_by('c.replied_count','desc');
@@ -688,13 +691,18 @@ class facebook_model extends CI_Model
                 social_stream_fb_comments b ON b.post_id=a.post_id INNER JOIN
                 fb_user_engaged  c ON c.facebook_id=b.from INNER JOIN social_stream d on d.post_id = b.id LEFT OUTER JOIN
                 social_stream e ON e.post_stream_id=b.comment_stream_id");               
-        if(count($filter) > 0)
-	       $this->db->where($filter);
-           
-        if(count($in) > 0)
-	       $this->db->where_in('b.from',$in);
-           
-        $this->db->limit(20);
+        if(count($filter) > 0){
+	    $filter['e.is_deleted'] = 0;
+	    $this->db->where($filter);
+        }
+        if(count($in) > 0){
+	    $this->db->where_in('b.from',$in);
+	    $filter['e.is_deleted'] = 0;
+	    $this->db->where($filter);
+        }
+        
+	
+        $this->db->limit(75);
         $this->db->order_by('a.post_id','desc');
         return $this->db->get()->result();        
     }
@@ -781,14 +789,6 @@ class facebook_model extends CI_Model
 	return $result;
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
     public function likePost($post_id, $access_token, $type = 'feed'){
         $requestResult = curl_get_file_contents('https://graph.facebook.com/32423425 453423/likes');
         $result  = json_decode($requestResult);
@@ -851,7 +851,14 @@ class facebook_model extends CI_Model
 	$this->db->select("*");
 	$this->db->from('social_stream');
 	$this->db->where($filter);
-	return $this->db->get()->result();
+	$result = $this->db->get()->result();
+	foreach($result as $row){
+	    $this->db->select("*");
+	    $this->db->from('channel');
+	    $this->db->where('channel_id', $row->channel_id);
+	    $row->channel = $this->db->get()->row();
+	}
+	return $result;
     }
     
     public function SocialStreamCountUpdate($post_id){
@@ -861,40 +868,34 @@ class facebook_model extends CI_Model
     }
     
     
-    function DeletePostFb($post_stream_id, $channel_id, $user_id, $status = 0){
+    function DeletePostFb($post_id, $channel_id, $user_id, $parent_post = NULL){
         $this->db->trans_start();
         $limit=1;
-        if($status == 0){
-            $data = $this->RetrieveFeedFB(
-                array('post_stream_id' => $post_stream_id),$limit
-            );
-        }elseif($status==1){
-            $data = $this->RetrievePmFB(
-                array('post_stream_id' => $post_stream_id),$limit
-            );
-        }else{
-            $data = $this->RetriveCommentPostFb(
-                array('d.post_stream_id' => $post_stream_id),array()
-            );   
-        }
-
+	
         $channel_action = array(
             'action_type' => "facebook_delete",
             'channel_id' => $channel_id,
             'created_at' => date("Y-m-d H:i:s"),
-            'post_id' => NULL,
+            'post_id' => $parent_post != NULL ? $parent_post->post_id : $post_id,
             'created_by' => $user_id,
-            'log_text' => json_encode($data)
+            'log_text' => "Delete Post"
         );
       //  print_r($data);
         $this->db->insert('channel_action', $channel_action);
         $this->db->where(array(
-            'post_stream_id' => $post_stream_id,
+            'post_id' => $post_id,
         ));        
-        $return = $this->db->delete('social_stream');
-        print_r($return);
+        $return = $this->db->update('social_stream', array('is_deleted' => 1));
         $this->db->trans_complete();
         return $return;
+    }
+    
+    public function GetFbCommentDetail($filter){
+	$this->db->select("*");
+	$this->db->from('social_stream_fb_comments');
+	$this->db->where($filter);
+	$result = $this->db->get()->result();
+	return $result;
     }
     
     function IsFacebookConversation($stream_id){

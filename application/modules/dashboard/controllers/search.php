@@ -33,9 +33,22 @@ class Search extends CI_Controller {
      public function index()
      {
 	  //$this->indexing();
+	  $this->load->model('campaign_model');
 	  $q = $this->input->post('q');
 	  $channel_id = $this->input->post('channel_id');
 	  $the_channel = $this->account_model->GetChannel(array('channel_id' => $channel_id));
+	  $product_list = $this->campaign_model->GetProduct(array('parent_id' => null));
+	  foreach($product_list as $prod){    
+	       $product_child = $this->campaign_model->GetProduct(array('parent_id' => $prod->id));
+	       
+	       if($product_child){
+		   $chi = array();
+		   foreach($product_child as $child){
+		       $chi[] = $child;
+		   }
+		   $prod->child = $chi;
+	       }
+	   }
 	  if($the_channel[0]->connection_type == 'facebook'){
 	       $fb_feed = (object)$this->elasticsearch_model->GlobalSearch($this->the_index,'facebook_feed',$q);
 	       if($fb_feed->hits['hits']){
@@ -92,19 +105,8 @@ class Search extends CI_Controller {
 	       $data['count_fb_feed']=$this->facebook_model->CountFeedFB($filter);
 	       $data['CountPmFB']=$this->facebook_model->CountPmFB($filter);
 	       $data['channel_id'] = $channel_id;
-	       $this->load->model('campaign_model');
-	       $product_list = $this->campaign_model->GetProduct(array('parent_id' => null));
-	       foreach($product_list as $prod){    
-		    $product_child = $this->campaign_model->GetProduct(array('parent_id' => $prod->id));
-		    
-		    if($product_child){
-			$chi = array();
-			foreach($product_child as $child){
-			    $chi[] = $child;
-			}
-			$prod->child = $chi;
-		    }
-		}
+	       
+	       
 	       $data['product_list'] = $product_list;
 	       $this->load->model('case_model');
 	       $data['user_list'] = $this->case_model->ReadAllUser();
@@ -225,7 +227,7 @@ class Search extends CI_Controller {
 	
 	       $data['channel_id'] = $channel_id;
 	       $this->load->model('campaign_model');
-	       $data['product_list'] = $this->campaign_model->GetProduct();
+	       $data['product_list'] = $product_list;
 	       $data['channel_id'] = $channel_id;
 	       $data['user_list'] = $this->case_model->ReadAllUser();
 	       $data['is_search'] = TRUE;

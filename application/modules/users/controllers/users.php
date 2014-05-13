@@ -1151,12 +1151,7 @@ class Users extends MY_Controller {
     {
 	$country_code = IsRoleFriendlyNameExist($this->user_role, 'User Management_Group_All_Country_View') ? NULL : $this->session->userdata('country');
      if(IsRoleFriendlyNameExist($this->user_role, array('User Management_Group_All_Country_View', 'User Management_Group_Own_Country_View'))){
-	  $select_group = $this->users_model->select_group();
-	  foreach($select_group->result() as $v1)
-	  {
-	       $select_user = $this->users_model->count_group_user($v1->group_id);
-	       $count_group[] = $select_user->row()->count_group; 
-	  }
+	
 	  
 	  $config['base_url'] = base_url().'users/menu_group';
 	  $config['total_rows'] = $this->users_model->count_record_group($country_code);
@@ -1175,8 +1170,14 @@ class Users extends MY_Controller {
 	  $this->pagination->initialize($config);
 	  
 	  $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+	    $select_group = $this->users_model->select_group();
+	  
 	  $data['group'] = $this->users_model->select_group1($config["per_page"], $page, $country_code);
-	  $data['count_group'] = $count_group;
+	  foreach($data['group'] as $v1)
+	  {
+	       $select_user = $this->users_model->count_group_user($v1->group_id);
+	       $v1->user_count = $select_user->row()->count_group; 
+	  }
 	  $data['plus'] = $this->uri->segment(3);
      
 	  $data['links'] = $this->pagination->create_links();

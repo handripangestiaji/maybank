@@ -25,7 +25,7 @@
                     <tr>
                       <td style="width:100px"><?php
                         $timezone = new DateTimeZone($this->session->userdata('timezone'));
-                        $date=new DateTime($action->created_at.' Europe/London');
+                        $date=new DateTime($action->created_at.' UTC');
                         $date->setTimezone($timezone);
                         echo $date->format('l, M j, Y h:i A');
                         

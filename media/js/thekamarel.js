@@ -2053,17 +2053,23 @@ $(function(){
                                            {
                                             channel_id : channel_1,
                                             q : $('.dashboard-search-field').val()
+                                            }, function(){
+                                                $(this).BindMultipleSelect();
                                             });
                 $('#box-id-2').next().load(BASEURL + 'dashboard/search',
                                            {
                                             channel_id : channel_2,
                                             q : $('.dashboard-search-field').val()
+                                            }, function(){
+                                                $(this).BindMultipleSelect();
                                             });
                 
                 $('#box-id-3').next().load(BASEURL + 'dashboard/search',
                                            {
                                             channel_id : channel_3,
                                             q : $('.dashboard-search-field').val()
+                                            }, function(){
+                                                $(this).BindMultipleSelect();
                                             });
                 //window.location.href = BASEURL + 'dashboard/search?q=' + $('.dashboard-search-field').val();
             }
@@ -2082,17 +2088,23 @@ $(function(){
                                            {
                                             channel_id : channel_1,
                                             q : $('.dashboard-search-field').val()
+                                            },function(){
+                                                $(this).BindMultipleSelect();
                                             });
                 $('#box-id-2').next().load(BASEURL + 'dashboard/search',
                                            {
                                             channel_id : channel_2,
                                             q : $('.dashboard-search-field').val()
+                                            },function(){
+                                                $(this).BindMultipleSelect();
                                             });
                 
                 $('#box-id-3').next().load(BASEURL + 'dashboard/search',
                                            {
                                             channel_id : channel_3,
                                             q : $('.dashboard-search-field').val()
+                                            }, function(){
+                                                $(this).BindMultipleSelect();
                                             });
                 //window.location.href = BASEURL + 'dashboard/search?q=' + $('.dashboard-search-field').val();
             }

@@ -30,7 +30,7 @@
         <p>New case has been assigned to you please response by entering Maybank DCMS. Detail of case below:</p>
         
         <table>
-            <tr><td>CASE ID</td><td>:</td><td><a href="<?=base_url('dashboard/socialmedia').'#case/'.$case_object->type.'/'.$case_object->post_id?>">#<?=$case_object->case_id?></a></td></tr>
+            <tr><td>CASE ID</td><td>:</td><td>#<?=$case_object->case_id?></td></tr>
             <tr><td>Product Name</td><td>:</td><td><?=isset($case_object->content_products_id->product_name) ? $case_object->content_products_id->product_name : 'No Product'?></td></tr>
             <tr><td>Assigned By</td><td>:</td><td><?=$case_object->created_by->email.' <'.$case_object->created_by->full_name.'>'?> </td></tr>
             <tr><td>Messages</td><td>:</td><td><?=$case_object->messages?></td></tr>

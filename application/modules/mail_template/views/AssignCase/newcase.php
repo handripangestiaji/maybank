@@ -35,8 +35,8 @@
             <tr><td>Assigned By</td><td>:</td><td><?=$case_object->created_by->email.' <'.$case_object->created_by->full_name.'>'?> </td></tr>
             <tr><td>Messages</td><td>:</td><td><?=$case_object->messages?></td></tr>
             <tr><td>Status</td><td>:</td><td><?=$case_object->status?></td></tr>
-            <tr><td>Assigned At</td><td>:</td><td><?php $date = new DateTime($case_object->created_at, new DateTimeZone($case_object->created_by->timezone));
-                echo $date->format("d F y H:i");
+            <tr><td>Assigned At</td><td>:</td><td><?php $date = new DateTime($case_object->created_at.' UTC', new DateTimeZone($case_object->created_by->timezone));
+                echo $date->format("l, M j, Y h:i A");
             ?></td></tr>
         </table>
         <?php

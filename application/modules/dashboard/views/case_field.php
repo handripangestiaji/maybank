@@ -75,6 +75,7 @@ if($posts){
                       if(is_array($user_list)){
                         for($userIncrement=0;$userIncrement<count($user_list);$userIncrement++){
                             $is_same_country = $this->session->userdata('country') == $user_list[$userIncrement]->user_country_code;
+                            if($user_list[$userIncrement]->is_hidden == 1) continue;
                             if($user_list[$userIncrement]->group_name != $group_name){
                                 echo '<optgroup label="'.$user_list[$userIncrement]->group_name.'"></optgroup>';
                                 $group_name = $user_list[$userIncrement]->group_name;  

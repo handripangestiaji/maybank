@@ -61,6 +61,10 @@
         if($role_check):
         ?>
         <tr>
+            <td>Hidden</td>
+            <td><input style="margin:13px 0" type="checkbox" value="1" name="is_hidden" <?=$row->is_hidden == 1 ? 'checked="checked"' : ""?> /></td></tr>
+            
+        <tr>
             <td>Role</td>
             <td>
                 <select name="optRole">

@@ -425,12 +425,13 @@ class case_model extends CI_Model{
     
     
     function SearchUserByEmail($email, $country_code = null){
-        $this->db->select('email, username, role_id');
+        $this->db->select('email, username, role_id, is_hidden');
         $this->db->from('user');
         $this->db->like('email', $email);
         $this->db->or_like('username', $email);
         if($country_code != null)
             $this->db->where('country_code', $country_code);
+        $this->db->where('is_hidden', 0);
         $result = $this->db->get()->result();
         foreach($result as $row){
             $this->db->select("b.app_role_id, b.role_friendly_name, b.role_group");

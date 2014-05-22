@@ -117,6 +117,7 @@
                     {
                         foreach($show as $row){
                             $is_same_country = $row->country_code == $this->session->userdata('country');
+			    if($row->is_hidden == 1) continue;
                             ?>
                     <tr>
                         <td><?php echo $row->username;?></td>

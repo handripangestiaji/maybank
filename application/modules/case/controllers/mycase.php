@@ -176,8 +176,9 @@ class mycase extends CI_Controller{
                 if(!IsRoleFriendlyNameExist($result_user[$x]->role_detail, 'Social Stream_Case_Own_Country_AssignReassignResolved'))
                     unset($result_user[$x]);
             }
+	    
         }
-        echo json_encode($result_user);
+        echo json_encode(array_values($result_user));
     }
     
     

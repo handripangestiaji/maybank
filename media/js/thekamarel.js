@@ -2379,6 +2379,7 @@ $.fn.RefreshAllStream = function(){
                 $(this).load(BASEURL + 'dashboard/media_stream/facebook_stream/' + channelId + '/' + is_read + "?uid=" + Math.random(), function(){
                     $(this).find('.channel-id').val(channelId);
                     $(this).BindMultipleSelect();
+                    $(this).TagItEmail();
                 });
             }
             else if($(this).closest('div').prev().find('i').attr('class') == 'icon-twitter'){
@@ -2386,6 +2387,7 @@ $.fn.RefreshAllStream = function(){
                 $(this).load(BASEURL + 'dashboard/media_stream/twitter_stream/' + channelId + '/'+ is_read + "?uid=" + Math.random(), function(){
                     $(this).find('.channel-id').val(channelId);
                     $(this).BindMultipleSelect();
+                    $(this).TagItEmail();
                 });
             
             }
@@ -2394,6 +2396,7 @@ $.fn.RefreshAllStream = function(){
                 $(this).load(BASEURL + 'dashboard/media_stream/youtube_stream/' + channelId + '/'+ is_read + "?uid=" + Math.random(), function(){
                     $(this).find('.channel-id').val(channelId);
                     $(this).BindMultipleSelect();
+                    $(this).TagItEmail();
                 });
             
             }
@@ -2402,7 +2405,35 @@ $.fn.RefreshAllStream = function(){
         }
     });
 };
+$.fn.TagItEmail = function(){
+    $('.email').tagit({
+        autocomplete : {
+            source:  function( request, response ) {
+                $.ajax({
+                    "url" : BASEURL + "case/mycase/SearchEmail",
+                    data : {
+                        term : request.term
+                    },
+                    success : function(data){
+                        response( $.map( data, function( item ) {
+                            return {
+                              label: item.username + "(" + item.email + ")",
+                              value: item.email
+                            }
+                        }));
+                    }
+                });
+            }
+        },
+        beforeTagAdded : function(event, ui){
+            if(validateEmail(ui.tagLabel))
+                return true;
+            else
+                return false;
 
+        }
+    });
+}
 $.fn.BindMultipleSelect = function(){
     $('.multipleSelect').multiselect({
             buttonText: function(options, select) {

@@ -323,7 +323,21 @@ class Users extends MY_Controller {
 	  $checkMail = $this->users_model->check_email($this->input->post('email'));
 	  $email = $this->input->post('email');
 	  $email1 = $this->input->post('email1');
-	  
+	  $data = array(
+		'full_name' => $this->input->post('fullName'),
+		'display_name' => $this->input->post('displayName'),
+		'email' => $this->input->post('email'),
+		'role_id' => $this->input->post('optRole'),
+		'group_id' => $this->input->post('optGroup'),
+		'description' => $this->input->post('description'),
+		'location' => $this->input->post('location'),
+		'timezone' => $this->input->post('timezone'),
+		'web_address' =>$this->input->post('web_address'),
+		'is_active' => $this->input->post('is_active'),
+		'country_code' => $this->input->post('country'),
+		'is_hidden' => $this->input->post('is_hidden')
+	    );
+	 
 	  if($this->form_validation->run() == FALSE)
 	  {
 	       $data = array(
@@ -334,18 +348,17 @@ class Users extends MY_Controller {
 		   );
 	       $this->load->view('users/edit_user',$data);
 	  }
-	  
 	  elseif($checkMail->num_rows() >= 1)
 	  {
 	       if($email!=$email1)
 	       {
-		    $data = array(
+		    $data_edit = array(
 			'id' => $this->users_model->get_byid($this->input->post('userID')),
 			'role' => $this->users_model->select_role(),
 			'group' => $this->users_model->select_group(),
 			'double' => 1
 			);
-		    $this->load->view('users/edit_user',$data);
+		    $this->load->view('users/edit_user',$data_edit);
 	       }
 	       else
 	       {
@@ -361,41 +374,25 @@ class Users extends MY_Controller {
 			  {
 			      $image = $this->upload->data();
 			      $dir = "media/dynamic/".$image['file_name'];
-			      
+			      $data['image_url'] = $dir;
 			      $id = $this->input->post('userID');
-			      $data = array(
-					  'full_name' => $this->input->post('fullName'),
-					  'display_name' => $this->input->post('displayName'),
-					  'email' => $this->input->post('email'),
-					  'role_id' => $this->input->post('optRole'),
-					  'group_id' => $this->input->post('optGroup'),
-					  'image_url' => $dir,
-					  'description' => $this->input->post('description'),
-					  'location' => $this->input->post('location'),
-					  'timezone' => $this->input->post('timezone'),
-					  'web_address' =>$this->input->post('web_address'),
-					  'is_active' => $this->input->post('is_active'),
-					  'country_code' => $this->input->post('country')
-					    );
-			      
 			      $this->users_model->update_user($id,$data);
-			      
 			      $username = $this->session->userdata('user_id');
 			      $user_login = $this->users_model->select_user_login($username);
-			      
-			      $data1 = array(
-					  'user_id' => $username,
-					  'username' => $user_login->row()->username,
-					  'full_name'=> $user_login->row()->full_name,
-					  'display_name' => $user_login->row()->display_name,
-					  'role_name' => $user_login->row()->role_name,
-					  'web_address' => $user_login->row()->web_address,
-					  'image_url' => $user_login->row()->image_url,
-					  'timezone' => $user_login->row()->timezone,
-					  'description' => $user_login->row()->description,
-					  'is_login' => TRUE
-				      );
-			      $this->session->set_userdata($data1);
+			        $data_loggedin = array(
+				    'user_id' => $username,
+				    'username' => $user_login->row()->username,
+				    'full_name'=> $user_login->row()->full_name,
+				    'display_name' => $user_login->row()->display_name,
+				    'role_name' => $user_login->row()->role_name,
+				    'web_address' => $user_login->row()->web_address,
+				    'image_url' => $user_login->row()->image_url,
+				    'timezone' => $user_login->row()->timezone,
+				    'description' => $user_login->row()->description,
+				    'is_login' => TRUE
+				);
+			     
+			      $this->session->set_userdata($data_loggedin);
 			      
 			      $this->session->set_flashdata('info', TRUE);
 			      redirect('users');
@@ -405,38 +402,25 @@ class Users extends MY_Controller {
 		    elseif(empty($_FILES['userfile']['tmp_name']))
 		    {
 			      $id = $this->input->post('userID');
-			      $data = array(
-					  'full_name' => $this->input->post('fullName'),
-					  'display_name' => $this->input->post('displayName'),
-					  'email' => $this->input->post('email'),
-					  'role_id' => $this->input->post('optRole'),
-					  'group_id' => $this->input->post('optGroup'),
-					  'description' => $this->input->post('description'),
-					  'location' => $this->input->post('location'),
-					  'timezone' => $this->input->post('timezone'),
-					  'web_address' =>$this->input->post('web_address'),
-					  'is_active' => $this->input->post('is_active'),
-					  'country_code' => $this->input->post('country')
-					    );
+			      
 			      
 			      $this->users_model->update_user($id,$data);
 			      
 			      $username = $this->session->userdata('user_id');
 			      $user_login = $this->users_model->select_user_login($username);
-			      
-			      $data1 = array(
-					  'user_id' => $username,
-					  'username' => $user_login->row()->username,
-					  'full_name'=> $user_login->row()->full_name,
-					  'display_name' => $user_login->row()->display_name,
-					  'role_name' => $user_login->row()->role_name,
-					  'web_address' => $user_login->row()->web_address,
-					  'timezone' => $user_login->row()->timezone,
-					  'description' => $user_login->row()->description,
-					  'country' => $user_login->row()->country_code,
-					  'is_login' => TRUE
-				      );
-			      $this->session->set_userdata($data1);
+			      $data_loggedin = array(
+				    'user_id' => $username,
+				    'username' => $user_login->row()->username,
+				    'full_name'=> $user_login->row()->full_name,
+				    'display_name' => $user_login->row()->display_name,
+				    'role_name' => $user_login->row()->role_name,
+				    'web_address' => $user_login->row()->web_address,
+				    'image_url' => $user_login->row()->image_url,
+				    'timezone' => $user_login->row()->timezone,
+				    'description' => $user_login->row()->description,
+				    'is_login' => TRUE
+				);
+			      $this->session->set_userdata($data_loggedin);
 			      
 			      $this->session->set_flashdata('info', TRUE);
 			      redirect('users');
@@ -459,22 +443,10 @@ class Users extends MY_Controller {
 			 $image = $this->upload->data();
 			 $dir = "media/dynamic/".$image['file_name'];
 			 
-			 $id = $this->input->post('userID');
-			 $data = array(
-				     'full_name' => $this->input->post('fullName'),
-				     'display_name' => $this->input->post('displayName'),
-				     'email' => $this->input->post('email'),
-				     'role_id' => $this->input->post('optRole'),
-				     'group_id' => $this->input->post('optGroup'),
-				     'image_url' => $dir,
-				     'description' => $this->input->post('description'),
-				     'location' => $this->input->post('location'),
-				     'timezone' => $this->input->post('timezone'),
-				     'web_address' =>$this->input->post('web_address'),
-				     'is_active' => $this->input->post('is_active')
-				       );
+			$id = $this->input->post('userID');
+			$data['image_url'] = $dir;
 			 
-			 $this->users_model->update_user($id,$data);
+			$this->users_model->update_user($id,$data);
 			 
 			 $username = $this->session->userdata('user_id');
 			 $user_login = $this->users_model->select_user_login($username);

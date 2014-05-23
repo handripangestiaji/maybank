@@ -40,7 +40,11 @@
         <input type="hidden" value="<?php echo $mentions[$i]->case[0]->case_id?>" name="case_id" class="case_id" />
         <input type="hidden" value="<?php echo $mentions[$i]->case[0]->status?>" name="case_status" class="case_status" />
     <?php } ?>
-    <textarea class='replaycontent' placeholder="Compose Message" name="content"><?php echo $type == 'reply' ? '@'.$mentions[$i]->screen_name : ''; ?> &nbsp;</textarea>
+    <br />
+    <div class="textarea-container" onclick="$(this).siblings('textarea').focus()">
+        <div class="left screen-name">@<?php echo $mentions[$i]->screen_name?></div>
+        <textarea class='replaycontent' placeholder="" name="content"  style="float:left;text-indent:<?=strlen($mentions[$i]->screen_name) * 8?>px"></textarea>
+    </div>
     <br clear="all" />
      <?php  if($type == 'reply'):?>
      <div class="pull-left"  style="margin-bottom: 5px;">

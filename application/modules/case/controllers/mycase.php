@@ -33,11 +33,8 @@ class mycase extends CI_Controller{
             $validation[] = array('type' => 'required','name' => 'product_type','value' => $this->input->post('product_type'), 'fine_name' => "Product Type");
         }        
         $validation[] = array('type' => 'required','name' => 'message','value' => $this->input->post('message'), 'fine_name' => "Messages");
-
-	if($allPost['assign_to'])
-            $validation[] = array('type' => 'required','name' => 'assign_to','value' => $allPost['assign_to'], 'fine_name' => "Assign To");
-        else
-            $validation[] = array('type' => 'required','name' => 'email','value' => $this->input->post('email'), 'fine_name' => "Email");
+        $validation[] = array('type' => 'required','name' => 'assign_to','value' => $allPost['assign_to'], 'fine_name' => "Assign To");
+        //$validation[] = array('type' => 'required','name' => 'email','value' => $this->input->post('email'), 'fine_name' => "Email");
             
         $is_valid = CheckValidation($validation, $this->validation);
         if($is_valid === true){

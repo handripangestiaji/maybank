@@ -152,7 +152,7 @@ class Media_stream extends CI_Controller {
 	if($this->input->post('product_type'))
 	    $twitter_reply['content_products_id'] = $this->input->post('product_type');
 	$twitter_reply['reply_type'] = $this->input->post('reply_type');
-	$twitter_reply['text'] = $this->input->post('content');
+	$twitter_reply['text'] = '@'.$this->input->post('twitter_user')." ".$this->input->post('content');
 	$twitter_reply['user_id'] = $this->session->userdata('user_id');
 	$twitter_reply['user_id'] = $this->session->userdata('user_id');
 	$tags=$this->input->post('tag_id');
@@ -234,7 +234,7 @@ class Media_stream extends CI_Controller {
     							    $channel->oauth_secret);
     	    if($this->input->post('type') == 'reply'){
     		$twitter_data = $twitter_data[0];
-    		$parameters = array('status' => $this->input->post('content'),'in_reply_to_status_id'=>$twitter_data->post_stream_id);
+    		$parameters = array('status' => '@'.$this->input->post('twitter_user')." ". $this->input->post('content'),'in_reply_to_status_id'=>$twitter_data->post_stream_id);
     		 if($twitter_reply['image_to_post']){
     		    $this->load->helper('file');
     		    $img = $twitter_reply['image_to_post'];
@@ -1064,17 +1064,16 @@ class Media_stream extends CI_Controller {
         
         if($action=='feed'){
             $filter['b.type'] = 'home_feed';
-        	$data['homefeed']=$this->twitter_model->ReadTwitterData($filter,$limit); 
+            $data['homefeed']=$this->twitter_model->ReadTwitterData($filter,$limit); 
             $data['countFeed']=$this->twitter_model->CountTwitterData($filter);
-             $this->load->view('dashboard/twitter/twitter_homefeed.php',$data);
+            $this->load->view('dashboard/twitter/twitter_homefeed.php',$data);
         }
         
         if($action=='user_timeline'){
-        	$filter['b.type'] = 'user_timeline';
-        	$data['senttweets']=$this->twitter_model->ReadTwitterData($filter,$limit);
+            $filter['b.type'] = 'user_timeline';
+            $data['senttweets']=$this->twitter_model->ReadTwitterData($filter,$limit);
             $data['countTweets']=$this->twitter_model->CountTwitterData($filter);
-             $this->load->view('dashboard/twitter/twitter_senttweets.php',$data);
-
+            $this->load->view('dashboard/twitter/twitter_senttweets.php', $data);
         }
         if($action=='direct'){
             $filter['a.channel_id']=$channel_ids;

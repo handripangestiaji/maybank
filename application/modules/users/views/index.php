@@ -117,9 +117,9 @@
                     {
                         foreach($show as $row){
                             $is_same_country = $row->country_code == $this->session->userdata('country');
-			    if($row->is_hidden == 1) continue;
+			    if($row->is_hidden == 1 && !IsRoleFriendlyNameExist($this->user_role, 'User Management_User_All_Country_Edit')) continue;
                             ?>
-                    <tr>
+                    <tr <?php echo $row->is_hidden == 1 ? 'class="hidden-data"' : '' ?>>
                         <td><?php echo $row->username;?></td>
                         <td><?php echo $row->display_name;?></td>
                         <td><?php echo $row->email;?></td>

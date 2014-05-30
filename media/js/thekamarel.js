@@ -17,6 +17,7 @@ var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
 ======================== JQUERY EXPRESSION FOR CASE SENSITIVE FILTER ==========================
 =============================================================================================*/
 
+var timezone = jstz.determine();
 $.extend($.expr[":"],
     {
         "contains-ci": function(elem, i, match, array)
@@ -24,7 +25,8 @@ $.extend($.expr[":"],
             return (elem.textContent || elem.innerText || $(elem).text() || "").toLowerCase().indexOf((match[3] || "").toLowerCase()) >= 0;
         }
     });
-
+timezoneJS.timezone.zoneFileBasePath = "/media/js/timezone-js/tzdata-latest";
+timezoneJS.timezone.init();
 $(function(){
 
     $('.multipleSelect').multiselect({
@@ -1662,14 +1664,11 @@ $(function(){
                         else{
                             var len=$(this).parent().siblings(".replaycontent").val().length
                             var commnetbox;
-                        console.log($(this).parent().siblings('.option-type').find(".productType").val());
-                        if($(this).parent().siblings('.option-type').find(".productType").val() != undefined){ 
+                        if($(this).closest('.reply-field').find('.case_id').length == 0)
                             var confirmStatus = confirm("Please make sure the case type !");
-                        }
-                        else{
+                        else
                             var confirmStatus = true;
-                        }
-                        
+                            
                         if(confirmStatus == true){
                             
                             commnetbox=$(this).parent().siblings(".replaycontent").val();
@@ -2054,17 +2053,23 @@ $(function(){
                                            {
                                             channel_id : channel_1,
                                             q : $('.dashboard-search-field').val()
+                                            }, function(){
+                                                $(this).BindMultipleSelect();
                                             });
                 $('#box-id-2').next().load(BASEURL + 'dashboard/search',
                                            {
                                             channel_id : channel_2,
                                             q : $('.dashboard-search-field').val()
+                                            }, function(){
+                                                $(this).BindMultipleSelect();
                                             });
                 
                 $('#box-id-3').next().load(BASEURL + 'dashboard/search',
                                            {
                                             channel_id : channel_3,
                                             q : $('.dashboard-search-field').val()
+                                            }, function(){
+                                                $(this).BindMultipleSelect();
                                             });
                 //window.location.href = BASEURL + 'dashboard/search?q=' + $('.dashboard-search-field').val();
             }
@@ -2083,17 +2088,23 @@ $(function(){
                                            {
                                             channel_id : channel_1,
                                             q : $('.dashboard-search-field').val()
+                                            },function(){
+                                                $(this).BindMultipleSelect();
                                             });
                 $('#box-id-2').next().load(BASEURL + 'dashboard/search',
                                            {
                                             channel_id : channel_2,
                                             q : $('.dashboard-search-field').val()
+                                            },function(){
+                                                $(this).BindMultipleSelect();
                                             });
                 
                 $('#box-id-3').next().load(BASEURL + 'dashboard/search',
                                            {
                                             channel_id : channel_3,
                                             q : $('.dashboard-search-field').val()
+                                            }, function(){
+                                                $(this).BindMultipleSelect();
                                             });
                 //window.location.href = BASEURL + 'dashboard/search?q=' + $('.dashboard-search-field').val();
             }
@@ -2365,24 +2376,27 @@ $.fn.RefreshAllStream = function(){
             var is_read = $(this).siblings('.containerHeadline').find('.change-read-unread-stream').val();
             if($(this).closest('div').prev().find('i').attr('class') == 'icon-facebook'){
                 $(this).html('&nbsp;&nbsp;Loading...');        
-                $(this).load(BASEURL + 'dashboard/media_stream/facebook_stream/' + channelId + '/' + is_read, function(){
+                $(this).load(BASEURL + 'dashboard/media_stream/facebook_stream/' + channelId + '/' + is_read + "?uid=" + Math.random(), function(){
                     $(this).find('.channel-id').val(channelId);
                     $(this).BindMultipleSelect();
+                    $(this).TagItEmail();
                 });
             }
             else if($(this).closest('div').prev().find('i').attr('class') == 'icon-twitter'){
                 $(this).html('&nbsp;&nbsp;Loading...');        
-                $(this).load(BASEURL + 'dashboard/media_stream/twitter_stream/' + channelId + '/'+ is_read, function(){
+                $(this).load(BASEURL + 'dashboard/media_stream/twitter_stream/' + channelId + '/'+ is_read + "?uid=" + Math.random(), function(){
                     $(this).find('.channel-id').val(channelId);
                     $(this).BindMultipleSelect();
+                    $(this).TagItEmail();
                 });
             
             }
             else if($(this).closest('div').prev().find('i').attr('class') == 'icon-youtube'){
                 $(this).html('&nbsp;&nbsp;Loading...');        
-                $(this).load(BASEURL + 'dashboard/media_stream/youtube_stream/' + channelId + '/'+ is_read, function(){
+                $(this).load(BASEURL + 'dashboard/media_stream/youtube_stream/' + channelId + '/'+ is_read + "?uid=" + Math.random(), function(){
                     $(this).find('.channel-id').val(channelId);
                     $(this).BindMultipleSelect();
+                    $(this).TagItEmail();
                 });
             
             }
@@ -2391,7 +2405,35 @@ $.fn.RefreshAllStream = function(){
         }
     });
 };
+$.fn.TagItEmail = function(){
+    $('.email').tagit({
+        autocomplete : {
+            source:  function( request, response ) {
+                $.ajax({
+                    "url" : BASEURL + "case/mycase/SearchEmail",
+                    data : {
+                        term : request.term
+                    },
+                    success : function(data){
+                        response( $.map( data, function( item ) {
+                            return {
+                              label: item.username + "(" + item.email + ")",
+                              value: item.email
+                            }
+                        }));
+                    }
+                });
+            }
+        },
+        beforeTagAdded : function(event, ui){
+            if(validateEmail(ui.tagLabel))
+                return true;
+            else
+                return false;
 
+        }
+    });
+}
 $.fn.BindMultipleSelect = function(){
     $('.multipleSelect').multiselect({
             buttonText: function(options, select) {
@@ -2430,7 +2472,7 @@ $.fn.ToCase = function(type){
         'data' : 'case_id=' + thisElement.find('.pointer-case').val(),
         'success' : function(response){
             $('#caseNotification').show();
-            
+            var img ="";
             if(response.status == 'pending'){
                 $('#caseNotification .btn-assign-popup > span').html('ReAssign');
                 $('#caseNotification .btn-resolve').show();
@@ -2459,7 +2501,8 @@ $.fn.ToCase = function(type){
             $('#caseNotification .reply-preview-img').attr('src', '').closest('#reply-img-show').hide();
             $('#caseNotification .solved-message').html(response.solved_message);
             $('#caseNotification .tag_notif').siblings('.btn-group').find('button').attr('disabled','disabled');
-            
+            var myDate = new timezoneJS.Date(response.main_post.post_date == undefined ? response.main_post.created_at + " +0000" : response.main_post.post_date + " +0000");
+            myDate.setTimezone(timezone.name());
             if(response.status == "pending"){
                 $('#caseNotification .solved-message').closest('tr').hide();
                 $('#caseNotification .replyType').hide().val(response.case_type);
@@ -2478,7 +2521,7 @@ $.fn.ToCase = function(type){
                 $('#caseNotification .data-type').val('reply');
                 $('#caseNotification .twitter-userid').val(response.main_post.twitter_user_id);
                 $('#caseNotification .replaycontent').val('@' + response.main_post.screen_name);
-               
+                
             
                 if(response.main_post.twitter_entities.media != undefined){
                     for(te = 0; te < response.main_post.twitter_entities.media.length; te++)
@@ -2495,10 +2538,11 @@ $.fn.ToCase = function(type){
                  $template2 = '<li style="display: block;">' +
                      '<img src="'+ BASEURL + 'dashboard/media_stream/SafePhoto?photo=' + response.main_post.profile_image_url  + '" alt="" style="height: 40px;margin: 6px 10px" class="left" />' + 
                         '<p style="padding: 0px 2px;margin: 2px 5px;width:80%" class="left">' + 
-                            '<span class="author" style="font-weight:600;padding:0;">' + response.main_post.screen_name + '</span>: ' +
+                            '<span class="author" style="font-weight:600;padding:0;">' + response.main_post.screen_name + '</span> <span class="cyanText" style="text-transform:capitalize;"> Mentions</span> ' +
+                            '<span class="UTCTime"> ' + dateFormat(myDate, "mmmm dS, yyyy h:MM TT") +
+                            '</span><br />'+
                             '<span class="text">'+ linkify(response.main_post.text) + '</span><br />' + img + 
-                            '<span class="created-time" style="font-size:10px;color: #62312A;">' + response.main_post.social_stream_created_at  +
-                            '</span>'+
+                            
                         '</p>' + 
                         '<br clear="all"/>' +
                     '</li>';
@@ -2514,10 +2558,10 @@ $.fn.ToCase = function(type){
                 $template2 = '<li style="display: block;">' +
                      '<img src="'+ BASEURL + 'dashboard/media_stream/SafePhoto?photo=' + response.main_post.profile_image_url  + '" alt="" style="height: 40px;margin: 6px 10px" class="left" />' + 
                         '<p style="padding: 0px 2px;margin: 2px 5px;width:80%" class="left">' + 
-                            '<span class="author" style="font-weight:600;padding:0;">' + response.main_post.screen_name + '</span>: ' +
+                            '<span class="author" style="font-weight:600;padding:0;">' + response.main_post.screen_name + '</span>:  <span class="cyanText" style="text-transform:capitalize;"> Direct Message</span> ' +
+                            '<span class="created-time">' + dateFormat(myDate, "mmmm dS, yyyy h:MM TT")  +
+                            '</span> <br />'+
                             '<span class="text">'+ linkify(response.main_post.text) + '</span><br />' + 
-                            '<span class="created-time" style="font-size:10px;color: #62312A;">' + response.main_post.social_stream_created_at  +
-                            '</span>'+
                         '</p>' + 
                         '<br clear="all"/>' +
                     '</li>';
@@ -2547,11 +2591,11 @@ $.fn.ToCase = function(type){
                 $template2 = '<li style="display: block;">' +
                 '<img src="'+ BASEURL + 'dashboard/media_stream/SafePhoto?photo=https://graph.facebook.com/' + response.main_post.author_id  + '/picture" alt="" style="height: 40px;margin: 6px 10px" class="left" />' + 
                    '<p style="padding: 0px 2px;margin: 2px 5px;width:80%" class="left">' + 
-                       '<span class="author" style="font-weight:600;padding:0;">' + response.main_post.name + '</span>: ' +
+                       '<span class="author" style="font-weight:600;padding:0;">' + response.main_post.name + '</span>: <span class="cyanText" style="text-transform:capitalize;"> Wall Post</span> ' +
+                       '<span class="created-time">' + dateFormat(myDate, "mmmm dS, yyyy h:MM TT")  +
+                       '</span> <br />'+
                        '<span class="text">'+ linkify(response.main_post.post_content) + '</span><br />' +
                        img +
-                       '<span class="created-time" style="font-size:10px;color: #62312A;">' + response.main_post.created_at  +
-                       '</span>'+
                    '</p>' + 
                    '<br clear="all"/>' +
                '</li>';
@@ -2559,14 +2603,17 @@ $.fn.ToCase = function(type){
             else{
                 $('#caseNotification .btn-send').attr('type','button');
                 img = '';
+                myDate = new timezoneJS.Date(response.main_post.post_date + " +0000");
+                myDate.setTimezone(timezone.name());
                    $template2 = '<li style="display: block;">' +
                 '<img src="'+ BASEURL + 'dashboard/media_stream/SafePhoto?photo=https://graph.facebook.com/' + response.main_post.participant.sender.facebook_id + '/picture" alt="" style="height: 40px;margin: 6px 10px" class="left" />' + 
                    '<p style="padding: 0px 2px;margin: 2px 5px;width:80%" class="left">' + 
-                       '<span class="author" style="font-weight:600;padding:0;">' + response.main_post.participant.sender.name + '</span>: ' +
+                       '<span class="author" style="font-weight:600;padding:0;">' + response.main_post.participant.sender.name + '</span>: <span class="cyanText" style="text-transform:capitalize;"> Private Message</span> ' +
+                       '<span class="UTCTimestamp created-time">' +  dateFormat(myDate,"mmmm dS, yyyy h:MM TT") +
+                       '</span> <br />'+
                        '<span class="text">'+ linkify(response.main_post.snippet) + '</span><br />' +
                        img +
-                       '<span class="created-time" style="font-size:10px;color: #62312A;">' + response.main_post.post_date  +
-                       '</span>'+
+                       
                    '</p>' + 
                    '<br clear="all"/>' +
                '</li>';
@@ -2602,9 +2649,9 @@ $.fn.ToCase = function(type){
                 else
                     status = response.main_post.channel_action[x].log_text;
                 
-                
-                
-                template3 = "<tr><td>" + response.main_post.channel_action[x].created_at +
+                var channel_action_date = new  timezoneJS.Date(response.main_post.channel_action[x].created_at + "+0000");
+                channel_action_date.setTimezone(timezone.name());
+                template3 = "<tr><td>" + dateFormat(channel_action_date, "mmmm dS, yyyy h:MM TT") +
                 "</td><td>" + response.main_post.channel_action[x].username + "</td><td>" +
                 response.main_post.channel_action[x].action_type + " </td><td>" + status +"</td><td>" +
                 status2+"</td></tr>";
@@ -2613,26 +2660,40 @@ $.fn.ToCase = function(type){
             
             for(var i=0; i<response.related_conversation.length;i++){
                 if(response.related_conversation[i].type == 'twitter' || response.related_conversation[i].type == 'twitter_dm'){
+                    currentDate = new timezoneJS.Date(response.related_conversation[i]['twitter_data'][0].created_at + " +0000");
+                    currentDate.setTimezone(timezone.name());
+                    var text = {
+                        'twitter_dm' : "Direct Message",
+                        "twitter" : "Mentions"
+                    };
                      $template = '<li style="display: block;">' +
                      '<img src="'+ BASEURL + 'dashboard/media_stream/SafePhoto?photo=' + response.related_conversation[i]['twitter_data'][0].profile_image_url  + '" alt="" style="height: 40px;margin: 6px 10px" class="left" />' + 
                         '<p style="padding: 0px 2px;margin: 2px 5px;width:80%" class="left">' + 
-                            '<span class="author" style="font-weight:600;padding:0;">' + response.related_conversation[i]['twitter_data'][0].screen_name + '</span>: ' +
+                            '<span class="author" style="font-weight:600;padding:0;">' + response.related_conversation[i]['twitter_data'][0].screen_name + '</span>: <span class="cyanText" style="text-transform:capitalize;"> ' + text[response.related_conversation[i].type]+ '</span>' +
+                            '<span class="UTCTimestamp created-time" >' + dateFormat(currentDate,"mmmm dS, yyyy h:MM TT")  +
+                            '</span> <br />'+
                             '<span class="text">'+ linkify(response.related_conversation[i]['twitter_data'][0].text) + '</span><br />' + 
-                            '<span class="created-time" style="font-size:10px;color: #62312A;">' + response.related_conversation[i]['twitter_data'][0].created_at  +
-                            '</span>'+
                         '</p>' + 
                         '<br clear="all"/>' +
                     '</li>';
                 }
-                else if(response.related_conversation[i].type == 'facebook'|| response.related_conversation[i].type == 'facebook conversation' ||
+                else if(response.related_conversation[i].type == 'facebook'|| response.related_conversation[i].type == 'facebook_conversation' ||
                         response.related_conversation[i].type == 'facebook_comment'){
                     var img = '';
+                    currentDate = new Date(response.related_conversation[i]['facebook_data'].created_at);
                     if(response.related_conversation[i]['facebook_data'].attachment != null){
                         if(response.related_conversation[i]['facebook_data'].attachment.type == 'image')
                         img = '<img src="'+BASEURL+'dashboard/media_stream/SafePhoto?photo=' +
                             response.related_conversation[i]['facebook_data'].attachment[0].src +
                             '" style="height:200px" /> <br />';
                     }
+                    var text = 
+                        {
+                            'facebook' : 'Wall Post',
+                            'facebook conversation' : 'Private Messages',
+                            'facebook_comment' : 'Comment'
+                        };
+                    
                     author_id = response.related_conversation[i]['facebook_data'].author_id;
                     post_content  = linkify(response.related_conversation[i]['facebook_data'].post_content);
                     if(response.related_conversation[i].type == 'facebook_comment')
@@ -2643,29 +2704,35 @@ $.fn.ToCase = function(type){
                     $template = '<li style="display: block;">' +
                      '<img src="'+ BASEURL + 'dashboard/media_stream/SafePhoto?photo=https://graph.facebook.com/' +  author_id  + '/picture" alt="" style="height: 40px;margin: 6px 10px" class="left" />' + 
                         '<p style="padding: 0px 2px;margin: 2px 5px;width:80%" class="left">' + 
-                            '<span class="author" style="font-weight:600;padding:0;">' + response.related_conversation[i]['facebook_data'].name + '</span>: ' +
+                            '<span class="author" style="font-weight:600;padding:0;">' + response.related_conversation[i]['facebook_data'].name + '</span>: <span class="cyanText" style="text-transform:capitalize;"> ' + text[response.related_conversation[i].type]+ '</span> ' +
+                            '<span class="UTCTimestamp created-time">' + dateFormat(currentDate,"mmmm dS, yyyy h:MM TT") +
+                            '</span> <br />'+
                             '<span class="text">'+ post_content  + '</span><br />' +
                             img +
-                            '<span class="created-time" style="font-size:10px;color: #62312A;">' + response.related_conversation[i]['facebook_data'].created_at  +
-                            '</span>'+
+                            
                         '</p>' + 
                         '<br clear="all"/>' +
                     '</li>';
                 }
                 else{
+                    currentDate = new Date(response.related_conversation[i]['facebook_data'].created_at );
                     $template = '<li style="display: block;">' +
                      '<img src="'+ BASEURL + 'dashboard/media_stream/SafePhoto?photo=https://graph.facebook.com/' + response.related_conversation[i]['facebook_data'].sender  + '/picture" alt="" style="height: 40px;margin: 6px 10px" class="left" />' + 
                         '<p style="padding: 0px 2px;margin: 2px 5px;width:80%" class="left">' + 
-                            '<span class="author" style="font-weight:600;padding:0;">' + response.related_conversation[i]['facebook_data'].name + '</span>: ' +
+                            '<span class="author" style="font-weight:600;padding:0;">' + response.related_conversation[i]['facebook_data'].name + '</span>: <span class="cyanText" style="text-transform:capitalize;">Private Message </span>' +
+                            '<span class="UTCTimestamp created-time" style="font-size:10px;color: #62312A;">' + dateFormat(currentDate,"mmmm dS, yyyy h:MM TT")  +
+                            '</span> <br />'+
                             '<span class="text">'+ linkify(response.related_conversation[i]['facebook_data'].messages) + '</span><br />' + 
-                            '<span class="created-time" style="font-size:10px;color: #62312A;">' + response.related_conversation[i]['facebook_data'].created_at  +
-                            '</span>'+
                         '</p>' + 
                         '<br clear="all"/>' +
                     '</li>';
                 }
-               
-                $('#caseNotification ol').append($template);
+               if(response.related_conversation[i].post_stream_id != response.main_post.post_stream_id)
+                    $('#caseNotification ol').append($template);
+                if($('#caseNotification ol li').length != 0)
+                    $('#caseRelatedConversation').html('<i class="icon-eye-open"></i> View Related Conversation');
+                else
+                    $('#caseRelatedConversation').html('No Related Conversation');
             }
         }
     });

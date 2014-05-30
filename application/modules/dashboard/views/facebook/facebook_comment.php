@@ -6,7 +6,7 @@
                 <span>posted a <span class="cyanText">comment</span></span>
                 <i class="icon-circle"></i>
                 <span><?php 
-                $date=new DateTime($comment[$j]->created_at.' Europe/London');
+                $date=new DateTime($comment[$j]->created_at.' UTC');
                 $date->setTimezone($timezone);
                 echo $date->format('l, M j, Y h:i A');
                 

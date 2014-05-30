@@ -23,7 +23,7 @@ for($i=0;$i<count($homefeed);$i++){
             <i class="icon-circle"></i>
             <span>
             <?php 
-            $date=new DateTime($homefeed[$i]->social_stream_created_at.' Europe/London');
+            $date=new DateTime($homefeed[$i]->social_stream_created_at.' UTC');
             $date->setTimezone($timezone);
             echo $date->format('l, M j, Y h:i A');
             
@@ -62,13 +62,13 @@ for($i=0;$i<count($homefeed);$i++){
             <?php
             if($homefeed[$i]->case[0]->status == "pending"){
                 echo isset($homefeed[$i]->case[0]->assign_to->display_name) ? ' Assign to:'.$homefeed[$i]->case[0]->assign_to->display_name : '';
-                $created_at = new DateTime($homefeed[$i]->case[0]->created_at.' Europe/London', $timezone);
+                $created_at = new DateTime($homefeed[$i]->case[0]->created_at.' UTC', $timezone);
                 
                 echo ' '.$created_at->format("d-M-y h:i A");
             }
             else{
                 echo isset($homefeed[$i]->case[0]->solved_by->display_name) ? ' Resolved By:'.$homefeed[$i]->case[0]->solved_by->display_name: '';
-                $solved_at = new DateTime($homefeed[$i]->case[0]->solved_at.' Europe/London', $timezone);
+                $solved_at = new DateTime($homefeed[$i]->case[0]->solved_at.' UTC', $timezone);
                 
                 echo ' '.$solved_at->format("d-M-y h:i A");
             }

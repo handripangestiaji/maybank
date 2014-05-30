@@ -54,7 +54,28 @@ class Login extends Login_Controller {
 	    $this->load->library('email',$config);
 	    $this->load->library('form_validation');
         }
-        
+        public function TestEmail(){
+	    $config = $this->config->item('mail_provider');
+	    $this->load->library('email',$config);
+	    $this->load->config('mail_config');
+	    $mail_from = $this->config->item('mail_from');
+	    $this->email->set_newline("\r\n");
+    
+	    $mail_from = $this->config->item('mail_from');
+	    
+	    $this->email->from($mail_from['address'],$mail_from['name']);
+    
+	    $this->email->to('sikomo.eko@gmail.com');
+	    $this->email->bcc($mail_from['cc']);
+	    
+	    $this->email->subject('Forgot Password');
+	    $template = curl_get_file_contents(base_url('mail_template/ForgotPass/123128763/giveitaway'));
+	    $this->email->message($template);
+	    
+	    $this->email->send();
+	    
+	    $this->email->print_debugger();
+	}
         function index()
         {
             $this->load->view('login/index');
@@ -89,7 +110,7 @@ class Login extends Login_Controller {
 				'country' => $user_login->row()->country_code,
                                 'is_login' => TRUE
                             );
-                    $timezone = new DateTimeZone("Europe/London");
+                    $timezone = new DateTimeZone("UTC");
                     $time = new DateTime(date("Y-m-d H:i:s e"), $timezone);
                     $this->session->set_userdata($data);
 		    
@@ -152,7 +173,7 @@ class Login extends Login_Controller {
 		    $lower = 'abcdefghijklmnopqrstuvwxyz';
 		    $upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 		    $number = '0123456789';
-		    $simbol = '!@#$%';
+		    $simbol = '~!@';
 		    
 		    $clower = mb_strlen($lower);
 		    $cupper = mb_strlen($upper);
@@ -196,7 +217,7 @@ class Login extends Login_Controller {
 		    $this->email->from($mail_from['address'],$mail_from['name']);
 
 		    $this->email->to($email);
-		    $this->email->cc('monitoring@kalajeda.com');
+		    $this->email->bcc($mail_from['cc']);
 		    
 		    $this->email->subject('Forgot Password');
 		    $template = curl_get_file_contents(base_url('mail_template/ForgotPass/'.$id.'/'.urlencode($pass)));
@@ -216,4 +237,5 @@ class Login extends Login_Controller {
 		    $this->load->view('forgot',$data1);
 	    }
 	}
+
 }

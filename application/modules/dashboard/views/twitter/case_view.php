@@ -33,7 +33,7 @@ $timezone = new DateTimeZone($this->session->userdata('timezone'));
                 <li style="display: block;"><p style="padding: 9px 2px;margin: 2px 5px;">
                     <!--span class="author">@<?=$conversation->twitter_data[0]->screen_name?>: </span-->
                     <span class="text"><?=$html?></span> <span> at </span>
-                    <span class="created-time" style="font-size:10px;color: #666;"><?php $created_at_twitter = new DateTime($conversation->twitter_data[0]->created_at.' Europe/London', $timezone);
+                    <span class="created-time" style="font-size:10px;color: #666;"><?php $created_at_twitter = new DateTime($conversation->twitter_data[0]->created_at.' UTC', $timezone);
                 echo $created_at_twitter->format("d-F-y h:i A")
                 ?></span>
                 </p>     

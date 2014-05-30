@@ -2,7 +2,7 @@
     $timezone = new DateTimeZone($this->session->userdata('timezone'));
     $indicator = array();
     if(count($post->case) > 0){
-        $case_date = new DateTime($post->case[0]->created_at.' Europe/London');
+        $case_date = new DateTime($post->case[0]->created_at.' UTC');
         $case_date->setTimezone($timezone);
         
         $indicator['case'] = ' <button href="#caseNotification" data-toggle="modal" type="button" style="text-align:left" class="btn btn-mini  indicator-case '.
@@ -14,7 +14,7 @@
                                 '</button>' ;
     }
     if(count($post->page_reply) > 0){
-        $reply_date = new DateTime($post->page_reply[0]->created_at.' Europe/London');
+        $reply_date = new DateTime($post->page_reply[0]->created_at.' UTC');
         $reply_date->setTimezone($timezone);
 
         $indicator['reply'] = '<button type="button" class="btn btn-inverse btn-mini replied-btn" style="text-align:left"  value="'.$post->social_stream_post_id.'"> Replied By: '.

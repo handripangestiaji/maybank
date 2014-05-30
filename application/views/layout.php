@@ -113,7 +113,7 @@
 	<script src="<?php echo base_url('media/js/vendor/fullcalendar.min.js')?>"></script>        		<!-- fullcalendar plugin -->
         <script src="<?php echo base_url('media/js/vendor/bootstrap.min.js')?>"></script>
         <script src="<?php echo base_url('media/js/vendor/bootstrap-editable.min.js')?>"></script>             <!-- editable fields plugin -->
-        <script type="text/javascript" charset="utf-8" src="<?php echo base_url(); ?>media/js/jquery.dateFormat-1.0.dc.js"></script>
+	<script src="<?php echo base_url('media/js/timezone-js/date.js')?>"></script>             <!-- editable fields plugin -->
 	
 	<!-- <script src="<?php //echo base_url('media/js/vendor/jquery-ui-1.10.2.custom.min.js')?>"</script>        	<!-- jquery ui dragging -->    
 	<!-- <script type="text/javascript" src="<?php //echo base_url(); ?>media/js/jquery-1.7.2.min.js"></script> --> <!-- jquery widget tree -->

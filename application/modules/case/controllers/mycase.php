@@ -33,11 +33,8 @@ class mycase extends CI_Controller{
             $validation[] = array('type' => 'required','name' => 'product_type','value' => $this->input->post('product_type'), 'fine_name' => "Product Type");
         }        
         $validation[] = array('type' => 'required','name' => 'message','value' => $this->input->post('message'), 'fine_name' => "Messages");
-
-	if($allPost['assign_to'])
-            $validation[] = array('type' => 'required','name' => 'assign_to','value' => $allPost['assign_to'], 'fine_name' => "Assign To");
-        else
-            $validation[] = array('type' => 'required','name' => 'email','value' => $this->input->post('email'), 'fine_name' => "Email");
+        $validation[] = array('type' => 'required','name' => 'assign_to','value' => $allPost['assign_to'], 'fine_name' => "Assign To");
+        //$validation[] = array('type' => 'required','name' => 'email','value' => $this->input->post('email'), 'fine_name' => "Email");
             
         $is_valid = CheckValidation($validation, $this->validation);
         if($is_valid === true){
@@ -176,8 +173,9 @@ class mycase extends CI_Controller{
                 if(!IsRoleFriendlyNameExist($result_user[$x]->role_detail, 'Social Stream_Case_Own_Country_AssignReassignResolved'))
                     unset($result_user[$x]);
             }
+	    
         }
-        echo json_encode($result_user);
+        echo json_encode(array_values($result_user));
     }
     
     
@@ -190,7 +188,7 @@ class mycase extends CI_Controller{
         if(count($case) > 0){
             $case = $case[0];
             $case->related_conversation = array();
-            $created_at = new DateTime($case->created_at.' Europe/London');
+            $created_at = new DateTime($case->created_at.' UTC');
             $created_at->setTimezone(new DateTimeZone($timezone));
             $case->created_at = $created_at->format('l, M j, Y h:i A');
             $case->main_post = new stdClass();

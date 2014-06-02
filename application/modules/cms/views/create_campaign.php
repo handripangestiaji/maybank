@@ -31,7 +31,7 @@
 			    
 				if(isset($product->child)){
 				    foreach($product->child as $child){ ?>
-				    <option value="<?=$child->id?>">-&nbsp;&nbsp;<?=$child->product_name?></option> 
+				    <option value="product|<?=$child->id?>">-&nbsp;&nbsp;<?=$child->product_name?></option> 
 				    <?php }
 				} ?>
 			<?php endforeach?>
@@ -44,7 +44,7 @@
                   <select class="shorturl-tags" multiple="multiple" name="tag_id[]">
                     	<?php if($tags): ?>
                     		<?php foreach($tags as $v): ?>
-                    			<option value="<?php echo $v->id ?>"><?php echo $v->tag_name ?></option>
+                    			<option value="tag|<?php echo $v->id ?>"><?php echo $v->tag_name ?></option>
                     		<?php endforeach; ?>
                     	<?php else: ?>
                     		<option>Please add Tag first</option>

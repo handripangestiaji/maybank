@@ -957,8 +957,14 @@ $(function(){
                 
                 $(this).on('input propertychange', '.replaycontent',
                     function() {
-                        var len = $(this).val().length;
-                        $(this).siblings('.reply-char-count').children('.reply-tw-char-count').html(140-len);
+                       
+                });
+                
+                $(this).on("keyup", ".twitter-reply-field", function(){
+                    var len = $(this).val().length + $(this).siblings('.screen-name').html().length;
+                    var change = 140 - len ;
+                    if(change < 0) return;
+                    $(this).closest('.reply-tweet').find('.reply-tw-char-count').html(change);
                 });
 
 

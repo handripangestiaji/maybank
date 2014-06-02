@@ -4694,10 +4694,11 @@ div.textarea-container {
     width:100%;
     position: relative
 }
-div.textarea-container .screen-name{padding: 3px;position: absolute;top:0;}
+div.textarea-container .screen-name{padding: 6px 4px;position: absolute;top:0;font: 15px Arial;}
 div.textarea-container textarea {
     border: none;
     outline: none;
-    font: 12px 'Open Sans', Arial;
+    resize: none;
+    
 }
 ul.floatingBoxContainers .case-field .error-list li {background: none !important;list-style: decimal;margin:0;border: none;}

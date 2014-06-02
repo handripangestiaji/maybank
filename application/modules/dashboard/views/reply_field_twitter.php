@@ -43,7 +43,7 @@
     <br />
     <div class="textarea-container" onclick="$(this).siblings('textarea').focus()">
         <div class="left screen-name">@<?php echo $mentions[$i]->screen_name?></div>
-        <textarea class='replaycontent' placeholder="" name="content"  style="float:left;text-indent:<?=strlen($mentions[$i]->screen_name) * 8?>px"></textarea>
+        <textarea class='replaycontent twitter-reply-field' placeholder="" name="content" style="float:left;text-indent:<?=strlen($mentions[$i]->screen_name) * 9?>px"></textarea>
     </div>
     <br clear="all" />
      <?php  if($type == 'reply'):?>

@@ -67,4 +67,8 @@ class Reports extends MY_Controller {
         $dt = $year.'-'.$month.'-'.$date;
         return $dt;
     }
+    
+    function activity(){
+	$this->load->view('reports/activity');
+    }
 }

@@ -10,6 +10,7 @@
     <head>
     	<?php echo $this->load->view('metadata') ?>
 	<link rel="shortcut icon" href="<?php echo base_url() ?>media/img/favicon.ico">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     </head>
 	
 	<body class="dashboard" onload="">
@@ -90,7 +91,7 @@
         </div>
         <!-- ==================== END OF PAGE CONTENT ==================== -->
         
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        
 	<script src="<?php echo base_url('media/js/jstz.min.js')?>"></script> 
         <script>window.jQuery || document.write('<script src="<?php echo base_url('media/js/vendor/jquery-1.9.1.min.js')?>"><\/script>')</script>
         <script src="<?php echo base_url('media/js/vendor/bootstrap-slider.js')?>"></script>                   <!-- bootstrap slider plugin -->

@@ -12,11 +12,8 @@ class Reports extends MY_Controller {
     
     function index()
     {
-        $data['channel'] = $this->reports_model->view_channel();
-        $data['product'] = $this->reports_model->view_product();
-        $data['show'] = $this->reports_model->count_product();
-        $data['count_percentage_product']  = $this->reports_model->count_percentage_product();
-        $data[] = "";        
+	
+	$data['country_list'] = $this->users_model->get_country()->result();
         $this->load->view('reports/index',$data);
     }
     

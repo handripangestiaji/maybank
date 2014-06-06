@@ -1,5 +1,8 @@
 $(function(){
     $('#reportDatePicker input').datepicker({
+        endDate : new Date(),
+        format : "yyyy/mm/dd",
+        startDate : new Date("2014/3/31")
     });
     $('#reportCountry').change(function(){
         $('#reportChannel').attr('disabled', 'disabled');

@@ -5,8 +5,9 @@
 	#content{background: #fff;padding: 15px;}
 	#content label{padding: 5px}
 	#content hr{display: block;}
-	#reportDatePicker {padding: 10px;}
-
+	#reportDatePicker {padding: 0px;}
+	.input-daterange input{border: 1px solid #aaa;padding: 4px 10px;}
+	.table th{text-align: center;vertical-align: middle}
 </style>
 
 <div class="row-fluid" id="report">
@@ -19,12 +20,25 @@
 	<div class="span10" id="content">
 		<div class="row-fluid">
 			<h1 class="span2">Performance</h1>
-			<div class="span4 offset5" id="reportDatePicker">
+			<div class="span6 offset4" id="reportDatePicker">
 				
-				<div class="input-daterange">
-					<input value="2012-04-05" id="dateStart" />
-					<span class="add-on">to</span>
-					<input value="2012-04-07" id="dateFinish"/>
+				<div class="input-daterange row">
+					<div class="control-group info span5" >
+						<label class="control-label" for="inputWarning">Date Start</label>
+						<div class="controls">
+						<input value="2014/03/01" id="dateStart" />
+						<span class="help-inline"></span>
+						</div>
+					</div>
+					<div class="control-group info span5">
+						<label class="control-label" for="inputWarning">Date Start</label>
+						<div class="controls">
+						<input value="<?php echo date("Y-m-d")?>" id="dateFinish"/>
+						<span class="help-inline"></span>
+						</div>
+					</div>
+					<div class="span2" style="padding: 30px 0 0"> <button class="btn  btn-primary" type="button" id="btnReport" data-loading-text="Loading..."><i class=" icon-filter"></i> Create</button></div>
+					
 				</div>
 			</div>
 		</div>
@@ -82,7 +96,8 @@
 					</select>
 				</th>
 				<th colspan="3">Wall Post</th>
-				<th colspan="3">Private Message</th></tr>
+				<th colspan="3">Private Message</th>
+				<th rowspan="2">Action</th></tr>
 				<tr>
 					<td>Products</td>
 					<td>Total</td>
@@ -94,19 +109,12 @@
 					<td>Total</td>
 					<td>Resolved</td>
 					<td>Avg Time</td>
-					<td>Action</td>
-					
 				</tr>
 				</thead>
 				<tbody>
 					<?php for($i=0;$i<10;$i++):?>
 					<tr>
-						<td>test</td>
-						<td>test</td>
-						<td>test</td>
-						<td>test</td>
-						<td>test</td>
-						<td>test</td>
+						
 					</tr>
 					<?php endfor?>
 				</tbody>
@@ -119,6 +127,9 @@
 					<td>0</td>
 					<td>0</td>
 					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td style="text-align: center">  <button class="btn  btn-primary" type="button"><i class=" icon-download"></i> Download</button></td>
 				</tfoot>
 			</table>
 		</div>

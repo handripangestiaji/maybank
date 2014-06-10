@@ -17,60 +17,20 @@ class Reports_model extends CI_Model
         return $this->db->get('content_products');
     }
     
-    function count_product()
+    function create_report($channel_id, $ug_id = null)
     {
-	$case = 'maybank.case';
-	$cp = 'maybank.content_products';
-	/*$sql = 'select * from (((select content_products_id,case_type,count(content_products_id) as Total_a,count(status)
-	as Resolved_a, avg(unix_timestamp(ca.solved_at)-unix_timestamp(ca.created_at)) as total_time_a
-	from '.$case.' as ca where case_type=\'Feedback\'
-	group by content_products_id,case_type) as a
-	
-	left outer join (select content_products_id,count(content_products_id) as Total_a from '.$case.' where case_type=\'Feedback\' group by content_products_id) as d
-	on a.content_products_id=d.content_products_id)
-	
-	left outer join
-	
-	((select content_products_id,case_type,count(content_products_id) as Total_b,count(status)
-	as Resolved_b, avg(unix_timestamp(solved_at)-unix_timestamp(created_at)) as total_time_b
-	from '.$case.' where case_type=\'Enquiry\'
-	group by content_products_id,case_type) as b 
-	
-	left outer join (select content_products_id,count(content_products_id) as Total_b from '.$case.' where case_type=\'Enquiry\' group by content_products_id) as e
-	on b.content_products_id=e.content_products_id) on a.content_products_id=b.content_products_id
-	
-	left outer join
-	
-	((select content_products_id,case_type,count(content_products_id) as Total_c,count(status)
-	as Resolved_c, avg(unix_timestamp(solved_at)-unix_timestamp(created_at)) as total_time_c
-	from '.$case.' where case_type=\'Complaint\'
-	group by content_products_id,case_type) as c
-	left outer join (select content_products_id,count(content_products_id) as Total_c from '.$case.' where case_type=\'Complaint\' group by content_products_id) as f
-	on c.content_products_id=f.content_products_id) on a.content_products_id=c.content_products_id)
-	
-	right outer join (select product_name,id from maybank.content_products) as co on a.content_products_id=co.id';
-        */
-	/*$sql = 'SELECT co.product_name,count(*) as total, avg(unix_timestamp(ca.solved_at)-unix_timestamp(ca.created_at)) as average_response,
-		(select count(status) from `case` inca where inca.status=\'solved\' and inca.case_type = ca.case_type
-		and inca.content_products_id = ca.content_products_id) as solved_count, case_type, content_products_id
-		FROM maybank.case as ca
-		left join maybank.content_products as co on ca.content_products_id=co.id group by case_type, content_products_id';
-	*/
-	$sql = "select cp.product_name, 
-		    count(case when case_type='enquiry' then 1 else null end) as enquiry,
-		    count(case when case_type='feedback' then 1 else null end) as feedback,
-		    count(case when case_type='complaint' then 1 else null end) as complaint,
-			count(case when case_type='enquiry' and status='solved'  then 1 else null end) as enquiry_solv,
-		    count(case when case_type='feedback' and status='solved' then 1 else null end) as feedback_solv,
-		    count(case when case_type='complaint' and status='solved' then 1 else null end) as complaint_solv,
-			avg(case when case_type='feedback' then (unix_timestamp(cs.solved_at)-unix_timestamp(cs.created_at)) else 0 end) as feedback_time,
-			avg(case when case_type='enquiry' then (unix_timestamp(cs.solved_at)-unix_timestamp(cs.created_at)) else 0 end) as enquiry_time,
-			avg(case when case_type='complaint' then (unix_timestamp(cs.solved_at)-unix_timestamp(cs.created_at)) else 0 end) as complaint_time
-		from `case` cs left join content_products  cp on cs.content_products_id= cp.id
-		group by cp.id";
-        $query = $this->db->query($sql);
-        
-        return $query->result();
+	$where = $channel_id ? 'ss.channel_id = '.$channel_id : '';
+	$where .= $ug_id == null || $ug_id == 'All'? '' : " and ug.group_id = '".$ug_id."'";
+	$sql_report = "select concat(ch.name,' (', ch.country_code, ')') as channel, cp.product_name, count(*) as total_case, avg(UNIX_TIMESTAMP(solved_at) - UNIX_TIMESTAMP(c.created_at)) as average_response, 
+	c.case_type , ug.group_name as user_group, ss.type, sst.type as type2 from `case` c inner join social_stream ss on c.post_id = ss.post_id
+	inner join content_products cp on cp.id = c.content_products_id
+	left join social_stream_twitter sst on sst.post_id = ss.post_id 
+	inner join channel ch on ch.channel_id = ss.channel_id
+	inner join (user u  inner join user_group ug on u.group_id = ug.group_id) on u.user_id = c.created_by 
+	Where ".$where."
+	group by c.case_type, ss.type, cp.id, sst.type, u.group_id ";
+	$q = $this->db->query($sql_report);
+	return $q->result();
     }
     
     function count_all_cases($channel, $dateFrom, $dateTo){

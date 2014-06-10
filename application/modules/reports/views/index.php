@@ -6,6 +6,7 @@
 	#content label{padding: 5px}
 	#content hr{display: block;}
 	#reportDatePicker {padding: 0px;}
+	#reportDatePicker input{width: 70%}
 	.input-daterange input{border: 1px solid #aaa;padding: 4px 10px;}
 	.table th{text-align: center;vertical-align: middle}
 </style>
@@ -18,6 +19,11 @@
 		</ul>
 	</div>
 	<div class="span10" id="content">
+		<div class="alert alert-block span12">
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+				<h4>Warning!</h4>
+				<span class="data">Please Check</span>
+			</div>
 		<div class="row-fluid">
 			<h1 class="span2">Performance</h1>
 			<div class="span6 offset4" id="reportDatePicker">
@@ -31,13 +37,13 @@
 						</div>
 					</div>
 					<div class="control-group info span5">
-						<label class="control-label" for="inputWarning">Date Start</label>
+						<label class="control-label" for="inputWarning">Date Finish</label>
 						<div class="controls">
-						<input value="<?php echo date("Y-m-d")?>" id="dateFinish"/>
+						<input value="<?php echo date("Y/m/d")?>" id="dateFinish"/>
 						<span class="help-inline"></span>
 						</div>
 					</div>
-					<div class="span2" style="padding: 30px 0 0"> <button class="btn  btn-primary" type="button" id="btnReport" data-loading-text="Loading..."><i class=" icon-filter"></i> Create</button></div>
+					<div class="span2" style="padding: 30px 0 0"> <button id="reportCreate" class="btn  btn-primary" type="button" id="btnReport" data-loading-text="Loading..."><i class=" icon-filter"></i> Create</button></div>
 					
 				</div>
 			</div>
@@ -112,11 +118,7 @@
 				</tr>
 				</thead>
 				<tbody>
-					<?php for($i=0;$i<10;$i++):?>
-					<tr>
-						
-					</tr>
-					<?php endfor?>
+					
 				</tbody>
 				<tfoot>
 					<td>Total</td>

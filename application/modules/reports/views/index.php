@@ -19,10 +19,10 @@
 		</ul>
 	</div>
 	<div class="span10" id="content">
-		<div class="alert alert-block span12">
+		<div class="alert alert-block span12" style="display: none">
 				<button type="button" class="close" data-dismiss="alert">&times;</button>
-				<h4>Warning!</h4>
-				<span class="data">Please Check</span>
+				<h4 style="margin-bottom:10px">Warning!</h4>
+				<div class="help-inline"></div>
 			</div>
 		<div class="row-fluid">
 			<h1 class="span2">Performance</h1>
@@ -43,7 +43,7 @@
 						<span class="help-inline"></span>
 						</div>
 					</div>
-					<div class="span2" style="padding: 30px 0 0"> <button id="reportCreate" class="btn  btn-primary" type="button" id="btnReport" data-loading-text="Loading..."><i class=" icon-filter"></i> Create</button></div>
+					<div class="span2" style="padding: 30px 0 0"> <button id="reportCreate" class="btn  btn-primary" type="button" id="btnReport" data-loading-text="Loading..."><i class=" icon-filter"></i> <span>Create</span></button></div>
 					
 				</div>
 			</div>
@@ -54,9 +54,8 @@
 			<div class="span3">
 				<label class="span6">Country</label>
 				<select name="country" class="span6" id="reportCountry">
-					<?php
-						foreach($country_list as $country):
-					?>
+					<option value="">Select Country</option>
+					<?php foreach($country_list as $country):?>
 						<option value="<?=$country->code?>"><?php echo $country->name?></option>
 					<?php endforeach;?>
 				</select>
@@ -93,7 +92,7 @@
 				<thead>
 				<tr><th>Case</th>
 				<th colspan="3">
-					<select name="channel" >
+					<select name="case_type" id="caseType" >
 						<option value="">All</option>
 						<option value="Feedback">Feedback</option>
 						<option value="Enquiries">Enquiries</option>
@@ -118,7 +117,7 @@
 				</tr>
 				</thead>
 				<tbody>
-					
+					<tr><td colspan="11" style="text-align: center">No Result</td></tr>
 				</tbody>
 				<tfoot>
 					<td>Total</td>

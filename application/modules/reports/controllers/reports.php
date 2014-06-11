@@ -8,11 +8,13 @@ class Reports extends MY_Controller {
         $this->load->model('reports_model');
         $this->user_role = $this->users_model->get_collection_detail(
 		array('role_collection_id'=>$this->session->userdata('role_id')));
+	
+	if(!$this->session->userdata('user_id'))
+	    redirect('');
     }
     
     function index()
     {
-	
 	$data['country_list'] = $this->users_model->get_country()->result();
         $this->load->view('reports/index',$data);
     }

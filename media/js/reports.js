@@ -11,7 +11,8 @@ $(function(){
         format : "yyyy/mm/dd",
         startDate : new Date("2014/3/31")
     });
-    $('#reportCountry').change(function(){
+    $(this).on('change', '#reportCountry', function(){
+        if($(this).val() == '') return;
         $('#reportChannel').attr('disabled', 'disabled');
         $('#reportChannel option,#reportUserGroup option ').remove();
         $('#reportUserGroup').attr('disabled', 'disabled');
@@ -32,7 +33,7 @@ $(function(){
             "url" : BASEURL + "reports/report_ajax/UserGroupList/" + $(this).val(),
             "data" : "",
             "type" : "GET",
-            "success" : function(response){
+            "success" : function(response){ 
                 $('#reportUserGroup').append($('<option>', {
                     value: null,
                     text: 'All'
@@ -50,7 +51,10 @@ $(function(){
     
     
     //GENERATE REPORT
-    $('#reportCreate').click(function(e){
+    $(this).on('click', '#reportCreate', function(e){
+        $(this).find("span").html('Creating...').attr('disabled', 'disabled');
+        $('#report .table tbody').html('<tr><td colspan="11" style="text-align: center">Creating Report...</td></tr>');
+        var thisButton = $(this);
         printedProduct = [];
         $.ajax({
             "url" : BASEURL + "reports/report_ajax/CreateReport",
@@ -62,15 +66,104 @@ $(function(){
             },
             "type" : "POST",
             "success" : function(response){
-                for(i = 0;i<response.length;   i++){
-                    if(!$.inArray(response[i].product_name, printedProduct)){
-                        $('#report .table tbody').append('<tr><td>' + response[i].product_name + '</td></tr>');
+                
+                thisButton.find("span").html('Create').removeAttr('disabled');
+                $('#report .table tbody').html('');
+                var productList = response[3];
+                for(var i=0; i< productList.length; i++){
+                    var summary = firstLane = secondLane = "<td colspan='3'>No Result</td>" ;
+                    for(var x=0; x<response[2].length; x++){
+                        if(productList[i].id == response[2][x].id){
+                            summary = "<td>" + response[2][x].total_case +"</td><td>" + response[2][x].total_solved +"</td><td>" +  timeConverter(response[2][x].average_response) +"</td>";
+                        }
                     }
-                    printedProduct[i] = response[i].product_name;        
+                    for(var y=0; y < response[0].length; y++){
+                         if(productList[i].id == response[0][y].id){
+                            firstLane = "<td>" + response[0][y].total_case +"</td><td>" + response[0][y].total_solved +"</td><td>" +  timeConverter(response[0][y].average_response) +"</td>";
+                        }
+                    }
+                    for(var z=0; z<response[1].length; z++){
+                         if(productList[i].id == response[1][z].id){
+                            secondLane = "<td>" + response[1][z].total_case +"</td><td>" + response[1][z].total_solved +"</td><td>" +  timeConverter(response[1][z].average_response)+"</td>";
+                        }
+                    }
+                    var isHidden = productList[i].parent_id > 0;
+                    $('#report .table tbody').append('<tr id="pId' + productList[i].id+ '" class="pId'+ productList[i].parent_id +  '"><td>' +
+                                productList[i].product_name + '</td>' + summary + firstLane + secondLane + (!isHidden ? '<td><button class="btn toggleSub">Show</button></td>' : '')  +'</tr>')
+                    
+                }
+                $('#report .table tbody > :not(tr.pIdnull)').toggle('fast');
+                $('#report .table .toggleSub').click(function(){
+                    alert("brohh..");
+                    idTrParent = $(this).closest('tr').attr('id');
+                    console.log(idTrParent);
+                    $('.' + idTrParent).toggle('slow');
+                    if($('.' + idTrParent).is(":hidden"))
+                        $(this).html('Show');
+                    else
+                        $(this).html('Hide');
+                    
+                });
+                
+            },
+            "error" : function(response){
+                data = JSON.parse(response.responseText);
+                $('#content .alert ').show('slow');
+                thisButton.find("span").html('Create').removeAttr('disabled');
+                $('#content .alert .help-inline').html('');
+                for(var i =0; i<data.length; i++){
+                    $('#content .alert .help-inline').append('<span class="data">' + data[i].message + '</span> <br />');
                 }
             }
         })
+        
+        $('#caseType').change(function(){
+            if($(this).val() == '') return;
+            $('#report .table tbody').html('<tr><td colspan="11" style="text-align: center">Filtering Report...</td></tr>');
+            $.ajax({
+                "url" : BASEURL + "reports/report_ajax/FilterReport",
+                "data" : "case_type=" + $(this).val(),
+                "type" : "GET",
+                "success" : function(response){
+                    $('#report .table tbody').html('');
+                    var productList = response[3];
+                    for(var i=0; i< productList.length; i++){
+                        var summary = firstLane = secondLane = "<td colspan='3'>No Result</td>" ;
+                        for(var x=0; x<response[2].length; x++){
+                            if(productList[i].id == response[2][x].id){
+                                summary = "<td>" + response[2][x].total_case +"</td><td>" + response[2][x].total_solved +"</td><td>" +  timeConverter(response[2][x].average_response) +"</td>";
+                            }
+                        }
+                        for(var y=0; y < response[0].length; y++){
+                             if(productList[i].id == response[0][y].id){
+                                firstLane = "<td>" + response[0][y].total_case +"</td><td>" + response[0][y].total_solved +"</td><td>" +  timeConverter(response[0][y].average_response) +"</td>";
+                            }
+                        }
+                        for(var z=0; z<response[1].length; z++){
+                             if(productList[i].id == response[1][z].id){
+                                secondLane = "<td>" + response[1][z].total_case +"</td><td>" + response[1][z].total_solved +"</td><td>" +  timeConverter(response[1][z].average_response)+"</td>";
+                            }
+                        }
+                        var isHidden = productList[i].parent_id != null;
+                        $('#report .table tbody').append('<tr id="pId' + productList[i].id+ '" class=' + (isHidden ? '"hide ' + productList[i].id + '" style="display:none"' : ''  ) + '"><td>' +
+                                productList[i].product_name + '</td>' + summary + firstLane + secondLane + (isHidden ? '<td><button class="btn btn-info toggleSub">Show</button></td>' : '')  +'</tr>')
+                        
+                        
+                    }
+                },
+                "error" : function(){
+                     $('#report .table tbody').html('<tr><td colspan="11" style="text-align: center">No Result</td></tr>');
+                }
+            });
+        });
     });
-    
+    function timeConverter(UNIX_timestamp){
+    var a = new Date(UNIX_timestamp*1000);
+        var hour = a.getHours();
+        var min = a.getMinutes();
+        var sec = a.getSeconds();
+        var time = hour+' hour '+min+' minutes ';
+        return time;
+    }
     
 })

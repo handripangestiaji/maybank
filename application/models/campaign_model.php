@@ -231,7 +231,13 @@ echo "<pre>";
 		if($filter){
 			$this->db->where($filter);
 		}
+		$this->db->order_by('parent_id');
 		return $this->db->get()->result();
+	}
+	
+	public function GetProductBasedOnParent($where = ""){
+		$query = "Select * from `content_products` ".($where != '' ? " WHERE $where" : "")." ORDER BY COALESCE(parent_id, `id`), `parent_id` is not null, id";
+		return $this->db->query($query)->result();
 	}
 	
 	public function getOneBy($params = array())

@@ -17,20 +17,46 @@ class Reports_model extends CI_Model
         return $this->db->get('content_products');
     }
     
-    function create_report($channel_id, $ug_id = null)
+    function create_report($channel_id, $user_id, $date_start, $date_finish, $ug_id = null)
     {
-	$where = $channel_id ? 'ss.channel_id = '.$channel_id : '';
-	$where .= $ug_id == null || $ug_id == 'All'? '' : " and ug.group_id = '".$ug_id."'";
-	$sql_report = "select concat(ch.name,' (', ch.country_code, ')') as channel, cp.product_name, count(*) as total_case, avg(UNIX_TIMESTAMP(solved_at) - UNIX_TIMESTAMP(c.created_at)) as average_response, 
-	c.case_type , ug.group_name as user_group, ss.type, sst.type as type2 from `case` c inner join social_stream ss on c.post_id = ss.post_id
-	inner join content_products cp on cp.id = c.content_products_id
-	left join social_stream_twitter sst on sst.post_id = ss.post_id 
-	inner join channel ch on ch.channel_id = ss.channel_id
-	inner join (user u  inner join user_group ug on u.group_id = ug.group_id) on u.user_id = c.created_by 
-	Where ".$where."
-	group by c.case_type, ss.type, cp.id, sst.type, u.group_id ";
+	$ug_id = $ug_id == null || $ug_id == 'All'? 'null' : "'$ug_id'";
+	$sql_report = "call sp_ReportPerformance('$channel_id', $ug_id, '$user_id', '$date_start', '$date_finish');";
 	$q = $this->db->query($sql_report);
-	return $q->result();
+	$references_report = $q->row();
+	return $references_report->my_code;
+    }
+    
+    function filter_report($current_code, $case_type = null){
+	$query = "SELECT b.product_name, b.id, a.type, a.type2, a.code,  sum(a.total_case) as total_case, sum(a.total_solved) as total_solved, sum(a.average_response) as average_response
+	FROM report_performance a right join content_products b on a.product_id = b.id
+	WHERE a.code = '$current_code' ".($case_type == null ? "" : " AND a.case_type = '$case_type'").
+	"GROUP By b.id";
+	$q = $this->db->query($query.", a.type, a.type2");
+	$result = $q->result();
+	$result_array = array();
+	$result_array[0] = $result_array[1] = array();
+	foreach($result as $row){
+	    if($row->type2 == null){
+		
+		if($row->type == 'facebook' || $row->type == null)
+		    $result_array[0][] = $row;
+		if($row->type == 'facebook_conversation' || $row->type == null)
+		    $result_array[1][] = $row;
+	    }
+	    else{
+		if($row->type2 == "mentions" || $row->type == null || $row->type2 == "homefeed")
+		    $result_array[0][] = $row;
+		
+		if($row->type == "twitter_dm" || $row->type == null)
+		    $result_array[1][] = $row;
+	    }
+	}
+	$q2 = $this->db->query($query);
+	$result_array[2] = $q2->result();
+	
+	$result_array[3] = $this->load->model('campaign_model')->GetProductBasedOnParent();
+	
+	return $result_array;
     }
     
     function count_all_cases($channel, $dateFrom, $dateTo){

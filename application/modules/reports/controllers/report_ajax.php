@@ -24,6 +24,7 @@ class report_ajax extends CI_Controller {
     }
     
     function CreateReport(){
+        $this->session->set_userdata('current_code', null);
         $this->load->library('validation');
         $validation[] = array('type' => 'required','name' => 'Channel','value' => $this->input->post('channel_id'), 'fine_name' => "Channel");
         $validation[] = array('type' => 'required','name' => 'User Group','value' => $this->input->post('group_id'), 'fine_name' => "Assign To");
@@ -32,10 +33,21 @@ class report_ajax extends CI_Controller {
             
         $is_valid = CheckValidation($validation, $this->validation);
         if($is_valid === TRUE){
-            echo json_encode($this->reports_model->create_report($this->input->post('channel_id'), $this->input->post('group_id')), JSON_PRETTY_PRINT);
+            $code = $this->reports_model->create_report($this->input->post('channel_id'), $this->session->userdata('user_id'),
+                                                        $this->input->post('date_start'), $this->input->post('date_finish'), $this->input->post('group_id'));
+            $this->session->set_userdata('current_code', $code);
+            $this->FilterReport();
         }
-        else
+        else{
+            http_response_code(500);
             echo json_encode($is_valid, JSON_PRETTY_PRINT); 
+        }
         
+    }
+    
+    function FilterReport(){
+        if(!$this->session->userdata('current_code')) return;
+        $case_type = $this->input->get('case_type');
+        echo json_encode($this->reports_model->filter_report($this->session->userdata('current_code'), $case_type), JSON_PRETTY_PRINT);
     }
 }

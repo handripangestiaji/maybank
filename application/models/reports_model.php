@@ -29,8 +29,7 @@ class Reports_model extends CI_Model
     function filter_report($current_code, $case_type = null){
 	$query = "SELECT b.product_name, b.id, a.type, a.type2, a.code,  sum(a.total_case) as total_case, sum(a.total_solved) as total_solved, sum(a.average_response) as average_response
 	FROM report_performance a right join content_products b on a.product_id = b.id
-	WHERE a.code = '$current_code' ".($case_type == null ? "" : " AND a.case_type = '$case_type'").
-	"GROUP By b.id";
+	WHERE a.code = '$current_code' ".($case_type == null ? "" : " AND a.case_type = '$case_type'");
 	$q = $this->db->query($query.", a.type, a.type2");
 	$result = $q->result();
 	$result_array = array();
@@ -51,11 +50,12 @@ class Reports_model extends CI_Model
 		    $result_array[1][] = $row;
 	    }
 	}
-	$q2 = $this->db->query($query);
+	$q2 = $this->db->query($query." GROUP By b.id");
 	$result_array[2] = $q2->result();
 	
 	$result_array[3] = $this->load->model('campaign_model')->GetProductBasedOnParent();
-	
+	$q4 = $this->db->query($query);
+	$result_array[4] = $q4->result();
 	return $result_array;
     }
     

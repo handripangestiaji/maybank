@@ -67,42 +67,7 @@ $(function(){
             "type" : "POST",
             "success" : function(response){
                 
-                thisButton.find("span").html('Create').removeAttr('disabled');
-                $('#report .table tbody').html('');
-                var productList = response[3];
-                for(var i=0; i< productList.length; i++){
-                    var summary = firstLane = secondLane = "<td colspan='3'>No Result</td>" ;
-                    for(var x=0; x<response[2].length; x++){
-                        if(productList[i].id == response[2][x].id){
-                            summary = "<td class='cols1'>" + response[2][x].total_case +"</td><td class='cols2'>" + response[2][x].total_solved +"</td><td class='cols3'>" +  timeConverter(response[2][x].average_response) +"</td>";
-                        }
-                    }
-                    for(var y=0; y < response[0].length; y++){
-                         if(productList[i].id == response[0][y].id){
-                            firstLane = "<td class='cols4'>" + response[0][y].total_case +"</td><td class='cols5'>" + response[0][y].total_solved +"</td><td class='cols6'>" +  timeConverter(response[0][y].average_response) +"</td>";
-                        }
-                    }
-                    for(var z=0; z<response[1].length; z++){
-                         if(productList[i].id == response[1][z].id){
-                            secondLane = "<td class='cols7'>" + response[1][z].total_case +"</td><td class='cols8'>" + response[1][z].total_solved +"</td><td class='cols9  '>" +  timeConverter(response[1][z].average_response)+"</td>";
-                        }
-                    }
-                    var isHidden = productList[i].parent_id > 0;
-                    $('#report .table tbody').append('<tr id="pId' + productList[i].id+ '" class="pId'+ productList[i].parent_id +  '"><td>' +
-                                productList[i].product_name + '</td>' + summary + firstLane + secondLane + (!isHidden ? '<td><button class="btn toggleSub">Show</button></td>' : '')  +'</tr>')
-                    
-                }
-              
-                $('#report .table tbody > :not(tr.pIdnull)').toggle('fast');
-                $('#report .table .toggleSub').click(function(){
-                    idTrParent = $(this).closest('tr').attr('id');
-                    $('.' + idTrParent).toggle('slow');
-                    if($(this).html() == "Show")
-                        $(this).html('Hide');
-                    else
-                        $(this).html('Show');
-                    
-                });
+                
                 
             },
             "error" : function(response){
@@ -145,9 +110,17 @@ $(function(){
                         }
                         var isHidden = productList[i].parent_id != null;
                         $('#report .table tbody').append('<tr id="pId' + productList[i].id+ '" class=' + (isHidden ? '"hide ' + productList[i].id + '" style="display:none"' : ''  ) + '"><td>' +
-                                productList[i].product_name + '</td>' + summary + firstLane + secondLane + (isHidden ? '<td><button class="btn btn-info toggleSub">Show</button></td>' : '')  +'</tr>')
+                                productList[i].product_name + '</td>' + summary + firstLane + secondLane + (isHidden ? '<td><button class="btn btn-info toggleSub">Show</button></td>' : '')  +'</tr>');
+                        var summary = [];
                         
-                        
+                        $('#report .table tbody td').each(function(){
+                            for(i=0;i<10;i++){
+                                if($(this).hasClass('cols' + i.toString())){
+                                    summary[i] += parseFloat($(this).html());
+                                }
+                            }
+                        });
+                        console.log(summary);
                     }
                 },
                 "error" : function(){
@@ -156,12 +129,71 @@ $(function(){
             });
         });
     });
+    $.fn.paintReportTable = function(){
+        thisButton.find("span").html('Create').removeAttr('disabled');
+        $('#report .table tbody').html('');
+        var productList = response[3];
+        for(var i=0; i< productList.length; i++){
+            var summary = firstLane = secondLane = "<td colspan='3'>No Result</td>" ;
+            for(var x=0; x<response[2].length; x++){
+                if(productList[i].id == response[2][x].id){
+                    summary = "<td class='cols1'>" + response[2][x].total_case +"</td><td class='cols2'>" + response[2][x].total_solved +"</td><td class='cols3 time-value'><input type='hidden' value='" + response[2][x].average_response + "'/>" +  timeConverter(response[2][x].average_response) +"</td>";
+                }
+            }
+            for(var y=0; y < response[0].length; y++){
+                 if(productList[i].id == response[0][y].id){
+                    firstLane = "<td class='cols4'>" + response[0][y].total_case +"</td><td class='cols5'>" + response[0][y].total_solved +"</td><td class='cols6 time-value'><input type='hidden' value='" + response[0][y].average_response + "'/>" +  timeConverter(response[0][y].average_response) +"</td>";
+                }
+            }
+            for(var z=0; z<response[1].length; z++){
+                 if(productList[i].id == response[1][z].id){
+                    secondLane = "<td class='cols7'>" + response[1][z].total_case +"</td><td class='cols8'>" + response[1][z].total_solved +"</td><td class='cols9 time-value'><input type='hidden' value='" + response[1][z].average_response + "'/>" +  timeConverter(response[1][z].average_response)+"</td>";
+                }
+            }
+            var isHidden = productList[i].parent_id > 0;
+            $('#report .table tbody').append('<tr id="pId' + productList[i].id+ '" class="pId'+ productList[i].parent_id +  '"><td>' +
+                        productList[i].product_name + '</td>' + summary + firstLane + secondLane + (!isHidden ? '<td><button class="btn toggleSub">Show</button></td>' : '')  +'</tr>')
+            
+        }
+      
+        $('#report .table tbody > :not(tr.pIdnull)').toggle('fast');
+        $('#report .table .toggleSub').click(function(){
+            idTrParent = $(this).closest('tr').attr('id');
+            $('.' + idTrParent).toggle('slow');
+            if($(this).html() == "Show")
+                $(this).html('Hide');
+            else
+                $(this).html('Show');
+            
+        });
+        var summary = []; 
+        $('#report .table tbody td').each(function(){
+            for(i=0;i<10;i++){
+                summary[i] = summary[i] == undefined ? 0 : summary[i];
+                if($(this).hasClass('cols' + i.toString())){
+                    
+                    summary[i] += $(this).hasClass('time-value') ? parseFloat($(this).find('input').val()) : parseFloat($(this).html());
+                    
+                }
+            }
+        });
+        for(i=0;i<summary.length; i++){
+            if(i%3 == 0){
+                $('#report .table tfoot td.sum'+ i).html(timeConverter(summary[i]));
+            }
+            else
+                $('#report .table tfoot td.sum'+ i).html(summary[i]);
+        }
+    }
     function timeConverter(UNIX_timestamp){
     var a = new Date(UNIX_timestamp*1000);
+        var day = a.getDate();
         var hour = a.getHours();
         var min = a.getMinutes();
         var sec = a.getSeconds();
-        var time = hour+' hour '+min+' minutes ';
+        
+        var time =  hour+' hour '+min+' minutes ';
+        time = day != 0 ? day.toString() + " days " + time : time;
         return time;
     }
     

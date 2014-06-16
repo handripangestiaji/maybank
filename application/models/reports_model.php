@@ -30,7 +30,7 @@ class Reports_model extends CI_Model
 	$query = "SELECT b.product_name, b.id, a.type, a.type2, a.code,  sum(a.total_case) as total_case, sum(a.total_solved) as total_solved, sum(a.average_response) as average_response
 	FROM report_performance a right join content_products b on a.product_id = b.id
 	WHERE a.code = '$current_code' ".($case_type == null ? "" : " AND a.case_type = '$case_type'");
-	$q = $this->db->query($query.", a.type, a.type2");
+	$q = $this->db->query($query." GROUP By a.type, a.type2");
 	$result = $q->result();
 	$result_array = array();
 	$result_array[0] = $result_array[1] = array();

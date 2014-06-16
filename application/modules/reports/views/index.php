@@ -121,15 +121,15 @@
 				</tbody>
 				<tfoot>
 					<td>Total</td>
-					<td>0</td>
-					<td>0</td>
-					<td>0</td>
-					<td>0</td>
-					<td>0</td>
-					<td>0</td>
-					<td>0</td>
-					<td>0</td>
-					<td>0</td>
+					<td class="sum1">0</td>
+					<td class="sum2">0</td>
+					<td class="sum3">0</td>
+					<td class="sum4">0</td>
+					<td class="sum5">0</td>
+					<td class="sum6">0</td>
+					<td class="sum7">0</td>
+					<td class="sum8">0</td>
+					<td class="sum9">0</td>
 					<td style="text-align: center">  <button class="btn  btn-primary" type="button"><i class=" icon-download"></i> Download</button></td>
 				</tfoot>
 			</table>

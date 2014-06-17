@@ -1,8 +1,0 @@
-application/logs
-mail_config.php
-.htaccess
-Maybank.komodoproject
-dumpmaybank.sql
-application/config/search.php
-application/logs/*
-.gitignore

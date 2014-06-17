@@ -67,7 +67,7 @@ $(function(){
             "type" : "POST",
             "success" : function(response){
                 
-                
+                thisButton.createReportTable(response);
                 
             },
             "error" : function(response){
@@ -90,38 +90,7 @@ $(function(){
                 "type" : "GET",
                 "success" : function(response){
                     $('#report .table tbody').html('');
-                    var productList = response[3];
-                    for(var i=0; i< productList.length; i++){
-                        var summary = firstLane = secondLane = "<td colspan='3'>No Result</td>" ;
-                        for(var x=0; x<response[2].length; x++){
-                            if(productList[i].id == response[2][x].id){
-                                summary = "<td>" + response[2][x].total_case +"</td><td>" + response[2][x].total_solved +"</td><td>" +  timeConverter(response[2][x].average_response) +"</td>";
-                            }
-                        }
-                        for(var y=0; y < response[0].length; y++){
-                             if(productList[i].id == response[0][y].id){
-                                firstLane = "<td>" + response[0][y].total_case +"</td><td>" + response[0][y].total_solved +"</td><td>" +  timeConverter(response[0][y].average_response) +"</td>";
-                            }
-                        }
-                        for(var z=0; z<response[1].length; z++){
-                             if(productList[i].id == response[1][z].id){
-                                secondLane = "<td>" + response[1][z].total_case +"</td><td>" + response[1][z].total_solved +"</td><td>" +  timeConverter(response[1][z].average_response)+"</td>";
-                            }
-                        }
-                        var isHidden = productList[i].parent_id != null;
-                        $('#report .table tbody').append('<tr id="pId' + productList[i].id+ '" class=' + (isHidden ? '"hide ' + productList[i].id + '" style="display:none"' : ''  ) + '"><td>' +
-                                productList[i].product_name + '</td>' + summary + firstLane + secondLane + (isHidden ? '<td><button class="btn btn-info toggleSub">Show</button></td>' : '')  +'</tr>');
-                        var summary = [];
-                        
-                        $('#report .table tbody td').each(function(){
-                            for(i=0;i<10;i++){
-                                if($(this).hasClass('cols' + i.toString())){
-                                    summary[i] += parseFloat($(this).html());
-                                }
-                            }
-                        });
-                        console.log(summary);
-                    }
+                    $('#reportCreate').createReportTable(response);
                 },
                 "error" : function(){
                      $('#report .table tbody').html('<tr><td colspan="11" style="text-align: center">No Result</td></tr>');
@@ -129,8 +98,20 @@ $(function(){
             });
         });
     });
-    $.fn.paintReportTable = function(){
-        thisButton.find("span").html('Create').removeAttr('disabled');
+    function timeConverter(UNIX_timestamp){
+    var a = new Date(UNIX_timestamp*1000);
+        var day = a.getDate();
+        var hour = a.getHours();
+        var min = a.getMinutes();
+        var sec = a.getSeconds();
+        
+        var time =  hour+' hour '+min+' minutes ';
+        time = day != 0 ? (day + (30 * a.getMonth())).toString() + " days " + time : time;
+        return time;
+    }
+    
+    $.fn.createReportTable = function(response){
+        $(this).find("span").html('Create').removeAttr('disabled');
         $('#report .table tbody').html('');
         var productList = response[3];
         for(var i=0; i< productList.length; i++){
@@ -184,23 +165,7 @@ $(function(){
             else
                 $('#report .table tfoot td.sum'+ i).html(summary[i]);
         }
-    }
-    function timeConverter(UNIX_timestamp){
-    var a = new Date(UNIX_timestamp*1000);
-        var day = a.getDate();
-        var hour = a.getHours();
-        var min = a.getMinutes();
-        var sec = a.getSeconds();
-        
-        var time =  hour+' hour '+min+' minutes ';
-        time = day != 0 ? day.toString() + " days " + time : time;
-        return time;
-    }
-    
-    $.fn.Calculate = function(){
-        $(this).each(function(){
-             
-        });
+        $('.table tfoot .btn-download').val($('#report .table').html().text());
     }
     
 })

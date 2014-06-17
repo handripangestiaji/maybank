@@ -48,6 +48,7 @@ class report_ajax extends CI_Controller {
     function FilterReport(){
         if(!$this->session->userdata('current_code')) return;
         $case_type = $this->input->get('case_type');
+        $case_type = $case_type == 'all' ? null : $case_type;
         echo json_encode($this->reports_model->filter_report($this->session->userdata('current_code'), $case_type), JSON_PRETTY_PRINT);
     }
 }

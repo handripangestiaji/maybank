@@ -93,7 +93,7 @@
 				<tr><th>Case</th>
 				<th colspan="3">
 					<select name="case_type" id="caseType" >
-						<option value="">All</option>
+						<option value="all">All</option>
 						<option value="Feedback">Feedback</option>
 						<option value="Enquiries">Enquiries</option>
 						<option value="Complaints">Complaints</option>
@@ -130,7 +130,7 @@
 					<td class="sum7">0</td>
 					<td class="sum8">0</td>
 					<td class="sum9">0</td>
-					<td style="text-align: center">  <button class="btn  btn-primary" type="button"><i class=" icon-download"></i> Download</button></td>
+					<td style="text-align: center">  <button class="btn btn-download  btn-primary" type="button" ><i class=" icon-download"></i> Download</button></td>
 				</tfoot>
 			</table>
 		</div>

@@ -527,3 +527,147 @@ function contains(a, obj) {
     }
     return false;
 }
+
+$(document).ready(function(){
+    var dates = $('#date-range0').val();
+    var res = dates.split(' to ');
+    
+    $.ajax({
+        url : BASEURL + 'reports/report_ajax/GetReportActivity',
+        type: "POST",
+        data: {
+            limit: 20,
+            offset: 0,
+            date_start: res[0],
+            date_end: res[1]
+        },
+        success: function(result)
+        {
+            console.log(result);
+            for(var x=0; x < result.records.length; x++){
+                $('#report_activity_table').find('tbody').append(
+                    '<tr>' +
+                        '<td>' + result.records[x].time + '</td>' +
+                        '<td>' + result.records[x].username + '</td>' +
+                        '<td>' + result.records[x].rolename + '</td>' +
+                        '<td>' + result.records[x].action + '</td>' +
+                        '<td>' + result.records[x].status + '</td>' +
+                    '</tr>'
+                );
+            }
+            generatePagination(result.count_total,20,0);
+        },
+    });
+    
+    $('.x-pagination').on('click',function(){
+        var me = $(this);
+        var offset = me.attr('data-offset');
+        var limit = me.attr('data-limit');
+        
+        var dates = $('#date-range0').val();
+        var res = dates.split(' to ');
+        
+        $.ajax({
+            url : BASEURL + 'reports/report_ajax/GetReportActivity',
+            type: "POST",
+            data: {
+                limit: limit,
+                offset: offset,
+                date_start: res[0],
+                date_end: res[1]
+            },
+            success: function(result)
+            {
+                console.log(result);
+                $('#report_activity_table').find('tbody').html('');
+                for(var x=0; x < result.records.length; x++){
+                    $('#report_activity_table').find('tbody').append(
+                        '<tr>' +
+                            '<td>' + result.records[x].time + '</td>' +
+                            '<td>' + result.records[x].username + '</td>' +
+                            '<td>' + result.records[x].rolename + '</td>' +
+                            '<td>' + result.records[x].action + '</td>' +
+                            '<td>' + result.records[x].status + '</td>' +
+                        '</tr>'
+                    );
+                }
+                generatePagination(result.count_total,limit,offset);
+                console.log($('#date-range0').val());
+            },
+        });
+    });
+    
+    $('.btn-refresh-activity').on('click',function(){
+        var dates = $('#date-range0').val();
+        var res = dates.split(' to ');
+        
+        $.ajax({
+            url : BASEURL + 'reports/report_ajax/GetReportActivity',
+            type: "POST",
+            data: {
+                limit: 20,
+                offset: 0,
+                date_start: res[0],
+                date_end: res[1]
+            },
+            success: function(result)
+            {
+                console.log(result);
+                $('#report_activity_table').find('tbody').html('');
+                for(var x=0; x < result.records.length; x++){
+                    $('#report_activity_table').find('tbody').append(
+                        '<tr>' +
+                            '<td>' + result.records[x].time + '</td>' +
+                            '<td>' + result.records[x].username + '</td>' +
+                            '<td>' + result.records[x].rolename + '</td>' +
+                            '<td>' + result.records[x].action + '</td>' +
+                            '<td>' + result.records[x].status + '</td>' +
+                        '</tr>'
+                    );
+                }
+                generatePagination(result.count_total,limit,offset);
+                console.log($('#date-range0').val());
+            },
+        });
+    });
+});
+
+function generatePagination(total_count, limit, current_offset){
+    //segments = count_all_records / limit
+    var segments = Math.floor(total_count / limit);
+    console.log(segments);
+    
+    //first
+    $('.btn-pagination-first').attr('data-offset',0);
+    $('.btn-pagination-first').attr('data-limit', limit);
+    
+    //last
+    $('.btn-pagination-last').attr('data-offset',parseInt(segments) * parseInt(limit));
+    $('.btn-pagination-last').attr('data-limit', limit);
+    
+    //prev
+    if(current_offset != 0){
+        $('.btn-pagination-prev').removeClass('disabled');
+        $('.btn-pagination-first').removeClass('disabled');
+        $('.btn-pagination-prev').attr('data-offset',parseInt(current_offset) - parseInt(limit));
+        $('.btn-pagination-prev').attr('data-limit', limit);
+    }
+    else{
+        $('.btn-pagination-prev').addClass('disabled');
+        $('.btn-pagination-first').addClass('disabled');
+    }
+    
+    //next
+    if(current_offset < segments * 20){
+        $('.btn-pagination-next').removeClass('disabled');
+        $('.btn-pagination-last').removeClass('disabled');
+        $('.btn-pagination-next').attr('data-offset',parseInt(current_offset) + parseInt(limit));
+        $('.btn-pagination-next').attr('data-limit', limit);
+    }
+    else{
+        $('.btn-pagination-next').addClass('disabled');
+        $('.btn-pagination-last').addClass('disabled');
+    }
+    
+    //numbers
+}

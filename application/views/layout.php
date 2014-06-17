@@ -129,10 +129,14 @@
 	<script src="<?php echo base_url(); ?>media/js/vendor/tag-it.js"></script> <!-- jquery tag-it -->
         
         <script src="<?php echo base_url('media/js/vendor/bootstrap-datepicker.js')?>"></script>               <!-- datepicker plugin -->
+	
+	<script src="<?php echo base_url(); ?>media/js/vendor/jquery-date-range-picker/moment.min.js"></script>
+	<script src="<?php echo base_url(); ?>media/js/vendor/jquery-date-range-picker/jquery.daterangepicker.js"></script>               
+    
         <script src="<?php echo base_url('media/js/thekamarel.min.js')?>"></script>                            <!-- main project js file -->
         <script src="<?php echo base_url('media/js/thekamarel.js')?>"></script>                            <!-- main project js file -->
 	
 	<script src="<?php echo base_url('media/js/kamarelimprove.js')?>"></script>                            <!-- main project js file -->
-	<script src="<?php echo base_url('media/js/date.format.js')?>"></script>     
+	<script src="<?php echo base_url('media/js/date.format.js')?>"></script>
     </body>
 </html>

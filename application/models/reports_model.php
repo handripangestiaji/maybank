@@ -135,4 +135,359 @@ class Reports_model extends CI_Model
         $query = $this->db->query($sql);      
         return $query->result();
     }
+    
+    function GetReportActivity($filter = null,$limit = null, $offset = null){
+	//get from report_activity table sort by date descending
+	$this->db->select('*');
+	$this->db->from('report_activity');
+	if($filter){
+	    $this->db->where($filter);
+	}
+	
+	if(($limit != null) && ($offset == null)){
+	    $this->db->limit($limit);
+	}
+	elseif(($limit != null) && ($offset != null)){
+	    $this->db->limit($limit,$offset);
+	}
+	
+	$this->db->order_by('time','desc');
+	return $this->db->get();
+    }
+    
+    function CountReportActivity($filter = null){
+	//get from report_activity table sort by date descending
+	$this->db->select('*');
+	$this->db->from('report_activity');
+	if($filter){
+	    $this->db->where($filter);
+	}
+	return $this->db->count_all_results();
+    }
+    
+    function generate_report_activity($date){
+	//read from all the table which contain created_at field must larger than the date
+	$now = date('Y-m-d H:i:s');
+	
+	//read channel_action
+	$this->db->select('username, role_name, action_type, role_collection.country_code, channel_action.created_at');
+	$this->db->from('channel_action');
+	$this->db->join('user','channel_action.created_by = user.user_id');
+	$this->db->join('role_collection','user.role_id = role_collection.role_collection_id');
+	$this->db->where("channel_action.created_at > '".$date."'");
+	$this->db->order_by('channel_action.created_at');
+	$result = $this->db->get()->result();
+	
+	$value = array();
+	//store channel_action
+	if($result){
+	    foreach($result as $row){
+		$value[] = array('username' => $row->username,
+			       'rolename' => $row->role_name,
+			       'action' => $row->action_type,
+			       'status' => '',
+			       'country_code' => $row->country_code,
+			       'time' => $row->created_at,
+			       'created_at' => $now
+			       );
+	    }
+	}
+	
+	
+	//read case
+	$this->db->select('username, role_name, case_id, messages, role_collection.country_code, case.created_at');
+	$this->db->from('case');
+	$this->db->join('user','case.created_by = user.user_id');
+	$this->db->join('role_collection','user.role_id = role_collection.role_collection_id');
+	$this->db->where("case.created_at > '".$date."'");
+	$this->db->order_by('case.created_at');
+	$result = $this->db->get()->result();
+	
+	//store case
+	foreach($result as $row){
+	    $value[] = array('username' => $row->username,
+			   'rolename' => $row->role_name,
+			   'action' => 'Create New Case #'.$row->case_id,
+			   'status' => $row->messages,
+			   'country_code' => $row->country_code,
+			   'time' => $row->created_at,
+			   'created_at' => $now
+			   );
+        }
+        
+        /*
+	//read case_assign_detail
+	$this->db->select('username, role_name, messages, role_collection.country_code, case.created_at');
+	$this->db->from('case_assign');
+	$this->db->join('user','case.created_by = user.user_id');
+	$this->db->join('role_collection','user.role_id = role_collection.role_collection_id');
+	$this->db->where("case.created_at > '".$date."'");
+	$this->db->order_by('case.created_at');
+	$result = $this->db->get()->result();
+	
+	//store case_assign_detail
+	foreach($result as $row){
+	    $value[] = array('username' => $row->username,
+			   'rolename' => $row->role_name,
+			   'action' => $row->messages,
+			   'status' => $row->messages,
+			   'country_code' => $row->country_code,
+			   'time' => $row->created_at,
+			   'created_at' => $now
+			   );
+        }
+        */
+	
+	//read channel
+	$this->db->select('username, role_name, name, role_collection.country_code, channel.token_created_at');
+	$this->db->from('channel');
+	$this->db->join('user','channel.created_by = user.user_id');
+	$this->db->join('role_collection','user.role_id = role_collection.role_collection_id');
+	$this->db->where("channel.token_created_at > '".$date."'");
+	$this->db->order_by('channel.token_created_at');
+	$result = $this->db->get()->result();
+	
+	//store channel
+	foreach($result as $row){
+	    $value[] = array('username' => $row->username,
+			   'rolename' => $row->role_name,
+			   'action' => 'Create New Channel',
+			   'status' => $row->name,
+			   'country_code' => $row->country_code,
+			   'time' => $row->token_created_at,
+			   'created_at' => $now
+			   );
+        }
+        
+	//read content_campaign
+	$this->db->select('username, role_name, campaign_name, role_collection.country_code, content_campaign.created_at');
+	$this->db->from('content_campaign');
+	$this->db->join('user','content_campaign.user_id = user.user_id');
+	$this->db->join('role_collection','user.role_id = role_collection.role_collection_id');
+	$this->db->where("content_campaign.created_at > '".$date."'");
+	$this->db->order_by('content_campaign.created_at');
+	$result = $this->db->get()->result();
+	
+	//store content_campaign
+	foreach($result as $row){
+	    $value[] = array('username' => $row->username,
+			   'rolename' => $row->role_name,
+			   'action' => 'Create New Campaign',
+			   'status' => $row->campaign_name,
+			   'country_code' => $row->country_code,
+			   'time' => $row->created_at,
+			   'created_at' => $now
+			   );
+        }
+	
+	//read content_products
+	$this->db->select('username, role_name, product_name, role_collection.country_code, content_products.created_at');
+	$this->db->from('content_products');
+	$this->db->join('user','content_products.user_id = user.user_id');
+	$this->db->join('role_collection','user.role_id = role_collection.role_collection_id');
+	$this->db->where("content_products.created_at > '".$date."'");
+	$this->db->order_by('content_products.created_at');
+	$result = $this->db->get()->result();
+	
+	//store content_products
+	foreach($result as $row){
+	    $value[] = array('username' => $row->username,
+			   'rolename' => $row->role_name,
+			   'action' => 'Create New Product',
+			   'status' => $row->product_name,
+			   'country_code' => $row->country_code,
+			   'time' => $row->created_at,
+			   'created_at' => $now
+			   );
+        }
+	
+	//read content_tag
+	$this->db->select('username, role_name, tag_name, role_collection.country_code, content_tag.created_at');
+	$this->db->from('content_tag');
+	$this->db->join('user','content_tag.user_id = user.user_id');
+	$this->db->join('role_collection','user.role_id = role_collection.role_collection_id');
+	$this->db->where("content_tag.created_at > '".$date."'");
+	$this->db->order_by('content_tag.created_at');
+	$result = $this->db->get()->result();
+	
+	//store content_tag
+	foreach($result as $row){
+	    $value[] = array('username' => $row->username,
+			   'rolename' => $row->role_name,
+			   'action' => 'Create New Tag',
+			   'status' => $row->tag_name,
+			   'country_code' => $row->country_code,
+			   'time' => $row->created_at,
+			   'created_at' => $now
+			   );
+        }
+	
+	/*
+	//read page_reply
+	$this->db->select('*');
+	$this->db->from('case');
+	$this->db->join('user');
+	$where = "`created_at` > ".$date;
+        $this->db->where($where);
+	$result = $this->db->result();
+	
+	//store page_reply
+	foreach($result as $row){
+	    $value[] = array('username' => $row->username,
+			   'rolename' => $row->rolename,
+			   'action' => $row->action,
+			   'status' => $row->status,
+			   'country_code' => $row->country_code,
+			   'time' => $row->created_at,
+			   'created_at' => $now
+			   );
+        }
+	*/
+	
+	//read role_collection
+	$this->db->select('username, x.role_name as xrole_name, role_collection.role_name, x.country_code, role_collection.created_at');
+	$this->db->from('role_collection');
+	$this->db->join('user','role_collection.created_by = user.user_id');
+	$this->db->join('role_collection x','user.role_id = x.role_collection_id');
+	$this->db->where("role_collection.created_at > '".$date."'");
+	$this->db->order_by('role_collection.created_at');
+	$result = $this->db->get()->result();
+	
+	//store role_collection
+	foreach($result as $row){
+	    $value[] = array('username' => $row->username,
+			   'rolename' => $row->xrole_name,
+			   'action' => 'Create new role',
+			   'status' => $row->role_name,
+			   'country_code' => $row->country_code,
+			   'time' => $row->created_at,
+			   'created_at' => $now
+			   );
+        }
+	
+	//read short_urls
+	$this->db->select('username, role_name, short_code, role_collection.country_code, short_urls.created_at');
+	$this->db->from('short_urls');
+	$this->db->join('user','short_urls.user_id = user.user_id');
+	$this->db->join('role_collection','user.role_id = role_collection.role_collection_id');
+	$this->db->where("short_urls.created_at > '".$date."'");
+	$this->db->order_by('short_urls.created_at');
+	$result = $this->db->get()->result();
+	
+	//store short_urls
+	foreach($result as $row){
+	    $value[] = array('username' => $row->username,
+			   'rolename' => $row->role_name,
+			   'action' => 'Create short url',
+			   'status' => $row->short_code,
+			   'country_code' => $row->country_code,
+			   'time' => $row->created_at,
+			   'created_at' => $now
+			   );
+        }
+	
+	/*not solved
+	//read twitter_reply
+	$this->db->select('username, role_name, text, role_collection.country_code, twitter_reply.created_at');
+	$this->db->from('twitter_reply');
+	$this->db->join('user','twitter_reply.user_id = user.user_id');
+	$this->db->join('role_collection','user.role_id = role_collection.role_collection_id');
+	$this->db->where("twitter_reply.created_at > '".$date."'");
+	$this->db->order_by('twitter_reply.created_at');
+	$result = $this->db->get()->result();
+	
+	//store twitter_reply
+	foreach($result as $row){
+	    $value[] = array('username' => $row->username,
+			   'rolename' => $row->role_name,
+			   'action' => 'Reply to '.$row->username,
+			   'status' => $row->text,
+			   'country_code' => $row->country_code,
+			   'time' => $row->created_at,
+			   'created_at' => $now
+			   );
+        }
+	*/
+	
+	//read user
+	$this->db->select('x.username as xusername, user.username, role_name, role_collection.country_code, user.created_at, user.created_by');
+	$this->db->from('user');
+	$this->db->join('user x','user.created_by = x.user_id');
+	$this->db->join('role_collection','x.role_id = role_collection.role_collection_id');
+	$this->db->where("user.created_at > '".$date."'");
+	$this->db->order_by('user.created_at');
+	$result = $this->db->get()->result();
+	
+	//store user
+	foreach($result as $row){
+	    if($row->created_by){
+	    $value[] = array('username' => $row->xusername,
+			   'rolename' => $row->role_name,
+			   'action' => 'Create '.$row->username,
+			   'status' => '',
+			   'country_code' => $row->country_code,
+			   'time' => $row->created_at,
+			   'created_at' => $now
+			   );
+	    }
+        }
+	
+	//read user_group
+	$this->db->select('username, role_name, group_name, role_collection.country_code, user_group.created_at');
+	$this->db->from('user_group');
+	$this->db->join('user','user_group.created_by = user.user_id');
+	$this->db->join('role_collection','user.role_id = role_collection.role_collection_id');
+	$this->db->where("user_group.created_at > '".$date."'");
+	$this->db->order_by('user_group.created_at');
+	$result = $this->db->get()->result();
+	
+	//store user_group
+	foreach($result as $row){
+	    $value[] = array('username' => $row->username,
+			   'rolename' => $row->role_name,
+			   'action' => 'Create '.$row->group_name,
+			   'status' => '',
+			   'country_code' => $row->country_code,
+			   'time' => $row->created_at,
+			   'created_at' => $now
+			   );
+        }
+	
+	//read user_login
+	$this->db->select('username, role_name, role_collection.country_code, login_time, logout_time');
+	$this->db->from('user_login_activity');
+	$this->db->join('user','user_login_activity.user_id = user.user_id');
+	$this->db->join('role_collection','user.role_id = role_collection.role_collection_id');
+	$this->db->where("user_login_activity.login_time > '".$date."'");
+	$this->db->order_by('user_login_activity.login_time');
+	$result = $this->db->get()->result();
+	
+	//store user_login
+	foreach($result as $row){
+	    $value[] = array('username' => $row->username,
+			   'rolename' => $row->role_name,
+			   'action' => 'Login',
+			   'status' => '',
+			   'country_code' => $row->country_code,
+			   'time' => $row->login_time,
+			   'created_at' => $now
+			   );
+	    
+	    $value[] = array('username' => $row->username,
+			   'rolename' => $row->role_name,
+			   'action' => 'Logout',
+			   'status' => '',
+			   'country_code' => $row->country_code,
+			   'time' => $row->logout_time,
+			   'created_at' => $now
+			   );
+        }
+	
+	if(!empty($value)){
+	    $this->db->insert_batch('report_activity',$value);
+	}
+	
+	$filter = array('created_at' => $now);
+	return $this->getReportActivity($filter)->result();
+    }
 }

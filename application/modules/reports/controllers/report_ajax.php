@@ -98,5 +98,12 @@ class report_ajax extends CI_Controller {
             echo json_encode($this->users_model->select_user($user_group)->result());
         }
     }
+    
+    function DownloadUserPerformance(){
+        header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        header("Content-Disposition: attachment;filename=\"filename.xlsx\"");
+        header("Cache-Control: max-age=0");
+        echo html_entity_decode($this->input->post('table_download'));
+    }
 
 }

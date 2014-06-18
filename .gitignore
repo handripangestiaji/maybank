@@ -1,0 +1,8 @@
+.htaccess
+application/config/mail_config.php
+application/config/search.php
+application/helpers/elasticsearch/elasticsearch/elasticsearch/.gitignore
+application/helpers/elasticsearch/guzzle/guzzle/.gitignore
+application/helpers/elasticsearch/pimple/pimple/.gitignore
+application/helpers/elasticsearch/psr/log/.gitignore
+application/helpers/elasticsearch/symfony/event-dispatcher/Symfony/Component/EventDispatcher/.gitignore

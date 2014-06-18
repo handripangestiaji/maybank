@@ -44,13 +44,21 @@ class report_ajax extends CI_Controller {
     function GetReportActivity(){
         //check post request
         if($this->input->post() != null){
-            $filter = "time between '".$this->input->post('date_start')."00:00:00' and '".$this->input->post('date_end')." 00:00:00'";
+            if($this->input->post('country_code') != ''){
+                $filter['country_code'] = $this->input->post('country_code');
+            }
+            else{
+                $filter = null;
+            }
+            
+            $range = "time between '".$this->input->post('date_start')." 00:00:00' and '".$this->input->post('date_end')." 00:00:00'";
             $result['records'] = $this->reports_model->GetReportActivity($filter,
+                                    $range,
                                     $this->input->post('limit'),
                                     $this->input->post('offset')
                                     )->result();
             
-            $result['count_total'] = $this->reports_model->CountReportActivity($filter);
+            $result['count_total'] = $this->reports_model->CountReportActivity($filter,$range);
         }
         else{
             $result['records'] = $this->reports_model->GetReportActivity()->result();

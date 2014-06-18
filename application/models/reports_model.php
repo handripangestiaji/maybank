@@ -150,7 +150,7 @@ class Reports_model extends CI_Model
         return $query->result();
     }
     
-    function GetReportActivity($filter = null,$limit = null, $offset = null){
+    function GetReportActivity($filter = null, $range = null, $limit = null, $offset = null){
 	//get from report_activity table sort by date descending
 	$this->db->select('*');
 	$this->db->from('report_activity');
@@ -165,18 +165,22 @@ class Reports_model extends CI_Model
 	    $this->db->limit($limit,$offset);
 	}
 	
+	$this->db->where($range);
 	$this->db->order_by('time','desc');
 	return $this->db->get();
     }
     
-    function CountReportActivity($filter = null){
+    function CountReportActivity($filter = null, $range = null){
 	//get from report_activity table sort by date descending
 	$this->db->select('*');
 	$this->db->from('report_activity');
 	if($filter){
 	    $this->db->where($filter);
 	}
-	return $this->db->count_all_results();
+	
+	$this->db->where($range);
+	$count =  $this->db->count_all_results();
+	return $count;
     }
     
     function generate_report_activity($date){
@@ -503,5 +507,11 @@ class Reports_model extends CI_Model
 	
 	$filter = array('created_at' => $now);
 	return $this->getReportActivity($filter)->result();
+    }
+    
+    public function get_country(){
+	$this->db->select('*');
+	$this->db->from('country');
+	return $this->db->get();
     }
 }

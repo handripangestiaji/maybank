@@ -7,7 +7,7 @@
 	#content hr{display: block;}
 	#reportDatePicker {padding: 0px;}
 	.input-daterange input{border: 1px solid #aaa;padding: 4px 10px;}
-	.table th{text-align: center;vertical-align: middle}
+	.table th{text-align: left; vertical-align: middle}
 </style>
 
 <link rel="stylesheet" href="<?php echo base_url(); ?>media/js/vendor/jquery-date-range-picker/daterangepicker.css" />
@@ -32,10 +32,10 @@
 	<div>
 	    <div class="left">
 		Country&nbsp;
-		<select name="country">
-		    <option>Malaysia</option>
-		    <option>Indonesia</option>
-		    <option>Singapore</option>
+		<select name="country" class="country_code">
+		    <?php foreach($countries as $row) {?>
+			<option value="<?php echo $row->code ?>"><?php echo $row->name ?></option>
+		    <?php } ?>
 		</select>
 	    </div>
 	    <div class="left" style=margin-left:10px;">

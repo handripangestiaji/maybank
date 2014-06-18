@@ -8,13 +8,19 @@
             <td>Status</td>
         </tr>
     </thead>
-    <tbody>
-        <tr>
-            <td>$time</td>
-            <td>$fullname</td>
-            <td>$rolename</td>
-            <td>$action</td>
-            <td>$status</td>
-        </tr>
-    </tbody>
+    <?php
+    if($result){
+        foreach($result as $val){ ?>
+            <tr>
+                <td><?php echo $val->time ?></td>
+                <td><?php echo $val->username ?></td>
+                <td><?php echo $val->rolename ?></td>
+                <td><?php echo $val->action ?></td>
+                <td><?php echo $val->status ?></td>
+            </tr>
+        <?php }
+    } else {
+        echo '123';
+    }
+    ?>
 </table>

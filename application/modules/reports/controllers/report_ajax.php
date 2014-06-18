@@ -140,13 +140,13 @@ class report_ajax extends CI_Controller {
         if($is_valid === TRUE){
             //check post request
             if($this->input->post() != null){
-                if(($this->input->post('user') != '') && ($this->input->post('user') != 'All')){
+                if(($this->input->post('user') != '') && ($this->input->post('user') != 'All') && ($this->input->post('user') != 'null')){
                     $filter['user_id'] = $this->input->post('user');
                 }
-                elseif(($this->input->post('group') != '') && ($this->input->post('group') != 'All')){
+                elseif(($this->input->post('group') != '') && ($this->input->post('group') != 'All') && ($this->input->post('group') != 'null')){
                     $filter['group_id'] = $this->input->post('group');
                 }
-                elseif($this->input->post('country') != ''){
+                elseif($this->input->post('country') != '' && ($this->input->post('country') != null)){
                     $filter['country_code'] = $this->input->post('country');
                 }
                 else{
@@ -154,26 +154,21 @@ class report_ajax extends CI_Controller {
                 }
                 
                 $range = "time between '".$this->input->post('date_start')." 00:00:00' and '".$this->input->post('date_finish')." 23:59:59'";
-                $result['records'] = $this->reports_model->GetReportActivity($filter,
-                                        $range,
-                                        $this->input->post('limit'),
-                                        $this->input->post('offset')
+                $data['result'] = $this->reports_model->GetReportActivity($filter,
+                                        $range
                                         )->result();
                 
-                $result['count_total'] = $this->reports_model->CountReportActivity($filter,$range);
+                $this->output->set_header("Content-Type: application/vnd.ms-excel; charset=" . 'UTF-8');
+                $this->output->set_header("Content-Disposition: inline; filename=\"report-activity.xls\"");
+                echo $this->load->view('reports/excel',$data);
             }
             else{
                 $result['records'] = $this->reports_model->GetReportActivity()->result();
             }
-        
-            $this->output->set_header("Content-Type: application/vnd.ms-excel; charset=" . 'UTF-8');
-            $this->output->set_header("Content-Disposition: inline; filename=\"Report Activity.xls\"");
-            print_r($result);
-            $this->load->view('reports/excel',$result);
         }
-        else{
+        else{    
             http_response_code(500);
-            echo json_encode($is_valid, JSON_PRETTY_PRINT); 
+            echo json_encode($is_valid, JSON_PRETTY_PRINT);
         }
     }
 }

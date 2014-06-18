@@ -188,21 +188,6 @@ $(function(){
         }
         $('.table tfoot .btn-download').val($('#report .table').html());
     }
-    
-    $(this).on('click', '#btn-download-report-activity', function(){
-         $.ajax({
-            url : BASEURL + 'reports/report_ajax/PrintReportActivity',
-            type: "POST",
-            data: {
-                date_start: $('#dateStart').val(),
-                date_finish: $('#dateFinish').val(),
-                country: $('#reportCountry').val(),
-                group: $('#reportUserGroup').val(),
-                user: $('#reportUserList').val()
-            }
-        });
-    });
-    
 
     $('.x-pagination').on('click',function(){
         var me = $(this);
@@ -278,7 +263,7 @@ $(function(){
     });
     
     $(this).on('click','.btn-download ', function(){
-         var form = document.createElement("form");
+        var form = document.createElement("form");
         form.setAttribute("method", "POST");
         form.setAttribute("action", BASEURL + "reports/report_ajax/DownloadUserPerformance");
         var hiddenField = document.createElement("input");
@@ -287,6 +272,46 @@ $(function(){
         hiddenField.setAttribute("value", "<table>" + $(this).val() + "</table>");
         
         form.appendChild(hiddenField);
+        form.submit();
+        form.remove();
+    });
+    
+    
+    $(this).on('click', '#btn-download-report-activity', function(){
+        var form = document.createElement("form");
+        form.setAttribute("method", "POST");
+        form.setAttribute("action", BASEURL + "reports/report_ajax/PrintReportActivity");
+        
+        var dateStart = document.createElement("input");
+        dateStart.setAttribute("type", "hidden");
+        dateStart.setAttribute("name", "date_start");
+        dateStart.setAttribute("value", $('#dateStart').val());
+        
+        var dateFinish = document.createElement("input");
+        dateFinish.setAttribute("type", "hidden");
+        dateFinish.setAttribute("name", "date_finish");
+        dateFinish.setAttribute("value", $('#dateFinish').val());
+        
+        var country = document.createElement("input");
+        country.setAttribute("type", "hidden");
+        country.setAttribute("name", "country");
+        country.setAttribute("value", $('#reportCountry').val());
+        
+        var group = document.createElement("input");
+        group.setAttribute("type", "hidden");
+        group.setAttribute("name", "group");
+        group.setAttribute("value", $('#reportUserGroup').val());
+        
+        var user = document.createElement("input");
+        user.setAttribute("type", "hidden");
+        user.setAttribute("name", "user");
+        user.setAttribute("value", $('#reportUserList').val());
+        
+        form.appendChild(dateStart);
+        form.appendChild(dateFinish);
+        form.appendChild(country);
+        form.appendChild(group);
+        form.appendChild(user);
         form.submit();
         form.remove();
     });

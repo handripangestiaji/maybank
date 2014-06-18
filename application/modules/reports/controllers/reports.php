@@ -68,6 +68,8 @@ class Reports extends MY_Controller {
     }
     
     function activity(){
-	$this->load->view('reports/activity');
+	$this->load->model('users_model');
+	$data['country_list'] = $this->users_model->get_country()->result();
+	$this->load->view('reports/activity', $data);
     }
 }

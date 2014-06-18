@@ -1,3 +1,4 @@
+<script src="<?php echo base_url(); ?>media/js/vendor/jquery-date-range-picker/jquery.daterangepicker.js"></script>               
 <style type="text/css">
 	#reportMenu {padding: 10px;}
 	#report {border: 1px solid #ccc}
@@ -21,40 +22,51 @@
     </div>
         
     <div class="span10" id="content">
-	<div>
-	    <h3 class="left">USER ACTIVITY</h3>
-	    <div class="right">
-		<input id="date-range0" size="40" value="<?php echo date("Y-m-d", strtotime("-3 months")) ?> to <?php echo date("Y-m-d") ?>">
-		<button class="btn btn-primary btn-refresh-activity">Refresh</button>
-	    </div>
+	<div class="row-fluid">
+	    <h3 class="span2">User Activity</h3>
+	    <div class="span6 offset4" id="reportDatePicker">
+			<div class="input-daterange row">
+				<div class="control-group info span5" >
+					<label class="control-label" for="inputWarning">Date Start</label>
+					<div class="controls">
+					<input value="2014/03/01" id="dateStart" />
+					<span class="help-inline"></span>
+					</div>
+				</div>
+				<div class="control-group info span5">
+					<label class="control-label" for="inputWarning">Date Finish</label>
+					<div class="controls">
+					<input value="<?php echo date("Y/m/d")?>" id="dateFinish"/>
+					<span class="help-inline"></span>
+					</div>
+				</div>
+				<div class="span2" style="padding: 30px 0 0"> <button id="reportCreateActivity" class="btn  btn-primary" type="button" id="btnReport" data-loading-text="Loading..."><i class=" icon-filter"></i> <span>Create</span></button></div>
+			</div>
+		</div>
 	    <br clear="all"/>
 	</div>
-	<div>
-	    <div class="left">
-		Country&nbsp;
-		<select name="country">
-		    <option>Malaysia</option>
-		    <option>Indonesia</option>
-		    <option>Singapore</option>
-		</select>
-	    </div>
-	    <div class="left" style=margin-left:10px;">
-		User Group&nbsp;
-		<select name="country">
-		    <option>Malaysia</option>
-		    <option>Indonesia</option>
-		    <option>Singapore</option>
-		</select>
-	    </div>
-	    <div class="right">
-		User&nbsp;
-		<select name="country">
-		    <option>Malaysia</option>
-		    <option>Indonesia</option>
-		    <option>Singapore</option>
-		</select>
-	    </div>
-	    <br clear="all"/>
+	<div class="row-fluid">
+			<div class="span3">
+				<label class="span6">Country</label>
+				<select name="country" class="span6" id="reportCountry">
+					<option value="">Select Country</option>
+					<?php foreach($country_list as $country):?>
+						<option value="<?=$country->code?>"><?php echo $country->name?></option>
+					<?php endforeach;?>
+				</select>
+			</div>
+			<div class="span3">
+				<label class="span6">User Group</label>
+				<select name="user-group" class="span6" id="reportUserGroup" disabled="disabled">
+					
+				</select>
+			</div>
+			<div class="span3">
+				<label class="span6">User </label>
+				<select name="user-group" class="span6" id="reportUserList" disabled="disabled">
+					
+				</select>
+			</div>
 	</div>
 	<div>
 	    <div class="floatingBox table" style="display: block;">
@@ -88,3 +100,5 @@
 	</div>
     </div>
 </div>
+
+<script type="text/javascript" src="<?php echo base_url()?>media/js/reports.js"></script>

@@ -49,7 +49,28 @@ $(function(){
     });
     
     
-    
+    $(this).on('change','#reportUserGroup', function(){
+       if($('#reportUserList').length > 0){
+            $.ajax({
+               "url" : BASEURL + "reports/report_ajax/GetUserList/" ,
+               "data" : "group_id=" + $(this).val(),
+               "type" : "GET",
+               "success" : function(response){
+                $('#reportUserList').find('option').remove();
+                $('#reportUserList').append($('<option>', {
+                    value: null,
+                    text: 'All'
+                }));
+                  for(i=0;i<response.length;i++)
+                    $('#reportUserList').append($('<option>', {
+                        value: response[i].user_id,
+                        text: response[i].full_name + "(" + response[i].username + ")"
+                    }));
+                    $('#reportUserList').removeAttr('disabled');
+               }
+            });
+       }
+    });
     //GENERATE REPORT
     $(this).on('click', '#reportCreate', function(e){
         $(this).find("span").html('Creating...').attr('disabled', 'disabled');
@@ -168,4 +189,76 @@ $(function(){
         $('.table tfoot .btn-download').val($('#report .table').html().text());
     }
     
-})
+    
+    
+
+    $('.x-pagination').on('click',function(){
+        var me = $(this);
+        var offset = me.attr('data-offset');
+        var limit = me.attr('data-limit');
+        
+        var dates = $('#date-range0').val();
+        var res = dates.split(' to ');
+        
+        $.ajax({
+            url : BASEURL + 'reports/report_ajax/GetReportActivity',
+            type: "POST",
+            data: {
+                limit: limit,
+                offset: offset,
+                date_start: $('#dateStart').val(),
+                date_end: $('#dateFinish').val()
+            },
+            success: function(result)
+            {
+                console.log(result);
+                $('#report_activity_table').find('tbody').html('');
+                for(var x=0; x < result.records.length; x++){
+                    $('#report_activity_table').find('tbody').append(
+                        '<tr>' +
+                            '<td>' + result.records[x].time + '</td>' +
+                            '<td>' + result.records[x].username + '</td>' +
+                            '<td>' + result.records[x].rolename + '</td>' +
+                            '<td>' + result.records[x].action + '</td>' +
+                            '<td>' + result.records[x].status + '</td>' +
+                        '</tr>'
+                    );
+                }
+                generatePagination(result.count_total,limit,offset);
+                console.log($('#date-range0').val());
+            },
+        });
+    });
+    
+    $('#reportCreateActivity').on('click',function(){       
+        $.ajax({
+            url : BASEURL + 'reports/report_ajax/GetReportActivity',
+            type: "POST",
+            data: {
+                limit: 20,
+                offset: 0,
+                date_start: $('#dateStart').val(),
+                date_end: $('#dateFinish').val()
+            },
+            success: function(result)
+            {
+                console.log(result);
+                $('#report_activity_table').find('tbody').html('');
+                for(var x=0; x < result.records.length; x++){
+                    $('#report_activity_table').find('tbody').append(
+                        '<tr>' +
+                            '<td>' + result.records[x].time + '</td>' +
+                            '<td>' + result.records[x].username + '</td>' +
+                            '<td>' + result.records[x].rolename + '</td>' +
+                            '<td>' + result.records[x].action + '</td>' +
+                            '<td>' + result.records[x].status + '</td>' +
+                        '</tr>'
+                    );
+                }
+                generatePagination(result.count_total,limit,offset);
+                console.log($('#date-range0').val());
+            },
+        });
+    });
+   
+});

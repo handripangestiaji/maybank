@@ -6,6 +6,7 @@
 	#content label{padding: 5px}
 	#content hr{display: block;}
 	#reportDatePicker {padding: 0px;}
+	#reportDatePicker input{width: 70%}
 	.input-daterange input{border: 1px solid #aaa;padding: 4px 10px;}
 	.table th{text-align: center;vertical-align: middle}
 </style>
@@ -18,6 +19,11 @@
 		</ul>
 	</div>
 	<div class="span10" id="content">
+		<div class="alert alert-block span12" style="display: none">
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+				<h4 style="margin-bottom:10px">Warning!</h4>
+				<div class="help-inline"></div>
+			</div>
 		<div class="row-fluid">
 			<h1 class="span2">Performance</h1>
 			<div class="span6 offset4" id="reportDatePicker">
@@ -31,13 +37,13 @@
 						</div>
 					</div>
 					<div class="control-group info span5">
-						<label class="control-label" for="inputWarning">Date Start</label>
+						<label class="control-label" for="inputWarning">Date Finish</label>
 						<div class="controls">
-						<input value="<?php echo date("Y-m-d")?>" id="dateFinish"/>
+						<input value="<?php echo date("Y/m/d")?>" id="dateFinish"/>
 						<span class="help-inline"></span>
 						</div>
 					</div>
-					<div class="span2" style="padding: 30px 0 0"> <button class="btn  btn-primary" type="button" id="btnReport" data-loading-text="Loading..."><i class=" icon-filter"></i> Create</button></div>
+					<div class="span2" style="padding: 30px 0 0"> <button id="reportCreate" class="btn  btn-primary" type="button" id="btnReport" data-loading-text="Loading..."><i class=" icon-filter"></i> <span>Create</span></button></div>
 					
 				</div>
 			</div>
@@ -48,9 +54,8 @@
 			<div class="span3">
 				<label class="span6">Country</label>
 				<select name="country" class="span6" id="reportCountry">
-					<?php
-						foreach($country_list as $country):
-					?>
+					<option value="">Select Country</option>
+					<?php foreach($country_list as $country):?>
 						<option value="<?=$country->code?>"><?php echo $country->name?></option>
 					<?php endforeach;?>
 				</select>
@@ -87,8 +92,8 @@
 				<thead>
 				<tr><th>Case</th>
 				<th colspan="3">
-					<select name="channel" >
-						<option value="">All</option>
+					<select name="case_type" id="caseType" >
+						<option value="all">All</option>
 						<option value="Feedback">Feedback</option>
 						<option value="Enquiries">Enquiries</option>
 						<option value="Complaints">Complaints</option>
@@ -112,24 +117,20 @@
 				</tr>
 				</thead>
 				<tbody>
-					<?php for($i=0;$i<10;$i++):?>
-					<tr>
-						
-					</tr>
-					<?php endfor?>
+					<tr><td colspan="11" style="text-align: center">No Result</td></tr>
 				</tbody>
 				<tfoot>
 					<td>Total</td>
-					<td>0</td>
-					<td>0</td>
-					<td>0</td>
-					<td>0</td>
-					<td>0</td>
-					<td>0</td>
-					<td>0</td>
-					<td>0</td>
-					<td>0</td>
-					<td style="text-align: center">  <button class="btn  btn-primary" type="button"><i class=" icon-download"></i> Download</button></td>
+					<td class="sum1">0</td>
+					<td class="sum2">0</td>
+					<td class="sum3">0</td>
+					<td class="sum4">0</td>
+					<td class="sum5">0</td>
+					<td class="sum6">0</td>
+					<td class="sum7">0</td>
+					<td class="sum8">0</td>
+					<td class="sum9">0</td>
+					<td style="text-align: center">  <button class="btn btn-download  btn-primary" type="button" ><i class=" icon-download"></i> Download</button></td>
 				</tfoot>
 			</table>
 		</div>

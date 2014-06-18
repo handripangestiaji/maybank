@@ -22,7 +22,6 @@ class mycase extends CI_Controller{
         $allPost = $this->input->post();
         
         $chackCase=$this->case_model->chackCase(array('post_id' => $this->input->post('post_id')));
-        //print_r($chackCase);
         if(isset($chackCase[0]->status)=='pending'){
              $reassign=$this->case_model->reassign($this->input->post('post_id'));
         }

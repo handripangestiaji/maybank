@@ -1,4 +1,3 @@
-<script src="<?php echo base_url(); ?>media/js/vendor/jquery-date-range-picker/jquery.daterangepicker.js"></script>               
 <style type="text/css">
 	#reportMenu {padding: 10px;}
 	#report {border: 1px solid #ccc}
@@ -88,7 +87,7 @@
 	    </div>
 	</div>
 	<div>
-	    <button class="btn btn-warning left">Download</button>
+	    <button class="btn btn-warning left" id="btn-download-report-activity">Download</button>
 	    <div class="page pull-right">
 		<button class="btn btn-inverse btn-pagination-first x-pagination" data-offset="0" data-limit="0">First</button>&nbsp;
 		<button class="btn btn-inverse btn-pagination-prev x-pagination" data-offset="20" data-limit="0">Previous</button>&nbsp;		

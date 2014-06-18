@@ -52,47 +52,64 @@ class report_ajax extends CI_Controller {
         echo json_encode($this->reports_model->filter_report($this->session->userdata('current_code'), $case_type), JSON_PRETTY_PRINT);
     }
     function GenerateActivity(){
-        //get the latest id from table report_activity
-        $result = $this->reports_model->getReportActivity()->first_row();
+        //select date max
+        $result = $this->reports_model->selectMaxDate()->row();
             
-            //if the date result = null, the date = 1 january 1970
+        //if the date result = null, the date = 1 january 1970
         if($result != null){
-                $latest_date = $result->time;
-            }
-            else{
-                $latest_date = '1970-01-01 00:00:00'; 
-            }
+            $latest_date = $result->time;
+        }
+        else{
+            $latest_date = '1970-01-01 00:00:00'; 
+        }
             
-            //call reports_model->generate_report_activity(the date)
+        //call reports_model->generate_report_activity(the date)
         $result = $this->reports_model->generate_report_activity($latest_date);
-            
-            //print the return
+        
+        //print the return
         print_r(json_encode($result));
     }
     
     function GetReportActivity(){
-        //check post request
-        if($this->input->post() != null){
-            if($this->input->post('country_code') != ''){
-                $filter['country_code'] = $this->input->post('country_code');
+        $this->load->library('validation');
+        $validation[] = array('type' => 'required|valid_date','name' => 'Date Start','value' => $this->input->post('date_start'), 'fine_name' => "Date Start");
+        $validation[] = array('type' => 'required|valid_date','name' => 'Date Finish','value' => $this->input->post('date_finish'), 'fine_name' => "Date Finish");
+        
+        $is_valid = CheckValidation($validation, $this->validation);
+        if($is_valid === TRUE){
+            //check post request
+            if($this->input->post() != null){
+                if(($this->input->post('user') != '') && ($this->input->post('user') != 'All')){
+                    $filter['user_id'] = $this->input->post('user');
+                }
+                elseif(($this->input->post('group') != '') && ($this->input->post('group') != 'All')){
+                    $filter['group_id'] = $this->input->post('group');
+                }
+                elseif($this->input->post('country') != ''){
+                    $filter['country_code'] = $this->input->post('country');
+                }
+                else{
+                    $filter = null;
+                }
+                
+                $range = "time between '".$this->input->post('date_start')." 00:00:00' and '".$this->input->post('date_finish')." 23:59:59'";
+                $result['records'] = $this->reports_model->GetReportActivity($filter,
+                                        $range,
+                                        $this->input->post('limit'),
+                                        $this->input->post('offset')
+                                        )->result();
+                
+                $result['count_total'] = $this->reports_model->CountReportActivity($filter,$range);
             }
             else{
-                $filter = null;
+                $result['records'] = $this->reports_model->GetReportActivity()->result();
             }
-            
-            $range = "time between '".$this->input->post('date_start')." 00:00:00' and '".$this->input->post('date_end')." 00:00:00'";
-            $result['records'] = $this->reports_model->GetReportActivity($filter,
-                                    $range,
-                                    $this->input->post('limit'),
-                                    $this->input->post('offset')
-                                    )->result();
-            
-            $result['count_total'] = $this->reports_model->CountReportActivity($filter,$range);
+            echo json_encode($result);
         }
         else{
-            $result['records'] = $this->reports_model->GetReportActivity()->result();
+            http_response_code(500);
+            echo json_encode($is_valid, JSON_PRETTY_PRINT); 
         }
-        echo json_encode($result);
     }
     
     function CountReportActivity(){
@@ -107,4 +124,49 @@ class report_ajax extends CI_Controller {
         }
     }
 
+    function PrintReportActivity(){
+        $this->load->library('validation');
+        $validation[] = array('type' => 'required|valid_date','name' => 'Date Start','value' => $this->input->post('date_start'), 'fine_name' => "Date Start");
+        $validation[] = array('type' => 'required|valid_date','name' => 'Date Finish','value' => $this->input->post('date_finish'), 'fine_name' => "Date Finish");
+        
+        $is_valid = CheckValidation($validation, $this->validation);
+        if($is_valid === TRUE){
+            //check post request
+            if($this->input->post() != null){
+                if(($this->input->post('user') != '') && ($this->input->post('user') != 'All')){
+                    $filter['user_id'] = $this->input->post('user');
+                }
+                elseif(($this->input->post('group') != '') && ($this->input->post('group') != 'All')){
+                    $filter['group_id'] = $this->input->post('group');
+                }
+                elseif($this->input->post('country') != ''){
+                    $filter['country_code'] = $this->input->post('country');
+                }
+                else{
+                    $filter = null;
+                }
+                
+                $range = "time between '".$this->input->post('date_start')." 00:00:00' and '".$this->input->post('date_finish')." 23:59:59'";
+                $result['records'] = $this->reports_model->GetReportActivity($filter,
+                                        $range,
+                                        $this->input->post('limit'),
+                                        $this->input->post('offset')
+                                        )->result();
+                
+                $result['count_total'] = $this->reports_model->CountReportActivity($filter,$range);
+            }
+            else{
+                $result['records'] = $this->reports_model->GetReportActivity()->result();
+            }
+        
+            $this->output->set_header("Content-Type: application/vnd.ms-excel; charset=" . 'UTF-8');
+            $this->output->set_header("Content-Disposition: inline; filename=\"Report Activity.xls\"");
+            print_r($result);
+            $this->load->view('reports/excel',$result);
+        }
+        else{
+            http_response_code(500);
+            echo json_encode($is_valid, JSON_PRETTY_PRINT); 
+        }
+    }
 }

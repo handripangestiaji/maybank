@@ -1,0 +1,20 @@
+<table>
+    <thead>
+        <tr>
+            <td>Time</td>
+            <td>User</td>
+            <td>Role</td>
+            <td>Action</td>
+            <td>Status</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>$time</td>
+            <td>$fullname</td>
+            <td>$rolename</td>
+            <td>$action</td>
+            <td>$status</td>
+        </tr>
+    </tbody>
+</table>

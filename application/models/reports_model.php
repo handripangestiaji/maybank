@@ -151,7 +151,10 @@ class Reports_model extends CI_Model
 	    $this->db->limit($limit,$offset);
 	}
 	
-	$this->db->where($range);
+	if($range){
+	    $this->db->where($range);
+	}
+	
 	$this->db->order_by('time','desc');
 	return $this->db->get();
     }
@@ -164,7 +167,10 @@ class Reports_model extends CI_Model
 	    $this->db->where($filter);
 	}
 	
-	$this->db->where($range);
+	if($range){
+	    $this->db->where($range);
+	}
+	
 	$count =  $this->db->count_all_results();
 	return $count;
     }
@@ -174,10 +180,11 @@ class Reports_model extends CI_Model
 	$now = date('Y-m-d H:i:s');
 	
 	//read channel_action
-	$this->db->select('username, role_name, action_type, role_collection.country_code, channel_action.created_at');
+	$this->db->select('username, user.user_id, user.group_id, role_name, action_type, user.country_code, channel_action.created_at');
 	$this->db->from('channel_action');
 	$this->db->join('user','channel_action.created_by = user.user_id');
 	$this->db->join('role_collection','user.role_id = role_collection.role_collection_id');
+	
 	$this->db->where("channel_action.created_at > '".$date."'");
 	$this->db->order_by('channel_action.created_at');
 	$result = $this->db->get()->result();
@@ -187,6 +194,8 @@ class Reports_model extends CI_Model
 	if($result){
 	    foreach($result as $row){
 		$value[] = array('username' => $row->username,
+				'user_id' => $row->user_id,
+				'group_id' => $row->group_id,
 			       'rolename' => $row->role_name,
 			       'action' => $row->action_type,
 			       'status' => '',
@@ -199,7 +208,7 @@ class Reports_model extends CI_Model
 	
 	
 	//read case
-	$this->db->select('username, role_name, case_id, messages, role_collection.country_code, case.created_at');
+	$this->db->select('username, user.user_id, user.group_id, role_name, case_id, messages, user.country_code, case.created_at');
 	$this->db->from('case');
 	$this->db->join('user','case.created_by = user.user_id');
 	$this->db->join('role_collection','user.role_id = role_collection.role_collection_id');
@@ -210,6 +219,8 @@ class Reports_model extends CI_Model
 	//store case
 	foreach($result as $row){
 	    $value[] = array('username' => $row->username,
+			    'user_id' => $row->user_id,
+			    'group_id' => $row->group_id,
 			   'rolename' => $row->role_name,
 			   'action' => 'Create New Case #'.$row->case_id,
 			   'status' => $row->messages,
@@ -243,7 +254,7 @@ class Reports_model extends CI_Model
         */
 	
 	//read channel
-	$this->db->select('username, role_name, name, role_collection.country_code, channel.token_created_at');
+	$this->db->select('username, user.user_id, user.group_id, role_name, name, user.country_code, channel.token_created_at');
 	$this->db->from('channel');
 	$this->db->join('user','channel.created_by = user.user_id');
 	$this->db->join('role_collection','user.role_id = role_collection.role_collection_id');
@@ -254,6 +265,8 @@ class Reports_model extends CI_Model
 	//store channel
 	foreach($result as $row){
 	    $value[] = array('username' => $row->username,
+			     'user_id' => $row->user_id,
+			    'group_id' => $row->group_id,
 			   'rolename' => $row->role_name,
 			   'action' => 'Create New Channel',
 			   'status' => $row->name,
@@ -264,7 +277,7 @@ class Reports_model extends CI_Model
         }
         
 	//read content_campaign
-	$this->db->select('username, role_name, campaign_name, role_collection.country_code, content_campaign.created_at');
+	$this->db->select('username, user.user_id, user.group_id, role_name, campaign_name, user.country_code, content_campaign.created_at');
 	$this->db->from('content_campaign');
 	$this->db->join('user','content_campaign.user_id = user.user_id');
 	$this->db->join('role_collection','user.role_id = role_collection.role_collection_id');
@@ -275,6 +288,8 @@ class Reports_model extends CI_Model
 	//store content_campaign
 	foreach($result as $row){
 	    $value[] = array('username' => $row->username,
+			     'user_id' => $row->user_id,
+			    'group_id' => $row->group_id,
 			   'rolename' => $row->role_name,
 			   'action' => 'Create New Campaign',
 			   'status' => $row->campaign_name,
@@ -285,7 +300,7 @@ class Reports_model extends CI_Model
         }
 	
 	//read content_products
-	$this->db->select('username, role_name, product_name, role_collection.country_code, content_products.created_at');
+	$this->db->select('username, user.user_id, user.group_id, role_name, product_name, user.country_code, content_products.created_at');
 	$this->db->from('content_products');
 	$this->db->join('user','content_products.user_id = user.user_id');
 	$this->db->join('role_collection','user.role_id = role_collection.role_collection_id');
@@ -296,6 +311,8 @@ class Reports_model extends CI_Model
 	//store content_products
 	foreach($result as $row){
 	    $value[] = array('username' => $row->username,
+			     'user_id' => $row->user_id,
+			    'group_id' => $row->group_id,
 			   'rolename' => $row->role_name,
 			   'action' => 'Create New Product',
 			   'status' => $row->product_name,
@@ -306,7 +323,7 @@ class Reports_model extends CI_Model
         }
 	
 	//read content_tag
-	$this->db->select('username, role_name, tag_name, role_collection.country_code, content_tag.created_at');
+	$this->db->select('username, user.user_id, user.group_id, role_name, tag_name, user.country_code, content_tag.created_at');
 	$this->db->from('content_tag');
 	$this->db->join('user','content_tag.user_id = user.user_id');
 	$this->db->join('role_collection','user.role_id = role_collection.role_collection_id');
@@ -317,6 +334,8 @@ class Reports_model extends CI_Model
 	//store content_tag
 	foreach($result as $row){
 	    $value[] = array('username' => $row->username,
+			     'user_id' => $row->user_id,
+			    'group_id' => $row->group_id,
 			   'rolename' => $row->role_name,
 			   'action' => 'Create New Tag',
 			   'status' => $row->tag_name,
@@ -349,7 +368,7 @@ class Reports_model extends CI_Model
 	*/
 	
 	//read role_collection
-	$this->db->select('username, x.role_name as xrole_name, role_collection.role_name, x.country_code, role_collection.created_at');
+	$this->db->select('username, user.user_id, user.group_id, x.role_name as xrole_name, role_collection.role_name, user.country_code, role_collection.created_at');
 	$this->db->from('role_collection');
 	$this->db->join('user','role_collection.created_by = user.user_id');
 	$this->db->join('role_collection x','user.role_id = x.role_collection_id');
@@ -360,6 +379,8 @@ class Reports_model extends CI_Model
 	//store role_collection
 	foreach($result as $row){
 	    $value[] = array('username' => $row->username,
+			     'user_id' => $row->user_id,
+			    'group_id' => $row->group_id,
 			   'rolename' => $row->xrole_name,
 			   'action' => 'Create new role',
 			   'status' => $row->role_name,
@@ -370,7 +391,7 @@ class Reports_model extends CI_Model
         }
 	
 	//read short_urls
-	$this->db->select('username, role_name, short_code, role_collection.country_code, short_urls.created_at');
+	$this->db->select('username, user.user_id, user.group_id, role_name, short_code, user.country_code, short_urls.created_at');
 	$this->db->from('short_urls');
 	$this->db->join('user','short_urls.user_id = user.user_id');
 	$this->db->join('role_collection','user.role_id = role_collection.role_collection_id');
@@ -381,6 +402,8 @@ class Reports_model extends CI_Model
 	//store short_urls
 	foreach($result as $row){
 	    $value[] = array('username' => $row->username,
+			     'user_id' => $row->user_id,
+			    'group_id' => $row->group_id,
 			   'rolename' => $row->role_name,
 			   'action' => 'Create short url',
 			   'status' => $row->short_code,
@@ -414,7 +437,7 @@ class Reports_model extends CI_Model
 	*/
 	
 	//read user
-	$this->db->select('x.username as xusername, user.username, role_name, role_collection.country_code, user.created_at, user.created_by');
+	$this->db->select('x.username as xusername, x.user_id, x.group_id, user.username, role_name, user.country_code, user.created_at, user.created_by');
 	$this->db->from('user');
 	$this->db->join('user x','user.created_by = x.user_id');
 	$this->db->join('role_collection','x.role_id = role_collection.role_collection_id');
@@ -426,6 +449,8 @@ class Reports_model extends CI_Model
 	foreach($result as $row){
 	    if($row->created_by){
 	    $value[] = array('username' => $row->xusername,
+			     'user_id' => $row->user_id,
+			    'group_id' => $row->group_id,
 			   'rolename' => $row->role_name,
 			   'action' => 'Create '.$row->username,
 			   'status' => '',
@@ -437,7 +462,7 @@ class Reports_model extends CI_Model
         }
 	
 	//read user_group
-	$this->db->select('username, role_name, group_name, role_collection.country_code, user_group.created_at');
+	$this->db->select('username, user.user_id, user.group_id, role_name, group_name, user.country_code, user_group.created_at');
 	$this->db->from('user_group');
 	$this->db->join('user','user_group.created_by = user.user_id');
 	$this->db->join('role_collection','user.role_id = role_collection.role_collection_id');
@@ -448,6 +473,8 @@ class Reports_model extends CI_Model
 	//store user_group
 	foreach($result as $row){
 	    $value[] = array('username' => $row->username,
+			     'user_id' => $row->user_id,
+			    'group_id' => $row->group_id,
 			   'rolename' => $row->role_name,
 			   'action' => 'Create '.$row->group_name,
 			   'status' => '',
@@ -458,7 +485,7 @@ class Reports_model extends CI_Model
         }
 	
 	//read user_login
-	$this->db->select('username, role_name, role_collection.country_code, login_time, logout_time');
+	$this->db->select('username, user.user_id, user.group_id, role_name, user.country_code, login_time, logout_time');
 	$this->db->from('user_login_activity');
 	$this->db->join('user','user_login_activity.user_id = user.user_id');
 	$this->db->join('role_collection','user.role_id = role_collection.role_collection_id');
@@ -469,6 +496,8 @@ class Reports_model extends CI_Model
 	//store user_login
 	foreach($result as $row){
 	    $value[] = array('username' => $row->username,
+			     'user_id' => $row->user_id,
+			    'group_id' => $row->group_id,
 			   'rolename' => $row->role_name,
 			   'action' => 'Login',
 			   'status' => '',
@@ -478,6 +507,8 @@ class Reports_model extends CI_Model
 			   );
 	    
 	    $value[] = array('username' => $row->username,
+			     'user_id' => $row->user_id,
+			    'group_id' => $row->group_id,
 			   'rolename' => $row->role_name,
 			   'action' => 'Logout',
 			   'status' => '',
@@ -498,6 +529,12 @@ class Reports_model extends CI_Model
     public function get_country(){
 	$this->db->select('*');
 	$this->db->from('country');
+	return $this->db->get();
+    }
+    
+    public function selectMaxDate(){
+	$this->db->select_max('time');
+	$this->db->from('report_activity');
 	return $this->db->get();
     }
 }

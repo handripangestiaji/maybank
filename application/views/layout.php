@@ -49,7 +49,7 @@
         
         <script src="<?php echo base_url('media/js/vendor/bootstrap-datepicker.js')?>"></script>               <!-- datepicker plugin -->
 	
-	<script src="<?php echo base_url(); ?>media/js/vendor/jquery-date-range-picker/moment.min.js"></script>
+	<!--script src="<?php echo base_url(); ?>media/js/vendor/jquery-date-range-picker/moment.min.js"></script!-->
 	
     
         <script src="<?php echo base_url('media/js/thekamarel.min.js')?>"></script>                            <!-- main project js file -->

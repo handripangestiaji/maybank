@@ -27,7 +27,7 @@ class Reports_model extends CI_Model
     }
     
     function filter_report($current_code, $case_type = null){
-	$query = "SELECT b.product_name, b.id, a.type, a.type2, a.code,  sum(a.total_case) as total_case, sum(a.total_solved) as total_solved, sum(a.average_response) as average_response
+	$query = "SELECT b.product_name, b.id, a.type, a.type2, a.code,  sum(a.total_case) as total_case, sum(a.total_solved) as total_solved, sum(a.average_response) as average_response, product_parent_id
 	FROM report_performance a right join content_products b on a.product_id = b.id
 	WHERE a.code = '$current_code' ".($case_type == null ? "" : " AND a.case_type = '$case_type'");
 	$q = $this->db->query($query." GROUP By a.type, a.type2");
@@ -35,9 +35,9 @@ class Reports_model extends CI_Model
 	$result_array = array();
 	$result_array[0] = $result_array[1] = array();
 	foreach($result as $row){
+	   
 	    if($row->type2 == null){
-		
-		if($row->type == 'facebook' || $row->type == null)
+		if($row->type == 'facebook' || $row->type == null || $row->type == 'facebook_comment')
 		    $result_array[0][] = $row;
 		if($row->type == 'facebook_conversation' || $row->type == null)
 		    $result_array[1][] = $row;

@@ -139,7 +139,9 @@ $(function(){
             var summary = firstLane = secondLane = "<td colspan='3'>No Result</td>" ;
             for(var x=0; x<response[2].length; x++){
                 if(productList[i].id == response[2][x].id){
-                    summary = "<td class='cols1'>" + response[2][x].total_case +"</td><td class='cols2'>" + response[2][x].total_solved +"</td><td class='cols3 time-value'><input type='hidden' value='" + response[2][x].average_response + "'/>" +  timeConverter(response[2][x].average_response) +"</td>";
+                    summary = "<td class='cols1'>" + response[2][x].total_case +"</td><td class='cols2'>" +
+                    response[2][x].total_solved +"</td><td class='cols3 time-value'><input type='hidden' value='" +
+                    response[2][x].average_response + "'/>" +  timeConverter(response[2][x].average_response) +"</td>";
                 }
             }
             for(var y=0; y < response[0].length; y++){
@@ -186,7 +188,6 @@ $(function(){
             else
                 $('#report .table tfoot td.sum'+ i).html(summary[i]);
         }
-        $('.table tfoot .btn-download').val($('#report .table').html().text());
     }
     
     

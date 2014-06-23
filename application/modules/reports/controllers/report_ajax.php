@@ -51,6 +51,8 @@ class report_ajax extends CI_Controller {
         $case_type = $case_type == 'all' ? null : $case_type;
         echo json_encode($this->reports_model->filter_report($this->session->userdata('current_code'), $case_type), JSON_PRETTY_PRINT);
     }
+    
+    
     function GenerateActivity(){
         //get the latest id from table report_activity
         $result = $this->reports_model->getReportActivity()->first_row();

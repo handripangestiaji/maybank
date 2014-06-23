@@ -188,6 +188,7 @@ $(function(){
             else
                 $('#report .table tfoot td.sum'+ i).html(summary[i]);
         }
+        $('.table tfoot .btn-download').val($('#report .table').html().text());
     }
     
     
@@ -260,6 +261,20 @@ $(function(){
                 console.log($('#date-range0').val());
             },
         });
+    });
+    
+    $(this).on('click','.btn-download ', function(){
+         var form = document.createElement("form");
+        form.setAttribute("method", "POST");
+        form.setAttribute("action", BASEURL + "reports/report_ajax/DownloadUserPerformance");
+        var hiddenField = document.createElement("input");
+        hiddenField.setAttribute("type", "hidden");
+        hiddenField.setAttribute("name", "table_download");
+        hiddenField.setAttribute("value", "<table>" + $(this).val() + "</table>");
+        
+        form.appendChild(hiddenField);
+        form.submit();
+        form.remove();
     });
    
 });

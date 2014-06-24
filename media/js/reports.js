@@ -178,17 +178,11 @@ $(function(){
       
         $('.table tfoot .btn-download').val($('#report .table').html().text());
     }
-    
-    
-    
 
     $('.x-pagination').on('click',function(){
         var me = $(this);
         var offset = me.attr('data-offset');
         var limit = me.attr('data-limit');
-        
-        var dates = $('#date-range0').val();
-        var res = dates.split(' to ');
         
         $.ajax({
             url : BASEURL + 'reports/report_ajax/GetReportActivity',
@@ -197,7 +191,10 @@ $(function(){
                 limit: limit,
                 offset: offset,
                 date_start: $('#dateStart').val(),
-                date_end: $('#dateFinish').val()
+                date_finish: $('#dateFinish').val(),
+                country: $('#reportCountry').val(),
+                group: $('#reportUserGroup').val(),
+                user: $('#reportUserList').val()
             },
             success: function(result)
             {
@@ -215,12 +212,14 @@ $(function(){
                     );
                 }
                 generatePagination(result.count_total,limit,offset);
-                console.log($('#date-range0').val());
             },
         });
     });
     
-    $('#reportCreateActivity').on('click',function(){       
+    $('#reportCreateActivity').on('click',function(){
+        var limit = 20;
+        var offset = 0;
+        
         $.ajax({
             url : BASEURL + 'reports/report_ajax/GetReportActivity',
             type: "POST",
@@ -228,7 +227,10 @@ $(function(){
                 limit: 20,
                 offset: 0,
                 date_start: $('#dateStart').val(),
-                date_end: $('#dateFinish').val()
+                date_finish: $('#dateFinish').val(),
+                country: $('#reportCountry').val(),
+                group: $('#reportUserGroup').val(),
+                user: $('#reportUserList').val()
             },
             success: function(result)
             {
@@ -246,13 +248,12 @@ $(function(){
                     );
                 }
                 generatePagination(result.count_total,limit,offset);
-                console.log($('#date-range0').val());
             },
         });
     });
     
     $(this).on('click','.btn-download ', function(){
-         var form = document.createElement("form");
+        var form = document.createElement("form");
         form.setAttribute("method", "POST");
         form.setAttribute("action", BASEURL + "reports/report_ajax/DownloadUserPerformance");
         var hiddenField = document.createElement("input");
@@ -264,5 +265,84 @@ $(function(){
         form.submit();
         form.remove();
     });
-   
+    
+    
+    $(this).on('click', '#btn-download-report-activity', function(){
+        var form = document.createElement("form");
+        form.setAttribute("method", "POST");
+        form.setAttribute("action", BASEURL + "reports/report_ajax/PrintReportActivity");
+        
+        var dateStart = document.createElement("input");
+        dateStart.setAttribute("type", "hidden");
+        dateStart.setAttribute("name", "date_start");
+        dateStart.setAttribute("value", $('#dateStart').val());
+        
+        var dateFinish = document.createElement("input");
+        dateFinish.setAttribute("type", "hidden");
+        dateFinish.setAttribute("name", "date_finish");
+        dateFinish.setAttribute("value", $('#dateFinish').val());
+        
+        var country = document.createElement("input");
+        country.setAttribute("type", "hidden");
+        country.setAttribute("name", "country");
+        country.setAttribute("value", $('#reportCountry').val());
+        
+        var group = document.createElement("input");
+        group.setAttribute("type", "hidden");
+        group.setAttribute("name", "group");
+        group.setAttribute("value", $('#reportUserGroup').val());
+        
+        var user = document.createElement("input");
+        user.setAttribute("type", "hidden");
+        user.setAttribute("name", "user");
+        user.setAttribute("value", $('#reportUserList').val());
+        
+        form.appendChild(dateStart);
+        form.appendChild(dateFinish);
+        form.appendChild(country);
+        form.appendChild(group);
+        form.appendChild(user);
+        form.submit();
+        form.remove();
+    });
+    
+    function generatePagination(total_count, limit, current_offset){
+        //segments = count_all_records / limit
+        var segments = Math.floor(total_count / limit);
+        console.log(segments);
+        
+        //first
+        $('.btn-pagination-first').attr('data-offset',0);
+        $('.btn-pagination-first').attr('data-limit', limit);
+        
+        //last
+        $('.btn-pagination-last').attr('data-offset',parseInt(segments) * parseInt(limit));
+        $('.btn-pagination-last').attr('data-limit', limit);
+        
+        //prev
+        if(current_offset != 0){
+            $('.btn-pagination-prev').removeClass('disabled');
+            $('.btn-pagination-first').removeClass('disabled');
+            $('.btn-pagination-prev').attr('data-offset',parseInt(current_offset) - parseInt(limit));
+            $('.btn-pagination-prev').attr('data-limit', limit);
+        }
+        else{
+            $('.btn-pagination-prev').addClass('disabled');
+            $('.btn-pagination-first').addClass('disabled');
+        }
+        
+        //next
+        if(current_offset < segments * 20){
+            $('.btn-pagination-next').removeClass('disabled');
+            $('.btn-pagination-last').removeClass('disabled');
+            $('.btn-pagination-next').attr('data-offset',parseInt(current_offset) + parseInt(limit));
+            $('.btn-pagination-next').attr('data-limit', limit);
+        }
+        else{
+            $('.btn-pagination-next').addClass('disabled');
+            $('.btn-pagination-last').addClass('disabled');
+        }
+        
+        //numbers
+    }
 });

@@ -25,38 +25,53 @@ class Reports_model extends CI_Model
 	$references_report = $q->row();
 	return $references_report->my_code;
     }
+    /*
     
+    */
     function filter_report($current_code, $case_type = null){
-	$query = "SELECT b.product_name, b.id, a.type, a.type2, a.code,  sum(a.total_case) as total_case, sum(a.total_solved) as total_solved, sum(a.average_response) as average_response, product_parent_id
+	$query = "SELECT b.product_name, b.id, a.type, a.type2, a.code,  sum(a.total_case) as total_case, sum(a.total_solved) as total_solved, avg(a.average_response) as average_response, product_parent_id
 	FROM report_performance a right join content_products b on a.product_id = b.id
 	WHERE a.code = '$current_code' ".($case_type == null ? "" : " AND a.case_type = '$case_type'");
 	$q = $this->db->query($query." GROUP By a.type, a.type2");
 	$result = $q->result();
 	$result_array = array();
 	$result_array[0] = $result_array[1] = array();
-	foreach($result as $row){
-	   
-	    if($row->type2 == null){
-		if($row->type == 'facebook' || $row->type == null || $row->type == 'facebook_comment')
-		    $result_array[0][] = $row;
-		if($row->type == 'facebook_conversation' || $row->type == null)
-		    $result_array[1][] = $row;
-	    }
-	    else{
-		if($row->type2 == "mentions" || $row->type == null || $row->type2 == "homefeed")
-		    $result_array[0][] = $row;
-		
-		if($row->type == "twitter_dm" || $row->type == null)
-		    $result_array[1][] = $row;
-	    }
+	foreach($result as $row1){
+	    $ret_val = $this->format_row_report($row1, $result_array);
+	    $row1 = $ret_val[0];
+	    $result_array[0] = $ret_val[1];
 	}
 	$q2 = $this->db->query($query." GROUP By b.id");
 	$result_array[2] = $q2->result();
-	
+	foreach($result_array[2] as $row2){
+	    $ret_val = $this->format_row_report($row2, $result_array);
+	    $row2 = $ret_val[0];
+	    $result_array = $ret_val[1];
+	}
 	$result_array[3] = $this->load->model('campaign_model')->GetProductBasedOnParent();
 	$q4 = $this->db->query($query);
 	$result_array[4] = $q4->result();
+	foreach($result_array[4] as $row4){
+	    $row4->average_response_string = time_elapsed_A($row4->average_response);
+	}
 	return $result_array;
+    }
+    function format_row_report($row, $result_array, $val1 = 0, $val2 = 1){
+	$row->average_response_string = time_elapsed_A($row->average_response);
+	if($row->type2 == null){
+	    if($row->type == 'facebook' || $row->type == null || $row->type == 'facebook_comment')
+		$result_array[$val1][] = $row;
+	    if($row->type == 'facebook_conversation' || $row->type == null)
+		$result_array[$val2][] = $row;
+	}
+	else{
+	    if($row->type2 == "mentions" || $row->type == null || $row->type2 == "homefeed")
+		$result_array[$val1][] = $row;
+	    
+	    if($row->type == "twitter_dm" || $row->type == null)
+		$result_array[$val2][] = $row;
+	}
+	return array($row, $result_array);
     }
     
     function count_all_cases($channel, $dateFrom, $dateTo){

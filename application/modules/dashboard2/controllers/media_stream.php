@@ -1290,4 +1290,16 @@ class Media_stream extends CI_Controller {
 	}
 	
     }
+    public function LoadCaseField(){
+	$type = $this->input->get('type');
+	$post_id = $this->input->get('post_id');
+	
+	if($type == 'twitter'){
+	    $data = $this->twitter_model->ReadTwitterData(array('a.post_id' => $post_id));
+	    $this->load->view('dashboard/case_field', array('posts' =>$data, 'i' => 0 ));
+	}
+	else if($type == 'twitter_dm'){
+	    
+	}
+    }
 }

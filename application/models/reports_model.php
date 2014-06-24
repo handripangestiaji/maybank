@@ -506,6 +506,11 @@ class Reports_model extends CI_Model
 			   'created_at' => $now
 			   );
 	    
+	    $logout_time = $row->logout_time;
+	    if($logout_time == null){
+		$logout_time = date('Y-m-d H:i:s',strtotime('+2 hours', strtotime($row->login_time)));
+	    }
+	    
 	    $value[] = array('username' => $row->username,
 			     'user_id' => $row->user_id,
 			    'group_id' => $row->group_id,
@@ -513,10 +518,10 @@ class Reports_model extends CI_Model
 			   'action' => 'Logout',
 			   'status' => '',
 			   'country_code' => $row->country_code,
-			   'time' => $row->logout_time,
+			   'time' => $logout_time,
 			   'created_at' => $now
 			   );
-        }
+	}
 	
 	if(!empty($value)){
 	    $this->db->insert_batch('report_activity',$value);

@@ -149,7 +149,7 @@ for($i=0;$i<count($homefeed);$i++){
             <?php
             $data_loaded['post'] = $homefeed[$i];
             $data_loaded['unique_id'] = $unique_id;
-            $this->load->view('dashboard/action_taken', $data_loaded);?>
+           // $this->load->view('dashboard/action_taken', $data_loaded);?>
         <!-- ==================== END OF CONDENSED TABLE FLOATING BOX ==================== --> 
     </div>
     <!-- END ENGAGEMENT -->
@@ -174,7 +174,7 @@ for($i=0;$i<count($homefeed);$i++){
         $data['mentions'] = $homefeed;
         $data['i'] = $i;
         $data['type'] = 'reply';
-        $this->load->view('dashboard/reply_field_twitter', $data);?>
+        //$this->load->view('dashboard/reply_field_twitter', $data);?>
     </div>
     <!-- END REPLY -->
     
@@ -184,7 +184,7 @@ for($i=0;$i<count($homefeed);$i++){
         $data['mentions'] = $homefeed;
         $data['type'] = 'direct_message';
         $data['i'] = $i;
-        $this->load->view('dashboard/reply_field_twitter', $data);?>
+       // $this->load->view('dashboard/reply_field_twitter', $data);?>
     </div>
     <!-- END DM -->
     
@@ -193,7 +193,7 @@ for($i=0;$i<count($homefeed);$i++){
        <?php
             $data['posts'] = $homefeed;
             $data['i'] = $i;
-            $this->load->view('dashboard/case_field',$data);
+            //$this->load->view('dashboard/case_field',$data);
         ?>
     </div>
     <!-- END CASE -->  

@@ -139,17 +139,19 @@ $(function(){
             var summary = firstLane = secondLane = "<td colspan='3'>No Result</td>" ;
             for(var x=0; x<response[2].length; x++){
                 if(productList[i].id == response[2][x].id){
-                    summary = "<td class='cols1'>" + response[2][x].total_case +"</td><td class='cols2'>" + response[2][x].total_solved +"</td><td class='cols3 time-value'><input type='hidden' value='" + response[2][x].average_response + "'/>" +  timeConverter(response[2][x].average_response) +"</td>";
+                    summary = "<td class='cols1'>" + response[2][x].total_case +"</td><td class='cols2'>" +
+                    response[2][x].total_solved +"</td><td class='cols3 time-value'><input type='hidden' value='" +
+                    response[2][x].average_response + "'/>" +  response[2][x].average_response_string +"</td>";
                 }
             }
             for(var y=0; y < response[0].length; y++){
                  if(productList[i].id == response[0][y].id){
-                    firstLane = "<td class='cols4'>" + response[0][y].total_case +"</td><td class='cols5'>" + response[0][y].total_solved +"</td><td class='cols6 time-value'><input type='hidden' value='" + response[0][y].average_response + "'/>" +  timeConverter(response[0][y].average_response) +"</td>";
+                    firstLane = "<td class='cols4'>" + response[0][y].total_case +"</td><td class='cols5'>" + response[0][y].total_solved +"</td><td class='cols6 time-value'><input type='hidden' value='" + response[0][y].average_response + "'/>" + response[0][y].average_response_string +"</td>";
                 }
             }
             for(var z=0; z<response[1].length; z++){
                  if(productList[i].id == response[1][z].id){
-                    secondLane = "<td class='cols7'>" + response[1][z].total_case +"</td><td class='cols8'>" + response[1][z].total_solved +"</td><td class='cols9 time-value'><input type='hidden' value='" + response[1][z].average_response + "'/>" +  timeConverter(response[1][z].average_response)+"</td>";
+                    secondLane = "<td class='cols7'>" + response[1][z].total_case +"</td><td class='cols8'>" + response[1][z].total_solved +"</td><td class='cols9 time-value'><input type='hidden' value='" + response[1][z].average_response + "'/>" +  response[1][z].average_response_string+"</td>";
                 }
             }
             var isHidden = productList[i].parent_id > 0;
@@ -168,25 +170,13 @@ $(function(){
                 $(this).html('Show');
             
         });
-        var summary = []; 
-        $('#report .table tbody td').each(function(){
-            for(i=0;i<10;i++){
-                summary[i] = summary[i] == undefined ? 0 : summary[i];
-                if($(this).hasClass('cols' + i.toString())){
-                    
-                    summary[i] += $(this).hasClass('time-value') ? parseFloat($(this).find('input').val()) : parseFloat($(this).html());
-                    
-                }
-            }
-        });
-        for(i=0;i<summary.length; i++){
-            if(i%3 == 0){
-                $('#report .table tfoot td.sum'+ i).html(timeConverter(summary[i]));
-            }
-            else
-                $('#report .table tfoot td.sum'+ i).html(summary[i]);
-        }
-        $('.table tfoot .btn-download').val($('#report .table').html());
+        
+        $('#report .table tfoot .sum1').html(response[4][0].total_case);
+        $('#report .table tfoot .sum2').html(response[4][0].total_solved);
+        $('#report .table tfoot .sum3').html(response[4][0].average_response_string);    
+        
+      
+        $('.table tfoot .btn-download').val($('#report .table').html().text());
     }
 
     $('.x-pagination').on('click',function(){

@@ -210,14 +210,19 @@ $(function(){
                     summary += parseInt($(this).html());    
                 }
                 else{
-                    summary += parseFloat($(this).find('.time-value input').val());
+                    console.log($(this).find('input').val());
+                    summary += $(this).find('input').val() == undefined || $(this).find('input').val() == '' ||
+                            $(this).find('input').val() == null || isNaN($(this).find('input').val()) ?
+                            0 : parseFloat($(this).find('input').val()) ;
                 }
                 x++
             });
+            
             if(i%3 != 0){
                 $('#report .table tfoot .sum' + i).html(Math.floor(summary));
             }
             else{
+                
                 $('#report .table tfoot .sum' + i).html(time_elapsed(summary/x));
             }
         }

@@ -17,6 +17,10 @@ class Reports_model extends CI_Model
         return $this->db->get('content_products');
     }
     
+    
+    /*
+    * Generate Report for 
+    */
     function create_report($channel_id, $user_id, $date_start, $date_finish, $ug_id = null)
     {
 	$ug_id = $ug_id == null || $ug_id == 'All'? 'null' : "'$ug_id'";
@@ -25,55 +29,53 @@ class Reports_model extends CI_Model
 	$references_report = $q->row();
 	return $references_report->my_code;
     }
-    /*
     
+    /*
+    * Filter_report
+    * $current_code : Country Code to generate reports...
+    * $case_type : Type of case, there is feedback, report abuse, enquiries, and complaints 
     */
     function filter_report($current_code, $case_type = null){
-	$query = "SELECT b.product_name, b.id, a.type, a.type2, a.code,  sum(a.total_case) as total_case, sum(a.total_solved) as total_solved, avg(a.average_response) as average_response, product_parent_id
-	FROM report_performance a right join content_products b on a.product_id = b.id
-	WHERE a.code = '$current_code' ".($case_type == null ? "" : " AND a.case_type = '$case_type'");
-	$q = $this->db->query($query." GROUP By a.type, a.type2");
-	$result = $q->result();
-	$result_array = array();
-	$result_array[0] = $result_array[1] = array();
-	foreach($result as $row1){
-	    $ret_val = $this->format_row_report($row1, $result_array);
-	    $row1 = $ret_val[0];
-	    $result_array[0] = $ret_val[1];
-	}
-	$q2 = $this->db->query($query." GROUP By b.id");
-	$result_array[2] = $q2->result();
-	foreach($result_array[2] as $row2){
-	    $ret_val = $this->format_row_report($row2, $result_array);
-	    $row2 = $ret_val[0];
-	    $result_array = $ret_val[1];
-	}
-	$result_array[3] = $this->load->model('campaign_model')->GetProductBasedOnParent();
-	$q4 = $this->db->query($query);
-	$result_array[4] = $q4->result();
-	foreach($result_array[4] as $row4){
-	    $row4->average_response_string = time_elapsed_A($row4->average_response);
-	}
-	return $result_array;
-    }
-    function format_row_report($row, $result_array, $val1 = 0, $val2 = 1){
-	$row->average_response_string = time_elapsed_A($row->average_response);
-	if($row->type2 == null){
-	    if($row->type == 'facebook' || $row->type == null || $row->type == 'facebook_comment')
-		$result_array[$val1][] = $row;
-	    if($row->type == 'facebook_conversation' || $row->type == null)
-		$result_array[$val2][] = $row;
-	}
-	else{
-	    if($row->type2 == "mentions" || $row->type == null || $row->type2 == "homefeed")
-		$result_array[$val1][] = $row;
-	    
-	    if($row->type == "twitter_dm" || $row->type == null)
-		$result_array[$val2][] = $row;
-	}
-	return array($row, $result_array);
+	$query = $this->filter_query_build(array(), "group by type, product_name", $current_code, $case_type);
+	$main_val =$this->db->query($query)->result();
+	
+	$summary_per_parent = $this->filter_query_build(array('c.parent_id', 'type', 'type2',  'sum(total_case) as total_case', 'sum(total_solved) as total_solved',
+	    'avg(average_response) as average_response'),
+	    "group by type, type2, c.parent_id", $current_code, $case_type );
+	
+	
+	$summary_all = $this->filter_query_build(array('type', 'type2',  'sum(total_case) as total_case', 'sum(total_solved) as total_solved',
+	    'avg(average_response) as average_response'),
+	    "group by type, type2", $current_code, $case_type);
+	$return_value = array(
+	    "main"  => $this->configure_time_lapse($main_val),
+	    "main_per_parent" => $this->configure_time_lapse($this->db->query($summary_per_parent)->result()),
+	    "main_summary" => $this->configure_time_lapse($this->db->query($summary_all)->result()),
+	    "product_list" => $this->load->model('campaign_model')->GetProductBasedOnParent(),
+	);
+	return $return_value;
+
     }
     
+    function configure_time_lapse($collection){
+	foreach($collection as $row){
+	    $row->average_response_string = time_elapsed_A($row->average_response);
+	}
+	return $collection;
+    }
+    
+    function filter_query_build($field = array(), $group_by, $current_code, $case_type = null){
+	$field =  count($field) == 0  ? array('c.id', 'c.product_name', 'c.parent_id', 'type', 'type2', 'product_parent_id',
+		    'sum(total_case) as total_case', 'sum(total_solved) as total_solved', 'avg(average_response) as average_response') :
+		    $field;
+	$field_array = join(',', $field);
+	$query = "SELECT ".$field_array." FROM maybk_new_staging.report_performance b
+	    RIGHT JOIN content_products c on c.id = b.product_id 
+    	WHERE b.code = '$current_code' ".($case_type == null ? "" : " AND b.case_type = '$case_type'"). " $group_by  ".
+	"ORDER BY COALESCE(c.parent_id, c.`id`), c.`parent_id` is not null, c.id";
+	return $query;
+    }
+ 
     function count_all_cases($channel, $dateFrom, $dateTo){
 	$this->db->select('count(*) as counted');
 	$this->db->from('case');

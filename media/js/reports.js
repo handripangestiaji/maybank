@@ -1,5 +1,5 @@
 /*
- * Created By CloudMOtion
+ * Created By CloudMotion
  * Section Report Module
  */
 
@@ -89,7 +89,6 @@ $(function(){
             "success" : function(response){
                 
                 thisButton.createReportTable(response);
-                
             },
             "error" : function(response){
                 data = JSON.parse(response.responseText);
@@ -134,32 +133,50 @@ $(function(){
     $.fn.createReportTable = function(response){
         $(this).find("span").html('Create').removeAttr('disabled');
         $('#report .table tbody').html('');
-        var productList = response[3];
-        for(var i=0; i< productList.length; i++){
+        for(var i=0; i< response.product_list.length; i++){
             var summary = firstLane = secondLane = "<td colspan='3'>No Result</td>" ;
-            for(var x=0; x<response[2].length; x++){
-                if(productList[i].id == response[2][x].id){
-                    summary = "<td class='cols1'>" + response[2][x].total_case +"</td><td class='cols2'>" +
-                    response[2][x].total_solved +"</td><td class='cols3 time-value'><input type='hidden' value='" +
-                    response[2][x].average_response + "'/>" +  response[2][x].average_response_string +"</td>";
+            summary = "<td colspan='3' class='summary'>No Result</td>";
+            if(response.product_list[i].parent_id > 0){
+                for(var x=0; x< response.main.length; x++){
+                    var val = response.main[x].type == 'facebook' || response.main[x].type2 == 'homefeed' || response.main[x].type2 == 'mentions' ?
+                        1 : 2;
+                    if(response.product_list[i].id == response.main[x].id){
+                        if(val == 1 )
+                        firstLane = "<td class='cols" + (val*3 + 1) + "'>" + response.main[x].total_case +"</td><td class='cols" + (val*3 + 2) + "'>" +
+                                    response.main[x].total_solved +"</td><td class='cols" + (val*3 + 3) + " time-value'><input type='hidden' value='" +
+                                    response.main[x].average_response + "'/>" +  response.main[x].average_response_string +"</td>";
+                        else if(val == 2)
+                        secondLane = "<td class='cols" + (val*3 + 1) + "'>" + response.main[x].total_case +"</td><td class='cols" + (val*3 + 2) + "'>" +
+                                    response.main[x].total_solved +"</td><td class='cols" + (val*3 + 3) + " time-value'><input type='hidden' value='" +
+                                    response.main[x].average_response + "'/>" +  response.main[x].average_response_string +"</td>";
+                        
+                    }
                 }
+                $('#report .table tbody').append('<tr id="pId' + response.product_list[i].id + '" class="pId'+ response.product_list[i].parent_id +  '"><td>' +
+                    response.product_list[i].product_name + '</td>' + summary + firstLane + secondLane + '</tr>')    
             }
-            for(var y=0; y < response[0].length; y++){
-                 if(productList[i].id == response[0][y].id){
-                    firstLane = "<td class='cols4'>" + response[0][y].total_case +"</td><td class='cols5'>" + response[0][y].total_solved +"</td><td class='cols6 time-value'><input type='hidden' value='" + response[0][y].average_response + "'/>" + response[0][y].average_response_string +"</td>";
+            else{
+                
+                for(var z=0; z< response.main_per_parent.length; z++){
+                    var val = response.main_per_parent[z].type == 'facebook' || response.main_per_parent[z].type2 == 'homefeed' || response.main_per_parent[z].type2 == 'mentions' ?
+                        1 : 2;
+                    if(response.product_list[i].id == response.main_per_parent[z].parent_id){
+                        if(val == 1)
+                        firstLane = "<td class='cols" + (val*3 + 1) + "'>" + response.main_per_parent[z].total_case +"</td><td class='cols" + (val*3 + 2) + "'>" +
+                                    response.main_per_parent[z].total_solved +"</td><td class='cols" + (val*3 + 3) + " time-value'><input type='hidden' value='" +
+                                    response.main_per_parent[z].average_response + "'/>" +  response.main_per_parent[z].average_response_string +"</td>";
+                        else if(val == 2)
+                        secondLane = "<td class='cols" + (val*3 + 1) + "'>" + response.main_per_parent[z].total_case +"</td><td class='cols" + (val*3 + 2) + "'>" +
+                                    response.main_per_parent[z].total_solved +"</td><td class='cols" + (val*3 + 3) + " time-value'><input type='hidden' value='" +
+                                    response.main_per_parent[z].average_response + "'/>" +  response.main_per_parent[z].average_response_string +"</td>";
+                    }
                 }
+                $('#report .table tbody').append('<tr id="pId' + response.product_list[i].id + '" class="pId'+ response.product_list[i].parent_id +  '"><td>' +
+                    response.product_list[i].product_name + '</td>' + summary + firstLane + secondLane + '<td><button class="btn toggleSub">Show</button></td></tr>')
             }
-            for(var z=0; z<response[1].length; z++){
-                 if(productList[i].id == response[1][z].id){
-                    secondLane = "<td class='cols7'>" + response[1][z].total_case +"</td><td class='cols8'>" + response[1][z].total_solved +"</td><td class='cols9 time-value'><input type='hidden' value='" + response[1][z].average_response + "'/>" +  response[1][z].average_response_string+"</td>";
-                }
-            }
-            var isHidden = productList[i].parent_id > 0;
-            $('#report .table tbody').append('<tr id="pId' + productList[i].id+ '" class="pId'+ productList[i].parent_id +  '"><td>' +
-                        productList[i].product_name + '</td>' + summary + firstLane + secondLane + (!isHidden ? '<td><button class="btn toggleSub">Show</button></td>' : '')  +'</tr>')
             
         }
-      
+        
         $('#report .table tbody > :not(tr.pIdnull)').toggle('fast');
         $('#report .table .toggleSub').click(function(){
             idTrParent = $(this).closest('tr').attr('id');
@@ -168,15 +185,42 @@ $(function(){
                 $(this).html('Hide');
             else
                 $(this).html('Show');
-            
         });
         
-        $('#report .table tfoot .sum1').html(response[4][0].total_case);
-        $('#report .table tfoot .sum2').html(response[4][0].total_solved);
-        $('#report .table tfoot .sum3').html(response[4][0].average_response_string);    
-        
-      
-        $('.table tfoot .btn-download').val($('#report .table').html().text());
+        $('#report .table tbody tr').each(function(){
+            var cols = [];
+            for(i=4;i<=9;i++){
+                if(i%3 != 0)
+                    cols['cols'+ i] = $(this).find('.cols' + i).html() == undefined ||  $(this).find('.cols' + i).html() == '' ?
+                    0 : parseInt($(this).find('.cols' + i).html());
+                else
+                    cols['cols' + i] = $(this).find('.cols' + i + '.time-value input').val() == undefined ? 0 :
+                    parseFloat($(this).find('.cols' + i + ' input').val()) ;
+            }
+            $(this).find('.summary').attr('colspan', 0).addClass('cols1').after('<td class="cols2"></td><td class="cols3"></td>');
+            $(this).find('.cols1' ).html((cols.cols4 + cols.cols7).toString());
+            $(this).find('.cols2' ).html((cols.cols5 + cols.cols8).toString());
+            $(this).find('.cols3' ).html("<input type='hidden' value='" + ((cols.cols6 + cols.cols9) / 2 )+ "' /> " + time_elapsed((cols.cols6 + cols.cols9) / 2));
+        });
+        for(i=1;i<=9;i++){
+            var summary = 0;
+            var x = 0;
+            $('.cols' + i).each(function(){
+                if(i%3 != 0){
+                    summary += parseInt($(this).html());    
+                }
+                else{
+                    summary += parseFloat($(this).find('.time-value input').val());
+                }
+                x++
+            });
+            if(i%3 != 0){
+                $('#report .table tfoot .sum' + i).html(Math.floor(summary));
+            }
+            else{
+                $('#report .table tfoot .sum' + i).html(time_elapsed(summary/x));
+            }
+        }
     }
 
     $('.x-pagination').on('click',function(){
@@ -198,7 +242,7 @@ $(function(){
             },
             success: function(result)
             {
-                console.log(result);
+                //console.log(result);
                 $('#report_activity_table').find('tbody').html('');
                 for(var x=0; x < result.records.length; x++){
                     $('#report_activity_table').find('tbody').append(
@@ -234,7 +278,7 @@ $(function(){
             },
             success: function(result)
             {
-                console.log(result);
+                //console.log(result);
                 $('#report_activity_table').find('tbody').html('');
                 for(var x=0; x < result.records.length; x++){
                     $('#report_activity_table').find('tbody').append(
@@ -309,7 +353,6 @@ $(function(){
     function generatePagination(total_count, limit, current_offset){
         //segments = count_all_records / limit
         var segments = Math.floor(total_count / limit);
-        console.log(segments);
         
         //first
         $('.btn-pagination-first').attr('data-offset',0);
@@ -346,3 +389,20 @@ $(function(){
         //numbers
     }
 });
+
+
+function time_elapsed(secs){
+    var bit = {
+        'y' : Math.floor((secs / 31556926) % 12),
+        'w' : Math.floor((secs / 604800) % 52),
+        'd' : Math.floor((secs / 86400) % 7),
+        'h' : Math.floor((secs / 3600) % 24),
+        'm' : Math.floor((secs / 60) % 60),
+    };
+    var text = '';
+    for(o in bit){
+        if(bit[o]>0)
+            text += bit[o] +  o + " ";
+    }
+    return text;
+}

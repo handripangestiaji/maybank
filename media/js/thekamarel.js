@@ -136,7 +136,7 @@ $(function(){
         $(this).parent().addClass('active');
         previous = $(this).closest('ul.nav-tabs').find('li.active');
         previous.removeClass('active');
-        alert($(this).text());
+        
     });
 
 

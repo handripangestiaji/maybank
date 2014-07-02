@@ -38,10 +38,7 @@
 	<!-- <script src="<?php //echo base_url('media/js/vendor/jquery-ui-1.10.2.custom.min.js')?>"</script>        	<!-- jquery ui dragging -->    
 	<!-- <script type="text/javascript" src="<?php //echo base_url(); ?>media/js/jquery-1.7.2.min.js"></script> --> <!-- jquery widget tree -->
 		
-	<script src="<?php echo base_url(); ?>media/js/vendor/jqwidgets/jqxcore.js"></script> <!-- jquery widget tree -->
-	<script src="<?php echo base_url(); ?>media/js/vendor/jqwidgets/jqxtree.js"></script> <!-- jquery widget tree -->
-	<script src="<?php echo base_url(); ?>media/js/vendor/jqwidgets/jqxcheckbox.js"></script> <!-- jquery widget tree -->
-
+	
         <script src="<?php echo base_url(); ?>media/js/vendor/bootstrap-linkpreview.js"></script> <!-- jquery linkpreview -->
         
 	<script src="<?php echo base_url(); ?>media/js/vendor/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script> <!-- jquery tag-it -->
@@ -113,7 +110,7 @@
 		    <?php
 			$value = array(1 => 'dashboard',2 => 'channels',3 => 'cms',4 => 'manage_users', 5 => 'users', 6 => 'reports', 7 => 'publisher', 8 => 'manage_channel');
 			$value = array('dashboard' => 'Dashboard','channels' => 'Channels', 'cms' => 'Content Management','manage_users' => 'Manage Users','users' => 'User Management',
-				       'reports' => 'Reports','publisher' => 'Publisher','manage_channel' => 'Manage Channel');
+				       'reports' => 'Reports','publisher' => 'Publisher','manage_channel' => 'Manage Channel', 'dashboard2'=>'Dashboard');
 			echo $value[$this->uri->segment(1)];
 		    ?>
 		</li>

@@ -170,31 +170,19 @@ for($i=0;$i<count($homefeed);$i++){
     
     <!-- REPLY -->  
     <div class="reply-field hide">
-        <?php
-        $data['mentions'] = $homefeed;
-        $data['i'] = $i;
-        $data['type'] = 'reply';
-        //$this->load->view('dashboard/reply_field_twitter', $data);?>
+      
     </div>
     <!-- END REPLY -->
     
     <!-- DM -->  
     <div class="dm-field hide">
-         <?php
-        $data['mentions'] = $homefeed;
-        $data['type'] = 'direct_message';
-        $data['i'] = $i;
-       // $this->load->view('dashboard/reply_field_twitter', $data);?>
+    
     </div>
     <!-- END DM -->
     
     <!-- CASE -->  
     <div class="case-field hide">
-       <?php
-            $data['posts'] = $homefeed;
-            $data['i'] = $i;
-            //$this->load->view('dashboard/case_field',$data);
-        ?>
+    
     </div>
     <!-- END CASE -->  
     

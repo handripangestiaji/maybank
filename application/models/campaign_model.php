@@ -255,6 +255,15 @@ echo "<pre>";
 	
 	public function delete($id)
 	{
+		//record log
+		$row = $this->get(array('id' => $id));
+		$campaign = array('created_by' => $this->session->userdata('user_id'),
+				  'created_at' => date('Y-m-d H:i:s'),
+				  'action_type' => 'delete campaign',
+				  'slug' => json_encode($row)
+				  );
+		$this->addLog($campaign);
+		
 		if ($id == null)
 		{
 			throw new \Exception("Invalid Id");
@@ -291,6 +300,15 @@ echo "<pre>";
 	}
 	
 	public function update($id,$value){
+		//record log
+		$row = $this->get(array('id' => $id));
+		$campaign = array('created_by' => $this->session->userdata('user_id'),
+				  'created_at' => date('Y-m-d H:i:s'),
+				  'action_type' => 'update campaign',
+				  'slug' => json_encode($row)
+				  );
+		$this->addLog($campaign);
+		
 		$this->db->where('id',$id);
 		$this->db->update('content_campaign',$value);
 	}
@@ -345,5 +363,10 @@ echo "<pre>";
 		$this->db->join('content_products','content_products_campaign.products_id = content_products.id');
 		$this->db->where('content_products_campaign.campaign_id',$id);
 		return $this->db->get();
+	}
+	
+	public function addLog($value){
+		$this->db->set($value);
+		$this->db->insert('content_action');
 	}
 }

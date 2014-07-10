@@ -55,6 +55,15 @@ class Product_model extends CI_Model
 	
 	public function delete($id)
 	{
+		//record log
+		$row = $this->getOneBy(array('id' => $id));
+		$prod = array('created_by' => $this->session->userdata('user_id'),
+				  'created_at' => date('Y-m-d H:i:s'),
+				  'action_type' => 'delete product',
+				  'slug' => json_encode($row)
+				  );
+		$this->addLog($prod);
+		
 		if ($id == null)
 		{
 			throw new \Exception("Invalid Id");
@@ -73,6 +82,15 @@ class Product_model extends CI_Model
 	}
 	
 	public function update($id,$value){
+		//record log
+		$row = $this->getOneBy(array('id' => $id));
+		$prod = array('created_by' => $this->session->userdata('user_id'),
+				  'created_at' => date('Y-m-d H:i:s'),
+				  'action_type' => 'update product',
+				  'slug' => json_encode($row)
+				  );
+		$this->addLog($prod);
+		
 		$this->db->where('id',$id);
 		return $this->db->update($this->_table,$value);
 	}
@@ -95,5 +113,10 @@ class Product_model extends CI_Model
 		$query = $this->db->get($this->_table);
 		
 		return $query->result();
+	}
+	
+	public function addLog($value){
+		$this->db->set($value);
+		$this->db->insert('content_action');
 	}
 }

@@ -165,7 +165,7 @@
                                         </div>
                 </div>
 </div>
-<script src="<?php echo base_url('media/js/vendor/jquery-1.9.1.min.js')?>"></script>
+
 <script type="text/javascript">
 	$(document).ready(function(){
 		var tab = '<?php echo $tab ?>';

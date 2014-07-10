@@ -7,13 +7,6 @@ $isMyCase = array();
 $sender = $fb_pm[$i]->participant->sender->facebook_id == $fb_pm[$i]->social_id ? $fb_pm[$i]->participant->to : $fb_pm[$i]->participant->sender;
 ?>
 <li id="post<?=$fb_pm[$i]->post_id?>" >
-    <?php
-        if(count($fb_pm[$i]->case) > 0)
-            $this->load->view('dashboard/facebook/case_view', array(
-                    "caseMsg" => $fb_pm[$i]->case[0],
-                    "sender" => $sender
-                ));
-    ?>
     <input type="hidden" class="postId" value="<?php echo $fb_pm[$i]->post_id; ?>" />
     <input type="hidden" name="facebook_user" value="<?php echo $sender->facebook_id; ?>" />
     <div class="circleAvatar"><img src="<?=base_url('dashboard/media_stream/SafePhoto?photo=')."https://graph.facebook.com/".number_format($sender->facebook_id, 0,'.','')?>/picture?small" alt=""></div>
@@ -39,7 +32,7 @@ $sender = $fb_pm[$i]->participant->sender->facebook_id == $fb_pm[$i]->social_id 
     <p class="indicator">
     <?php $this->load->view('facebook/facebook_indicator', array('post'=>$fb_pm[$i]))?>
     <p>
-        <span class="btn-engagement"><i class="icon-eye-open"></i> <?php echo $fb_pm[$i]->message_count;?> Engagements</span>
+        <span class="btn-engagement" title="conversations"><i class="icon-eye-open"></i> <?php echo $fb_pm[$i]->message_count;?> Engagements</span>
     </p>
 
     <!-- ENGAGEMENT -->    
@@ -47,64 +40,13 @@ $sender = $fb_pm[$i]->participant->sender->facebook_id == $fb_pm[$i]->social_id 
         <div class="engagement-header">
             <span class="engagement-btn-close btn-close pull-right">Close <i class="icon-remove-sign"></i></span>
         </div>
-         
+        <div class="engagement-list">
+            <img class="loading" src="<?=base_url()?>media/img/loader.gif" alt="loading..." style="margin:10px 0 10px 40%;width: 48px;" />
+            
+        </div>
         <br>
         <?php 
-            $comment = $fb_pm[$i]->conversation_detail;
-            for($j=0;$j < count($comment) ;$j++){
-                if($comment[$j]->messages != '' || $comment[$j]->attachment != '' ):
-        ?>
-        <div class="engagement-body">
-            <span class="engagement-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>    
-            <p class="headLine">
-                <span class="author"><?php echo $comment[$j]->name; ?></span>
-                <i class="icon-circle"></i>
-                <span>posted a <span class="cyanText">reply</span></span>
-                <i class="icon-circle"></i>
-                <span><?php
-                $created_detail_pm = new DateTime($comment[$j]->created_at);
-                $created_detail_pm->setTimezone($timezone);
-                echo $created_detail_pm->format('l, M j, Y h:i A'); ?></span>
-               
-            </p>
-            
-            <div>
-                  
-                <?php
-                $att_to_print = "";
-                if($comment[$j]->attachment != ''):
-                    $attachment = json_decode($comment[$j]->attachment);
-                    $attachment = $attachment->data[0];
-                    
-                    if(isset($attachment->image_data)){
-                        if(isset($attachment->image_data->url)){
-                            $att_to_print = '<a href="#detail'.$comment[$j]->detail_id.'" data-toggle="modal" ><img src="'.base_url('dashboard/media_stream/SafePhoto?photo=').urlencode($attachment->image_data->url).'" style="width:60%;" /></a>';
-                            $src = urlencode($attachment->image_data->url);
-                        }
-                        else{
-                            $att_to_print = '<img src="'.base_url('dashboard/media_stream/SafePhoto?photo=').urlencode('https://www.facebook.com/ajax/messaging/attachment.php?attach_id='.$attachment->id.'&mid='.substr($comment[$j]->detail_id_from_facebook, 2).'&preview=1').'" style="width:60%;" />';
-                            $src = urlencode('https://www.facebook.com/ajax/messaging/attachment.php?attach_id='.$attachment->id.'&mid='.substr($comment[$j]->detail_id_from_facebook, 2).'&preview=1');
-                        }
-                        
-                        $att_to_print .= '<div id="detail'.$comment[$j]->detail_id.'" class="attachment-modal modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
-                            <img src="'.base_url('dashboard/media_stream/SafePhoto?photo=').$src.'" />
-                            <button type="button" class="close " data-dismiss="modal"><i class="icon-remove"></i></button>
-                        </div>';
-                    }
-                    else 
-                        $att_to_print = '<a href="https://www.facebook.com/ajax/messaging/attachment.php?attach_id='.$attachment->id.'&mid='.substr($comment[$j]->detail_id_from_facebook, 2).'" target="_blank" style="font-size:16px;">ATTACHMENT</a>';
-                
-                    
-                endif;?>
-                <?php if($comment[$j]->messages != ""){?>
-                    <p class="engagement-message"><?php echo CreateUrlFromText($comment[$j]->messages)?></p>
-                <?php }?>
-                <p><?=$att_to_print;?> </p>
-              
-            </div>
-        </div>
-       <?php endif;
-       }
+           
        $unique_id = uniqid();
        ?>
        <!-- ==================== CONDENSED TABLE HEADLINE ==================== -->
@@ -120,7 +62,7 @@ $sender = $fb_pm[$i]->participant->sender->facebook_id == $fb_pm[$i]->social_id 
                     $data_loaded['post'] = $fb_pm[$i];
                     $data_loaded['action_type'] = "conversation_facebook";
                     $data_loaded['unique_id'] = $unique_id;
-                    $this->load->view('dashboard/action_taken', $data_loaded);
+                    $this->load->view('dashboard2/action_taken', $data_loaded);
  
                 }
             ?>
@@ -129,7 +71,7 @@ $sender = $fb_pm[$i]->participant->sender->facebook_id == $fb_pm[$i]->social_id 
 
     <h4 class="filled">
         <div class="pull-right">
-            <?php $this->load->view('facebook_button', array('post'=> $fb_pm[$i]));?>
+            <?php $this->load->view('facebook_button', array('post'=> $fb_pm[$i], 'reply_type'=>'reply_dm'));?>
         </div>
         <br clear="all" />
     </h4>
@@ -141,7 +83,7 @@ $sender = $fb_pm[$i]->participant->sender->facebook_id == $fb_pm[$i]->social_id 
         $to_reply_field['fb_feed'] = $fb_pm;
         $to_reply_field['i'] = $i;
         $to_reply_field['reply_type']='reply_dm';
-        $this->load->view('dashboard/reply_field_facebook', $to_reply_field)?>
+        //$this->load->view('dashboard2/reply_field_facebook', $to_reply_field)?>
      </div>
     <!-- END REPLY -->
     
@@ -151,7 +93,7 @@ $sender = $fb_pm[$i]->participant->sender->facebook_id == $fb_pm[$i]->social_id 
         $data['posts'] = $fb_pm;
         $data['i'] = $i;
         
-        $this->load->view('dashboard/case_field',$data);
+        //$this->load->view('dashboard2/case_field',$data);
         
         ?>
     </div>

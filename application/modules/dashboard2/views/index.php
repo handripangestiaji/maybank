@@ -233,18 +233,17 @@
     $data['group'] = $group;
     $data['box_id'] = 1;
     if(count($group) >= 1){
-        $this->load->view('dashboard/box_stream',$data);
+        $this->load->view('dashboard2/box_stream',$data);
     }
     $data['box_id'] = 2;
     $data['color'] = '#4099FF';
     if(count($group) >= 2){
-        $this->load->view('dashboard/box_stream',$data);
+        $this->load->view('dashboard2/box_stream',$data);
     }
     $data['box_id'] = 3;
     $data['color'] = '#FF3333';
     if(count($group) >= 3)
-        $this->load->view('dashboard/box_stream',$data);
-    //$this->load->view('dashboard/box_stream',$data);
-    //$this->load->view('dashboard/youtube/youtube_stream',$data);
+        $this->load->view('dashboard2/box_stream',$data);
+    
 ?>
 </div>

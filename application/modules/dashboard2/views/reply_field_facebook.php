@@ -5,7 +5,8 @@
     <div class="option-type pull-left">
         <div class="message"></div>
         <?php
-        if(!$fb_feed[$i]->case || ($fb_feed[$i]->case[0]->status == 'solved')){ ?>
+        if(!$fb_feed[$i]->case || ($fb_feed[$i]->case[0]->status == 'solved')){
+         ?>
         <select class="replyType" style="width: 130px;">
             <option value="">Please Select</option>
             <option value="Feedback">Feedback</option>
@@ -34,7 +35,7 @@
         </select>
         <?php } else { ?>
             <input type="hidden" value="<?php echo $fb_feed[$i]->case[0]->case_id?>" name="case_id" class="case_id" />
-        <?php } ?>
+        <?php }  ?>
     </div>
     <textarea class='replaycontent' placeholder="Compose Message"></textarea>
     <br clear="all" />

@@ -1,6 +1,7 @@
 <?php
     $buttonItems = array();
-    $buttonItems['reply'] = '<button type="button" class="btn btn-primary btn-reply"><i class="icon-mail-reply"></i></button>';
+    
+    $buttonItems['reply'] = '<button type="button" class="btn btn-primary btn-reply" value="'.$reply_type.'"><i class="icon-mail-reply"></i></button>';
     if(count($post->case) == 0){
         $buttonItems['case'] = '<button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> <span>CASE</span></button> ';
     }

@@ -11,13 +11,6 @@ if($fb_feed[$i]->post_content != '<br />' || isset($attachment->media)):
 
 ?>
 <li  id="post<?=$fb_feed[$i]->social_stream_post_id?>">
-    <?php
-        if(count($fb_feed[$i]->case) > 0)
-            $this->load->view('dashboard/facebook/case_view', array(
-                    "caseMsg" => $fb_feed[$i]->case[0],
-                    "sender" => $fb_feed[$i]->sender
-                ));
-    ?>
     <input type="hidden" class="postId" value="<?php echo $fb_feed[$i]->post_id; ?>" />
     <input type="hidden" name="user_id" value="<?php echo $this->session->userdata('user_id'); ?>" />
     <input type="hidden" name="facebook_user" value="<?php echo $fb_feed[$i]->facebook_id; ?>" />
@@ -98,7 +91,7 @@ if($fb_feed[$i]->post_content != '<br />' || isset($attachment->media)):
         <?php endif;?>                                                              
     </p>    
     <p>
-        <span class="btn-engagement"><i class="icon-eye-open"></i> <?php echo $fb_feed[$i]->total_comments;?> Engagements</span> |
+        <span class="btn-engagement" title="comments"><i class="icon-eye-open"></i> <?php echo $fb_feed[$i]->total_comments;?> Engagements</span> |
         <span class="cyanText"><i class="icon-thumbs-up-alt"></i></i> <?php echo $fb_feed[$i]->total_likes; ?> likes</span> 
     </p>
 
@@ -109,32 +102,10 @@ if($fb_feed[$i]->post_content != '<br />' || isset($attachment->media)):
             <span class="engagement-btn-close btn-close pull-right">Close <i class="icon-remove-sign"></i></span>
         </div>
         <br />
-        <?php 
-            $comment = $fb_feed[$i]->comments;
-            for($j=0;$j<count($comment);$j++):
-            $isMyCase2=$this->case_model->chackAssignCase(array('a.post_id' => $comment[$j]->comment_post_id, 'a.status <>'=>'reassign'));
-        
-            if($comment[$j]->comment_id==0){
-                $data['comment'] = $comment;
-                $data['j'] = $j;
-                $data['isMyCase']=$isMyCase;
-                $data['timezone']=$timezone;
-                $this->load->view('dashboard/facebook/facebook_comment', $data);   
-                
-                $inner_reply['comments']=$this->facebook_model->RetriveCommentPostFb(array('a.post_id'=>$comment[$j]->post_id,'comment_id'=>$comment[$j]->comment_stream_id),array()) ;
-                if(isset($inner_reply['comments'])){
-                    for($k=0; $k<count($inner_reply['comments']);$k++){
-                            $data['comment'] = $inner_reply['comments'];
-                            $data['j'] = $k;
-                            $data['isMyCase']=$isMyCase;
-                            $data['timezone']=$timezone;
-                            $this->load->view('dashboard/facebook/facebook_comment', $data);   
-                    }         
-                }    
-            }
-        
-         endfor;
-         ?>
+        <div class="engagement-list">
+            <img class="loading" src="<?=base_url()?>media/img/loader.gif" alt="loading..." style="margin:10px 0 10px 40%;width: 48px;" />
+            
+        </div>
        <!-- ==================== CONDENSED TABLE HEADLINE ==================== -->
        <?php $unique_id = uniqid(); ?>
         <div href='#modal-action-log-<?php echo $fb_feed[$i]->post_stream_id.$unique_id ?>' data-toggle='modal' class="containerHeadline specialToggleTable">
@@ -165,17 +136,13 @@ if($fb_feed[$i]->post_content != '<br />' || isset($attachment->media)):
                 <a role="button" class='delete_post wall'><i class="icon-trash greyText"></i></a>
             <?php endif;?>
         <div class="pull-right">
-            <?php $this->load->view('facebook_button', array('post'=> $fb_feed[$i]));?>
+            <?php $this->load->view('facebook_button', array('post'=> $fb_feed[$i], 'reply_type'=>'replaycontent'));?>
         </div>
         <br clear="all" />
     </h4> 
     <!-- REPLY -->  
     <div class="reply-field hide">
-    <?php
-    $data['fb_feed'] = $fb_feed;
-    $data['i'] = $i;
-    $data['reply_type']='replaycontent';
-    $this->load->view('dashboard/reply_field_facebook', $data)?>  
+
     </div>
     <!-- END REPLY -->
     
@@ -184,7 +151,7 @@ if($fb_feed[$i]->post_content != '<br />' || isset($attachment->media)):
     <?php
         $data['posts'] = $fb_feed;        
         $data['i'] = $i;
-        $this->load->view('dashboard/case_field',$data);
+        //$this->load->view('dashboard/case_field',$data);
     ?>
     </div>
     <!-- END CASE -->  

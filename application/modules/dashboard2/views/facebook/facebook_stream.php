@@ -46,10 +46,10 @@
         <input type="hidden" value="<?=$channel_id?>" name="channel_id" class="channel-id" />
         <?php
             if($fb_feed != NULL){
-                $this->load->view('dashboard/facebook/wall_post', array('fb_feed' => $fb_feed));
+                $this->load->view('dashboard2/facebook/wall_post', array('fb_feed' => $fb_feed));
             }
             else{
-                $this->load->view('dashboard/no_display');
+                $this->load->view('dashboard2/no_display');
             }
         ?> 
     </ul>
@@ -60,15 +60,12 @@
         <input type="hidden" value="" name="channel_id" class="channel-id" />
         <?php
             if($fb_pm != NULL){
-                $this->load->view('dashboard/facebook/private_message', array('fb_feed' => $fb_feed));
+                $this->load->view('dashboard2/facebook/private_message', array('fb_feed' => $fb_feed));
             }
             else{
                 $this->load->view('dashboard/no_display');
             }
         ?> 
-    </ul>
-    <ul class="floatingBoxContainers" id="maybankpost" style="display:none">
-        <?php //$this->load->view('dashboard/facebook/own_post', array('own_post' => $own_post))?> 
     </ul>
     <!-- ==================== END OF RECENT COMMENTS CONTENT ==================== -->
 </div>

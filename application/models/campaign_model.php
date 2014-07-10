@@ -216,12 +216,6 @@ echo "<pre>";
 			
 			$i++;
 		}
-		
-		/*
-echo "<pre>";
-		die(print_r($campaigns));
-*/
-		
 		return $campaigns;
 	}
 	
@@ -234,6 +228,21 @@ echo "<pre>";
 		$this->db->order_by('parent_id');
 		return $this->db->get()->result();
 	}
+	
+	public function GetProductTree($product_list){
+		foreach($product_list as $prod){    
+			$product_child = $this->GetProduct(array('parent_id' => $prod->id));
+			if($product_child){
+				$chi = array();
+				foreach($product_child as $child){
+					$chi[] = $child;
+				}
+				$prod->child = $chi;
+			}
+		}
+		return $product_list;
+	}
+	
 	
 	public function GetProductBasedOnParent($where = ""){
 		$query = "Select * from `content_products` ".($where != '' ? " WHERE $where" : "")." ORDER BY COALESCE(parent_id, `id`), `parent_id` is not null, id";

@@ -50,7 +50,6 @@ class Media_stream extends CI_Controller {
 	$data['user_list'] = $this->case_model->ReadAllUser($filter_user);
 	$data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter,$limit, true, $is_read == 2);
 	$data['count_fb_feed']=$this->facebook_model->CountFeedFB($filter, true, $is_read == 2);
-	//$data['own_post'] = $this->facebook_model->RetrievePostFB($filter);
 	$filter['c.channel_id'] = $filter['channel_id'];
 	unset($filter['channel_id']);
 	$data['fb_pm'] = $this->facebook_model->RetrievePmFB($filter,$limit, $is_read == 2);
@@ -75,7 +74,7 @@ class Media_stream extends CI_Controller {
 	
         //print_r($getUserCountry->country_code);
         
-	$this->load->view('dashboard/facebook/facebook_stream',$data);
+	$this->load->view('dashboard2/facebook/facebook_stream',$data);
     }
     
     public function youtube_stream($channel_id, $is_read = null){
@@ -89,7 +88,7 @@ class Media_stream extends CI_Controller {
 	$data['channel_id'] = $channel_id;
 	$data['youtube_post'] = $this->youtube_model->ReadYoutubePost($filter, $page);
 	$data['youtube_comment'] = $this->youtube_model->ReadYoutubeComment($filter, $page);
-	$this->load->view('dashboard/youtube/youtube_stream', $data);
+	$this->load->view('dashboard2/youtube/youtube_stream', $data);
     }
     
     
@@ -141,7 +140,7 @@ class Media_stream extends CI_Controller {
 	    }
 	}
 	$data['product_list'] = $product_list;
-    	$this->load->view('dashboard/twitter/twitter_stream',$data);
+    	$this->load->view('dashboard2/twitter/twitter_stream',$data);
     }
 
   
@@ -505,7 +504,7 @@ class Media_stream extends CI_Controller {
     public function fb_access_token(){
 	$app_id = $this->config->item('fb_appid');
 	$app_secret = $this->config->item('fb_appsecret');
-	$my_url = site_url('dashboard/fb_access_token');  // redirect url
+	$my_url = site_url('dashboard2/fb_access_token');  // redirect url
 	$code = $this->input->get("code");
 	if(empty($code)) {
 	  // Redirect to Login Dialog
@@ -1059,28 +1058,28 @@ class Media_stream extends CI_Controller {
             $filter['b.type'] = 'mentions';
             $data['mentions']=$this->twitter_model->ReadTwitterData($filter,$limit);
             $data['countMentions']=$this->twitter_model->CountTwitterData($filter);
-            $this->load->view('dashboard/twitter/twitter_mentions.php',$data);
+            $this->load->view('dashboard2/twitter/twitter_mentions.php',$data);
         }
         
         if($action=='feed'){
             $filter['b.type'] = 'home_feed';
             $data['homefeed']=$this->twitter_model->ReadTwitterData($filter,$limit); 
             $data['countFeed']=$this->twitter_model->CountTwitterData($filter);
-            $this->load->view('dashboard/twitter/twitter_homefeed.php',$data);
+            $this->load->view('dashboard2/twitter/twitter_homefeed.php',$data);
         }
         
         if($action=='user_timeline'){
             $filter['b.type'] = 'user_timeline';
             $data['senttweets']=$this->twitter_model->ReadTwitterData($filter,$limit);
             $data['countTweets']=$this->twitter_model->CountTwitterData($filter);
-            $this->load->view('dashboard/twitter/twitter_senttweets.php', $data);
+            $this->load->view('dashboard2/twitter/twitter_senttweets.php', $data);
         }
         if($action=='direct'){
             $filter['a.channel_id']=$channel_ids;
             $data['directmessage']=$this->twitter_model->ReadDMFromDb($filter,$limit);
             $data['countDirect']=$this->twitter_model->CountTwitterData($filter);
             $data['channel_id'] = $channel_id;
-            $this->load->view('dashboard/twitter/twitter_messages.php',$data);
+            $this->load->view('dashboard2/twitter/twitter_messages.php',$data);
 
         }
         if($action=='wallPosts'){
@@ -1088,7 +1087,7 @@ class Media_stream extends CI_Controller {
 	    $filter['channel_id']=$channel_ids;
              $data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter,$limit, true, $is_read == 2);
              $data['count_fb_feed']=$this->facebook_model->CountFeedFB($filter);
-             $this->load->view('dashboard/facebook/wall_post.php',$data);
+             $this->load->view('dashboard2/facebook/wall_post.php',$data);
         }
         
         if($action=='privateMessages'){
@@ -1096,7 +1095,7 @@ class Media_stream extends CI_Controller {
             $filter['c.channel_id']=$channel_ids;
             $data['fb_pm'] = $this->facebook_model->RetrievePmFB($filter,$limit);
             $data['CountPmFB']=$this->facebook_model->CountPmFB($filter);
-            $this->load->view('dashboard/facebook/private_message.php',$data);
+            $this->load->view('dashboard2/facebook/private_message.php',$data);
         }
     }
     
@@ -1113,7 +1112,7 @@ class Media_stream extends CI_Controller {
 	    $filter['a.post_id'] = $post->post_id;
             $data['mentions']=$this->twitter_model->ReadTwitterData($filter,1);
             $data['countMentions']=$this->twitter_model->CountTwitterData($filter);
-	    $this->load->view('dashboard/twitter/twitter_mentions.php',$data);
+	    $this->load->view('dashboard2/twitter/twitter_mentions.php',$data);
 	    
 	}
 	else if($post->type == "facebook"){
@@ -1121,7 +1120,7 @@ class Media_stream extends CI_Controller {
             $data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter,1);
             $data['count_fb_feed']=$this->facebook_model->CountFeedFB($filter);
 	    
-            $this->load->view('dashboard/facebook/wall_post.php',$data);
+            $this->load->view('dashboard2/facebook/wall_post.php',$data);
 	}
 	
     }
@@ -1290,16 +1289,5 @@ class Media_stream extends CI_Controller {
 	}
 	
     }
-    public function LoadCaseField(){
-	$type = $this->input->get('type');
-	$post_id = $this->input->get('post_id');
-	
-	if($type == 'twitter'){
-	    $data = $this->twitter_model->ReadTwitterData(array('a.post_id' => $post_id));
-	    $this->load->view('dashboard/case_field', array('posts' =>$data, 'i' => 0 ));
-	}
-	else if($type == 'twitter_dm'){
-	    
-	}
-    }
+   
 }

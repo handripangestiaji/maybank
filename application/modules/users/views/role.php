@@ -1,5 +1,8 @@
-<script src="<?php echo base_url();?>media/js/jquery-1.7.2.min.js" type="text/javascript" > </script>
+<script src="<?php echo base_url(); ?>media/js/vendor/jqwidgets/jqxcore.js"></script> <!-- jquery widget tree -->
+<script src="<?php echo base_url(); ?>media/js/vendor/jqwidgets/jqxtree.js"></script> <!-- jquery widget tree -->
+<script src="<?php echo base_url(); ?>media/js/vendor/jqwidgets/jqxcheckbox.js"></script> <!-- jquery widget tree -->
 
+	
 <div class="row-fluid" style="width: 100%; margin: 0px auto;">
     <?php
 		//$msge = $this->session->flashdata('double');

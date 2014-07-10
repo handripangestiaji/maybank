@@ -536,5 +536,27 @@ class Cronjob extends CI_Controller {
              ));       
 
     }
+    
+    function GenerateActivity(){
+        $this->load->model('reports_model');
+        
+        //select date max
+        $result = $this->reports_model->selectMaxDate()->row();
+            
+        //if the date result = null, the date = 1 january 1970
+        if($result != null){
+            $latest_date = $result->time;
+        }
+        else{
+            $latest_date = '1970-01-01 00:00:00'; 
+        }
+            
+        //call reports_model->generate_report_activity(the date)
+        $result = $this->reports_model->generate_report_activity($latest_date);
+        
+        //print the return
+        print_r(json_encode($result));
+    }
+    
    
 }

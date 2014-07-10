@@ -175,30 +175,14 @@ for($i=0;$i<count($mentions);$i++){
     </h4>
     <!-- DM -->  
     <div class="dm-field hide">
-        <?php
-        $data['mentions'] = $mentions;
-        $data['type'] = 'direct_message';
-        $data['i'] = $i;
-        $this->load->view('dashboard/reply_field_twitter', $data);?>
     </div>
     <div class="reply-field hide">
-        
-        <?php
-        $data['mentions'] = $mentions;
-        $data['type'] = 'reply';
-        $data['i'] = $i;
-        $this->load->view('dashboard/reply_field_twitter', $data);?>
     </div>
     <!-- END DM -->    
     
     
     <!-- CASE -->
     <div class="case-field hide">
-       <?php
-            $data['posts'] = $mentions;
-            $data['i'] = $i;
-            $this->load->view('dashboard/case_field',$data);
-        ?>
     </div>
     <!-- END CASE -->  
     

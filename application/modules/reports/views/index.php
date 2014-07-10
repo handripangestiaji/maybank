@@ -14,8 +14,8 @@
 <div class="row-fluid" id="report">
 	<div class="span2" id="reportMenu">
 		<ul class="nav nav-tabs nav-stacked">
-			<li class="active"><a href="#"><i class="icon-chevron-right"></i> User Performance</a></li>
-			<li class=""><a href="#"> <i class="icon-chevron-right"></i>  User Activity </a></li>
+			<li class="active"><a href="<?=site_url('reports/')?>"><i class="icon-chevron-right"></i> User Performance</a></li>
+			<li class=""><a href="<?=site_url('reports/activity')?>"> <i class="icon-chevron-right"></i>  User Activity </a></li>
 		</ul>
 	</div>
 	<div class="span10" id="content">
@@ -26,7 +26,7 @@
 			</div>
 		<div class="row-fluid">
 			<h1 class="span2">Performance</h1>
-			<div class="span6 offset4" id="reportDatePicker">
+			<div class="span7 offset3" id="reportDatePicker">
 				
 				<div class="input-daterange row">
 					<div class="control-group info span5" >

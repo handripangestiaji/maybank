@@ -6,25 +6,25 @@
     $allowed['user_timeline'] = array("favorite");
     
     $buttonItems= array(
-        "reply" => '<button class="btn btn-reply btn-primary" data-toggle="modal" value="'.$post->social_stream_post_id. '"><i class="icon-mail-reply"></i></button> ',
+        "reply" => '<button value="'.$come_from.'" class="btn btn-reply btn-primary" data-toggle="modal" item="'.$post->social_stream_post_id. '"><i class="icon-mail-reply"></i></button> ',
         "retweet" => isset($post->retweeted) ? ($post->retweeted == 1 ? '<button type="button" class="retweet unretweet btn btn-inverse" value="'.$post->social_stream_post_id.'"><i class="icon-retweet"><span></span></i></button> ' :
                     '<button type="button" class="retweet btn btn-primary" value="'.$post->social_stream_post_id.'"><i class="icon-retweet"><span></span></i></button> ') : '',
-        "direct_message" => '<button class="btn btn-dm btn-primary" data-toggle="modal"><i class="icon-envelope"></i></button> ',
+        "direct_message" => '<button item="dm" class="btn btn-dm btn-primary" data-toggle="modal"><i class="icon-envelope"></i></button> ',
     );
     
     if(count($post->case) == 0){
-        $buttonItems['case'] = '<button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> <span>CASE</span></button> ';
+        $buttonItems['case'] = '<button type="button" item="'.$come_from.'" class="btn btn-danger btn-case" name="action"  value="'.$come_from.'"><i class="icon-plus"></i> <span>CASE</span></button> ';
     }
     else{
         if($post->case[0]->status == 'pending'){
             $buttonItems['case'] = 
-            '<button type="button" class="btn btn-purple btn-resolve" name="action" value="'.
+            '<button type="button"  class="btn btn-purple btn-resolve" name="action" value="'.
             $post->case[0]->case_id.'"><i class="icon-check"></i> <span>RESOLVE</span></button>
-            <button type="button" class="btn btn-danger btn-case" name="action" value="reassign"><i class="icon-plus"></i>
+            <button type="button" class="btn btn-danger btn-case" name="action" item="'.$come_from.'" value="reassign"><i class="icon-plus"></i>
             <span>ReAssign</span></button>';
         }
         else{
-            $buttonItems['case'] = '<button type="button" class="btn btn-danger btn-case" name="action" value="new_case"><i class="icon-plus"></i> <span>Case</span></button> ';
+            $buttonItems['case'] = '<button type="button" item="'.$come_from.'" class="btn btn-danger btn-case" name="action" value="new_case"><i class="icon-plus"></i> <span>Case</span></button> ';
         }
     }
     

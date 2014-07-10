@@ -790,26 +790,47 @@ $(function(){
                     function() {
                         $(this).closest('h4').siblings('.reply-field').hide();
                         $(this).closest('h4').siblings('.dm-field').hide();
+                        $button = $(this);
+                        if($(this).hasClass('nested_reply')) return;
                         
-                        var id =  $(this).closest('h4').siblings('.case-field').find("select[name=assign_to]").attr('id');
-                        console.log(id);
-                        $('#' + id).multiselect({
-                            buttonText: function(options, select) {
-                                if (options.length == 0) {
-                                    return 'None selected <b class="caret"></b>';
-                                }
-                                else if (options.length > 1) {
-                                    return options.length + ' selected <b class="caret"></b>';
-                                }
-                                else {
-                                    var selected = '';
-                                    options.each(function() {
-                                        selected += $(this).text() + ', ';
+                        if($(this).parent().siblings('.engagement').is(":visible"))
+                            $(this).parent().siblings('.reply-field').slideUp('slow');
+                        else{
+                             $.ajax({
+                                "url" : BASEURL + "dashboard2/ajax/LoadCase",
+                                "data" : {
+                                    post_id : $(this).closest('li').find('.postId').val(),
+                                    reply_type : $(this).attr('item')
+                                },
+                                "type" : "GET",
+                                "success" : function(response){
+                                    if(response != '')
+                                        $button.closest('li').find('.case-field').html(response);
+                                    else
+                                        $button.closest('li').find('.case-field img').hide();
+                                    $button.BindMultipleSelect();
+                                    var id =  $button.closest('h4').siblings('.case-field').find("select[name=assign_to]").attr('id');
+                                    $('#' + id).multiselect({
+                                        buttonText: function(options, select) {
+                                            if (options.length == 0) {
+                                                return 'None selected <b class="caret"></b>';
+                                            }
+                                            else if (options.length > 1) {
+                                                return options.length + ' selected <b class="caret"></b>';
+                                            }
+                                            else {
+                                                var selected = '';
+                                                options.each(function() {
+                                                    selected += $(this).text() + ', ';
+                                                });
+                                                return selected.substr(0, selected.length -2) + ' <b class="caret"></b>';
+                                            }
+                                        }
                                     });
-                                    return selected.substr(0, selected.length -2) + ' <b class="caret"></b>';
                                 }
-                            }
-                        });
+                            });
+                        }
+                       
                         //$(this).closest('h4').siblings('.case-field').find("select[name=assign_to]").multiselect('refresh');
                         
                         $(this).closest('h4').siblings('.case-field').show();
@@ -822,6 +843,45 @@ $(function(){
                         $(this).closest('h4').siblings('.reply-field').hide();
                         $(this).closest('h4').siblings('.dm-field').show();
                         $(this).closest('h4').siblings('.case-field').hide();
+                        $button = $(this);
+                        if($(this).parent().siblings('.engagement').is(":visible"))
+                            $(this).parent().siblings('.reply-field').slideUp('slow');
+                        else{
+                             $.ajax({
+                                "url" : BASEURL + "dashboard2/ajax/LoadTwitterReply",
+                                "data" : {
+                                    post_id : $(this).closest('li').find('.postId').val(),
+                                    reply_type : $(this).attr('item')
+                                },
+                                "type" : "GET",
+                                "success" : function(response){
+                                    if(response != '')
+                                        $button.closest('li').find('.dm-field').html(response);
+                                    else
+                                        $button.closest('li').find('.dm-field img').hide();
+                                    $button.BindMultipleSelect();
+                                    var id =  $button.closest('h4').siblings('.case-field').find("select[name=assign_to]").attr('id');
+                                    $('#' + id).multiselect({
+                                        buttonText: function(options, select) {
+                                            if (options.length == 0) {
+                                                return 'None selected <b class="caret"></b>';
+                                            }
+                                            else if (options.length > 1) {
+                                                return options.length + ' selected <b class="caret"></b>';
+                                            }
+                                            else {
+                                                var selected = '';
+                                                options.each(function() {
+                                                    selected += $(this).text() + ', ';
+                                                });
+                                                return selected.substr(0, selected.length -2) + ' <b class="caret"></b>';
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                        
                     }
                 );
                     
@@ -2024,13 +2084,18 @@ $(function(){
                 
                 $(this).on('click','.btn-reply',function(){
                     $button = $(this);
+                    url = "LoadFacebookReply";
+                    if($(this).val() == 'replaycontent' || $(this).val() == 'reply_dm')
+                        url = "LoadFacebookReply";
+                    else{
+                        url = "LoadTwitterReply";
+                    }
                     if($(this).hasClass('nested_reply')) return;
-                    
                     if($(this).parent().siblings('.engagement').is(":visible"))
                         $(this).parent().siblings('.reply-field').slideUp('slow');
                     else{
                          $.ajax({
-                            "url" : BASEURL + "dashboard2/ajax/LoadFacebookReply",
+                            "url" : BASEURL + "dashboard2/ajax/" + url,
                             "data" : {
                                 post_id : $(this).closest('li').find('.postId').val(),
                                 reply_type : $(this).val()

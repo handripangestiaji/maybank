@@ -3,17 +3,17 @@
     
     $buttonItems['reply'] = '<button type="button" class="btn btn-primary btn-reply" value="'.$reply_type.'"><i class="icon-mail-reply"></i></button>';
     if(count($post->case) == 0){
-        $buttonItems['case'] = '<button type="button" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> <span>CASE</span></button> ';
+        $buttonItems['case'] = '<button type="button" item="'.$reply_type.'" class="btn btn-danger btn-case" name="action" value="case"><i class="icon-plus"></i> <span>CASE</span></button> ';
     }
     else{
         if($post->case[0]->status == 'pending'){
             $buttonItems['case'] = 
-            '<button type="button" class="btn btn-purple btn-resolve" name="action" value="'.$post->case[0]->case_id.'">
+            '<button type="button"  item="'.$reply_type.'" class="btn btn-purple btn-resolve" name="action" value="'.$post->case[0]->case_id.'">
             <i class="icon-check"></i> <span>RESOLVE</span></button> <button type="button" class="btn btn-danger btn-case" name="action" value="reassign">
             <i class="icon-plus"></i> <span>ReAssign</span></button>';
         }
         else{
-            $buttonItems['case'] = '<button type="button" class="btn btn-danger btn-case" name="action" value="new_case">
+            $buttonItems['case'] = '<button type="button" class="btn btn-danger btn-case" name="action" item="'.$reply_type.'" value="new_case">
                                     <i class="icon-plus"></i> <span>Case</span></button> ';
         }
     }

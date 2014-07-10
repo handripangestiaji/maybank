@@ -54,7 +54,7 @@ for($i=0;$i<count($senttweets);$i++){
                         'come_from' => "user_timeline",
                         'post' => $senttweets[$i]
                     );
-                    $this->load->view('dashboard/twitter/twitter_button', $data);
+                    $this->load->view('dashboard2/twitter/twitter_button', $data);
                 ?>
             </div>
             <br clear="all" />

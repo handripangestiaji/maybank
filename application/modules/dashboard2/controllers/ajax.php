@@ -9,23 +9,11 @@ class ajax extends CI_Controller{
     function __construct(){
         parent::__construct();
 	$this->load->model('facebook_model');
+	$this->load->model('twitter_model');
+	$this->load->model('campaign_model');
 	$this->user_role = $this->users_model->get_collection_detail(
 		array('role_collection_id'=>$this->session->userdata('role_id')));
-    }
-    
-    public function LoadCaseField(){
-	$type = $this->input->get('type');
-	$post_id = $this->input->get('post_id');
-	
-	if($type == 'twitter'){
-	    $data = $this->twitter_model->ReadTwitterData(array('a.post_id' => $post_id));
-	    $this->load->view('dashboard/case_field', array('posts' =>$data, 'i' => 0 ));
-	}
-	else if($type == 'twitter_dm'){
-	    
-	}
-    }
-    
+    }  
     
     
     /*
@@ -71,30 +59,64 @@ class ajax extends CI_Controller{
     public function LoadFacebookReply(){
 	$this->load->model('campaign_model');
 	$this->load->model('case_model');
-	$filter['b.post_id'] = $this->input->get('post_id');
+	
 	$product_list = $this->campaign_model->GetProduct(array('parent_id' => null));
-	$data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter,1, true, false);
+	if($this->input->get('reply_type') == 'replaycontent'){
+	    $filter['b.post_id'] = $this->input->get('post_id');
+	    $data['fb_feed'] = $this->facebook_model->RetrieveFeedFB($filter,1, true, false);
+	}
+	else if($this->input->get('reply_type') == 'reply_dm'){
+	    $filter['c.post_id'] = $this->input->get('post_id');
+	    $data['fb_feed']  = $this->facebook_model->RetrievePmFB($filter, 1);
+	}
         $data['i'] = 0;
         $data['reply_type'] = $this->input->get('reply_type');
 	$data['product_list'] = $this->campaign_model->GetProductTree($product_list);
-        echo $this->load->view('dashboard/reply_field_facebook', $data);
+        echo $this->load->view('dashboard2/reply_field_facebook', $data);
     }
     
+    public function LoadTwitterReply(){
+	$product_list = $this->campaign_model->GetProduct(array('parent_id' => null));
+	
+	$filter['a.post_id'] = $this->input->get('post_id');
+	$data['mentions'] = $this->twitter_model->ReadTwitterData($filter,1);;
+        $data['type'] = 'reply';
+        $data['i'] = 0;
+	$data['product_list'] =  $this->campaign_model->GetProductTree($product_list);
+        echo $this->load->view('dashboard/reply_field_twitter', $data);
+    }
     
+   
     
     public function LoadCase(){
-	$this->load->mocel('case_model');
+	$this->load->model('case_model');
+	$this->load->model('campaign_model');
 	$fb_feed = array();
-	if($this->input->get('reply_type') == 'replaycontent'){
-	    
+	$product_list = $this->campaign_model->GetProduct(array('parent_id' => null));
+	$filter_user['country_code'] = IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Case_All_Country_AssignReassignResolved') ? NULL : $this->session->userdata('country');
+	$data['user_list'] = $this->case_model->ReadAllUser($filter_user);
+	if($this->input->get('reply_type') == 'reply_dm'){
+	    $filter['c.post_id'] = $this->input->get('post_id');
+	    $fb_feed = $this->facebook_model->RetrievePmFB($filter, 1);
 	}
-	else if($this->input->get('reply_type') == 'reply_dm'){
+	else if($this->input->get('reply_type') == 'replaycontent'){
 	    $filter['b.post_id'] = $this->input->get('post_id');
 	    $fb_feed = $this->facebook_model->RetrieveFeedFB($filter,1, true, false);
+	}
+	else if($this->input->get('reply_type') == 'mentions' || $this->input->get('reply_type') == 'home_feed'){
+	    $filter['a.post_id'] = $this->input->get('post_id');
+	    $fb_feed = $this->twitter_model->ReadTwitterData($filter,1);
+	}
+	else if($this->input->get('reply_type') == 'direct_messages'){
+	    $filter['a.post_id'] = $this->input->get('post_id');
+	    $fb_feed = $this->twitter_model->ReadDMFromDb($filter,1);
 	}
 	
 	$data['posts'] = $fb_feed;        
         $data['i'] = 0;
+	$data['product_list'] = $this->campaign_model->GetProductTree($product_list);
+	echo $this->load->view('dashboard2/case_field', $data);
+	
     }
 
 }

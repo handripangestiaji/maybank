@@ -9,12 +9,7 @@
         <div class="read-mark <?php if($directmessage[$i]->is_read==0){echo 'redText';} else { echo 'greyText'; } ?>"><i class="icon-bookmark icon-large"></i></div>
         <br />
         <?php
-        if(count($directmessage[$i]->case) > 0)
-            $this->load->view('dashboard/twitter/case_view', array(
-                    "caseMsg" => $directmessage[$i]->case[0]
-                ));
-        
-        
+
         $entities = json_decode($directmessage[$i]->entities);
         ?>
         <p class="headLine">
@@ -139,7 +134,7 @@
                     'dm_type' => $directmessage[$i]->direct_message_type,
                     'unique_id' => $unique_id
                 );
-                $this->load->view('dashboard/twitter/twitter_button', $data);
+                $this->load->view('dashboard2/twitter/twitter_button', $data);
             ?>
         </div>
         <br clear="all" />
@@ -152,7 +147,7 @@
         $data['mentions'] = $directmessage;
         $data['i'] = $i;
         $data['type'] = 'direct_message';
-        $this->load->view('dashboard/reply_field_twitter', $data);?>
+        //$this->load->view('dashboard/reply_field_twitter', $data);?>
     </div>
     <!-- END DM -->  
     
@@ -161,7 +156,7 @@
        <?php
        $data['posts'] = $directmessage;
        $data['i'] = $i;
-       $this->load->view('dashboard/case_field', $data);?>
+       //$this->load->view('dashboard/case_field', $data);?>
     </div>
     <!-- END CASE --> 
         

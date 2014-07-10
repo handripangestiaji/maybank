@@ -161,7 +161,7 @@ for($i=0;$i<count($homefeed);$i++){
                 'come_from' => "home_feed",
                 'post' => $homefeed[$i]
             );
-            $this->load->view('dashboard/twitter/twitter_button', $data);
+            $this->load->view('dashboard2/twitter/twitter_button', $data);
         ?>
         </div>
          

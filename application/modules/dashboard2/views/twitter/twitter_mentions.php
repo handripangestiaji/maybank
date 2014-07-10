@@ -5,14 +5,6 @@ for($i=0;$i<count($mentions);$i++){
 ?>
     <li <?php if($mentions[$i]->is_read==0){echo 'class="unread-post"';} ?> id="post<?=$mentions[$i]->social_stream_post_id?>">
     
-        <div class="message">
-             <?php
-            if(count($mentions[$i]->case) > 0)
-                $this->load->view('dashboard/twitter/case_view', array(
-                    "caseMsg" => $mentions[$i]->case[0]
-                ));
-        ?>
-        </div>
         <input type="hidden" class="postId" value="<?php echo $mentions[$i]->social_stream_post_id; ?>" />
         <div class="circleAvatar"><img src="<?php echo base_url('dashboard/media_stream/SafePhoto?photo=').$mentions[$i]->profile_image_url;?>" alt=""></div>
         <div class="read-mark <?php if($mentions[$i]->is_read==0){echo 'redText';} else { echo 'greyText'; } ?>"><i class="icon-bookmark icon-large"></i></div>
@@ -168,7 +160,7 @@ for($i=0;$i<count($mentions);$i++){
                     'come_from' => "mentions",
                     'post' => $mentions[$i]
                 );
-                $this->load->view('dashboard/twitter/twitter_button', $data);
+                $this->load->view('dashboard2/twitter/twitter_button', $data);
             ?>
         </div>
         <br clear="all" />

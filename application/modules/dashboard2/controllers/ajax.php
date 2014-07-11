@@ -79,11 +79,16 @@ class ajax extends CI_Controller{
 	$product_list = $this->campaign_model->GetProduct(array('parent_id' => null));
 	
 	$filter['a.post_id'] = $this->input->get('post_id');
-	$data['mentions'] = $this->twitter_model->ReadTwitterData($filter,1);;
-        $data['type'] = 'reply';
+	$data['mentions'] = $this->twitter_model->ReadTwitterData($filter,1);
+	if(count($data['mentions']) == 0){
+	    $data['mentions'] = $this->twitter_model->ReadDMFromDb($filter,1);
+	}
+	
+        $data['type'] = $this->input->get('reply_type') == 'dm'? 'direct_message' : 'reply';
         $data['i'] = 0;
 	$data['product_list'] =  $this->campaign_model->GetProductTree($product_list);
-        echo $this->load->view('dashboard/reply_field_twitter', $data);
+	
+        echo $this->load->view('dashboard2/reply_field_twitter', $data);
     }
     
    

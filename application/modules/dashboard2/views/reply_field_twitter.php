@@ -2,6 +2,7 @@
 <div class="row-fluid">
     <span class="dm-field-btn-close btn-close pull-right"><i class="icon-remove"></i></span>
     <div class="pull-left">
+        
         <input type="hidden" value="<?php echo $mentions[$i]->social_stream_post_id ?>" name="post_id" />
         <input type="hidden" value="<?php echo $mentions[$i]->twitter_user_id?>" name="twitter_user_id" />
         <input type="hidden" value="<?php echo $type?>" name="type" />

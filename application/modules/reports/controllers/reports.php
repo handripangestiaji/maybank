@@ -11,11 +11,17 @@ class Reports extends MY_Controller {
 	
 	if(!$this->session->userdata('user_id'))
 	    redirect('');
+	
+	if(!IsRoleFriendlyNameExist($this->user_role, array ('Reporting_View', 'Reporting_Download'))){
+	    redirect('');
+	}
     }
     
     function index()
     {
-	$data['country_list'] = $this->users_model->get_country()->result();
+	$country_code = IsRoleFriendlyNameExist($this->user_role, 'Reporting_View_All_Country') ?
+	    null : $this->session->userdata('country_code');
+	$data['country_list'] = $this->users_model->get_country($country_code)->result();
         $this->load->view('reports/index',$data);
     }
     

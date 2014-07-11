@@ -69,7 +69,7 @@
         </p>
            
         <p>
-            <a role="button" class="btn-engagement"><i class="icon-eye-open"></i> View Outbox</a>
+            <a role="button" class="btn-engagement" item="twitter"><i class="icon-eye-open"></i> View Outbox</a>
         </p>
         <div class="engagement hide">
            <div class="engagement-header">

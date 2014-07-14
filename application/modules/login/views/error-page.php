@@ -2,7 +2,7 @@
 
 
 
-$header_words['404'] = 'Sorry, URL doesn\'t Exists.';
+$header_words['404'] = 'Sorry, the URL doesn\'t exist.';
 $content_words['404'] = 'The maybk.co domain is used to access web pages created by Maybank Group. We shorten our URLs not only for aesthetic purposes, but also to make them memorable and easily reproducible in all communications. ';
 $header_words['500'] = "Internal Server Errors";
 $content_words['500'] = 'There is something error on web server, please comeback later.  ';

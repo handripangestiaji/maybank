@@ -99,7 +99,7 @@ for($i=0;$i<count($homefeed);$i++){
     <?php endif ?></p>
     
     <p>
-        <a role="button" class="btn-engagement"><i class="icon-eye-open"></i> Engagement</a> <?php if($homefeed[$i]->retweet_count>0): ?>|
+        <a role="button" class="btn-engagement" item="twitter"><i class="icon-eye-open"></i> Engagement</a> <?php if($homefeed[$i]->retweet_count>0): ?>|
         <span><i class="icon-retweet greyText"></i><?php echo $homefeed[$i]->retweet_count; ?> re-tweet(s)</span><?php endif;?>
     </p>
     

@@ -904,11 +904,12 @@ $(function(){
                         url = $(this).attr('title') == 'conversations' ? 'LoadFacebookConversationDetail' : 'LoadFacebookComments';
                         var $btnEngagement = $(this);
                         
-                        if($btnEngagement.attr('item') == 'twitter') return;
+                        
                         if($(this).parent().siblings('.engagement').is(":visible"))
                             $(this).parent().siblings('.engagement').slideUp('slow');
                         else{
                             $(this).parent().siblings('.engagement').slideDown('slow');
+                            if($btnEngagement.attr('item') == 'twitter') return;
                              $.ajax({
                                 "url" : BASEURL + "dashboard2/ajax/" + url,
                                 "data" : {

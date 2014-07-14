@@ -13,7 +13,7 @@ $content_words['500'] = 'There is something error on web server, please comeback
 </div>
 
 <div class="signInRow" style="max-width: 550px">
-    <?php if($this->session->userdata('user_id')):?>
+    <?php if(!$this->session->userdata('user_id')):?>
     <div style="float:left"><button class="btn-inverse btn" onclick="window.open('','_self').close()">Close Window</button></div>
     <?php else:?>
     <div style="float:left"><button class="btn-inverse btn" onclick="window.history.back()">Back</button></div>

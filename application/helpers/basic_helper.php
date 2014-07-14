@@ -182,7 +182,7 @@ function curl_get_file_contents($URL) {
     $c = curl_init();
     curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($c, CURLOPT_URL, $URL);
-     curl_setopt($c, CURLOPT_SSL_VERIFYPEER, FALSE);
+    curl_setopt($c, CURLOPT_SSL_VERIFYPEER, FALSE);
     curl_setopt( $c, CURLOPT_ENCODING, "UTF-8" );
     curl_setopt( $c, CURLOPT_RETURNTRANSFER, true );
     curl_setopt( $c, CURLOPT_AUTOREFERER, true );
@@ -194,7 +194,7 @@ function curl_get_file_contents($URL) {
     curl_close($c);
     if ($contents) return $contents;
     else return FALSE;
-  }
+}
   
 function facebook_request($path, $attachment = null){
     $ch = curl_init();

@@ -558,5 +558,12 @@ class Cronjob extends CI_Controller {
         print_r(json_encode($result));
     }
     
+    
+    public function error_page(){
+	$data['heading'] = $this->input->get('heading');
+	$data['content'] = $this->input->get('content');
+	    
+	$this->load->view('login/error-page', $data);
+    }
    
 }

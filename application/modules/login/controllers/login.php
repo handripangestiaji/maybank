@@ -1,44 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Login extends Login_Controller {
-
-	/*public function __construct()
-	{
-		parent::__construct();
-	}
-
-	public function index()
-	{
-		if($this->input->server('REQUEST_METHOD') === 'POST')
-		{
-			$params['username'] = $this->input->post('username');
-			$params['password'] = $this->input->post('password');
-			
-			$result = $this->auth($params);
-			if($result == TRUE) {
-				redirect('dashboard');
-			}
-			else
-			{
-				redirect('login');
-			}
-		} 
-		
-		$this->load->view('login/index');
-	}
-	
-	private function auth($params = array())
-	{
-		if($params['username'] == 'admin' && $params['password'] == 'admin')
-		{
-			$return = TRUE;
-		}
-		else {
-			$return = FALSE;
-		}
-		
-		return $return;
-	}*/
 	function __construct()
         {
             parent::__construct();
@@ -146,6 +108,13 @@ class Login extends Login_Controller {
 		$this->load->view('forgot',$data1);	
 	}
 	
+	public function error_page(){
+	    $data['heading'] = $this->input->get('heading');
+	    $data['content'] = $this->input->get('content');
+	    
+	    $this->load->view('login/error-page', $data);
+	}
+	
 	function reset_pass()
 	{
 	    $email = $this->input->post('username');
@@ -237,5 +206,7 @@ class Login extends Login_Controller {
 		    $this->load->view('forgot',$data1);
 	    }
 	}
+	
+	
 
 }

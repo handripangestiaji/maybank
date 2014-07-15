@@ -2055,14 +2055,14 @@ $(function(){
                 var channel_2 = $('#box-id-2').next().find('.channel-id').val();
                 var channel_3 = $('#box-id-3').next().find('.channel-id').val();
                 $(this).closest('.container-fluid').next().find('.floatingBox').html('Loading...');
-                $('#box-id-1').next().load(BASEURL + 'dashboard/search',
+                $('#box-id-1').next().load(BASEURL + 'dashboard2/search',
                                            {
                                             channel_id : channel_1,
                                             q : $('.dashboard-search-field').val()
                                             }, function(){
                                                 $(this).BindMultipleSelect();
                                             });
-                $('#box-id-2').next().load(BASEURL + 'dashboard/search',
+                $('#box-id-2').next().load(BASEURL + 'dashboard2/search',
                                            {
                                             channel_id : channel_2,
                                             q : $('.dashboard-search-field').val()
@@ -2070,7 +2070,7 @@ $(function(){
                                                 $(this).BindMultipleSelect();
                                             });
                 
-                $('#box-id-3').next().load(BASEURL + 'dashboard/search',
+                $('#box-id-3').next().load(BASEURL + 'dashboard2/search',
                                            {
                                             channel_id : channel_3,
                                             q : $('.dashboard-search-field').val()

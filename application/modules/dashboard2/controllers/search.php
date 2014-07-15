@@ -111,7 +111,7 @@ class Search extends CI_Controller {
 	       $this->load->model('case_model');
 	       $data['user_list'] = $this->case_model->ReadAllUser();
 	       $data['is_search'] = TRUE;
-	       $this->load->view('dashboard/facebook/facebook_stream',$data);
+	       $this->load->view('dashboard2/facebook/facebook_stream',$data);
 	  }
 	  elseif($the_channel[0]->connection_type == 'twitter'){
 	       $filter = array('a.channel_id' => $channel_id);
@@ -231,7 +231,7 @@ class Search extends CI_Controller {
 	       $data['channel_id'] = $channel_id;
 	       $data['user_list'] = $this->case_model->ReadAllUser();
 	       $data['is_search'] = TRUE;
-	       $this->load->view('dashboard/twitter/twitter_stream',$data);
+	       $this->load->view('dashboard2/twitter/twitter_stream',$data);
 	  }
 	  elseif($the_channel[0]->connection_type == 'youtube'){
 	       $youtube_post = (object)$this->elasticsearch_model->GlobalSearch($this->the_index,'youtube_post',$q);
@@ -282,7 +282,7 @@ class Search extends CI_Controller {
 	       
 	       $data['channel_id'] = $channel_id;
 	       $data['is_search'] = TRUE;
-	       $this->load->view('dashboard/youtube/youtube_stream', $data);
+	       $this->load->view('dashboard2/youtube/youtube_stream', $data);
 	  }
      }
      
@@ -474,7 +474,7 @@ class Search extends CI_Controller {
 	$page = $page ? $page : 1;
 	$data['youtube_post'] = $this->youtube_model->ReadYoutubePost($filter, $page);
 	$data['youtube_comment'] = $this->youtube_model->ReadYoutubeComment($filter, $page);
-	$this->load->view('dashboard/youtube/youtube_stream', $data);
+	$this->load->view('dashboard2/youtube/youtube_stream', $data);
     }
     
     

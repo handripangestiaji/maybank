@@ -91,9 +91,9 @@
 		
 	<?php
 	
-	if (!IsRoleFriendlyNameExist($this->user_role, 'Reporting_Download_All_Country')):?>
+	//if (!IsRoleFriendlyNameExist($this->user_role, 'Reporting_Download_All_Country')):?>
 	    <button class="btn btn-warning left" id="btn-download-report-activity">Download</button>
-	<?php endif?>
+	<?php //endif?>
 	    <div class="page pull-right">
 		<button class="btn btn-inverse btn-pagination-first x-pagination" data-offset="0" data-limit="0">First</button>&nbsp;
 		<button class="btn btn-inverse btn-pagination-prev x-pagination" data-offset="20" data-limit="0">Previous</button>&nbsp;		

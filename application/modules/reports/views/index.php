@@ -131,9 +131,9 @@
 					<td class="sum8">0</td>
 					<td class="sum9">0</td>
 					<td style="text-align: center">
-						<?php if (!IsRoleFriendlyNameExist($this->user_role, 'Reporting_Download_All_Country')):?>
+						<?php //if (!IsRoleFriendlyNameExist($this->user_role, 'Reporting_Download_All_Country')):?>
 						<button class="btn btn-download  btn-primary" type="button" ><i class=" icon-download"></i> Download</button>
-						<?php endif;?>
+						<?php //endif;?>
 					</td>
 				</tfoot>
 			</table>

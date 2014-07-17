@@ -72,22 +72,22 @@
 					
 				</select>
 			</div>
-			<div class="span3">
+			<!--div class="span3">
 				<label class="span6">Type</label>
 				<select name="type" class="span6">
 					<option value="engagement">Engagement</option>
 					<option value="case">Case</option>
 				</select>
-			</div>
+			</div-->
 		</div>
 		
 		<div class="row-fluid">
-			<div class="span2 offset5">
+			<!--div class="span2 offset5">
 				<div class="btn-group" data-toggle="buttons-checkbox">
 					<button type="button" class="btn btn-primary">Numbers</button>
 					<button type="button" class="btn ">Percentage</button>
 				</div>
-			</div>
+			</div-->
 			<table class="table table-striped table-bordered" style="background: #fff;border: 1px solid #ccc">
 				<thead>
 				<tr><th>Case</th>

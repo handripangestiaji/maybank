@@ -137,8 +137,6 @@
     }
     
 $(function(){
-    alert("bro!");
-
 })
     
     

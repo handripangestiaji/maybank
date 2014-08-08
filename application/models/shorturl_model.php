@@ -32,7 +32,7 @@ class Shorturl_model extends CI_Model
 		return $result;
 	}
 	
-	public function get($limit = '', $offset = '', $filter)
+	public function get($limit = '', $offset = '', $filter = null)
 	{
 		$this->db->select('short_urls.*,user.display_name');
 		$this->db->join("user", $this->_table.".user_id = user.user_id", "left");
@@ -139,7 +139,7 @@ class Shorturl_model extends CI_Model
 				  'action_type' => 'delete short url',
 				  'slug' => json_encode($row)
 				  );
-		$this->addLog($campaign);
+		//$this->addLog($campaign);
 		
 		if ($id == null)
 		{

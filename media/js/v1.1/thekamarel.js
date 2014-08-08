@@ -2385,10 +2385,10 @@ $(document).ready(function(){
                 "</div>" +
             "</div>";
             element.append(tooltip);
-            
+            /*console.log(element.coord());
             if(($('#calendar').width() - element.coord().left) < 270){
                 element.find('.tooltip-event').css('left','-100px');
-            }
+            }*/
         }
     });
     

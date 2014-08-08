@@ -8,6 +8,12 @@ class Cronjob extends CI_Controller {
         $this->load->model('facebook_model');
         $this->load->model('account_model');
         $this->load->model('twitter_model');
+        $this->load->config('search');
+        if($this->input->get('key') != $this->config->item('cronjob_password')){
+            header("HTTP/1.1 403 Forbidden");
+            echo "403 Forbidden";
+            exit();
+        }
     }
     
     /*function index(){

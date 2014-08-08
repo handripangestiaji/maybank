@@ -111,19 +111,19 @@ class Media_stream extends CI_Controller {
     	$data['user_list'] = $this->case_model->ReadAllUser($filter_user);
     	$filter['b.type'] = 'mentions';
     	$data['mentions']=$this->twitter_model->ReadTwitterData($filter,$limit);
-        $data['countMentions']=$this->twitter_model->CountTwitterData($filter);
+        $data['countMentions']=0;
     
     	$filter['b.type'] = 'home_feed';
     	$data['homefeed']=$this->twitter_model->ReadTwitterData($filter,$limit);
-        $data['countFeed']=$this->twitter_model->CountTwitterData($filter);
+        $data['countFeed']=0;
              
     	$filter['b.type'] = 'user_timeline';
     	$data['senttweets']=$this->twitter_model->ReadTwitterData($filter,$limit);  
-        $data['countTweets']=$this->twitter_model->CountTwitterData($filter);
+        $data['countTweets']=0;
         
     	unset($filter['b.type']);
     	$data['directmessage']=$this->twitter_model->ReadDMFromDb($filter,$limit);
-        $data['countDirect']=$this->twitter_model->CountTwitterData($filter);
+        $data['countDirect']=0;
     	$data['channel_id'] = $channel_id;
     	
     	$this->load->model('campaign_model');
@@ -1033,7 +1033,7 @@ class Media_stream extends CI_Controller {
     	
     	//get current starting point of records
     	$limit = ($group_number * $items_per_group);
-
+	
     	$this->load->model('case_model');
 	$filter_user['country_code'] = IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Case_All_Country_AssignReassignResolved') ? NULL : $this->session->userdata('country');
 	$data['user_list'] = $this->case_model->ReadAllUser($filter_user);
@@ -1053,31 +1053,30 @@ class Media_stream extends CI_Controller {
 	}
 	$data['product_list'] = $product_list;
 
-	
+	$data['page'] = $group_numbers + 1;
         if($action=='mentions'){
             $filter['b.type'] = 'mentions';
             $data['mentions']=$this->twitter_model->ReadTwitterData($filter,$limit);
-            $data['countMentions']=$this->twitter_model->CountTwitterData($filter);
+            
             $this->load->view('dashboard2/twitter/twitter_mentions.php',$data);
         }
         
         if($action=='feed'){
             $filter['b.type'] = 'home_feed';
             $data['homefeed']=$this->twitter_model->ReadTwitterData($filter,$limit); 
-            $data['countFeed']=$this->twitter_model->CountTwitterData($filter);
+            
             $this->load->view('dashboard2/twitter/twitter_homefeed.php',$data);
         }
         
         if($action=='user_timeline'){
             $filter['b.type'] = 'user_timeline';
             $data['senttweets']=$this->twitter_model->ReadTwitterData($filter,$limit);
-            $data['countTweets']=$this->twitter_model->CountTwitterData($filter);
+            
             $this->load->view('dashboard2/twitter/twitter_senttweets.php', $data);
         }
         if($action=='direct'){
             $filter['a.channel_id']=$channel_ids;
             $data['directmessage']=$this->twitter_model->ReadDMFromDb($filter,$limit);
-            $data['countDirect']=$this->twitter_model->CountTwitterData($filter);
             $data['channel_id'] = $channel_id;
             $this->load->view('dashboard2/twitter/twitter_messages.php',$data);
 

@@ -1981,6 +1981,7 @@ $(function(){
             looppage=2;
             $(this).on('click','.loadmore',
                 function() {
+                    
                     $(this).find('span').html("LOADING...");
                     $(this).attr("disabled", "disabled");
                     var loadMoreElement = $(this);
@@ -1989,6 +1990,7 @@ $(function(){
                     group_numbers=2;
                     channel_ids = $(this).siblings(".channel_id").val();
                     me = $(this);
+                    looppage = me.attr('item') == undefined ? 2 : me.attr('item');
                     me.attr('disabled', 'disabled').html('Loading...');
                     $(this).closest('.floatingBoxContainers').load(BASEURL + 'dashboard2/media_stream/loadmore/'+action+'/'+looppage+'/'+channel_ids, function(){
                         loadMoreElement.removeAttr("disabled");
@@ -2059,6 +2061,7 @@ $(function(){
                     me.removeAttr('disabled').html('Loading..');
                     
                     looppage++;
+                    me.attr('item', looppage);
                     loading = false;
             });                        
 

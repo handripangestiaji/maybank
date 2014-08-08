@@ -1,4 +1,5 @@
 <?php 
+$page = isset($page) ? $page : 2;
 $total_groups = ceil($CountPmFB[0]->count_post_id/$this->config->item('item_perpage'));
 $timezone=new DateTimeZone($this->session->userdata('timezone'));
 for($i=0; $i<count($fb_pm);$i++):
@@ -101,5 +102,6 @@ $sender = $fb_pm[$i]->participant->sender->facebook_id == $fb_pm[$i]->social_id 
 </li>
 <?php endfor;?>
 <?php if((count($fb_pm) > 0) && (!isset($is_search))): ?>
-<div class="filled" style="text-align: center;"><input type="hidden" class="total_groups" value="<?=$total_groups?>" /><input type="hidden"  class="channel_id" value="<?=$fb_pm[0]->channel_id?>"/><input type="hidden"  class="looppage" value=""/><button class="loadmore btn btn-info" value="privateMessages"><i class="icon-chevron-down"></i><span>LOAD MORE</span></button></div>
+<div class="filled" style="text-align: center;"><input type="hidden" class="total_groups" value="<?=$total_groups?>" /><input type="hidden"  class="channel_id" value="<?=$fb_pm[0]->channel_id?>"/><input type="hidden"  class="looppage" value=""/>
+<button class="loadmore btn btn-info" item="<?php echo $page?>" value="privateMessages"><i class="icon-chevron-down"></i><span>LOAD MORE</span></button></div>
 <?php endif?>

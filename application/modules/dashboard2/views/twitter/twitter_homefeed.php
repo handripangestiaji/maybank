@@ -1,5 +1,5 @@
 <?php
-$total_groups = ceil($countFeed[0]->count_post_id/$this->config->item('item_perpage'));
+
 $timezone=new DateTimeZone($this->session->userdata('timezone'));
 for($i=0;$i<count($homefeed);$i++){
 ?>
@@ -189,5 +189,6 @@ for($i=0;$i<count($homefeed);$i++){
     </li>
 <?php } ?>
 <?php if((count($homefeed) > 0) && (!isset($is_search))): ?>
-<div class="filled" style="text-align: center;"><input type="hidden" class="channel_id" value="<?php echo $homefeed[0]->channel_id?>" /><input type="hidden"  class="channel_id" value="<?php echo $homefeed[0]->channel_id?>"/><input type="hidden" class="total_groups" value="<?php echo $total_groups?>" /><input type="hidden"  class="looppage" value=""/><button class="loadmore btn btn-info" value="feed"><i class="icon-chevron-down"></i> <span>LOAD MORE</span></button></div>
+<div class="filled" style="text-align: center;"><input type="hidden"  class="channel_id" value="<?php echo $homefeed[0]->channel_id?>" /><input type="hidden"  class="channel_id" value="<?php echo $homefeed[0]->channel_id?>"/><input type="hidden" class="total_groups" value="<?php echo $total_groups?>" /><input type="hidden"  class="looppage" value=""/>
+<button class="loadmore btn btn-info" item="<?php echo isset($page) ? $page : 2?>" value="feed"><i class="icon-chevron-down"></i> <span>LOAD MORE</span></button></div>
 <?php endif;?>

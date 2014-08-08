@@ -383,7 +383,7 @@ class twitter_model extends CI_Model
     }
     
     public function CountTwitterData($filter){
-        $this->db->select("count(b.post_id) as count_post_id");
+        $this->db->select("count(*) as count_post_id");
         $this->db->from("social_stream a INNER JOIN social_stream_twitter b ON a.post_id = b.post_id 
                         INNER JOIN twitter_user_engaged c ON
                         c.twitter_user_id = b.twitter_user_id left join `case` d on d.post_id = a.post_id");
@@ -394,7 +394,7 @@ class twitter_model extends CI_Model
             }
 	    $this->db->where($filter);
         }
-        $this->db->order_by('b.created_at','desc');           
+        $this->db->order_by('a.post_id','desc');           
         return $this->db->get()->result();
     }
     
@@ -536,7 +536,6 @@ class twitter_model extends CI_Model
      * Get Action from database
     */
     function GetChannelAction($filter){
-        $this->db->distinct();
         $this->db->select("a.*, b.username, b.display_name, c.text, d.messages, d.assign_to, e.display_name as assign_name, f.display_name as solved_name, d.solved_message");
         $this->db->from("channel_action a INNER JOIN
 			user b on b.user_id = a.created_by LEFT JOIN

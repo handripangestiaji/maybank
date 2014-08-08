@@ -1,5 +1,5 @@
 <?php
-    $total_groups = ceil($countDirect[0]->count_post_id/$this->config->item('item_perpage'));
+    
     $timezone=new DateTimeZone($this->session->userdata('timezone'));
     for($i=0;$i<count($directmessage);$i++){
     ?>
@@ -167,5 +167,5 @@
 <?php if((count($directmessage) > 0) && (!isset($is_search))): ?>
   <div class="filled" style="text-align: center;">
      <input type="hidden"  class="channel_id" value="<?php echo $directmessage[0]->channel_id?>"/>
-    <button class="loadmore btn btn-info" value="direct"><i class="icon-chevron-down"></i> <span>LOAD MORE</span></button></div>
+    <button item="<?php echo isset($page) ? $page : 2?>" class="loadmore btn btn-info" value="direct"><i class="icon-chevron-down"></i> <span>LOAD MORE</span></button></div>
 <?php endif;?>

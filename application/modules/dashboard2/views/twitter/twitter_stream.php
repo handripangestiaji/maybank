@@ -1,4 +1,5 @@
 <?php
+    $page = !isset($page) ? 2 : $page;
     $count_unread_mentions = 0;
     if($mentions){
         foreach($mentions as $m){
@@ -85,7 +86,7 @@
          <?php
          if($mentions){
             if(is_array($mentions)){
-               echo $this->load->view('dashboard2/twitter/twitter_mentions', array('mentions' => $mentions));
+               echo $this->load->view('dashboard2/twitter/twitter_mentions', array('mentions' => $mentions, 'page' => $page));
             }else{
                echo $mentions->errors[0]->message;
             }
@@ -103,7 +104,7 @@
         // print_r($homefeed);
         if($homefeed){
             if(is_array($homefeed)){
-                $this->load->view('dashboard2/twitter/twitter_homefeed', array('homefeed' => $homefeed));
+                $this->load->view('dashboard2/twitter/twitter_homefeed', array('homefeed' => $homefeed, 'page' => $page));
             }else{
                 echo $homefeed->errors[0]->message; 
             }
@@ -120,7 +121,7 @@
             //print_r($senttweets);
             if($senttweets){
                 if(is_array($senttweets)){
-                    $this->load->view('dashboard2/twitter/twitter_senttweets', array('senttweets' => $senttweets));
+                    $this->load->view('dashboard2/twitter/twitter_senttweets', array('senttweets' => $senttweets, 'page' => $page));
                 }else{
                     echo $senttweets->errors[0]->message;
                 }
@@ -135,7 +136,7 @@
            // print_r($directmessage);
            if($directmessage){
             if(is_array($directmessage)){
-                $this->load->view('dashboard2/twitter/twitter_messages');
+                $this->load->view('dashboard2/twitter/twitter_messages', array('page' => $page));
              }else{
                 //print_r($directmessage);
                 //echo $directmessage->errors[0]->message;

@@ -69,7 +69,7 @@ class Reports_model extends CI_Model
 		    'sum(total_case) as total_case', 'sum(total_solved) as total_solved', 'avg(average_response) as average_response') :
 		    $field;
 	$field_array = join(',', $field);
-	$query = "SELECT ".$field_array." FROM maybk_new_staging.report_performance b
+	$query = "SELECT ".$field_array." FROM report_performance b
 	    RIGHT JOIN content_products c on c.id = b.product_id 
     	WHERE b.code = '$current_code' ".($case_type == null ? "" : " AND b.case_type = '$case_type'"). " $group_by  ".
 	"ORDER BY COALESCE(c.parent_id, c.`id`), c.`parent_id` is not null, c.id";

@@ -1309,7 +1309,7 @@ $(function(){
                                 y++;
                                 if($(this).attr('id') == 'optfacebook'){
                                     $.ajax({
-                                        url : BASEURL + 'cronjob/FbStatusUpdate',
+                                        url : BASEURL + 'cronjob/FbStatusUpdate?key=' + KEY,
                                         type: "POST",
                                         data: {
                                             linkImage : $('.url-show img.img-link').attr('src'),
@@ -1396,7 +1396,7 @@ $(function(){
                                 
                                 if($(this).attr('id') == 'opttwitter'){                
                                     $.ajax({
-                                        url : BASEURL + 'cronjob/TwitterStatusUpdate',
+                                        url : BASEURL + 'cronjob/TwitterStatusUpdate?key=' + KEY,
                                         type: "POST",
                                         data: {
                                                 content:$('.compose-textbox').val(),

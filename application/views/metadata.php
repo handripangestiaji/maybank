@@ -9,4 +9,5 @@
 <link rel="stylesheet" href="<?php echo base_url()?>media/css/styles.css" />
 <script type="text/javascript">
     var BASEURL = "<?php echo base_url()?>";
+    var KEY = "<?php echo $this->config->item('cronjob_password')?>";
 </script>

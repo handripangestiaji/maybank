@@ -831,9 +831,10 @@ class Media_stream extends CI_Controller {
                 'link' => $url,
                 'description' => $descr,
                 'picture'=> $img,
-            ); 
-            $return = $this->facebook->api('/'.$stream_id->post_stream_id.'/messages', 'POST', array('message'=>$comment));
-            $action = array(
+            );
+	    
+            $return = $this->facebook->api('/v2.1/'.$stream_id->post_stream_id.'/messages', 'POST', array('message'=>$comment));
+	    $action = array(
     	    "action_type" => "conversation_facebook",
     	    "channel_id" => $channel_loaded[0]->channel_id,
     	    "created_at" => date("Y-m-d H:i:s"),

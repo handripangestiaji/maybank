@@ -136,7 +136,7 @@
 		    ?>
                     <tr>
                         <td><?php echo $gr->group_name;?></td>
-                        <td><?php echo $count_group[$i+$plus]?></td>
+                        <td><?php echo $gr->user_count;?></td>
                         <td>
                             <?php
                                 foreach($group_detail->result() as $gd)

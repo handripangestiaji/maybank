@@ -23,7 +23,7 @@ for($i=0;$i<count($homefeed);$i++){
             <i class="icon-circle"></i>
             <span>
             <?php 
-            $date=new DateTime($homefeed[$i]->social_stream_created_at.' Europe/London');
+            $date=new DateTime($homefeed[$i]->social_stream_created_at.' UTC');
             $date->setTimezone($timezone);
             echo $date->format('l, M j, Y h:i A');
             
@@ -62,13 +62,13 @@ for($i=0;$i<count($homefeed);$i++){
             <?php
             if($homefeed[$i]->case[0]->status == "pending"){
                 echo isset($homefeed[$i]->case[0]->assign_to->display_name) ? ' Assign to:'.$homefeed[$i]->case[0]->assign_to->display_name : '';
-                $created_at = new DateTime($homefeed[$i]->case[0]->created_at.' Europe/London', $timezone);
+                $created_at = new DateTime($homefeed[$i]->case[0]->created_at.' UTC', $timezone);
                 
                 echo ' '.$created_at->format("d-M-y h:i A");
             }
             else{
                 echo isset($homefeed[$i]->case[0]->solved_by->display_name) ? ' Resolved By:'.$homefeed[$i]->case[0]->solved_by->display_name: '';
-                $solved_at = new DateTime($homefeed[$i]->case[0]->solved_at.' Europe/London', $timezone);
+                $solved_at = new DateTime($homefeed[$i]->case[0]->solved_at.' UTC', $timezone);
                 
                 echo ' '.$solved_at->format("d-M-y h:i A");
             }
@@ -99,7 +99,7 @@ for($i=0;$i<count($homefeed);$i++){
     <?php endif ?></p>
     
     <p>
-        <a role="button" class="btn-engagement"><i class="icon-eye-open"></i> Engagement</a> <?php if($homefeed[$i]->retweet_count>0): ?>|
+        <a role="button" class="btn-engagement" item="twitter"><i class="icon-eye-open"></i> Engagement</a> <?php if($homefeed[$i]->retweet_count>0): ?>|
         <span><i class="icon-retweet greyText"></i><?php echo $homefeed[$i]->retweet_count; ?> re-tweet(s)</span><?php endif;?>
     </p>
     

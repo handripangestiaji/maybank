@@ -55,6 +55,15 @@ class Tag_model extends CI_Model
 	
 	public function delete($id)
 	{
+		//record log
+		$row = $this->getOneBy(array('id' => $id));
+		$tag = array('created_by' => $this->session->userdata('user_id'),
+				  'created_at' => date('Y-m-d H:i:s'),
+				  'action_type' => 'delete tag',
+				  'slug' => json_encode($row)
+				  );
+		$this->addLog($tag);
+		
 		if ($id == null)
 		{
 			throw new \Exception("Invalid Id");
@@ -70,5 +79,10 @@ class Tag_model extends CI_Model
 	public function count_record()
 	{
 		return $this->db->count_all($this->_table);
+	}
+	
+	public function addLog($value){
+		$this->db->set($value);
+		$this->db->insert('content_action');
 	}
 }

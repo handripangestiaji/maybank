@@ -32,7 +32,7 @@ class Shorturl_model extends CI_Model
 		return $result;
 	}
 	
-	public function get($limit = '', $offset = '', $filter)
+	public function get($limit = '', $offset = '', $filter = null)
 	{
 		$this->db->select('short_urls.*,user.display_name');
 		$this->db->join("user", $this->_table.".user_id = user.user_id", "left");
@@ -132,6 +132,15 @@ class Shorturl_model extends CI_Model
 	
 	public function delete($id)
 	{
+		//record log
+		$row = $this->get(array('','','id' => $id));
+		$campaign = array('created_by' => $this->session->userdata('user_id'),
+				  'created_at' => date('Y-m-d H:i:s'),
+				  'action_type' => 'delete short url',
+				  'slug' => json_encode($row)
+				  );
+		//$this->addLog($campaign);
+		
 		if ($id == null)
 		{
 			throw new \Exception("Invalid Id");
@@ -148,5 +157,10 @@ class Shorturl_model extends CI_Model
 		$this->db->delete($this->_table);
 		
 		return true;
+	}
+	
+	public function addLog($value){
+		$this->db->set($value);
+		$this->db->insert('content_action');
 	}
 }

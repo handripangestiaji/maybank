@@ -182,7 +182,7 @@ function curl_get_file_contents($URL) {
     $c = curl_init();
     curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($c, CURLOPT_URL, $URL);
-     curl_setopt($c, CURLOPT_SSL_VERIFYPEER, FALSE);
+    curl_setopt($c, CURLOPT_SSL_VERIFYPEER, FALSE);
     curl_setopt( $c, CURLOPT_ENCODING, "UTF-8" );
     curl_setopt( $c, CURLOPT_RETURNTRANSFER, true );
     curl_setopt( $c, CURLOPT_AUTOREFERER, true );
@@ -194,7 +194,7 @@ function curl_get_file_contents($URL) {
     curl_close($c);
     if ($contents) return $contents;
     else return FALSE;
-  }
+}
   
 function facebook_request($path, $attachment = null){
     $ch = curl_init();
@@ -365,4 +365,18 @@ function CreateUrlFromText($text){
         $text = preg_replace($reg_exUrl, "<span class='inside-link'><a target='_blank' href='{$url[0]}'>".substr($url[0], 0, 50)."</a></span> ", $text);
     $text = str_replace("\n", "<br />", $text);
     return $text;
+}
+function time_elapsed_A($secs){
+    $bit = array(
+        'y' => $secs / 31556926 % 12,
+        'w' => $secs / 604800 % 52,
+        'd' => $secs / 86400 % 7,
+        'h' => $secs / 3600 % 24,
+        'm' => $secs / 60 % 60,
+        );
+    $ret = array();
+    foreach($bit as $k => $v)
+        if($v > 0)$ret[] = $v . $k;
+        
+    return join(' ', $ret);
 }

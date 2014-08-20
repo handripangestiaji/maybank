@@ -152,7 +152,14 @@ class Cms extends MY_Controller {
 		     
 		    if ($this->form_validation->run() == TRUE)
 		    {
-			 $this->campaign_model->insert($campaigns, $products_id, $tags);
+			 foreach($products_id as $key => $value){
+			      $new_products[] = str_replace('product|','',$value);
+			 }
+			 foreach($tags as $key => $value){
+			      $new_tags[] = str_replace('tag|','',$value);
+			 }
+			 
+			 $this->campaign_model->insert($campaigns, $new_products, $new_tags);
 			 $this->session->set_flashdata('message_type', 'success');
 			 $this->session->set_flashdata('message_body', 'Create campaign success');
 			 redirect('cms');
@@ -671,7 +678,7 @@ class Cms extends MY_Controller {
                redirect('cms/edit_campaign/'.$id);
           }
           else{
-               $value = array('campaign_name' => $this->input->post('name'),
+	       $value = array('campaign_name' => $this->input->post('name'),
                               'description' => $this->input->post('description')
                              );
                $result = $this->campaign_model->update($id,$value);
@@ -681,7 +688,7 @@ class Cms extends MY_Controller {
                
                $tags = $this->input->post('tag');
                $this->campaign_model->update_campaign_tag($id,$tags);
-                
+	       
                $this->session->set_flashdata('message_type','success');
                $this->session->set_flashdata('message_body','Campaign has been updated');
                redirect('cms');

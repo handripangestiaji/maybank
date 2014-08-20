@@ -51,6 +51,13 @@
             <span style='color:red;'><?php echo form_error('email'); ?></span></td></td>
             <input name='email1' type="hidden" value="<?php echo $row->email;?>" />
         </tr>
+        <?php if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_All_Country_Edit')):?>
+         <tr>
+            <td>Hidden</td>
+            <td><input style="margin:13px 0" type="checkbox" value="1" name="is_hidden" <?=$row->is_hidden == 1 ? 'checked="checked"' : ""?> /></td></tr>
+            
+        <tr>
+        <?php endif;?>
         <?php
         $current_user_role = $this->users_model->get_collection_detail(
 		array('role_collection_id' => $row->role_id));
@@ -60,17 +67,18 @@
         IsRoleFriendlyNameExist($this->user_role, 'User Management_User_All_Country_Edit');
         if($role_check):
         ?>
-        <tr>
+       
             <td>Role</td>
             <td>
                 <select name="optRole">
                 <?php
                     foreach($role->result() as $r){
-                            if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_All_Country_Create'))
-                                    echo '<option value="'.$r->role_collection_id.'">'.$r->role_name.'</option>';
+                            $selected = $row->role_id == $r->role_collection_id ? 'selected="selected"' : '';
+                            if(IsRoleFriendlyNameExist($this->user_role, 'User Management_User_All_Country_View'))
+                                    echo '<option value="'.$r->role_collection_id.'" '.$selected.'>'.$r->role_name.'</option>';
                             else{
                                     if($r->role_collection_id != $this->session->userdata('role_id')) 	
-                                            echo '<option value="'.$r->role_collection_id.'">'.$r->role_name.'</option>';
+                                            echo '<option value="'.$r->role_collection_id.'" '.$selected.'>'.$r->role_name.'</option>';
                             }
                     }				
                 ?>

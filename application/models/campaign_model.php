@@ -216,12 +216,6 @@ echo "<pre>";
 			
 			$i++;
 		}
-		
-		/*
-echo "<pre>";
-		die(print_r($campaigns));
-*/
-		
 		return $campaigns;
 	}
 	
@@ -231,7 +225,28 @@ echo "<pre>";
 		if($filter){
 			$this->db->where($filter);
 		}
+		$this->db->order_by('parent_id');
 		return $this->db->get()->result();
+	}
+	
+	public function GetProductTree($product_list){
+		foreach($product_list as $prod){    
+			$product_child = $this->GetProduct(array('parent_id' => $prod->id));
+			if($product_child){
+				$chi = array();
+				foreach($product_child as $child){
+					$chi[] = $child;
+				}
+				$prod->child = $chi;
+			}
+		}
+		return $product_list;
+	}
+	
+	
+	public function GetProductBasedOnParent($where = ""){
+		$query = "Select * from `content_products` ".($where != '' ? " WHERE $where" : "")." ORDER BY COALESCE(parent_id, `id`), `parent_id` is not null, id";
+		return $this->db->query($query)->result();
 	}
 	
 	public function getOneBy($params = array())
@@ -249,6 +264,15 @@ echo "<pre>";
 	
 	public function delete($id)
 	{
+		//record log
+		$row = $this->get(array('id' => $id));
+		$campaign = array('created_by' => $this->session->userdata('user_id'),
+				  'created_at' => date('Y-m-d H:i:s'),
+				  'action_type' => 'delete campaign',
+				  'slug' => json_encode($row)
+				  );
+		$this->addLog($campaign);
+		
 		if ($id == null)
 		{
 			throw new \Exception("Invalid Id");
@@ -285,6 +309,15 @@ echo "<pre>";
 	}
 	
 	public function update($id,$value){
+		//record log
+		$row = $this->get(array('id' => $id));
+		$campaign = array('created_by' => $this->session->userdata('user_id'),
+				  'created_at' => date('Y-m-d H:i:s'),
+				  'action_type' => 'update campaign',
+				  'slug' => json_encode($row)
+				  );
+		$this->addLog($campaign);
+		
 		$this->db->where('id',$id);
 		$this->db->update('content_campaign',$value);
 	}
@@ -339,5 +372,10 @@ echo "<pre>";
 		$this->db->join('content_products','content_products_campaign.products_id = content_products.id');
 		$this->db->where('content_products_campaign.campaign_id',$id);
 		return $this->db->get();
+	}
+	
+	public function addLog($value){
+		$this->db->set($value);
+		$this->db->insert('content_action');
 	}
 }

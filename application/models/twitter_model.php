@@ -114,7 +114,7 @@ class twitter_model extends CI_Model
     */
     public function SaveTweets($tweet, $channel, $come_from = "mentions"){
         $this->db->trans_start();
-        $timezone = new DateTimeZone("Europe/London");
+        $timezone = new DateTimeZone("UTC");
         $created_at = new DateTime($tweet->created_at, $timezone);
         $retrieved_at = new DateTime(date("Y-m-d H:i:s e"), $timezone);
         $post_id = $this->GetTweetId($tweet->id_str, "twitter", $channel->channel_id, $come_from);
@@ -178,7 +178,7 @@ class twitter_model extends CI_Model
     }
     
     public function SaveDirectMessages($direct_message, $channel){
-        $timezone = new DateTimeZone("Europe/London");
+        $timezone = new DateTimeZone("UTC");
         $created_at = new DateTime($direct_message->created_at, $timezone);
         $retrieved_at = new DateTime(date("Y-m-d H:i:s e"), $timezone);
         $this->db->trans_start();
@@ -218,7 +218,7 @@ class twitter_model extends CI_Model
     }
     
     public function SaveTwitterUsers($user){
-        $timezone = new DateTimeZone("Europe/London");
+        $timezone = new DateTimeZone("UTC");
         $created_at = new DateTime($user->created_at, $timezone);
         $retrieved_at = new DateTime(date("Y-m-d H:i:s e"), $timezone);
         $user_to_save = array(
@@ -383,7 +383,7 @@ class twitter_model extends CI_Model
     }
     
     public function CountTwitterData($filter){
-        $this->db->select("count(b.post_id) as count_post_id");
+        $this->db->select("count(*) as count_post_id");
         $this->db->from("social_stream a INNER JOIN social_stream_twitter b ON a.post_id = b.post_id 
                         INNER JOIN twitter_user_engaged c ON
                         c.twitter_user_id = b.twitter_user_id left join `case` d on d.post_id = a.post_id");
@@ -394,7 +394,7 @@ class twitter_model extends CI_Model
             }
 	    $this->db->where($filter);
         }
-        $this->db->order_by('b.created_at','desc');           
+        $this->db->order_by('a.post_id','desc');           
         return $this->db->get()->result();
     }
     
@@ -536,11 +536,10 @@ class twitter_model extends CI_Model
      * Get Action from database
     */
     function GetChannelAction($filter){
-        $this->db->distinct();
         $this->db->select("a.*, b.username, b.display_name, c.text, d.messages, d.assign_to, e.display_name as assign_name, f.display_name as solved_name, d.solved_message");
         $this->db->from("channel_action a INNER JOIN
 			user b on b.user_id = a.created_by LEFT JOIN
-			twitter_reply c on c.created_at = a.created_at AND
+			twitter_reply c on 
                         c.reply_to_post_id = a.post_id LEFT JOIN
 			`case` d on d.case_id = a.case_id LEFT JOIN
 			user e on e.user_id = d.assign_to LEFT JOIN

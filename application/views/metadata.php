@@ -6,7 +6,8 @@
 <link rel="stylesheet" href="<?php echo base_url()?>media/css/bootstrap-responsive.min.css">
 <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="<?php echo base_url(); ?>media/js/vendor/jqwidgets/styles/jqx.base.css"/> <!-- jquery widget tree -->
-<link rel="stylesheet" href="<?php echo base_url()?>media/css/styles.css">
+<link rel="stylesheet" href="<?php echo base_url()?>media/css/styles.css" />
 <script type="text/javascript">
     var BASEURL = "<?php echo base_url()?>";
+    var KEY = "<?php echo $this->config->item('cronjob_password')?>";
 </script>

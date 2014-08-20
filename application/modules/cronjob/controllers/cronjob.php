@@ -8,11 +8,39 @@ class Cronjob extends CI_Controller {
         $this->load->model('facebook_model');
         $this->load->model('account_model');
         $this->load->model('twitter_model');
+        $this->load->config('search');
+        if($this->input->get('key') != $this->config->item('cronjob_password')){
+            header("HTTP/1.1 403 Forbidden");
+            echo "403 Forbidden";
+            exit();
+        }
     }
     
-    function index(){
-        
-    }
+    /*function index(){
+        header("Content-Type:application/json");
+        if($this->input->get('short_url')){
+            $this->db->select("long_url");
+            $this->db->from('short_urls');
+            $this->db->where('short_code', $this->input->get('short_url'));
+            $row = $this->db->get()->row();
+            if($row != null)
+                redirect($row->long_url);
+            else{
+                $staging = $this->load->database('staging', true);
+                $staging->select("long_url");
+                $staging->from('short_urls');
+                $staging->where('short_code', $this->input->get('short_url'));
+                $row = $staging->get()->row();
+                redirect($row->long_url);
+                $staging->close();
+            }
+        }
+        else
+              echo json_encode(array(
+                'long_url' => NULL,
+                'short_url' => $this->input->get('short_url')
+             ));
+    }*/
     
     // Purposed for save facebook stream to database.... 
     function FacebookStreamOwnPost(){
@@ -181,16 +209,16 @@ class Cronjob extends CI_Controller {
         $posts = $this->post_model->GetPosts($where);
                     
         foreach($posts as $post){
-            print_r($post);
+            //print_r($post);
             $dtz = new DateTimeZone($post->timezone);
             $local_time = new DateTime('now', $dtz);
             $offset = $dtz->getOffset( $local_time ) / 3600;
-            $current_date = new DateTime(date("Y-m-d H:i:s").' Europe/London');
+            $current_date = new DateTime(date("Y-m-d H:i:s").' UTC');
             $current_date->setTimezone($dtz);
             
             $local_time = $current_date->format("Y-m-d H:i");
             $post_time = date('Y-m-d H:i',strtotime($post->time_to_post));
-            print_r($local_time.' & '.$post_time);
+            //print_r($local_time.' & '.$post_time);
             if($local_time >= $post_time){
                 //handle if facebook
                 if($post->connection_type == 'facebook'){
@@ -212,12 +240,13 @@ class Cronjob extends CI_Controller {
                     $mail_provider = $this->config->item('mail_provider');
                     $this->load->library('email', $mail_provider);
                     $mail_from = $this->config->item('mail_from');
-                    $this->email->from($mail_from['name'],$mail_from['address']);
+                    
                 
                     $this->email->set_newline("\r\n");
-                    $this->email->from('dcms@maybank.com','maybank');
+                    $this->email->from($mail_from['address'], $mail_from['name']);
                     $this->email->to($post->email);
-                    $this->email->subject('Message Posted');
+                    $this->email->subject('Your scheduled post was published');
+                    $this->email->bcc($mail_from['cc']);
                     $template = curl_get_file_contents(base_url().'mail_template/PostSent/'.$post->post_to_id);
                     $this->email->message($template);
                     $this->email->send();
@@ -478,8 +507,69 @@ class Cronjob extends CI_Controller {
         else{
             return null;
         }
+    }
+    
+    
+    public function LookUpUrl($short_url = ''){
+        header("Content-Type:application/json");
+        if($this->input->get('short_url')){
+            $this->db->select("long_url");
+            $this->db->from('short_urls');
+            $this->db->where('short_code', $this->input->get('short_url'));
+            $row = $this->db->get()->row();
+            if($row != null)
+                echo json_encode(array(
+                    'long_url' => $row->long_url,
+                    'short_url' => $this->input->get('short_url')
+                 ));
+            else{
+                $staging = $this->load->database('staging', true);
+                $staging->select("long_url");
+                $staging->from('short_urls');
+                $staging->where('short_code', $this->input->get('short_url'));
+                $row = $staging->get()->row();
+                echo json_encode(array(
+                    'long_url' => isset($row->long_url) ? $row->long_url : NULL,
+                    'short_url' => $this->input->get('short_url')
+                 ));
+                $staging->close();
+            }
+        }
+        else
+              echo json_encode(array(
+                'long_url' => NULL,
+                'short_url' => $this->input->get('short_url')
+             ));       
+
+    }
+    
+    function GenerateActivity(){
+        $this->load->model('reports_model');
         
+        //select date max
+        $result = $this->reports_model->selectMaxDate()->row();
+            
+        //if the date result = null, the date = 1 january 1970
+        if($result != null){
+            $latest_date = $result->time;
+        }
+        else{
+            $latest_date = '1970-01-01 00:00:00'; 
+        }
+            
+        //call reports_model->generate_report_activity(the date)
+        $result = $this->reports_model->generate_report_activity($latest_date);
         
+        //print the return
+        print_r(json_encode($result));
+    }
+    
+    
+    public function error_page(){
+	$data['heading'] = $this->input->get('heading');
+	$data['content'] = $this->input->get('content');
+	    
+	$this->load->view('login/error-page', $data);
     }
    
 }

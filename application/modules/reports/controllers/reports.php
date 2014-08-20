@@ -8,15 +8,20 @@ class Reports extends MY_Controller {
         $this->load->model('reports_model');
         $this->user_role = $this->users_model->get_collection_detail(
 		array('role_collection_id'=>$this->session->userdata('role_id')));
+	
+	if(!$this->session->userdata('user_id'))
+	    redirect('');
+	
+	if(!IsRoleFriendlyNameExist($this->user_role, array ('Reporting_View', 'Reporting_Download'))){
+	    redirect('');
+	}
     }
     
     function index()
     {
-        $data['channel'] = $this->reports_model->view_channel();
-        $data['product'] = $this->reports_model->view_product();
-        $data['show'] = $this->reports_model->count_product();
-        $data['count_percentage_product']  = $this->reports_model->count_percentage_product();
-        $data[] = "";        
+	$country_code = IsRoleFriendlyNameExist($this->user_role, 'Reporting_View_All_Country') ?
+	    null : $this->session->userdata('country_code');
+	$data['country_list'] = $this->users_model->get_country($country_code)->result();
         $this->load->view('reports/index',$data);
     }
     
@@ -66,5 +71,11 @@ class Reports extends MY_Controller {
         
         $dt = $year.'-'.$month.'-'.$date;
         return $dt;
+    }
+    
+    function activity(){
+	$this->load->model('users_model');
+	$data['country_list'] = $this->users_model->get_country()->result();
+	$this->load->view('reports/activity', $data);
     }
 }

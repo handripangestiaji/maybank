@@ -152,7 +152,7 @@ class Media_stream extends CI_Controller {
 	if($this->input->post('product_type'))
 	    $twitter_reply['content_products_id'] = $this->input->post('product_type');
 	$twitter_reply['reply_type'] = $this->input->post('reply_type');
-	$twitter_reply['text'] = $this->input->post('content');
+	$twitter_reply['text'] = '@'.$this->input->post('twitter_user')." ".$this->input->post('content');
 	$twitter_reply['user_id'] = $this->session->userdata('user_id');
 	$twitter_reply['user_id'] = $this->session->userdata('user_id');
 	$tags=$this->input->post('tag_id');
@@ -165,7 +165,7 @@ class Media_stream extends CI_Controller {
 	}
 	
 	if(($this->input->post('reply_type') != 'Report_Abuse') && (!$case_status || ($case_status == 'solved'))){
-	    $validation[] = array('type' => 'required','name' => 'product_type','value' => $twitter_reply['content_products_id'], 'fine_name' => "Product Type");
+	    $validation[] = array('type' => 'required','name' => 'product_type','value' => isset($twitter_reply['content_products_id']) ? $twitter_reply['content_products_id'] : NULL , 'fine_name' => "Product Type");
 	}
     
 	$is_valid = CheckValidation($validation, $this->validation);
@@ -234,7 +234,7 @@ class Media_stream extends CI_Controller {
     							    $channel->oauth_secret);
     	    if($this->input->post('type') == 'reply'){
     		$twitter_data = $twitter_data[0];
-    		$parameters = array('status' => $this->input->post('content'),'in_reply_to_status_id'=>$twitter_data->post_stream_id);
+    		$parameters = array('status' => '@'.$this->input->post('twitter_user')." ". $this->input->post('content'),'in_reply_to_status_id'=>$twitter_data->post_stream_id);
     		 if($twitter_reply['image_to_post']){
     		    $this->load->helper('file');
     		    $img = $twitter_reply['image_to_post'];
@@ -694,7 +694,7 @@ class Media_stream extends CI_Controller {
                 }
             }
             
-            $pull_ronjob=curl_get_file_contents(base_url('/cronjob/FacebookStreamFeed'));
+            $pull_ronjob=curl_get_file_contents(base_url('/cronjob/FacebookStreamFeed?channel_id='.$this->input->post('channel_id')));
             
             if(!is_array($return) && $return!='error'){//send comment          
                 $action = array(
@@ -730,7 +730,7 @@ class Media_stream extends CI_Controller {
             	);
                 $this->account_model->CreateFbCommentAction($action,$post_id,$this->input->post('like') === 'true' ? 1 : 0);
                 $this->account_model->CreateFbReplyAction($post_id,'',$comment,$reply_type,$product_type,$url);
-		$action['created_at'] = new DateTime($action['created_at']." Europe/London");
+		$action['created_at'] = new DateTime($action['created_at']." UTC");
 		$action['created_at']->setTimezone(new DateTimeZone($this->session->userdata('timezone')));
 		$action['created_at'] = $action['created_at']->format("d-M-y h:i A");
 		echo json_encode(
@@ -891,86 +891,42 @@ class Media_stream extends CI_Controller {
     public function fbDeleteStatus($status = 0){
         
     	header("Content-Type: application/x-json");
-    	$action['channel_id'] = $this->input->post('channel_id');
-    	$action['post_id'] = $this->input->post('post_id');
-    	$action['created_by'] = $this->session->userdata('user_id');
-
-    	if($status == 0){
-            $facebook_data=$this->facebook_model->RetrieveFeedFB(array('b.post_id' => $this->input->post('post_id')));
-    	}elseif($status == 1){
-    	    $facebook_data = $this->facebook_model->RetrievePmFB(array('a.post_id' => $this->input->post('post_id')));
-        }else{
-            $facebook_data = $this->facebook_model->RetriveCommentPostFb(array('b.id' => $this->input->post('post_id')),array());
-        }
-    	if(count($facebook_data) > 0){        
-    	    $facebook_data = $facebook_data[0];
-            $channel = $this->account_model->GetChannel(array(
-    		'channel_id' => $this->input->post('channel_id')
-    	    ));
-    	    
-    	    if(count($channel) == 0){
-        		echo json_encode(
-        		    array(
-        			'success' => false,
-        			'message' => "Invalid Channel Id"
-        		    )
-        		);return;
-    	    }else{
-                $config = array(
-		    'appId' => $this->config->item('fb_appid'),
-		    'secret' => $this->config->item('fb_secretkey')
-		 );
-                $is_Post_id=$this->facebook_model->streamId($action['post_id']);
-                if($is_Post_id){
-                    $newStd = new stdClass();
-                    $newStd->page_id =  $channel[0]->social_id;
-                    $newStd->token = $this->facebook_model->GetPageAccessToken( $channel[0]->oauth_token, $channel[0]->social_id);
-                    $this->load->library('facebook',$config);
-                    $this->facebook->setaccesstoken($newStd->token);
-                    $result = $this->facebook->api( "/".$is_Post_id->post_stream_id."","delete");
-                   
-                   
-                    if(isset($result)){
-            		if($status == 0){//wallpost
-                          $row_affected = $this->facebook_model->DeletePostFb($is_Post_id->post_stream_id,$channel[0]->channel_id,
-               			  $this->session->userdata('user_id') == 0 ? NULL : $this->session->userdata('user_id'),0);
-            		}
-			else if($status == 1)
-                          $row_affected = $this->facebook_model->DeletePostFb($is_Post_id->post_stream_id,$channel[0]->channel_id,
-               			  $this->session->userdata('user_id') == 0 ? NULL : $this->session->userdata('user_id'),1);
-			else
-                          $row_affected = $this->facebook_model->DeletePostFb($is_Post_id->post_stream_id,$channel[0]->channel_id,
-               			  $this->session->userdata('user_id') == 0 ? NULL : $this->session->userdata('user_id'),2);
-			  
-			
-                        echo json_encode(
-                	 		array(
-                			    'success' => true,
-                			    'message' => "Facebook data was sucessfully deleted.",
-                			    'result' => $result,
-                			    'row_affected' => $row_affected
-                			)
-                        );                                
-            	    }else{
-            		     echo json_encode(
-                		    array(
-                			'success' => false,
-                			'message' => "Delete Facebook was failed.",
-                			'result' => 'ok'//$result
-                			)
-            		      );
-            		}
-            		return;
-         	    }
-            }   
-        }else{	
-            echo json_encode(
-            array(
-            		    'success' => false,
-            		    'message' => "Invalid POST_ID"
-            		)
-            	);	    
-        }
+	$social_stream = $this->facebook_model->ReadSocialStream(array('post_id' => $this->input->post('post_id')));
+	$social_stream = isset($social_stream[0]) ? $social_stream[0] : NULL;
+	if($social_stream == null)
+	    echo json_encode(array(
+		"success" => false,
+		"message" => "Invalid Post"
+	    ));
+	else{
+	    
+	    $post_id = $this->input->post('post_id');
+	    $parent_post = $social_stream->type == 'facebook_comment' ? $this->facebook_model->GetFbCommentDetail(array('id' => $post_id)) : NULL;
+	    
+	    $config = array(
+		'appId' => $this->config->item('fb_appid'),
+		'secret' => $this->config->item('fb_secretkey')
+	    );
+            $this->load->library('facebook',$config);
+	    $access_token = $this->facebook_model->GetPageAccessToken( $social_stream->channel->oauth_token, $social_stream->channel->social_id);
+	    $this->facebook->setAccessToken($access_token);
+	    try{
+		$result = $this->facebook->api("/".$social_stream->post_stream_id, "DELETE");
+		$this->facebook_model->DeletePostFb($this->input->post('post_id'), $this->input->post('channel_id'), $this->session->userdata('user_id'), $parent_post);
+		echo json_encode(array(
+		    "success" => true,
+		    "message" => "Post Deleted"
+		));
+	    }
+	    catch(Exception $exception){
+		$this->facebook_model->DeletePostFb($this->input->post('post_id'), $this->input->post('channel_id'), $this->session->userdata('user_id'), $parent_post);
+		echo json_encode(array(
+		    "success" => false,
+		    "message" => $exception
+		));
+	    }
+	}
+    	
     }   
        
        
@@ -1108,17 +1064,16 @@ class Media_stream extends CI_Controller {
         
         if($action=='feed'){
             $filter['b.type'] = 'home_feed';
-        	$data['homefeed']=$this->twitter_model->ReadTwitterData($filter,$limit); 
+            $data['homefeed']=$this->twitter_model->ReadTwitterData($filter,$limit); 
             $data['countFeed']=$this->twitter_model->CountTwitterData($filter);
-             $this->load->view('dashboard/twitter/twitter_homefeed.php',$data);
+            $this->load->view('dashboard/twitter/twitter_homefeed.php',$data);
         }
         
         if($action=='user_timeline'){
-        	$filter['b.type'] = 'user_timeline';
-        	$data['senttweets']=$this->twitter_model->ReadTwitterData($filter,$limit);
+            $filter['b.type'] = 'user_timeline';
+            $data['senttweets']=$this->twitter_model->ReadTwitterData($filter,$limit);
             $data['countTweets']=$this->twitter_model->CountTwitterData($filter);
-             $this->load->view('dashboard/twitter/twitter_senttweets.php',$data);
-
+            $this->load->view('dashboard/twitter/twitter_senttweets.php', $data);
         }
         if($action=='direct'){
             $filter['a.channel_id']=$channel_ids;

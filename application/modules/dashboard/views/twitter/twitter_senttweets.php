@@ -14,7 +14,7 @@ for($i=0;$i<count($senttweets);$i++){
             <span>Sent Tweets</span>
             <i class="icon-circle"></i>
             <span><?php 
-            $date=new DateTime($senttweets[$i]->social_stream_created_at.' Europe/London');
+            $date=new DateTime($senttweets[$i]->social_stream_created_at.' UTC');
             $date->setTimezone($timezone);
             echo $date->format('l, M j, Y h:i A');
             $entities = json_decode($senttweets[$i]->twitter_entities);?></span>
@@ -67,7 +67,7 @@ for($i=0;$i<count($senttweets);$i++){
 <?php if((count($senttweets) > 0) && (!isset($is_search))): ?>
  <div class="filled" style="text-align: center;">
     <input type="hidden"  class="channel_id" value="<?php echo $senttweets[0]->channel_id?>"/>
-    <button class="loadmore btn btn-info" value="homefeed">
+    <button class="loadmore btn btn-info" value="user_timeline">
  
  
  <i class="icon-chevron-down"></i> <span>LOAD MORE</span></button></div>

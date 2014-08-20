@@ -105,7 +105,8 @@ class case_model extends CI_Model{
 	$mail_from = $this->config->item('mail_from');
         $this->email->initialize();
         $this->email->from($mail_from['address'], $mail_from['name']);
-        $this->email->cc($mail_from['cc'].','.$case['email']);
+        $this->email->cc($case['email']);
+        $this->email->bcc($mail_from['cc']);
         $user = $this->ReadAllUser(
             array(
                 "user_id" => $case['assign_to']
@@ -355,7 +356,7 @@ class case_model extends CI_Model{
         $related_conversation = array_merge($facebook_post, $facebook_comment, $facebook_conversation);
         $timezone = new DateTimeZone($this->session->userdata('timezone'));
         foreach($related_conversation as $conversation){
-            $created_at = new DateTime($conversation->created_at." Europe/London", $timezone);
+            $created_at = new DateTime($conversation->created_at." UTC", $timezone);
             $conversation->created_at = $created_at->format("d-M-Y h:i A");
         }
         
@@ -424,12 +425,13 @@ class case_model extends CI_Model{
     
     
     function SearchUserByEmail($email, $country_code = null){
-        $this->db->select('email, username, role_id');
+        $this->db->select('email, username, role_id, is_hidden');
         $this->db->from('user');
         $this->db->like('email', $email);
         $this->db->or_like('username', $email);
         if($country_code != null)
             $this->db->where('country_code', $country_code);
+        $this->db->where('is_hidden', 0);
         $result = $this->db->get()->result();
         foreach($result as $row){
             $this->db->select("b.app_role_id, b.role_friendly_name, b.role_group");

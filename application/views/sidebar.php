@@ -60,7 +60,7 @@ $come_from =array(
                 </div>
                 <div class="notifBody">
                     <?php
-                        $date = new DateTime($each_case->created_at.' Europe/London');
+                        $date = new DateTime($each_case->created_at.' UTC');
                         $date->setTimezone($timezone);
                         echo $date->format("M d, Y, h:i A");
                     ?>
@@ -84,7 +84,7 @@ $come_from =array(
                  
                     <p><?=$come_from[$each_case->type]?> <br />
                        <?php
-                        $date = new DateTime($each_case->created_at.' Europe/London');
+                        $date = new DateTime($each_case->created_at.' UTC');
                         $date->setTimezone($timezone);
                         echo $date->format("M d, Y, h:i A");
                         

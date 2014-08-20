@@ -42,15 +42,15 @@
                                                                 <p>
                                                                 <?php if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Campaign_Own_Country_Edit') ||
                                                                          (IsRoleFriendlyNameExist($this->user_role,'Content Management_Campaign_All_Country_Edit'))){ ?>
-                                                                <a href="cms/edit_campaign/<?php echo $v['id']; ?>"><button class="btn btn-primary btn-small" type="button">Edit</button></a>
+                                                                <a href="<?php echo base_url() ?>cms/edit_campaign/<?php echo $v['id']; ?>"><button class="btn btn-primary btn-small" type="button">Edit</button></a>
                                                                 <?php } ?>
                                                                 <?php if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Campaign_Own_Country_Download') ||
                                                                          (IsRoleFriendlyNameExist($this->user_role,'Content Management_Campaign_All_Country_Download'))){ ?>
-                                                                <a href="cms/cms_ci/download_campaign/<?php echo $v['id']; ?>"><button class="btn btn-success btn-small" type="button">Download</button></a>
+                                                                <a href="<?php echo base_url() ?>cms/cms_ci/download_campaign/<?php echo $v['id']; ?>"><button class="btn btn-success btn-small" type="button">Download</button></a>
                                                                 <?php } ?>
                                                                 <?php if(IsRoleFriendlyNameExist($this->user_role,'Content Management_Campaign_Own_Country_Delete') ||
                                                                          (IsRoleFriendlyNameExist($this->user_role,'Content Management_Campaign_All_Country_Delete'))){ ?>
-                                                                <a href="cms/delete_campaign/<?php echo $v['id']; ?>" onclick="return confirm('Are you sure want to delete this campaign?');"><button class="btn btn-danger btn-small" type="button">Delete</button></a>
+                                                                <a href="<?php echo base_url() ?>cms/delete_campaign/<?php echo $v['id']; ?>" onclick="return confirm('Are you sure want to delete this campaign?');"><button class="btn btn-danger btn-small" type="button">Delete</button></a>
                                                                 <?php } ?>
                                                                 </p>
                                                             </div>
@@ -165,7 +165,7 @@
                                         </div>
                 </div>
 </div>
-<script src="<?php echo base_url('media/js/vendor/jquery-1.9.1.min.js')?>"></script>
+
 <script type="text/javascript">
 	$(document).ready(function(){
 		var tab = '<?php echo $tab ?>';
@@ -180,3 +180,4 @@
 		}
 	});
 </script>
+<!-- comment !-->

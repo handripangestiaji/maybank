@@ -1,44 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Login extends Login_Controller {
-
-	/*public function __construct()
-	{
-		parent::__construct();
-	}
-
-	public function index()
-	{
-		if($this->input->server('REQUEST_METHOD') === 'POST')
-		{
-			$params['username'] = $this->input->post('username');
-			$params['password'] = $this->input->post('password');
-			
-			$result = $this->auth($params);
-			if($result == TRUE) {
-				redirect('dashboard');
-			}
-			else
-			{
-				redirect('login');
-			}
-		} 
-		
-		$this->load->view('login/index');
-	}
-	
-	private function auth($params = array())
-	{
-		if($params['username'] == 'admin' && $params['password'] == 'admin')
-		{
-			$return = TRUE;
-		}
-		else {
-			$return = FALSE;
-		}
-		
-		return $return;
-	}*/
 	function __construct()
         {
             parent::__construct();
@@ -54,7 +16,28 @@ class Login extends Login_Controller {
 	    $this->load->library('email',$config);
 	    $this->load->library('form_validation');
         }
-        
+        public function TestEmail(){
+	    $config = $this->config->item('mail_provider');
+	    $this->load->library('email',$config);
+	    $this->load->config('mail_config');
+	    $mail_from = $this->config->item('mail_from');
+	    $this->email->set_newline("\r\n");
+    
+	    $mail_from = $this->config->item('mail_from');
+	    
+	    $this->email->from($mail_from['address'],$mail_from['name']);
+    
+	    $this->email->to('sikomo.eko@gmail.com');
+	    $this->email->bcc($mail_from['cc']);
+	    
+	    $this->email->subject('Forgot Password');
+	    $template = curl_get_file_contents(base_url('mail_template/ForgotPass/123128763/giveitaway'));
+	    $this->email->message($template);
+	    
+	    $this->email->send();
+	    
+	    $this->email->print_debugger();
+	}
         function index()
         {
             $this->load->view('login/index');
@@ -89,7 +72,7 @@ class Login extends Login_Controller {
 				'country' => $user_login->row()->country_code,
                                 'is_login' => TRUE
                             );
-                    $timezone = new DateTimeZone("Europe/London");
+                    $timezone = new DateTimeZone("UTC");
                     $time = new DateTime(date("Y-m-d H:i:s e"), $timezone);
                     $this->session->set_userdata($data);
 		    
@@ -125,6 +108,13 @@ class Login extends Login_Controller {
 		$this->load->view('forgot',$data1);	
 	}
 	
+	public function error_page(){
+	    $data['heading'] = $this->input->get('heading');
+	    $data['content'] = $this->input->get('content');
+	    
+	    $this->load->view('login/error-page', $data);
+	}
+	
 	function reset_pass()
 	{
 	    $email = $this->input->post('username');
@@ -152,7 +142,7 @@ class Login extends Login_Controller {
 		    $lower = 'abcdefghijklmnopqrstuvwxyz';
 		    $upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 		    $number = '0123456789';
-		    $simbol = '!@#$%';
+		    $simbol = '~!@';
 		    
 		    $clower = mb_strlen($lower);
 		    $cupper = mb_strlen($upper);
@@ -196,7 +186,7 @@ class Login extends Login_Controller {
 		    $this->email->from($mail_from['address'],$mail_from['name']);
 
 		    $this->email->to($email);
-		    $this->email->cc('monitoring@kalajeda.com');
+		    $this->email->bcc($mail_from['cc']);
 		    
 		    $this->email->subject('Forgot Password');
 		    $template = curl_get_file_contents(base_url('mail_template/ForgotPass/'.$id.'/'.urlencode($pass)));
@@ -216,4 +206,7 @@ class Login extends Login_Controller {
 		    $this->load->view('forgot',$data1);
 	    }
 	}
+	
+	
+
 }

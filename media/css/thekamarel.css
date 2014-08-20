@@ -4684,3 +4684,21 @@ ul.floatingBoxContainers .case-field li{margin-bottom: 0;}
 ul.floatingBoxContainers .case-field li label{padding: 0;text-transform: none}
 .related-conversation .author{font-weight: 600;color: green;}
 .reply-field ul.dropdown-menu li{padding:0;margin: 2px;border:  none; }
+.indicator .indicator-case{text-align: left;}
+.hidden-data td{background-color:#aaa !important}
+div.textarea-container {
+    background:  solid 1px #ccc ;
+    overflow: auto;
+    background-color: #fff;
+    float: left;
+    width:100%;
+    position: relative
+}
+div.textarea-container .screen-name{padding: 6px 4px;position: absolute;top:0;font: 15px Arial;}
+div.textarea-container textarea {
+    border: none;
+    outline: none;
+    resize: none;
+    
+}
+ul.floatingBoxContainers .case-field .error-list li {background: none !important;list-style: decimal;margin:0;border: none;}

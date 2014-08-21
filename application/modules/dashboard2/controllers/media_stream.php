@@ -1280,13 +1280,15 @@ class Media_stream extends CI_Controller {
 	
 	if(!is_dir("./media/dynamic/tmp_photo/"))
 	    mkdir(getcwd()."/media/dynamic/tmp_photo/");
-	    
+	
+	/*    
 	if(file_exists("./media/dynamic/tmp_photo/".$md5_photo) && $safe_photo)
 	    redirect("/media/dynamic/tmp_photo/".$md5_photo);
 	else{
+	*/
 	    file_put_contents("./media/dynamic/tmp_photo/".$md5_photo, file_get_contents(urldecode($this->input->get('photo'))));
 	    redirect("/media/dynamic/tmp_photo/".$md5_photo);    
-	}
+	//}
 	
     }
    

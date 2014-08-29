@@ -83,12 +83,17 @@ $(function(){
                 "channel_id" : $('#reportChannel').val(),
                 "group_id" : $('#reportUserGroup').val(),
                 'date_start' : $('#dateStart').val(),
-                'date_finish' : $('#dateFinish').val()
+                'date_finish' : $('#dateFinish').val(),
+                'type' : $('#reportType').val()
             },
             "type" : "POST",
             "success" : function(response){
-                
-                thisButton.createReportTable(response);
+                if (response.type == 'case') {
+                    thisButton.createReportTable(response);
+                }
+                else{
+                    thisButton.createReportTableEngagement(response);
+                }
             },
             "error" : function(response){
                 data = JSON.parse(response.responseText);
@@ -133,6 +138,9 @@ $(function(){
     $.fn.createReportTable = function(response){
         $(this).find("span").html('Create').removeAttr('disabled');
         $('#report .table tbody').html('');
+        $('#report .table .resolved').html('Resolved');
+        $('#report .table .avg_time').html('Avg Time');
+        
         for(var i=0; i< response.product_list.length; i++){
             var summary = firstLane = secondLane = "<td colspan='3'>No Result</td>" ;
             summary = "<td colspan='3' class='summary'>No Result</td>";
@@ -228,6 +236,40 @@ $(function(){
         }
     }
 
+    $.fn.createReportTableEngagement = function(response){
+        $(this).find("span").html('Create').removeAttr('disabled');
+        $('#report .table tbody').html('');
+        $('#report .table tbody').html('');
+        for(var i=0; i< response.product_list.length; i++){
+            var summary = firstLane = secondLane = "<td colspan='3'>No Result</td>" ;
+            summary = "<td colspan='3' class='summary'>No Result</td>";
+            firstLane = "<td colspan='3' class='summary'>No Result</td>";
+            secondLane = "<td colspan='3' class='summary'>No Result</td>";
+            
+            if(response.product_list[i].parent_id > 0){
+                $('#report .table tbody').append('<tr id="pId' + response.product_list[i].id + '" class="pId'+ response.product_list[i].parent_id +  '"><td>' +
+                    response.product_list[i].product_name + '</td>' + summary + firstLane + secondLane + '</tr>')
+            }
+            else{
+                $('#report .table tbody').append('<tr id="pId' + response.product_list[i].id + '" class="pId'+ response.product_list[i].parent_id +  '"><td>' +
+                    response.product_list[i].product_name + '</td>' + summary + firstLane + secondLane + '<td><button class="btn toggleSub">Show</button></td></tr>')
+            }
+        }
+        
+        $('#report .table .resolved').html('Engagement');
+        $('#report .table .avg_time').html('Avg Respond Time');
+        
+        $('#report .table tbody > :not(tr.pIdnull)').toggle('fast');
+        $('#report .table .toggleSub').click(function(){
+            idTrParent = $(this).closest('tr').attr('id');
+            $('.' + idTrParent).toggle('slow');
+            if($(this).html() == "Show")
+                $(this).html('Hide');
+            else
+                $(this).html('Show');
+        });
+    }
+    
     $('.x-pagination').on('click',function(){
         var me = $(this);
         var offset = me.attr('data-offset');

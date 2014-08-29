@@ -33,10 +33,26 @@ class report_ajax extends CI_Controller {
         
         $is_valid = CheckValidation($validation, $this->validation);
         if($is_valid === TRUE){
-            $code = $this->reports_model->create_report($this->input->post('channel_id'), $this->session->userdata('user_id'),
-                                                        $this->input->post('date_start'), $this->input->post('date_finish'), $this->input->post('group_id'));
-            $this->session->set_userdata('current_code', $code);
-            $this->FilterReport();
+            if($this->input->post('type') == 'case'){
+                $code = $this->reports_model->create_report($this->input->post('channel_id'), $this->session->userdata('user_id'),
+                                                            $this->input->post('date_start'), $this->input->post('date_finish'), $this->input->post('group_id'));
+                $this->session->set_userdata('current_code', $code);
+                $this->FilterReport();
+            }
+            else{
+                $result = $this->reports_model->getCase($this->input->post());
+                if($result){
+                    foreach($result as $res){
+                        $case_id = $res->case_id;
+                        $res->engagement = $this->reports_model->getEngagementByCaseId($case_id)->result();
+                    }
+                    echo json_encode(array(
+                        'type' => 'engagement',
+                        'product_list' => $this->load->model('campaign_model')->GetProductBasedOnParent()
+                    ));
+                    //echo json_encode($result);
+                }
+            }
         }
         else{
             http_response_code(500);
@@ -154,5 +170,16 @@ class report_ajax extends CI_Controller {
             http_response_code(500);
             echo json_encode($is_valid, JSON_PRETTY_PRINT);
         }
+    }
+    
+    public function EngagementReport($post){
+        //get all case with the current filter
+        //print_r($post);
+        
+        
+        //count all the engagement for each case type
+        
+        //make json data with type of case
+        //return json data
     }
 }

@@ -42,7 +42,7 @@ class Reports_model extends CI_Model
 	$summary_per_parent = $this->filter_query_build(array('c.parent_id', 'type', 'type2',  'sum(total_case) as total_case', 'sum(total_solved) as total_solved',
 	    'avg(average_response) as average_response'),
 	    "group by type, type2, c.parent_id", $current_code, $case_type );
-	
+	print_r($summary_per_parent);
 	
 	$summary_all = $this->filter_query_build(array('type', 'type2',  'sum(total_case) as total_case', 'sum(total_solved) as total_solved',
 	    'avg(average_response) as average_response'),
@@ -52,9 +52,9 @@ class Reports_model extends CI_Model
 	    "main_per_parent" => $this->configure_time_lapse($this->db->query($summary_per_parent)->result()),
 	    "main_summary" => $this->configure_time_lapse($this->db->query($summary_all)->result()),
 	    "product_list" => $this->load->model('campaign_model')->GetProductBasedOnParent(),
+	    "type" => 'case'
 	);
 	return $return_value;
-
     }
     
     function configure_time_lapse($collection){
@@ -65,8 +65,7 @@ class Reports_model extends CI_Model
     }
     
     function filter_query_build($field = array(), $group_by, $current_code, $case_type = null){
-	$field =  count($field) == 0  ? array('c.id', 'c.product_name', 'c.parent_id', 'type', 'type2', 'product_parent_id',
-		    'sum(total_case) as total_case', 'sum(total_solved) as total_solved', 'avg(average_response) as average_response') :
+	$field =  count($field) == 0  ? array('c.id', 'c.product_name', 'c.parent_id', 'type', 'type2', 'product_parent_id', 'sum(total_case) as total_case', 'sum(total_solved) as total_solved', 'avg(average_response) as average_response') :
 		    $field;
 	$field_array = join(',', $field);
 	$query = "SELECT ".$field_array." FROM report_performance b
@@ -557,6 +556,40 @@ class Reports_model extends CI_Model
     public function selectMaxDate(){
 	$this->db->select_max('time');
 	$this->db->from('report_activity');
+	return $this->db->get();
+    }
+    
+    public function getCase($filter){
+	if($filter['group_id'] == 'All' || $filter['group_id'] == null){
+	    $where_group_id = '';
+	}
+	else{
+	    $where_group_id = 'and ug.group_id = '.$filter['group_id'];
+	}
+	
+	$date_start = str_replace('/', '-', $filter['date_start']);
+	$date_end = str_replace('/', '-', $filter['date_finish']);
+	
+	$date_start = DateTime::createFromFormat('Y/m/d', $filter['date_start']);
+	$date_finish = DateTime::createFromFormat('Y/m/d', $filter['date_finish']);
+
+	$query = "SELECT c.case_id, ch.channel_id,  cp.id, cp.product_name, count(c.case_id) as total_case, count(c.solved_at) as total_solved, avg(UNIX_TIMESTAMP(solved_at) - UNIX_TIMESTAMP(c.created_at)) as average_response, 
+	c.case_type , ug.group_id, ug.group_name as user_group, ss.`type`, sst.`type` as type2, 366653, NOW()
+FROM `case` c inner join social_stream ss on c.post_id = ss.post_id
+	inner join content_products cp on cp.id = c.content_products_id
+	left join social_stream_twitter sst on sst.post_id = ss.post_id 
+	inner join channel ch on ch.channel_id = ss.channel_id
+	inner join (user u  inner join user_group ug on u.group_id = ug.group_id) on u.user_id = c.created_by 
+WHERE ss.channel_id = ".$filter['channel_id']." ".$where_group_id." and c.created_at >= '".$date_start->format('Y-m-d')."' and c.created_at <= '".$date_finish->format('Y-m-d')."'
+	group by c.case_type, ss.type, cp.id, sst.type, u.group_id;";
+	
+	return $this->db->query($query)->result();
+    }
+    
+    public function getEngagementByCaseId($case_id){
+	$this->db->select('*');
+	$this->db->from('page_reply');
+	$this->db->where('case_id',$case_id);
 	return $this->db->get();
     }
 }

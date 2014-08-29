@@ -52,8 +52,8 @@
 		<hr />
 		<div class="row-fluid">
 			<div class="span3">
-				<label class="span6">Country</label>
-				<select name="country" class="span6" id="reportCountry">
+				<label class="span4">Country</label>
+				<select name="country" class="span8" id="reportCountry">
 					<option value="">Select Country</option>
 					<?php foreach($country_list as $country):?>
 						<option value="<?=$country->code?>"><?php echo $country->name?></option>
@@ -61,8 +61,8 @@
 				</select>
 			</div>
 			<div class="span3">
-				<label class="span6">Channel</label>
-				<select name="channel" class="span6" id="reportChannel" disabled="disabled" >
+				<label class="span4">Channel</label>
+				<select name="channel" class="span8" id="reportChannel" disabled="disabled" >
 					
 				</select>
 			</div>
@@ -72,13 +72,13 @@
 					
 				</select>
 			</div>
-			<!--div class="span3">
-				<label class="span6">Type</label>
-				<select name="type" class="span6">
-					<option value="engagement">Engagement</option>
+			<div class="span3">
+				<label class="span4">Type</label>
+				<select name="type" class="span8" id="reportType">
 					<option value="case">Case</option>
+					<option value="engagement">Engagement</option>
 				</select>
-			</div-->
+			</div>
 		</div>
 		
 		<div class="row-fluid">
@@ -106,14 +106,14 @@
 				<tr>
 					<td>Products</td>
 					<td>Total</td>
-					<td>Resolved</td>
-					<td>Avg Time</td>
+					<td class="resolved">Resolved</td>
+					<td class="avg_time">Avg Time</td>
 					<td>Total</td>
-					<td>Resolved</td>
-					<td>Avg Time</td>
+					<td class="resolved">Resolved</td>
+					<td class="avg_time">Avg Time</td>
 					<td>Total</td>
-					<td>Resolved</td>
-					<td>Avg Time</td>
+					<td class="resolved">Resolved</td>
+					<td class="avg_time">Avg Time</td>
 				</tr>
 				</thead>
 				<tbody>

@@ -201,11 +201,29 @@ class report_ajax extends CI_Controller {
                         $all->avg_respond_time_pm += $parent_respond_time_pm;
                     }
                     
-                    $all->avg_respond_time_total = $this->time_elapsed($all->avg_respond_time_total / $all->engagement_total);
-                    $all->avg_respond_time_wall_post = $this->time_elapsed($all->avg_respond_time_wall_post / $all->engagement_wall_post);
-                    $all->avg_respond_time_pm = $this->time_elapsed($all->avg_respond_time_pm / $all->engagement_pm);
+                    if($all->avg_respond_time_total != 0){
+                        $all->avg_respond_time_total = $this->time_elapsed($all->avg_respond_time_total / $all->engagement_total);
+                    }
+                    else{
+                        $all->avg_respond_time_total = 0;
+                    }
+                    
+                    if($all->avg_respond_time_wall_post != 0){
+                        $all->avg_respond_time_wall_post = $this->time_elapsed($all->avg_respond_time_wall_post / $all->engagement_wall_post);
+                    }
+                    else{
+                        $all->avg_respond_time_wall_post = 0;
+                    }
+                    
+                    if($all->avg_respond_time_pm != 0){
+                        $all->avg_respond_time_pm = $this->time_elapsed($all->avg_respond_time_pm / $all->engagement_pm);
+                    }
+                    else{
+                         $all->avg_respond_time_pm = 0;
+                    }
                     
                     echo json_encode(array(
+                        'status' => 'success',
                         'type' => 'engagement',
                         'product_list' => $product_list,
                         'cases' => $result,
@@ -213,6 +231,12 @@ class report_ajax extends CI_Controller {
                         'all' => $all
                     ));
                     
+                }
+                else{
+                    echo json_encode(array(
+                        'status' => 'error',
+                        'message' => 'No Result'
+                    ));
                 }
             }
         }

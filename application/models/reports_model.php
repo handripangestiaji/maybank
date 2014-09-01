@@ -566,6 +566,13 @@ class Reports_model extends CI_Model
 	    $where_group_id = 'and ug.group_id = '.$filter['group_id'];
 	}
 	
+	if($filter['case_type'] == 'all' || $filter['case_type'] == null){
+	    $where_case_type = '';
+	}
+	else{
+	    $where_case_type = "and c.case_type = '".$filter['case_type']."'";
+	}
+	
 	$date_start = str_replace('/', '-', $filter['date_start']);
 	$date_end = str_replace('/', '-', $filter['date_finish']);
 	
@@ -579,7 +586,7 @@ FROM `case` c inner join social_stream ss on c.post_id = ss.post_id
 	left join social_stream_twitter sst on sst.post_id = ss.post_id 
 	inner join channel ch on ch.channel_id = ss.channel_id
 	inner join (user u  inner join user_group ug on u.group_id = ug.group_id) on u.user_id = c.created_by 
-WHERE ss.channel_id = ".$filter['channel_id']." ".$where_group_id." and c.created_at >= '".$date_start->format('Y-m-d')."' and c.created_at <= '".$date_finish->format('Y-m-d')."';";
+WHERE ss.channel_id = ".$filter['channel_id']." ".$where_case_type." ".$where_group_id." and c.created_at >= '".$date_start->format('Y-m-d')."' and c.created_at <= '".$date_finish->format('Y-m-d')."';";
 
 	return $this->db->query($query)->result();
     }

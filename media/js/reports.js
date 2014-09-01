@@ -84,7 +84,8 @@ $(function(){
                 "group_id" : $('#reportUserGroup').val(),
                 'date_start' : $('#dateStart').val(),
                 'date_finish' : $('#dateFinish').val(),
-                'type' : $('#reportType').val()
+                'type' : $('#reportType').val(),
+                'case_type' : $('#caseType').val(),
             },
             "type" : "POST",
             "success" : function(response){
@@ -105,10 +106,12 @@ $(function(){
                 }
             }
         })
-        
-        $('#caseType').change(function(){
-            if($(this).val() == '') return;
-            $('#report .table tbody').html('<tr><td colspan="11" style="text-align: center">Filtering Report...</td></tr>');
+    });
+    
+    $('#caseType').change(function(){
+        if($(this).val() == '') return;
+        $('#report .table tbody').html('<tr><td colspan="11" style="text-align: center">Filtering Report...</td></tr>');
+        if($('#reportType').val() == 'case'){
             $.ajax({
                 "url" : BASEURL + "reports/report_ajax/FilterReport",
                 "data" : "case_type=" + $(this).val(),
@@ -121,8 +124,41 @@ $(function(){
                      $('#report .table tbody').html('<tr><td colspan="11" style="text-align: center">No Result</td></tr>');
                 }
             });
-        });
+        }
+        else{
+            $.ajax({
+                "url" : BASEURL + "reports/report_ajax/CreateReport",
+                "data" : {
+                    'channel_id' : $('#reportChannel').val(),
+                    'group_id' : $('#reportUserGroup').val(),
+                    'date_start' : $('#dateStart').val(),
+                    'date_finish' : $('#dateFinish').val(),
+                    'type' : $('#reportType').val(),
+                    'case_type' : $(this).val(),
+                },
+                "type" : "POST",
+                "success" : function(response){
+                    if (response.type == 'case') {
+                        thisButton.createReportTable(response);
+                    }
+                    else{
+                        $('#report .table tbody').html('');
+                        $('#reportCreate').createReportTableEngagement(response);
+                    }
+                },
+                "error" : function(response){
+                    data = JSON.parse(response.responseText);
+                    $('#content .alert ').show('slow');
+                    thisButton.find("span").html('Create').removeAttr('disabled');
+                    $('#content .alert .help-inline').html('');
+                    for(var i =0; i<data.length; i++){
+                        $('#content .alert .help-inline').append('<span class="data">' + data[i].message + '</span> <br />');
+                    }
+                }
+            });
+        }
     });
+    
     function timeConverter(UNIX_timestamp){
     var a = new Date(UNIX_timestamp*1000);
         var day = a.getDate();
@@ -238,71 +274,78 @@ $(function(){
 
     $.fn.createReportTableEngagement = function(response){
         $(this).find("span").html('Create').removeAttr('disabled');
-        $('#report .table tbody').html('');
-        $('#report .table tbody').html('');
+        
         var parent_array_id = 0;
-        for(var i=0; i< response.product_list.length; i++){
-            var summary = firstLane = secondLane = "<td colspan='3'>No Result</td>" ;
-            firstLane = "<td colspan='3' class='summary'>No Result</td>";
-            secondLane = "<td colspan='3' class='summary'>No Result</td>";
-            
-            if(response.product_list[i].parent_id > 0){
-                if (response.product_list[i].count_cases_total != 0){
-                    summary = "<td>" + response.product_list[i].count_cases_total + "</td><td>" + response.product_list[i].count_engagement_total + "</td><td>" + response.product_list[i].avg_respond_time_total_string + "</td>";
-                }
+        if (response.status == 'success') {
+            for(var i=0; i< response.product_list.length; i++){
+                var summary = firstLane = secondLane = "<td colspan='3'>No Result</td>" ;
+                firstLane = "<td colspan='3' class='summary'>No Result</td>";
+                secondLane = "<td colspan='3' class='summary'>No Result</td>";
                 
-                if (response.product_list[i].count_cases_wall_post != 0) {
-                    firstLane = "<td>" + response.product_list[i].count_cases_wall_post + "</td><td>" + response.product_list[i].count_engagement_wall_post + "</td><td>" + response.product_list[i].avg_respond_time_wall_post_string + "</td>";
+                if(response.product_list[i].parent_id > 0){
+                    if (response.product_list[i].count_cases_total != 0){
+                        summary = "<td>" + response.product_list[i].count_cases_total + "</td><td>" + response.product_list[i].count_engagement_total + "</td><td>" + response.product_list[i].avg_respond_time_total_string + "</td>";
+                    }
+                    
+                    if (response.product_list[i].count_cases_wall_post != 0) {
+                        firstLane = "<td>" + response.product_list[i].count_cases_wall_post + "</td><td>" + response.product_list[i].count_engagement_wall_post + "</td><td>" + response.product_list[i].avg_respond_time_wall_post_string + "</td>";
+                    }
+                    
+                    if (response.product_list[i].count_cases_pm != 0) {
+                        secondLane = "<td>" + response.product_list[i].count_cases_pm + "</td><td>" + response.product_list[i].count_engagement_pm + "</td><td>" + response.product_list[i].avg_respond_time_pm_string + "</td>";
+                    }
+                    
+                    $('#report .table tbody').append('<tr id="pId' + response.product_list[i].id + '" class="pId'+ response.product_list[i].parent_id +  '"><td>' +
+                        response.product_list[i].product_name + '</td>' + summary + firstLane + secondLane + '</tr>')
                 }
-                
-                if (response.product_list[i].count_cases_pm != 0) {
-                    secondLane = "<td>" + response.product_list[i].count_cases_pm + "</td><td>" + response.product_list[i].count_engagement_pm + "</td><td>" + response.product_list[i].avg_respond_time_pm_string + "</td>";
+                else{
+                    if (response.parents[parent_array_id].count_cases_total != 0){
+                        summary = "<td>" + response.parents[parent_array_id].count_cases_total + "</td><td>" + response.parents[parent_array_id].count_engagement_total + "</td><td>" + response.parents[parent_array_id].avg_respond_time_total_string + "</td>";
+                    }
+                    
+                    if (response.parents[parent_array_id].count_cases_wall_post != 0){
+                        firstLane = "<td>" + response.parents[parent_array_id].count_cases_wall_post + "</td><td>" + response.parents[parent_array_id].count_engagement_wall_post + "</td><td>" + response.parents[parent_array_id].avg_respond_time_wall_post_string + "</td>";
+                    }
+                    
+                    if (response.parents[parent_array_id].count_cases_pm != 0){
+                        secondLane = "<td>" + response.parents[parent_array_id].count_cases_pm + "</td><td>" + response.parents[parent_array_id].count_engagement_pm + "</td><td>" + response.parents[parent_array_id].avg_respond_time_pm_string + "</td>";
+                    }
+                    
+                    $('#report .table tbody').append('<tr id="pId' + response.product_list[i].id + '" class="pId'+ response.product_list[i].parent_id +  '"><td>' +
+                        response.product_list[i].product_name + '</td>' + summary + firstLane + secondLane + '<td><button class="btn toggleSub">Show</button></td></tr>')
+                    parent_array_id++;
                 }
-                
-                $('#report .table tbody').append('<tr id="pId' + response.product_list[i].id + '" class="pId'+ response.product_list[i].parent_id +  '"><td>' +
-                    response.product_list[i].product_name + '</td>' + summary + firstLane + secondLane + '</tr>')
             }
-            else{
-                if (response.parents[parent_array_id].count_cases_total != 0){
-                    summary = "<td>" + response.parents[parent_array_id].count_cases_total + "</td><td>" + response.parents[parent_array_id].count_engagement_total + "</td><td>" + response.parents[parent_array_id].avg_respond_time_total_string + "</td>";
-                }
-                
-                if (response.parents[parent_array_id].count_cases_wall_post != 0){
-                    firstLane = "<td>" + response.parents[parent_array_id].count_cases_wall_post + "</td><td>" + response.parents[parent_array_id].count_engagement_wall_post + "</td><td>" + response.parents[parent_array_id].avg_respond_time_wall_post_string + "</td>";
-                }
-                
-                if (response.parents[parent_array_id].count_cases_pm != 0){
-                    secondLane = "<td>" + response.parents[parent_array_id].count_cases_pm + "</td><td>" + response.parents[parent_array_id].count_engagement_pm + "</td><td>" + response.parents[parent_array_id].avg_respond_time_pm_string + "</td>";
-                }
-                
-                $('#report .table tbody').append('<tr id="pId' + response.product_list[i].id + '" class="pId'+ response.product_list[i].parent_id +  '"><td>' +
-                    response.product_list[i].product_name + '</td>' + summary + firstLane + secondLane + '<td><button class="btn toggleSub">Show</button></td></tr>')
-                parent_array_id++;
+            
+            $('#report .table .resolved').html('Engagement');
+            $('#report .table .avg_time').html('Avg Respond Time');
+            
+            $('#report .table tbody > :not(tr.pIdnull)').toggle('fast');
+            $('#report .table .toggleSub').click(function(){
+                idTrParent = $(this).closest('tr').attr('id');
+                $('.' + idTrParent).toggle('slow');
+                if($(this).html() == "Show")
+                    $(this).html('Hide');
+                else
+                    $(this).html('Show');
+            });
+            
+            $('#report .table tfoot .sum1').html(response.all.cases_total);
+            $('#report .table tfoot .sum2').html(response.all.engagement_total);
+            $('#report .table tfoot .sum3').html(response.all.avg_respond_time_total);
+            $('#report .table tfoot .sum4').html(response.all.cases_wall_post);
+            $('#report .table tfoot .sum5').html(response.all.engagement_wall_post);
+            $('#report .table tfoot .sum6').html(response.all.avg_respond_time_wall_post);
+            $('#report .table tfoot .sum7').html(response.all.cases_pm);
+            $('#report .table tfoot .sum8').html(response.all.engagement_pm);
+            $('#report .table tfoot .sum9').html(response.all.avg_respond_time_pm);
+        }
+        else{
+            $('#report .table tbody').html('<tr><td colspan="11" style="text-align: center">No Result</td></tr>');
+            for(i=1;i<=9;i++){
+                $('#report .table tfoot .sum' + i).html('0');
             }
         }
-        
-        $('#report .table .resolved').html('Engagement');
-        $('#report .table .avg_time').html('Avg Respond Time');
-        
-        $('#report .table tbody > :not(tr.pIdnull)').toggle('fast');
-        $('#report .table .toggleSub').click(function(){
-            idTrParent = $(this).closest('tr').attr('id');
-            $('.' + idTrParent).toggle('slow');
-            if($(this).html() == "Show")
-                $(this).html('Hide');
-            else
-                $(this).html('Show');
-        });
-        
-        $('#report .table tfoot .sum1').html(response.all.cases_total);
-        $('#report .table tfoot .sum2').html(response.all.engagement_total);
-        $('#report .table tfoot .sum3').html(response.all.avg_respond_time_total);
-        $('#report .table tfoot .sum4').html(response.all.cases_wall_post);
-        $('#report .table tfoot .sum5').html(response.all.engagement_wall_post);
-        $('#report .table tfoot .sum6').html(response.all.avg_respond_time_wall_post);
-        $('#report .table tfoot .sum7').html(response.all.cases_pm);
-        $('#report .table tfoot .sum8').html(response.all.engagement_pm);
-        $('#report .table tfoot .sum9').html(response.all.avg_respond_time_pm);
     }
     
     $('.x-pagination').on('click',function(){

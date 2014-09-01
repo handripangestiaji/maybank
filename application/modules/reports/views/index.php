@@ -95,9 +95,9 @@
 					<select name="case_type" id="caseType" >
 						<option value="all">All</option>
 						<option value="Feedback">Feedback</option>
-						<option value="Enquiries">Enquiries</option>
-						<option value="Complaints">Complaints</option>
-						<option value="ReportAbuse">Report Abuse</option>
+						<option value="Enquiry">Enquiries</option>
+						<option value="Complaint">Complaints</option>
+						<option value="Report_Abuse">Report Abuse</option>
 					</select>
 				</th>
 				<th colspan="3">Wall Post</th>

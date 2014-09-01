@@ -41,16 +41,79 @@ class report_ajax extends CI_Controller {
             }
             else{
                 $result = $this->reports_model->getCase($this->input->post());
+                $product_list = $this->load->model('campaign_model')->GetProductBasedOnParent();
+                
                 if($result){
                     foreach($result as $res){
                         $case_id = $res->case_id;
                         $res->engagement = $this->reports_model->getEngagementByCaseId($case_id)->result();
                     }
+                    
+                    $parents = Array();
+                    foreach($product_list as $prod_list){
+                        $is_parent = false;
+                        
+                        if($prod_list->parent_id == null)
+                            $is_parent = true;
+                        
+                        if($is_parent == false){
+                            $prod_list->count_cases_total = 0;
+                            $prod_list->count_cases_wall_post = 0;
+                            $prod_list->count_cases_pm = 0;
+                        
+                            $prod_list->count_engagement_total = 0;
+                            $prod_list->count_engagement_wall_post = 0;
+                            $prod_list->count_engagement_pm = 0;
+                            
+                            foreach($result as $res){
+                                if($res->product_name == $prod_list->product_name){
+                                    if($res->type == 'facebook'){
+                                        $prod_list->count_cases_wall_post += 1;
+                                        $prod_list->count_engagement_wall_post += count($res->engagement);
+                                    }
+                                    elseif($res->type == 'facebook_conversation'){
+                                        $prod_list->count_cases_pm += 1;
+                                        $prod_list->count_engagement_pm += count($res->engagement);
+                                    }
+                                    $prod_list->count_cases_total += 1;
+                                    $prod_list->count_engagement_total += count($res->engagement);
+                                }
+                            }
+                        }
+                        else{
+                            $parents[] = $prod_list;
+                        }
+                    }
+                    
+                    foreach($parents as $parent){
+                        $parent->count_cases_total = 0;
+                        $parent->count_cases_wall_post = 0;
+                        $parent->count_cases_pm = 0;
+                        
+                        $parent->count_engagement_total = 0;
+                        $parent->count_engagement_wall_post = 0;
+                        $parent->count_engagement_pm = 0;
+                        
+                        foreach($product_list as $prod_list){
+                            if($prod_list->parent_id == $parent->id){
+                                $parent->count_cases_total += $prod_list->count_cases_total;
+                                $parent->count_cases_wall_post += $prod_list->count_cases_wall_post;
+                                $parent->count_cases_pm += $prod_list->count_cases_pm;
+                                
+                                $parent->count_engagement_total += $prod_list->count_engagement_total;
+                                $parent->count_engagement_wall_post += $prod_list->count_engagement_wall_post;
+                                $parent->count_engagement_pm += $prod_list->count_engagement_pm;
+                            }
+                        }
+                    }
+                    
                     echo json_encode(array(
                         'type' => 'engagement',
-                        'product_list' => $this->load->model('campaign_model')->GetProductBasedOnParent()
+                        'product_list' => $product_list,
+                        'cases' => $result,
+                        'parents' => $parents
                     ));
-                    //echo json_encode($result);
+                    
                 }
             }
         }

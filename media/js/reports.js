@@ -240,19 +240,26 @@ $(function(){
         $(this).find("span").html('Create').removeAttr('disabled');
         $('#report .table tbody').html('');
         $('#report .table tbody').html('');
+        var parent_array_id = 0;
         for(var i=0; i< response.product_list.length; i++){
             var summary = firstLane = secondLane = "<td colspan='3'>No Result</td>" ;
-            summary = "<td colspan='3' class='summary'>No Result</td>";
             firstLane = "<td colspan='3' class='summary'>No Result</td>";
             secondLane = "<td colspan='3' class='summary'>No Result</td>";
             
             if(response.product_list[i].parent_id > 0){
+                summary = "<td>" + response.product_list[i].count_cases_total + "</td><td>" + response.product_list[i].count_engagement_total + "</td><td></td>";
+                firstLane = "<td>" + response.product_list[i].count_cases_wall_post + "</td><td>" + response.product_list[i].count_engagement_wall_post + "</td><td></td>";
+                secondLane = "<td>" + response.product_list[i].count_cases_pm + "</td><td>" + response.product_list[i].count_engagement_pm + "</td><td></td>";
                 $('#report .table tbody').append('<tr id="pId' + response.product_list[i].id + '" class="pId'+ response.product_list[i].parent_id +  '"><td>' +
                     response.product_list[i].product_name + '</td>' + summary + firstLane + secondLane + '</tr>')
             }
             else{
+                summary = "<td>" + response.parents[parent_array_id].count_cases_total + "</td><td>" + response.parents[parent_array_id].count_engagement_total + "</td><td></td>";
+                firstLane = "<td>" + response.parents[parent_array_id].count_cases_wall_post + "</td><td>" + response.parents[parent_array_id].count_engagement_wall_post + "</td><td></td>";
+                secondLane = "<td>" + response.parents[parent_array_id].count_cases_pm + "</td><td>" + response.parents[parent_array_id].count_engagement_pm + "</td><td></td>";
                 $('#report .table tbody').append('<tr id="pId' + response.product_list[i].id + '" class="pId'+ response.product_list[i].parent_id +  '"><td>' +
                     response.product_list[i].product_name + '</td>' + summary + firstLane + secondLane + '<td><button class="btn toggleSub">Show</button></td></tr>')
+                parent_array_id++;
             }
         }
         

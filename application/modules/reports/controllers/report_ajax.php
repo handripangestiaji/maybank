@@ -65,19 +65,60 @@ class report_ajax extends CI_Controller {
                             $prod_list->count_engagement_wall_post = 0;
                             $prod_list->count_engagement_pm = 0;
                             
+                            $count_time_wall_post = 0;
+                            $count_time_pm = 0;
+                            
                             foreach($result as $res){
                                 if($res->product_name == $prod_list->product_name){
                                     if($res->type == 'facebook'){
                                         $prod_list->count_cases_wall_post += 1;
                                         $prod_list->count_engagement_wall_post += count($res->engagement);
+                                        //find average respond time
+                                        if($res->engagement){
+                                            foreach($res->engagement as $eng){
+                                                $count_time_wall_post += (strtotime($eng->created_at) - strtotime($res->created_at));
+                                            }
+                                        }
                                     }
                                     elseif($res->type == 'facebook_conversation'){
                                         $prod_list->count_cases_pm += 1;
                                         $prod_list->count_engagement_pm += count($res->engagement);
+                                        if($res->engagement){
+                                            foreach($res->engagement as $eng){
+                                                $count_time_pm += (strtotime($eng->created_at) - strtotime($res->created_at));
+                                            }
+                                        }
                                     }
                                     $prod_list->count_cases_total += 1;
                                     $prod_list->count_engagement_total += count($res->engagement);
                                 }
+                            }
+                            
+                            if($count_time_wall_post != 0){
+                                $prod_list->avg_respond_time_wall_post = $count_time_wall_post;
+                                $prod_list->avg_respond_time_wall_post_string = $this->time_elapsed($count_time_wall_post / $prod_list->count_engagement_wall_post);
+                            }
+                            else{
+                                $prod_list->avg_respond_time_wall_post = $count_time_wall_post;
+                                $prod_list->avg_respond_time_wall_post_string = $count_time_wall_post;
+                            }
+                            
+                            if($count_time_pm != 0){
+                                $prod_list->avg_respond_time_pm = $count_time_pm;
+                                $prod_list->avg_respond_time_pm_string = $this->time_elapsed($count_time_pm / $prod_list->count_engagement_pm);
+                            }
+                            else{
+                                $prod_list->avg_respond_time_pm = $count_time_pm;
+                                $prod_list->avg_respond_time_pm_string = $count_time_pm;
+                            }
+                        
+                            if(($count_time_wall_post != 0) || ($count_time_wall_post != 0)){
+                                $prod_list->avg_respond_time_total = $count_time_wall_post + $count_time_pm;
+                                $prod_list->avg_respond_time_total_string = $this->time_elapsed(($count_time_wall_post + $count_time_pm) / $prod_list->count_engagement_total);
+                            }
+                            else{
+                                $prod_list->avg_respond_time_total = 0;
+                                $prod_list->avg_respond_time_total_string = 0;
                             }
                         }
                         else{
@@ -94,6 +135,10 @@ class report_ajax extends CI_Controller {
                         $parent->count_engagement_wall_post = 0;
                         $parent->count_engagement_pm = 0;
                         
+                        $parent_respond_time_total = 0;
+                        $parent_respond_time_wall_post = 0;
+                        $parent_respond_time_pm = 0;
+                        
                         foreach($product_list as $prod_list){
                             if($prod_list->parent_id == $parent->id){
                                 $parent->count_cases_total += $prod_list->count_cases_total;
@@ -103,7 +148,31 @@ class report_ajax extends CI_Controller {
                                 $parent->count_engagement_total += $prod_list->count_engagement_total;
                                 $parent->count_engagement_wall_post += $prod_list->count_engagement_wall_post;
                                 $parent->count_engagement_pm += $prod_list->count_engagement_pm;
+                            
+                                $parent_respond_time_total += $prod_list->avg_respond_time_total;
+                                $parent_respond_time_wall_post += $prod_list->avg_respond_time_wall_post;
+                                $parent_respond_time_pm += $prod_list->avg_respond_time_pm;
                             }
+                        }
+                        
+                        if($parent_respond_time_wall_post != 0){
+                            $parent->avg_respond_time_wall_post_string = $this->time_elapsed($parent_respond_time_wall_post / $parent->count_engagement_wall_post);
+                        }
+                        else{
+                            $parent->avg_respond_time_wall_post_string = 0;
+                        }
+                        
+                        if($parent_respond_time_pm != 0){
+                            $parent->avg_respond_time_pm_string = $this->time_elapsed($parent_respond_time_pm / $parent->count_engagement_pm);
+                        }
+                        else{
+                            $parent->avg_respond_time_pm_string = 0;
+                        }
+                    
+                        if(($parent_respond_time_wall_post != 0) || ($parent_respond_time_wall_post != 0))
+                            $parent->avg_respond_time_total_string = $this->time_elapsed(($parent_respond_time_wall_post + $parent_respond_time_pm) / $parent->count_engagement_total);
+                        else{
+                            $parent->avg_respond_time_total_string = 0;
                         }
                     }
                     
@@ -244,5 +313,22 @@ class report_ajax extends CI_Controller {
         
         //make json data with type of case
         //return json data
+    }
+    
+        
+    function time_elapsed($secs){
+	$bit = array(
+	    'y' => $secs / 31556926 % 12,
+	    'w' => $secs / 604800 % 52,
+	    'd' => $secs / 86400 % 7,
+	    'h' => $secs / 3600 % 24,
+	    'm' => $secs / 60 % 60,
+	    's' => $secs % 60
+	    );
+	    
+	foreach($bit as $k => $v)
+	    if($v > 0)$ret[] = $v . $k;
+	    
+	return join(' ', $ret);
     }
 }

@@ -247,16 +247,16 @@ $(function(){
             secondLane = "<td colspan='3' class='summary'>No Result</td>";
             
             if(response.product_list[i].parent_id > 0){
-                summary = "<td>" + response.product_list[i].count_cases_total + "</td><td>" + response.product_list[i].count_engagement_total + "</td><td></td>";
-                firstLane = "<td>" + response.product_list[i].count_cases_wall_post + "</td><td>" + response.product_list[i].count_engagement_wall_post + "</td><td></td>";
-                secondLane = "<td>" + response.product_list[i].count_cases_pm + "</td><td>" + response.product_list[i].count_engagement_pm + "</td><td></td>";
+                summary = "<td>" + response.product_list[i].count_cases_total + "</td><td>" + response.product_list[i].count_engagement_total + "</td><td>" + response.product_list[i].avg_respond_time_total_string + "</td>";
+                firstLane = "<td>" + response.product_list[i].count_cases_wall_post + "</td><td>" + response.product_list[i].count_engagement_wall_post + "</td><td>" + response.product_list[i].avg_respond_time_wall_post_string + "</td>";
+                secondLane = "<td>" + response.product_list[i].count_cases_pm + "</td><td>" + response.product_list[i].count_engagement_pm + "</td><td>" + response.product_list[i].avg_respond_time_pm_string + "</td>";
                 $('#report .table tbody').append('<tr id="pId' + response.product_list[i].id + '" class="pId'+ response.product_list[i].parent_id +  '"><td>' +
                     response.product_list[i].product_name + '</td>' + summary + firstLane + secondLane + '</tr>')
             }
             else{
-                summary = "<td>" + response.parents[parent_array_id].count_cases_total + "</td><td>" + response.parents[parent_array_id].count_engagement_total + "</td><td></td>";
-                firstLane = "<td>" + response.parents[parent_array_id].count_cases_wall_post + "</td><td>" + response.parents[parent_array_id].count_engagement_wall_post + "</td><td></td>";
-                secondLane = "<td>" + response.parents[parent_array_id].count_cases_pm + "</td><td>" + response.parents[parent_array_id].count_engagement_pm + "</td><td></td>";
+                summary = "<td>" + response.parents[parent_array_id].count_cases_total + "</td><td>" + response.parents[parent_array_id].count_engagement_total + "</td><td>" + response.parents[parent_array_id].avg_respond_time_total_string + "</td>";
+                firstLane = "<td>" + response.parents[parent_array_id].count_cases_wall_post + "</td><td>" + response.parents[parent_array_id].count_engagement_wall_post + "</td><td>" + response.parents[parent_array_id].avg_respond_time_wall_post_string + "</td>";
+                secondLane = "<td>" + response.parents[parent_array_id].count_cases_pm + "</td><td>" + response.parents[parent_array_id].count_engagement_pm + "</td><td>" + response.parents[parent_array_id].avg_respond_time_pm_string + "</td>";
                 $('#report .table tbody').append('<tr id="pId' + response.product_list[i].id + '" class="pId'+ response.product_list[i].parent_id +  '"><td>' +
                     response.product_list[i].product_name + '</td>' + summary + firstLane + secondLane + '<td><button class="btn toggleSub">Show</button></td></tr>')
                 parent_array_id++;

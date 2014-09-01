@@ -42,7 +42,6 @@ class Reports_model extends CI_Model
 	$summary_per_parent = $this->filter_query_build(array('c.parent_id', 'type', 'type2',  'sum(total_case) as total_case', 'sum(total_solved) as total_solved',
 	    'avg(average_response) as average_response'),
 	    "group by type, type2, c.parent_id", $current_code, $case_type );
-	print_r($summary_per_parent);
 	
 	$summary_all = $this->filter_query_build(array('type', 'type2',  'sum(total_case) as total_case', 'sum(total_solved) as total_solved',
 	    'avg(average_response) as average_response'),
@@ -573,16 +572,15 @@ class Reports_model extends CI_Model
 	$date_start = DateTime::createFromFormat('Y/m/d', $filter['date_start']);
 	$date_finish = DateTime::createFromFormat('Y/m/d', $filter['date_finish']);
 
-	$query = "SELECT c.case_id, ch.channel_id,  cp.id, cp.product_name, count(c.case_id) as total_case, count(c.solved_at) as total_solved, avg(UNIX_TIMESTAMP(solved_at) - UNIX_TIMESTAMP(c.created_at)) as average_response, 
+	$query = "SELECT c.case_id, c.created_at, ch.channel_id,  cp.id, cp.product_name,
 	c.case_type , ug.group_id, ug.group_name as user_group, ss.`type`, sst.`type` as type2, 366653, NOW()
 FROM `case` c inner join social_stream ss on c.post_id = ss.post_id
 	inner join content_products cp on cp.id = c.content_products_id
 	left join social_stream_twitter sst on sst.post_id = ss.post_id 
 	inner join channel ch on ch.channel_id = ss.channel_id
 	inner join (user u  inner join user_group ug on u.group_id = ug.group_id) on u.user_id = c.created_by 
-WHERE ss.channel_id = ".$filter['channel_id']." ".$where_group_id." and c.created_at >= '".$date_start->format('Y-m-d')."' and c.created_at <= '".$date_finish->format('Y-m-d')."'
-	group by c.case_type, ss.type, cp.id, sst.type, u.group_id;";
-	
+WHERE ss.channel_id = ".$filter['channel_id']." ".$where_group_id." and c.created_at >= '".$date_start->format('Y-m-d')."' and c.created_at <= '".$date_finish->format('Y-m-d')."';";
+
 	return $this->db->query($query)->result();
     }
     

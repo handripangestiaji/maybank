@@ -215,8 +215,8 @@ $(function(){
                                     response.main_per_parent[z].average_response + "'/>" +  response.main_per_parent[z].average_response_string +"</td>";
                     }
                 }
-                $('#report .table tbody').append('<tr id="pId' + response.product_list[i].id + '" class="pId'+ response.product_list[i].parent_id +  '"><td>' +
-                    response.product_list[i].product_name + '</td>' + summary + firstLane + secondLane + '<td><button class="btn toggleSub">Show</button></td></tr>')
+                $('#report .table tbody').append('<tr id="pId' + response.product_list[i].id + '" class="pId'+ response.product_list[i].parent_id +  '"><td><strong>' +
+                    response.product_list[i].product_name + '</strong></td>' + summary + firstLane + secondLane + '<td><button class="btn toggleSub">Show</button></td></tr>')
             }
             
         }
@@ -311,8 +311,8 @@ $(function(){
                         secondLane = "<td>" + response.parents[parent_array_id].count_cases_pm + "</td><td>" + response.parents[parent_array_id].count_engagement_pm + "</td><td>" + response.parents[parent_array_id].avg_respond_time_pm_string + "</td>";
                     }
                     
-                    $('#report .table tbody').append('<tr id="pId' + response.product_list[i].id + '" class="pId'+ response.product_list[i].parent_id +  '"><td>' +
-                        response.product_list[i].product_name + '</td>' + summary + firstLane + secondLane + '<td><button class="btn toggleSub">Show</button></td></tr>')
+                    $('#report .table tbody').append('<tr id="pId' + response.product_list[i].id + '" class="pId'+ response.product_list[i].parent_id +  '"><td><strong>' +
+                        response.product_list[i].product_name + '</strong></td>' + summary + firstLane + secondLane + '<td><button class="btn toggleSub">Show</button></td></tr>')
                     parent_array_id++;
                 }
             }
@@ -424,11 +424,20 @@ $(function(){
     $(this).on('click','.btn-download ', function(){
         var form = document.createElement("form");
         form.setAttribute("method", "POST");
-        form.setAttribute("action", BASEURL + "reports/report_ajax/DownloadUserPerformance");
+        form.setAttribute("action", BASEURL + "reports/report_ajax/DownloadUserPerformance/" + $('#reportType').val() + ' - ' + $('#caseType').val());
         var hiddenField = document.createElement("input");
+        var $table = $(this).closest('table').html();
+        $table = $table.replace(/style="display: none;"/g,'');
+        $table = $table.replace(/<tr ><td colspan="11" style="text-align: center">Creating Report...<\/td><\/tr>/g,'');
+        $table = $table.replace(/Action/g,'');
+        $table = $table.replace(/Show/g,'');
+        $table = $table.replace(/Download/g,'');
+        $table = $table.replace(/<option value="all">All<\/option><option value="Feedback">Feedback<\/option>/g,'');
+        
+        console.log($table);
         hiddenField.setAttribute("type", "hidden");
         hiddenField.setAttribute("name", "table_download");
-        hiddenField.setAttribute("value", "<table>" + $(this).val() + "</table>");
+        hiddenField.setAttribute("value", "<table>" + $table + "</table>");
         
         form.appendChild(hiddenField);
         form.submit();

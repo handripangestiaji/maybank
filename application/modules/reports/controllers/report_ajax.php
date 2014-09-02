@@ -310,9 +310,9 @@ class report_ajax extends CI_Controller {
         }
     }
     
-    function DownloadUserPerformance(){
+    function DownloadUserPerformance($filename){
         header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        header("Content-Disposition: attachment;filename=\"filename.xlsx\"");
+        header("Content-Disposition: attachment;filename=\"".$filename.".xls\"");
         header("Cache-Control: max-age=0");
         echo html_entity_decode($this->input->post('table_download'));
     }

@@ -564,6 +564,10 @@ class Cronjob extends CI_Controller {
         print_r(json_encode($result));
     }
     
+    function DestroyReportActivity(){
+        $this->load->model('reports_model');
+        $this->reports_model->destroy_report_activity();
+    }
     
     public function error_page(){
 	$data['heading'] = $this->input->get('heading');

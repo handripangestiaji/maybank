@@ -195,7 +195,7 @@ class Reports_model extends CI_Model
 	$now = date('Y-m-d H:i:s');
 	
 	//read channel_action
-	$this->db->select('username, user.user_id, user.group_id, role_name, action_type, user.country_code, channel_action.created_at');
+	$this->db->select('username, user.user_id, user.group_id, role_name, action_type, user.country_code, channel_action.created_at, case_id, stream_id_response');
 	$this->db->from('channel_action');
 	$this->db->join('user','channel_action.created_by = user.user_id');
 	$this->db->join('role_collection','user.role_id = role_collection.role_collection_id');
@@ -208,65 +208,62 @@ class Reports_model extends CI_Model
 	//store channel_action
 	if($result){
 	    foreach($result as $row){
+		$status = '';
+		if($row->action_type == 'reply_facebook'){
+		    $this->db->select('*');
+		    $this->db->from('social_stream_fb_comments');
+		    $this->db->where("comment_stream_id", $row->stream_id_response);
+		    $val = $this->db->get()->row();
+		    if($val)
+			$status = $val->comment_content;
+		}
+		elseif($row->action_type == 'twitter_reply'){
+	            $this->db->select('*');
+		    $this->db->from('twitter_reply');
+		    $this->db->where("created_at", $row->created_at);
+		    $val = $this->db->get()->row();
+		    if($val)
+			$status = $val->text;
+		}
+		elseif($row->action_type == 'case_created'){
+		    $this->db->select('*');
+		    $this->db->from('case');
+		    $this->db->where("case_id", $row->case_id);
+		    $val = $this->db->get()->row();
+		    if($val)
+			$status = 'Case #'.$val->case_id.': '.$val->messages;
+		}
+		elseif(($row->action_type == 'case_solved') || ($row->action_type == 'solved')){
+		    $this->db->select('*');
+		    $this->db->from('case');
+		    $this->db->where("case_id", $row->case_id);
+		    $val = $this->db->get()->row();
+		    if($val)
+			$status = 'Case #'.$val->case_id.': '.$val->messages;
+		}
+		elseif($row->action_type == 'conversation_facebook'){
+		    if($row->stream_id_response != null){
+			$this->db->select('*');
+			$this->db->from('social_stream_facebook_conversation_detail');
+			$this->db->where("detail_id_from_facebook", $row->stream_id_response);
+			$val = $this->db->get()->row();
+			if($val)
+			    $status = $val->messages;
+		    }
+		}
+		
 		$value[] = array('username' => $row->username,
 				'user_id' => $row->user_id,
 				'group_id' => $row->group_id,
 			       'rolename' => $row->role_name,
 			       'action' => $row->action_type,
-			       'status' => '',
+			       'status' => $status,
 			       'country_code' => $row->country_code,
 			       'time' => $row->created_at,
 			       'created_at' => $now
 			       );
 	    }
 	}
-	
-	
-	//read case
-	$this->db->select('username, user.user_id, user.group_id, role_name, case_id, messages, user.country_code, case.created_at');
-	$this->db->from('case');
-	$this->db->join('user','case.created_by = user.user_id');
-	$this->db->join('role_collection','user.role_id = role_collection.role_collection_id');
-	$this->db->where("case.created_at > '".$date."'");
-	$this->db->order_by('case.created_at');
-	$result = $this->db->get()->result();
-	
-	//store case
-	foreach($result as $row){
-	    $value[] = array('username' => $row->username,
-			    'user_id' => $row->user_id,
-			    'group_id' => $row->group_id,
-			   'rolename' => $row->role_name,
-			   'action' => 'Create New Case #'.$row->case_id,
-			   'status' => $row->messages,
-			   'country_code' => $row->country_code,
-			   'time' => $row->created_at,
-			   'created_at' => $now
-			   );
-        }
-        
-        /*
-	//read case_assign_detail
-	$this->db->select('username, role_name, messages, role_collection.country_code, case.created_at');
-	$this->db->from('case_assign');
-	$this->db->join('user','case.created_by = user.user_id');
-	$this->db->join('role_collection','user.role_id = role_collection.role_collection_id');
-	$this->db->where("case.created_at > '".$date."'");
-	$this->db->order_by('case.created_at');
-	$result = $this->db->get()->result();
-	
-	//store case_assign_detail
-	foreach($result as $row){
-	    $value[] = array('username' => $row->username,
-			   'rolename' => $row->role_name,
-			   'action' => $row->messages,
-			   'status' => $row->messages,
-			   'country_code' => $row->country_code,
-			   'time' => $row->created_at,
-			   'created_at' => $now
-			   );
-        }
-        */
 	
 	//read channel
 	$this->db->select('username, user.user_id, user.group_id, role_name, name, user.country_code, channel.token_created_at');
@@ -360,28 +357,6 @@ class Reports_model extends CI_Model
 			   );
         }
 	
-	/*
-	//read page_reply
-	$this->db->select('*');
-	$this->db->from('case');
-	$this->db->join('user');
-	$where = "`created_at` > ".$date;
-        $this->db->where($where);
-	$result = $this->db->result();
-	
-	//store page_reply
-	foreach($result as $row){
-	    $value[] = array('username' => $row->username,
-			   'rolename' => $row->rolename,
-			   'action' => $row->action,
-			   'status' => $row->status,
-			   'country_code' => $row->country_code,
-			   'time' => $row->created_at,
-			   'created_at' => $now
-			   );
-        }
-	*/
-	
 	//read role_collection
 	$this->db->select('username, user.user_id, user.group_id, x.role_name as xrole_name, role_collection.role_name, user.country_code, role_collection.created_at');
 	$this->db->from('role_collection');
@@ -421,35 +396,12 @@ class Reports_model extends CI_Model
 			    'group_id' => $row->group_id,
 			   'rolename' => $row->role_name,
 			   'action' => 'Create short url',
-			   'status' => $row->short_code,
+			   'status' => 'http://maybk.co/'.$row->short_code,
 			   'country_code' => $row->country_code,
 			   'time' => $row->created_at,
 			   'created_at' => $now
 			   );
         }
-	
-	/*not solved
-	//read twitter_reply
-	$this->db->select('username, role_name, text, role_collection.country_code, twitter_reply.created_at');
-	$this->db->from('twitter_reply');
-	$this->db->join('user','twitter_reply.user_id = user.user_id');
-	$this->db->join('role_collection','user.role_id = role_collection.role_collection_id');
-	$this->db->where("twitter_reply.created_at > '".$date."'");
-	$this->db->order_by('twitter_reply.created_at');
-	$result = $this->db->get()->result();
-	
-	//store twitter_reply
-	foreach($result as $row){
-	    $value[] = array('username' => $row->username,
-			   'rolename' => $row->role_name,
-			   'action' => 'Reply to '.$row->username,
-			   'status' => $row->text,
-			   'country_code' => $row->country_code,
-			   'time' => $row->created_at,
-			   'created_at' => $now
-			   );
-        }
-	*/
 	
 	//read user
 	$this->db->select('x.username as xusername, x.user_id, x.group_id, user.username, role_name, user.country_code, user.created_at, user.created_by');
@@ -596,5 +548,9 @@ WHERE ss.channel_id = ".$filter['channel_id']." ".$where_case_type." ".$where_gr
 	$this->db->from('page_reply');
 	$this->db->where('case_id',$case_id);
 	return $this->db->get();
+    }
+    
+    public function destroy_report_activity(){
+	$this->db->empty_table('report_activity');
     }
 }

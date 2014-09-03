@@ -265,17 +265,17 @@ class report_ajax extends CI_Controller {
         if($is_valid === TRUE){
             //check post request
             if($this->input->post() != null){
+                $filter = null;    
                 if(($this->input->post('user') != '') && ($this->input->post('user') != 'All')){
                     $filter['user_id'] = $this->input->post('user');
                 }
-                elseif(($this->input->post('group') != '') && ($this->input->post('group') != 'All')){
+                
+                if(($this->input->post('group') != '') && ($this->input->post('group') != 'All')){
                     $filter['group_id'] = $this->input->post('group');
                 }
-                elseif($this->input->post('country') != ''){
+                
+                if($this->input->post('country') != ''){
                     $filter['country_code'] = $this->input->post('country');
-                }
-                else{
-                    $filter = null;
                 }
                 
                 $range = "time between '".$this->input->post('date_start')." 00:00:00' and '".$this->input->post('date_finish')." 23:59:59'";

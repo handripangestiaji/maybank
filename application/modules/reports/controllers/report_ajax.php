@@ -45,8 +45,9 @@ class report_ajax extends CI_Controller {
                 
                 if($result){
                     foreach($result as $res){
-                        $case_id = $res->case_id;
-                        $res->engagement = $this->reports_model->getEngagementByCaseId($case_id)->result();
+                        $postEngagement = $this->reports_model->getEngagementsByPostId($res->post_id, $res->created_at);
+                        //$res->engagement = $this->reports_model->getEngagementByCaseId($case_id)->result();
+                        $res->engagement = $postEngagement;
                     }
                     
                     $parents = Array();
@@ -86,6 +87,27 @@ class report_ajax extends CI_Controller {
                                         if($res->engagement){
                                             foreach($res->engagement as $eng){
                                                 $count_time_pm += (strtotime($eng->created_at) - strtotime($res->created_at));
+                                            }
+                                        }
+                                    }
+                                    elseif($res->type == 'twitter'){
+                                        if($res->type2 == 'home_feed'){
+                                            $prod_list->count_cases_wall_post += 1;
+                                            $prod_list->count_engagement_wall_post += count($res->engagement);
+                                            //find average respond time
+                                            if($res->engagement){
+                                                foreach($res->engagement as $eng){
+                                                    $count_time_wall_post += (strtotime($eng->created_at) - strtotime($res->created_at));
+                                                }
+                                            }
+                                        }
+                                        elseif($res->type2 == 'direct_message'){
+                                            $prod_list->count_cases_pm += 1;
+                                            $prod_list->count_engagement_pm += count($res->engagement);
+                                            if($res->engagement){
+                                                foreach($res->engagement as $eng){
+                                                    $count_time_pm += (strtotime($eng->created_at) - strtotime($res->created_at));
+                                                }
                                             }
                                         }
                                     }

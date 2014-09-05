@@ -531,23 +531,38 @@ class Reports_model extends CI_Model
 	$date_start = DateTime::createFromFormat('Y/m/d', $filter['date_start']);
 	$date_finish = DateTime::createFromFormat('Y/m/d', $filter['date_finish']);
 
-	$query = "SELECT c.case_id, c.created_at, ch.channel_id,  cp.id, cp.product_name,
+	$query = "SELECT c.case_id, c.post_id, c.created_at, ch.channel_id,  cp.id, cp.product_name,
 	c.case_type , ug.group_id, ug.group_name as user_group, ss.`type`, sst.`type` as type2, 366653, NOW()
 FROM `case` c inner join social_stream ss on c.post_id = ss.post_id
 	inner join content_products cp on cp.id = c.content_products_id
 	left join social_stream_twitter sst on sst.post_id = ss.post_id 
 	inner join channel ch on ch.channel_id = ss.channel_id
 	inner join (user u  inner join user_group ug on u.group_id = ug.group_id) on u.user_id = c.created_by 
-WHERE ss.channel_id = ".$filter['channel_id']." ".$where_case_type." ".$where_group_id." and c.created_at >= '".$date_start->format('Y-m-d')."' and c.created_at <= '".$date_finish->format('Y-m-d')."';";
+WHERE ss.channel_id = ".$filter['channel_id']." ".$where_case_type." ".$where_group_id." and c.created_at >= '".$date_start->format('Y-m-d')."' and c.created_at <= '".$date_finish->format('Y-m-d')." 23:59:59';";
 
 	return $this->db->query($query)->result();
     }
     
-    public function getEngagementByCaseId($case_id){
+    public function getEngagementsByPostId($post_id, $created_at){
 	$this->db->select('*');
-	$this->db->from('page_reply');
-	$this->db->where('case_id',$case_id);
-	return $this->db->get();
+	$this->db->from('channel_action');
+	$this->db->where('post_id',$post_id);
+	$this->db->where('created_at >', $created_at);
+	$channel_action = $this->db->get()->result();
+	
+	$eng = array();
+	if($channel_action){
+	    foreach($channel_action as $ca){
+		if(($ca->action_type == 'twitter_reply') ||
+		    ($ca->action_type == 'reply_facebook') ||
+		    ($ca->action_type == 'conversation_facebook') ||
+		    ($ca->action_type == 'twitter_dm')){
+		     $eng[] = $ca;
+		}
+	    }
+	}
+	
+	return $eng;
     }
     
     public function destroy_report_activity(){

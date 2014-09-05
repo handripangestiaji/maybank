@@ -91,7 +91,7 @@ class report_ajax extends CI_Controller {
                                         }
                                     }
                                     elseif($res->type == 'twitter'){
-                                        if($res->type2 == 'home_feed'){
+                                        if(($res->type2 == 'home_feed') || ($res->type2 == 'mentions')){
                                             $prod_list->count_cases_wall_post += 1;
                                             $prod_list->count_engagement_wall_post += count($res->engagement);
                                             //find average respond time

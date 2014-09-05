@@ -27,6 +27,7 @@ class Search extends CI_Controller {
 	  $this->load->model('account_model');
 	  $this->load->config('search');
 	  $this->the_index = $this->config->item('index_search');
+	  $this->date_after = date("Y-m-d H:i:s",strtotime("-1 Months"));
 	  
 	  $this->user_role = $this->users_model->get_collection_detail(
 		array('role_collection_id'=>$this->session->userdata('role_id')));
@@ -293,6 +294,7 @@ class Search extends CI_Controller {
 	  $this->elasticsearch_model->PutIndex($this->the_index);
 	  
 	  $channels = $this->account_model->GetChannel();
+	  
 	  foreach($channels as $channel){
 	       if($channel->connection_type == 'facebook'){
 		    $this->facebook_indexing($channel->channel_id);
@@ -318,6 +320,7 @@ class Search extends CI_Controller {
 	  
 	  $filter = array(
 	       'c.channel_id' => $channel_id,
+	       'c.created_at >' => $this->date_after
 	    );
 	  $fb_feed = $this->facebook_model->RetrieveFeedFB($filter,0,false);
 	  
@@ -341,6 +344,7 @@ class Search extends CI_Controller {
 	  $ret = $this->elasticsearch_model->TypeMapping($this->the_index,'facebook_pm',$fb_pm_map);
 	  $filter = array(
 	       'c.channel_id' => $channel_id,
+	       'c.created_at >' => $this->date_after
 	    );
 	  $fb_pm = $this->facebook_model->RetrievePmFB($filter);
 	  foreach($fb_pm as $pm){
@@ -363,7 +367,10 @@ class Search extends CI_Controller {
 				);
 	  
 	  $ret = $this->elasticsearch_model->TypeMapping($this->the_index,'twitter_mentions',$tw_mention_map);
-	  $filter = array('a.channel_id' => $channel_id);
+	  $filter = array(
+	       'a.channel_id' => $channel_id,
+	       'a.created_at >' => $this->date_after
+	       );
 	  $filter['b.type'] = 'mentions';
 	  $mentions = $this->twitter_model->ReadTwitterData($filter);
 	  foreach($mentions as $m){

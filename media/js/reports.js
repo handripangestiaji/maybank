@@ -249,7 +249,7 @@ $(function(){
         for(i=1;i<=9;i++){
             var summary = 0;
             var x = 0;
-            $('#pIdnull').find('.cols' + i).each(function(){
+            $('.pIdnull').find('.cols' + i).each(function(){
                 if(i%3 != 0){
                     summary += parseInt($(this).html());    
                 }

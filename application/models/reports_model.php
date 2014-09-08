@@ -510,7 +510,22 @@ class Reports_model extends CI_Model
 	return $this->db->get();
     }
     
-    public function getCase($filter){
+    public function getEngagement($filter){
+	$channel = $this->getChannelByChannelId($filter['channel_id']);
+	
+	if($channel->connection_type == 'facebook'){
+	    $table = 'page_reply';
+	    $field = 'social_stream_post_id';
+	    $field2 = 'product_id';
+	    $field3 = '`type`';
+	}
+	elseif($channel->connection_type == 'twitter'){
+	    $table = 'twitter_reply';
+	    $field = 'reply_to_post_id';
+	    $field2 = 'content_products_id';
+	    $field3 = 'reply_type';
+	}
+	
 	if($filter['group_id'] == 'All' || $filter['group_id'] == null){
 	    $where_group_id = '';
 	}
@@ -519,26 +534,24 @@ class Reports_model extends CI_Model
 	}
 	
 	if($filter['case_type'] == 'all' || $filter['case_type'] == null){
-	    $where_case_type = '';
+	    $where_case_type = 'and r.'.$field3.' is not null';
 	}
 	else{
-	    $where_case_type = "and c.case_type = '".$filter['case_type']."'";
+	    $where_case_type = "and r.".$field3." = '".$filter['case_type']."'";
 	}
 	
 	$date_start = str_replace('/', '-', $filter['date_start']);
 	$date_end = str_replace('/', '-', $filter['date_finish']);
 	
-	$date_start = DateTime::createFromFormat('Y/m/d', $filter['date_start']);
-	$date_finish = DateTime::createFromFormat('Y/m/d', $filter['date_finish']);
+	//$date_start = DateTime::createFromFormat('Y/m/d', $filter['date_start']);
+	//$date_finish = DateTime::createFromFormat('Y/m/d', $filter['date_finish']);
 
-	$query = "SELECT c.case_id, c.post_id, c.created_at, ch.channel_id,  cp.id, cp.product_name,
-	c.case_type , ug.group_id, ug.group_name as user_group, ss.`type`, sst.`type` as type2, 366653, NOW()
-FROM `case` c inner join social_stream ss on c.post_id = ss.post_id
-	inner join content_products cp on cp.id = c.content_products_id
-	left join social_stream_twitter sst on sst.post_id = ss.post_id 
+	$query = "SELECT ss.created_at, cp.id, r.created_at as reply_created_at, ss.type
+FROM social_stream ss inner join ".$table." r on ss.post_id = r.".$field."
+	inner join content_products cp on cp.id = r.".$field2."
 	inner join channel ch on ch.channel_id = ss.channel_id
-	inner join (user u  inner join user_group ug on u.group_id = ug.group_id) on u.user_id = c.created_by 
-WHERE ss.channel_id = ".$filter['channel_id']." ".$where_case_type." ".$where_group_id." and c.created_at >= '".$date_start->format('Y-m-d')."' and c.created_at <= '".$date_finish->format('Y-m-d')." 23:59:59';";
+	inner join (user u inner join user_group ug on u.group_id = ug.group_id) on u.user_id = r.user_id 
+WHERE ss.channel_id = ".$filter['channel_id']." ".$where_case_type." ".$where_group_id." and ss.created_at >= '".$date_start."' and ss.created_at <= '".$date_end." 23:59:59';";
 
 	return $this->db->query($query)->result();
     }
@@ -563,6 +576,13 @@ WHERE ss.channel_id = ".$filter['channel_id']." ".$where_case_type." ".$where_gr
 	}
 	
 	return $eng;
+    }
+    
+    public function getChannelByChannelId($channel_id){
+	$this->db->select('*');
+	$this->db->from('channel');
+	$this->db->where('channel_id',$channel_id);
+	return $this->db->get()->row();
     }
     
     public function destroy_report_activity(){

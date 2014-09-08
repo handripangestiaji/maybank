@@ -40,16 +40,11 @@ class report_ajax extends CI_Controller {
                 $this->FilterReport();
             }
             else{
-                $result = $this->reports_model->getCase($this->input->post());
+                $result = $this->reports_model->getEngagement($this->input->post());
+                
                 $product_list = $this->load->model('campaign_model')->GetProductBasedOnParent();
                 
                 if($result){
-                    foreach($result as $res){
-                        $postEngagement = $this->reports_model->getEngagementsByPostId($res->post_id, $res->created_at);
-                        //$res->engagement = $this->reports_model->getEngagementByCaseId($case_id)->result();
-                        $res->engagement = $postEngagement;
-                    }
-                    
                     $parents = Array();
                     foreach($product_list as $prod_list){
                         $is_parent = false;
@@ -58,10 +53,6 @@ class report_ajax extends CI_Controller {
                             $is_parent = true;
                         
                         if($is_parent == false){
-                            $prod_list->count_cases_total = 0;
-                            $prod_list->count_cases_wall_post = 0;
-                            $prod_list->count_cases_pm = 0;
-                        
                             $prod_list->count_engagement_total = 0;
                             $prod_list->count_engagement_wall_post = 0;
                             $prod_list->count_engagement_pm = 0;
@@ -70,49 +61,14 @@ class report_ajax extends CI_Controller {
                             $count_time_pm = 0;
                             
                             foreach($result as $res){
-                                if($res->product_name == $prod_list->product_name){
-                                    if($res->type == 'facebook'){
-                                        $prod_list->count_cases_wall_post += 1;
-                                        $prod_list->count_engagement_wall_post += count($res->engagement);
-                                        //find average respond time
-                                        if($res->engagement){
-                                            foreach($res->engagement as $eng){
-                                                $count_time_wall_post += (strtotime($eng->created_at) - strtotime($res->created_at));
-                                            }
-                                        }
-                                    }
-                                    elseif($res->type == 'facebook_conversation'){
-                                        $prod_list->count_cases_pm += 1;
-                                        $prod_list->count_engagement_pm += count($res->engagement);
-                                        if($res->engagement){
-                                            foreach($res->engagement as $eng){
-                                                $count_time_pm += (strtotime($eng->created_at) - strtotime($res->created_at));
-                                            }
-                                        }
-                                    }
-                                    elseif($res->type == 'twitter'){
-                                        if(($res->type2 == 'home_feed') || ($res->type2 == 'mentions')){
-                                            $prod_list->count_cases_wall_post += 1;
-                                            $prod_list->count_engagement_wall_post += count($res->engagement);
-                                            //find average respond time
-                                            if($res->engagement){
-                                                foreach($res->engagement as $eng){
-                                                    $count_time_wall_post += (strtotime($eng->created_at) - strtotime($res->created_at));
-                                                }
-                                            }
-                                        }
-                                        elseif($res->type2 == 'direct_message'){
-                                            $prod_list->count_cases_pm += 1;
-                                            $prod_list->count_engagement_pm += count($res->engagement);
-                                            if($res->engagement){
-                                                foreach($res->engagement as $eng){
-                                                    $count_time_pm += (strtotime($eng->created_at) - strtotime($res->created_at));
-                                                }
-                                            }
-                                        }
-                                    }
-                                    $prod_list->count_cases_total += 1;
-                                    $prod_list->count_engagement_total += count($res->engagement);
+                                if($res->id == $prod_list->id){
+                                    $prod_list->count_engagement_wall_post += 1;
+                                    $prod_list->count_engagement_total += 1;
+                                    
+                                    if(($res->type == 'facebook') || ($res->type == 'facebook_comment') || ($res->type == 'twitter'))
+                                        $count_time_wall_post += strtotime($res->reply_created_at) - strtotime($res->created_at);
+                                    elseif(($res->type == 'facebook_conversation') || ($res->type == 'twitter_dm'))
+                                        $count_time_pm += strtotime($res->reply_created_at) - strtotime($res->created_at);
                                 }
                             }
                             
@@ -176,14 +132,10 @@ class report_ajax extends CI_Controller {
                         
                         foreach($product_list as $prod_list){
                             if($prod_list->parent_id == $parent->id){
-                                $parent->count_cases_total += $prod_list->count_cases_total;
-                                $parent->count_cases_wall_post += $prod_list->count_cases_wall_post;
-                                $parent->count_cases_pm += $prod_list->count_cases_pm;
-                                
                                 $parent->count_engagement_total += $prod_list->count_engagement_total;
                                 $parent->count_engagement_wall_post += $prod_list->count_engagement_wall_post;
                                 $parent->count_engagement_pm += $prod_list->count_engagement_pm;
-                            
+                                
                                 $parent_respond_time_total += $prod_list->avg_respond_time_total;
                                 $parent_respond_time_wall_post += $prod_list->avg_respond_time_wall_post;
                                 $parent_respond_time_pm += $prod_list->avg_respond_time_pm;
@@ -209,10 +161,6 @@ class report_ajax extends CI_Controller {
                         else{
                             $parent->avg_respond_time_total_string = 0;
                         }
-                        
-                        $all->cases_total += $parent->count_cases_total;
-                        $all->cases_wall_post += $parent->count_cases_wall_post;
-                        $all->cases_pm += $parent->count_cases_pm;
                         
                         $all->engagement_total += $parent->count_engagement_total;
                         $all->engagement_wall_post += $parent->count_engagement_wall_post;

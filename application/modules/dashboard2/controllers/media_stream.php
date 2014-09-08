@@ -707,7 +707,7 @@ class Media_stream extends CI_Controller {
                 
                	    
                 $this->account_model->CreateFbCommentAction($action,$post_id,$this->input->post('like') === 'true' ? 1 : 0);
-                $this->account_model->CreateFbReplyAction($post_id,$stream_id->post_stream_id,$comment,$reply_type,$product_type,$url);
+                $this->account_model->CreateFbReplyAction($post_id,$stream_id->post_stream_id,$comment,$reply_type,$product_type,$url,$case_id);
 		echo json_encode(
 		    array(
 			'success' => true,
@@ -728,7 +728,7 @@ class Media_stream extends CI_Controller {
             		"stream_id_response" => $return
             	);
                 $this->account_model->CreateFbCommentAction($action,$post_id,$this->input->post('like') === 'true' ? 1 : 0);
-                $this->account_model->CreateFbReplyAction($post_id,'',$comment,$reply_type,$product_type,$url);
+                $this->account_model->CreateFbReplyAction($post_id,'',$comment,$reply_type,$product_type,$url,$case_id);
 		$action['created_at'] = new DateTime($action['created_at']." UTC");
 		$action['created_at']->setTimezone(new DateTimeZone($this->session->userdata('timezone')));
 		$action['created_at'] = $action['created_at']->format("d-M-y h:i A");

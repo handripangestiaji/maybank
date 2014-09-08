@@ -16,6 +16,7 @@
             <option value="Enquiry">Enquiry</option>
             <option value="Complaint">Complaint</option>
             <option value="Report_Abuse">Report Abuse</option>
+            <option value="Compliment">Compliment</option>
         </select>
         <select name="product_type" class="product_type" style="width: 130px;">
             <option value="">Please Select</option>

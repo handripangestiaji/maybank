@@ -12,7 +12,8 @@
             <option value="Feedback">Feedback</option>
             <option value="Enquiry">Enquiry</option>
             <option value="Complaint">Complaint</option>
-            <option value="Report_Abuse">Report Abuse</option>  
+            <option value="Report_Abuse">Report Abuse</option>
+            <option value="Compliment">Compliment</option>
         </select>
             
         <select class="productType" style="width: 130px;">

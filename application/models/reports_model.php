@@ -48,7 +48,7 @@ FROM `case` c inner join social_stream ss on c.post_id = ss.post_id
 	inner join content_products cp on cp.id = c.content_products_id
 	inner join channel ch on ch.channel_id = ss.channel_id
 	inner join (user u  inner join user_group ug on u.group_id = ug.group_id) on u.user_id = c.created_by 
-WHERE ss.channel_id = ".$filter['channel_id']." ".$where_group_id." ".$where_case_type." and c.created_at >= '".$date_start."' and c.created_at <= '".$date_finish.";'";
+WHERE ss.channel_id = ".$filter['channel_id']." ".$where_group_id." ".$where_case_type." and c.created_at >= '".$date_start." 00:00:00' and c.created_at <= '".$date_finish." 23:59:59';";
 	$q = $this->db->query($sql_report);
 	$references_report = $q->result();
 	return $references_report;
@@ -575,7 +575,7 @@ FROM social_stream ss inner join ".$table." r on ss.post_id = r.".$field."
 	inner join content_products cp on cp.id = r.".$field2."
 	inner join channel ch on ch.channel_id = ss.channel_id
 	inner join (user u inner join user_group ug on u.group_id = ug.group_id) on u.user_id = r.user_id 
-WHERE ss.channel_id = ".$filter['channel_id']." ".$where_case_type." ".$where_group_id." and ss.created_at >= '".$date_start."' and ss.created_at <= '".$date_end." 23:59:59';";
+WHERE ss.channel_id = ".$filter['channel_id']." ".$where_case_type." ".$where_group_id." and ss.created_at >= '".$date_start." 00:00:00' and ss.created_at <= '".$date_end." 23:59:59';";
 
 	return $this->db->query($query)->result();
     }

@@ -34,10 +34,200 @@ class report_ajax extends CI_Controller {
         $is_valid = CheckValidation($validation, $this->validation);
         if($is_valid === TRUE){
             if($this->input->post('type') == 'case'){
-                $code = $this->reports_model->create_report($this->input->post('channel_id'), $this->session->userdata('user_id'),
-                                                            $this->input->post('date_start'), $this->input->post('date_finish'), $this->input->post('group_id'));
-                $this->session->set_userdata('current_code', $code);
-                $this->FilterReport();
+                $result = $this->reports_model->create_report($this->input->post());
+                $product_list = $this->load->model('campaign_model')->GetProductBasedOnParent();
+                if($result){
+                    $parents = Array();
+                    foreach($product_list as $prod_list){
+                        $is_parent = false;
+                        
+                        if($prod_list->parent_id == null)
+                            $is_parent = true;
+                        
+                        if($is_parent == false){
+                            $prod_list->count_cases_total = 0;
+                            $prod_list->count_cases_wall_post = 0;
+                            $prod_list->count_cases_pm = 0;
+                            
+                            $prod_list->count_cases_total_resolved = 0;
+                            $prod_list->count_cases_wall_post_resolved = 0;
+                            $prod_list->count_cases_pm_resolved = 0;
+                            
+                            $count_time_wall_post = 0;
+                            $count_time_pm = 0;
+                            
+                            foreach($result as $res){
+                                if($res->id == $prod_list->id){
+                                    $prod_list->count_cases_total += 1;
+                                    if($res->solved_at != null)
+                                        $prod_list->count_cases_total_resolved += 1;    
+                                    
+                                    if(($res->type == 'facebook') || ($res->type == 'facebook_comment') || ($res->type == 'twitter')){
+                                        $prod_list->count_cases_wall_post += 1;
+                                        if($res->solved_at != null)
+                                            $prod_list->count_cases_wall_post_resolved += 1;
+                                    }
+                                    elseif(($res->type == 'facebook_conversation') || ($res->type == 'twitter_dm')){
+                                        $prod_list->count_cases_pm += 1;
+                                        if($res->solved_at != null)
+                                            $prod_list->count_cases_pm_resolved += 1;
+                                    }
+                                    
+                                    if(($res->type == 'facebook') || ($res->type == 'facebook_comment') || ($res->type == 'twitter')){
+                                        if($res->solved_at != null)
+                                            $count_time_wall_post += strtotime($res->solved_at) - strtotime($res->created_at);
+                                    }
+                                    elseif(($res->type == 'facebook_conversation') || ($res->type == 'twitter_dm')){
+                                        if($res->solved_at != null)
+                                            $count_time_pm += strtotime($res->solved_at) - strtotime($res->created_at);
+                                    }
+                                }
+                            }
+                            
+                            if($count_time_wall_post > 0){
+                                $prod_list->avg_respond_time_wall_post = $count_time_wall_post;
+                                $prod_list->avg_respond_time_wall_post_string = $this->time_elapsed($count_time_wall_post / $prod_list->count_cases_wall_post_resolved);
+                            }
+                            else{
+                                $prod_list->avg_respond_time_wall_post = $count_time_wall_post;
+                                $prod_list->avg_respond_time_wall_post_string = $count_time_wall_post;
+                            }
+                            
+                            if($count_time_pm > 0){
+                                $prod_list->avg_respond_time_pm = $count_time_pm;
+                                $prod_list->avg_respond_time_pm_string = $this->time_elapsed($count_time_pm / $prod_list->count_cases_pm_resolved);
+                            }
+                            else{
+                                $prod_list->avg_respond_time_pm = $count_time_pm;
+                                $prod_list->avg_respond_time_pm_string = $count_time_pm;
+                            }
+                        
+                            if(($count_time_wall_post > 0) || ($count_time_pm > 0)){
+                                $prod_list->avg_respond_time_total = $count_time_wall_post + $count_time_pm;
+                                $prod_list->avg_respond_time_total_string = $this->time_elapsed(($count_time_wall_post + $count_time_pm) / $prod_list->count_cases_total_resolved);
+                            }
+                            else{
+                                $prod_list->avg_respond_time_total = 0;
+                                $prod_list->avg_respond_time_total_string = 0;
+                            }
+                        }
+                        else{
+                            $parents[] = $prod_list;
+                        }
+                    }
+
+                    $x = array('cases_total' => 0,
+                                 'cases_wall_post' => 0,
+                                 'cases_pm' => 0,
+                                 'cases_total_resolved' => 0,
+                                 'cases_wall_post_resolved' => 0,
+                                 'cases_pm_resolved' => 0,
+                                 'avg_respond_time_total' => 0,
+                                 'avg_respond_time_wall_post' => 0,
+                                 'avg_respond_time_pm' => 0
+                                 );
+                    
+                    $all = (object) $x;
+                    
+                    foreach($parents as $parent){
+                        $parent->count_cases_total = 0;
+                        $parent->count_cases_wall_post = 0;
+                        $parent->count_cases_pm = 0;
+                        
+                        $parent->count_cases_total_resolved = 0;
+                        $parent->count_cases_wall_post_resolved = 0;
+                        $parent->count_cases_pm_resolved = 0;
+                        
+                        $parent_respond_time_total = 0;
+                        $parent_respond_time_wall_post = 0;
+                        $parent_respond_time_pm = 0;
+                        
+                        foreach($product_list as $prod_list){
+                            if($prod_list->parent_id == $parent->id){
+                                $parent->count_cases_total += $prod_list->count_cases_total;
+                                $parent->count_cases_wall_post += $prod_list->count_cases_wall_post;
+                                $parent->count_cases_pm += $prod_list->count_cases_pm;
+                                
+                                $parent->count_cases_total_resolved += $prod_list->count_cases_total_resolved;
+                                $parent->count_cases_wall_post_resolved += $prod_list->count_cases_wall_post_resolved;
+                                $parent->count_cases_pm_resolved += $prod_list->count_cases_pm_resolved;
+                                
+                                $parent_respond_time_total += $prod_list->avg_respond_time_total;
+                                $parent_respond_time_wall_post += $prod_list->avg_respond_time_wall_post;
+                                $parent_respond_time_pm += $prod_list->avg_respond_time_pm;
+                            }
+                        }
+                        
+                        if($parent_respond_time_wall_post > 0){
+                            $parent->avg_respond_time_wall_post_string = $this->time_elapsed($parent_respond_time_wall_post / $parent->count_cases_wall_post_resolved);
+                        }
+                        else{
+                            $parent->avg_respond_time_wall_post_string = 0;
+                        }
+                        
+                        if($parent_respond_time_pm > 0){
+                            $parent->avg_respond_time_pm_string = $this->time_elapsed($parent_respond_time_pm / $parent->count_cases_pm_resolved);
+                        }
+                        else{
+                            $parent->avg_respond_time_pm_string = 0;
+                        }
+                    
+                        if(($parent_respond_time_wall_post > 0) || ($parent_respond_time_pm > 0))
+                            $parent->avg_respond_time_total_string = $this->time_elapsed(($parent_respond_time_wall_post + $parent_respond_time_pm) / $parent->count_cases_total_resolved);
+                        else{
+                            $parent->avg_respond_time_total_string = 0;
+                        }
+                        
+                        $all->cases_total += $parent->count_cases_total;
+                        $all->cases_wall_post += $parent->count_cases_wall_post;
+                        $all->cases_pm += $parent->count_cases_pm;
+                        
+                        $all->cases_total_resolved += $parent->count_cases_total_resolved;
+                        $all->cases_wall_post_resolved += $parent->count_cases_wall_post_resolved;
+                        $all->cases_pm_resolved += $parent->count_cases_pm_resolved;
+                        
+                        $all->avg_respond_time_total += $parent_respond_time_wall_post + $parent_respond_time_pm;
+                        $all->avg_respond_time_wall_post += $parent_respond_time_wall_post;
+                        $all->avg_respond_time_pm += $parent_respond_time_pm;
+                    }
+                    
+                    if($all->avg_respond_time_total > 0){
+                        $all->avg_respond_time_total = $this->time_elapsed($all->avg_respond_time_total / $all->cases_total_resolved);
+                    }
+                    else{
+                        $all->avg_respond_time_total = 0;
+                    }
+                    
+                    if($all->avg_respond_time_wall_post > 0){
+                        $all->avg_respond_time_wall_post = $this->time_elapsed($all->avg_respond_time_wall_post / $all->cases_wall_post_resolved);
+                    }
+                    else{
+                        $all->avg_respond_time_wall_post = 0;
+                    }
+                    
+                    if($all->avg_respond_time_pm > 0){
+                        $all->avg_respond_time_pm = $this->time_elapsed($all->avg_respond_time_pm / $all->cases_pm_resolved);
+                    }
+                    else{
+                         $all->avg_respond_time_pm = 0;
+                    }
+                
+                    echo json_encode(array(
+                        'status' => 'success',
+                        'type' => 'case',
+                        'product_list' => $product_list,
+                        'cases' => $result,
+                        'parents' => $parents,
+                        'all' => $all
+                    ));
+                    
+                }
+                else{
+                    echo json_encode(array(
+                        'status' => 'error',
+                        'message' => 'No Result'
+                    ));
+                }
             }
             else{
                 $result = $this->reports_model->getEngagement($this->input->post());

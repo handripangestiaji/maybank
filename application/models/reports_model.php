@@ -21,13 +21,37 @@ class Reports_model extends CI_Model
     /*
     * Generate Report for 
     */
-    function create_report($channel_id, $user_id, $date_start, $date_finish, $ug_id = null)
+    function create_report($filter)
     {
-	$ug_id = $ug_id == null || $ug_id == 'All'? 'null' : "'$ug_id'";
-	$sql_report = "call sp_ReportPerformance('$channel_id', $ug_id, '$user_id', '$date_start', '$date_finish');";
+	if($filter['group_id'] == 'All' || $filter['group_id'] == null){
+	    $where_group_id = '';
+	}
+	else{
+	    $where_group_id = 'and ug.group_id = '.$filter['group_id'];
+	}
+	
+	if($filter['case_type'] == 'all' || $filter['case_type'] == null){
+	    $where_case_type = 'and c.case_type is not null';
+	}
+	else{
+	    $where_case_type = "and c.case_type = '".$filter['case_type']."'";
+	}
+	
+	//$ug_id = $ug_id == null || $ug_id == 'All'? 'null' : "'$ug_id'";
+	//$sql_report = "call sp_ReportPerformance('$channel_id', $ug_id, '$user_id', '$date_start', '$date_finish');";
+	
+	$date_start = str_replace('/', '-', $filter['date_start']);
+	$date_finish = str_replace('/', '-', $filter['date_finish']);
+	
+	$sql_report = "SELECT c.created_at, cp.id, ss.type, c.solved_at
+FROM `case` c inner join social_stream ss on c.post_id = ss.post_id
+	inner join content_products cp on cp.id = c.content_products_id
+	inner join channel ch on ch.channel_id = ss.channel_id
+	inner join (user u  inner join user_group ug on u.group_id = ug.group_id) on u.user_id = c.created_by 
+WHERE ss.channel_id = ".$filter['channel_id']." ".$where_group_id." ".$where_case_type." and c.created_at >= '".$date_start."' and c.created_at <= '".$date_finish.";'";
 	$q = $this->db->query($sql_report);
-	$references_report = $q->row();
-	return $references_report->my_code;
+	$references_report = $q->result();
+	return $references_report;
     }
     
     /*

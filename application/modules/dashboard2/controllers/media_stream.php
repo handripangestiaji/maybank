@@ -707,7 +707,7 @@ class Media_stream extends CI_Controller {
                 
                	    
                 $this->account_model->CreateFbCommentAction($action,$post_id,$this->input->post('like') === 'true' ? 1 : 0);
-                $this->account_model->CreateFbReplyAction($post_id,$stream_id->post_stream_id,$comment,$reply_type,$product_type,$url,$case_id);
+                $this->account_model->CreateFbReplyAction($post_id,$stream_id->post_stream_id,$comment,$reply_type,$product_type,$url);
 		echo json_encode(
 		    array(
 			'success' => true,

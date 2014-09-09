@@ -178,7 +178,7 @@ class account_model extends CI_Model
     	return $result;
     }
 
-    function CreateFbReplyAction($post_id, $stream_id, $message, $reply_type,$product_type,$url,$case_id = null){
+    function CreateFbReplyAction($post_id, $stream_id, $message, $reply_type,$product_type,$url){
     	$this->db->trans_start();
     
         $case = $this->isCaseIdExists($stream_id);
@@ -206,8 +206,7 @@ class account_model extends CI_Model
 	    $actions['product_id'] = $product_type;
         $actions['created_at'] = date("Y-m-d H:i:s");
         $actions['user_id'] = $this->session->userdata('user_id');
-	$actions['case_id'] = $case_id;
-        $result = $this->CreateReplyAction($actions);
+	$result = $this->CreateReplyAction($actions);
 	
 	$this->db->where("post_id", $post_id );
 	$this->db->update("social_stream", array("replied_count" => 0));

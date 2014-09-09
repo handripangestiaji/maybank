@@ -855,7 +855,8 @@ class Media_stream extends CI_Controller {
     	    "post_at" => date("Y-m-d H:i:s"),
     	    "created_at" => date("Y-m-d H:i:s"),
     	    "product_id" => $this->input->post('product_id') == 0 ? NULL : $this->input->post('product_id'),
-    	    "user_id" => $this->session->userdata('user_id')
+    	    "user_id" => $this->session->userdata('user_id'),
+	    "`type`" => $reply_type
     	);
     	$this->account_model->CreateReplyAction($page_reply);
             $case = $this->account_model->isCaseIdExists($post_id);

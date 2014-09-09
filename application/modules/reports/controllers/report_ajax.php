@@ -265,7 +265,7 @@ class report_ajax extends CI_Controller {
                                 }
                             }
                             
-                            if($count_time_wall_post != 0){
+                            if($count_time_wall_post > 0){
                                 $prod_list->avg_respond_time_wall_post = $count_time_wall_post;
                                 $prod_list->avg_respond_time_wall_post_string = $this->time_elapsed($count_time_wall_post / $prod_list->count_engagement_wall_post);
                             }
@@ -274,7 +274,7 @@ class report_ajax extends CI_Controller {
                                 $prod_list->avg_respond_time_wall_post_string = $count_time_wall_post;
                             }
                             
-                            if($count_time_pm != 0){
+                            if($count_time_pm > 0){
                                 $prod_list->avg_respond_time_pm = $count_time_pm;
                                 $prod_list->avg_respond_time_pm_string = $this->time_elapsed($count_time_pm / $prod_list->count_engagement_pm);
                             }
@@ -283,7 +283,7 @@ class report_ajax extends CI_Controller {
                                 $prod_list->avg_respond_time_pm_string = $count_time_pm;
                             }
                         
-                            if(($count_time_wall_post != 0) || ($count_time_pm != 0)){
+                            if(($count_time_wall_post > 0) || ($count_time_pm > 0)){
                                 $prod_list->avg_respond_time_total = $count_time_wall_post + $count_time_pm;
                                 $prod_list->avg_respond_time_total_string = $this->time_elapsed(($count_time_wall_post + $count_time_pm) / $prod_list->count_engagement_total);
                             }
@@ -335,21 +335,21 @@ class report_ajax extends CI_Controller {
                             }
                         }
                         
-                        if($parent_respond_time_wall_post != 0){
+                        if($parent_respond_time_wall_post > 0){
                             $parent->avg_respond_time_wall_post_string = $this->time_elapsed($parent_respond_time_wall_post / $parent->count_engagement_wall_post);
                         }
                         else{
                             $parent->avg_respond_time_wall_post_string = 0;
                         }
                         
-                        if($parent_respond_time_pm != 0){
+                        if($parent_respond_time_pm > 0){
                             $parent->avg_respond_time_pm_string = $this->time_elapsed($parent_respond_time_pm / $parent->count_engagement_pm);
                         }
                         else{
                             $parent->avg_respond_time_pm_string = 0;
                         }
                     
-                        if(($parent_respond_time_wall_post != 0) || ($parent_respond_time_pm != 0))
+                        if(($parent_respond_time_wall_post > 0) || ($parent_respond_time_pm > 0))
                             $parent->avg_respond_time_total_string = $this->time_elapsed(($parent_respond_time_wall_post + $parent_respond_time_pm) / $parent->count_engagement_total);
                         else{
                             $parent->avg_respond_time_total_string = 0;
@@ -364,21 +364,21 @@ class report_ajax extends CI_Controller {
                         $all->avg_respond_time_pm += $parent_respond_time_pm;
                     }
                     
-                    if($all->avg_respond_time_total != 0){
+                    if($all->avg_respond_time_total > 0){
                         $all->avg_respond_time_total = $this->time_elapsed($all->avg_respond_time_total / $all->engagement_total);
                     }
                     else{
                         $all->avg_respond_time_total = 0;
                     }
                     
-                    if($all->avg_respond_time_wall_post != 0){
+                    if($all->avg_respond_time_wall_post > 0){
                         $all->avg_respond_time_wall_post = $this->time_elapsed($all->avg_respond_time_wall_post / $all->engagement_wall_post);
                     }
                     else{
                         $all->avg_respond_time_wall_post = 0;
                     }
                     
-                    if($all->avg_respond_time_pm != 0){
+                    if($all->avg_respond_time_pm > 0){
                         $all->avg_respond_time_pm = $this->time_elapsed($all->avg_respond_time_pm / $all->engagement_pm);
                     }
                     else{
@@ -407,7 +407,6 @@ class report_ajax extends CI_Controller {
             http_response_code(500);
             echo json_encode($is_valid, JSON_PRETTY_PRINT); 
         }
-        
     }
     
     function FilterReport(){

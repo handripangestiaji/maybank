@@ -98,6 +98,7 @@
 						<option value="Enquiry">Enquiries</option>
 						<option value="Complaint">Complaints</option>
 						<option value="Report_Abuse">Report Abuse</option>
+						<option value="Compliment">Compliment</option>
 					</select>
 				</th>
 				<th colspan="3">Wall Post</th>

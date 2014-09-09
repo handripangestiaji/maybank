@@ -575,7 +575,7 @@ FROM social_stream ss inner join ".$table." r on ss.post_id = r.".$field."
 	inner join content_products cp on cp.id = r.".$field2."
 	inner join channel ch on ch.channel_id = ss.channel_id
 	inner join (user u inner join user_group ug on u.group_id = ug.group_id) on u.user_id = r.user_id 
-WHERE ss.channel_id = ".$filter['channel_id']." ".$where_case_type." ".$where_group_id." and ss.created_at >= '".$date_start." 00:00:00' and ss.created_at <= '".$date_end." 23:59:59';";
+WHERE ss.channel_id = ".$filter['channel_id']." ".$where_case_type." ".$where_group_id." and r.created_at >= '".$date_start." 00:00:00' and r.created_at <= '".$date_end." 23:59:59';";
 
 	return $this->db->query($query)->result();
     }

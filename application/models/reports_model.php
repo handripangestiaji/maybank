@@ -570,7 +570,7 @@ WHERE ss.channel_id = ".$filter['channel_id']." ".$where_group_id." ".$where_cas
 	//$date_start = DateTime::createFromFormat('Y/m/d', $filter['date_start']);
 	//$date_finish = DateTime::createFromFormat('Y/m/d', $filter['date_finish']);
 
-	$query = "SELECT ss.created_at, cp.id, r.created_at as reply_created_at, ss.type
+	$query = "SELECT ss.post_id, ss.created_at, cp.id, r.created_at as reply_created_at, ss.type
 FROM social_stream ss inner join ".$table." r on ss.post_id = r.".$field."
 	inner join content_products cp on cp.id = r.".$field2."
 	inner join channel ch on ch.channel_id = ss.channel_id
@@ -607,6 +607,14 @@ WHERE ss.channel_id = ".$filter['channel_id']." ".$where_case_type." ".$where_gr
 	$this->db->from('channel');
 	$this->db->where('channel_id',$channel_id);
 	return $this->db->get()->row();
+    }
+    
+    public function getFbConversation($post_id){
+	$this->db->select('*');
+	$this->db->from('social_stream_facebook_conversation_detail');
+	$this->db->where('conversation_id',$post_id);
+	$this->db->order_by('created_at','desc');
+	return $this->db->get()->result();
     }
     
     public function destroy_report_activity(){

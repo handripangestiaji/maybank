@@ -259,6 +259,24 @@ class report_ajax extends CI_Controller {
                                         $prod_list->count_engagement_wall_post += 1;
                                     }
                                     elseif(($res->type == 'facebook_conversation') || ($res->type == 'twitter_dm')){
+                                        if($res->type == 'facebook_conversation'){
+                                            $conv = $this->reports_model->getFBConversation($res->post_id);
+                                            
+                                            if(count($conv) > 1){
+                                                $time_c = array();
+                                                foreach($conv as $c){
+                                                    $time_c[] = strtotime($c->created_at);
+                                                }
+                                                $count_time_c = 0;
+                                                for($x=1; $x<count($conv); $x++){
+                                                    $count_time_c += $time_c[0] - $time_c[$x];
+                                                }
+                                                $count_time_pm += $count_time_c / count($conv);
+                                            }
+                                            else{
+                                                $count_time_pm += strtotime($res->reply_created_at) - strtotime($res->created_at);            
+                                            }
+                                        }
                                         $count_time_pm += strtotime($res->reply_created_at) - strtotime($res->created_at);
                                         $prod_list->count_engagement_pm += 1;
                                     }

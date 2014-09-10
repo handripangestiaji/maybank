@@ -609,10 +609,15 @@ WHERE ss.channel_id = ".$filter['channel_id']." ".$where_case_type." ".$where_gr
 	return $this->db->get()->row();
     }
     
-    public function getFbConversation($post_id){
+    public function getFbConversation($post_id, $date_start, $date_finish){
+	$date_start = str_replace('/', '-', $date_start);
+	$date_finish = str_replace('/', '-', $date_finish);
+	
 	$this->db->select('*');
 	$this->db->from('social_stream_facebook_conversation_detail');
 	$this->db->where('conversation_id',$post_id);
+	$this->db->where('created_at > ', $date_start." 00:00:00");
+	$this->db->where('created_at < ', $date_finish." 23:59:59");
 	$this->db->order_by('created_at','desc');
 	return $this->db->get()->result();
     }

@@ -270,6 +270,7 @@ class report_ajax extends CI_Controller {
                                                 $count_time_c = 0;
                                                 for($x=1; $x<count($conv); $x++){
                                                     $count_time_c += ($time_c[0] - $time_c[$x]);
+                                                    $time_c[0] = $time_c[$x];
                                                 }
                                                 $count_time_pm += ($count_time_c / count($conv));
                                             }

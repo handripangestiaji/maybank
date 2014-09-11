@@ -34,18 +34,22 @@ class Search extends CI_Controller {
 	  $this->elasticsearch_model->PutIndex($this->the_index);
 	  
 	  $channels = $this->account_model->GetChannel();
+	  $data = array();
 	  foreach($channels as $channel){
 	       if($channel->connection_type == 'facebook'){
-		    $this->facebook_indexing($channel->channel_id);
+		    $data[$channel->name] = $this->facebook_indexing($channel->channel_id);
 	       }
-	       
 	       elseif($channel->connection_type == 'twitter'){
-		    $this->twitter_indexing($channel->channel_id);
+		    $data[$channel->name] = $this->twitter_indexing($channel->channel_id);
 	       }
+	       /*
 	       elseif($channel->connection_type == 'youtube'){
 		    $this->youtube_indexing($channel->channel_id);
 	       }
+	       */
 	  }
+	  
+	  print_r(json_encode($data));
      }
      
      public function facebook_indexing($channel_id){
@@ -63,8 +67,6 @@ class Search extends CI_Controller {
 	    );
 	  $fb_feed = $this->facebook_model->RetrieveFeedFB($filter,100,false);
 	  
-	  $i=0;
-	  echo count($fb_feed);
 	  foreach($fb_feed as $wp){
 	       $new_wp = array('name' => $wp->name,
 			       'post_id' => $wp->post_id,
@@ -94,6 +96,10 @@ class Search extends CI_Controller {
 			       'post_id' => $pm->post_id);
 	       $ret = $this->elasticsearch_model->InsertDoc($this->the_index,'facebook_pm',$pm->post_id,$new_pm);
 	  }
+	  
+	  $fb_index['fb_feed'] = $fb_feed;
+	  $fb_index['fb_pm'] = $fb_feed;
+	  return $fb_index;
      }
      
      public function twitter_indexing($channel_id){
@@ -163,6 +169,12 @@ class Search extends CI_Controller {
 				); 
 	       $ret = $this->elasticsearch_model->InsertDoc($this->the_index,'twitter_dms',$dm->post_stream_id,$tws);
 	  }
+	  
+	  $tw_index['mentions'] = $mentions;
+	  $tw_index['homefeeds'] = $homefeeds;
+	  $tw_index['timelines'] = $timelines;
+	  $tw_index['dms'] = $dms;
+	  return $tw_index;
      }
      
       public function youtube_indexing($channel_id){
@@ -212,7 +224,7 @@ class Search extends CI_Controller {
 	  }
       }
 
-     public function DeleteIndex($name){
+     public function DeleteIndex(){
 	  $this->elasticsearch_model->DeleteIndex('media_stream');
      }
 }

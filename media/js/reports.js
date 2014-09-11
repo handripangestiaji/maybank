@@ -393,7 +393,15 @@ $(function(){
         $table = $table.replace(/Action/g,'');
         $table = $table.replace(/Show/g,'');
         $table = $table.replace(/Download/g,'');
-        $table = $table.replace(/<option value="all">All<\/option><option value="Feedback">Feedback<\/option>/g,'');
+       
+        $table = $table.replace(/<option value="all">All<\/option>/g,'')
+        $table = $table.replace(/<option value="Feedback">Feedback<\/option>/g,'')
+        $table = $table.replace(/<option value="Compliment">Compliment<\/option>/g,'')
+        $table = $table.replace(/<option value="Enquiry">Enquiries<\/option>/g,'')
+        $table = $table.replace(/<option value="Complaint">Complaints<\/option>/g,'')
+        $table = $table.replace(/<option value="Report_Abuse">Report Abuse<\/option>/g,'')
+        $table = $table.replace(/<select name="case_type" id="caseType">/g,'');
+        $table = $table.replace(/<\/select>/g,$(this).closest('table').find('#caseType').val());
         
         console.log($table);
         hiddenField.setAttribute("type", "hidden");

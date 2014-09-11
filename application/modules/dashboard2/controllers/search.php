@@ -27,7 +27,7 @@ class Search extends CI_Controller {
 	  $this->load->model('account_model');
 	  $this->load->config('search');
 	  $this->the_index = $this->config->item('index_search');
-	  $this->date_after = date("Y-m-d H:i:s",strtotime("-1 Months"));
+	  $this->date_after = date("Y-m-d H:i:s",strtotime("-1 hours"));
 	  
 	  $this->user_role = $this->users_model->get_collection_detail(
 		array('role_collection_id'=>$this->session->userdata('role_id')));
@@ -294,7 +294,6 @@ class Search extends CI_Controller {
 	  $this->elasticsearch_model->PutIndex($this->the_index);
 	  
 	  $channels = $this->account_model->GetChannel();
-	  echo $this->date_after;
 	  
 	  foreach($channels as $channel){
 	       if($channel->connection_type == 'facebook'){

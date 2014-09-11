@@ -32,7 +32,7 @@
 					<div class="control-group info span5" >
 						<label class="control-label" for="inputWarning">Date Start</label>
 						<div class="controls">
-						<input value="2014/03/01" id="dateStart" />
+						<input value="<?php echo date("Y/m/d",strtotime("-3 months")); ?>" id="dateStart" />
 						<span class="help-inline"></span>
 						</div>
 					</div>

@@ -1218,6 +1218,7 @@ class Users extends MY_Controller {
 	       $this->load->view('users/group',$data);
 	  }
 	  else{
+	    
 		    $timezone = new DateTimeZone("UTC");
 		    $time = new DateTime(date("Y-m-d H:i:s e"), $timezone);
 		    $created_at = $time->format("Y-m-d H:i:s");
@@ -1232,10 +1233,13 @@ class Users extends MY_Controller {
 				   'is_active' => 1,
 				   'created_by' => $created_by
 				  );
+		   
 		    if(IsRoleFriendlyNameExist($this->user_role, 'Regional_User'))
 			$data['country_code'] = $this->input->post('country');
 		    else
 			$data['country_code'] = $this->session->userdata('country');
+		    $data['country_code'] = $this->input->post('country');
+		    
 		    $this->users_model->insert_group($data);
 		    $last_id=$this->db->insert_id();
 		    

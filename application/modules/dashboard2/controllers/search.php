@@ -6,8 +6,6 @@ class Search extends CI_Controller {
      public $user_role;
      private $the_index;
       
-      
-      
      function __construct()
      {
 	  parent::__construct();

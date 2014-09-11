@@ -22,6 +22,7 @@ class Search extends CI_Controller {
 	  $this->load->model('account_model');
 	  $this->load->config('search');
 	  $this->the_index = $this->config->item('index_search');
+	  $this->date_after = date("Y-m-d H:i:s",strtotime("-1 hours"));
 	  
 	  $this->user_role = $this->users_model->get_collection_detail(
 		array('role_collection_id'=>$this->session->userdata('role_id')));
@@ -58,8 +59,9 @@ class Search extends CI_Controller {
 	  
 	  $filter = array(
 	       'c.channel_id' => $channel_id,
+	       'c.created_at >' => $this->date_after
 	    );
-	  $fb_feed = $this->facebook_model->RetrieveFeedFB($filter,200,false);
+	  $fb_feed = $this->facebook_model->RetrieveFeedFB($filter,100,false);
 	  
 	  $i=0;
 	  echo count($fb_feed);
@@ -81,6 +83,7 @@ class Search extends CI_Controller {
 	  $ret = $this->elasticsearch_model->TypeMapping($this->the_index,'facebook_pm',$fb_pm_map);
 	  $filter = array(
 	       'c.channel_id' => $channel_id,
+	       'c.created_at >' => $this->date_after
 	    );
 	  $fb_pm = $this->facebook_model->RetrievePmFB($filter, 100);
 	  foreach($fb_pm as $pm){
@@ -103,9 +106,12 @@ class Search extends CI_Controller {
 				);
 	  
 	  $ret = $this->elasticsearch_model->TypeMapping($this->the_index,'twitter_mentions',$tw_mention_map);
-	  $filter = array('a.channel_id' => $channel_id);
+	  $filter = array(
+	       'a.channel_id' => $channel_id,
+	       'a.created_at >' => $this->date_after
+	       );
 	  $filter['b.type'] = 'mentions';
-	  $mentions = $this->twitter_model->ReadTwitterData($filter, 300);
+	  $mentions = $this->twitter_model->ReadTwitterData($filter, 100);
 	  foreach($mentions as $m){
 	       $tws = array('text' => $m->text,
 				'post_stream_id' => $m->post_stream_id,
@@ -119,7 +125,7 @@ class Search extends CI_Controller {
 	  //create twitter homefeed type
 	  $ret = $this->elasticsearch_model->TypeMapping($this->the_index,'twitter_homefeed',$tw_mention_map);
 	  $filter['b.type'] = 'home_feed';
-	  $homefeeds = $this->twitter_model->ReadTwitterData($filter, 300);
+	  $homefeeds = $this->twitter_model->ReadTwitterData($filter, 100);
 	  foreach($homefeeds as $hf){
 	       $tws = array('text' => $hf->text,
 				'post_stream_id' => $hf->post_stream_id,
@@ -133,7 +139,7 @@ class Search extends CI_Controller {
 	  //create twitter senttweets type
 	  $ret = $this->elasticsearch_model->TypeMapping($this->the_index,'twitter_senttweets',$tw_mention_map);
 	  $filter['b.type'] = 'user_timeline';
-	  $timelines = $this->twitter_model->ReadTwitterData($filter, 300);
+	  $timelines = $this->twitter_model->ReadTwitterData($filter, 100);
 	  foreach($timelines as $tl){
 	       $tws = array('text' => $tl->text,
 				'post_stream_id' => $tl->post_stream_id,
@@ -147,7 +153,7 @@ class Search extends CI_Controller {
 	  //create twitter direct_messages type
 	  $ret = $this->elasticsearch_model->TypeMapping($this->the_index,'twitter_dms',$tw_mention_map);
 	  unset($filter['b.type']);
-	  $dms = $this->twitter_model->ReadDMFromDb($filter, 400);
+	  $dms = $this->twitter_model->ReadDMFromDb($filter, 100);
 	  foreach($dms as $dm){
 	       $tws = array('text' => $dm->dm_text,
 				'post_stream_id' => $dm->post_stream_id,

@@ -22,7 +22,7 @@ class ajax extends CI_Controller{
     public function LoadFacebookComments(){
 	$this->load->model('campaign_model');
 	$post_id = $this->input->get('post_id');
-	$comment_list = $this->facebook_model->RetriveCommentPostFb(array('a.post_id'=> $post_id), array());
+	$comment_list = $this->facebook_model->RetriveCommentPostFb(array('a.post_id'=> $post_id,'b.comment_id' => 0), array());
 	$product_list = $this->campaign_model->GetProduct(array('parent_id' => null));
 	foreach($product_list as $prod){    
 	    $product_child = $this->campaign_model->GetProduct(array('parent_id' => $prod->id));
@@ -35,7 +35,22 @@ class ajax extends CI_Controller{
 	        $prod->child = $chi;
 	    }
 	}
-	echo $this->load->view('dashboard2/facebook/facebook_comment', array('comment' => $comment_list,
+	
+	//get comments in comments
+	$new_comment_list = array();
+	foreach($comment_list as $r){
+	    $new_comment_list[] = $r;
+	    
+	    $filter = array('b.comment_id' => $r->comment_stream_id);
+	    $comments = $this->facebook_model->GetCommentsInComment($filter);
+	    if($comments){
+		foreach($comments as $c){
+		    $new_comment_list[] = $c;
+		}
+	    }
+	}
+	
+	echo $this->load->view('dashboard2/facebook/facebook_comment', array('comment' => $new_comment_list,
 									     'product_list' => $product_list));
     }
     

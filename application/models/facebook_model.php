@@ -701,10 +701,9 @@ class facebook_model extends CI_Model
 	    $this->db->where($filter);
         }
         
-	
         $this->db->limit(1000);
         $this->db->order_by('a.post_id','desc');
-        return $this->db->get()->result();        
+        return $this->db->get()->result();
     }
     
     public function RetrievePmFB($filter = array() ,$limit = null, $only_assign_case = false){
@@ -903,5 +902,15 @@ class facebook_model extends CI_Model
 	$this->db->from("social_stream_facebook_conversation");
 	$this->db->where('conversation_id', $stream_id);
 	return $this->db->get()->row();
+    }
+    
+    public function GetCommentsInComment($filter){
+	$this->db->select("a.post_id,a.post_content,a.total_comments,b.comment_stream_id,b.attachment,b.from,c.name,b.comment_content,b.created_at, b.user_likes, d.post_stream_id,b.comment_id,e.post_id AS comment_post_id, b.id,e.type as type_stream");
+	$this->db->from("social_stream_fb_post a INNER JOIN
+	    social_stream_fb_comments b ON b.post_id=a.post_id INNER JOIN
+	    fb_user_engaged  c ON c.facebook_id=b.from INNER JOIN social_stream d on d.post_id = b.id LEFT OUTER JOIN
+	    social_stream e ON e.post_stream_id=b.comment_stream_id");
+	$this->db->where($filter);
+	return $this->db->get()->result();
     }
 }

@@ -702,7 +702,7 @@ class facebook_model extends CI_Model
         }
         
 	
-        $this->db->limit(75);
+        $this->db->limit(1000);
         $this->db->order_by('a.post_id','desc');
         return $this->db->get()->result();        
     }

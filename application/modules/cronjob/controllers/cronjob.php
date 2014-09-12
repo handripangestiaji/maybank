@@ -64,7 +64,7 @@ class Cronjob extends CI_Controller {
         foreach($access_tokens as $access_token){
             $post = $this->facebook_model->RetrievePost($access_token->page_id, $access_token->token);
             $this->facebook_model->TransferFeedToDb($post, $access_token->channel );
-        }
+        }   
     }
     
     function FacebookStreamFeed(){

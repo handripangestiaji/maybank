@@ -22,7 +22,7 @@ class ajax extends CI_Controller{
     public function LoadFacebookComments(){
 	$this->load->model('campaign_model');
 	$post_id = $this->input->get('post_id');
-	$comment_list = $this->facebook_model->RetriveCommentPostFb(array('a.post_id'=> $post_id,'b.comment_id' => 0), array());
+	$comment_list = $this->facebook_model->RetriveCommentPostFb(array('a.post_id'=> $post_id), array());
 	$product_list = $this->campaign_model->GetProduct(array('parent_id' => null));
 	foreach($product_list as $prod){    
 	    $product_child = $this->campaign_model->GetProduct(array('parent_id' => $prod->id));

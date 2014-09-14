@@ -66,6 +66,11 @@ class elasticsearch_model extends CI_Model
         return $ret;
     }
     
+    public function Bulk($value){
+        $ret = $this->client->bulk($value);
+        return $ret;
+    }
+    
     public function DeleteIndex($index){
 	$deleteParams['index'] = $index;
 	$this->client->indices()->delete($deleteParams);

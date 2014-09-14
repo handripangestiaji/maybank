@@ -58,7 +58,7 @@ class Search extends CI_Controller {
 	       */
 	  }
 	  
-	  print_r(json_encode($data));
+	  print_r($data);
      }
      
      public function facebook_indexing($channel_id){
@@ -76,21 +76,31 @@ class Search extends CI_Controller {
 	       'c.created_at <=' => $this->date_before
 	    );
 	  $fb_feed = $this->facebook_model->RetrieveFeedFB($filter,0,false);
-	  
-	  foreach($fb_feed as $wp){
-	       $new_wp = array('name' => $wp->name,
-			       'post_id' => $wp->post_id,
-			       'post_content' => $wp->post_content,
-			       'post_stream_id' => $wp->post_stream_id
-			       );
-	       $ret = $this->elasticsearch_model->InsertDoc($this->the_index,'facebook_feed',$wp->post_id,$new_wp);
+	 
+	  if($fb_feed){
+	       $bulkString = '';
+	       foreach($fb_feed as $wp){
+		    $action = array("index" => array('_id' => $wp->post_id));
+		    $actionString = json_encode($action);
+		    $doc = array('name' => $wp->name,
+				   'post_id' => $wp->post_id,
+				   'post_content' => $wp->post_content,
+				   'post_stream_id' => $wp->post_stream_id
+				  );
+		    $bulkString .= "$actionString\n";
+		    $bulkString .= json_encode($doc) . "\n";
+	       }
+	       $new_wp['index'] = $this->the_index;
+	       $new_wp['type'] = 'facebook_feed';
+	       $new_wp['body'] = $bulkString;
+	       $ret = $this->elasticsearch_model->Bulk($new_wp);
 	  }
 	  
 	  //indexing for fb private message
 	  $fb_pm_map = array('messages' => array('type' => 'string'),
 				   'name' => array('type' => 'string'),
 				   'post_stream_id' => array('type' => 'string'),
-				   'post_id' => array('type' => 'long'),
+				   'post_id' => array('type' => 'string'),
 				);
 	  $ret = $this->elasticsearch_model->TypeMapping($this->the_index,'facebook_pm',$fb_pm_map);
 	  $filter = array(
@@ -99,17 +109,30 @@ class Search extends CI_Controller {
 	       'c.created_at <=' => $this->date_before
 	    );
 	  $fb_pm = $this->facebook_model->RetrievePmFB($filter);
-	  foreach($fb_pm as $pm){
-	       $sender = $pm->participant->sender->facebook_id == $pm->social_id ? $pm->participant->to : $pm->participant->sender;
-	       $new_pm = array('messages' => $pm->snippet,
-			       'name' => $sender->name,
-			       'post_stream_id' => $pm->post_stream_id,
-			       'post_id' => $pm->post_id);
-	       $ret = $this->elasticsearch_model->InsertDoc($this->the_index,'facebook_pm',$pm->post_id,$new_pm);
+	  
+	  if($fb_pm){
+	       $bulkString = '';
+	       foreach($fb_pm as $pm){
+		    $sender = $pm->participant->sender->facebook_id == $pm->social_id ? $pm->participant->to : $pm->participant->sender;
+		    $action = array("index" => array('_id' => $pm->post_id));
+		    $actionString = json_encode($action);
+		    $doc = array('messages' => $pm->snippet,
+				   'name' => $sender->name,
+				   'post_stream_id' => $pm->post_stream_id,
+				   'post_id' => $pm->post_id
+				   );
+		    $bulkString .= "$actionString\n";
+		    $bulkString .= json_encode($doc) . "\n";
+	       }
+	       $new_pm['index'] = $this->the_index;
+	       $new_pm['type'] = 'facebook_pm';
+	       $new_pm['body'] = $bulkString;
+	       $ret = $this->elasticsearch_model->Bulk($new_pm);
 	  }
 	  
-	  $fb_index['fb_feed'] = $fb_feed;
-	  $fb_index['fb_pm'] = $fb_feed;
+	  $fb_index['fb_feed'] = count($fb_feed);
+	  $fb_index['fb_pm'] = count($fb_pm);
+	  
 	  return $fb_index;
      }
      
@@ -130,62 +153,106 @@ class Search extends CI_Controller {
 	       );
 	  $filter['b.type'] = 'mentions';
 	  $mentions = $this->twitter_model->ReadTwitterData($filter);
-	  foreach($mentions as $m){
-	       $tws = array('text' => $m->text,
-				'post_stream_id' => $m->post_stream_id,
-				'screen_name' => $m->screen_name,
-				'post_id' => $m->post_id,
-				'name' => $m->name
-				);
-	       $ret = $this->elasticsearch_model->InsertDoc($this->the_index,'twitter_mentions',$m->post_stream_id,$tws);
+	  
+	  if($mentions){
+	       $bulkString = '';
+	       foreach($mentions as $m){
+		    $action = array("index" => array('_id' => $m->post_id));
+		    $actionString = json_encode($action);
+		    $doc = array('text' => $m->text,
+				   'screen_name' => $m->screen_name,
+				   'post_stream_id' => $m->post_stream_id,
+				   'post_id' => $m->post_id,
+				   'name' => $m->name
+				   );
+		    $bulkString .= "$actionString\n";
+		    $bulkString .= json_encode($doc) . "\n";
+	       }
+	       $new_m['index'] = $this->the_index;
+	       $new_m['type'] = 'twitter_mentions';
+	       $new_m['body'] = $bulkString;
+	       $ret = $this->elasticsearch_model->Bulk($new_m);
 	  }
-
+	  
 	  //create twitter homefeed type
 	  $ret = $this->elasticsearch_model->TypeMapping($this->the_index,'twitter_homefeed',$tw_mention_map);
 	  $filter['b.type'] = 'home_feed';
 	  $homefeeds = $this->twitter_model->ReadTwitterData($filter);
-	  foreach($homefeeds as $hf){
-	       $tws = array('text' => $hf->text,
-				'post_stream_id' => $hf->post_stream_id,
-				'screen_name' => $hf->screen_name,
-				'post_id' => $hf->post_id,
-				'name' => $hf->name
-				); 
-	       $ret = $this->elasticsearch_model->InsertDoc($this->the_index,'twitter_homefeed',$hf->post_stream_id,$tws);
+	  
+	  if($homefeeds){
+	       $bulkString = '';
+	       foreach($homefeeds as $hf){
+		    $action = array("index" => array('_id' => $hf->post_id));
+		    $actionString = json_encode($action);
+		    $doc = array('text' => $hf->text,
+				   'screen_name' => $hf->screen_name,
+				   'post_stream_id' => $hf->post_stream_id,
+				   'post_id' => $hf->post_id,
+				   'name' => $hf->name
+				   );
+		    $bulkString .= "$actionString\n";
+		    $bulkString .= json_encode($doc) . "\n";
+	       }
+	       $new_hf['index'] = $this->the_index;
+	       $new_hf['type'] = 'twitter_homefeed';
+	       $new_hf['body'] = $bulkString;
+	       $ret = $this->elasticsearch_model->Bulk($new_hf);
 	  }
 	  
 	  //create twitter senttweets type
 	  $ret = $this->elasticsearch_model->TypeMapping($this->the_index,'twitter_senttweets',$tw_mention_map);
 	  $filter['b.type'] = 'user_timeline';
 	  $timelines = $this->twitter_model->ReadTwitterData($filter);
-	  foreach($timelines as $tl){
-	       $tws = array('text' => $tl->text,
-				'post_stream_id' => $tl->post_stream_id,
-				'screen_name' => $tl->screen_name,
-				'post_id' => $tl->post_id,
-				'name' => $tl->name
-				); 
-	       $ret = $this->elasticsearch_model->InsertDoc($this->the_index,'twitter_senttweets',$tl->post_stream_id,$tws);
+	  
+	  if($timelines){
+	       $bulkString = '';
+	       foreach($timelines as $tl){
+		    $action = array("index" => array('_id' => $tl->post_id));
+		    $actionString = json_encode($action);
+		    $doc = array('text' => $tl->text,
+				   'screen_name' => $tl->screen_name,
+				   'post_stream_id' => $tl->post_stream_id,
+				   'post_id' => $tl->post_id,
+				   'name' => $tl->name
+				   );
+		    $bulkString .= "$actionString\n";
+		    $bulkString .= json_encode($doc) . "\n";
+	       }
+	       $new_tl['index'] = $this->the_index;
+	       $new_tl['type'] = 'twitter_senttweets';
+	       $new_tl['body'] = $bulkString;
+	       $ret = $this->elasticsearch_model->Bulk($new_tl);
 	  }
 	   
 	  //create twitter direct_messages type
 	  $ret = $this->elasticsearch_model->TypeMapping($this->the_index,'twitter_dms',$tw_mention_map);
 	  unset($filter['b.type']);
 	  $dms = $this->twitter_model->ReadDMFromDb($filter);
-	  foreach($dms as $dm){
-	       $tws = array('text' => $dm->dm_text,
-				'post_stream_id' => $dm->post_stream_id,
-				'screen_name' => $dm->screen_name,
-				'post_id' => $dm->post_id,
-				'name' => $dm->name
-				); 
-	       $ret = $this->elasticsearch_model->InsertDoc($this->the_index,'twitter_dms',$dm->post_stream_id,$tws);
+	  
+	  if($dms){
+	       $bulkString = '';
+	       foreach($timelines as $dm){
+		    $action = array("index" => array('_id' => $dm->post_id));
+		    $actionString = json_encode($action);
+		    $doc = array('text' => $dm->dm_text,
+				   'screen_name' => $dm->screen_name,
+				   'post_stream_id' => $dm->post_stream_id,
+				   'post_id' => $dm->post_id,
+				   'name' => $dm->name
+				   );
+		    $bulkString .= "$actionString\n";
+		    $bulkString .= json_encode($doc) . "\n";
+	       }
+	       $new_dm['index'] = $this->the_index;
+	       $new_dm['type'] = 'twitter_dms';
+	       $new_dm['body'] = $bulkString;
+	       $ret = $this->elasticsearch_model->Bulk($new_dm);
 	  }
 	  
-	  $tw_index['mentions'] = $mentions;
-	  $tw_index['homefeeds'] = $homefeeds;
-	  $tw_index['timelines'] = $timelines;
-	  $tw_index['dms'] = $dms;
+	  $tw_index['mentions'] = count($mentions);
+	  $tw_index['homefeeds'] = count($homefeeds);
+	  $tw_index['timelines'] = count($timelines);
+	  $tw_index['dms'] = count($dms);
 	  return $tw_index;
      }
      

@@ -23,6 +23,7 @@ class Search extends CI_Controller {
 	  $this->load->config('search');
 	  $this->the_index = $this->config->item('index_search');
 	  $this->date_after = date("Y-m-d H:i:s",strtotime("-1 hours"));
+	  $this->date_before = date("Y-m-d H:i:s");
 	  
 	  $this->user_role = $this->users_model->get_collection_detail(
 		array('role_collection_id'=>$this->session->userdata('role_id')));
@@ -32,6 +33,14 @@ class Search extends CI_Controller {
      public function indexing(){
 	  //create index
 	  $this->elasticsearch_model->PutIndex($this->the_index);
+	  
+	  if($this->input->get('after') != null){
+	       $this->date_after = $this->input->get('after');
+	  }
+	  
+	  if($this->input->get('before') != null){
+	       $this->date_before = $this->input->get('before');
+	  }
 	  
 	  $channels = $this->account_model->GetChannel();
 	  $data = array();
@@ -63,7 +72,8 @@ class Search extends CI_Controller {
 	  
 	  $filter = array(
 	       'c.channel_id' => $channel_id,
-	       'c.created_at >' => $this->date_after
+	       'c.created_at >=' => $this->date_after,
+	       'c.created_at <=' => $this->date_before
 	    );
 	  $fb_feed = $this->facebook_model->RetrieveFeedFB($filter,0,false);
 	  
@@ -85,7 +95,8 @@ class Search extends CI_Controller {
 	  $ret = $this->elasticsearch_model->TypeMapping($this->the_index,'facebook_pm',$fb_pm_map);
 	  $filter = array(
 	       'c.channel_id' => $channel_id,
-	       'c.created_at >' => $this->date_after
+	       'c.created_at >=' => $this->date_after,
+	       'c.created_at <=' => $this->date_before
 	    );
 	  $fb_pm = $this->facebook_model->RetrievePmFB($filter);
 	  foreach($fb_pm as $pm){
@@ -114,7 +125,8 @@ class Search extends CI_Controller {
 	  $ret = $this->elasticsearch_model->TypeMapping($this->the_index,'twitter_mentions',$tw_mention_map);
 	  $filter = array(
 	       'a.channel_id' => $channel_id,
-	       'a.created_at >' => $this->date_after
+	       'a.created_at >=' => $this->date_after,
+	       'a.created_at <=' => $this->date_before
 	       );
 	  $filter['b.type'] = 'mentions';
 	  $mentions = $this->twitter_model->ReadTwitterData($filter);

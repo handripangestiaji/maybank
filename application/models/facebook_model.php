@@ -701,7 +701,6 @@ class facebook_model extends CI_Model
 	    $this->db->where($filter);
         }
         
-        $this->db->limit(1000);
         $this->db->order_by('b.id','desc');
         return $this->db->get()->result();
     }

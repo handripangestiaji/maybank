@@ -9,6 +9,8 @@ class Routes extends CI_Controller {
     function ShortURL($code){
         $this->load->model('shorturl_model');
 	$short_url = $this->shorturl_model->find(array('short_code' => $code));
+	$params = array("increment" => "increment + 1");
+	$this->shorturl_model->update($code, $params);
         $this->output->set_header("Location: ".$short_url->long_url); 
     }
 }

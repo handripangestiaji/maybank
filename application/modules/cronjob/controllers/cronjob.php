@@ -518,9 +518,6 @@ class Cronjob extends CI_Controller {
             $this->db->where('short_code', $this->input->get('short_url'));
             $row = $this->db->get()->row();
             if($row != null){
-                $this->load->model('shorturl_model');
-                $params = array("increment" => "increment + 1");
-                $this->shorturl_model->update($this->input->get('short_url'), $params);
                 echo json_encode(array(
                     'long_url' => $row->long_url,
                     'short_url' => $this->input->get('short_url')

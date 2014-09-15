@@ -76,20 +76,32 @@ class Search extends CI_Controller {
 	       'c.created_at <=' => $this->date_before
 	    );
 	  $fb_feed = $this->facebook_model->RetrieveFeedFB($filter,0,false);
-	 
+	  
 	  if($fb_feed){
 	       $bulkString = '';
 	       foreach($fb_feed as $wp){
 		    $action = array("index" => array('_id' => $wp->post_id));
 		    $actionString = json_encode($action);
+		    
+		    $comments = array();
+		    if($wp->comments){
+			 foreach($wp->comments as $c){
+			      $comments[] = array('comment_content' => $c->post_content,
+						  'name' => $c->name
+						 );  
+			 }
+		    }
+
 		    $doc = array('name' => $wp->name,
 				   'post_id' => $wp->post_id,
 				   'post_content' => $wp->post_content,
-				   'post_stream_id' => $wp->post_stream_id
+				   'post_stream_id' => $wp->post_stream_id,
+				   'comments' => $comments
 				  );
 		    $bulkString .= "$actionString\n";
 		    $bulkString .= json_encode($doc) . "\n";
 	       }
+	       
 	       $new_wp['index'] = $this->the_index;
 	       $new_wp['type'] = 'facebook_feed';
 	       $new_wp['body'] = $bulkString;

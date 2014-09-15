@@ -9,7 +9,7 @@
         if($post->case[0]->status == 'pending'){
             $buttonItems['case'] = 
             '<button type="button"  item="'.$reply_type.'" class="btn btn-purple btn-resolve" name="action" value="'.$post->case[0]->case_id.'">
-            <i class="icon-check"></i> <span>RESOLVE</span></button> <button type="button" class="btn btn-danger btn-case" name="action" value="reassign">
+            <i class="icon-check"></i> <span>RESOLVE</span></button> <button type="button"  item="'.$reply_type.'" class="btn btn-danger btn-case" name="action" value="reassign">
             <i class="icon-plus"></i> <span>ReAssign</span></button>';
         }
         else{

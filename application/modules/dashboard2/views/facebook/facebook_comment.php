@@ -34,7 +34,19 @@ $comment[$j]->case = !isset($comment[$j]->case) ? null: $comment[$j]->case;
         
         <div class="engagement-comment">
             <p><?php echo CreateUrlFromText($comment[$j]->comment_content); ?></p>
-                
+                <?php
+                        $loop = true;
+                        $last_reply = null;
+                        for($x=$j+1;$x<count($comment);$x++){
+                                if($comment[$x]->comment_id == 0){
+                                        break;
+                                }
+                                if($comment[$x]->page_reply_id){
+                                        $last_reply = $comment[$x];
+                                }
+                        }
+                ?>
+                <p><?php echo $this->load->view('facebook/facebook_reply_indicator', array('comment' => $comment[$j],'last_reply' => $last_reply)) ?></p>
             <p>
                 <?php if(IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Channel_General_Function_Own_Country_Delete') ||
                  IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Channel_General_Function_All_Country_Delete')

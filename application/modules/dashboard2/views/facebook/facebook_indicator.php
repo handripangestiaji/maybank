@@ -25,8 +25,6 @@
     }
     if(count($post->page_reply) == 0 && count($post->case) == 0)
         $indicator['open'] = '<button type="button" class="btn btn-warning btn-mini no-cursor indicator open-thread" >OPEN</button>';
-
-        
     
     foreach($indicator as $button)
         echo $button.' ';

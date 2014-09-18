@@ -22,7 +22,12 @@ class Reports extends MY_Controller {
 	$country_code = IsRoleFriendlyNameExist($this->user_role, 'Reporting_View_All_Country') ?
 	    null : $this->session->userdata('country_code');
 	$data['country_list'] = $this->users_model->get_country($country_code)->result();
-        $this->load->view('reports/index',$data);
+	if(IsRoleFriendlyNameExist($this->user_role, array ('Reporting_User_Performance'))){
+	    $this->load->view('reports/index',$data);
+	}
+	elseif(IsRoleFriendlyNameExist($this->user_role, array ('Reporting_User_Activity'))){
+	    redirect('reports/activity');
+	}
     }
     
     function filter(){

@@ -1,3 +1,5 @@
+<?php $this->user_role = $this->users_model->get_collection_detail(
+		array('role_collection_id'=>$this->session->userdata('role_id'))); ?>
 <style type="text/css">
 	#reportMenu {padding: 10px;}
 	#report {border: 1px solid #ccc}
@@ -14,8 +16,11 @@
 <div class="row-fluid" id="report">
 	<div class="span2" id="reportMenu">
 		<ul class="nav nav-tabs nav-stacked">
-			<li class="active"><a href="<?=site_url('reports/')?>"><i class="icon-chevron-right"></i> User Performance</a></li>
-			<li class=""><a href="<?=site_url('reports/activity')?>"> <i class="icon-chevron-right"></i>  User Activity </a></li>
+			<?php if(IsRoleFriendlyNameExist($this->user_role, array ('Reporting_User_Performance'))){ ?>
+			    <li class="active"><a href="<?php echo site_url('reports/index')?>"><i class="icon-chevron-right"></i> User Performance</a></li>
+			<?php } if(IsRoleFriendlyNameExist($this->user_role, array ('Reporting_User_Activity'))){ ?>
+			    <li class=""><a href="<?php echo site_url('reports/activity') ?>"> <i class="icon-chevron-right"></i>  User Activity </a></li>
+			<?php } ?>
 		</ul>
 	</div>
 	<div class="span10" id="content">

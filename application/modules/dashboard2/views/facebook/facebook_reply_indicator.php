@@ -2,7 +2,6 @@
     $timezone = new DateTimeZone($this->session->userdata('timezone'));
     $indicator = array();
     
-    /*
     if(count($comment->case) > 0){
         $case_date = new DateTime($comment->case[0]->created_at.' UTC');
         $case_date->setTimezone($timezone);
@@ -15,7 +14,6 @@
                                 '<input type="hidden" class="pointer-case" value="'.$comment->case[0]->case_id.'" />'.
                                 '</button>' ;
     }
-    */
     
     if($last_reply && ($comment->comment_id == 0)){
         $reply_date = new DateTime($last_reply->created_at.' UTC');
@@ -26,7 +24,7 @@
                         "</button>";
     }
     
-    if(!$last_reply && ($comment->comment_id == 0))
+    if(!$last_reply && ($comment->comment_id == 0) && (count($comment->case) == 0))
         $indicator['open'] = '<button type="button" class="btn btn-warning btn-mini no-cursor indicator open-thread" >OPEN</button>';
     
     foreach($indicator as $button)

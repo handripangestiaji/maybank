@@ -23,7 +23,8 @@ $come_from =array(
     'twitter' => "Mentions",
     'twitter_dm' => "Direct Message",
     'facebook' => "Wall Post",
-    'facebook_conversation' => 'Private Message'
+    'facebook_conversation' => 'Private Message',
+    'facebook_comment' => 'Reply'
 )
 ?>
 
@@ -32,7 +33,6 @@ $come_from =array(
     <div class="sidebarContent" style="overflow-y: scroll;">
         <div class="sidebarHead pull-left">
             <?php
-            /*print_r($case);*/ 
             if(isset($case)):?>
             <p class="title pull-left total-case">NOTIFICATION&nbsp;<span class="badge">Total </span></p>
             <?php endif;?>
@@ -100,7 +100,6 @@ $come_from =array(
     </div>  
 </div>
 <?php endif?>
-
 <!-- ==================== END OF SIDEBAR TASKS ==================== -->
 
 <!-- ==================== SIDEBAR PROFILE ==================== -->
@@ -143,6 +142,7 @@ $come_from =array(
 <!-- ==================== END OF SIDEBAR PROFILE ==================== -->
 
 <!-- ==================== SIDEBAR UPDATE PASSWORD ==================== -->
+
 <div id="updatePassword">
     <div class="sidebarDivider"></div>
     <div class="sidebarContent">
@@ -230,6 +230,7 @@ $come_from =array(
     </div>
 </div>
 <!-- ==================== END OF SIDEBAR UPDATE PROFILE ==================== -->
+
 <style type='text/css'>
     #btn_update
     {

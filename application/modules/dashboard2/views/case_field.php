@@ -53,11 +53,15 @@ if($posts){
             ?>
            </div>
            <br clear="all" />
+           <?php if($posts[$i]->social_stream_type != 'facebook_comment') { ?>
            <button href="#modalConfirm-<?php echo isset($posts[$i]->social_stream_post_id) ? $posts[$i]->social_stream_post_id : "" ?>" data-toggle="modal"
             class="btn btn-small btn-purple btn-add-related <?php echo $posts[$i]->social_stream_type?>">Add Related Conversation <?php if($related>1) echo $related?></button>
+            <?php } ?>
             <?php }else{?>
+            <?php if($posts[$i]->social_stream_type != 'facebook_comment') { ?>
                 <button href="#modalConfirm-<?php echo isset($posts[$i]->social_stream_post_id) ? $posts[$i]->social_stream_post_id : "" ?>" data-toggle="modal"
                 class="btn btn-small btn-purple btn-add-related <?php echo $posts[$i]->social_stream_type?>">Add Related Conversation</button>
+            <?php } ?>
             <?php }?>
             
             

@@ -415,6 +415,34 @@ $(function(){
         }
     });
     
+    $(this).on('click', '.btn-inner-resolve', function(e){
+        var btnResolve = $(this);
+        confirmed = prompt("Resolved Message?", "","Are you sure to solve this case");
+        e.preventDefault();
+        if(confirmed){
+            btnResolve.attr("disabled", "disabled");
+            $.ajax({
+               "url" : BASEURL + "case/mycase/ResolveCase",
+               "type" : "POST",
+               "data" : "case_id=" + btnResolve.val()+"&solved_message="+confirmed,
+               "success" : function(response){
+                    if(response.success){
+                        btnResolve.siblings('.btn-inner-case').remove();
+                        btnResolve.removeAttr("disabled").html('<i class="icon-plus"></i> <span>CASE</span>').removeClass('btn-resolve btn-purple').addClass('btn-case btn-danger');
+                        btnResolve.closest('.engagement-comment').find('.btn-purple:first').html('Case ID #' + response.result.case_id + ' solved by ' + response.result.solved_by.display_name).removeClass('btn-purple').addClass('btn-inverse');
+                        if(btnResolve.hasClass('popup'))
+                            window.location.reload();
+                    }
+
+               },
+               "error" : function(){
+                    alert("There is something error when resolve this case.")
+               }
+        
+            });
+        }
+    });
+    
     $(this).on('click', '.btn-resolve_fb', function(e){
         var btnResolve = $(this);
         var user_id= $(" input[name=user_id]").val();

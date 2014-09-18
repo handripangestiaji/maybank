@@ -55,7 +55,6 @@
 	<script src="<?php echo base_url('media/js/v'.$this->config->item('version').'/kamarelimprove.js')?>"></script>                            <!-- main project js file -->
 	<script src="<?php echo base_url('media/js/date.format.js')?>"></script>
     </head>
-	
 	<body class="dashboard" onload="">
 		<!--[if lt IE 7]>
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
@@ -63,13 +62,13 @@
         
         <!-- ==================== TOP MENU ==================== -->
         <div class="navbar navbar-inverse navbar-fixed-top">
-        	<?php echo $this->load->view('top_menu') ?>
+	    <?php echo $this->load->view('top_menu') ?>
         </div>
         <!-- ==================== END OF TOP MENU ==================== -->
         
 		<!-- ==================== SIDEBAR ==================== -->
         <div class="hiddenContent">
-            <?php echo $this->load->view('sidebar')?>
+            <?php $this->load->view('sidebar') ?>
         </div>
         <!-- ==================== END OF SIDEBAR ==================== -->
         
@@ -133,7 +132,6 @@
                 
         </div>
         <!-- ==================== END OF PAGE CONTENT ==================== -->
-        
         
 	
     </body>

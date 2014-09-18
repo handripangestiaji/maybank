@@ -39,6 +39,11 @@ class ajax extends CI_Controller{
 	//get comments in comments
 	$new_comment_list = array();
 	foreach($comment_list as $r){
+	    $case = $this->case_model->LoadCase(array('a.post_id' => $r->social_stream_post_id));
+	    $r->case = null;
+	    if($case){
+		$r->case = $case;
+	    }
 	    $new_comment_list[] = $r;
 	    
 	    $filter = array('b.comment_id' => $r->comment_stream_id);
@@ -130,6 +135,11 @@ class ajax extends CI_Controller{
 	else if($this->input->get('reply_type') == 'direct_messages'){
 	    $filter['a.post_id'] = $this->input->get('post_id');
 	    $fb_feed = $this->twitter_model->ReadDMFromDb($filter,1);
+	}
+	else if($this->input->get('reply_type') == 'comment'){
+	    $filter['b.id'] = $this->input->get('post_id');
+	    $fb_feed = $this->facebook_model->RetriveCommentPostFb($filter, null);
+	    $fb_feed[0]->post_id = $fb_feed[0]->social_stream_post_id;
 	}
 	
 	$data['posts'] = $fb_feed;        

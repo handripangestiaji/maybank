@@ -61,6 +61,30 @@ $comment[$j]->case = !isset($comment[$j]->case) ? null: $comment[$j]->case;
                         <button type="button" class="btn btn-primary btn-engagement-reply btn-mini btn-reply nested_reply" ><i class="icon-mail-reply"></i></button>
                     <?php endif; ?>
                 <?php endif;?>
+                <?php
+                if(!$comment[$j]->comment_id){
+                    if(count($comment[$j]->case) == 0){
+                        $buttonItems['case'] = '<button type="button" item="comment" comment-id='.$comment[$j]->comment_post_id.' class="btn btn-danger btn-inner-case" name="action" value="case"><i class="icon-plus"></i> <span>CASE</span></button> ';
+                    }
+                    else{
+                        if($comment[$j]->case[0]->status == 'pending'){
+                            $buttonItems['case'] = 
+                            '<button type="button"  item="comment" class="btn btn-purple btn-inner-resolve" name="action" value="'.$comment[$j]->case[0]->case_id.'">
+                            <i class="icon-check"></i> <span>RESOLVE</span></button> <button type="button"  item="comment" comment-id='.$comment[$j]->comment_post_id.' class="btn btn-danger btn-inner-case" name="action" value="reassign">
+                            <i class="icon-plus"></i> <span>ReAssign</span></button>';
+                        }
+                        else{
+                            $buttonItems['case'] = '<button type="button" class="btn btn-danger btn-inner-case" name="action" item="comment" value="new_case" comment-id='.$comment[$j]->comment_post_id.'>
+                                                    <i class="icon-plus"></i> <span>Case</span></button> ';
+                        }
+                    }
+                    $buttonItems['case'] = IsRoleFriendlyNameExist($this->user_role, array ('Social Stream_Case_All_Country_AssignReassignResolved',
+                                                                                'Social Stream_Case_Own_Country_AssignReassignResolved')) ? $buttonItems['case'] : '';
+                    $buttonItems['case'] = IsRoleFriendlyNameExist($this->user_role, 'Social Stream_Case_All_Country_AssignReassignResolved') ? $buttonItems['case'] : '';
+                    foreach($buttonItems as $item)
+                        echo $item.' ';
+                }
+                ?>
             </p></h4>
             
             <div class="fb-reply-engagement-field reply-field hide">

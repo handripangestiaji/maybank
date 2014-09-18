@@ -775,7 +775,7 @@ $(function(){
                 $(this).on('click','.btn-engagement-reply',
                     function() {
                         $(this).parent().siblings('.fb-reply-engagement-field').show();
-                        $(this).parent().siblings('.case-engagement-field').hide();
+                        $(this).parent().siblings('.case-field').hide();
                     }
                 );
                 
@@ -835,6 +835,56 @@ $(function(){
                         
                         $(this).closest('h4').siblings('.case-field').show();
                         $(this).closest('h4').siblings('.case-field').find("input[name=type]").val($(this).val());
+                    }
+                );
+                
+                $(this).on('click','.btn-inner-case',
+                    function() {
+                        $(this).closest('p').siblings('.reply-field').hide();
+                        $(this).closest('p').siblings('.dm-field').hide();
+                        $button = $(this);
+                        if($(this).hasClass('nested_reply')) return;
+                        
+                        if($(this).parent().siblings('.engagement').is(":visible"))
+                            $(this).parent().siblings('.reply-field').slideUp('slow');
+                        else{
+                             $.ajax({
+                                "url" : BASEURL + "dashboard2/ajax/LoadCase",
+                                "data" : {
+                                    post_id : $(this).attr('comment-id'),
+                                    reply_type : $(this).attr('item')
+                                },
+                                "type" : "GET",
+                                "success" : function(response){
+                                    if(response != '')
+                                        $button.closest('.engagement-comment').find('.case-field').html(response);
+                                    else
+                                        $button.closest('.engagement-comment').find('.case-field img').hide();
+                                    $button.BindMultipleSelect();
+                                    var id =  $button.closest('.engagement-comment').find('.case-field').find("select[name=assign_to]").attr('id');
+                                    $('#' + id).multiselect({
+                                        buttonText: function(options, select) {
+                                            if (options.length == 0) {
+                                                return 'None selected <b class="caret"></b>';
+                                            }
+                                            else if (options.length > 1) {
+                                                return options.length + ' selected <b class="caret"></b>';
+                                            }
+                                            else {
+                                                var selected = '';
+                                                options.each(function() {
+                                                    selected += $(this).text() + ', ';
+                                                });
+                                                return selected.substr(0, selected.length -2) + ' <b class="caret"></b>';
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                       
+                        $(this).closest('.engagement-comment').find('.case-field').show();
+                        $(this).closest('.engagement-comment').find('.case-field').find("input[name=type]").val($(this).val());
                     }
                 );
                 
@@ -2584,6 +2634,7 @@ $.fn.ToCase = function(type){
     $('#caseNotification').hide();
     $('#caseNotification .btn-send').removeClass('btn-send-reply btn-send-msg');
     $(this).ResetCaseNotification();
+    
     $.ajax({
         'url' : BASEURL + 'case/mycase/ReadCase',
         'type' : 'GET',
@@ -2718,7 +2769,7 @@ $.fn.ToCase = function(type){
                    '<br clear="all"/>' +
                '</li>';
             }
-            else{
+            else if(response.type == 'facebook conversation'){
                 $('#caseNotification .btn-send').attr('type','button');
                 img = '';
                 myDate = new timezoneJS.Date(response.main_post.post_date + " +0000");
@@ -2740,6 +2791,40 @@ $.fn.ToCase = function(type){
                 channel_type = "Private Message";
                 $('#caseNotification .data-type').val('reply_facebook_pm');
                 $('#caseNotification .btn-send').addClass('btn-send-msg');
+            }
+            else if(response.type == 'facebook comment'){
+                $('#caseNotification .image-upload').show();
+                $('#caseNotification .btn-send').attr('type','button');
+                $('#caseNotification .reply-fb-char-count').html('2000');
+                channel_type = 'Reply';
+                $('#caseNotification .btn-send').addClass('btn-send-reply');
+                $('#caseNotification .data-type').val('reply_facebook');
+                $('#caseNotification .twitter-userid').val('');
+                var img = '';
+                myDate = new timezoneJS.Date(response.related_conversation[0].facebook_data.created_at + " +0000");
+                myDate.setTimezone(timezone.name());
+                if(response.related_conversation[0].attachment != null){
+                    if(response.main_post.attachment.media.length > 0){
+                        if(response.main_post.attachment.media[0].type == 'photo')
+                        img = '<img src="'+BASEURL+'dashboard2/media_stream/SafePhoto?photo=' +
+                        response.main_post.attachment.media[0].src +
+                        '" style="height:200px" /> <br />';
+                        else if(response.main_post.attachment.media[0].type == 'link')
+                            img = '<br />';
+                    }
+                }
+                
+                $template2 = '<li style="display: block;">' +
+                '<img src="'+ BASEURL + 'dashboard2/media_stream/SafePhoto?photo=https://graph.facebook.com/' + response.related_conversation[0].facebook_data.facebook_id  + '/picture" alt="" style="height: 40px;margin: 6px 10px" class="left" />' + 
+                   '<p style="padding: 0px 2px;margin: 2px 5px;width:80%" class="left">' + 
+                       '<span class="author" style="font-weight:600;padding:0;">' + response.related_conversation[0].facebook_data.name + '</span>: <span class="cyanText" style="text-transform:capitalize;"> Reply</span> ' +
+                       '<span class="created-time">' + dateFormat(myDate, "mmmm dS, yyyy h:MM TT")  +
+                       '</span> <br />'+
+                       '<span class="text">'+ linkify(response.related_conversation[0].facebook_data.comment_content) + '</span><br />' +
+                       img +
+                   '</p>' + 
+                   '<br clear="all"/>' +
+               '</li>';
             }
             $('#caseNotification .type-post').html(response.channel.name + " | " + channel_type );
             $('#caseNotification .content-original-post').html($template2);

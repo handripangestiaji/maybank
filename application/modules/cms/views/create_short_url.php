@@ -41,7 +41,7 @@
                                 <label class="control-label">Campaign<span class="redText"> *</span></label>
                                 <div class="controls">
                                     <select id="uniqueSelect" name="shorturl[campaign_id]">
-                                        <option value="">--Select A Campaign--</option>
+                                        <option value="">- Select A Campaign -</option>
                                         <?php if($campaigns): ?>
                                                 <?php $i=1;?>
                                                 <?php foreach($campaigns as $v): ?>
@@ -105,7 +105,7 @@
                                 <label class="control-label">Product<span class="redText"> *</span></label>
                                 <div class="controls">
                                     <select name="shorturl[product_id]">
-                                        <option value="">--None Selected--</option>
+                                        <option value="">None selected</option>
 					<?php foreach($product_list as $product):?>
 					    <?php
 						if(isset($product->child)){ ?>

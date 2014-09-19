@@ -871,6 +871,11 @@ ul.tagit{
 	background-image: none;
 }
 
+.cms-table option{background: rgb(255,255,255); color:#333; font-size: 12px; font-weight: normal;}
+.cms-table optgroup{background-color: #fff; text-decoration: underline;}
+.cms-table select{width: auto; font-family: "Open Sans"; font-size: 13px;}
+.cms-table .multiselect{width: auto; font-family: "Open Sans"; font-size: 13px;}
+
 .floatingBox > div.campaignForm{
 	border: solid 1px #C9C9C9;
 	background-color: #F7F7F7;

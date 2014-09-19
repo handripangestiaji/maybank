@@ -76,10 +76,10 @@
         <!-- ==================== MAIN MENU ==================== -->
         <div class="mainmenu">
             <?php 
-				if(session_id() == NULL){
-					echo $this->load->view('menu');
-				}
-			?>
+		    if(session_id() == NULL){
+			    echo $this->load->view('menu');
+		    }
+	    ?>
         </div>
         <!-- ==================== END OF MAIN MENU ==================== -->
         

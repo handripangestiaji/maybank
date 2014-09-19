@@ -14,15 +14,12 @@
  
 <div class="row-fluid" id="report" style="width: 100%; margin: 0px auto;" >
     <div class="span2" id="reportMenu">
-	    <ul class="nav nav-tabs nav-stacked">
-		    <li class=""><a href="<?php echo site_url('reports/index')?>"><i class="icon-chevron-right"></i> User Performance</a></li>
-		    <li class="active"><a href="#"> <i class="icon-chevron-right"></i>  User Activity </a></li>
-	    </ul>
-    </div>
+	<?php $this->load->view('reports/reports_menu'); ?>
+	</div>
         
     <div class="span10" id="content">
 	<div class="row-fluid">
-	    <h3 class="span3">User Activity</h3>
+	    <h2 class="span3">User Activity</h2>
 	    <div class="span8 offset1" id="reportDatePicker">
 			<div class="input-daterange row">
 				<div class="control-group info span5" >

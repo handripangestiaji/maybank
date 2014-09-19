@@ -37,18 +37,25 @@ class Reports_model extends CI_Model
 	    $where_case_type = "and c.case_type = '".$filter['case_type']."'";
 	}
 	
+	if($filter['user'] == 'All' || $filter['user'] == null){
+	    $where_user_id = 'and c.solved_by is not null';
+	}
+	else{
+	    $where_user_id = "and c.solved_by = '".$filter['user']."'";
+	}
+	
 	//$ug_id = $ug_id == null || $ug_id == 'All'? 'null' : "'$ug_id'";
 	//$sql_report = "call sp_ReportPerformance('$channel_id', $ug_id, '$user_id', '$date_start', '$date_finish');";
 	
 	$date_start = str_replace('/', '-', $filter['date_start']);
 	$date_finish = str_replace('/', '-', $filter['date_finish']);
 	
-	$sql_report = "SELECT c.created_at, cp.id, ss.type, c.solved_at
+	$sql_report = "SELECT c.created_at, cp.id, ss.type, c.solved_at, u.display_name, ug.group_name
 FROM `case` c inner join social_stream ss on c.post_id = ss.post_id
 	inner join content_products cp on cp.id = c.content_products_id
 	inner join channel ch on ch.channel_id = ss.channel_id
 	inner join (user u  inner join user_group ug on u.group_id = ug.group_id) on u.user_id = c.created_by 
-WHERE ss.channel_id = ".$filter['channel_id']." ".$where_group_id." ".$where_case_type." and c.created_at >= '".$date_start." 00:00:00' and c.created_at <= '".$date_finish." 23:59:59';";
+WHERE ss.channel_id = ".$filter['channel_id']." ".$where_group_id." ".$where_case_type." ".$where_user_id." and c.created_at >= '".$date_start." 00:00:00' and c.created_at <= '".$date_finish." 23:59:59';";
 	$q = $this->db->query($sql_report);
 	$references_report = $q->result();
 	return $references_report;
@@ -564,18 +571,25 @@ WHERE ss.channel_id = ".$filter['channel_id']." ".$where_group_id." ".$where_cas
 	    $where_case_type = "and r.".$field3." = '".$filter['case_type']."'";
 	}
 	
+	if($filter['user'] == 'All' || $filter['user'] == null){
+	    $where_user_id = 'and r.user_id is not null';
+	}
+	else{
+	    $where_user_id = "and r.user_id = '".$filter['user']."'";
+	}
+	
 	$date_start = str_replace('/', '-', $filter['date_start']);
 	$date_end = str_replace('/', '-', $filter['date_finish']);
 	
 	//$date_start = DateTime::createFromFormat('Y/m/d', $filter['date_start']);
 	//$date_finish = DateTime::createFromFormat('Y/m/d', $filter['date_finish']);
 
-	$query = "SELECT ss.post_id, ss.created_at, cp.id, r.created_at as reply_created_at, ss.type
+	$query = "SELECT ss.post_id, ss.created_at, cp.id, r.created_at as reply_created_at, ss.type, u.display_name, ug.group_name
 FROM social_stream ss inner join ".$table." r on ss.post_id = r.".$field."
 	inner join content_products cp on cp.id = r.".$field2."
 	inner join channel ch on ch.channel_id = ss.channel_id
 	inner join (user u inner join user_group ug on u.group_id = ug.group_id) on u.user_id = r.user_id 
-WHERE ss.channel_id = ".$filter['channel_id']." ".$where_case_type." ".$where_group_id." and r.created_at >= '".$date_start." 00:00:00' and r.created_at <= '".$date_end." 23:59:59';";
+WHERE ss.channel_id = ".$filter['channel_id']." ".$where_case_type." ".$where_group_id." ".$where_user_id." and r.created_at >= '".$date_start." 00:00:00' and r.created_at <= '".$date_end." 23:59:59';";
 
 	return $this->db->query($query)->result();
     }

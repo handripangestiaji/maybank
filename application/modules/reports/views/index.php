@@ -28,18 +28,28 @@
 			<div class="span7 offset3" id="reportDatePicker">
 				
 				<div class="input-daterange row">
-					<div class="control-group info span5" >
+					<div class="control-group info span3" >
 						<label class="control-label" for="inputWarning">Date Start</label>
 						<div class="controls">
 						<input value="<?php echo date("Y/m/d",strtotime("-3 months")); ?>" id="dateStart" />
 						<span class="help-inline"></span>
 						</div>
 					</div>
-					<div class="control-group info span5">
+					<div class="control-group info span3">
 						<label class="control-label" for="inputWarning">Date Finish</label>
 						<div class="controls">
 						<input value="<?php echo date("Y/m/d")?>" id="dateFinish"/>
 						<span class="help-inline"></span>
+						</div>
+					</div>
+					<div class="control-group info span3">
+						<label class="control-label">Type</label>
+						<div class="controls">
+							<select name="type" class="span8" id="reportType">
+								<option value="case">Case</option>
+								<option value="engagement">Engagement</option>
+							</select>
+							<span class="help-inline"></span>
 						</div>
 					</div>
 					<div class="span2" style="padding: 30px 0 0"> <button id="reportCreate" class="btn  btn-primary" type="button" id="btnReport" data-loading-text="Loading..."><i class=" icon-filter"></i> <span>Create</span></button></div>
@@ -72,10 +82,8 @@
 				</select>
 			</div>
 			<div class="span3">
-				<label class="span4">Type</label>
-				<select name="type" class="span8" id="reportType">
-					<option value="case">Case</option>
-					<option value="engagement">Engagement</option>
+				<label class="span6">User</label>
+				<select name="user" class="span6" id="reportUserList" disabled="disabled">
 				</select>
 			</div>
 		</div>

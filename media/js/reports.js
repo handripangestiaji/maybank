@@ -45,7 +45,9 @@ $(function(){
                     }));
                 $('#reportUserGroup').removeAttr('disabled');
             }
-        })
+        });
+        $('#reportUserList').html('');
+        $('#reportUserList').attr('disabled','disabled');
     });
     
     
@@ -86,6 +88,7 @@ $(function(){
                 'date_finish' : $('#dateFinish').val(),
                 'type' : $('#reportType').val(),
                 'case_type' : $('#caseType').val(),
+                'user' : $('#reportUserList').val()
             },
             "type" : "POST",
             "success" : function(response){

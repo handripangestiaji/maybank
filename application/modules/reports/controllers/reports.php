@@ -12,7 +12,10 @@ class Reports extends MY_Controller {
 	if(!$this->session->userdata('user_id'))
 	    redirect('');
 	
-	if(!IsRoleFriendlyNameExist($this->user_role, array ('Reporting_View', 'Reporting_Download'))){
+	if((!IsRoleFriendlyNameExist($this->user_role, array('Reporting_View_Current_Channel'))) &&
+	   (!IsRoleFriendlyNameExist($this->user_role, array('Reporting_View_Own_Country'))) &&
+	   (!IsRoleFriendlyNameExist($this->user_role, array('Reporting_View_All_Country')))
+	   ){
 	    redirect('');
 	}
     }

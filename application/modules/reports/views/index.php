@@ -15,13 +15,7 @@
 
 <div class="row-fluid" id="report">
 	<div class="span2" id="reportMenu">
-		<ul class="nav nav-tabs nav-stacked">
-			<?php if(IsRoleFriendlyNameExist($this->user_role, array ('Reporting_User_Performance'))){ ?>
-			    <li class="active"><a href="<?php echo site_url('reports/index')?>"><i class="icon-chevron-right"></i> User Performance</a></li>
-			<?php } if(IsRoleFriendlyNameExist($this->user_role, array ('Reporting_User_Activity'))){ ?>
-			    <li class=""><a href="<?php echo site_url('reports/activity') ?>"> <i class="icon-chevron-right"></i>  User Activity </a></li>
-			<?php } ?>
-		</ul>
+		<?php $this->load->view('reports/reports_menu'); ?>
 	</div>
 	<div class="span10" id="content">
 		<div class="alert alert-block span12" style="display: none">
@@ -30,7 +24,7 @@
 				<div class="help-inline"></div>
 			</div>
 		<div class="row-fluid">
-			<h1 class="span2">Performance</h1>
+			<h2 class="span2">Performance</h2>
 			<div class="span7 offset3" id="reportDatePicker">
 				
 				<div class="input-daterange row">

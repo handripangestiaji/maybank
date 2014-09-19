@@ -123,6 +123,7 @@ $(function(){
                 'date_finish' : $('#dateFinish').val(),
                 'type' : $('#reportType').val(),
                 'case_type' : $(this).val(),
+                'user' : $('#reportUserList').val()
             },
             "type" : "POST",
             "success" : function(response){

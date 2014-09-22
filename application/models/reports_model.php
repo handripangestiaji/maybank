@@ -220,7 +220,7 @@ WHERE ss.channel_id = ".$filter['channel_id']." ".$where_group_id." ".$where_cas
 	$count =  $this->db->count_all_results();
 	return $count;
     }
-    
+
     function generate_report_activity($date){
 	//read from all the table which contain created_at field must larger than the date
 	$now = date('Y-m-d H:i:s');
@@ -638,5 +638,33 @@ WHERE ss.channel_id = ".$filter['channel_id']." ".$where_case_type." ".$where_gr
     
     public function destroy_report_activity(){
 	$this->db->empty_table('report_activity');
+    }
+    
+    public function getEngagementNotPageReply($filter){
+	$channel = $this->getChannelByChannelId($filter['channel_id']);
+	
+	if($channel->connection_type == 'facebook'){
+	    $table = 'page_reply';
+	    $field = 'social_stream_post_id';
+	    $types = array('facebook_comment', 'facebook_conversation');
+	}
+	elseif($channel->connection_type == 'twitter'){
+	    $table = 'twitter_reply';
+	    $field = 'reply_to_post_id';
+	    $types = array('twitter', 'twitter_dm');
+	}
+	
+	$date_start = str_replace('/', '-', $filter['date_start']);
+	$date_end = str_replace('/', '-', $filter['date_finish']);
+	
+	foreach($types as $type){ 
+	    $query = "SELECT ss.post_id, ss.post_stream_id, ss.`type`, ss.created_at
+	    FROM social_stream ss left outer join ".$table." r on ss.post_id = r.".$field."
+	    WHERE ss.`type` = '".$type."' and r.".$field." is null and ss.channel_id = ".$filter['channel_id']." and ss.created_at >= '".$date_start." 00:00:00' and ss.created_at <= '".$date_end." 23:59:59';";
+	    
+	    $engagements[$type] = $this->db->query($query)->result();
+	}
+	
+	return $engagements;
     }
 }

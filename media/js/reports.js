@@ -161,7 +161,13 @@ $(function(){
     }
     
     $.fn.createReportTable = function(response){
-        console.log(response);
+        $('#table_title').html('Case');
+        $('.td_total').show();
+        $('.total_engagement_received').hide();
+        $('#th_cat_filter').attr('colspan',3);
+        $('#th_wall_post').attr('colspan',3);
+        $('#th_pm').attr('colspan',3);
+        $('#total_replied').html('Total');
         $(this).find("span").html('Create').removeAttr('disabled');
         
         var parent_array_id = 0;
@@ -238,26 +244,33 @@ $(function(){
     }
 
     $.fn.createReportTableEngagement = function(response){
+        $('#table_title').html('Engagement');
+        $('.td_total').hide();
+        $('.total_engagement_received').show();
+        $('#th_cat_filter').attr('colspan',2);
+        $('#th_wall_post').attr('colspan',2);
+        $('#th_pm').attr('colspan',2);
+        $('#total_replied').html('Total Replied');
         $(this).find("span").html('Create').removeAttr('disabled');
         
         var parent_array_id = 0;
         if (response.status == 'success') {
             for(var i=0; i< response.product_list.length; i++){
-                var summary = firstLane = secondLane = "<td colspan='3'>No Result</td>" ;
-                firstLane = "<td colspan='3' class='summary'>No Result</td>";
-                secondLane = "<td colspan='3' class='summary'>No Result</td>";
+                var summary = firstLane = secondLane = "<td colspan='2'>No Result</td>" ;
+                firstLane = "<td colspan='2' class='summary'>No Result</td>";
+                secondLane = "<td colspan='2' class='summary'>No Result</td>";
                 
                 if(response.product_list[i].parent_id > 0){
                     if (response.product_list[i].count_engagement_total != 0){
-                        summary = "<td>" + response.product_list[i].count_engagement_total + "</td><td>" + response.product_list[i].count_engagement_total + "</td><td>" + response.product_list[i].avg_respond_time_total_string + "</td>";
+                        summary = "<td>" + response.product_list[i].count_engagement_total + "</td><td>" + response.product_list[i].avg_respond_time_total_string + "</td>";
                     }
                     
                     if (response.product_list[i].count_engagement_wall_post != 0) {
-                        firstLane = "<td>" + response.product_list[i].count_engagement_wall_post + "</td><td>" + response.product_list[i].count_engagement_wall_post + "</td><td>" + response.product_list[i].avg_respond_time_wall_post_string + "</td>";
+                        firstLane = "<td>" + response.product_list[i].count_engagement_wall_post + "</td><td>" + response.product_list[i].avg_respond_time_wall_post_string + "</td>";
                     }
                     
                     if (response.product_list[i].count_engagement_pm != 0) {
-                        secondLane = "<td>" + response.product_list[i].count_engagement_pm + "</td><td>" + response.product_list[i].count_engagement_pm + "</td><td>" + response.product_list[i].avg_respond_time_pm_string + "</td>";
+                        secondLane = "<td>" + response.product_list[i].count_engagement_pm + "</td><td>" + response.product_list[i].avg_respond_time_pm_string + "</td>";
                     }
                     
                     $('#report .table tbody').append('<tr id="pId' + response.product_list[i].id + '" class="pId'+ response.product_list[i].parent_id +  '"><td>' +
@@ -265,15 +278,15 @@ $(function(){
                 }
                 else{
                     if (response.parents[parent_array_id].count_engagement_total != 0){
-                        summary = "<td>" + response.parents[parent_array_id].count_engagement_total + "</td><td>" + response.parents[parent_array_id].count_engagement_total + "</td><td>" + response.parents[parent_array_id].avg_respond_time_total_string + "</td>";
+                        summary = "<td>" + response.parents[parent_array_id].count_engagement_total + "</td><td>" + response.parents[parent_array_id].avg_respond_time_total_string + "</td>";
                     }
                     
                     if (response.parents[parent_array_id].count_engagement_wall_post != 0){
-                        firstLane = "<td>" + response.parents[parent_array_id].count_engagement_wall_post + "</td><td>" + response.parents[parent_array_id].count_engagement_wall_post + "</td><td>" + response.parents[parent_array_id].avg_respond_time_wall_post_string + "</td>";
+                        firstLane = "<td>" + response.parents[parent_array_id].count_engagement_wall_post + "</td><td>" + response.parents[parent_array_id].avg_respond_time_wall_post_string + "</td>";
                     }
                     
                     if (response.parents[parent_array_id].count_engagement_pm != 0){
-                        secondLane = "<td>" + response.parents[parent_array_id].count_engagement_pm + "</td><td>" + response.parents[parent_array_id].count_engagement_pm + "</td><td>" + response.parents[parent_array_id].avg_respond_time_pm_string + "</td>";
+                        secondLane = "<td>" + response.parents[parent_array_id].count_engagement_pm + "</td><td>" + response.parents[parent_array_id].avg_respond_time_pm_string + "</td>";
                     }
                     
                     $('#report .table tbody').append('<tr id="pId' + response.product_list[i].id + '" class="pId'+ response.product_list[i].parent_id +  '"><td><strong>' +
@@ -304,6 +317,13 @@ $(function(){
             $('#report .table tfoot .sum7').html(response.all.engagement_pm);
             $('#report .table tfoot .sum8').html(response.all.engagement_pm);
             $('#report .table tfoot .sum9').html(response.all.avg_respond_time_pm);
+            
+            $('#total_engagement_received_value').html(response.customer_engagement.count_ce);
+            $('#total_wall_post_engagement_received_value').html(response.customer_engagement.count_ce_wall_post);
+            $('#total_pm_engagement_received_value').html(response.customer_engagement.count_ce_pm);
+            $('#total_unattended_value').html(response.unattended.count_total);
+            $('#total_wall_post_unattended_value').html(response.unattended.count_wall_post);
+            $('#total_pm_unattended_value').html(response.unattended.count_pm);
         }
         else{
             $('#report .table tbody').html('<tr><td colspan="11" style="text-align: center">No Result</td></tr>');

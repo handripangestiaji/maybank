@@ -416,7 +416,7 @@ class report_ajax extends CI_Controller {
                                 elseif($ce[0]->type == 'facebook_conversation' || $ce[0]->type == 'twitter_dm'){
                                     if($ce[0]->type == 'facebook_conversation'){
                                         $allConv = $this->reports_model->getFbConversationByChannelId($this->input->post('channel_id'),$this->input->post('date_start'), $this->input->post('date_finish'));    
-                                        $count_ce_pm = count($allConv) - count($all->engagement_pm);
+                                        $count_ce_pm = count($allConv) - $all->engagement_pm;
                                     }else{
                                         $count_ce_pm = count($ce);
                                     }

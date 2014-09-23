@@ -637,6 +637,20 @@ WHERE ss.channel_id = ".$filter['channel_id']." ".$where_case_type." ".$where_gr
 	return $this->db->get()->result();
     }
     
+    public function getFbConversationByChannelId($channel_id, $date_start, $date_finish){
+	$date_start = str_replace('/', '-', $date_start);
+	$date_finish = str_replace('/', '-', $date_finish);
+	
+	$this->db->select('*');
+	$this->db->from('social_stream');
+	$this->db->join('social_stream_facebook_conversation_detail','social_stream.post_id = social_stream_facebook_conversation_detail.conversation_id');
+        $this->db->where('channel_id',$channel_id);
+	$this->db->where('social_stream_facebook_conversation_detail.created_at > ', $date_start." 00:00:00");
+	$this->db->where('social_stream_facebook_conversation_detail.created_at < ', $date_finish." 23:59:59");
+	$this->db->order_by('social_stream_facebook_conversation_detail.created_at','desc');
+	return $this->db->get()->result();
+    }
+    
     public function destroy_report_activity(){
 	$this->db->empty_table('report_activity');
     }

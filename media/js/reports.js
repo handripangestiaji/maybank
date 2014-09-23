@@ -240,6 +240,13 @@ $(function(){
             $('#report .table tfoot .sum7').html(response.all.cases_pm);
             $('#report .table tfoot .sum8').html(response.all.cases_pm_resolved);
             $('#report .table tfoot .sum9').html(response.all.avg_respond_time_pm);
+            
+            $('#total_engagement_received_value').html(0);
+            $('#total_wall_post_engagement_received_value').html(0);
+            $('#total_pm_engagement_received_value').html(0);
+            $('#total_unattended_value').html(0);
+            $('#total_wall_post_unattended_value').html(0);
+            $('#total_pm_unattended_value').html(0);
         }
         else{
             $('#report .table tbody').html('<tr><td colspan="11" style="text-align: center">No Result</td></tr>');
@@ -314,13 +321,13 @@ $(function(){
                     $(this).html('Show');
             });
             
-            $('#report .table tfoot .sum1').html(response.all.engagement_total);
+            $('#report .table tfoot .sum1').html(0);
             $('#report .table tfoot .sum2').html(response.all.engagement_total);
             $('#report .table tfoot .sum3').html(response.all.avg_respond_time_total);
-            $('#report .table tfoot .sum4').html(response.all.engagement_wall_post);
+            $('#report .table tfoot .sum4').html(0);
             $('#report .table tfoot .sum5').html(response.all.engagement_wall_post);
             $('#report .table tfoot .sum6').html(response.all.avg_respond_time_wall_post);
-            $('#report .table tfoot .sum7').html(response.all.engagement_pm);
+            $('#report .table tfoot .sum7').html(0);
             $('#report .table tfoot .sum8').html(response.all.engagement_pm);
             $('#report .table tfoot .sum9').html(response.all.avg_respond_time_pm);
             
@@ -432,6 +439,24 @@ $(function(){
         $table = $table.replace(/<option value="Report_Abuse">Report Abuse<\/option>/g,'')
         $table = $table.replace(/<select name="case_type" id="caseType">/g,'');
         $table = $table.replace(/<\/select>/g,$(this).closest('table').find('#caseType').val());
+        
+        if ($('#reportType').val() == 'engagement') {
+            $table = $table.replace(/<td class="td_total" >Total<\/td>/g,'');
+            $table = $table.replace(/<td class="sum1 td_total" >0<\/td>/g,'');
+            $table = $table.replace(/<td class="sum4 td_total" >0<\/td>/g,'');
+            $table = $table.replace(/<td class="sum7 td_total" >0<\/td>/g,'');
+        }
+        else{
+             $table = $table.replace(/<td>Total Engagement Received<\/td>/g,'');
+             $table = $table.replace(/<td colspan="2" id="total_engagement_received_value">0<\/td>/g,'');
+             $table = $table.replace(/<td colspan="2" id="total_wall_post_engagement_received_value">0<\/td>/g,'');
+             $table = $table.replace(/<td colspan="2" id="total_pm_engagement_received_value">0<\/td>/g,'');
+             
+             $table = $table.replace(/<td>Total Unattended<\/td>/g,'');
+             $table = $table.replace(/<td colspan="2" id="total_unattended_value">0<\/td>/g,'');
+             $table = $table.replace(/<td colspan="2" id="total_wall_post_unattended_value">0<\/td>/g,'');
+             $table = $table.replace(/<td colspan="2" id="total_pm_unattended_value">0<\/td>/g,'');
+        }
         
         console.log($table);
         hiddenField.setAttribute("type", "hidden");

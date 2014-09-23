@@ -31,6 +31,18 @@ class report_ajax extends CI_Controller {
         $validation[] = array('type' => 'required|valid_date','name' => 'Date Start','value' => $this->input->post('date_start'), 'fine_name' => "Date Start");
         $validation[] = array('type' => 'required|valid_date','name' => 'Date Start','value' => $this->input->post('date_finish'), 'fine_name' => "Date Finish");
         
+        $this->user_role = $this->users_model->get_collection_detail(
+		array('role_collection_id'=>$this->session->userdata('role_id')));
+        
+        $is_download = false;
+        if((IsRoleFriendlyNameExist($this->user_role, array ('Reporting_Download_Own_Country'))) || (IsRoleFriendlyNameExist($this->user_role, array ('Reporting_Download_All_Country')))){
+            $is_download = true;
+        } elseif(IsRoleFriendlyNameExist($this->user_role, array ('Reporting_Download_Current_Channel'))){
+            if($this->input->post('country') == $this->session->userdata('country')){
+                $is_download = true;        
+            }
+        }
+                                        
         $is_valid = CheckValidation($validation, $this->validation);
         if($is_valid === TRUE){
             if($this->input->post('type') == 'case'){
@@ -218,7 +230,8 @@ class report_ajax extends CI_Controller {
                         'product_list' => $product_list,
                         'cases' => $result,
                         'parents' => $parents,
-                        'all' => $all
+                        'all' => $all,
+                        'is_download' => $is_download
                     ));
                     
                 }
@@ -432,6 +445,7 @@ class report_ajax extends CI_Controller {
                         'cases' => $result,
                         'parents' => $parents,
                         'all' => $all,
+                        'is_download' => $is_download,
                         'customer_engagement' => array('count_ce_wall_post' => $count_ce_wall_post,
                                                        'count_ce_pm' => $count_ce_pm,
                                                        'count_ce' => $count_ce_wall_post + $count_ce_pm,

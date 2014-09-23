@@ -63,7 +63,13 @@
 				<select name="country" class="span8" id="reportCountry">
 					<option value="">Select Country</option>
 					<?php foreach($country_list as $country):?>
-						<option value="<?=$country->code?>"><?php echo $country->name?></option>
+						<?php if((IsRoleFriendlyNameExist($this->user_role, array ('Reporting_View_Own_Country'))) || (IsRoleFriendlyNameExist($this->user_role, array ('Reporting_View_All_Country')))){ ?>
+							<option value="<?=$country->code?>"><?php echo $country->name?></option>		
+						<?php } elseif(IsRoleFriendlyNameExist($this->user_role, array ('Reporting_View_Current_Channel'))){ ?>	
+							<?php if($this->session->userdata('country') == $country->code){ ?>
+								<option value="<?=$country->code?>"><?php echo $country->name?></option>
+							<?php }
+						} ?>
 					<?php endforeach;?>
 				</select>
 			</div>
@@ -132,7 +138,7 @@
 					<td class="sum9">0</td>
 					<td style="text-align: center">
 						<?php //if (!IsRoleFriendlyNameExist($this->user_role, 'Reporting_Download_All_Country')):?>
-						<button class="btn btn-download  btn-primary" type="button" ><i class=" icon-download"></i> Download</button>
+						<button class="btn btn-download  btn-primary" type="button" style="display: none;"><i class=" icon-download"></i> Download</button>
 						<?php //endif;?>
 					</td>
 					<tr class="total_engagement_received" style="display: none;">

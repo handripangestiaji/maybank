@@ -75,6 +75,7 @@ $(function(){
     });
     //GENERATE REPORT
     $(this).on('click', '#reportCreate', function(e){
+        $('.btn-download').hide();
         $(this).find("span").html('Creating...').attr('disabled', 'disabled');
         $('#report .table tbody').html('<tr><td colspan="11" style="text-align: center">Creating Report...</td></tr>');
         var thisButton = $(this);
@@ -88,10 +89,15 @@ $(function(){
                 'date_finish' : $('#dateFinish').val(),
                 'type' : $('#reportType').val(),
                 'case_type' : $('#caseType').val(),
-                'user' : $('#reportUserList').val()
+                'user' : $('#reportUserList').val(),
+                'country' : $('#reportCountry').val()
             },
             "type" : "POST",
             "success" : function(response){
+                if (response.is_download == true) {
+                    $('.btn-download').show();
+                }
+                
                 if (response.type == 'case') {
                     thisButton.createReportTable(response);
                 }

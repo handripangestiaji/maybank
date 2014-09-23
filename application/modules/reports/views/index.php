@@ -143,15 +143,15 @@
 					</td>
 					<tr class="total_engagement_received" style="display: none;">
 						<td>Total Engagement Received</td>
-						<td colspan="2" id="total_engagement_received_value">320</td>
-						<td colspan="2" id="total_wall_post_engagement_received_value">320</td>
-						<td colspan="2" id="total_pm_engagement_received_value">320</td>
+						<td colspan="2" id="total_engagement_received_value">0</td>
+						<td colspan="2" id="total_wall_post_engagement_received_value">0</td>
+						<td colspan="2" id="total_pm_engagement_received_value">0</td>
 					</tr>
 					<tr class="total_engagement_received" style="display: none;">
 						<td>Total Unattended</td>
-						<td colspan="2" id="total_unattended_value">20</td>
-						<td colspan="2" id="total_wall_post_unattended_value">20</td>
-						<td colspan="2" id="total_pm_unattended_value">20</td>
+						<td colspan="2" id="total_unattended_value">0</td>
+						<td colspan="2" id="total_wall_post_unattended_value">0</td>
+						<td colspan="2" id="total_pm_unattended_value">0</td>
 					</tr>
 				</tfoot>
 			</table>

@@ -260,7 +260,7 @@ class report_ajax extends CI_Controller {
                                     elseif(($res->type == 'facebook_conversation') || ($res->type == 'twitter_dm')){
                                         $prod_list->count_engagement_pm += 1;
                                         if($res->type == 'facebook_conversation'){
-                                            $conv = $this->reports_model->getFBConversation($res->post_id, $this->input->post('date_start'), $this->input->post('date_finish'));
+                                            $conv = $this->reports_model->getFbConversation($res->post_id, $this->input->post('date_start'), $this->input->post('date_finish'));
                                             if(count($conv) > 1){
                                                 $time_c = array();
                                                 foreach($conv as $c){
@@ -406,7 +406,7 @@ class report_ajax extends CI_Controller {
                     $customer_engagement = $this->reports_model->getEngagementNotPageReply($this->input->post());
                     $count_ce_wall_post = 0;
                     $count_ce_pm = 0;
-    
+                    
                     if($customer_engagement){
                         foreach($customer_engagement as $ce){
                             if($ce){
@@ -414,7 +414,15 @@ class report_ajax extends CI_Controller {
                                     $count_ce_wall_post = count($ce);
                                 }
                                 elseif($ce[0]->type == 'facebook_conversation' || $ce[0]->type == 'twitter_dm'){
-                                    $count_ce_pm = count($ce);
+                                    if($ce[0]->type == 'facebook_conversation'){
+                                        $count_ce_pm = 0;
+                                        foreach($ce as $c){
+                                            $conv = $this->reports_model->getFbConversation($c->post_id,$this->input->post('date_start'), $this->input->post('date_finish'));    
+                                            $count_ce_pm += count($conv);
+                                        }
+                                    }else{
+                                        $count_ce_pm = count($ce);
+                                    }
                                 }
                             }
                         }

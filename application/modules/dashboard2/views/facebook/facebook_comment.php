@@ -4,7 +4,7 @@ for($j=0; $j<count($comment); $j++):
 $comment[$j]->case = !isset($comment[$j]->case) ? null: $comment[$j]->case;
 ?>    
 
-<div class="engagement-body" <?php if($comment[$j]->comment_id != '0'){ ?> style="padding-left: 45px;" <?php } ?>>
+<div class="engagement-body" <?php if($comment[$j]->comment_id != '0'){ ?> style="padding-left: 26px;" <?php } ?>>
         <span class="engagement-btn-hide-show btn-close pull-right"><i class="icon-caret-down"></i></span>    
         <p class="headLine">
             <span class="author"><?php echo $comment[$j]->name; ?></span>

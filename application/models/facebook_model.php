@@ -915,4 +915,14 @@ class facebook_model extends CI_Model
 	$this->db->order_by('b.created_at');
 	return $this->db->get()->result();
     }
+    
+    public function GetCommentsGroupedByPostId($filter){
+	$this->db->select("a.post_id");
+	$this->db->from("social_stream a INNER JOIN
+	    social_stream_fb_comments b ON b.post_id=a.post_id INNER JOIN
+	    social_stream_fb_post c ON c.post_id = a.post_id");
+	$this->db->where($filter);
+	$this->db->group_by('a.post_id');
+	return $this->db->get()->result();
+    }
 }

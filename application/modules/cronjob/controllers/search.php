@@ -77,6 +77,25 @@ class Search extends CI_Controller {
 	    );
 	  $fb_feed = $this->facebook_model->RetrieveFeedFB($filter,0,false);
 	  
+	  $filter = array(
+	       'a.channel_id' => $channel_id,
+	       'b.created_at >=' => $this->date_after,
+	       'b.created_at <=' => $this->date_before
+	    );
+	  $comments = $this->facebook_model->GetCommentsGroupedByPostId($filter);
+	  
+	  if($comments){
+	       foreach($comments as $c){
+		    $filter = array(
+			 'b.post_id' => $c->post_id,
+		    );
+		    $add_fb_feed = $this->facebook_model->RetrieveFeedFB($filter,0,false);
+		    foreach($add_fb_feed as $add){
+			$fb_feed[] = (object)$add;
+		    }
+		}
+	  }
+	  
 	  if($fb_feed){
 	       $bulkString = '';
 	       foreach($fb_feed as $wp){
@@ -101,7 +120,7 @@ class Search extends CI_Controller {
 		    $bulkString .= "$actionString\n";
 		    $bulkString .= json_encode($doc) . "\n";
 	       }
-	       
+		    
 	       $new_wp['index'] = $this->the_index;
 	       $new_wp['type'] = 'facebook_feed';
 	       $new_wp['body'] = $bulkString;

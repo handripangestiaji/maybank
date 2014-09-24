@@ -257,6 +257,13 @@ $(function(){
     }
 
     $.fn.createReportTableEngagement = function(response){
+        $('#total_engagement_received_value').html(0);
+        $('#total_wall_post_engagement_received_value').html(0);
+        $('#total_pm_engagement_received_value').html(0);
+        $('#total_unattended_value').html(0);
+        $('#total_wall_post_unattended_value').html(0);
+        $('#total_pm_unattended_value').html(0);
+            
         $('#table_title').html('Engagement');
         $('.td_total').hide();
         $('.total_engagement_received').show();
@@ -343,6 +350,12 @@ $(function(){
             for(i=1;i<=9;i++){
                 $('#report .table tfoot .sum' + i).html('0');
             }
+            $('#total_engagement_received_value').html(response.customer_engagement.count_ce);
+            $('#total_wall_post_engagement_received_value').html(response.customer_engagement.count_ce_wall_post);
+            $('#total_pm_engagement_received_value').html(response.customer_engagement.count_ce_pm);
+            $('#total_unattended_value').html(response.unattended.count_total);
+            $('#total_wall_post_unattended_value').html(response.unattended.count_wall_post);
+            $('#total_pm_unattended_value').html(response.unattended.count_pm);
         }
     }
     

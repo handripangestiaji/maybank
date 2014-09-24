@@ -459,9 +459,40 @@ class report_ajax extends CI_Controller {
                     
                 }
                 else{
+                    $customer_engagement = $this->reports_model->getEngagementNotPageReply($this->input->post());
+                    $count_ce_wall_post = 0;
+                    $count_ce_pm = 0;
+                    
+                    if($customer_engagement){
+                        foreach($customer_engagement as $ce){
+                            if($ce){
+                                if($ce[0]->type == 'facebook_comment' || $ce[0]->type == 'twitter'){
+                                    $count_ce_wall_post = count($ce);
+                                }
+                                elseif($ce[0]->type == 'facebook_conversation' || $ce[0]->type == 'twitter_dm'){
+                                    if($ce[0]->type == 'facebook_conversation'){
+                                        $allConv = $this->reports_model->getFbConversationByChannelId($this->input->post('channel_id'),$this->input->post('date_start'), $this->input->post('date_finish'));    
+                                        $count_ce_pm = count($allConv);
+                                    }else{
+                                        $count_ce_pm = count($ce);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
                     echo json_encode(array(
                         'status' => 'error',
-                        'message' => 'No Result'
+                        'message' => 'No Result',
+                        'customer_engagement' => array('count_ce_wall_post' => $count_ce_wall_post,
+                                                       'count_ce_pm' => $count_ce_pm,
+                                                       'count_ce' => $count_ce_wall_post + $count_ce_pm,
+                                                       'list' => $customer_engagement
+                                                      ),
+                        'unattended' => array('count_total' => ($count_ce_wall_post + $count_ce_pm),
+                                                    'count_wall_post' => ($count_ce_wall_post),
+                                                    'count_pm' => ($count_ce_pm)
+                                                   )
                     ));
                 }
             }

@@ -1292,7 +1292,7 @@ class Media_stream extends CI_Controller {
 	if(!is_dir("./media/dynamic/tmp_photo/"))
 	    mkdir(getcwd()."/media/dynamic/tmp_photo/");
 	
-	if(file_exists("./media/dynamic/tmp_photo/".$md5_photo) && $safe_photo){
+	if(file_exists("./media/dynamic/tmp_photo/".$md5_photo) && $safe_photo && (filesize("./media/dynamic/tmp_photo/".$md5_photo) > 0)){	
 	    redirect("/media/dynamic/tmp_photo/".$md5_photo);
 	}
 	else{

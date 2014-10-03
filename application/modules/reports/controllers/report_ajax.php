@@ -238,6 +238,7 @@ class report_ajax extends CI_Controller {
                 else{
                     echo json_encode(array(
                         'status' => 'error',
+                        'type' => 'case',
                         'message' => 'No Result'
                     ));
                 }
@@ -484,6 +485,7 @@ class report_ajax extends CI_Controller {
                     echo json_encode(array(
                         'status' => 'error',
                         'message' => 'No Result',
+                        'type' => 'engagement',
                         'customer_engagement' => array('count_ce_wall_post' => $count_ce_wall_post,
                                                        'count_ce_pm' => $count_ce_pm,
                                                        'count_ce' => $count_ce_wall_post + $count_ce_pm,

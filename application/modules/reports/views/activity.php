@@ -47,7 +47,13 @@
 				<select name="country" class="span6" id="reportCountry">
 					<option value="">Select Country</option>
 					<?php foreach($country_list as $country):?>
-						<option value="<?=$country->code?>"><?php echo $country->name?></option>
+						<?php if((IsRoleFriendlyNameExist($this->user_role, array ('Reporting_View_Own_Country'))) || (IsRoleFriendlyNameExist($this->user_role, array ('Reporting_View_All_Country')))){ ?>
+							<option value="<?=$country->code?>"><?php echo $country->name?></option>		
+						<?php } elseif(IsRoleFriendlyNameExist($this->user_role, array ('Reporting_View_Current_Channel'))){ ?>	
+							<?php if($this->session->userdata('country') == $country->code){ ?>
+								<option value="<?=$country->code?>"><?php echo $country->name?></option>
+							<?php }
+						} ?>
 					<?php endforeach;?>
 				</select>
 			</div>

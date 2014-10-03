@@ -252,7 +252,8 @@ $(function(){
             $('#report .table tbody').html('<tr><td colspan="11" style="text-align: center">No Result</td></tr>');
             for(i=1;i<=9;i++){
                 $('#report .table tfoot .sum' + i).html('0');
-            }
+            }    
+            $('.total_engagement_received').hide();
         }
     }
 

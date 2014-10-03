@@ -257,6 +257,9 @@ $(function(){
     }
 
     $.fn.createReportTableEngagement = function(response){
+        $('#report .table .resolved').html('Engagement');
+        $('#report .table .avg_time').html('Avg Respond Time');
+            
         $('#total_engagement_received_value').html(0);
         $('#total_wall_post_engagement_received_value').html(0);
         $('#total_pm_engagement_received_value').html(0);
@@ -314,9 +317,6 @@ $(function(){
                     parent_array_id++;
                 }
             }
-            
-            $('#report .table .resolved').html('Engagement');
-            $('#report .table .avg_time').html('Avg Respond Time');
             
             $('#report .table tbody > :not(tr.pIdnull)').toggle('fast');
             $('#report .table .toggleSub').click(function(){

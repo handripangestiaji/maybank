@@ -515,6 +515,7 @@ class report_ajax extends CI_Controller {
     
     
     function GetReportActivity(){
+        $hide_user = true;
         $this->load->library('validation');
         $validation[] = array('type' => 'required|valid_date','name' => 'Date Start','value' => $this->input->post('date_start'), 'fine_name' => "Date Start");
         $validation[] = array('type' => 'required|valid_date','name' => 'Date Finish','value' => $this->input->post('date_finish'), 'fine_name' => "Date Finish");
@@ -529,21 +530,22 @@ class report_ajax extends CI_Controller {
                 }
                 
                 if(($this->input->post('group') != '') && ($this->input->post('group') != 'All')){
-                    $filter['group_id'] = $this->input->post('group');
+                    $filter['report_activity.group_id'] = $this->input->post('group');
                 }
                 
                 if($this->input->post('country') != ''){
-                    $filter['country_code'] = $this->input->post('country');
+                    $filter['report_activity.country_code'] = $this->input->post('country');
                 }
                 
                 $range = "time between '".$this->input->post('date_start')." 00:00:00' and '".$this->input->post('date_finish')." 23:59:59'";
                 $result['records'] = $this->reports_model->GetReportActivity($filter,
                                         $range,
                                         $this->input->post('limit'),
-                                        $this->input->post('offset')
+                                        $this->input->post('offset'),
+                                        $hide_user
                                         )->result();
                 
-                $result['count_total'] = $this->reports_model->CountReportActivity($filter,$range);
+                $result['count_total'] = $this->reports_model->CountReportActivity($filter,$range,$hide_user);
             }
             else{
                 $result['records'] = $this->reports_model->GetReportActivity()->result();

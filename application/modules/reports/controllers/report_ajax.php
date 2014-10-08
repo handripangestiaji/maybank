@@ -526,7 +526,7 @@ class report_ajax extends CI_Controller {
             if($this->input->post() != null){
                 $filter = null;    
                 if(($this->input->post('user') != '') && ($this->input->post('user') != 'All')){
-                    $filter['user_id'] = $this->input->post('user');
+                    $filter['user.user_id'] = $this->input->post('user');
                 }
                 
                 if(($this->input->post('group') != '') && ($this->input->post('group') != 'All')){

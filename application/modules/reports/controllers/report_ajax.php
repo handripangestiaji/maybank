@@ -566,7 +566,7 @@ class report_ajax extends CI_Controller {
     function GetUserList(){
         $user_group = $this->input->get('group_id');
         if($user_group != ''){
-            echo json_encode($this->users_model->select_user($user_group)->result());
+            echo json_encode($this->users_model->select_user($user_group, true)->result());
         }
     }
     

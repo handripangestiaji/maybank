@@ -44,13 +44,16 @@ class Users_model extends CI_Model
         }
         return false;
     }
-    function select_user($group_id = null)
+    function select_user($group_id = null, $is_hide = false)
     {
         $this->db->select('user.*,role_collection.role_name,user_group.group_name');
         $this->db->join('user_group','user.group_id = user_group.group_id','inner');
         $this->db->join('role_collection','user.role_id = role_collection.role_collection_id','left');
         if($group_id != null){
             $this->db->where('user.group_id', $group_id);
+        }
+        if($is_hide != false){
+            $this->db->where('user.is_hidden', 0);
         }
         return $this->db->get($this->user);
     }

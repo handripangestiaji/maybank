@@ -148,6 +148,7 @@
 						<td colspan="2" id="total_engagement_received_value">0</td>
 						<td colspan="2" id="total_wall_post_engagement_received_value">0</td>
 						<td colspan="2" id="total_pm_engagement_received_value">0</td>
+						<td rowspan="2" ></td>
 					</tr>
 					<tr class="total_engagement_received" style="display: none;">
 						<td>Total Unattended</td>

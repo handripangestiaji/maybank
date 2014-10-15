@@ -8,8 +8,9 @@ class elasticsearch_model extends CI_Model
 
     public function __construct(){
         parent::__construct();
-        $this->client= new Elasticsearch\Client();
-	$host = base_url();
+	$params = array();
+	$params['hosts'] = array ('54.169.73.242:9200');
+        $this->client= new Elasticsearch\Client($params);
     }
 	
     public function PutIndex($name)

@@ -7,8 +7,8 @@ class Media_stream extends CI_Controller {
     function __construct()
     {
 	parent::__construct();
-	if(!$this->session->userdata('user_id'))
-	    redirect("login");
+	//if(!$this->session->userdata('user_id'))
+	    //redirect("login");
 	
 	// Loading TwitterOauth library. 
 	$this->config->load('twitter');
@@ -1293,11 +1293,11 @@ class Media_stream extends CI_Controller {
 	    mkdir(getcwd()."/media/dynamic/tmp_photo/");
 	
 	if(file_exists("./media/dynamic/tmp_photo/".$md5_photo) && $safe_photo && (filesize("./media/dynamic/tmp_photo/".$md5_photo) > 0)){	
-	    redirect("/media/dynamic/tmp_photo/".$md5_photo);
+	    echo $md5_photo;
 	}
 	else{
 	    file_put_contents("./media/dynamic/tmp_photo/".$md5_photo, file_get_contents(urldecode($new_photo_param)));
-	    redirect("/media/dynamic/tmp_photo/".$md5_photo);    
+	    echo $md5_photo;
 	}
     }
 }

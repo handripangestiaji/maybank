@@ -1279,10 +1279,10 @@ class Media_stream extends CI_Controller {
 
 	$headers = array();
 	$options = array('timeout' => 1000);
-	$url = 'http://172.31.20.201/staging/dashboard/media_stream/SafePhoto?photo='.$new_photo_param;
+	$url = 'http://172.31.20.201/dashboard/media_stream/SafePhoto?photo='.$new_photo_param;
 	$filename = Requests::get($url, $headers, $options);
 	
-	$url = 'http://172.31.20.201/staging/media/dynamic/tmp_photo/'.$filename->body;
+	$url = 'http://172.31.20.201/media/dynamic/tmp_photo/'.$filename->body;
 	$response = Requests::get($url, $headers, $options);
 	$im = imagecreatefromstring($response->body);
 

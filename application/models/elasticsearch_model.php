@@ -9,7 +9,7 @@ class elasticsearch_model extends CI_Model
     public function __construct(){
         parent::__construct();
 	$params = array();
-	$params['hosts'] = array ('54.169.73.242:9200');
+	$params['hosts'] = array ('172.31.20.201:9200');
         $this->client= new Elasticsearch\Client($params);
     }
 	

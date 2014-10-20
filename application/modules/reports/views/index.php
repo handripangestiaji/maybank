@@ -69,9 +69,6 @@
 							<option value="<?=$country->code?>"><?php echo $country->name?></option>		
 						<?php } elseif(IsRoleFriendlyNameExist($this->user_role, array ('Reporting_View_Current_Channel'))){ ?>	
 							<?php if($this->session->userdata('country') == $country->code){ ?>
-						<option value="<?=$country->code?>"><?php echo $country->name?></option>
-						<?php } elseif(IsRoleFriendlyNameExist($this->user_role, array ('Reporting_View_Current_Channel'))){ ?>	
-							<?php if($this->session->userdata('country') == $country->code){ ?>
 								<option value="<?=$country->code?>"><?php echo $country->name?></option>
 							<?php }
 						} ?>

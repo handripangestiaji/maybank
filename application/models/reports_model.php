@@ -182,12 +182,17 @@ WHERE ss.channel_id = ".$filter['channel_id']." ".$where_group_id." ".$where_cas
         return $query->result();
     }
     
-    function GetReportActivity($filter = null, $range = null, $limit = null, $offset = null){
+    function GetReportActivity($filter = null, $range = null, $limit = null, $offset = null, $hide = null){
 	//get from report_activity table sort by date descending
 	$this->db->select('*');
 	$this->db->from('report_activity');
 	if($filter){
 	    $this->db->where($filter);
+	}
+	
+	if($hide){
+	    $this->db->join('user','report_activity.user_id = user.user_id');
+	    $this->db->where('is_hidden', 0);
 	}
 	
 	if(($limit != null) && ($offset == null)){
@@ -205,7 +210,7 @@ WHERE ss.channel_id = ".$filter['channel_id']." ".$where_group_id." ".$where_cas
 	return $this->db->get();
     }
     
-    function CountReportActivity($filter = null, $range = null){
+    function CountReportActivity($filter = null, $range = null, $hide = null){
 	//get from report_activity table sort by date descending
 	$this->db->select('*');
 	$this->db->from('report_activity');
@@ -215,6 +220,11 @@ WHERE ss.channel_id = ".$filter['channel_id']." ".$where_group_id." ".$where_cas
 	
 	if($range){
 	    $this->db->where($range);
+	}
+	
+	if($hide){
+	    $this->db->join('user','report_activity.user_id = user.user_id');
+	    $this->db->where('is_hidden', 0);
 	}
 	
 	$count =  $this->db->count_all_results();

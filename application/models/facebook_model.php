@@ -580,7 +580,7 @@ class facebook_model extends CI_Model
     
     
     function GetChannelAction($filter, $is_where_in = false){
-        $this->db->select("a.*, b.username, b.display_name, c.message as page_reply_content, d.messages, d.assign_to, e.display_name as assign_name, f.display_name as solved_name, d.solved_message");
+	$this->db->select("a.*, b.username, b.display_name, c.message as page_reply_content, d.messages, d.assign_to, e.display_name as assign_name, f.display_name as solved_name, d.solved_message");
         $this->db->from("channel_action a INNER JOIN
 			user b on b.user_id = a.created_by LEFT JOIN
 			page_reply c on c.created_at = a.created_at AND
@@ -594,7 +594,7 @@ class facebook_model extends CI_Model
 	else
 	    $this->db->where_in('a.post_id',$filter);
 	$result = $this->db->get()->result();
-        return $result;
+	return $result;
     }
     
     function GetChannelActionPM($filter, $is_where_in = false){
@@ -651,7 +651,7 @@ class facebook_model extends CI_Model
 	    $row->comments = $this->RetriveCommentPostFb(array('a.post_id'=> $row->social_stream_post_id), array());
 	    $where_in = array($row->social_stream_post_id);
 	    foreach($row->comments as $comment)
-		$where_in[] = $comment->post_id;
+		$where_in[] = $comment->comment_post_id;
 	    $row->channel_action = $this->GetChannelAction($where_in, true);
         }
         
@@ -913,6 +913,16 @@ class facebook_model extends CI_Model
 	    user g ON f.user_id=g.user_id");
 	$this->db->where($filter);
 	$this->db->order_by('b.created_at');
+	return $this->db->get()->result();
+    }
+    
+    public function GetCommentsGroupedByPostId($filter){
+	$this->db->select("a.post_id");
+	$this->db->from("social_stream a INNER JOIN
+	    social_stream_fb_comments b ON b.post_id=a.post_id INNER JOIN
+	    social_stream_fb_post c ON c.post_id = a.post_id");
+	$this->db->where($filter);
+	$this->db->group_by('a.post_id');
 	return $this->db->get()->result();
     }
     

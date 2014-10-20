@@ -18,7 +18,7 @@ class Users_model extends CI_Model
     
     //======================== USER ==========================
     //view user
-    function select_user1($limit, $start, $role_id,$value, $country_code = null)
+    function select_user1($limit, $start, $role_id,$value, $country_code = null, $is_hide = false)
     {
         $this->db->distinct();
         $this->db->limit($limit, $start);
@@ -35,6 +35,11 @@ class Users_model extends CI_Model
         $this->db->order_by('a.user_id','asc');
         if($role_id != null)
         $this->db->where("a.role_id", $role_id);
+        
+        if($is_hide != false){
+            $this->db->where('a.is_hidden', 0);
+        }
+        
         $query = $this->db->get($this->user);
         if ($query->num_rows() > 0) {
             foreach ($query->result() as $row) {
@@ -44,13 +49,16 @@ class Users_model extends CI_Model
         }
         return false;
     }
-    function select_user($group_id = null)
+    function select_user($group_id = null, $is_hide = false)
     {
         $this->db->select('user.*,role_collection.role_name,user_group.group_name');
         $this->db->join('user_group','user.group_id = user_group.group_id','inner');
         $this->db->join('role_collection','user.role_id = role_collection.role_collection_id','left');
         if($group_id != null){
             $this->db->where('user.group_id', $group_id);
+        }
+        if($is_hide != false){
+            $this->db->where('user.is_hidden', 0);
         }
         return $this->db->get($this->user);
     }
@@ -70,13 +78,15 @@ class Users_model extends CI_Model
         return $this->db->get($this->user);
     }
     
-    function count_record($var , $value, $country_code = NULL)
+    function count_record($var , $value, $country_code = NULL,  $is_hide = false)
     {
-            
         if($var=='role_id' && $value==0)
         {
             if($country_code != null)
                 $this->db->where('country_code', $country_code);
+            if($is_hide != false){
+                $this->db->where('is_hidden', 0);
+            }    
             $tes = $this->db->get($this->user);
             return $tes->num_rows();
         }
@@ -85,6 +95,9 @@ class Users_model extends CI_Model
             $this->db->where('role_id',$value);
             if($country_code != null)
                 $this->db->where('country_code', $country_code);
+            if($is_hide != false){
+                $this->db->where('is_hidden', 0);
+            }
             $tes = $this->db->get($this->user);
             return $tes->num_rows();
         }
@@ -94,6 +107,9 @@ class Users_model extends CI_Model
             if($country_code != null)
                 $where .= " AND country_code = '$country_code'";
             $this->db->where($where);
+            if($is_hide != false){
+                $this->db->where('is_hidden', 0);
+            }
             $tes = $this->db->get($this->user);
             return $tes->num_rows();
         }
@@ -101,6 +117,9 @@ class Users_model extends CI_Model
         {
             if($country_code != null)
                 $this->db->where('country_code', $country_code);
+            if($is_hide != false){
+                $this->db->where('is_hidden', 0);
+            }
             return $this->db->count_all($this->user);
         }
     }

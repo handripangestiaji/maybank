@@ -238,6 +238,7 @@ class report_ajax extends CI_Controller {
                 else{
                     echo json_encode(array(
                         'status' => 'error',
+                        'type' => 'case',
                         'message' => 'No Result'
                     ));
                 }
@@ -484,6 +485,7 @@ class report_ajax extends CI_Controller {
                     echo json_encode(array(
                         'status' => 'error',
                         'message' => 'No Result',
+                        'type' => 'engagement',
                         'customer_engagement' => array('count_ce_wall_post' => $count_ce_wall_post,
                                                        'count_ce_pm' => $count_ce_pm,
                                                        'count_ce' => $count_ce_wall_post + $count_ce_pm,
@@ -513,6 +515,7 @@ class report_ajax extends CI_Controller {
     
     
     function GetReportActivity(){
+        $hide_user = true;
         $this->load->library('validation');
         $validation[] = array('type' => 'required|valid_date','name' => 'Date Start','value' => $this->input->post('date_start'), 'fine_name' => "Date Start");
         $validation[] = array('type' => 'required|valid_date','name' => 'Date Finish','value' => $this->input->post('date_finish'), 'fine_name' => "Date Finish");
@@ -523,25 +526,26 @@ class report_ajax extends CI_Controller {
             if($this->input->post() != null){
                 $filter = null;    
                 if(($this->input->post('user') != '') && ($this->input->post('user') != 'All')){
-                    $filter['user_id'] = $this->input->post('user');
+                    $filter['user.user_id'] = $this->input->post('user');
                 }
                 
                 if(($this->input->post('group') != '') && ($this->input->post('group') != 'All')){
-                    $filter['group_id'] = $this->input->post('group');
+                    $filter['report_activity.group_id'] = $this->input->post('group');
                 }
                 
                 if($this->input->post('country') != ''){
-                    $filter['country_code'] = $this->input->post('country');
+                    $filter['report_activity.country_code'] = $this->input->post('country');
                 }
                 
                 $range = "time between '".$this->input->post('date_start')." 00:00:00' and '".$this->input->post('date_finish')." 23:59:59'";
                 $result['records'] = $this->reports_model->GetReportActivity($filter,
                                         $range,
                                         $this->input->post('limit'),
-                                        $this->input->post('offset')
+                                        $this->input->post('offset'),
+                                        $hide_user
                                         )->result();
                 
-                $result['count_total'] = $this->reports_model->CountReportActivity($filter,$range);
+                $result['count_total'] = $this->reports_model->CountReportActivity($filter,$range,$hide_user);
             }
             else{
                 $result['records'] = $this->reports_model->GetReportActivity()->result();
@@ -562,7 +566,7 @@ class report_ajax extends CI_Controller {
     function GetUserList(){
         $user_group = $this->input->get('group_id');
         if($user_group != ''){
-            echo json_encode($this->users_model->select_user($user_group)->result());
+            echo json_encode($this->users_model->select_user($user_group, true)->result());
         }
     }
     

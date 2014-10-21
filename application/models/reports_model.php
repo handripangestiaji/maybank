@@ -255,8 +255,17 @@ WHERE ss.channel_id = ".$filter['channel_id']." ".$where_group_id." ".$where_cas
 		    $this->db->from('social_stream_fb_comments');
 		    $this->db->where("comment_stream_id", $row->stream_id_response);
 		    $val = $this->db->get()->row();
-		    if($val)
+		    if($val){
 			$status = $val->comment_content;
+		    }
+		    else{
+		    	$this->db->select('*');
+			$this->db->from('page_reply');
+			$this->db->where("created_at", $row->created_at);
+			$val = $this->db->get()->row();
+			if($val)
+			    $status = $val->message;
+		    }
 		}
 		elseif($row->action_type == 'twitter_reply'){
 	            $this->db->select('*');
@@ -531,6 +540,7 @@ WHERE ss.channel_id = ".$filter['channel_id']." ".$where_group_id." ".$where_cas
 			   );
 	}
 	
+	print_r($value);
 	if(!empty($value)){
 	    $this->db->insert_batch('report_activity',$value);
 	}

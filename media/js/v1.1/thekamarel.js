@@ -526,6 +526,12 @@ $(function(){
                                 $(this).find('.channel-id').val(social_id);
                             });
                         }
+                        else if($(this).closest('div').prev().find('i').attr('class') == 'icon-youtube'){
+                            $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');        
+                            $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard2/media_stream/youtube_stream/' + social_id + '/' + is_read, function(){
+                                $(this).find('.channel-id').val(social_id);
+                            });
+                        }
                     });
                     var increment = 1;
                     
@@ -959,7 +965,7 @@ $(function(){
                             $(this).parent().siblings('.engagement').slideUp('slow');
                         else{
                             $(this).parent().siblings('.engagement').slideDown('slow');
-                            if($btnEngagement.attr('item') == 'twitter') return;
+                            if($btnEngagement.attr('item') == 'twitter' || $btnEngagement.attr('item') == 'youtube') return;
                              $.ajax({
                                 "url" : BASEURL + "dashboard2/ajax/" + url,
                                 "data" : {
@@ -1101,7 +1107,13 @@ $(function(){
                     if(change < 0) return;
                     $(this).closest('.reply-tweet').find('.reply-tw-char-count').html(change);
                 });
-
+                
+                $(this).on("keyup", ".youtube-reply-field", function(){
+                    var len = $(this).val().length;
+                    var change = 500 - len ;
+                    if(change < 0) return;
+                    $(this).closest('.reply-field').find('.reply-yt-char-count').html(change);
+                });
 
             $( "#open-img" ).click(function() {
                $("#img-show").css({"display": "block"});
@@ -2141,8 +2153,12 @@ $(function(){
                 $(this).on('click','.btn-reply',function(){
                     $button = $(this);
                     url = "LoadFacebookReply";
-                    if($(this).val() == 'replaycontent' || $(this).val() == 'reply_dm')
+                    if($(this).val() == 'replaycontent' || $(this).val() == 'reply_dm'){
                         url = "LoadFacebookReply";
+                    }
+                    else if($(this).val() == 'reply_youtube'){
+                        url = "LoadYoutubeReply";
+                    }
                     else{
                         url = "LoadTwitterReply";
                     }

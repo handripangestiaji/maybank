@@ -13,10 +13,10 @@ class report_ajax extends CI_Controller {
     function ChannelList($country = null){
         $this->load->model('account_model');
         if($country == 'All'){
-            $filter = array();
+            $filter = array('connection_type !=' => 'youtube');
         }
         else{
-            $filter = $country != null ? array('country_code' => $country) : array();
+            $filter = $country != null ? array('country_code' => $country, 'connection_type' => '!= youtube') : array('connection_type' => 'youtube');
         }
         echo json_encode($this->account_model->GetChannel($filter), JSON_PRETTY_PRINT);
     }

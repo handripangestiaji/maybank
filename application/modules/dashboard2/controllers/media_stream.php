@@ -81,13 +81,33 @@ class Media_stream extends CI_Controller {
 	$filter = array(
 	   'channel_id' => $channel_id,
 	);
-	if($is_read)
-	    $filter['is_read'] = $is_read;
+	
+	if($is_read != NULL){
+    	    if($is_read != 2){
+    		$filter['is_read'] = $is_read;
+    	    }else{
+		    $filter['case'] = '';
+	        }
+    	}
+	
 	$page = $this->input->get('page');
 	$page = $page ? $page : 1;
 	$data['channel_id'] = $channel_id;
-	$data['youtube_post'] = $this->youtube_model->ReadYoutubePost($filter, $page);
-	$data['youtube_comment'] = $this->youtube_model->ReadYoutubeComment($filter, $page);
+	$youtube_posts = $this->youtube_model->ReadYoutubePost($filter, $page);
+	foreach($youtube_posts as $post){
+	    unset($filter['case']);
+	    if($post->comment_count > 0){
+		$filter['youtube_post_id'] = $post->post_id;
+		$comments = $this->youtube_model->ReadYoutubeComment($filter);
+		$post->comments = $comments;
+	    }
+	    else{
+		$post->comments = array();
+	    }
+	}
+	
+	$data['youtube_post'] = $youtube_posts;
+	//$data['youtube_comment'] = $this->youtube_model->ReadYoutubeComment($filter, $page);
 	$this->load->view('dashboard2/youtube/youtube_stream', $data);
     }
     
@@ -1292,5 +1312,4 @@ class Media_stream extends CI_Controller {
 	}
 	
     }
-   
 }

@@ -11,6 +11,7 @@ class ajax extends CI_Controller{
 	$this->load->model('facebook_model');
 	$this->load->model('twitter_model');
 	$this->load->model('campaign_model');
+	$this->load->model('youtube_model');
 	$this->user_role = $this->users_model->get_collection_detail(
 		array('role_collection_id'=>$this->session->userdata('role_id')));
     }  
@@ -111,7 +112,17 @@ class ajax extends CI_Controller{
         echo $this->load->view('dashboard2/reply_field_twitter', $data);
     }
     
-   
+    public function LoadYoutubeReply(){
+	$product_list = $this->campaign_model->GetProduct(array('parent_id' => null));
+	
+	$data['i'] = 0;
+	$data['product_list'] =  $this->campaign_model->GetProductTree($product_list);
+	
+	$data['post_id'] = $this->input->get('post_id');
+	$data['post'] =  $this->youtube_model->ReadYoutubePost(array('a.post_id' => $this->input->get('post_id')));
+	//print_r($data);
+        echo $this->load->view('dashboard2/reply_field_youtube', $data);
+    }
     
     public function LoadCase(){
 	$this->load->model('case_model');
@@ -141,7 +152,12 @@ class ajax extends CI_Controller{
 	    $fb_feed = $this->facebook_model->RetriveCommentPostFb($filter, null);
 	    $fb_feed[0]->post_id = $fb_feed[0]->social_stream_post_id;
 	}
+	else if($this->input->get('reply_type') == 'youtube'){
+	    $fb_feed =  $this->youtube_model->ReadYoutubePost(array('a.post_id' => $this->input->get('post_id')));
+	}
 	
+	//print_r($fb_feed);
+	//die();
 	$data['posts'] = $fb_feed;        
         $data['i'] = 0;
 	$data['product_list'] = $this->campaign_model->GetProductTree($product_list);

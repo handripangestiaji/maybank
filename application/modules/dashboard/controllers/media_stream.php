@@ -1005,6 +1005,59 @@ class Media_stream extends CI_Controller {
    
     //=========================================END facebook function=============================================    
 
+    //=========================================Youtube function=============================================    
+    public function ReplyYoutube(){
+	$this->load->config('youtube');
+        $youtube = $this->config->item('youtube');
+        
+        $this->load->library('google_libs/Google_Client');
+        require_once './application/libraries/google_libs/contrib/Google_YouTubeService.php';
+        require_once './application/libraries/google_libs/contrib/Google_YouTubeAnalyticsService.php';
+        $filter = array(
+            "connection_type" => "youtube"
+        );
+	
+        if($this->input->post('channel_id')){
+            $filter['channel_id'] = $this->input->post('channel_id');
+        }
+        $youtube_channel= $this->account_model->GetChannel($filter);
+        $this->google_client->setClientId($youtube['client_id']);
+        $this->google_client->setClientSecret($youtube['client_secret']);
+        foreach($youtube_channel as $each_channel){
+            $token = json_decode($each_channel->oauth_token);
+            
+	    if($token->created + 3600 < time()){
+	        $this->google_client->refreshToken($token->refresh_token);
+                $current_access_token = json_decode($this->google_client->getAccessToken());
+                $current_access_token->refresh_token = $token->refresh_token;
+                $this->account_model->YoutubeRefreshToken(json_encode($current_access_token), $each_channel->channel_id, date("Y-m-d H:i:s", $current_access_token->created));
+                $token = $current_access_token;
+            }
+            else{
+                $this->google_client->setAccessToken(json_encode($token));
+            }
+	}
+            
+	require_once 'Zend/Loader.php'; // the Zend dir must be in your include_path
+	Zend_Loader::loadClass('Zend_Gdata_YouTube');
+	Zend_Loader::loadClass('Zend_Gdata_AuthSub');
+
+	$httpClient = Zend_Gdata_AuthSub::getHttpClient($token->access_token);
+	$yt = new Zend_Gdata_YouTube($httpClient,null,null,$youtube['developer_id']);
+	$yt->setMajorProtocolVersion(2);
+	$videoEntry = $yt->getVideoEntry($this->input->post('video_id'));
+	
+	$newComment = $yt->newCommentEntry();
+	$newComment->content = $yt->newContent()->setText($this->input->post('content'));
+	
+	// post the comment to the comments feed URL for the video
+	$commentFeedPostUrl = $videoEntry->getVideoCommentFeedUrl();
+	$updatedVideoEntry = $yt->insertEntry($newComment, $commentFeedPostUrl, 'Zend_Gdata_YouTube_CommentEntry');	
+	
+	$this->youtube_model->CreateReply($this->input->post());
+    }
+    
+    //===========================================================================================================
     /**
     * Get more content data for auto load paging
     * $group_no = jumlah item terakhir yg di load

@@ -387,6 +387,66 @@ $(function(){
         }
     });
     
+    $(this).on('submit','.reply-youtube', function(e){
+        var buttonSubmit = $(this).find('button[type=submit]');
+        
+        var openButton = $(this).closest('li').find('button:first');
+        var me = $(this);
+        e.preventDefault();
+        
+        var confirmStatus = false;
+        if($(this).closest('.reply-field').find('.case_id').length == 0)
+            confirmStatus = confirm("Please make sure the case type !");
+        else
+            confirmStatus = true;
+        if(confirmStatus){
+            buttonSubmit.attr('disabled', 'disabled').html('SENDING...');
+            $.ajax({
+                "url" : BASEURL + "dashboard/media_stream/ReplyYoutube",
+                "type" : "POST",
+                "data" : $(this).serialize() + "&channel_id=" + $(this).closest('.floatingBox').find('input.channel-id').val(),
+                "success" : function(response){
+                    buttonSubmit.removeAttr('disabled').html('SEND');
+                        console.log(response.success);
+                        if(response.success == false){
+                            var message = response.message;
+                            console.log(message);
+                            me.find('.message').html('<div class="alert alert-warning">' +
+                            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
+                            '<strong>Error!</strong> ' + response.message + '<br />' +  '</div>');
+                            
+                        }
+                        else{
+                            me.find('.message').html('<div class="alert alert-success">' +
+                            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
+                            '<h4>Post Comment</h4> ' + response.message + '!</div>');
+                            if(me.closest('#caseNotification').length == 0){
+                                me.find('input, textarea').val('');
+                                me.find('.reply-preview-img').toggle('slow');
+                                if(openButton.length != 0)
+                                    openButton.removeClass('btn-warning').addClass('btn-inverse').html('Replied By You').val('');
+                            }
+                             setTimeout(function(){
+                                    me.closest('.reply-field').toggle('slow');
+                                    var currentHtml = me.closest('li');
+                                    currentHtml.find('.reply-preview-img').toggle('slow');
+                                    me.closest('ul').prepend(currentHtml);
+                                    me.closest('.subStream').animate({
+                                        scrollTop: 0
+                                    });
+                            }, 1500);
+                        }
+                },
+                "error" :  function( jqXHR, textStatus, errorThrown ){
+                    buttonSubmit.removeAttr('disabled').html('SEND');
+                    me.find('.message').html('<div class="alert alert-danger">' +
+                            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' +
+                            '<strong>Error!</strong> Post comment failed.</div>');
+                }
+            });
+        }
+    });
+    
     $(this).on('click', '.btn-resolve', function(e){
         var btnResolve = $(this);
         confirmed = prompt("Resolved Message?", "","Are you sure to solve this case");

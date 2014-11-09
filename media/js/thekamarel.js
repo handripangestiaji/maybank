@@ -526,6 +526,13 @@ $(function(){
                                 $(this).find('.channel-id').val(social_id);
                             });
                         }
+                        else if($(this).closest('div').prev().find('i').attr('class') == 'icon-youtube'){
+                            $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');        
+                            $(this).closest('.containerHeadline').next().load(BASEURL + 'dashboard/media_stream/youtube_stream/' + social_id + '/' + is_read, function(){
+                                $(this).find('.channel-id').val(social_id);
+                            });
+                        }
+                        alert('wayo');
                     });
                     var increment = 1;
                     
@@ -2392,7 +2399,6 @@ $.fn.RefreshAllStream = function(){
                     $(this).BindMultipleSelect();
                     $(this).TagItEmail();
                 });
-            
             }
             else if($(this).closest('div').prev().find('i').attr('class') == 'icon-youtube'){
                 $(this).html('&nbsp;&nbsp;Loading...');        

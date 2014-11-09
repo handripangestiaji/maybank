@@ -24,7 +24,8 @@ $come_from =array(
     'twitter_dm' => "Direct Message",
     'facebook' => "Wall Post",
     'facebook_conversation' => 'Private Message',
-    'facebook_comment' => 'Reply'
+    'facebook_comment' => 'Reply',
+    'youtube_post' => 'Youtube'
 )
 ?>
 

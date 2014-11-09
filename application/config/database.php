@@ -48,7 +48,7 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'maybankdcms.cxv8f0ifpij1.us-west-2.rds.amazonaws.com:3306';
+$db['default']['hostname'] = 'maybank.cjfesjlc1cr5.ap-southeast-1.rds.amazonaws.com:3306';
 $db['default']['username'] = 'yolkatgrey';
 $db['default']['password'] = 'y0lk3r123mysql';
 $db['default']['database'] = 'maybk_new_staging';

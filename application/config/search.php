@@ -1,1 +1,1 @@
-<?php $config['index_search'] = 'live_dcms'; $config['cronjob_password'] = 'cl0ud_m0t10n';
+<?php $config['index_search'] = 'staging'; $config['cronjob_password'] = 'cl0ud_m0t10n';

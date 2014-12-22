@@ -36,7 +36,7 @@ class facebook_model extends CI_Model
         $fql = '{"query1":"SELECT post_id, actor_id, share_count, attachment, share_count, updated_time, message,like_info, comment_info, message_tags FROM stream WHERE source_id = '.$page_id.
 	' AND actor_id  <> '.$page_id.' order by updated_time desc LIMIT 50",'.
         '"query2" : "SELECT id,post_id, comment_count, text, time, fromid, attachment FROM comment WHERE post_id in (Select post_id from #query1 where comment_info.comment_count > 0) ",'.
-        '"query3" : "Select uid, name from user where uid in (select actor_id from #query1) or uid in (select fromid from #query2)",'.
+        '"query3" : "Select uid, name, username from user where uid in (select actor_id from #query1) or uid in (select fromid from #query2)",'.
         '"query4" : "Select page_id, name, username from page where page_id in (select actor_id from #query1) or page_id in (select fromid from #query2)"'.
         '}';
         
@@ -76,7 +76,7 @@ class facebook_model extends CI_Model
     */
     public function RetrievePost($page_id, $access_token, $isOwnPost = true){
 	 $fql = '{"query1":"SELECT share_count, attachment, post_id, actor_id, share_count, updated_time, message,like_info, comment_info, message_tags, created_time FROM stream WHERE source_id = '.$page_id.
-	' AND actor_id '.($isOwnPost ? " = " : " <> " ).$page_id.' order by updated_time desc LIMIT 50",
+	' AND actor_id '.($isOwnPost ? " = " : " <> " ).$page_id.' order by updated_time desc LIMIT 100",
         "query2" : "SELECT id,post_id, comment_count, parent_id, text, time, likes, attachment, fromid FROM comment WHERE post_id in (Select post_id from #query1 where comment_info.comment_count > 0) ",
         "query3" : "Select uid, name, username,sex from user where uid in (select actor_id from #query1) or uid in (select fromid from #query2)",
         "query4" : "Select page_id, name, username from page where page_id in (select actor_id from #query1) or page_id in (select fromid from #query2)"

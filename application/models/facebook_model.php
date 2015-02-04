@@ -36,8 +36,8 @@ class facebook_model extends CI_Model
         $fql = '{"query1":"SELECT post_id, actor_id, share_count, attachment, share_count, updated_time, message,like_info, comment_info, message_tags FROM stream WHERE source_id = '.$page_id.
 	' AND actor_id  <> '.$page_id.' order by updated_time desc LIMIT 50",'.
         '"query2" : "SELECT id,post_id, comment_count, text, time, fromid, attachment FROM comment WHERE post_id in (Select post_id from #query1 where comment_info.comment_count > 0) ",'.
-        '"query3" : "Select uid, name, username from user where uid in (select actor_id from #query1) or uid in (select fromid from #query2)",'.
-        '"query4" : "Select page_id, name, username from page where page_id in (select actor_id from #query1) or page_id in (select fromid from #query2)"'.
+        '"query3" : "Select uid, name, from user where uid in (select actor_id from #query1) or uid in (select fromid from #query2)",'.
+        '"query4" : "Select page_id, name from page where page_id in (select actor_id from #query1) or page_id in (select fromid from #query2)"'.
         '}';
         
         $requestResult = curl_get_file_contents('https://graph.facebook.com/fql?q='.urlencode($fql)."&access_token=".$access_token);
@@ -76,14 +76,15 @@ class facebook_model extends CI_Model
     */
     public function RetrievePost($page_id, $access_token, $isOwnPost = true){
 	 $fql = '{"query1":"SELECT share_count, attachment, post_id, actor_id, share_count, updated_time, message,like_info, comment_info, message_tags, created_time FROM stream WHERE source_id = '.$page_id.
-	' AND actor_id '.($isOwnPost ? " = " : " <> " ).$page_id.' order by updated_time desc LIMIT 50",
+	' AND actor_id '.($isOwnPost ? " = " : " <> " ).$page_id.' order by updated_time desc LIMIT 100",
         "query2" : "SELECT id,post_id, comment_count, parent_id, text, time, likes, attachment, fromid FROM comment WHERE post_id in (Select post_id from #query1 where comment_info.comment_count > 0) ",
-        "query3" : "Select uid, name, username,sex from user where uid in (select actor_id from #query1) or uid in (select fromid from #query2)",
-        "query4" : "Select page_id, name, username from page where page_id in (select actor_id from #query1) or page_id in (select fromid from #query2)"
+        "query3" : "Select uid, name, sex from user where uid in (select actor_id from #query1) or uid in (select fromid from #query2)",
+        "query4" : "Select page_id, name from page where page_id in (select actor_id from #query1) or page_id in (select fromid from #query2)"
         }';
 	print $fql;
 	$requestResult = curl_get_file_contents('https://graph.facebook.com/fql?q='.urlencode($fql)."&access_token=".$access_token);
 	$result  = json_decode($requestResult);
+print_r($result);
 	if(is_array($result->data)){
 	    
 	    $postList = $result->data[0]->fql_result_set;
@@ -177,7 +178,7 @@ class facebook_model extends CI_Model
 	
 	$social_stream_fb_post = array(
 	    "post_content" => str_replace("\n", "<br />", $each_post->message),
-	    "author_id" => number_format($each_post->actor_id,0,'.',''),
+	    "author_id" => $each_post->actor_id,
 	    "attachment" => isset($each_post->attachment) ? json_encode($each_post->attachment) : "",
 	    "enggagement_count" => 0,
 	    "total_likes" => $each_post->like_info->like_count,
@@ -232,7 +233,7 @@ class facebook_model extends CI_Model
 		$social_stream_fb_comments = array(
 		    "post_id" => $insert_id,
 		    "attachment" => json_encode($each_post->comments[$x]->attachment), 
-		    "from" => number_format($each_post->comments[$x]->fromid,0,'.',''),
+		    "from" => $each_post->comments[$x]->fromid,
 		    "comment_stream_id" => $each_post->comments[$x]->id,
 		    "comment_content" => $each_post->comments[$x]->text,
 		    "comment_id" => $each_post->comments[$x]->parent_id,
@@ -268,8 +269,8 @@ class facebook_model extends CI_Model
     public function RetrieveConversation($page_id, $access_token){
 	$fql = '{"query1" : "SELECT message_count, unread, updated_time,snippet,  recent_authors,  recipients, subject, thread_id FROM thread WHERE folder_id = 0",
 	"query2" : "SELECT created_time, body, author_id, attachment, viewer_id, thread_id, message_id  from message where thread_id in (SELECT thread_id from #query1)",
-	"query3" : "Select uid, name, username from user where uid in (select recent_authors from #query1) or uid in (select recipients from #query1)",
-	"query4" : "Select page_id, name, username from page where page_id in (select recent_authors from #query1) or page_id in (select recipients from #query1)"
+	"query3" : "Select uid, name from user where uid in (select recent_authors from #query1) or uid in (select recipients from #query1)",
+	"query4" : "Select page_id, name from page where page_id in (select recent_authors from #query1) or page_id in (select recipients from #query1)"
 	}';
 	$requestResult = curl_get_file_contents('https://graph.facebook.com/fql?q='.urlencode($fql)."&access_token=".$access_token);
 	$result  = json_decode($requestResult);
@@ -307,7 +308,7 @@ class facebook_model extends CI_Model
     public function SaveUserFromFacebook($userid, $access_token){
 	$timezone = new DateTimeZone("UTC");
 	if(!$this->IsFbUserExists($userid)){
-	    $fql = "select uid, name, username, sex from user where uid = $userid";
+	    $fql = "select uid, name, sex from user where uid = $userid";
 	    $requestResult = curl_get_file_contents('https://graph.facebook.com/fql?q='.urlencode($fql)."&access_token=".$access_token->token);
 	    $requestResult = json_decode($requestResult);
 	    if(count($requestResult->data) > 0)
@@ -317,10 +318,10 @@ class facebook_model extends CI_Model
 		$fb_user_to_save = array(
 		    "facebook_id" => $fbuser->uid,
 		    "name" => $fbuser->name,
-		    "sex" => isset($fbuser->sex) ? substr($fbuser->sex, 0, 1) : "",
+		    "sex" => isset($fbuser->sex) ? substr($fbuser->sex, 0, 1) : NULL,
 		    "created_at" => $currentTime->format("Y-m-d H:i:s"),
 		    "retrieved_at" => $currentTime->format("Y-m-d H:i:s"),
-		    "username" => $fbuser->username
+		    "username" => NULL
 		);
 		print_r($fbuser);
 		print_r($fb_user_to_save);
@@ -394,8 +395,8 @@ class facebook_model extends CI_Model
 		    "attachment" => isset($conversation_detail->attachments) ? json_encode($conversation_detail->attachments) : '',
 		    "detail_id_from_facebook"  => $conversation_detail->id,
 		    "messages" => $conversation_detail->message,
-		    "sender" => number_format($conversation_detail->from->id,0,'.',''),
-		    "to" => number_format($conversation_detail->to->data[0]->id,0,'.',''),
+		    "sender" => $conversation_detail->from->id,
+		    "to" => $conversation_detail->to->data[0]->id,
 		    "created_at" =>$created_time->format('Y-m-d H:i:s'),
 		    "conversation_id" => $stream->post_id
 		);
@@ -466,8 +467,8 @@ class facebook_model extends CI_Model
 		    "attachment" => json_encode($conversation_detail->attachment),
 		    "detail_id_from_facebook"  => $conversation_detail->message_id,
 		    "messages" => $conversation_detail->body,
-		    "sender" => number_format($conversation_detail->author_id,0,'.',''),
-		    "to" => number_format($conversation_detail->viewer_id,0,'.',''),
+		    "sender" => $conversation_detail->author_id,
+		    "to" => $conversation_detail->viewer_id,
 		    "created_at" =>date('Y-m-d H:i:s', $conversation_detail->created_time),
 		    "conversation_id" => $stream->post_id
 		);
@@ -498,7 +499,7 @@ class facebook_model extends CI_Model
 		    $timezone = new DateTimeZone("Asia/Kuala_Lumpur");
 		    $currentTime = new DateTime(date('Y-m-d H:i:s e'), $timezone);
 		    $this->db->insert('fb_user_engaged', array(
-			"facebook_id" => number_format($user->uid,0,'.',''),
+			"facebook_id" => $user->uid,
 			"name" => $user->name,
 			"sex" => isset($user->sex) ? $user->sex : "",
 			"created_at" => $currentTime->format("Y-m-d H:i:s"),
@@ -512,7 +513,7 @@ class facebook_model extends CI_Model
 		    $timezone = new DateTimeZone("Asia/Kuala_Lumpur");
 		    $currentTime = new DateTime(date('Y-m-d H:i:s e'), $timezone);
 		    $this->db->insert('fb_user_engaged', array(
-			"facebook_id" => number_format($user->page_id,0,'.',''),
+			"facebook_id" => $user->page_id,
 			"name" => $user->name,
 			"sex" => isset($user->sex) ? $user->sex : "",
 			"created_at" => $currentTime->format("Y-m-d H:i:s"),
@@ -554,7 +555,7 @@ class facebook_model extends CI_Model
     public function IsFbUserExists($fb_id, $isRow = false){
 	$this->db->select('*');
 	$this->db->from('fb_user_engaged');
-	$this->db->where('facebook_id',number_format($fb_id,0,'.',''));
+	$this->db->where('facebook_id',$fb_id);
 	if(!$isRow)
 	    return $this->db->get()->row() != null;
 	else

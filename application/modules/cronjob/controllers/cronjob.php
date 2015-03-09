@@ -16,33 +16,6 @@ class Cronjob extends CI_Controller {
         }
     }
     
-    /*function index(){
-        header("Content-Type:application/json");
-        if($this->input->get('short_url')){
-            $this->db->select("long_url");
-            $this->db->from('short_urls');
-            $this->db->where('short_code', $this->input->get('short_url'));
-            $row = $this->db->get()->row();
-            if($row != null)
-                redirect($row->long_url);
-            else{
-                $staging = $this->load->database('staging', true);
-                $staging->select("long_url");
-                $staging->from('short_urls');
-                $staging->where('short_code', $this->input->get('short_url'));
-                $row = $staging->get()->row();
-                redirect($row->long_url);
-                $staging->close();
-            }
-        }
-        else
-              echo json_encode(array(
-                'long_url' => NULL,
-                'short_url' => $this->input->get('short_url')
-             ));
-    }*/
-    
-    // Purposed for save facebook stream to database.... 
     function FacebookStreamOwnPost(){
         $filter = array(
             "connection_type" => "facebook"
@@ -54,17 +27,10 @@ class Cronjob extends CI_Controller {
         $conversation_list = array();
         $access_tokens = array();
         foreach($channel_loaded as $channel){
-            $newStd = new stdClass();
-            $newStd->token = $this->facebook_model->GetPageAccessToken($channel->oauth_token, $channel->social_id);
-            $newStd->page_id = $channel->social_id;
-            $newStd->channel = $channel;
-            $access_tokens[] = $newStd;
+            $post = $this->facebook_model->RetrievePost($channel->social_id, $channel->oauth_token);
+            $this->facebook_model->TransferFeedToDb($post, $channel_loaded );   
         }
-        
-        foreach($access_tokens as $access_token){
-            $post = $this->facebook_model->RetrievePost($access_token->page_id, $access_token->token);
-            $this->facebook_model->TransferFeedToDb($post, $access_token->channel );
-        }   
+        print_r($post);
     }
     
     function FacebookStreamFeed(){

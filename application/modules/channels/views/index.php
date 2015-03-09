@@ -1,4 +1,3 @@
-
 <div class="row-fluid" style="width: 80%; margin: 0px auto;" id="channelMg">
 <!--<span style="font-size: 14pt; color: black; margin: 5px 0;">USER MANAGEMENT</span>-->
     <div class="cms-content row-fluid">
@@ -13,9 +12,7 @@
     </div>
 </div>
 <?php    
-    if($this->input->get('FacebookConfirm') == 'yes' && $this->session->userdata('fb_token')):
-        $fb_token = $this->session->userdata('fb_token');
-        $account_manage = facebook_page_manage($fb_token);
+    if(isset($account_manage)){
 ?>
 <div class="container-fluid">
     <div class="modal-backdrop fade in"></div>
@@ -29,8 +26,8 @@
                 <label class="control-label">Your Authenticated Account has <?=count($account_manage)?> page(s) to manage</label>
                 <div class="controls">
                     <?php foreach($account_manage as $account):?>
-                        <input id="chk_<?=$account->id?>" value="<?=$account->name?>" class="css-checkbox" type="checkbox"/>
-                        <label for="chk_<?=$account->id?>" class="css-label"><?=$account->name?></label>
+                        <input id="chk_<?=$account['id']?>" value="<?=$account['name']?>" class="css-checkbox" type="checkbox"/>
+                        <label for="chk_<?=$account['id']?>" class="css-label"><?=$account['name']?></label>
                     <?php endforeach;?>
                 </div>
                 <?php if(IsRoleFriendlyNameExist($this->user_role, 'Regional_User')):?>
@@ -56,4 +53,4 @@
         </div>
     </div>
 </div>
-<?php endif;?>
+<?php } ?>

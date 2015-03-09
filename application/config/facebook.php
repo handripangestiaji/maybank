@@ -1,6 +1,4 @@
 <?php
-
-$config['fb_appid'] = "1431698807068557";
-$config['fb_appsecret'] = "b46657d6d196ec5e425af285f82b81c8";
-$config['dummy_access_token'] = 'CAACEdEose0cBAHpoqvmkjPItt3NWfcWzrvYZBJlsZCD5eCgTGDHFzxqguiXbwZAN26GnMwuOLisKQ5Bfo3o94uH5bsCtCZAdla7yD17CVCua45LlXwvsAZBKODmy1sT2nfjobcUB3tY2xy4qQWr1bZA7XsrDjZB2QZA4i2zNViMjzzz8G3tqWmaZAhZCVxPlTUUeq29HcbtgA6dwZDZD';
-
+$config['fb_appid'] = "626863040779749";
+$config['fb_appsecret'] = "060cdd9c32f692f8bba6849e17862620";
+$config['dummy_access_token'] = 'CAAFm2lqzuUgBAKS1WdAbduU7B9AKcWvUzdKZBw9xEYzl2ifqPFjdFN952ZAZAq4yZCi6PB0zxQC3BWc1KhoHnTU5Yojy56VB8215JIs912IVWcoZCNSNUKKm3EXqq8KitZCbMHMAySiDm5JHx8g1sAXkr9pdE3p1mTaOJwN7y4nzGIrn98PVpxGdwr6S8DZBktLIKHgBhHkuP165dQLGRQ5cYpPyAiJMjQZD';

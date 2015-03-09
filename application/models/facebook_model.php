@@ -5,20 +5,55 @@ class facebook_model extends CI_Model
     public function __construct(){
         parent::__construct();
         $this->load->helper('basic');
+       
+        $config = array(
+             'appId' => $this->config->item('fb_appid'),
+             'secret' => $this->config->item('fb_appsecret'),
+        );
+        $this->load->library('facebook',$config);        
     }
     
-    /*
-     * Get Access Token for page from user 'access_token'
-     * page_id : page stream to be retrieved
-     * access_token : user access token
-     */
-    function GetPageAccessToken($access_token, $page_id){
+    function setAccessTokenOnly($access_token){
+	$this->facebook->setAccessToken($access_token);
+    }
+    
+    function SetAccessToken($access_token, $page_id){
 	$accounts = json_decode(open_api_template('https://graph.facebook.com/me/accounts?access_token='.$access_token));
 	if(isset($accounts->data)){
 	    foreach($accounts->data as $account){
 		if($account->id == $page_id)
-		    return $account->access_token;
+		    $this->facebook->setAccessToken($account->access_token);
 	    }
+	}
+    }
+    
+    public function RetrievePost($page_id, $access_token, $isOwnPost = true){
+	$this->SetAccessToken($access_token, $page_id);
+	$result = $this->facebook->api('/me/posts');
+	print_r($result);
+	die();
+    }
+    
+    function addFacebook($code = null){
+	if(!$code) {
+            $user = $this->facebook->getUser();
+	    if ($user) {
+		$logoutUrl = $this->facebook->getLogoutUrl();
+	    }else {
+		$params = array(
+		    'scope' => 'read_stream, manage_pages, publish_stream, read_mailbox, export_stream, publish_checkins, read_insights, read_requests,
+			    status_update, photo_upload, email, read_page_mailboxes',
+		    'redirect_uri' => base_url('channels/channelmg/AddFacebook')
+		);
+		$loginUrl = $this->facebook->getLoginUrl($params);
+		redirect($loginUrl);
+	    }
+	}
+        else{
+	    $access_token = $this->facebook->getAccessTokenFromCode($code, base_url().'channels/channelmg/AddFacebook');
+	    $this->facebook->setAccessToken($access_token);
+	    $pages = $this->facebook->api('/me/accounts');
+	    return $pages;
 	}
     }
     
@@ -66,59 +101,6 @@ class facebook_model extends CI_Model
         }
         return $postList;
     }
-    /**
-	* Retrieve maybank post from facebook based on page_id provided
-	* $page_id:  id of pages which is retrieved
-	* $access_token: current access_token to manage application
-	*
-	* @return array feed collection
-        * @author Eko Purnomo
-    */
-    public function RetrievePost($page_id, $access_token, $isOwnPost = true){
-	 $fql = '{"query1":"SELECT share_count, attachment, post_id, actor_id, share_count, updated_time, message,like_info, comment_info, message_tags, created_time FROM stream WHERE source_id = '.$page_id.
-	' AND actor_id '.($isOwnPost ? " = " : " <> " ).$page_id.' order by updated_time desc LIMIT 100",
-        "query2" : "SELECT id,post_id, comment_count, parent_id, text, time, likes, attachment, fromid FROM comment WHERE post_id in (Select post_id from #query1 where comment_info.comment_count > 0) ",
-        "query3" : "Select uid, name, sex from user where uid in (select actor_id from #query1) or uid in (select fromid from #query2)",
-        "query4" : "Select page_id, name from page where page_id in (select actor_id from #query1) or page_id in (select fromid from #query2)"
-        }';
-	print $fql;
-	$requestResult = curl_get_file_contents('https://graph.facebook.com/fql?q='.urlencode($fql)."&access_token=".$access_token);
-	$result  = json_decode($requestResult);
-print_r($result);
-	if(is_array($result->data)){
-	    
-	    $postList = $result->data[0]->fql_result_set;
-	    $comment = $result->data[1]->fql_result_set;
-	    $page_list = $result->data[3]->fql_result_set;
-	    $user_list = $result->data[2]->fql_result_set;
-	    
-	    for($i=0;$i<count($postList);$i++){
-		
-		for($x=0; $x < count($comment); $x++){
-		    $user = $this->SearchUserFromList($comment[$x]->fromid, $user_list);
-		    $user = $user == null ? $this->SearchUserFromList($comment[$x]->fromid, $page_list) : $user;
-		    if($comment[$x]->post_id == $postList[$i]->post_id){
-			$comment[$x]->user = $user;
-			$postList[$i]->comments[] = $comment[$x];
-		    }
-		}
-		for($x=0; $x < count($user_list); $x++){
-		    if($user_list[$x]->uid == $postList[$i]->actor_id)
-			$postList[$i]->users = $user_list[$x];
-		}
-		
-		for($x=0; $x < count($page_list); $x++){
-		    if($page_list[$x]->page_id == $postList[$i]->actor_id)
-			$postList[$i]->users = $page_list[$x];
-		}
-	    }
-	    return $postList;
-	}
-	else{
-	    return null;
-	}
-    }
-    
     
     private function SearchUserFromList($uid, $list){
 	for($i=0; $i<count($list); $i++){

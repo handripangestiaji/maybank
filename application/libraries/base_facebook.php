@@ -576,7 +576,7 @@ abstract class BaseFacebook
     if ($scopeParams && is_array($scopeParams)) {
       $params['scope'] = implode(',', $scopeParams);
     }
-
+    
     return $this->getUrl(
       'www',
       'dialog/oauth',
@@ -751,7 +751,7 @@ abstract class BaseFacebook
    * @return mixed An access token exchanged for the authorization code, or
    *               false if an access token could not be generated.
    */
-  protected function getAccessTokenFromCode($code, $redirect_uri = null) {
+  public function getAccessTokenFromCode($code, $redirect_uri = null) {
     if (empty($code)) {
       return false;
     }

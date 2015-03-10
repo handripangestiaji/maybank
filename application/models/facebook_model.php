@@ -59,6 +59,12 @@ class facebook_model extends CI_Model
 	return $result;
     }
     
+    public function RetrieveConversation($page_id, $access_token){
+	$this->SetAccessToken($access_token, $page_id);
+	$result = $this->facebook->api('/me/conversations');
+	return $result;
+    }
+    
     private function SearchUserFromList($uid, $list){
 	for($i=0; $i<count($list); $i++){
 	    if(isset($list[$i]->uid)){
@@ -205,45 +211,6 @@ class facebook_model extends CI_Model
 	}
 	$this->db->trans_complete();
     }
-    
-    public function RetrieveConversation($page_id, $access_token){
-	$fql = '{"query1" : "SELECT message_count, unread, updated_time,snippet,  recent_authors,  recipients, subject, thread_id FROM thread WHERE folder_id = 0",
-	"query2" : "SELECT created_time, body, author_id, attachment, viewer_id, thread_id, message_id  from message where thread_id in (SELECT thread_id from #query1)",
-	"query3" : "Select uid, name from user where uid in (select recent_authors from #query1) or uid in (select recipients from #query1)",
-	"query4" : "Select page_id, name from page where page_id in (select recent_authors from #query1) or page_id in (select recipients from #query1)"
-	}';
-	$requestResult = curl_get_file_contents('https://graph.facebook.com/fql?q='.urlencode($fql)."&access_token=".$access_token);
-	$result  = json_decode($requestResult);
-	
-	$conversation = $result->data[0]->fql_result_set;
-        $conversationDetail = $result->data[1]->fql_result_set;
-        
-        $user_list = $result->data[2]->fql_result_set;
-	$page_list = $result->data[3]->fql_result_set;
-	
-        for($i=0;$i<count($conversation);$i++){
-            for($x=0; $x < count($conversationDetail); $x++){
-		$viewer = $this->SearchUserFromList($conversationDetail[$x]->viewer_id, $user_list);
-		$viewer = $viewer == null ? $this->SearchUserFromList($conversationDetail[$x]->viewer_id, $page_list) : $viewer;
-		$author = $this->SearchUserFromList($conversationDetail[$x]->author_id, $user_list);
-		$author = $author == null ? $this->SearchUserFromList($conversationDetail[$x]->author_id, $page_list) : $author;
-		$conversationDetail[$x]->viewer = $viewer;
-		$conversationDetail[$x]->author = $author;
-                if($conversationDetail[$x]->thread_id == $conversation[$i]->thread_id){
-                    $conversation[$i]->detail[] =$conversationDetail[$x] ;
-                }
-            }
-        }
-	
-        return $conversation;
-    }
-    
-    public function RetrieveNewConversation($access_token, $url = 'https://graph.facebook.com/me/conversations?access_token='){
-	$requestResult = curl_get_file_contents($url.$access_token);
-	
-	return $requestResult;
-    }
-    
     
     public function SaveUserFromFacebook($userid, $access_token){
 	$timezone = new DateTimeZone("UTC");

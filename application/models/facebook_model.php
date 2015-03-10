@@ -13,10 +13,6 @@ class facebook_model extends CI_Model
         $this->load->library('facebook',$config);        
     }
     
-    function setAccessTokenOnly($access_token){
-	$this->facebook->setAccessToken($access_token);
-    }
-    
     function SetAccessToken($access_token, $page_id){
 	$accounts = json_decode(open_api_template('https://graph.facebook.com/me/accounts?access_token='.$access_token));
 	if(isset($accounts->data)){
@@ -25,13 +21,6 @@ class facebook_model extends CI_Model
 		    $this->facebook->setAccessToken($account->access_token);
 	    }
 	}
-    }
-    
-    public function RetrievePost($page_id, $access_token, $isOwnPost = true){
-	$this->SetAccessToken($access_token, $page_id);
-	$result = $this->facebook->api('/me/posts');
-	print_r($result);
-	die();
     }
     
     function addFacebook($code = null){
@@ -52,9 +41,16 @@ class facebook_model extends CI_Model
         else{
 	    $access_token = $this->facebook->getAccessTokenFromCode($code, base_url().'channels/channelmg/AddFacebook');
 	    $this->facebook->setAccessToken($access_token);
+	    $this->session->set_userdata('fb_token', $access_token);
 	    $pages = $this->facebook->api('/me/accounts');
 	    return $pages;
 	}
+    }
+    
+    public function RetrievePost($page_id, $access_token, $isOwnPost = true){
+	$this->SetAccessToken($access_token, $page_id);
+	$result = $this->facebook->api('/me/posts');
+	return $result;
     }
     
     /**
@@ -121,6 +117,7 @@ class facebook_model extends CI_Model
      * $post : post retrieved from facebook
     */
     public function TransferFeedToDb($post, $channel){
+	print_r($post);
 	for($i=0; $i < count($post); $i++){
 	    //echo "<pre>";print_r($post[$i]);echo"</pre>";
 	    $this->SavePost($post[$i], $channel);

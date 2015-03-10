@@ -119,7 +119,6 @@ class listofchannel extends CI_Controller {
                 
                 $i++;
                 $this->account_model->SaveChannel($channel);
-                
             }
         }
         $this->session->unset_userdata('fb_token');

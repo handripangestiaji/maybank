@@ -30,7 +30,7 @@ class Cronjob extends CI_Controller {
             $post = $this->facebook_model->RetrievePost($channel->social_id, $channel->oauth_token);
             $this->facebook_model->TransferFeedToDb($post, $channel_loaded );   
         }
-        print_r($post);
+        //print_r($post);
     }
     
     function FacebookStreamFeed(){

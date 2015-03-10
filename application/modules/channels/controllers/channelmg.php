@@ -21,7 +21,7 @@ class ChannelMg extends MY_Controller {
 	$code = $this->input->get('code');
 	$account = $this->facebook_model->addFacebook($code);
 	$data['account_manage'] = $account['data'];
-	$this->load->view('channels/index',$data);
+        $this->load->view('channels/index',$data);
     }
     
     function AddTwitter($country = ''){

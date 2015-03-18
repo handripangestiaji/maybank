@@ -1,4 +1,5 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+// error_reporting(0);
 
 class facebook_model extends CI_Model
 {
@@ -83,11 +84,15 @@ class facebook_model extends CI_Model
      * Transfer all feed from facebook based on post input
      * $post : post retrieved from facebook
     */
-    public function TransferFeedToDb($post, $channel){
-	print_r($post);
-	for($i=0; $i < count($post); $i++){
+    public function TransferFeedToDb($posts, $channel){
+	// print_r($post);
+	// echo "<pre>";
+ //    print_r($posts);
+ //    die();
+	foreach($posts['data'] as $post){
 	    //echo "<pre>";print_r($post[$i]);echo"</pre>";
-	    $this->SavePost($post[$i], $channel);
+	    // print_r($channel);
+	    $this->SavePost($post, $channel);
 	}
     }
     
@@ -97,45 +102,51 @@ class facebook_model extends CI_Model
     * $channel_id : retrieved from which channel stored on db
     */
     public function SavePost($each_post, $channel){
-	$this->db->trans_start();
+	// $this->db->trans_start();
 	$timezone = new DateTimeZone("UTC");
-	$stream = $this->IsStreamIdExists($each_post->post_id);
-	$this->SaveFacebookUser($each_post->users);
-	$created_time = new DateTime(date("Y-m-d H:i:s e", $each_post->created_time), $timezone);
+	$stream = $this->IsStreamIdExists($each_post['id']);
+	$this->SaveFacebookUser($each_post['from']);
+	$created_time = new DateTime(date("Y-m-d H:i:s e", $each_post['created_time']), $timezone);
+	
 	$social_stream = array(
-	    "post_stream_id" => $each_post->post_id,
+	    "post_stream_id" => $each_post['id'],
 	    "channel_id" => $channel->channel_id,
 	    "type" => "facebook",
 	    "retrieved_at" => date("Y-m-d H:i:s"),
 	    "created_at" => $created_time->format("Y-m-d H:i:s")
 	);
-	$updated_time = new DateTime(date("Y-m-d H:i:s e", $each_post->updated_time), $timezone);
 	
-	$breakLine = explode("\n", $each_post->message);
+	$updated_time = new DateTime(date("Y-m-d H:i:s e", $each_post['updated_time']), $timezone);
+	$breakLine = explode("\n", $each_post['message']);
+	
 	if(count($breakLine) > 0)
 	{
-	    $each_post->message = '';
+	    $each_post['message'] = '';
 	    foreach($breakLine as $line)
-		$each_post->message .= $line.'<br />';
+		$each_post['message'] .= $line.'<br />';
+
 	}
+
 	else{
-	    $each_post->message = $each_post->message;
+	    $each_post['message'] = $each_post['message'];
 	}
 	
 	$social_stream_fb_post = array(
-	    "post_content" => str_replace("\n", "<br />", $each_post->message),
-	    "author_id" => $each_post->actor_id,
-	    "attachment" => isset($each_post->attachment) ? json_encode($each_post->attachment) : "",
+	    "post_content" => str_replace("\n", "<br />", $each_post['message']),
+	    "author_id" => $each_post['id'],
+	    "attachment" => isset($each_post['attachment']) ? json_encode($each_post['attachment']) : "",
 	    "enggagement_count" => 0,
-	    "total_likes" => $each_post->like_info->like_count,
-	    "user_likes" => $each_post->like_info->user_likes,
-	    "total_shares" =>  $each_post->share_count,
-	    "total_comments" => isset($each_post->comments) ? count($each_post->comments) : 0,
+	    "total_likes" => $each_post['comments']['data'][0]['like_count'],
+	    "user_likes" => $each_post['comments']['data'][0]['user_likes'],
+	    "total_shares" =>  isset($each_post->share_count) ? count($each_post->share_count) : 0,
+	    "total_comments" => isset($each_post['comments']) ? count($each_post['comments']) : 0,
 	    "updated_at" => $updated_time->format("Y-m-d H:i:s"),
-	    "is_customer_post" => $channel->social_id == $each_post->actor_id ? 0 : 1
+	    "is_customer_post" => $channel->social_id == $each_post['id'] ? 0 : 1
 	);
+
 	
-	if($each_post->message != '' && $each_post->message != null){
+	
+	if($each_post['message'] != '' && $each_post['message'] != null){
 	    if($stream == null){
 		$this->db->insert("social_stream", $social_stream);
 		$insert_id = $this->db->insert_id();
@@ -152,42 +163,51 @@ class facebook_model extends CI_Model
 		$this->db->update("social_stream_fb_post", $social_stream_fb_post);
 		
 	    }
+
 	}
 	else
 	    return;
-	
-	if(isset($each_post->comments)){
-	    for($x=0; $x < count($each_post->comments); $x++){
-		$updated_time = new DateTime(date("Y-m-d H:i:s e", $each_post->comments[$x]->time), $timezone);
-		$this->SaveFacebookUser($each_post->comments[$x]->user);
+
+	if(isset($each_post['comments'])){
+		// $x =  0;
+
+	    for($x=0; $x<count($each_post['comments']); $x++){
+	    	// error_reporting(0);
+	 
+		$updated_time = new DateTime(date("Y-m-d H:i:s e", $each_post['comments'][$x]['time']), $timezone);
+		echo "<pre>";
+	    	echo "<hr>";
+	print_r(count($each_post['comments']));
+	die();
+		$this->SaveFacebookUser($each_post['comments'][$x]['user']);
 		$social_stream_comment = array(
-		    "post_stream_id" => $each_post->comments[$x]->id,
-		    "channel_id" => $channel->channel_id,
+		    "post_stream_id" => $each_post['comments'][$x]['id'],
+		    "channel_id" => $channel['channel_id'],
 		    "type" => "facebook_comment",
 		    "retrieved_at" => date("Y-m-d H:i:s"),
 		    "created_at" => $updated_time->format("Y-m-d H:i:s")
 		);
 		
-		$breakLine = explode("\n", $each_post->comments[$x]->text);
+		$breakLine = explode("\n", $each_post['comments'][$x]['text']);
 		if(count($breakLine) > 1)
 		{
-		    $each_post->comments[$x]->text = '';
+		    $each_post['comments'][$x]['text'] = '';
 		    foreach($breakLine as $line)
-			$each_post->comments[$x]->text .= $line.'<br />';
+			$each_post['comments'][$x]['text'] .= $line.'<br />';
 		}
 		
 		$social_stream_fb_comments = array(
 		    "post_id" => $insert_id,
-		    "attachment" => json_encode($each_post->comments[$x]->attachment), 
-		    "from" => $each_post->comments[$x]->fromid,
-		    "comment_stream_id" => $each_post->comments[$x]->id,
-		    "comment_content" => $each_post->comments[$x]->text,
-		    "comment_id" => $each_post->comments[$x]->parent_id,
+		    "attachment" => json_encode($each_post['comments'][$x]->attachment), 
+		    "from" => $each_post['comments'][$x]->fromid,
+		    "comment_stream_id" => $each_post['comments'][$x]->id,
+		    "comment_content" => $each_post['comments'][$x]->text,
+		    "comment_id" => $each_post['comments'][$x]->parent_id,
 		    "created_at" => $updated_time->format("Y-m-d H:i:s"),
 		    "retrieved_at" => date("Y-m-d H:i:s")
 		);
 		
-		if($this->IsCommentExists($each_post->comments[$x]->id) == null){
+		if($this->IsCommentExists($each_post['comments'][$x]->id) == null){
 		    
 		    $this->db->insert('social_stream', $social_stream_comment);
 		    $insert_id_comment = $this->db->insert_id();
@@ -195,10 +215,10 @@ class facebook_model extends CI_Model
 		    $this->db->insert("social_stream_fb_comments", $social_stream_fb_comments);
 		    if($stream != null){
 			$this->SocialStreamCountUpdate($stream->post_id);
-			print "<pre>";
 	
-			print_r($stream);print "</pre>";
 		    }
+
+		    
 		}
 		else{
 		    $this->db->where('post_stream_id', $each_post->comments[$x]->id);
@@ -401,17 +421,17 @@ class facebook_model extends CI_Model
     */
     public function SaveFacebookUser($user){
 	if($user != null){
-	    if(isset($user->uid)){
-		if(!$this->IsFbUserExists($user->uid)){
+	    if(isset($user['id'])){
+		if(!$this->IsFbUserExists($user['id'])){
 		    $timezone = new DateTimeZone("Asia/Kuala_Lumpur");
 		    $currentTime = new DateTime(date('Y-m-d H:i:s e'), $timezone);
 		    $this->db->insert('fb_user_engaged', array(
-			"facebook_id" => $user->uid,
-			"name" => $user->name,
-			"sex" => isset($user->sex) ? $user->sex : "",
+			"facebook_id" => $user['id'],
+			"name" => $user['name'],
+			"sex" => isset($user['sex']) ? $user['sex'] : "",
 			"created_at" => $currentTime->format("Y-m-d H:i:s"),
 			"retrieved_at" => $currentTime->format("Y-m-d H:i:s"),
-			"username" => $user->username
+			"username" => isset($user['username']) ? $user['username'] : ""
 		    ));
 		}
 	    }
@@ -420,12 +440,12 @@ class facebook_model extends CI_Model
 		    $timezone = new DateTimeZone("Asia/Kuala_Lumpur");
 		    $currentTime = new DateTime(date('Y-m-d H:i:s e'), $timezone);
 		    $this->db->insert('fb_user_engaged', array(
-			"facebook_id" => $user->page_id,
-			"name" => $user->name,
-			"sex" => isset($user->sex) ? $user->sex : "",
+			"facebook_id" => $user['id'],
+			"name" => $user['name'],
+			"sex" => isset($user['sex']) ? $user['sex'] : "",
 			"created_at" => $currentTime->format("Y-m-d H:i:s"),
 			"retrieved_at" => $currentTime->format("Y-m-d H:i:s"),
-			"username" => $user->username
+			"username" => isset($user['username']) ? $user['username'] : ""
 		    ));
 		}
 	    }

@@ -45,8 +45,11 @@ class Cronjob extends CI_Controller {
         $access_tokens = array();
         foreach($channel_loaded as $channel){
             $post = $this->facebook_model->RetrieveFeed($channel->social_id, $channel->oauth_token, false);
-            print_r($post);
-            //$this->facebook_model->TransferFeedToDb($post,$channel_loaded);
+            // echo"<pre>";
+            // print_r($channel);
+
+            $this->facebook_model->TransferFeedToDb($post,$channel);
+           
         }
     }
     

@@ -262,7 +262,7 @@ class Search extends CI_Controller {
 	  
 	  if($dms){
 	       $bulkString = '';
-	       foreach($timelines as $dm){
+	       foreach($dms as $dm){
 		    $action = array("index" => array('_id' => $dm->post_id));
 		    $actionString = json_encode($action);
 		    $doc = array('text' => $dm->dm_text,
@@ -336,5 +336,115 @@ class Search extends CI_Controller {
 
      public function DeleteIndex(){
 	  $this->elasticsearch_model->DeleteIndex('media_stream');
+     }
+     
+     public function DeleteDoc(){
+	  $monthsAgo = strtotime("-3 month", strtotime(date('Y-m-d H:i:s')));
+	 
+	  if($this->input->get('after') == null){
+	       $this->date_after = date('Y-m-d H:i:s', $monthsAgo);
+	  }
+	  
+	  if($this->input->get('before') == null){
+	       $this->date_before = date('Y-m-d H:i:s', strtotime("+1 hours",$monthsAgo));
+	  }
+	  
+	  $channels = $this->account_model->GetChannel();
+	  $data = array();
+	  foreach($channels as $channel){
+	       if($channel->connection_type == 'facebook'){
+		    $filter = array(
+			 'c.channel_id' => $channel->channel_id,
+			 'c.created_at >=' => $this->date_after,
+			 'c.created_at <=' => $this->date_before
+		      );
+	
+		    $fb_feed = $this->facebook_model->RetrieveFeedFB($filter,0,false);
+		    if($fb_feed){
+			 foreach($fb_feed as $wp){
+			      $this->elasticsearch_model->DeleteDoc($this->the_index, 'facebook_feed', $wp->post_id);
+			 }
+			 $data[$channel->name]['fb_feed'] = count($fb_feed);
+		    }
+		    
+		    $fb_pm = $this->facebook_model->RetrievePmFB($filter);
+		    if($fb_pm){
+			 $bulkString = '';
+			 foreach($fb_pm as $pm){
+			      $this->elasticsearch_model->DeleteDoc($this->the_index, 'facebook_pm', $pm->post_id);
+			 }
+			 $data[$channel->name]['fb_pm'] = count($fb_pm);
+		    }
+	       }
+	       elseif($channel->connection_type == 'twitter'){
+		    $filter = array(
+			 'a.channel_id' => $channel_id,
+			 'a.created_at >=' => $this->date_after,
+			 'a.created_at <=' => $this->date_before
+			 );
+		    
+		    $filter['b.type'] = 'mentions';
+		    $mentions = $this->twitter_model->ReadTwitterData($filter);
+		    if($mentions){
+			 foreach($mentions as $m){
+			      $this->elasticsearch_model->DeleteDoc($this->the_index, 'twitter_mentions', $m->post_id);
+			 }
+			 $data[$channel->name]['mentions'] = count($mentions);
+		    }
+		    
+		    $filter['b.type'] = 'home_feed';
+		    $homefeeds = $this->twitter_model->ReadTwitterData($filter);
+		    if($homefeeds){
+			 foreach($homefeeds as $hf){
+			      $this->elasticsearch_model->DeleteDoc($this->the_index, 'twitter_homefeed', $hf->post_id);
+			 }
+			 $data[$channel->name]['home_feed'] = count($homefeeds);
+		    }
+		    
+		    $filter['b.type'] = 'user_timeline';
+		    $timelines = $this->twitter_model->ReadTwitterData($filter);
+		    if($timelines){
+			 foreach($timelines as $tl){
+			      $this->elasticsearch_model->DeleteDoc($this->the_index, 'twitter_senttweets', $tl->post_id);
+			 }
+			 $data[$channel->name]['user_timeline'] = count($timelines);
+		    }
+		    
+		    unset($filter['b.type']);
+		    $dms = $this->twitter_model->ReadDMFromDb($filter);
+		    if($dms){
+			 $bulkString = '';
+			 foreach($dms as $dm){
+			      $this->elasticsearch_model->DeleteDoc($this->the_index, 'twitter_dms', $dm->post_id);
+			 }
+			 $data[$channel->name]['twitter_dms'] = count($dms);
+		    }
+	       }
+	       
+	       elseif($channel->connection_type == 'youtube'){
+		    $filter = array(
+			 'c.channel_id' => $channel_id,
+		    );
+		    
+		    $posts = $this->youtube_model->ReadYoutubePost($filter);
+		    if($posts){
+			 foreach($posts as $post){
+			      $this->elasticsearch_model->DeleteDoc($this->the_index, 'youtube_post', $post->post_id);
+			 }
+			 $data[$channel->name]['youtube_post'] = count($posts);
+		    }
+		    
+		    $comments = $this->youtube_model->ReadYoutubeComment($filter);
+		    if($comments){
+			 foreach($comments as $comment){
+			      $this->elasticsearch_model->DeleteDoc($this->the_index, 'youtube_comment', $comment->post_id);
+			 }
+			 $data[$channel->name]['youtube_comment'] = count($posts);
+		    }
+	       }
+	       
+	  }
+	  
+	  print_r($data);
      }
 }

@@ -496,6 +496,6 @@ class Search extends CI_Controller {
      }
      
      public function DeleteIndex($name){
-	  $this->elasticsearch_model->DeleteIndex('media_stream');
+	  $this->elasticsearch_model->DeleteIndex('live_dcms');
      }
 }

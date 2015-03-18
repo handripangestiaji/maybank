@@ -343,12 +343,16 @@ class Search extends CI_Controller {
 	 
 	  if($this->input->get('after') == null){
 	       $this->date_after = date('Y-m-d H:i:s', $monthsAgo);
-	  }
+	  } else {
+	$this->date_after = $this->input->get('after');
+	}
 	  
 	  if($this->input->get('before') == null){
 	       $this->date_before = date('Y-m-d H:i:s', strtotime("+1 hours",$monthsAgo));
-	  }
-	  
+	  } else {
+	$this->date_before = $this->input->get('before');
+	}
+
 	  $channels = $this->account_model->GetChannel();
 	  $data = array();
 	  foreach($channels as $channel){
@@ -358,24 +362,24 @@ class Search extends CI_Controller {
 			 'c.created_at >=' => $this->date_after,
 			 'c.created_at <=' => $this->date_before
 		      );
-	
+
 		    $fb_feed = $this->facebook_model->RetrieveFeedFB($filter,0,false);
 		    if($fb_feed){
 			 foreach($fb_feed as $wp){
-			      $this->elasticsearch_model->DeleteDoc($this->the_index, 'facebook_feed', $wp->post_id);
+			    	$this->elasticsearch_model->DeleteDoc($this->the_index, 'facebook_feed', $wp->post_id);
 			 }
-			 $data[$channel->name]['fb_feed'] = count($fb_feed);
 		    }
-		    
+		    $data[$channel->name]['fb_feed'] = count($fb_feed);
+
 		    $fb_pm = $this->facebook_model->RetrievePmFB($filter);
 		    if($fb_pm){
-			 $bulkString = '';
 			 foreach($fb_pm as $pm){
 			      $this->elasticsearch_model->DeleteDoc($this->the_index, 'facebook_pm', $pm->post_id);
 			 }
-			 $data[$channel->name]['fb_pm'] = count($fb_pm);
 		    }
+			$data[$channel->name]['fb_pm'] = count($fb_pm);
 	       }
+
 	       elseif($channel->connection_type == 'twitter'){
 		    $filter = array(
 			 'a.channel_id' => $channel_id,
@@ -389,17 +393,18 @@ class Search extends CI_Controller {
 			 foreach($mentions as $m){
 			      $this->elasticsearch_model->DeleteDoc($this->the_index, 'twitter_mentions', $m->post_id);
 			 }
-			 $data[$channel->name]['mentions'] = count($mentions);
-		    }
-		    
+			}
+	 	    $data[$channel->name]['mentions'] = count($mentions);
+		   
 		    $filter['b.type'] = 'home_feed';
 		    $homefeeds = $this->twitter_model->ReadTwitterData($filter);
 		    if($homefeeds){
 			 foreach($homefeeds as $hf){
 			      $this->elasticsearch_model->DeleteDoc($this->the_index, 'twitter_homefeed', $hf->post_id);
 			 }
-			 $data[$channel->name]['home_feed'] = count($homefeeds);
-		    }
+		}
+	 $data[$channel->name]['home_feed'] = count($homefeeds);
+		    
 		    
 		    $filter['b.type'] = 'user_timeline';
 		    $timelines = $this->twitter_model->ReadTwitterData($filter);
@@ -407,18 +412,17 @@ class Search extends CI_Controller {
 			 foreach($timelines as $tl){
 			      $this->elasticsearch_model->DeleteDoc($this->the_index, 'twitter_senttweets', $tl->post_id);
 			 }
-			 $data[$channel->name]['user_timeline'] = count($timelines);
-		    }
-		    
+		}
+		    $data[$channel->name]['user_timeline'] = count($timelines);
+		     
 		    unset($filter['b.type']);
 		    $dms = $this->twitter_model->ReadDMFromDb($filter);
 		    if($dms){
-			 $bulkString = '';
 			 foreach($dms as $dm){
 			      $this->elasticsearch_model->DeleteDoc($this->the_index, 'twitter_dms', $dm->post_id);
 			 }
-			 $data[$channel->name]['twitter_dms'] = count($dms);
-		    }
+			}
+	 	$data[$channel->name]['twitter_dms'] = count($dms);    
 	       }
 	       
 	       elseif($channel->connection_type == 'youtube'){
@@ -441,8 +445,9 @@ class Search extends CI_Controller {
 			 }
 			 $data[$channel->name]['youtube_comment'] = count($posts);
 		    }
+
 	       }
-	       
+
 	  }
 	  
 	  print_r($data);

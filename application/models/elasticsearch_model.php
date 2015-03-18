@@ -99,11 +99,10 @@ class elasticsearch_model extends CI_Model
     }
     
     public function DeleteDoc($index,$type,$id){
-	$deleteParams = array();
 	$deleteParams['index'] = $index;
 	$deleteParams['type'] = $type;
 	$deleteParams['id'] = $id;
-	$retDelete = $client->delete($deleteParams);
+	//$retDelete = $this->client->delete($deleteParams);
     }
 }
 ?>

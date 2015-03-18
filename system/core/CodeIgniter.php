@@ -225,6 +225,7 @@
  * ------------------------------------------------------
  *
  */
+
 	// Load the base controller class
 	require BASEPATH.'core/Controller.php';
 

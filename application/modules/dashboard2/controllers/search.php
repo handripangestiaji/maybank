@@ -50,9 +50,10 @@ class Search extends CI_Controller {
 		   $prod->child = $chi;
 	       }
 	   }
+
 	  if($the_channel[0]->connection_type == 'facebook'){
 	       $fb_feed = (object)$this->elasticsearch_model->GlobalSearch($this->the_index,'facebook_feed',$q);
-	       if($fb_feed->hits['hits']){
+       	if($fb_feed->hits['hits']){
 		    foreach($fb_feed->hits['hits'] as $wp){
 			 $new_fb_feed[] = (object)$wp['_source'];
 		    }
@@ -60,7 +61,6 @@ class Search extends CI_Controller {
 	       else{
 		    $new_fb_feed = null;
 	       }
-	       
 	       if($new_fb_feed){
 		    $data_fb_feed = array();
 		    foreach($new_fb_feed as $nff){

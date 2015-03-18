@@ -79,9 +79,6 @@ class elasticsearch_model extends CI_Model
     public function GlobalSearch($index,$type,$query){
 	$params['index'] = $index;
 	$params['type'] = $type;
-	
-	//$params['fields'] = array('post_content','name');
-	//$params['body']['query'] = $query;
 	$params['q'] = $query;
 	$params['size'] = 1000;
 	$results = $this->client->search($params);

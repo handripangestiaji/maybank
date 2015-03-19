@@ -565,11 +565,7 @@ $(function(){
                             $(this).closest('.containerHeadline').next().html('&nbsp;&nbsp;Loading...');  
                         }
                         $(this).closest('.containerHeadline').next().load(urlToLoad, function(){
-                            var urlLink = $('.post-content a').html();
-                            if (urlLink.length > 50) {
-                                urlLink = urlLink.substring(0, 50) + '...';
-                            }
-                            $('.post-content a').html(urlLink);
+                            $('.post-content a').html('[LINK]');
 
                             $('.email').tagit({
                                 autocomplete : {

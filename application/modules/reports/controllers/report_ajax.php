@@ -12,8 +12,12 @@ class report_ajax extends CI_Controller {
     
     function ChannelList($country = null){
         $this->load->model('account_model');
-        $filter = $country != null ? array('country_code' => $country) : array();
-        
+	if($country != 'All'){
+	    $filter = $country != null ? array('country_code' => $country) : array();
+	}
+	else{
+	    $filter = null;
+	}
         echo json_encode($this->account_model->GetChannel($filter), JSON_PRETTY_PRINT);
     }
     

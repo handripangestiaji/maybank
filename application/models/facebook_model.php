@@ -261,16 +261,16 @@ class facebook_model extends CI_Model
     
     public function SaveNewConversation($conversation, $channel, $access_token){
 	$timezone = new DateTimeZone("UTC");
-	echo "<pre>";
-	echo("<hr>");
-	print_r($conversation);
-	die();
+	
 	foreach($conversation as $each_conversation){
 	    $this->db->trans_start();
 	    
 	    /*Save User*/
 	    
 	    foreach($each_conversation->participants->data as $user){
+	    echo "<pre>";
+	    print_r($each_conversation);
+	    die();
 		$this->SaveUserFromFacebook($user->id, $access_token);
 	    }
 	    

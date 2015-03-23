@@ -45,11 +45,7 @@ class Cronjob extends CI_Controller {
         $access_tokens = array();
         foreach($channel_loaded as $channel){
             $post = $this->facebook_model->RetrieveFeed($channel->social_id, $channel->oauth_token, false);
-            // echo"<pre>";
-            // print_r($channel);
-
             $this->facebook_model->TransferFeedToDb($post,$channel);
-           
         }
     }
     
@@ -65,11 +61,8 @@ class Cronjob extends CI_Controller {
         $access_tokens = array();
         foreach($channel_loaded as $channel){
             $post = $this->facebook_model->RetrieveConversation($channel->social_id, $channel->oauth_token);
-            // echo "<pre>";
-            // print_r($conversation_list);
-            $this->facebook_model->SaveNewConversation($post,$channel, $access_tokens);
-            // echo "<pre>";
-            // print_r($post);
+ $this->facebook_model->SaveNewConversation($conversation->data,$access_token->channel, $access_token);
+
         }
     }
     

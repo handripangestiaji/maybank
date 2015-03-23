@@ -61,7 +61,7 @@ class Cronjob extends CI_Controller {
         $access_tokens = array();
         foreach($channel_loaded as $channel){
             $post = $this->facebook_model->RetrieveConversation($channel->social_id, $channel->oauth_token);
- $this->facebook_model->SaveNewConversation($conversation->data,$access_token->channel, $access_token);
+            $this->facebook_model->SaveNewConversation($post,$channel);
 
         }
     }

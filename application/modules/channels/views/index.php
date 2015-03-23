@@ -1,4 +1,4 @@
-<div class="row-fluid" style="width: 80%; margin: 0px auto;" id="channelMg">
+<div class="row-fluid" id="channelMg">
 <!--<span style="font-size: 14pt; color: black; margin: 5px 0;">USER MANAGEMENT</span>-->
     <div class="cms-content row-fluid">
         <div class="cms-filter pull-left">

@@ -272,10 +272,10 @@ class facebook_model extends CI_Model
 		"retrieved_at" => date("Y-m-d H:i:s"),
 		"created_at" => $updated_time->format("Y-m-d H:i:s"),
 	    );
-	    
+	 
 	    $social_stream_facebook_conversation = array(
 		"message_count" => $each_conversation['message_count'],
-		// "snippet" => $each_conversation['snippet'],
+		"snippet" => $each_conversation['messages']['data'][0]['message'],
 		"unread_count" => 0,
 		"status" => 1,
 		"updated_time" => $updated_time->format("Y-m-d H:i:s")

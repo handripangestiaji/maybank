@@ -108,7 +108,7 @@ class facebook_model extends CI_Model
 	$created_time = new DateTime(date("Y-m-d H:i:s e",strtotime($each_post['created_time'])), $timezone);
 	
 	$social_stream = array(
-	    "post_stream_id" => $each_post['from']['id'],
+	    "post_stream_id" => $each_post['id'],
 	    "channel_id" => $channel->channel_id,
 	    "type" => "facebook",
 	    "retrieved_at" => date("Y-m-d H:i:s"),

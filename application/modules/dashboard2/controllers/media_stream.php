@@ -583,7 +583,6 @@ class Media_stream extends CI_Controller {
         if(!$case_id){
 	    $validation[] = array('type' => 'required','name' => 'reply_type','value' => $reply_type, 'fine_name' => "Reply Type");
 	}
-	//print_r($reply_type);
         if($reply_type!='Report_Abuse' && (!$case_id)){
             $validation[] = array('type' => 'required','name' => 'product_type','value' => $product_type, 'fine_name' => "Product Type");
         }
@@ -612,13 +611,11 @@ class Media_stream extends CI_Controller {
                 $short_url_id = $short_url->id;
             }else{
                 $short_url_id=null;
-            }        
-               // die();
+            }
+	    
             if($tags != ''){
     	    foreach($tags as $tag){
-//    	    print_r(substr($tag,14));
-            $tag_id = substr($tag,14);//$this->post_model->GetTagByTagId($tag);
-                    //$tag_id = $get_tag->id;
+            $tag_id = substr($tag,14);
                     if(isset($tag_id)){
                         $data = array('short_urls_id' => $short_url_id ,
                                       'content_tag_id' => $tag_id
@@ -631,11 +628,9 @@ class Media_stream extends CI_Controller {
                     $this->post_model->IncrementTag($tag_id);
     	       }
             }
-       // die("Unable to connect to");
 
             $stream_id=$this->facebook_model->streamId($post_id);
-            //print_r($stream_id);
-            
+           
             $newStd = new stdClass();
             $newStd->page_id =  $channel_loaded[0]->social_id;
             $newStd->token = $this->facebook_model->GetPageAccessToken( $channel_loaded[0]->oauth_token, $channel_loaded[0]->social_id);

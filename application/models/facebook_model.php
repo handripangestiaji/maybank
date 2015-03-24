@@ -24,6 +24,11 @@ class facebook_model extends CI_Model
 	}
     }
     
+    function GetPageAccessToken($access_token, $page_id){
+	$this->SetAccessToken($access_token, $page_id);
+	return $this->facebook->getAccessToken();
+    }
+    
     function addFacebook($code = null){
 	if(!$code) {
             $user = $this->facebook->getUser();
@@ -32,7 +37,7 @@ class facebook_model extends CI_Model
 	    }else {
 		$params = array(
 		    'scope' => 'read_stream, manage_pages, publish_stream, read_mailbox, export_stream, publish_checkins, read_insights, read_requests,
-			    status_update, photo_upload, email, read_page_mailboxes',
+			    status_update, photo_upload, email, read_page_mailboxes, publish_actions',
 		    'redirect_uri' => base_url('channels/channelmg/AddFacebook')
 		);
 		$loginUrl = $this->facebook->getLoginUrl($params);
@@ -85,13 +90,7 @@ class facebook_model extends CI_Model
      * $post : post retrieved from facebook
     */
     public function TransferFeedToDb($posts, $channel){
-	// print_r($post);
-	// echo "<pre>";
- //    print_r($posts);
- //    die();
 	foreach($posts['data'] as $post){
-	    //echo "<pre>";print_r($post[$i]);echo"</pre>";
-	    // print_r($channel);
 	    $this->SavePost($post, $channel);
 	}
     }
@@ -204,7 +203,7 @@ class facebook_model extends CI_Model
 		
 	
 		    
-		if($this->IsCommentExists($each_post['comments']['data'][$x]['from']['id']) == null){
+		if($this->IsCommentExists($each_post['comments']['data'][$x]['id']) == null){
 		    
 		    $this->db->insert('social_stream', $social_stream_comment);
 		    $insert_id_comment = $this->db->insert_id();
@@ -704,10 +703,12 @@ class facebook_model extends CI_Model
 	return $result;
     }
     
+    /*
     public function likePost($post_id, $access_token, $type = 'feed'){
         $requestResult = curl_get_file_contents('https://graph.facebook.com/32423425 453423/likes');
         $result  = json_decode($requestResult);
     }
+    */
     
     public function FbRelatedConversation($filter,$sender){
 

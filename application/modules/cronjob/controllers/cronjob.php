@@ -46,6 +46,7 @@ class Cronjob extends CI_Controller {
         foreach($channel_loaded as $channel){
             $post = $this->facebook_model->RetrieveFeed($channel->social_id, $channel->oauth_token, false);
             $this->facebook_model->TransferFeedToDb($post,$channel);
+            print_r($post);
         }
     }
     
@@ -62,7 +63,7 @@ class Cronjob extends CI_Controller {
         foreach($channel_loaded as $channel){
             $post = $this->facebook_model->RetrieveConversation($channel->social_id, $channel->oauth_token);
             $this->facebook_model->SaveNewConversation($post,$channel);
-
+            print_r($post);
         }
     }
     

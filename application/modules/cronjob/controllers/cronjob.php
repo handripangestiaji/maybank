@@ -16,23 +16,6 @@ class Cronjob extends CI_Controller {
         }
     }
     
-    function FacebookStreamOwnPost(){
-        $filter = array(
-            "connection_type" => "facebook"
-        );
-        if($this->input->get('channel_id')){
-            $filter['channel_id'] = $this->input->get('channel_id');
-        }
-        $channel_loaded = $this->account_model->GetChannel($filter);
-        $conversation_list = array();
-        $access_tokens = array();
-        foreach($channel_loaded as $channel){
-            $post = $this->facebook_model->RetrievePost($channel->social_id, $channel->oauth_token);
-            $this->facebook_model->TransferFeedToDb($post, $channel_loaded );   
-        }
-        //print_r($post);
-    }
-    
     function FacebookStreamFeed(){
         $filter = array(
             "connection_type" => "facebook"

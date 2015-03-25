@@ -6,10 +6,11 @@ class facebook_model extends CI_Model
         parent::__construct();
         $this->load->helper('basic');
 	
-	$config = array(
-             'appId' => $this->setting_model->getSetting('Facebook_app_id'),
-             'secret' => $this->setting_model->getSetting('Facebook_app_secret'),
+	 $config = array(
+             'appId' => $this->config->item('fb_appid'),
+             'secret' => $this->config->item('fb_appsecret'),
         );
+
         $this->load->library('facebook',$config);        
     }
     

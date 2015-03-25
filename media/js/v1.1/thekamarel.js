@@ -2374,9 +2374,9 @@ $(function(){
                     "pageName" : pageName,
                     "country" : $(this).closest('#addFbStream').find('select[name=country]').val()
                 },
-                reload : true
-                
+                reload : false
             });
+            window.location = BASEURL + 'channels/channelmg';
    
         
         $(this).on('submit', 'form.assign_case', function(e){
@@ -2532,7 +2532,7 @@ jQuery.fn.AsyncPost = function(options){
     var settings = $.extend({
         url : window.location.origin,
         urlParameter : {},
-        reload : true,
+        reload : false,
         callback : function(response){
             try{
                 response = JSON.parse(response);

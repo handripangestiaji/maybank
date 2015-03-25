@@ -3,19 +3,12 @@
 class Search extends CI_Controller {
 
      private $connection;
-     public $user_role;
      private $the_index;
       
      function __construct()
      {
 	  parent::__construct();
 	  $this->load->model('elasticsearch_model');
-	  $this->load->library('ion_auth');
-	  $this->load->library('Twitteroauth');
-	  $this->load->library('session');
-	  $this->load->helper('url');
-	  $this->load->helper('array');  
-	  $this->load->helper('form');
 	  $this->load->model('facebook_model');
 	  $this->load->model('twitter_model');
 	  $this->load->model('youtube_model');
@@ -24,9 +17,6 @@ class Search extends CI_Controller {
 	  $this->the_index = $this->config->item('index_search');
 	  $this->date_after = date("Y-m-d H:i:s",strtotime("-1 hours"));
 	  $this->date_before = date("Y-m-d H:i:s");
-	  
-	  $this->user_role = $this->users_model->get_collection_detail(
-		array('role_collection_id'=>$this->session->userdata('role_id')));
      }
      
      
@@ -51,11 +41,9 @@ class Search extends CI_Controller {
 	       elseif($channel->connection_type == 'twitter'){
 		    $data[$channel->name] = $this->twitter_indexing($channel->channel_id);
 	       }
-	       /*
 	       elseif($channel->connection_type == 'youtube'){
 		    $this->youtube_indexing($channel->channel_id);
 	       }
-	       */
 	  }
 	  
 	  print_r($data);

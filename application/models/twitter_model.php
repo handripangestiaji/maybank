@@ -10,7 +10,6 @@ class twitter_model extends CI_Model
         $this->load->library('Twitteroauth');
         $this->config->load('twitter');
         $this->load->model('case_model');
-                
     }
     /*
     * Initialize connection properties

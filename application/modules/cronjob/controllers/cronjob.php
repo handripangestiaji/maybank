@@ -142,7 +142,6 @@ class Cronjob extends CI_Controller {
             
             $local_time = $current_date->format("Y-m-d H:i");
             $post_time = date('Y-m-d H:i',strtotime($post->time_to_post));
-            //print_r($local_time.' & '.$post_time);
             if($local_time >= $post_time){
                 //handle if facebook
                 if($post->connection_type == 'facebook'){

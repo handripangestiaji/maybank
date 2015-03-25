@@ -250,7 +250,7 @@ class Search extends CI_Controller {
 	  
 	  if($dms){
 	       $bulkString = '';
-	       foreach($timelines as $dm){
+	       foreach($dms as $dm){
 		    $action = array("index" => array('_id' => $dm->post_id));
 		    $actionString = json_encode($action);
 		    $doc = array('text' => $dm->dm_text,

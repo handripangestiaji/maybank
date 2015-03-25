@@ -91,7 +91,7 @@ class listofchannel extends CI_Controller {
         }
         $data['channel_list'] = $this->account_model->GetChannel($filter);
         $data['total_row'] = $this->account_model->GetTableTotalRow('channel', $filter);
-        $data['title'] = "Youtube";
+        $data['title'] = "Twitter";
         $this->session->set_userdata('channel_token_delete', md5(time()));
         $this->load->view("channels/channel_management_list", $data);
         
@@ -119,7 +119,6 @@ class listofchannel extends CI_Controller {
                 
                 $i++;
                 $this->account_model->SaveChannel($channel);
-                
             }
         }
         $this->session->unset_userdata('fb_token');

@@ -18,25 +18,10 @@ class ChannelMg extends MY_Controller {
     }
     
     function AddFacebook(){
-        $this->load->config('facebook');
-        $this->load->library('Facebook', array(
-            'appId' => $this->config->item('fb_appid'),
-            'secret' => $this->config->item('fb_appsecret')
-        ));
-        
-        $user = $this->facebook->getUser();
-        if ($user) {
-            $logoutUrl = $this->facebook->getLogoutUrl();
-        }else {
-
-            $params = array(
-                'scope' => 'read_stream, manage_pages, publish_stream, read_mailbox, export_stream, publish_checkins, read_insights, read_requests,
-                        status_update, photo_upload, email, read_page_mailboxes',
-                'redirect_uri' => base_url('channels/channelmg/TokenFacebook')
-            );
-            $loginUrl = $this->facebook->getLoginUrl($params);
-            redirect($loginUrl);
-        }
+	$code = $this->input->get('code');
+	$account = $this->facebook_model->addFacebook($code);
+	$data['account_manage'] = $account['data'];
+        $this->load->view('channels/index',$data);
     }
     
     function AddTwitter($country = ''){
@@ -92,11 +77,11 @@ class ChannelMg extends MY_Controller {
     }
     
     public function TokenFacebook(){
-        $this->load->config('facebook');
         $app_id = $this->config->item('fb_appid');
         $app_secret = $this->config->item('fb_appsecret');
         $my_url = base_url('channels/channelmg/TokenFacebook');  // redirect url
         $code = $this->input->get("code");
+	
         if(empty($code)) {
             // Redirect to Login Dialog
             $this->session->set_userdata('state', md5(uniqid(rand(), TRUE))); // CSRF protection

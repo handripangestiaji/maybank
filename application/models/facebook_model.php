@@ -37,7 +37,7 @@ class facebook_model extends CI_Model
 	    }else {
 		$params = array(
 		    'scope' => 'read_stream, manage_pages, publish_stream, read_mailbox, export_stream, publish_checkins, read_insights, read_requests,
-			    status_update, photo_upload, email, read_page_mailboxes, publish_actions',
+			    status_update, photo_upload, email, read_page_mailboxes, publish_actions', 'publish_pages',
 		    'redirect_uri' => base_url('channels/channelmg/AddFacebook')
 		);
 		$loginUrl = $this->facebook->getLoginUrl($params);
